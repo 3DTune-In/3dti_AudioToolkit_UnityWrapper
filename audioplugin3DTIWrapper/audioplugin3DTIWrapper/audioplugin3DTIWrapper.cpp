@@ -27,6 +27,7 @@ namespace UnityWrapper3DTI
 	{
 		float p[P_NUM];		
 		std::shared_ptr<CSingleSourceDSP> source;
+		CCore *core;
 	};
 
 /////////////////////////////////////////////////////////////////////
@@ -219,7 +220,15 @@ namespace UnityWrapper3DTI
 		//ifstream ifs("binaryHRTF.hrtf", ios::binary);
 		//ifs.read((char *)readHRTF, headsize);		
 		//ifs.close();
-		
+		//
+		//ofstream logfile;
+		//logfile.open("debuglog.txt", ofstream::out | ofstream::app);
+		//logfile << "HRTF Read for 180,0: " << endl;
+		//CMonoBuffer<float> LeftChannel = readHRTF->GetInterpolatedHRIR(180, 0, true).first;
+		//for (int i = 0; i < 512; i++)
+		//	logfile << "	" << LeftChannel[i] <<  endl;
+		//logfile.close();
+
 		//return *readHRTF;
 
 		CHRTF readHRTF;
@@ -253,13 +262,14 @@ namespace UnityWrapper3DTI
 		WriteLog("***************************************************************************************\nDebug log started at ", str);
 
 		// Core initialization
-		CCore core;		
+		CCore *core = effectdata->core;		
+		core = new CCore();
 		WriteLog("Core initialized", "");
 
 		// Set audio state
 		CAudioState audioState;
 		audioState.SetSampleRate((int) state->samplerate);
-		core.SetAudioState(audioState);		
+		core->SetAudioState(audioState);		
 		WriteLog("Sample rate set to ", state->samplerate);
 
 		// Set listener transform		: TO DO
@@ -269,7 +279,10 @@ namespace UnityWrapper3DTI
 		//float listenerpos_x = -(L[0] * L[12] + L[1] * L[13] + L[2] * L[14]);	// From Unity documentation
 		//float listenerpos_y = -(L[4] * L[12] + L[5] * L[13] + L[6] * L[14]);	// From Unity documentation
 		//float listenerpos_z = -(L[8] * L[12] + L[9] * L[13] + L[10] * L[14]);	// From Unity documentation
-		core.SetListenerTransform(CTransform());
+		CTransform listenerTransform;
+		listenerTransform.SetOrientation(CQuaternion::UNIT);
+		listenerTransform.SetPosition(CVector3(0.0f, 0.0f, 0.0f));
+		core->SetListenerTransform(listenerTransform);
 		WriteLog("Listener transform set", "");
 
 		// Set listener head circumference : TO DO
@@ -277,13 +290,21 @@ namespace UnityWrapper3DTI
 		// Setup listener HRTF	
 		WriteLog("Setting listener HRTF...", "");
 		CHRTF listenerHRTF = SetupHRTF();
-		core.LoadHRTF(std::move(listenerHRTF));
+		core->LoadHRTF(std::move(listenerHRTF));
 		WriteLog("	Listener HRTF set.", "");
+
+		//ofstream logfile;
+		//logfile.open("debuglog.txt", ofstream::out | ofstream::app);
+		//logfile << "Listener HRTF for 180,0: " << endl;
+		//CMonoBuffer<float> leftChannel = listenerHRTF.GetInterpolatedHRIR(180, 0, 3).first;
+		//for (int i = 0; i < 512; i++)
+		//	logfile << "	" << leftChannel[i] << endl;
+		//logfile.close();
 
 		// TO DO: Setup room
 
 		// Create source and set transform		
-		effectdata->source = core.CreateSingleSourceDSP();
+		effectdata->source = core->CreateSingleSourceDSP();
 		CTransform sourceTransform;
 		sourceTransform.SetPosition(CVector3(state->spatializerdata->sourcematrix[12], 
 											 state->spatializerdata->sourcematrix[13], 
@@ -342,7 +363,7 @@ namespace UnityWrapper3DTI
 
 	UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectState* state, float* inbuffer, float* outbuffer, unsigned int length, int inchannels, int outchannels)
 	{
-		WriteLog("Starting process with input buffer size (converted to MONO): ", length/2);
+		//WriteLog("Starting process with input buffer size (converted to MONO): ", length/2);
 
 		// Check that I/O formats are right and that the host API supports this feature		
 		if (inchannels != 2 || outchannels != 2 ||
@@ -358,10 +379,11 @@ namespace UnityWrapper3DTI
 		float* s = state->spatializerdata->sourcematrix;
 
 		// Set source position (we don't care about orientation)
+		float distanceScale = 0.0001f;
 		CTransform sourceTransform;
-		sourceTransform.SetPosition(CVector3(s[12], s[13], s[14]));
+		sourceTransform.SetPosition(CVector3(s[12]*distanceScale, s[13]*distanceScale, s[14]*distanceScale));
 		data->source->SetSourceTransform(sourceTransform);
-		WriteLog("	Source position set to ", sourceTransform.GetPosition());
+		//WriteLog("	Source position set to ", sourceTransform.GetPosition());
 
 		// We assume a fixed listener
 		
@@ -375,12 +397,9 @@ namespace UnityWrapper3DTI
 			inMonoBuffer[i] = inbuffer[i * 2];
 		}
 
-		WriteLog("	Starting anechoic binaural processing", "");
-
 		// Process!!
+		data->source->SetInterpolation(3);
 		data->source->ProcessAnechoic(inMonoBuffer, outStereoBuffer);				
-
-		WriteLog("	Anechoic binaural processing done", "");
 
 		// Transform output buffer
 		// TO DO: Avoid this copy!!!
@@ -389,8 +408,6 @@ namespace UnityWrapper3DTI
 		{
 			outbuffer[i++] = *it;
 		}
-
-		WriteLog("	Process completed!", "");
 
 		return UNITY_AUDIODSP_OK;
 	}
