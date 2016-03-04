@@ -146,10 +146,12 @@
   <ItemGroup>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\ABIR.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\AudioState.cpp" />
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\BiquadFilter.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Buffer.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Convolver.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Core.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Debugger.cpp" />
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\FiltersChain.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HRTF.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Magnitudes.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Quaternion.cpp" />
@@ -162,11 +164,13 @@
   <ItemGroup>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\ABIR.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\AudioState.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\BiquadFilter.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Buffer.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Conventions.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Convolver.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Core.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Debugger.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\FiltersChain.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HRTF.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Magnitudes.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Quaternion.h" />
@@ -175,6 +179,7 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Vector3.h" />
     <ClInclude Include="AudioPluginInterface.h" />
     <ClInclude Include="AudioPluginUtil.h" />
+    <ClInclude Include="HRTFArray.h" />
     <ClInclude Include="PluginList.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
