@@ -10,6 +10,9 @@
 #include <iostream>
 #include <time.h>
 
+// Tell the 3DTI Toolkit Core that we will be using the Unity axis convention!
+#define AXIS_CONVENTION UNITY
+
 using namespace std;
 
 // DEBUG LOG FILE
