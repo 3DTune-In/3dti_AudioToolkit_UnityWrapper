@@ -5,6 +5,8 @@
 
 //#define LOG_FILE
 
+#define distanceScale 1.0f
+
 // Includes for reading HRTF data and logging dor debug
 #include <fstream>
 #include <iostream>
@@ -230,8 +232,7 @@ namespace UnityWrapper3DTI
 		EffectData* data = state->GetEffectData<EffectData>();
 		float* s = state->spatializerdata->sourcematrix;
 
-		// Set source position (we don't care about orientation)
-		float distanceScale = 0.1f;
+		// Set source position (we don't care about orientation)		
 		CTransform sourceTransform;
 		sourceTransform.SetPosition(CVector3(s[12]*distanceScale, s[13]*distanceScale, s[14]*distanceScale));
 		data->source->SetSourceTransform(sourceTransform);		
