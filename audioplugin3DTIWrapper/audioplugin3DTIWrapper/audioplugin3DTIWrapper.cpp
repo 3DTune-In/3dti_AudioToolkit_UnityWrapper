@@ -18,6 +18,7 @@
 using namespace std;
 
 // DEBUG LOG FILE
+//#define LOG_FILE
 template <class T>
 void WriteLog(string logtext, const T& value)
 {
@@ -236,8 +237,8 @@ namespace UnityWrapper3DTI
 		CTransform sourceTransform;
 		sourceTransform.SetPosition(CVector3(s[12]*distanceScale, s[13]*distanceScale, s[14]*distanceScale));
 		data->source->SetSourceTransform(sourceTransform);		
-		// We assume a fixed listener
-		
+		// We assume a fixed listener		
+
 		// Transform input buffer
 		// TO DO: Avoid this copy!!!!!!		
 		CMonoBuffer<float> inMonoBuffer(length);
