@@ -1,5 +1,9 @@
 #include "AudioPluginUtil.h"
 
+// Tell the 3DTI Toolkit Core that we will be using the Unity axis convention!
+// WARNING: This define must be done before including Core.h!
+#define AXIS_CONVENTION UNITY
+
 #include "../../3DTI_Toolkit_Core/Core.h"
 #include "HRTFArray.h"
 
@@ -11,9 +15,6 @@
 #include <fstream>
 #include <iostream>
 #include <time.h>
-
-// Tell the 3DTI Toolkit Core that we will be using the Unity axis convention!
-#define AXIS_CONVENTION UNITY
 
 using namespace std;
 
