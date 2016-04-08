@@ -42,12 +42,13 @@ namespace UnityWrapper3DTI
 	};
 
 /////////////////////////////////////////////////////////////////////
-
+	
+	CCore* core;
 	struct EffectData
 	{
 		float p[P_NUM];		
 		std::shared_ptr<CSingleSourceDSP> source;
-		CCore *core;
+		//CCore core;
 	};
 
 /////////////////////////////////////////////////////////////////////
@@ -131,7 +132,7 @@ namespace UnityWrapper3DTI
 		//
 
 		// Core initialization
-		CCore *core = effectdata->core;		
+		//CCore core = effectdata->core;		
 		core = new CCore();
 		WriteLog("Core initialized", "");
 
@@ -141,35 +142,38 @@ namespace UnityWrapper3DTI
 		core->SetAudioState(audioState);		
 		WriteLog("Sample rate set to ", state->samplerate);
 
-		// Set listener transform		: TO DO
-		//float L[16];					// Inverted 4x4 listener matrix, as provided by Unity
-		//for (int i = 0; i < 16; i++)
-		//	L[i] = state->spatializerdata->listenermatrix[i];
-		//float listenerpos_x = -(L[0] * L[12] + L[1] * L[13] + L[2] * L[14]);	// From Unity documentation
-		//float listenerpos_y = -(L[4] * L[12] + L[5] * L[13] + L[6] * L[14]);	// From Unity documentation
-		//float listenerpos_z = -(L[8] * L[12] + L[9] * L[13] + L[10] * L[14]);	// From Unity documentation
+		// Set listener transform	
+		// WARNING: the source and listener matrix passed in CreateCallback seem to be always ZERO
+		float L[16];					// Inverted 4x4 listener matrix, as provided by Unity
+		for (int i = 0; i < 16; i++)
+			L[i] = state->spatializerdata->listenermatrix[i];
+		float listenerpos_x = -(L[0] * L[12] + L[1] * L[13] + L[2] * L[14]);	// From Unity documentation
+		float listenerpos_y = -(L[4] * L[12] + L[5] * L[13] + L[6] * L[14]);	// From Unity documentation
+		float listenerpos_z = -(L[8] * L[12] + L[9] * L[13] + L[10] * L[14]);	// From Unity documentation
 		CTransform listenerTransform;
 		listenerTransform.SetOrientation(CQuaternion::UNIT);
-		listenerTransform.SetPosition(CVector3(0.0f, 0.0f, 0.0f));
+		//listenerTransform.SetPosition(CVector3(0.0f, 0.0f, 0.0f));
+		listenerTransform.SetPosition(CVector3(listenerpos_x, listenerpos_y, listenerpos_z));
 		core->SetListenerTransform(listenerTransform);
-		WriteLog("Listener transform set to fixed position: ", CVector3(0.0f, 0.0f, 0.0f));
-
-		// Set listener head circumference : TO DO
+		//WriteLog("Listener transform set to fixed position: ", CVector3(0.0f, 0.0f, 0.0f));
+		WriteLog("Listener transform set to: ", listenerTransform.GetPosition());
 
 		// Setup listener HRTF	
 		WriteLog("Setting listener HRTF...", "");
 		CHRTF listenerHRTF = SetupHRTF();
 		core->LoadHRTF(std::move(listenerHRTF));
-		WriteLog("	Listener HRTF set.", "");
+		WriteLog("	Listener HRTF set.", "");		
 
+		// TO DO: Set listener head radius
 		// TO DO: Setup room
 
 		// Create source and set transform		
+		// WARNING: the source and listener matrix passed in CreateCallback seem to be always ZERO
 		effectdata->source = core->CreateSingleSourceDSP();
 		CTransform sourceTransform;
-		sourceTransform.SetPosition(CVector3(state->spatializerdata->sourcematrix[12], 
-											 state->spatializerdata->sourcematrix[13], 
-											 state->spatializerdata->sourcematrix[14]));	
+		sourceTransform.SetPosition(CVector3(state->spatializerdata->sourcematrix[12]*distanceScale, 
+											 state->spatializerdata->sourcematrix[13]*distanceScale, 
+											 state->spatializerdata->sourcematrix[14]*distanceScale));	
 		effectdata->source->SetSourceTransform(sourceTransform);			
 		WriteLog("Source position set to ", sourceTransform.GetPosition());
 
@@ -238,8 +242,66 @@ namespace UnityWrapper3DTI
 		CTransform sourceTransform;
 		sourceTransform.SetPosition(CVector3(s[12]*distanceScale, s[13]*distanceScale, s[14]*distanceScale));
 		data->source->SetSourceTransform(sourceTransform);		
-		// We assume a fixed listener		
 
+		// Set listener position		
+		float L[16];					// Inverted 4x4 listener matrix, as provided by Unity
+		for (int i = 0; i < 16; i++)
+			L[i] = state->spatializerdata->listenermatrix[i];
+		//float listenerpos_x = -(L[0] * L[12] + L[1] * L[13] + L[2] * L[14]);	// From Unity documentation, if camera is rotated wrt listener
+		//float listenerpos_y = -(L[4] * L[12] + L[5] * L[13] + L[6] * L[14]);	// From Unity documentation, if camera is rotated wrt listener
+		//float listenerpos_z = -(L[8] * L[12] + L[9] * L[13] + L[10] * L[14]);	// From Unity documentation, if camera is rotated wrt listener
+		float listenerpos_x = -L[12];	// If camera is not rotated
+		float listenerpos_y = -L[13];	// If camera is not rotated
+		float listenerpos_z = -L[14];	// If camera is not rotated
+		CTransform listenerTransform;		
+		listenerTransform.SetPosition(CVector3(listenerpos_x, listenerpos_y, listenerpos_z));
+		//WriteLog("Listener position = ", listenerTransform.GetPosition());
+		
+		// Set listener rotation
+		//float w = 2 * sqrt(1.0f + L[0] + L[5] + L[10]);
+		//float qw = w / 4.0f;
+		//float qx = (L[6] - L[9]) / w;
+		//float qy = (L[8] - L[2]) / w;
+		//float qz = (L[1] - L[4]) / w;
+		// http://forum.unity3d.com/threads/how-to-assign-matrix4x4-to-transform.121966/
+		float tr = L[0] + L[5] + L[10];
+		float w, qw, qx, qy, qz;
+		if (tr>0.0f)			// General case
+		{
+			w = sqrt(1.0f + tr) * 2.0f;
+			qw = 0.25f*w;
+			qx = (L[6] - L[9]) / w;
+			qy = (L[8] - L[2]) / w;
+			qz = (L[1] - L[4]) / w;
+		}
+		// Cases with w = 0
+		else if ((L[0] > L[5]) && (L[0] > L[10])) 
+		{
+			w = sqrt(1.0f + L[0] - L[5] - L[10]) * 2.0f;
+			qw = (L[6] - L[9]) / w;
+			qx = 0.25f*w;
+			qy = -(L[1] + L[4]) / w;
+			qz = -(L[8] + L[2]) / w;
+		}
+		else if (L[5] > L[10]) 
+		{
+			w = sqrt(1.0f + L[5] - L[0] - L[10]) * 2.0f;
+			qw = (L[8] - L[2]) / w;
+			qx = -(L[1] + L[4]) / w;
+			qy = 0.25f*w;
+			qz = -(L[6] + L[9]) / w;
+		}
+		else
+		{
+			w = sqrt(1.0f + L[10] - L[0] - L[5]) * 2.0f;
+			qw = (L[1] - L[4]) / w;
+			qx = -(L[8] + L[2]) / w;
+			qy = -(L[6] + L[9]) / w;
+			qz = 0.25f*w;
+		}
+		listenerTransform.SetOrientation(CQuaternion(qw, qx, qy, qz));
+		core->SetListenerTransform(listenerTransform);			
+		
 		// Transform input buffer
 		// TO DO: Avoid this copy!!!!!!		
 		CMonoBuffer<float> inMonoBuffer(length);
