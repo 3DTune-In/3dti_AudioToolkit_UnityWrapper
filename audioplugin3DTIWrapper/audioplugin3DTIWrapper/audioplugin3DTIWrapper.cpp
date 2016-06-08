@@ -19,7 +19,7 @@
 using namespace std;
 
 // DEBUG LOG FILE
-//#define LOG_FILE
+#define LOG_FILE
 template <class T>
 void WriteLog(string logtext, const T& value)
 {
@@ -37,7 +37,8 @@ namespace UnityWrapper3DTI
 {
 	enum
 	{
-		P_DUMMY,
+		//P_DUMMY,
+		P_FILEPOINTER,
 		P_NUM
 	};
 
@@ -71,7 +72,8 @@ namespace UnityWrapper3DTI
 
 		int numparams = P_NUM;
 		definition.paramdefs = new UnityAudioParameterDefinition[numparams];
-		RegisterParameter(definition, "Dummy parameter", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, P_DUMMY, "Dummy parameter");
+		//RegisterParameter(definition, "Dummy parameter", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, P_DUMMY, "Dummy parameter");
+		RegisterParameter(definition, "File pointer", "", 0.0f, FLT_MAX, 0.0f, 1.0f, 1.0f, P_FILEPOINTER, "Pointer to file");
 		definition.flags |= UnityAudioEffectDefinitionFlags_IsSpatializer;
 		return numparams;
 	}
@@ -197,6 +199,15 @@ namespace UnityWrapper3DTI
 		if (index >= P_NUM)
 			return UNITY_AUDIODSP_ERR_UNSUPPORTED;
 		data->p[index] = value;
+		if (index == P_FILEPOINTER)
+		{
+			int filevoid = (int)value;
+			HANDLE filetest = (HANDLE)filevoid;
+			char DataBuffer[] = "Text from WRAPPER!!!!!!";
+			DWORD dwBytesWritten = 0;
+			WriteFile(filetest, DataBuffer, (DWORD)strlen(DataBuffer), &dwBytesWritten,	NULL);
+			//CloseHandle(filetest);
+		}
 		return UNITY_AUDIODSP_OK;
 	}
 
