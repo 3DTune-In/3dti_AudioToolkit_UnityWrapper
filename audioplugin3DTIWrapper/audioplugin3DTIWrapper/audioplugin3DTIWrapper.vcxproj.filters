@@ -27,6 +27,9 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\AudioState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\BiquadFilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Buffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -39,10 +42,31 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Debugger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Defaults.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Fconvolver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\fftsg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\FiltersBank.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\FiltersChain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HRTF.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\ILD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Magnitudes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Profiler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Quaternion.cpp">
@@ -55,18 +79,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Vector3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\BiquadFilter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\FiltersChain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Defaults.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\ILD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -86,6 +98,9 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\AudioState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\BiquadFilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Buffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -101,10 +116,34 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Debugger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Defaults.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Fconvolver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\fftsg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\FiltersBank.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\FiltersChain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HRTF.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\ILD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Magnitudes .h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Magnitudes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Profiler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Quaternion.h">
@@ -117,21 +156,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Vector3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HRTFArray.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\BiquadFilter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\FiltersChain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Defaults.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\ILD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -152,10 +152,14 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Core.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Debugger.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Defaults.cpp" />
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Fconvolver.cpp" />
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\fftsg.cpp" />
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\FiltersBank.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\FiltersChain.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HRTF.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\ILD.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Magnitudes.cpp" />
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Profiler.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Quaternion.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\SingleSourceDSP.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Transform.cpp" />
@@ -173,17 +177,21 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Core.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Debugger.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Defaults.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Fconvolver.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\fftsg.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\FiltersBank.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\FiltersChain.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HRTF.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\ILD.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Magnitudes .h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Magnitudes.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Profiler.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Quaternion.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\SingleSourceDSP.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Transform.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Vector3.h" />
     <ClInclude Include="AudioPluginInterface.h" />
     <ClInclude Include="AudioPluginUtil.h" />
-    <ClInclude Include="HRTFArray.h" />
     <ClInclude Include="PluginList.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
