@@ -81,6 +81,9 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Vector3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioPluginInterface.h">
@@ -156,6 +159,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Vector3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

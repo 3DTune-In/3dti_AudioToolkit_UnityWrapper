@@ -17,12 +17,13 @@
 // WARNING: This define must be done before including Core.h!
 #define AXIS_CONVENTION UNITY
 
-#include "../../3DTI_Toolkit_Core/Core.h"
+#include "Core.h"
 
 // Includes for reading HRTF data and logging dor debug
 #include <fstream>
 #include <iostream>
 #include <time.h>
+#include <HRTF/HRTFCereal.h>
 
 using namespace std;
 
@@ -109,12 +110,10 @@ namespace UnityWrapper3DTI
 			return;
 		}
 
-		// TEST READING SOME TEXT				
-		char ReadBuffer[6] = { 0 };	
-		DWORD bytesToRead = 5;
-		DWORD bytesActuallyRead;				
-		ReadFile(fileHandle, ReadBuffer, bytesToRead, &bytesActuallyRead, NULL);
-		WriteLog("Read from HRTF file TEST: ", ReadBuffer);
+		// TO DO: Check errors reported by CreateFrom3dtiHandle
+		CHRTF myHead = HRTF::CreateFrom3dtiHandle(fileHandle);
+		core->LoadHRTF(std::move(myHead));
+		WriteLog("HRTF loaded from binary 3DTI file, with HRIR length: ", myHead.GetHRIRLength());
 
 		// Close file
 		CloseHandle(fileHandle);

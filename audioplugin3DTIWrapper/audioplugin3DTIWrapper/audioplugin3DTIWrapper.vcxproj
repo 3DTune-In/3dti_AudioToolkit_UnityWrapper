@@ -135,6 +135,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;AUDIOPLUGIN3DTIWRAPPER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\3DTI_Toolkit_Modules;..\..\3DTI_Toolkit_Modules\HRTF\cereal\include;..\..\3DTI_Toolkit_Core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -164,6 +165,7 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\SingleSourceDSP.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Transform.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Vector3.cpp" />
+    <ClCompile Include="..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.cpp" />
     <ClCompile Include="audioplugin3DTIWrapper.cpp" />
     <ClCompile Include="AudioPluginUtil.cpp" />
   </ItemGroup>
@@ -190,6 +192,7 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\SingleSourceDSP.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Transform.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Vector3.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.h" />
     <ClInclude Include="AudioPluginInterface.h" />
     <ClInclude Include="AudioPluginUtil.h" />
     <ClInclude Include="PluginList.h" />
