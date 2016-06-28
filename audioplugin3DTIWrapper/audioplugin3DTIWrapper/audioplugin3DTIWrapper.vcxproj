@@ -129,8 +129,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -168,6 +167,8 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.cpp" />
     <ClCompile Include="audioplugin3DTIWrapper.cpp" />
     <ClCompile Include="AudioPluginUtil.cpp" />
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\ABIR.h" />
@@ -185,7 +186,6 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\FiltersChain.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HRTF.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\ILD.h" />
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Magnitudes .h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Magnitudes.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Profiler.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Quaternion.h" />
@@ -196,6 +196,8 @@
     <ClInclude Include="AudioPluginInterface.h" />
     <ClInclude Include="AudioPluginUtil.h" />
     <ClInclude Include="PluginList.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

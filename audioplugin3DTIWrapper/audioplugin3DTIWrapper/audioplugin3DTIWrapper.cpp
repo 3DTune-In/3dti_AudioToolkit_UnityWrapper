@@ -11,6 +11,8 @@
 * Module: 3DTI Toolkit Unity Wrapper
 **/
 
+#include "stdafx.h"
+
 #include "AudioPluginUtil.h"
 
 // Tell the 3DTI Toolkit Core that we will be using the Unity axis convention!
@@ -28,14 +30,14 @@
 using namespace std;
 
 // DEBUG LOG FILE
-#define LOG_FILE
+//#define LOG_FILE
 template <class T>
-void WriteLog(string logtext, const T& value)
+void WriteLog(int sourceid, string logtext, const T& value)
 {
 #ifdef LOG_FILE
 	ofstream logfile;
 	logfile.open("debuglog.txt", ofstream::out | ofstream::app);
-	logfile << logtext << value << endl;
+	logfile << sourceid << ": " << logtext << value << endl;
 	logfile.close();
 #endif
 }
@@ -49,18 +51,29 @@ namespace UnityWrapper3DTI
 		PARAM_HRTF_FILE_HANDLE,
 		PARAM_HEAD_RADIUS,
 		PARAM_SCALE_FACTOR,
+		PARAM_SOURCE_ID,	// DEBUG
+		PARAM_CUSTOM_ITD,
+		PARAM_HRTF_INTERPOLATION,
+		PARAM_MOD_FARLPF,
+		PARAM_MOD_DISTATT,
+		PARAM_MOD_ILD,
+		PARAM_MOD_HRTF,
+		PARAM_MAG_ANECHATT,
+		PARAM_MAG_REVERBATT,
+		PARAM_MAG_SOUNDSPEED,
 		P_NUM
 	};
 
 /////////////////////////////////////////////////////////////////////
 	
-	CCore* core;
-	bool coreReady;				// Temporary solution before integration of CoreState class in Core
-	bool pluginCreated = false;	// Be sure that core is not initialized more than once
 	struct EffectData
 	{
+		int sourceID;	// DEBUG
+		bool pluginCreated=false;	// For some reason, createcallback is being called more than once...
 		float parameters[P_NUM];		
 		std::shared_ptr<CSingleSourceDSP> audioSource;		
+		CCore* core;
+		bool coreReady;				// Temporary solution before integration of CoreState class in Core	
 	};
 
 /////////////////////////////////////////////////////////////////////
@@ -82,6 +95,17 @@ namespace UnityWrapper3DTI
 		RegisterParameter(definition, "HRTFHandle", "", 0.0f, FLT_MAX, 0.0f, 1.0f, 1.0f, PARAM_HRTF_FILE_HANDLE, "Handle of HRTF binary file");
 		RegisterParameter(definition, "HeadRadius", "m", 0.0f, FLT_MAX, 0.0875f, 1.0f, 1.0f, PARAM_HEAD_RADIUS, "Listener head radius");
 		RegisterParameter(definition, "ScaleFactor", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 1.0f, PARAM_SCALE_FACTOR, "Scale factor for over/under sized scenes");
+		RegisterParameter(definition, "SourceID", "", 0.0f, FLT_MAX, -1.0f, 1.0f, 1.0f, PARAM_SOURCE_ID, "Source ID for debug");
+		RegisterParameter(definition, "CustomITD", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_CUSTOM_ITD, "Enabled custom ITD");
+		RegisterParameter(definition, "HRTFInterp", "", 0.0f, 3.0f, 3.0f, 1.0f, 1.0f, PARAM_HRTF_INTERPOLATION, "HRTF Interpolation method");
+		RegisterParameter(definition, "MODfarLPF", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_FARLPF, "Far distance LPF module enabler");
+		RegisterParameter(definition, "MODDistAtt", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_DISTATT, "Distance attenuation module enabler");
+		RegisterParameter(definition, "MODILD", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_ILD, "Near distance ILD module enabler");
+		RegisterParameter(definition, "MODHRTF", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_HRTF, "HRTF module enabler");		
+		RegisterParameter(definition, "MAGAneAtt", "dB", -30.0f, 0.0f, -6.0f, 1.0f, 1.0f, PARAM_MAG_ANECHATT, "Anechoic distance attenuation");
+		RegisterParameter(definition, "MAGRevAtt", "dB", -30.0f, 0.0f, -6.0f, 1.0f, 1.0f, PARAM_MAG_REVERBATT, "Reverb distance attenuation");
+		RegisterParameter(definition, "MAGSounSpd", "m/s", 0.0f, 1000.0f, 343.0f, 1.0f, 1.0f, PARAM_MAG_SOUNDSPEED, "Sound speed");
+
 		definition.flags |= UnityAudioEffectDefinitionFlags_IsSpatializer;
 		return numparams;
 	}
@@ -97,8 +121,10 @@ namespace UnityWrapper3DTI
 
 /////////////////////////////////////////////////////////////////////
 
-	void LoadHRTFBinaryFile(float floatHandle)
+	int LoadHRTFBinaryFile(UnityAudioEffectState* state, float floatHandle)
 	{
+		EffectData* data = state->GetEffectData<EffectData>();		
+
 		// Cast from float to HANDLE
 		int intHandle = (int)floatHandle;
 		HANDLE fileHandle = (HANDLE)intHandle;
@@ -106,22 +132,31 @@ namespace UnityWrapper3DTI
 		// Check that handle is correct
 		if (fileHandle == INVALID_HANDLE_VALUE)
 		{
-			WriteLog("Error!!! Invalid file handle in HRTF binary file", "");
-			return;
+			WriteLog(data->sourceID, "Error!!! Invalid file handle in HRTF binary file", "");
+			return -1;
 		}
-
-		// TO DO: Check errors reported by CreateFrom3dtiHandle
-		CHRTF myHead = HRTF::CreateFrom3dtiHandle(fileHandle);
-		core->LoadHRTF(std::move(myHead));
-		WriteLog("HRTF loaded from binary 3DTI file, with HRIR length: ", myHead.GetHRIRLength());
-
-		// Close file
-		CloseHandle(fileHandle);
+		
+		// Get HRTF and check errors
+		CHRTF myHead = HRTF::CreateFrom3dtiHandle(fileHandle);		
+		if (myHead.GetHRIRLength() != 0)		// TO DO: Improve this error check
+		{
+			data->core->LoadHRTF(std::move(myHead));
+			WriteLog(data->sourceID, "HRTF loaded from binary 3DTI file:", "");
+			WriteLog(data->sourceID, "	HRIR length: ", myHead.GetHRIRLength());
+			WriteLog(data->sourceID, "	Azimuth step: ", myHead.GetAzimuthStep());
+			WriteLog(data->sourceID, "	Elevation step: ", myHead.GetElevationStep());
+			return 1;
+		}
+		else
+		{
+			WriteLog(data->sourceID, "Error!!! could not create HRTF from handle", "");
+			return -1;
+		}
 	}
 
 /////////////////////////////////////////////////////////////////////
 
-	void SetListenerTransformFromMatrix(float* listenerMatrix, float scale)
+	CTransform ComputeListenerTransformFromMatrix(float* listenerMatrix, float scale)
 	{
 		// SET LISTENER POSITION
 
@@ -183,19 +218,17 @@ namespace UnityWrapper3DTI
 			qz = 0.25f*w;
 		}
 		listenerTransform.SetOrientation(CQuaternion(qw, qx, qy, qz));
-		core->SetListenerTransform(listenerTransform);
-		WriteLog("Listener position set to: ", listenerTransform.GetPosition());
+		return listenerTransform;
 	}
 
 /////////////////////////////////////////////////////////////////////
 
-	void SetSourceTransformFromMatrix(std::shared_ptr<CSingleSourceDSP> audioSource, float* sourceMatrix, float scale)
+	CTransform ComputeSourceTransformFromMatrix(float* sourceMatrix, float scale)
 	{
 		// Orientation does not matters for audio sources
 		CTransform sourceTransform;
 		sourceTransform.SetPosition(CVector3(sourceMatrix[12] * scale, sourceMatrix[13] * scale, sourceMatrix[14] * scale));		
-		audioSource->SetSourceTransform(sourceTransform);
-		WriteLog("Source position set to: ", sourceTransform.GetPosition());
+		return sourceTransform;
 	}
 
 /////////////////////////////////////////////////////////////////////
@@ -205,15 +238,15 @@ namespace UnityWrapper3DTI
 		EffectData* effectdata = new EffectData;
 		memset(effectdata, 0, sizeof(EffectData));
 		state->effectdata = effectdata;
-		if (IsHostCompatible(state))
-			state->spatializerdata->distanceattenuationcallback = DistanceAttenuationCallback;	// TO DO: check if we can remove this
-		InitParametersFromDefinitions(InternalRegisterEffectDefinition, effectdata->parameters);
 
-		// For some reason, Unity eventually call this method more than once
-
-		if (!pluginCreated)
+		if (!effectdata->pluginCreated)
 		{
-			pluginCreated = true;
+			if (IsHostCompatible(state))
+				state->spatializerdata->distanceattenuationcallback = DistanceAttenuationCallback;	// TO DO: check if we can remove this
+			InitParametersFromDefinitions(InternalRegisterEffectDefinition, effectdata->parameters);		
+
+			effectdata->pluginCreated = true;
+			effectdata->sourceID = -1;
 
 			// DEBUG: Start log file
 			#ifdef LOG_FILE
@@ -224,24 +257,24 @@ namespace UnityWrapper3DTI
 			timeinfo = localtime(&rawtime);
 			strftime(buffer, 80, "%d-%m-%Y %I:%M:%S", timeinfo);
 			std::string str(buffer);
-			WriteLog("***************************************************************************************\nDebug log started at ", str);
+			WriteLog(effectdata->sourceID, "***************************************************************************************\nDebug log started at ", str);
 			#endif
 			//
 
 			// Core initialization
-			core = new CCore();
-			WriteLog("Core initialized", "");
+			effectdata->core = new CCore();
+			WriteLog(effectdata->sourceID, "Core initialized", "");
 
 			// Init parameters. Core is not ready until we load the HRTF...
-			coreReady = false;
+			effectdata->coreReady = false;
 			effectdata->parameters[PARAM_SCALE_FACTOR] = 1.0f;
 
 			// Set default audio state
 			// QUESTIONS: How does this overlaps with explicit call to SetAudioState from C# API? What about buffer size?
 			CAudioState audioState;
 			audioState.SetSampleRate((int)state->samplerate);
-			core->SetAudioState(audioState);
-			WriteLog("Sample rate set to ", state->samplerate);
+			effectdata->core->SetAudioState(audioState);
+			WriteLog(effectdata->sourceID, "Sample rate set to ", state->samplerate);
 
 			// Set listener transform	
 			// WARNING: the source and listener matrix passed in CreateCallback seem to be always ZERO (this might create a problem with Quaternions)
@@ -249,8 +282,9 @@ namespace UnityWrapper3DTI
 
 			// Create source and set transform		
 			// WARNING: the source and listener matrix passed in CreateCallback seem to be always ZERO
-			effectdata->audioSource = core->CreateSingleSourceDSP();
-			SetSourceTransformFromMatrix(effectdata->audioSource, state->spatializerdata->sourcematrix, effectdata->parameters[PARAM_SCALE_FACTOR]);
+			effectdata->audioSource = effectdata->core->CreateSingleSourceDSP();	
+			effectdata->audioSource->SetInterpolation(3);	// Default
+			effectdata->audioSource->SetSourceTransform(ComputeSourceTransformFromMatrix(state->spatializerdata->sourcematrix, effectdata->parameters[PARAM_SCALE_FACTOR]));			
 		}
 
 		return UNITY_AUDIODSP_OK;
@@ -272,28 +306,128 @@ namespace UnityWrapper3DTI
 		EffectData* data = state->GetEffectData<EffectData>();
 		if (index >= P_NUM)
 			return UNITY_AUDIODSP_ERR_UNSUPPORTED;
-		data->parameters[index] = value;
+		data->parameters[index] = value;		
+
+		CMagnitudes magnitudes;
 
 		// Process command sent by C# API
 		switch (index)
 		{
 			case PARAM_HRTF_FILE_HANDLE:	// Load HRTF binary file (MANDATORY)
-				LoadHRTFBinaryFile(value);
-				//coreReady = true;		// Temporary solution before integration of CoreState class
-				WriteLog("Core ready! ", "");
+				if (LoadHRTFBinaryFile(state, value))
+				{
+					data->coreReady = true;		// Temporary solution before integration of CoreState class
+					WriteLog(data->sourceID, "Core ready! ", "");
+				}
 				break;
 
 			case PARAM_HEAD_RADIUS:	// Set listener head radius (OPTIONAL)
-				core->SetHeadRadius(value);				
-				WriteLog("Listener head radius changed: ", value);
+				data->core->SetHeadRadius(value);				
+				WriteLog(data->sourceID, "Listener head radius changed: ", value);
 				break;
 
 			case PARAM_SCALE_FACTOR:	// Set scale factor (OPTIONAL)				
-				WriteLog("Scale factor changed: ", value);
+				WriteLog(data->sourceID, "Scale factor changed: ", value);
+				break;
+
+			case PARAM_SOURCE_ID:	// DEBUG
+				data->sourceID = (int)value;
+				WriteLog(data->sourceID, "Source ID set to: ", data->sourceID);
+				break;
+
+			case PARAM_CUSTOM_ITD:	// Enable custom ITD (OPTIONAL)
+				if (value > 0.0f)
+				{
+					data->core->SetCustomizedITD(true);
+					WriteLog(data->sourceID, "Custom ITD: ", "Enabled");
+				}
+				else
+				{
+					data->core->SetCustomizedITD(false);
+					WriteLog(data->sourceID, "Custom ITD: ", "Disabled");
+				}
+				break;
+
+			case PARAM_HRTF_INTERPOLATION:	// Change interpolation method (OPTIONAL)
+				data->audioSource->SetInterpolation((int)value);	
+				WriteLog(data->sourceID, "HRTF Interpolation method switched to: ", (int) value);
+				break;
+
+			case PARAM_MOD_FARLPF:
+				if (value > 0.0f)
+				{
+					data->audioSource->modEnabler.doFarDistanceLPF = true;
+					WriteLog(data->sourceID, "Far distance LPF: ", "Enabled");
+				}
+				else
+				{
+					data->audioSource->modEnabler.doFarDistanceLPF = false;
+					WriteLog(data->sourceID, "Far distance LPF: ", "Disabled");
+				}
+				break;
+
+			case PARAM_MOD_DISTATT:
+				if (value > 0.0f)
+				{
+					data->audioSource->modEnabler.doDistanceAttenuation = true;
+					WriteLog(data->sourceID, "Distance attenuation: ", "Enabled");
+				}
+				else
+				{
+					data->audioSource->modEnabler.doDistanceAttenuation = false;
+					WriteLog(data->sourceID, "Distance attenuation: ", "Disabled");
+				}
+				break;
+
+			case PARAM_MOD_ILD:
+				if (value > 0.0f)
+				{
+					data->audioSource->modEnabler.doILD = true;
+					WriteLog(data->sourceID, "Near distance ILD: ", "Enabled");
+				}
+				else
+				{
+					data->audioSource->modEnabler.doILD = false;
+					WriteLog(data->sourceID, "Near distance ILD: ", "Disabled");
+				}
+				break;
+
+			case PARAM_MOD_HRTF:
+				if (value > 0.0f)
+				{
+					data->audioSource->modEnabler.doHRTF = true;
+					WriteLog(data->sourceID, "HRTF convolution: ", "Enabled");
+				}
+				else
+				{
+					data->audioSource->modEnabler.doHRTF = false;
+					WriteLog(data->sourceID, "HRTF convolution: ", "Disabled");
+				}
+				break;
+
+			case PARAM_MAG_ANECHATT:
+				magnitudes = data->core->GetMagnitudes();
+				magnitudes.SetAnechoicDistanceAttenuation(value);
+				data->core->SetMagnitudes(magnitudes);
+				WriteLog(data->sourceID, "Anechoic distance attenuation set to (dB): ", value);
+				break;
+
+			case PARAM_MAG_REVERBATT:
+				magnitudes = data->core->GetMagnitudes();
+				magnitudes.SetReverbDistanceAttenuation(value);
+				data->core->SetMagnitudes(magnitudes);
+				WriteLog(data->sourceID, "Reverb distance attenuation set to (dB): ", value);
+				break;
+
+			case PARAM_MAG_SOUNDSPEED:
+				magnitudes = data->core->GetMagnitudes();
+				magnitudes.SetSoundSpeed(value);
+				data->core->SetMagnitudes(magnitudes);
+				WriteLog(data->sourceID, "Sound speed set to (m/s): ", value);
 				break;
 
 			default:
-				WriteLog("Unknown float parameter passed from API: ", index);
+				WriteLog(data->sourceID, "Unknown float parameter passed from API: ", index);
 				return UNITY_AUDIODSP_ERR_UNSUPPORTED;
 				break;
 		}
@@ -327,25 +461,27 @@ namespace UnityWrapper3DTI
 
 	UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectState* state, float* inbuffer, float* outbuffer, unsigned int length, int inchannels, int outchannels)
 	{		
+		EffectData* data = state->GetEffectData<EffectData>();		
+
 		// Check that I/O formats are right and that the host API supports this feature		
 		if (inchannels != 2 || outchannels != 2 ||
 			!IsHostCompatible(state) || state->spatializerdata == NULL)
 		{
-			WriteLog("	ERROR! Wrong number of channels or Host is not compatible", "");
+			WriteLog(data->sourceID, "	ERROR! Wrong number of channels or Host is not compatible", "");
 			memcpy(outbuffer, inbuffer, length * outchannels * sizeof(float));
 			return UNITY_AUDIODSP_OK;
 		}						
-		EffectData* data = state->GetEffectData<EffectData>();
-
+		
 		// Before doing anything, check that the core is ready
 		// Temporary solution, before integration of CoreState class
-		if (!coreReady)
-			return UNITY_AUDIODSP_OK;
+		if (!data->coreReady)
+			return UNITY_AUDIODSP_OK;		
 
 		// Set source and listener transforms
-		SetSourceTransformFromMatrix(data->audioSource, state->spatializerdata->sourcematrix, data->parameters[PARAM_SCALE_FACTOR]);
-		SetListenerTransformFromMatrix(state->spatializerdata->listenermatrix, data->parameters[PARAM_SCALE_FACTOR]);
-		
+		// Orientation does not matters for audio sources
+		data->audioSource->SetSourceTransform(ComputeSourceTransformFromMatrix(state->spatializerdata->sourcematrix, data->parameters[PARAM_SCALE_FACTOR]));
+		data->core->SetListenerTransform(ComputeListenerTransformFromMatrix(state->spatializerdata->listenermatrix, data->parameters[PARAM_SCALE_FACTOR]));
+
 		// Transform input buffer
 		// TO DO: Avoid this copy
 		CMonoBuffer<float> inMonoBuffer(length);
@@ -353,12 +489,11 @@ namespace UnityWrapper3DTI
 		{
 			inMonoBuffer[i] = inbuffer[i * 2]; // We take only the left channel
 		}
-
+		
 		// Process!!
-		CStereoBuffer<float> outStereoBuffer(length * 2);
-		data->audioSource->SetInterpolation(3);		// Do we still need this?
-		data->audioSource->UpdateBuffer(inMonoBuffer);
-		data->audioSource->ProcessAnechoic(outStereoBuffer);		
+		CStereoBuffer<float> outStereoBuffer(length * 2);		
+		data->audioSource->UpdateBuffer(inMonoBuffer);		
+		data->audioSource->ProcessAnechoic(outStereoBuffer);						
 
 		// Transform output buffer
 		// TO DO: Avoid this copy
