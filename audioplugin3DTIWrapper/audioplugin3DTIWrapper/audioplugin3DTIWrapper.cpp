@@ -20,6 +20,7 @@
 #define AXIS_CONVENTION UNITY
 
 #include "Core.h"
+#include "CoreState.h"
 
 // Includes for reading HRTF data and logging dor debug
 #include <fstream>
@@ -30,7 +31,7 @@
 using namespace std;
 
 // DEBUG LOG FILE
-//#define LOG_FILE
+#define LOG_FILE
 template <class T>
 void WriteLog(int sourceid, string logtext, const T& value)
 {
@@ -73,7 +74,7 @@ namespace UnityWrapper3DTI
 		float parameters[P_NUM];		
 		std::shared_ptr<CSingleSourceDSP> audioSource;		
 		CCore* core;
-		bool coreReady;				// Temporary solution before integration of CoreState class in Core	
+		bool coreReady;				// Keep this until final version of CoreState
 	};
 
 /////////////////////////////////////////////////////////////////////
@@ -140,6 +141,7 @@ namespace UnityWrapper3DTI
 		CHRTF myHead = HRTF::CreateFrom3dtiHandle(fileHandle);		
 		if (myHead.GetHRIRLength() != 0)		// TO DO: Improve this error check
 		{
+			data->core->BeginSetup();
 			data->core->LoadHRTF(std::move(myHead));
 			WriteLog(data->sourceID, "HRTF loaded from binary 3DTI file:", "");
 			WriteLog(data->sourceID, "	HRIR length: ", myHead.GetHRIRLength());
@@ -245,9 +247,6 @@ namespace UnityWrapper3DTI
 				state->spatializerdata->distanceattenuationcallback = DistanceAttenuationCallback;	// TO DO: check if we can remove this
 			InitParametersFromDefinitions(InternalRegisterEffectDefinition, effectdata->parameters);		
 
-			effectdata->pluginCreated = true;
-			effectdata->sourceID = -1;
-
 			// DEBUG: Start log file
 			#ifdef LOG_FILE
 			time_t rawtime;
@@ -263,18 +262,24 @@ namespace UnityWrapper3DTI
 
 			// Core initialization
 			effectdata->core = new CCore();
-			WriteLog(effectdata->sourceID, "Core initialized", "");
+			effectdata->core->BeginSetup();
+			WriteLog(effectdata->sourceID, "Core setup started...", "");
 
-			// Init parameters. Core is not ready until we load the HRTF...
+			// Init parameters. Core is not ready until we load the HRTF and ILD...
 			effectdata->coreReady = false;
 			effectdata->parameters[PARAM_SCALE_FACTOR] = 1.0f;
 
+			//effectdata->pluginCreated = true;
+			effectdata->sourceID = -1;
+
 			// Set default audio state
-			// QUESTIONS: How does this overlaps with explicit call to SetAudioState from C# API? What about buffer size?
-			CAudioState audioState;
-			audioState.SetSampleRate((int)state->samplerate);
+			// QUESTIONS: How does this overlaps with explicit call to SetAudioState from C# API? 
+			AudioState_Struct audioState;
+			audioState.sampleRate = (int)state->samplerate;
+			audioState.bufferSize = (int)state->dspbuffersize;
 			effectdata->core->SetAudioState(audioState);
 			WriteLog(effectdata->sourceID, "Sample rate set to ", state->samplerate);
+			WriteLog(effectdata->sourceID, "Buffer size set to ", state->dspbuffersize);
 
 			// Set listener transform	
 			// WARNING: the source and listener matrix passed in CreateCallback seem to be always ZERO (this might create a problem with Quaternions)
@@ -316,8 +321,9 @@ namespace UnityWrapper3DTI
 			case PARAM_HRTF_FILE_HANDLE:	// Load HRTF binary file (MANDATORY)
 				if (LoadHRTFBinaryFile(state, value))
 				{
-					data->coreReady = true;		// Temporary solution before integration of CoreState class
-					WriteLog(data->sourceID, "Core ready! ", "");
+					data->core->EndSetup();
+					data->coreReady = true;		// Temporary solution before integration of CoreState class					
+					WriteLog(data->sourceID, "...Core ready! ", "");
 				}
 				break;
 
@@ -477,32 +483,47 @@ namespace UnityWrapper3DTI
 		if (!data->coreReady)
 			return UNITY_AUDIODSP_OK;		
 
-		// Set source and listener transforms
-		// Orientation does not matters for audio sources
-		data->audioSource->SetSourceTransform(ComputeSourceTransformFromMatrix(state->spatializerdata->sourcematrix, data->parameters[PARAM_SCALE_FACTOR]));
-		data->core->SetListenerTransform(ComputeListenerTransformFromMatrix(state->spatializerdata->listenermatrix, data->parameters[PARAM_SCALE_FACTOR]));
-
-		// Transform input buffer
-		// TO DO: Avoid this copy
-		CMonoBuffer<float> inMonoBuffer(length);
-		for (int i = 0; i < length; i++)
+		try
 		{
-			inMonoBuffer[i] = inbuffer[i * 2]; // We take only the left channel
-		}
-		
-		// Process!!
-		CStereoBuffer<float> outStereoBuffer(length * 2);		
-		data->audioSource->UpdateBuffer(inMonoBuffer);		
-		data->audioSource->ProcessAnechoic(outStereoBuffer);						
+			data->core->EndSetup();
 
-		// Transform output buffer
-		// TO DO: Avoid this copy
-		int i = 0;
-		for (auto it = outStereoBuffer.begin(); it != outStereoBuffer.end(); it++)
+			// Set source and listener transforms
+			// Orientation does not matters for audio sources
+			data->audioSource->SetSourceTransform(ComputeSourceTransformFromMatrix(state->spatializerdata->sourcematrix, data->parameters[PARAM_SCALE_FACTOR]));
+			data->core->SetListenerTransform(ComputeListenerTransformFromMatrix(state->spatializerdata->listenermatrix, data->parameters[PARAM_SCALE_FACTOR]));
+
+			// Transform input buffer
+			// TO DO: Avoid this copy
+			CMonoBuffer<float> inMonoBuffer(length);
+			for (int i = 0; i < length; i++)
+			{
+				inMonoBuffer[i] = inbuffer[i * 2]; // We take only the left channel
+			}
+
+			// Process!!
+			CStereoBuffer<float> outStereoBuffer(length * 2);
+			data->audioSource->UpdateBuffer(inMonoBuffer);
+			data->audioSource->ProcessAnechoic(outStereoBuffer);
+
+			// Transform output buffer
+			// TO DO: Avoid this copy
+			int i = 0;
+			for (auto it = outStereoBuffer.begin(); it != outStereoBuffer.end(); it++)
+			{
+				outbuffer[i++] = *it;
+			}
+		}	
+		catch (State_exception & e) 
 		{
-			outbuffer[i++] = *it;
+			WriteLog(data->sourceID, "Core exception! Tried to process before ending setup: ", e.what());
 		}
-
+		catch (NotInitialized_exception & e) 
+		{
+			WriteLog(data->sourceID, "Core exception! Tried to process before ending setup: ", e.what());
+		}
+		catch (...)
+		{// Further exception management
+		}
 		return UNITY_AUDIODSP_OK;
 	}
 }

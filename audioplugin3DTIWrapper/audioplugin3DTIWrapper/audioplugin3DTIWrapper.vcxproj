@@ -150,6 +150,7 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Buffer.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Convolver.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Core.cpp" />
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\CoreState.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Debugger.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Defaults.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Fconvolver.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Conventions.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Convolver.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Core.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\CoreState.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Debugger.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Defaults.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Fconvolver.h" />
