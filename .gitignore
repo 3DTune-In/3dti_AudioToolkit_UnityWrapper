@@ -279,3 +279,4 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+audioplugin3DTIWrapper/audioplugin3DTIWrapper.VC.VC.opendb
