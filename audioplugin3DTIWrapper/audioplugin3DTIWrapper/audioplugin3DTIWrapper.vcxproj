@@ -145,6 +145,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\ABIR.cpp" />
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\AIR.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\AudioState.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\BiquadFilter.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Buffer.cpp" />
@@ -152,7 +153,6 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Core.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\CoreState.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Debugger.cpp" />
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Defaults.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Fconvolver.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\fftsg.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\FiltersBank.cpp" />
@@ -173,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\ABIR.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\AIR.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\AudioState.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\BiquadFilter.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Buffer.h" />
@@ -181,7 +182,6 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Core.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\CoreState.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Debugger.h" />
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Defaults.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Fconvolver.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\fftsg.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\FiltersBank.h" />

@@ -28,6 +28,7 @@
 #include <iostream>
 #include <time.h>
 #include <HRTF/HRTFCereal.h>
+#include <ILD/ILDCereal.h>
 
 using namespace std;
 
@@ -63,6 +64,7 @@ namespace UnityWrapper3DTI
 		PARAM_MAG_ANECHATT,
 		PARAM_MAG_REVERBATT,
 		PARAM_MAG_SOUNDSPEED,
+		PARAM_ILD_FILE_HANDLE,
 		P_NUM
 	};
 
@@ -107,7 +109,8 @@ namespace UnityWrapper3DTI
 		RegisterParameter(definition, "MAGAneAtt", "dB", -30.0f, 0.0f, -6.0f, 1.0f, 1.0f, PARAM_MAG_ANECHATT, "Anechoic distance attenuation");
 		RegisterParameter(definition, "MAGRevAtt", "dB", -30.0f, 0.0f, -6.0f, 1.0f, 1.0f, PARAM_MAG_REVERBATT, "Reverb distance attenuation");
 		RegisterParameter(definition, "MAGSounSpd", "m/s", 0.0f, 1000.0f, 343.0f, 1.0f, 1.0f, PARAM_MAG_SOUNDSPEED, "Sound speed");
-
+		RegisterParameter(definition, "ILDHandle", "", 0.0f, FLT_MAX, 0.0f, 1.0f, 1.0f, PARAM_ILD_FILE_HANDLE, "Handle of ILD binary file");
+		
 		definition.flags |= UnityAudioEffectDefinitionFlags_IsSpatializer;
 		return numparams;
 	}
@@ -155,6 +158,40 @@ namespace UnityWrapper3DTI
 			WriteLog(data->sourceID, "Error!!! could not create HRTF from handle", "");
 			return -1;
 		}
+	}
+
+/////////////////////////////////////////////////////////////////////
+
+	int LoadILDBinaryFile(UnityAudioEffectState* state, float floatHandle)
+	{
+		EffectData* data = state->GetEffectData<EffectData>();
+
+		// Cast from float to HANDLE
+		int intHandle = (int)floatHandle;
+		HANDLE fileHandle = (HANDLE)intHandle;
+
+		// Check that handle is correct
+		if (fileHandle == INVALID_HANDLE_VALUE)
+		{
+			WriteLog(data->sourceID, "Error!!! Invalid file handle in ILD binary file", "");
+			return -1;
+		}
+
+		// Get ILD and check errors
+		ILD_HashTable h;
+		//h = ILD::CreateFrom3dti(fileHandle);
+
+		if (h.size() > 0)		// TO DO: Improve this error check		
+		{
+			CILD::SetILD_HashTable(std::move(h));
+			WriteLog(data->sourceID, "ILD loaded from binary 3DTI file: ", h.size());
+			return 1;
+		}
+		else
+		{
+			WriteLog(data->sourceID, "Error!!! could not create ILD from handle", "");
+			return -1;
+		}		
 	}
 
 /////////////////////////////////////////////////////////////////////
@@ -490,7 +527,7 @@ namespace UnityWrapper3DTI
 		
 		//CDebugger::Instance().SetVerbosityMode(VERBOSITY_MODE_ALL);
 		//CDebugger::Instance().SetErrorLogFile("coredebug.txt");
-		CDebugger::Instance().SetAssertMode(ASSERT_MODE_CONTINUE);
+		//CDebugger::Instance().SetAssertMode(ASSERT_MODE_CONTINUE);
 
 		try
 		{
