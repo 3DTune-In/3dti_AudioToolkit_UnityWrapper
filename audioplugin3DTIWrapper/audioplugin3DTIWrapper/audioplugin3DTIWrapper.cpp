@@ -21,6 +21,7 @@
 
 #include "Core.h"
 #include "CoreState.h"
+#include "Debugger.h"
 
 // Includes for reading HRTF data and logging dor debug
 #include <fstream>
@@ -31,7 +32,7 @@
 using namespace std;
 
 // DEBUG LOG FILE
-#define LOG_FILE
+//#define LOG_FILE
 template <class T>
 void WriteLog(int sourceid, string logtext, const T& value)
 {
@@ -260,8 +261,16 @@ namespace UnityWrapper3DTI
 			#endif
 			//
 
+			// Set default audio state
+			// QUESTIONS: How does this overlaps with explicit call to SetAudioState from C# API? 
+			AudioState_Struct audioState;
+			audioState.sampleRate = (int)state->samplerate;
+			audioState.bufferSize = (int)state->dspbuffersize;
+			WriteLog(effectdata->sourceID, "Sample rate set to ", state->samplerate);
+			WriteLog(effectdata->sourceID, "Buffer size set to ", state->dspbuffersize);
+
 			// Core initialization
-			effectdata->core = new CCore();
+			effectdata->core = new CCore(audioState, 0.0875f);
 			effectdata->core->BeginSetup();
 			WriteLog(effectdata->sourceID, "Core setup started...", "");
 
@@ -272,15 +281,6 @@ namespace UnityWrapper3DTI
 			//effectdata->pluginCreated = true;
 			effectdata->sourceID = -1;
 
-			// Set default audio state
-			// QUESTIONS: How does this overlaps with explicit call to SetAudioState from C# API? 
-			AudioState_Struct audioState;
-			audioState.sampleRate = (int)state->samplerate;
-			audioState.bufferSize = (int)state->dspbuffersize;
-			effectdata->core->SetAudioState(audioState);
-			WriteLog(effectdata->sourceID, "Sample rate set to ", state->samplerate);
-			WriteLog(effectdata->sourceID, "Buffer size set to ", state->dspbuffersize);
-
 			// Set listener transform	
 			// WARNING: the source and listener matrix passed in CreateCallback seem to be always ZERO (this might create a problem with Quaternions)
 			//SetListenerTransformFromMatrix(state->spatializerdata->listenermatrix, effectdata->parameters[PARAM_SCALE_FACTOR]);
@@ -289,7 +289,7 @@ namespace UnityWrapper3DTI
 			// WARNING: the source and listener matrix passed in CreateCallback seem to be always ZERO
 			effectdata->audioSource = effectdata->core->CreateSingleSourceDSP();	
 			effectdata->audioSource->SetInterpolation(3);	// Default
-			effectdata->audioSource->SetSourceTransform(ComputeSourceTransformFromMatrix(state->spatializerdata->sourcematrix, effectdata->parameters[PARAM_SCALE_FACTOR]));			
+			//effectdata->audioSource->SetSourceTransform(ComputeSourceTransformFromMatrix(state->spatializerdata->sourcematrix, effectdata->parameters[PARAM_SCALE_FACTOR]));			
 		}
 
 		return UNITY_AUDIODSP_OK;
@@ -319,11 +319,16 @@ namespace UnityWrapper3DTI
 		switch (index)
 		{
 			case PARAM_HRTF_FILE_HANDLE:	// Load HRTF binary file (MANDATORY)
-				if (LoadHRTFBinaryFile(state, value))
+				if (LoadHRTFBinaryFile(state, value) == 1)
 				{
 					data->core->EndSetup();
 					data->coreReady = true;		// Temporary solution before integration of CoreState class					
 					WriteLog(data->sourceID, "...Core ready! ", "");
+
+					// Create source
+					//data->audioSource = data->core->CreateSingleSourceDSP();
+					//data->audioSource->SetInterpolation(3);	// Default
+					//data->audioSource->SetSourceTransform(ComputeSourceTransformFromMatrix(state->spatializerdata->sourcematrix, data->parameters[PARAM_SCALE_FACTOR]));
 				}
 				break;
 
@@ -481,11 +486,15 @@ namespace UnityWrapper3DTI
 		// Before doing anything, check that the core is ready
 		// Temporary solution, before integration of CoreState class
 		if (!data->coreReady)
-			return UNITY_AUDIODSP_OK;		
+			return UNITY_AUDIODSP_OK;			
+		
+		//CDebugger::Instance().SetVerbosityMode(VERBOSITY_MODE_ALL);
+		//CDebugger::Instance().SetErrorLogFile("coredebug.txt");
+		CDebugger::Instance().SetAssertMode(ASSERT_MODE_CONTINUE);
 
 		try
 		{
-			data->core->EndSetup();
+			//data->core->EndSetup();
 
 			// Set source and listener transforms
 			// Orientation does not matters for audio sources
@@ -522,8 +531,10 @@ namespace UnityWrapper3DTI
 			WriteLog(data->sourceID, "Core exception! Tried to process before ending setup: ", e.what());
 		}
 		catch (...)
-		{// Further exception management
+		{
+			WriteLog(data->sourceID, "Core exception! Unknown.", "");
 		}
+
 		return UNITY_AUDIODSP_OK;
 	}
 }
