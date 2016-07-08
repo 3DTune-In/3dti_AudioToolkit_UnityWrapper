@@ -42,9 +42,6 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Debugger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Defaults.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Fconvolver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -79,6 +76,24 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Vector3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\CoreState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\AIR.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -116,9 +131,6 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Debugger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Defaults.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Fconvolver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -137,9 +149,6 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\ILD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Magnitudes .h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Magnitudes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -156,6 +165,27 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Vector3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\CoreState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\AIR.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\ARIR.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

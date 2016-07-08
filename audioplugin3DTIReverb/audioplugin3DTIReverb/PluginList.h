@@ -1,0 +1,1 @@
+DECLARE_EFFECT("3DTI Unity Reverb", UnityReverb3DTI)
