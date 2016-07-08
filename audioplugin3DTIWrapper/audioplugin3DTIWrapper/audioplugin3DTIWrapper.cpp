@@ -1,8 +1,8 @@
 /**
 *** 3D-Tune-In Toolkit Unity Wrapper ***
 *
-* version alpha 1.1
-* Created on: June 2016
+* version beta 1.1
+* Created on: July 2016
 *
 * Author: 3DI-DIANA Research Group / University of Malaga / Spain
 * Contact: areyes@uma.es
@@ -23,7 +23,7 @@
 #include "CoreState.h"
 #include "Debugger.h"
 
-// Includes for reading HRTF data and logging dor debug
+// Includes for reading HRTF and ILD data and logging dor debug
 #include <fstream>
 #include <iostream>
 #include <time.h>
@@ -73,7 +73,6 @@ namespace UnityWrapper3DTI
 	struct EffectData
 	{
 		int sourceID;	// DEBUG
-		bool pluginCreated=false;	// For some reason, createcallback is being called more than once...
 		float parameters[P_NUM];		
 		std::shared_ptr<CSingleSourceDSP> audioSource;		
 		CCore* core;
@@ -179,8 +178,7 @@ namespace UnityWrapper3DTI
 
 		// Get ILD and check errors
 		ILD_HashTable h;
-		//h = ILD::CreateFrom3dti(fileHandle);
-
+		h = ILD::CreateFrom3dtiHandle(fileHandle);
 		if (h.size() > 0)		// TO DO: Improve this error check		
 		{
 			CILD::SetILD_HashTable(std::move(h));
@@ -279,55 +277,54 @@ namespace UnityWrapper3DTI
 		memset(effectdata, 0, sizeof(EffectData));
 		state->effectdata = effectdata;
 
-		if (!effectdata->pluginCreated)
-		{
-			if (IsHostCompatible(state))
-				state->spatializerdata->distanceattenuationcallback = DistanceAttenuationCallback;	// TO DO: check if we can remove this
-			InitParametersFromDefinitions(InternalRegisterEffectDefinition, effectdata->parameters);		
+		if (IsHostCompatible(state))
+			state->spatializerdata->distanceattenuationcallback = DistanceAttenuationCallback;	// TO DO: check if we can remove this
+		InitParametersFromDefinitions(InternalRegisterEffectDefinition, effectdata->parameters);		
 
-			// DEBUG: Start log file
-			#ifdef LOG_FILE
-			time_t rawtime;
-			struct tm * timeinfo;
-			char buffer[80];
-			time(&rawtime);
-			timeinfo = localtime(&rawtime);
-			strftime(buffer, 80, "%d-%m-%Y %I:%M:%S", timeinfo);
-			std::string str(buffer);
-			WriteLog(effectdata->sourceID, "***************************************************************************************\nDebug log started at ", str);
-			#endif
-			//
+		// DEBUG: Start log file
+		#ifdef LOG_FILE
+		time_t rawtime;
+		struct tm * timeinfo;
+		char buffer[80];
+		time(&rawtime);
+		timeinfo = localtime(&rawtime);
+		strftime(buffer, 80, "%d-%m-%Y %I:%M:%S", timeinfo);
+		std::string str(buffer);
+		WriteLog(effectdata->sourceID, "***************************************************************************************\nDebug log started at ", str);
+		#endif
+		//
 
-			// Set default audio state
-			// QUESTIONS: How does this overlaps with explicit call to SetAudioState from C# API? 
-			AudioState_Struct audioState;
-			audioState.sampleRate = (int)state->samplerate;
-			audioState.bufferSize = (int)state->dspbuffersize;
-			WriteLog(effectdata->sourceID, "Sample rate set to ", state->samplerate);
-			WriteLog(effectdata->sourceID, "Buffer size set to ", state->dspbuffersize);
+		// Set default audio state
+		// QUESTION: How does this overlaps with explicit call to SetAudioState from C# API? 
+		AudioState_Struct audioState;
+		audioState.sampleRate = (int)state->samplerate;
+		audioState.bufferSize = (int)state->dspbuffersize;
+		WriteLog(effectdata->sourceID, "Sample rate set to ", state->samplerate);
+		WriteLog(effectdata->sourceID, "Buffer size set to ", state->dspbuffersize);
 
-			// Core initialization
-			effectdata->core = new CCore(audioState, 0.0875f);
-			effectdata->core->BeginSetup();
-			WriteLog(effectdata->sourceID, "Core setup started...", "");
+		// Core initialization
+		effectdata->core = new CCore(audioState, 0.0875f);
+		effectdata->core->BeginSetup();
+		WriteLog(effectdata->sourceID, "Core setup started...", "");
 
-			// Init parameters. Core is not ready until we load the HRTF and ILD...
-			effectdata->coreReady = false;
-			effectdata->parameters[PARAM_SCALE_FACTOR] = 1.0f;
+		// Init parameters. Core is not ready until we load the HRTF (and ILD?)...
+		effectdata->coreReady = false;
+		effectdata->parameters[PARAM_SCALE_FACTOR] = 1.0f;
+		effectdata->sourceID = -1;
 
-			//effectdata->pluginCreated = true;
-			effectdata->sourceID = -1;
+		// Set listener transform	
+		// WARNING: the source and listener matrix passed in CreateCallback seem to be always ZERO (this might create a problem with Quaternions)
+		//SetListenerTransformFromMatrix(state->spatializerdata->listenermatrix, effectdata->parameters[PARAM_SCALE_FACTOR]);
 
-			// Set listener transform	
-			// WARNING: the source and listener matrix passed in CreateCallback seem to be always ZERO (this might create a problem with Quaternions)
-			//SetListenerTransformFromMatrix(state->spatializerdata->listenermatrix, effectdata->parameters[PARAM_SCALE_FACTOR]);
+		// Create source and set default interpolation method		
+		effectdata->audioSource = effectdata->core->CreateSingleSourceDSP();	
+		effectdata->audioSource->SetInterpolation(3);	// Default
+		// WARNING: the source and listener matrix passed in CreateCallback seem to be always ZERO
+		//effectdata->audioSource->SetSourceTransform(ComputeSourceTransformFromMatrix(state->spatializerdata->sourcematrix, effectdata->parameters[PARAM_SCALE_FACTOR]));			
 
-			// Create source and set transform		
-			// WARNING: the source and listener matrix passed in CreateCallback seem to be always ZERO
-			effectdata->audioSource = effectdata->core->CreateSingleSourceDSP();	
-			effectdata->audioSource->SetInterpolation(3);	// Default
-			//effectdata->audioSource->SetSourceTransform(ComputeSourceTransformFromMatrix(state->spatializerdata->sourcematrix, effectdata->parameters[PARAM_SCALE_FACTOR]));			
-		}
+		//CDebugger::Instance().SetVerbosityMode(VERBOSITY_MODE_ALL);
+		//CDebugger::Instance().SetErrorLogFile("coredebug.txt");
+		//CDebugger::Instance().SetAssertMode(ASSERT_MODE_CONTINUE);
 
 		return UNITY_AUDIODSP_OK;
 	}
@@ -359,13 +356,14 @@ namespace UnityWrapper3DTI
 				if (LoadHRTFBinaryFile(state, value) == 1)
 				{
 					data->core->EndSetup();
-					data->coreReady = true;		// Temporary solution before integration of CoreState class					
+					data->coreReady = true;		// Temporary solution before integration of final CoreState class					
 					WriteLog(data->sourceID, "...Core ready! ", "");
+				}
+				break;
 
-					// Create source
-					//data->audioSource = data->core->CreateSingleSourceDSP();
-					//data->audioSource->SetInterpolation(3);	// Default
-					//data->audioSource->SetSourceTransform(ComputeSourceTransformFromMatrix(state->spatializerdata->sourcematrix, data->parameters[PARAM_SCALE_FACTOR]));
+			case PARAM_ILD_FILE_HANDLE:	// Load ILD binary file (MANDATORY?)
+				if (LoadILDBinaryFile(state, value) == 1)
+				{
 				}
 				break;
 
@@ -516,18 +514,19 @@ namespace UnityWrapper3DTI
 			!IsHostCompatible(state) || state->spatializerdata == NULL)
 		{
 			WriteLog(data->sourceID, "	ERROR! Wrong number of channels or Host is not compatible", "");
-			memcpy(outbuffer, inbuffer, length * outchannels * sizeof(float));
+			//memcpy(outbuffer, inbuffer, length * outchannels * sizeof(float));
+			memset(outbuffer, 0.0f, length * outchannels * sizeof(float));
 			return UNITY_AUDIODSP_OK;
 		}						
 		
 		// Before doing anything, check that the core is ready
 		// Temporary solution, before integration of CoreState class
 		if (!data->coreReady)
-			return UNITY_AUDIODSP_OK;			
-		
-		//CDebugger::Instance().SetVerbosityMode(VERBOSITY_MODE_ALL);
-		//CDebugger::Instance().SetErrorLogFile("coredebug.txt");
-		//CDebugger::Instance().SetAssertMode(ASSERT_MODE_CONTINUE);
+		{
+			// Put silence in outbuffer
+			memset(outbuffer, 0.0f, length * outchannels * sizeof(float));
+			return UNITY_AUDIODSP_OK;
+		}
 
 		try
 		{

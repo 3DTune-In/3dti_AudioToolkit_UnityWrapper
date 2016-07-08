@@ -93,6 +93,9 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\AIR.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioPluginInterface.h">
@@ -177,6 +180,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\AIR.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\ARIR.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
