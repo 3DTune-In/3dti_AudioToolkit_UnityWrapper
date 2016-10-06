@@ -13,6 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="3DTI_Toolkit_Core">
+      <UniqueIdentifier>{d08a4404-a494-407a-82c5-2c5b09624fd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3DTI_Toolkit_Core\BinauralSpatializer">
+      <UniqueIdentifier>{7cfa3052-4583-43b8-99a5-5e16060c12e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3DTI_Toolkit_Core\Common">
+      <UniqueIdentifier>{3a4beacb-550d-43e0-9179-9b6b02bc624b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3DTI_Toolkit_Modules">
+      <UniqueIdentifier>{f277d14f-9215-4631-aaf8-e723ae308938}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3DTI_Toolkit_Modules\HRTF">
+      <UniqueIdentifier>{a8dce4f3-1679-46ca-8563-f354a6c1200b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3DTI_Toolkit_Modules\ILD">
+      <UniqueIdentifier>{d1d03bbc-39ba-4bb0-8ddd-e6eef6ffeeee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="audioplugin3DTIWrapper.cpp">
@@ -21,80 +39,77 @@
     <ClCompile Include="AudioPluginUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\ABIR.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\AudioState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\BiquadFilter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Buffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Convolver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Core.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Debugger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Fconvolver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\fftsg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\FiltersBank.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\FiltersChain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\HRTF.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\ILD.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Magnitudes.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Profiler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Quaternion.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\SingleSourceDSP.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Transform.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Vector3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="dllmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\CoreState.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\Convolver.cpp">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\AIR.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\Core.cpp">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\CoreState.cpp">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\HRTF.cpp">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\ILD.cpp">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\SingleSourceDSP.cpp">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\AIR.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\AudioState.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\BiquadFilter.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Buffer.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Debugger.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\DistanceAttenuator.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Fconvolver.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\fftsg.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\FiltersChain.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Magnitudes.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Profiler.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Quaternion.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Transform.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Vector3.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.cpp">
+      <Filter>3DTI_Toolkit_Modules\HRTF</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.cpp">
+      <Filter>3DTI_Toolkit_Modules\ILD</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -107,86 +122,80 @@
     <ClInclude Include="PluginList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\ABIR.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\AudioState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\BiquadFilter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Buffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Conventions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Convolver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Core.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Debugger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Fconvolver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\fftsg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\FiltersBank.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\FiltersChain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\HRTF.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\ILD.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Magnitudes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Profiler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Quaternion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\SingleSourceDSP.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Transform.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Vector3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\CoreState.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\Convolver.h">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\AIR.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\Core.h">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\CoreState.h">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\ARIR.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\HRTF.h">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\ILD.h">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\SingleSourceDSP.h">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\AIR.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\AudioState.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\BiquadFilter.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Buffer.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Conventions.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Debugger.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\DistanceAttenuator.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Fconvolver.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\fftsg.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\FiltersChain.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Magnitudes.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Profiler.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Quaternion.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Transform.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Vector3.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.h">
+      <Filter>3DTI_Toolkit_Modules\HRTF</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.h">
+      <Filter>3DTI_Toolkit_Modules\ILD</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
