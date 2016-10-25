@@ -1,1 +1,0 @@
-DECLARE_EFFECT("3DTI Unity Wrapper", UnityWrapper3DTI)
