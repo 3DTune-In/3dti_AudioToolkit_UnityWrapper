@@ -21,7 +21,7 @@
 #include <iostream>
 
 #include <HRTF/HRTFCereal.h>
-//#include <ILD/ILDCereal.h>
+#include <ILD/ILDCereal.h>
 
 #define RESULT_LOAD_WAITING 0
 #define RESULT_LOAD_OK 1
@@ -32,7 +32,7 @@
 #ifdef UNITY_ANDROID
 #define DEBUG_LOG_CAT
 #else
-#define DEBUG_LOG_FILE
+//#define DEBUG_LOG_FILE
 #endif
 
 #ifdef DEBUG_LOG_CAT
@@ -269,7 +269,7 @@ namespace UnityWrapper3DTI
 			WriteLog(state, "CREATE: Source created successfully", "");
 			effectdata->audioSource->SetInterpolation(true);
 			effectdata->audioSource->SetFrequencyConvolution(true);
-			//effectdata->audioSource->modEnabler.doILD = false;	// TEMP: ILD disabled
+			effectdata->audioSource->modEnabler.doILD = false;	// ILD disabled before loading ILD data
 			WriteLog(state, "CREATE: Source has been setup", "");
 		}
 		else
@@ -352,6 +352,67 @@ namespace UnityWrapper3DTI
 
 	/////////////////////////////////////////////////////////////////////
 
+	int LoadILDBinaryFile(UnityAudioEffectState* state, float floatHandle)
+	{
+		EffectData* data = state->GetEffectData<EffectData>();
+
+		#ifndef UNITY_ANDROID
+
+		// Cast from float to HANDLE
+		int intHandle = (int)floatHandle;
+		HANDLE fileHandle = (HANDLE)intHandle;
+
+		// Check that handle is correct
+		if (fileHandle == INVALID_HANDLE_VALUE)
+		{
+			WriteLog(state, "LOAD ILD: ERROR!!!! Invalid file handle in ILD binary file", "");
+			return RESULT_LOAD_BADHANDLE;
+		}
+
+		// Get ILD and check errors
+		ILD_HashTable h;
+		h = ILD::CreateFrom3dtiHandle(fileHandle);		
+		if (h.size() > 0)		// TO DO: Improve this error check		
+		{
+			CILD::SetILD_HashTable(std::move(h));
+			WriteLog(state, "LOAD ILD: ILD loaded from binary 3DTI file ", h.size());
+			return RESULT_LOAD_OK;
+		}
+		else
+		{
+			WriteLog(state, "LOAD ILD: ERROR!!! could not create ILD from handle", "");
+			return RESULT_LOAD_WRONGDATA;
+		}
+
+		#else
+		// TO DO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		// Cast from float to HANDLE
+		int intHandle = (int)floatHandle;
+
+		// TO DO: check invalid handle!
+
+		// Get HRTF and check errors
+		CHRTF myHead = HRTF::CreateFrom3dtiHandle(intHandle, state->dspbuffersize, state->samplerate);		// Check if arguments are always correct
+		if (myHead.GetHRIRLength() != 0)		// TO DO: Improve this error check
+		{
+			data->listener->LoadHRTF(std::move(myHead));
+			WriteLog(state, "LOAD HRTF: HRTF loaded from binary 3DTI file: ", "");
+			WriteLog(state, "           HRIR length is ", data->listener->GetHRTF().GetHRIRLength());
+			WriteLog(state, "           Sample rate is ", state->samplerate);
+			WriteLog(state, "           Buffer size is ", state->dspbuffersize);
+			return RESULT_LOAD_OK;
+		}
+		else
+		{
+			WriteLog(state, "LOAD HRTF: ERROR!!! Could not create HRTF from handle", "");
+			return RESULT_LOAD_WRONGDATA;
+		}
+
+		#endif
+	}
+
+	/////////////////////////////////////////////////////////////////////
+
     UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAudioEffectState* state, int index, float value)
     {
         EffectData* data = state->GetEffectData<EffectData>();
@@ -377,10 +438,14 @@ namespace UnityWrapper3DTI
 				break;
 
 			case PARAM_ILD_FILE_HANDLE:	// Load ILD binary file (MANDATORY?)
-				//WriteLog(state, "SET PARAMETER: Load ILD. ERROR!!!!!", "");	// TO DO: change this when we enable ILD
-				//if (LoadILDBinaryFile(state, value) == 1)
-				//{
-				//}
+				WriteLog(state, "SET PARAMETER: Loading ILD from file handle ", value);	// TO DO: change this when we enable ILD
+				loadResult = LoadILDBinaryFile(state, value);
+				data->parameters[PARAM_LOAD_RESULT] = loadResult;
+				if (loadResult == RESULT_LOAD_OK)
+				{
+					data->audioSource->modEnabler.doILD = true;
+					WriteLog(state, "SET PARAMETER: ILD Enabled", "");
+				}
 				break;
 
 			case PARAM_HEAD_RADIUS:	// Set listener head radius (OPTIONAL)

@@ -66,6 +66,9 @@
     </ClCompile>
     <ClCompile Include="src\audioplugin3DTIWrapper.cpp" />
     <ClCompile Include="src\AudioPluginUtil.cpp" />
+    <ClCompile Include="..\..\..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.cpp">
+      <Filter>3DTI_Toolkit_Modules\ILD</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\Convolver.h">
@@ -137,6 +140,9 @@
     <ClInclude Include="src\AudioPluginInterface.h" />
     <ClInclude Include="src\AudioPluginUtil.h" />
     <ClInclude Include="src\PluginList.h" />
+    <ClInclude Include="..\..\..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.h">
+      <Filter>3DTI_Toolkit_Modules\ILD</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="3DTI_Toolkit_Core">
@@ -153,6 +159,9 @@
     </Filter>
     <Filter Include="3DTI_Toolkit_Modules\HRTF">
       <UniqueIdentifier>{6ae249e3-24ed-469f-a135-a895c37968fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3DTI_Toolkit_Modules\ILD">
+      <UniqueIdentifier>{026a501b-3278-4d0c-9d4c-37830cc6ad24}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
