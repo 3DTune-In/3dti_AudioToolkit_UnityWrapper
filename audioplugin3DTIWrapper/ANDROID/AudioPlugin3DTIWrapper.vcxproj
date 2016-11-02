@@ -184,6 +184,7 @@
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Transform.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Vector3.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.h" />
     <ClInclude Include="..\src\AudioPluginInterface.h" />
     <ClInclude Include="..\src\AudioPluginUtil.h" />
     <ClInclude Include="..\src\PluginList.h" />
@@ -211,6 +212,7 @@
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Transform.cpp" />
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Vector3.cpp" />
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.cpp" />
     <ClCompile Include="..\src\audioplugin3DTIWrapper.cpp" />
     <ClCompile Include="..\src\AudioPluginUtil.cpp" />
   </ItemGroup>

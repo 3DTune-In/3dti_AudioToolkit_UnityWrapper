@@ -385,26 +385,24 @@ namespace UnityWrapper3DTI
 		}
 
 		#else
-		// TO DO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		
 		// Cast from float to HANDLE
 		int intHandle = (int)floatHandle;
 
 		// TO DO: check invalid handle!
 
-		// Get HRTF and check errors
-		CHRTF myHead = HRTF::CreateFrom3dtiHandle(intHandle, state->dspbuffersize, state->samplerate);		// Check if arguments are always correct
-		if (myHead.GetHRIRLength() != 0)		// TO DO: Improve this error check
+		// Get ILD and check errors
+		ILD_HashTable h;
+		h = ILD::CreateFrom3dtiHandle(intHandle);
+		if (h.size() > 0)		// TO DO: Improve this error check		
 		{
-			data->listener->LoadHRTF(std::move(myHead));
-			WriteLog(state, "LOAD HRTF: HRTF loaded from binary 3DTI file: ", "");
-			WriteLog(state, "           HRIR length is ", data->listener->GetHRTF().GetHRIRLength());
-			WriteLog(state, "           Sample rate is ", state->samplerate);
-			WriteLog(state, "           Buffer size is ", state->dspbuffersize);
+			CILD::SetILD_HashTable(std::move(h));
+			WriteLog(state, "LOAD ILD: ILD loaded from binary 3DTI file ", h.size());
 			return RESULT_LOAD_OK;
 		}
 		else
 		{
-			WriteLog(state, "LOAD HRTF: ERROR!!! Could not create HRTF from handle", "");
+			WriteLog(state, "LOAD ILD: ERROR!!! could not create ILD from handle", "");
 			return RESULT_LOAD_WRONGDATA;
 		}
 

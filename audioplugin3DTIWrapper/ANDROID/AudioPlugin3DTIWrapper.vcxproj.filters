@@ -66,6 +66,9 @@
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.cpp">
       <Filter>3DTI_Toolkit_Modules\HRTF</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.cpp">
+      <Filter>3DTI_Toolkit_Modules\ILD</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -138,6 +141,9 @@
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.h">
       <Filter>3DTI_Toolkit_Modules\HRTF</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.h">
+      <Filter>3DTI_Toolkit_Modules\ILD</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="3DTI_Toolkit_Core">
@@ -154,6 +160,9 @@
     </Filter>
     <Filter Include="3DTI_Toolkit_Modules\HRTF">
       <UniqueIdentifier>{18dcba2b-4e86-41da-8a59-a2043e031662}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3DTI_Toolkit_Modules\ILD">
+      <UniqueIdentifier>{4b9bb371-cee4-4ab3-8e16-b4fb5cf02a39}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
