@@ -157,12 +157,12 @@ namespace UnityWrapper3DTI
 		for (int i = 0; i < 16; i++)
 			L[i] = listenerMatrix[i];
 
-		//float listenerpos_x = -(L[0] * L[12] + L[1] * L[13] + L[2] * L[14]) * scale;	// From Unity documentation, if camera is rotated wrt listener (NOT TESTED)
-		//float listenerpos_y = -(L[4] * L[12] + L[5] * L[13] + L[6] * L[14]) * scale;	// From Unity documentation, if camera is rotated wrt listener (NOT TESTED)
-		//float listenerpos_z = -(L[8] * L[12] + L[9] * L[13] + L[10] * L[14]) * scale;	// From Unity documentation, if camera is rotated wrt listener (NOT TESTED)
-		float listenerpos_x = -L[12] * scale;	// If camera is not rotated
-		float listenerpos_y = -L[13] * scale;	// If camera is not rotated
-		float listenerpos_z = -L[14] * scale;	// If camera is not rotated
+		float listenerpos_x = -(L[0] * L[12] + L[1] * L[13] + L[2] * L[14]) * scale;	// From Unity documentation, if listener is rotated 
+		float listenerpos_y = -(L[4] * L[12] + L[5] * L[13] + L[6] * L[14]) * scale;	// From Unity documentation, if listener is rotated 
+		float listenerpos_z = -(L[8] * L[12] + L[9] * L[13] + L[10] * L[14]) * scale;	// From Unity documentation, if listener is rotated 
+		//float listenerpos_x = -L[12] * scale;	// If listener is not rotated
+		//float listenerpos_y = -L[13] * scale;	// If listener is not rotated
+		//float listenerpos_z = -L[14] * scale;	// If listener is not rotated
 		CTransform listenerTransform;
 		listenerTransform.SetPosition(CVector3(listenerpos_x, listenerpos_y, listenerpos_z));		
 
@@ -630,6 +630,18 @@ namespace UnityWrapper3DTI
 		{
 			inMonoBuffer[i] = inbuffer[i * 2]; // We take only the left channel
 		}
+
+		//CTransform sourcePosition = data->audioSource->GetSourceTransform();
+		//string sourcePositionStr = "(" + std::to_string(sourcePosition.GetPosition().x) + ", " + std::to_string(sourcePosition.GetPosition().y) + ", " + std::to_string(sourcePosition.GetPosition().z) + ")";		
+		//CTransform listenerPosition = data->listener->GetListenerTransform();
+		//string listenerPositionStr = "(" + std::to_string(listenerPosition.GetPosition().x) + ", " + std::to_string(listenerPosition.GetPosition().y) + ", " + std::to_string(listenerPosition.GetPosition().z) + ")";
+		//string listenerRotationStr = std::to_string(listenerPosition.GetOrientation().w) + "(" + std::to_string(listenerPosition.GetOrientation().x) + ", " + std::to_string(listenerPosition.GetOrientation().y) + ", " + std::to_string(listenerPosition.GetOrientation().z) + ")";
+		//CVector3 vectorTo = listenerPosition.GetVectorTo(sourcePosition);
+		//string vectorToStr = "(" + std::to_string(vectorTo.x) + ", " + std::to_string(vectorTo.y) + ", " + std::to_string(vectorTo.z) + ")";
+		//WriteLog(state, "Source position = ", sourcePositionStr);
+		//WriteLog(state, "Listener position = ", listenerPositionStr);
+		//WriteLog(state, "Listener rotation = ", listenerRotationStr);
+		//WriteLog(state, "Vector from listener to source = ", vectorToStr);
 
 		// Process!!
 		CStereoBuffer<float> outStereoBuffer(length * 2);
