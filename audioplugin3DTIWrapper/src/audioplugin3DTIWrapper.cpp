@@ -13,8 +13,8 @@
 
 #include "AudioPluginUtil.h"
 
-#include "BinauralSpatializer/Core.h"
-#include "Common/Debugger.h"
+#include <BinauralSpatializer/Core.h>
+#include <Common/Debugger.h>
 
 // Includes for reading HRTF and ILD data and logging dor debug
 #include <fstream>
