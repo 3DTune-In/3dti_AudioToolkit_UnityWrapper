@@ -1,8 +1,8 @@
 /**
-*** 3D-Tune-In Toolkit Unity Wrapper ***
+*** 3D-Tune-In Toolkit Unity Wrapper for Hearing Loss Simulation***
 *
-* version beta 1.2
-* Created on: October 2016
+* version beta 1.0
+* Created on: November 2016
 *
 * Author: 3DI-DIANA Research Group / University of Malaga / Spain
 * Contact: areyes@uma.es
@@ -18,6 +18,8 @@
 // Includes for debug logging
 #include <fstream>
 #include <iostream>
+#include <string>
+using namespace std;
 
 // DEBUG LOG 
 #ifdef UNITY_ANDROID
@@ -51,6 +53,7 @@ namespace HLSimulation3DTI
 #define DEFAULT_THRESHOLD		0
 #define DEFAULT_ATTACK			20
 #define DEFAULT_RELEASE			100
+#define DEFAULT_BAND_GAINS		{-7,  -7, -12, -15, -22, -25, -25, -25, -25}
 
 // Min/max values for parameters
 #define MIN_INIFREQ			20	
@@ -60,8 +63,8 @@ namespace HLSimulation3DTI
 #define MAX_OCTAVEBANDSTEP	FLT_MAX
 #define MIN_QBPF			0
 #define MAX_QBPF			FLT_MAX
-#define MIN_BANDGAIN		0
-#define MAX_BANDGAIN		1
+#define MIN_BANDGAIN_DB		-75
+#define MAX_BANDGAIN_DB		0
 #define MIN_KNEE			0
 #define MAX_KNEE			20
 #define MAX_RATIO			50
@@ -72,16 +75,25 @@ namespace HLSimulation3DTI
 
 	enum
 	{
-		// EQ Setup
-		PARAM_INIFREQ,
-		PARAM_BANDSNUMBER,
-		PARAM_OCTAVEBANDSTEP,
-		PARAM_QBPF,
-
-		// Set one EQ band for one ear
-		PARAM_SETBAND_EAR,
-		PARAM_SETBAND_NUMBER,
-		PARAM_SETBAND_GAIN,
+		// EQ Band gains
+		PARAM_BAND_L_0_DB,
+		PARAM_BAND_L_1_DB,
+		PARAM_BAND_L_2_DB,
+		PARAM_BAND_L_3_DB,
+		PARAM_BAND_L_4_DB,
+		PARAM_BAND_L_5_DB,
+		PARAM_BAND_L_6_DB,
+		PARAM_BAND_L_7_DB,
+		PARAM_BAND_L_8_DB,
+		PARAM_BAND_R_0_DB,
+		PARAM_BAND_R_1_DB,
+		PARAM_BAND_R_2_DB,
+		PARAM_BAND_R_3_DB,
+		PARAM_BAND_R_4_DB,
+		PARAM_BAND_R_5_DB,
+		PARAM_BAND_R_6_DB,
+		PARAM_BAND_R_7_DB,
+		PARAM_BAND_R_8_DB,
 
 		// Switch on/off processing for each ear and EQ-Compressor chain
 		PARAM_LEFT_EQ_ON,
@@ -107,21 +119,11 @@ namespace HLSimulation3DTI
 		P_NUM
 	};
 
-	enum TSetBandGainState
-	{
-		SETBG_WAITING,
-		SETBG_EARSELECTED,
-		SETBG_BANDSELECTED
-	};
-
 	/////////////////////////////////////////////////////////////////////
 
     struct EffectData
     {
 		CHearingLossSim HL;				
-		bool hlReady;
-		TSetBandGainState setBandGainState;
-		int numberOfBandsSet;
 		float parameters[P_NUM];
 	};
 
@@ -131,10 +133,9 @@ namespace HLSimulation3DTI
 	void WriteLog(UnityAudioEffectState* state, string logtext, const T& value)
 	{
 		#ifdef DEBUG_LOG_FILE
-			ofstream logfile;
-			int sourceid = state->GetEffectData<EffectData>()->sourceID;
+			ofstream logfile;			
 			logfile.open("debugHL.txt", ofstream::out | ofstream::app);
-			logfile << sourceid << ": " << logtext << value << endl;
+			logfile << logtext << value << endl;
 			logfile.close();
 		#endif
 
@@ -164,20 +165,29 @@ namespace HLSimulation3DTI
         int numparams = P_NUM;
         definition.paramdefs = new UnityAudioParameterDefinition[numparams];
 
-		// EQ Setup
-		RegisterParameter(definition, "IniFreq", "Hz", MIN_INIFREQ, MAX_INIFREQ, DEFAULT_INIFREQ, 1.0f, 1.0f, PARAM_INIFREQ, "EQ Initial frequency");
-		RegisterParameter(definition, "BandsNumber", "", 0.0f, MAX_BANDSNUMBER, DEFAULT_BANDSNUMBER, 1.0f, 1.0f, PARAM_BANDSNUMBER, "EQ Number of bands");
-		RegisterParameter(definition, "OctaveBandStep", "", MIN_OCTAVEBANDSTEP, MAX_OCTAVEBANDSTEP, DEFAULT_OCTAVEBANDSTEP, 1.0f, 1.0f, PARAM_OCTAVEBANDSTEP, "EQ Octave band step");
-		RegisterParameter(definition, "QBPF", "", MIN_QBPF, MAX_QBPF, DEFAULT_QBPF, 1.0f, 1.0f, PARAM_QBPF, "EQ Q of band pass filters");
-
-		// EQ set gain for each band
-		RegisterParameter(definition, "SetBandEar", "", -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, PARAM_SETBAND_EAR, "Set band gain: ear");
-		RegisterParameter(definition, "SetBandNumber", "", -1.0f, MAX_BANDSNUMBER, -1.0f, 1.0f, 1.0f, PARAM_SETBAND_NUMBER, "Set band gain: band number");
-		RegisterParameter(definition, "SetBandGain", "dB", MIN_BANDGAIN, MAX_BANDGAIN, 1.0f, 1.0f, 1.0f, PARAM_SETBAND_GAIN, "Set band gain: gain");		
-
+		// EQ gain for each band
+		RegisterParameter(definition, "EQL0", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_L_0_DB, "EQ Left 62.5 Hz band gain (dB)");
+		RegisterParameter(definition, "EQL1", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_L_1_DB, "EQ Left 125 Hz band gain (dB)");
+		RegisterParameter(definition, "EQL2", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_L_2_DB, "EQ Left 250 Hz band gain (dB)");
+		RegisterParameter(definition, "EQL3", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_L_3_DB, "EQ Left 500 Hz band gain (dB)");
+		RegisterParameter(definition, "EQL4", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_L_4_DB, "EQ Left 1 KHz band gain (dB)");
+		RegisterParameter(definition, "EQL5", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_L_5_DB, "EQ Left 2 KHz band gain (dB)");
+		RegisterParameter(definition, "EQL6", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_L_6_DB, "EQ Left 4 KHz band gain (dB)");
+		RegisterParameter(definition, "EQL7", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_L_7_DB, "EQ Left 8 KHz band gain (dB)");
+		RegisterParameter(definition, "EQL8", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_L_8_DB, "EQ Left 16 KHz band gain (dB)");
+		RegisterParameter(definition, "EQR0", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_R_0_DB, "EQ Right 62.5 Hz band gain (dB)");
+		RegisterParameter(definition, "EQR1", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_R_1_DB, "EQ Right 125 Hz band gain (dB)");
+		RegisterParameter(definition, "EQR2", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_R_2_DB, "EQ Right 250 Hz band gain (dB)");
+		RegisterParameter(definition, "EQR3", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_R_3_DB, "EQ Right 500 Hz band gain (dB)");
+		RegisterParameter(definition, "EQR4", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_R_4_DB, "EQ Right 1 KHz band gain (dB)");
+		RegisterParameter(definition, "EQR5", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_R_5_DB, "EQ Right 2 KHz band gain (dB)");
+		RegisterParameter(definition, "EQR6", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_R_6_DB, "EQ Right 4 KHz band gain (dB)");
+		RegisterParameter(definition, "EQR7", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_R_7_DB, "EQ Right 8 KHz band gain (dB)");
+		RegisterParameter(definition, "EQR8", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_R_8_DB, "EQ Right 16 KHz band gain (dB)");
+		
 		// Switch on/off process for each ear and EQ-compressor chain
-		RegisterParameter(definition, "EQLeftOn", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_LEFT_EQ_ON, "Switch on EQ for left ear");							// Default: OFF
-		RegisterParameter(definition, "EQRightOn", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_RIGHT_EQ_ON, "Switch on EQ for right ear");						// Default: OFF
+		RegisterParameter(definition, "EQLeftOn", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_LEFT_EQ_ON, "Switch on EQ for left ear");							// Default: ON
+		RegisterParameter(definition, "EQRightOn", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_RIGHT_EQ_ON, "Switch on EQ for right ear");						// Default: ON
 		RegisterParameter(definition, "CompLeftOn", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_LEFT_COMPRESSOR_ON, "Switch on Compressor for left ear");		// Default: OFF
 		RegisterParameter(definition, "CompRightOn", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_RIGHT_COMPRESSOR_ON, "Switch on Compressor for right ear");	// Default: OFF
 		RegisterParameter(definition, "CompFirst", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_COMPRESSOR_FIRST, "Process Compressor before EQ");	// Default: Compressor First
@@ -185,7 +195,7 @@ namespace HLSimulation3DTI
 		// Compressor
 		RegisterParameter(definition, "LeftKnee", "", MIN_KNEE, MAX_KNEE, DEFAULT_KNEE, 1.0f, 1.0f, PARAM_COMP_LEFT_KNEE, "Left compressor: Knee");	
 		RegisterParameter(definition, "LeftRatio", "", 1.0f, MAX_RATIO, DEFAULT_RATIO, 1.0f, 1.0f, PARAM_COMP_LEFT_RATIO, "Left compressor: Ratio");
-		RegisterParameter(definition, "LeftThreshold", "dB", -80.0f, 0.0f, DEFAULT_THRESHOLD, 1.0f, 1.0f, PARAM_COMP_LEFT_THRESHOLD, "Left compressor: Threshold");
+		RegisterParameter(definition, "LeftThreshold", "dB", MIN_THRESHOLD, 0.0f, DEFAULT_THRESHOLD, 1.0f, 1.0f, PARAM_COMP_LEFT_THRESHOLD, "Left compressor: Threshold");
 		RegisterParameter(definition, "RightKnee", "", MIN_KNEE, MAX_KNEE, DEFAULT_KNEE, 1.0f, 1.0f, PARAM_COMP_RIGHT_KNEE, "Right compressor: Knee");
 		RegisterParameter(definition, "RightRatio", "", 1.0f, MAX_RATIO, DEFAULT_RATIO, 1.0f, 1.0f, PARAM_COMP_RIGHT_RATIO, "Right compressor: Ratio");
 		RegisterParameter(definition, "RightThreshold", "dB", MIN_THRESHOLD, 0.0f, DEFAULT_THRESHOLD, 1.0f, 1.0f, PARAM_COMP_RIGHT_THRESHOLD, "Right compressor: Threshold");
@@ -195,48 +205,37 @@ namespace HLSimulation3DTI
 		RegisterParameter(definition, "LeftRelease", "ms", 0.0f, MAX_RELEASE, DEFAULT_RELEASE, 1.0f, 1.0f, PARAM_COMP_LEFT_RELEASE, "Left compressor: Release");
 		RegisterParameter(definition, "RightAttack", "ms", 0.0f, MAX_ATTACK, DEFAULT_ATTACK, 1.0f, 1.0f, PARAM_COMP_RIGHT_ATTACK, "Right compressor: Attack");
 		RegisterParameter(definition, "RightRelease", "ms", 0.0f, MAX_RELEASE, DEFAULT_RELEASE, 1.0f, 1.0f, PARAM_COMP_RIGHT_RELEASE, "Right compressor: Release");
-
+		
         return numparams;
     }
 
-	/////////////////////////////////////////////////////////////////////
-
-    static UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK DistanceAttenuationCallback(UnityAudioEffectState* state, float distanceIn, float attenuationIn, float* attenuationOut)
-    {				
-		*attenuationOut = attenuationIn;
-		return UNITY_AUDIODSP_OK;
-    }
-
-	/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////	
 
     UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectState* state)
     {
         EffectData* effectdata = new EffectData;
         memset(effectdata, 0, sizeof(EffectData));
         state->effectdata = effectdata;
-        if (IsHostCompatible(state))
-            state->spatializerdata->distanceattenuationcallback = DistanceAttenuationCallback;
         InitParametersFromDefinitions(InternalRegisterEffectDefinition, effectdata->parameters);
 		
-		// Initial setup of EQ (might be overriden with set parameter)
 		// TO DO: check errors with debugger
-		effectdata->HL.Setup(effectdata->parameters[PARAM_INIFREQ], (int)effectdata->parameters[PARAM_BANDSNUMBER], 
-							(int)effectdata->parameters[PARAM_OCTAVEBANDSTEP], effectdata->parameters[PARAM_QBPF]);
-		WriteLog(state, "CREATE: Initial EQ setup:", "");
-		WriteLog(state, "        Initial frequency = ", effectdata->parameters[PARAM_INIFREQ]);
-		WriteLog(state, "        Number of bands = ", (int)effectdata->parameters[PARAM_BANDSNUMBER]);
-		WriteLog(state, "        Octave step = 1/", (int)effectdata->parameters[PARAM_OCTAVEBANDSTEP]);
-		WriteLog(state, "        Q factor of BPFs = ", effectdata->parameters[PARAM_QBPF]);
+
+		// EQ Setup		
+		effectdata->HL.Setup(DEFAULT_INIFREQ, DEFAULT_BANDSNUMBER, DEFAULT_OCTAVEBANDSTEP, DEFAULT_QBPF);
+		WriteLog(state, "CREATE: EQ setup:", "");
+		WriteLog(state, "        Initial frequency = ", DEFAULT_INIFREQ);
+		WriteLog(state, "        Number of bands = ", DEFAULT_BANDSNUMBER);
+		WriteLog(state, "        Octave step = 1/", DEFAULT_OCTAVEBANDSTEP);
+		WriteLog(state, "        Q factor of BPFs = ", DEFAULT_QBPF);
+
+		// Initial setup of band gains
+		effectdata->HL.SetGains_dB(DEFAULT_BAND_GAINS, EAR_LEFT);
+		effectdata->HL.SetGains_dB(DEFAULT_BAND_GAINS, EAR_RIGHT);
 		
 		// Setup of Compressor
 		effectdata->HL.Compr_L.Setup(state->samplerate);
 		effectdata->HL.Compr_R.Setup(state->samplerate);
 		WriteLog(state, "CREATE: Compressor setup with sample rate ", state->samplerate);
-
-		// HL is not ready until we set all band gains
-		effectdata->setBandGainState = SETBG_WAITING;
-		effectdata->numberOfBandsSet = 0;
-		effectdata->hlReady = false;		
 
 		WriteLog(state, "CREATE: HL Simulation plugin created", "");		
 
@@ -254,6 +253,36 @@ namespace HLSimulation3DTI
 
 	/////////////////////////////////////////////////////////////////////
 
+	void SetOneBandGain(UnityAudioEffectState* state, bool ear, int bandIndex, float valueDB)
+	{
+		// Check errors
+		if ((bandIndex > DEFAULT_BANDSNUMBER) || (bandIndex < 0))
+		{
+			WriteLog(state, "SET PARAMETER: ERROR!!!! Attempt to set gain for an incorrect band index: ", bandIndex);
+			return;
+		}
+		if ((valueDB < MIN_BANDGAIN_DB) || (valueDB > MAX_BANDGAIN_DB))
+		{
+			WriteLog(state, "SET PARAMETER: ERROR!!!! Attempt to set a wrong dB value for band gain: ", valueDB);
+			return;
+		}
+		
+		// Set band gain
+		CHearingLossSim HL = state->GetEffectData<EffectData>()->HL;
+		HL.SetBandGain_dB(bandIndex, valueDB, ear);
+					
+		// Debug log output
+		string earStr = "Unknown";
+		if (ear == EAR_LEFT)
+			earStr = "Left";
+		else
+			earStr = "Right";
+		string logOutput = "SET PARAMETER: Gain of band " + std::to_string(bandIndex) + " for " + earStr + " ear set to " + std::to_string(valueDB) + " dB";
+		WriteLog(state, logOutput, "");		
+	}
+
+	/////////////////////////////////////////////////////////////////////
+
     UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAudioEffectState* state, int index, float value)
     {
         EffectData* data = state->GetEffectData<EffectData>();
@@ -264,123 +293,28 @@ namespace HLSimulation3DTI
 		// Process command sent by C# API
 		// TO DO: Check errors with debugger, incorrect values...
 		switch (index)
-		{
-			// EQ SETUP:
-
-			case PARAM_INIFREQ:	// Initial frequency for EQ
-				WriteLog(state, "SET PARAMETER: New initial EQ frequency (Hz): ", value);
-				data->numberOfBandsSet = 0;
-				data->setBandGainState = SETBG_WAITING;
-				data->HL.Setup(data->parameters[PARAM_INIFREQ], data->parameters[PARAM_BANDSNUMBER], data->parameters[PARAM_OCTAVEBANDSTEP], data->parameters[PARAM_QBPF]);
-				break;
-
-			case PARAM_BANDSNUMBER:	// Number of bands for EQ
-				WriteLog(state, "SET PARAMETER: New number of EQ bands: ", (int)value);	
-				data->numberOfBandsSet = 0;
-				data->setBandGainState = SETBG_WAITING;
-				data->HL.Setup(data->parameters[PARAM_INIFREQ], data->parameters[PARAM_BANDSNUMBER], data->parameters[PARAM_OCTAVEBANDSTEP], data->parameters[PARAM_QBPF]);
-				break;
-
-			case PARAM_OCTAVEBANDSTEP:	// Octave step for EQ
-				WriteLog(state, "SET PARAMETER: New octave step for EQ: ", value);
-				data->numberOfBandsSet = 0;
-				data->setBandGainState = SETBG_WAITING;
-				data->HL.Setup(data->parameters[PARAM_INIFREQ], data->parameters[PARAM_BANDSNUMBER], data->parameters[PARAM_OCTAVEBANDSTEP], data->parameters[PARAM_QBPF]);
-				break;
-
-			case PARAM_QBPF:	// Q for BPFs in EQ
-				WriteLog(state, "SET PARAMETER: New Q of EQ band pass filters: ", value);
-				data->numberOfBandsSet = 0;
-				data->setBandGainState = SETBG_WAITING;
-				data->HL.Setup(data->parameters[PARAM_INIFREQ], data->parameters[PARAM_BANDSNUMBER], data->parameters[PARAM_OCTAVEBANDSTEP], data->parameters[PARAM_QBPF]);
-				break;
-				
+		{		
 			// SET EQ BAND GAIN:
 
-			case PARAM_SETBAND_EAR:	
-				if (data->setBandGainState == SETBG_WAITING)
-				{
-					data->setBandGainState = SETBG_EARSELECTED;
-					if ((int) value == EAR_LEFT)
-						WriteLog(state, "SET BAND GAIN: Ear selected: ", "Left");
-					else 
-					{
-						if ((int)value == EAR_RIGHT)
-							WriteLog(state, "SET BAND GAIN: Ear selected: ", "Right");
-						else
-						{
-							WriteLog(state, "SET BAND GAIN: ERROR!! Unknown ear ID: ", value);
-							data->setBandGainState = SETBG_WAITING;
-						}
-					}
-					
-				}
-				else
-				{
-					WriteLog(state, "SET BAND GAIN: ERROR!! Attempt to seat ear from wrong state: ", data->setBandGainState);
-				}
-				break;
-
-			case PARAM_SETBAND_NUMBER:
-				if (data->setBandGainState == SETBG_EARSELECTED)
-				{
-					data->setBandGainState = SETBG_BANDSELECTED;
-					if (((int)value < 0) || ((int)value > (int)data->parameters[PARAM_BANDSNUMBER]))
-					{
-						WriteLog(state, "SET BAND GAIN: ERROR!! Wrong band number: ", value);
-						data->setBandGainState = SETBG_WAITING;
-					}						
-					else
-					{
-						WriteLog(state, "SET BAND GAIN: Band selected: ", (int)value);
-					}
-				}
-				else
-				{
-					WriteLog(state, "SET BAND GAIN: ERROR!! Attempt to seat band number from wrong state: ", data->setBandGainState);
-				}
-				break;
-
-			case PARAM_SETBAND_GAIN:
-				if (data->setBandGainState == SETBG_BANDSELECTED)
-				{
-					data->setBandGainState = SETBG_WAITING;
-					data->numberOfBandsSet++;
-					if (data->numberOfBandsSet > (int)data->parameters[PARAM_BANDSNUMBER])
-					{
-						WriteLog(state, "SET BAND GAIN: ERROR!! Attempt to set too many bands: ", data->numberOfBandsSet);
-					}
-					else
-					{
-						// Set band
-						if ((int)data->parameters[PARAM_SETBAND_EAR] == EAR_LEFT)
-							data->HL.SetBandGain_dB((int)data->parameters[PARAM_SETBAND_NUMBER], value, true);
-						else
-							data->HL.SetBandGain_dB((int)data->parameters[PARAM_SETBAND_NUMBER], value, false);
-
-						// Debug log output
-						string earStr = "Unknown";
-						if ((int)data->parameters[PARAM_SETBAND_EAR] == EAR_LEFT)
-							earStr = "Left";
-						if ((int)data->parameters[PARAM_SETBAND_EAR] == EAR_RIGHT)
-							earStr = "Right";
-						string logOutput = "SET BAND GAIN: Gain of band " + std::to_string((int)data->parameters[PARAM_SETBAND_NUMBER]) + " for " + earStr + "ear set to " + std::to_string(value) + " dB";
-						WriteLog(state, logOutput, "");
-
-						// Check if all bands are set
-						if (data->numberOfBandsSet == (int)data->parameters[PARAM_BANDSNUMBER])
-						{
-							WriteLog(state, "SETUP OF HL SIMULATOR IS COMPLETE. Ready to process!!!", "");
-							data->hlReady = true;
-						}
-					}
-				}
-				else
-				{
-					WriteLog(state, "SET BAND GAIN: ERROR!! Attempt to seat band gain from wrong state: ", data->setBandGainState);
-				}
-				break;
-
+			case PARAM_BAND_L_0_DB:	SetOneBandGain(state, EAR_LEFT, 0, value);	break;
+			case PARAM_BAND_L_1_DB:	SetOneBandGain(state, EAR_LEFT, 1, value);	break;
+			case PARAM_BAND_L_2_DB:	SetOneBandGain(state, EAR_LEFT, 2, value);	break;
+			case PARAM_BAND_L_3_DB:	SetOneBandGain(state, EAR_LEFT, 3, value);	break;
+			case PARAM_BAND_L_4_DB:	SetOneBandGain(state, EAR_LEFT, 4, value);	break;
+			case PARAM_BAND_L_5_DB:	SetOneBandGain(state, EAR_LEFT, 5, value);	break;
+			case PARAM_BAND_L_6_DB:	SetOneBandGain(state, EAR_LEFT, 6, value);	break;
+			case PARAM_BAND_L_7_DB:	SetOneBandGain(state, EAR_LEFT, 7, value);	break;
+			case PARAM_BAND_L_8_DB:	SetOneBandGain(state, EAR_LEFT, 8, value);	break;
+			case PARAM_BAND_R_0_DB:	SetOneBandGain(state, EAR_RIGHT, 0, value); break;
+			case PARAM_BAND_R_1_DB:	SetOneBandGain(state, EAR_RIGHT, 1, value); break;
+			case PARAM_BAND_R_2_DB:	SetOneBandGain(state, EAR_RIGHT, 2, value); break;
+			case PARAM_BAND_R_3_DB:	SetOneBandGain(state, EAR_RIGHT, 3, value); break;
+			case PARAM_BAND_R_4_DB:	SetOneBandGain(state, EAR_RIGHT, 4, value); break;
+			case PARAM_BAND_R_5_DB:	SetOneBandGain(state, EAR_RIGHT, 5, value); break;
+			case PARAM_BAND_R_6_DB:	SetOneBandGain(state, EAR_RIGHT, 6, value); break;
+			case PARAM_BAND_R_7_DB:	SetOneBandGain(state, EAR_RIGHT, 7, value); break;
+			case PARAM_BAND_R_8_DB:	SetOneBandGain(state, EAR_RIGHT, 8, value); break;
+	
 			// SWITCH ON/OFF PROCESS FOR EACH EAR:
 
 			case PARAM_LEFT_EQ_ON:
@@ -508,8 +442,7 @@ namespace HLSimulation3DTI
     }
 
 	/////////////////////////////////////////////////////////////////////
-
-	// TO DO: GUI...
+	
     int UNITY_AUDIODSP_CALLBACK GetFloatBufferCallback(UnityAudioEffectState* state, const char* name, float* buffer, int numsamples)
     {
         return UNITY_AUDIODSP_OK;
@@ -520,8 +453,7 @@ namespace HLSimulation3DTI
     UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectState* state, float* inbuffer, float* outbuffer, unsigned int length, int inchannels, int outchannels)
     {
         // Check that I/O formats are right and that the host API supports this feature
-        if (inchannels != 2 || outchannels != 2 ||
-            !IsHostCompatible(state) || state->spatializerdata == NULL)
+        if (inchannels != 2 || outchannels != 2 || !IsHostCompatible(state))
         {
 			WriteLog(state, "PROCESS: ERROR!!!! Wrong number of channels or Host is not compatible:", "");
 			WriteLog(state, "         Input channels = ", inchannels);
@@ -533,16 +465,6 @@ namespace HLSimulation3DTI
         }
 
 		EffectData* data = state->GetEffectData<EffectData>();
-
-		// Before doing anything, check that the HL simulator is ready
-		// TO DO: We could allow running the simulator without EQ setup, if EQ is switched off for both ears...
-		if (!data->hlReady)
-		{
-			// Put silence in outbuffer
-			//WriteLog(state, "PROCESS: HL simulator is not ready yet...", "");
-			memset(outbuffer, 0.0f, length * outchannels * sizeof(float));
-			return UNITY_AUDIODSP_OK;
-		}
 
 		// Transform input buffer
 		CStereoBuffer<float> inStereoBuffer(length * 2);		
@@ -562,6 +484,15 @@ namespace HLSimulation3DTI
 		{
 			outbuffer[i++] = *it;
 		}
+
+		// DUMMY PROCESS (DEBUG):
+		//for (unsigned int n = 0; n < length; n++)
+		//{
+		//	for (int i = 0; i < outchannels; i++)
+		//	{
+		//		outbuffer[n * outchannels + i] = inbuffer[n * outchannels + i];
+		//	}
+		//}
 
         return UNITY_AUDIODSP_OK;
     }

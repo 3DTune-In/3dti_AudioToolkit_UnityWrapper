@@ -34,7 +34,6 @@
     <ClCompile Include="..\..\..\..\3DTI_Toolkit_Core\Common\Vector3.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
-    <ClCompile Include="src\audioplugin3DTIHL.cpp" />
     <ClCompile Include="src\AudioPluginUtil.cpp" />
     <ClCompile Include="..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\Compressor.cpp">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
@@ -48,6 +47,7 @@
     <ClCompile Include="..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingLossSim.cpp">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClCompile>
+    <ClCompile Include="src\audioplugin3DTIHL.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\3DTI_Toolkit_Core\Common\AudioState.h">
