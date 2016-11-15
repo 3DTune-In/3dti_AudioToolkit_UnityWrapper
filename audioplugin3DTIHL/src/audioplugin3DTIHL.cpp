@@ -277,7 +277,11 @@ namespace HLSimulation3DTI
 			earStr = "Left";
 		else
 			earStr = "Right";
+#ifndef UNITY_ANDROID
 		string logOutput = "SET PARAMETER: Gain of band " + std::to_string(bandIndex) + " for " + earStr + " ear set to " + std::to_string(valueDB) + " dB";
+#else
+		string logOutput = "SET PARAMETER: Gain of EQ band changed for" + earStr + " ear";
+#endif
 		WriteLog(state, logOutput, "");		
 	}
 

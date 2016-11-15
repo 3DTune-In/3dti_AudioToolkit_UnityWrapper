@@ -10,7 +10,7 @@ using UnityEditor;
 using UnityEngine;
 
 public class ConvolutionReverbCustomGUI : IAudioEffectPluginGUI
-{
+{    
     // Constant definitions
     const int PRESET_CUSTOM = -1;
     const int PRESET_MILD = 0;    
@@ -123,8 +123,8 @@ public class ConvolutionReverbCustomGUI : IAudioEffectPluginGUI
         }
         EditorGUILayout.EndToggleGroup();
 
-        //return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG)
-        return false;     // DO NOT SHOW DEFAULT CONTROLS
+        return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG)
+        //return false;     // DO NOT SHOW DEFAULT CONTROLS
     }
 
 
