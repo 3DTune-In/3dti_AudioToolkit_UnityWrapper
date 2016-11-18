@@ -13,8 +13,8 @@
 
 #include "AudioPluginUtil.h"
 
-#include "BinauralSpatializer/Core.h"
-#include "Common/Debugger.h"
+#include <BinauralSpatializer/Core.h>
+#include <Common/Debugger.h>
 
 // Includes for reading HRTF and ILD data and logging dor debug
 #include <fstream>
@@ -27,6 +27,10 @@
 #define RESULT_LOAD_OK 1
 #define RESULT_LOAD_BADHANDLE -1
 #define RESULT_LOAD_WRONGDATA -2
+
+//#ifdef UNITY_OSX FIXME: should get this define from config. 
+#include <cfloat>
+//#endif
 
 // DEBUG LOG 
 #ifdef UNITY_ANDROID
@@ -80,7 +84,7 @@ namespace UnityWrapper3DTI
 	/////////////////////////////////////////////////////////////////////
 
 	template <class T>
-	void WriteLog(UnityAudioEffectState* state, string logtext, const T& value)
+    void WriteLog(UnityAudioEffectState* state, std::string logtext, const T& value)
 	{
 		#ifdef DEBUG_LOG_FILE
 			ofstream logfile;
@@ -293,7 +297,7 @@ namespace UnityWrapper3DTI
 	{
 		EffectData* data = state->GetEffectData<EffectData>();
 
-		#ifndef UNITY_ANDROID
+		#ifdef UNITY_WIN
 
 			// Cast from float to HANDLE
 			int intHandle = (int)floatHandle;
@@ -322,7 +326,6 @@ namespace UnityWrapper3DTI
 				WriteLog(state, "LOAD HRTF: ERROR!!! Could not create HRTF from handle", "");
 				return RESULT_LOAD_WRONGDATA;
 			}
-
 		#else
 
 			// Cast from float to HANDLE
