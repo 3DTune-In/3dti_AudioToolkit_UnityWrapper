@@ -63,6 +63,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>Clang_3_8</PlatformToolset>
     <UseOfStl>gnustl_static</UseOfStl>
+    <AndroidAPILevel>android-19</AndroidAPILevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -151,7 +152,7 @@
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <PreprocessorDefinitions>NDEBUG;AudioPlugin3DTIWrapper_EXPORTS;_3DTI_AXIS_CONVENTION_UNITY;_3DTI_ANGLE_CONVENTION_LISTEN;UNITY_ANDROID;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;AudioPlugin3DTIWrapper_EXPORTS;_3DTI_AXIS_CONVENTION_UNITY;_3DTI_ANGLE_CONVENTION_LISTEN;UNITY_ANDROID;_3DTI_ANDROID_DEBUGGER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\..\..\..\3DTI_Toolkit_Core;..\..\..\..\..\3DTI_Toolkit_Modules;..\..\..\..\..\3DTI_Toolkit_Modules\HRTF\cereal\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CppLanguageStandard>c++1y</CppLanguageStandard>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
