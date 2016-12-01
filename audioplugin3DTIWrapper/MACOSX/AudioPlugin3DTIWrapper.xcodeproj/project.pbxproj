@@ -34,6 +34,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AF766FED1DE9F8690003ED20 /* Config.Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.Common.xcconfig; sourceTree = "<group>"; };
+		AF766FEE1DE9F99C0003ED20 /* Config.Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.Debug.xcconfig; sourceTree = "<group>"; };
 		AFE8837F1DCCA8F6003505EF /* AudioPlugin3DTIWrapper.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AudioPlugin3DTIWrapper.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFE883821DCCA8F6003505EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AFE889EC1DCCAC7E003505EF /* Config.Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.Release.xcconfig; sourceTree = "<group>"; };
@@ -103,6 +105,9 @@
 		AFE883761DCCA8F6003505EF = {
 			isa = PBXGroup;
 			children = (
+				AF766FED1DE9F8690003ED20 /* Config.Common.xcconfig */,
+				AF766FEE1DE9F99C0003ED20 /* Config.Debug.xcconfig */,
+				AFE889EC1DCCAC7E003505EF /* Config.Release.xcconfig */,
 				AFE890A61DCCB3CF003505EF /* audioplugin3DTIWrapper.cpp */,
 				AFE890A71DCCB3CF003505EF /* AudioPluginInterface.h */,
 				AFE890A81DCCB3CF003505EF /* AudioPluginUtil.cpp */,
@@ -110,7 +115,6 @@
 				AFE890AA1DCCB3CF003505EF /* PluginList.h */,
 				AFE88A331DCCB223003505EF /* 3DTI_Toolkit_Modules */,
 				AFE88A311DCCB1A9003505EF /* 3DTI_Toolkit_Core */,
-				AFE889EC1DCCAC7E003505EF /* Config.Release.xcconfig */,
 				AFE883811DCCA8F6003505EF /* AudioPlugin3DTIWrapper */,
 				AFE883801DCCA8F6003505EF /* Products */,
 			);
@@ -406,6 +410,7 @@
 		};
 		AFE883861DCCA8F6003505EF /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AF766FEE1DE9F99C0003ED20 /* Config.Debug.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = AudioPlugin3DTIWrapper/Info.plist;
