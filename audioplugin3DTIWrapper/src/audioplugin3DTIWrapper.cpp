@@ -19,6 +19,9 @@
 // Includes for reading HRTF and ILD data and logging dor debug
 #include <fstream>
 #include <iostream>
+//#include <string>
+//#include <unistd.h>
+//#include <cstdlib>
 
 #include <HRTF/HRTFCereal.h>
 #include <ILD/ILDCereal.h>
@@ -32,7 +35,7 @@
 #ifdef UNITY_ANDROID
 #define DEBUG_LOG_CAT
 #else
-//#define DEBUG_LOG_FILE
+#define DEBUG_LOG_FILE
 #endif
 
 #ifdef DEBUG_LOG_CAT
@@ -40,6 +43,11 @@
 #include <string>
 #include <sstream>
 #endif
+
+//#define USE_RESOURCES_FILE
+//#define RESOURCES_FILE_NAME "resources.txt"
+//#define RESOURCES_FILE_NAME "/storage/emulated/0/Android/data/com.Consortium3DTI.UnityWrapper/files/resources.txt"
+#define USE_STRING_SERIALIZER
 
 /////////////////////////////////////////////////////////////////////
 
@@ -75,6 +83,13 @@ namespace UnityWrapper3DTI
 		Binaural::CCore* core;
 		bool coreReady;
 		float parameters[P_NUM];
+
+		// STRING SERIALIZER
+		//string HRTFpath;		// CANT FIND A WAY TO MAKE IT WORK WITH STRINGS IN ANDROID!
+		char* HRTFpath;
+		bool HRTFserializing;
+		int HRTFcount;
+		int HRTFlength;
 	};
 
 	/////////////////////////////////////////////////////////////////////
@@ -275,6 +290,10 @@ namespace UnityWrapper3DTI
 		else
 			WriteLog(state, "CREATE: ERROR!!!! Source creation returned null pointer!", "");		
 
+		// STRING SERIALIZER
+		effectdata->HRTFserializing = false;
+		effectdata->HRTFcount = 0;
+
         return UNITY_AUDIODSP_OK;
     }
 
@@ -289,9 +308,95 @@ namespace UnityWrapper3DTI
 
 	/////////////////////////////////////////////////////////////////////
 
+#ifdef USE_STRING_SERIALIZER
+
+	int LoadHRTFBinaryFile(UnityAudioEffectState* state)
+	{
+		EffectData* data = state->GetEffectData<EffectData>();
+
+		// Load HRTF
+		CHRTF myHead = HRTF::CreateFrom3dti(data->HRTFpath, state->dspbuffersize, state->samplerate);		// Check if arguments are always correct
+		if (myHead.GetHRIRLength() != 0)		// TO DO: Improve this error check
+		{
+			data->listener->LoadHRTF(std::move(myHead));
+			WriteLog(state, "LOAD HRTF: HRTF loaded from binary 3DTI file: ", data->HRTFpath);
+			WriteLog(state, "           HRIR length is ", data->listener->GetHRTF().GetHRIRLength());
+			WriteLog(state, "           Sample rate is ", state->samplerate);
+			WriteLog(state, "           Buffer size is ", state->dspbuffersize);
+			return RESULT_LOAD_OK;
+		}
+		else
+		{
+			WriteLog(state, "LOAD HRTF: ERROR!!! Could not create HRTF from handle", "");
+			return RESULT_LOAD_WRONGDATA;
+		}
+	}
+
+#else
+
 	int LoadHRTFBinaryFile(UnityAudioEffectState* state, float floatHandle)
 	{
 		EffectData* data = state->GetEffectData<EffectData>();
+
+#ifdef USE_RESOURCES_FILE
+
+		// NOTE: In this version, we ignore floatHandle. The SetFloatParameter call is used as a trigger event
+
+		// Open resources file
+#ifndef UNITY_ANDROID
+		ifstream resourcesFile = ifstream(RESOURCES_FILE_NAME);
+#else
+		ifstream resourcesFile;
+		resourcesFile.open(RESOURCES_FILE_NAME);
+#endif
+
+		// Check line number
+		//int lineNumber = (int)floatHandle;
+		//if (lineNumber < 0)
+		//{
+		//	WriteLog(state, "LOAD HRTF: ERROR!!!! Invalid line number in resources file: ", lineNumber);
+		//	return RESULT_LOAD_BADHANDLE;
+		//}
+
+		//// Reach line of resources file
+		//int currentLine = 0;
+		//while (currentLine < lineNumber)
+		//{
+		//	string dummyStr;
+		//	if (!(resourcesFile >> dummyStr))
+		//	{
+		//		WriteLog(state, "LOAD HRTF: ERROR!!!! Attempt to read after the end of resources file: ", lineNumber);
+		//		return RESULT_LOAD_BADHANDLE;
+		//	}
+		//	currentLine++;
+		//}
+
+		// Read full file path
+		string hrtfFileName;
+		if (!(resourcesFile >> hrtfFileName))
+		{
+			WriteLog(state, "LOAD HRTF: ERROR!!!! Could not read file name from resources file. ", ""); // lineNumber);
+			return RESULT_LOAD_BADHANDLE;
+		}		
+
+		// Load HRTF
+		CHRTF myHead = HRTF::CreateFrom3dti(hrtfFileName, state->dspbuffersize, state->samplerate);		// Check if arguments are always correct
+		if (myHead.GetHRIRLength() != 0)		// TO DO: Improve this error check
+		{
+			data->listener->LoadHRTF(std::move(myHead));
+			WriteLog(state, "LOAD HRTF: HRTF loaded from binary 3DTI file: ", hrtfFileName);
+			WriteLog(state, "           HRIR length is ", data->listener->GetHRTF().GetHRIRLength());
+			WriteLog(state, "           Sample rate is ", state->samplerate);
+			WriteLog(state, "           Buffer size is ", state->dspbuffersize);
+			return RESULT_LOAD_OK;
+		}
+		else
+		{
+			WriteLog(state, "LOAD HRTF: ERROR!!! Could not create HRTF from handle", "");
+			return RESULT_LOAD_WRONGDATA;
+		}
+
+#else
 
 		#ifndef UNITY_ANDROID
 
@@ -348,7 +453,10 @@ namespace UnityWrapper3DTI
 			}		
 
 		#endif
+#endif
 	}
+
+#endif
 
 	/////////////////////////////////////////////////////////////////////
 
@@ -420,11 +528,50 @@ namespace UnityWrapper3DTI
 
 		CMagnitudes magnitudes;
 		int loadResult;
+		int valueInt;
+		char valueChr;
 
 		// Process command sent by C# API
 		switch (index)
 		{
 			case PARAM_HRTF_FILE_HANDLE:	// Load HRTF binary file (MANDATORY)
+#ifdef USE_STRING_SERIALIZER					
+				// Check if serialization was not started
+				if (!data->HRTFserializing)
+				{					
+					//data->HRTFpath.clear();					
+					data->HRTFlength = static_cast<int>(value);
+					data->HRTFpath = (char*)malloc(data->HRTFlength);
+					data->HRTFserializing = true;					
+				}				
+				else
+				{
+					// Concatenate char to string				
+					valueInt = static_cast<int>(value);
+					valueChr = static_cast<char>(valueInt);
+					//data->HRTFpath = data->HRTFpath + valueChr;
+					data->HRTFpath[data->HRTFcount] = valueChr;
+					data->HRTFcount++;
+
+					// Check if string has ended
+					//if (value == 0.0f)
+					if (data->HRTFcount == data->HRTFlength)
+					{						
+						data->HRTFserializing = false;
+						loadResult = LoadHRTFBinaryFile(state);
+						data->parameters[PARAM_LOAD_RESULT] = loadResult;
+						if (loadResult == RESULT_LOAD_OK)
+						{
+							if (!data->coreReady)
+							{
+								data->coreReady = true;
+								WriteLog(state, "Core ready!!!!!", "");
+							}
+						}
+					}
+				}
+				break;
+#else
 				WriteLog(state, "SET PARAMETER: Loading HRTF from file handle ", value);
 				loadResult = LoadHRTFBinaryFile(state, value);
 				data->parameters[PARAM_LOAD_RESULT] = loadResult;
@@ -434,6 +581,7 @@ namespace UnityWrapper3DTI
 					WriteLog(state, "Core ready!!!!!!!!!!!!!!!!", "");
 				}
 				break;
+#endif
 
 			case PARAM_ILD_FILE_HANDLE:	// Load ILD binary file (MANDATORY?)
 				WriteLog(state, "SET PARAMETER: Loading ILD from file handle ", value);	// TO DO: change this when we enable ILD
