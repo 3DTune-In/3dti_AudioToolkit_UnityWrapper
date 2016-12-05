@@ -355,25 +355,21 @@ namespace UnityWrapper3DTI
 		if (!serializing)
 		{
 			// Receive string length
-			WriteLog(state, "Start serialization with value: ", value);
+			
 			length = static_cast<int>(value);
 			path = (char*)malloc((length+1) * sizeof(char));
 			count = 0;
 			serializing = true;						
-			WriteLog(state, "Serialization started", "");
 		}
 		else
 		{
 			// Receive next character
-			WriteLog(state, "Character received: ", value);
+
 			// Concatenate char to string				
 			int valueInt = static_cast<int>(value);
 			char valueChr = static_cast<char>(valueInt);	
-			WriteLog(state, "Writing to path character: ", valueChr);
-			WriteLog(state, "Position is: ", count);
 			path[count] = valueChr;
 			++count; 
-			WriteLog(state, "Written", "");
 
 			// Check if string has ended			
 			if (count == length)
@@ -401,8 +397,7 @@ namespace UnityWrapper3DTI
 		// Process command sent by C# API
 		switch (index)
 		{
-			case PARAM_HRTF_FILE_STRING:	// Load HRTF binary file (MANDATORY)				
-				WriteLog(state, "Received value for HRTF: ", value);
+			case PARAM_HRTF_FILE_STRING:	// Load HRTF binary file (MANDATORY)								
 				data->parameters[PARAM_LOAD_RESULT] = BuildPathString(state, data->strHRTFpath, data->strHRTFserializing, data->strHRTFlength, data->strHRTFcount, value);				
 				if (data->parameters[PARAM_LOAD_RESULT]== TLoadResult::RESULT_LOAD_END)
 				{
@@ -418,8 +413,7 @@ namespace UnityWrapper3DTI
 				}
 				break;
 
-			case PARAM_ILD_FILE_STRING:	// Load ILD binary file (MANDATORY?)				
-				WriteLog(state, "Received value for ILD: ", value);
+			case PARAM_ILD_FILE_STRING:	// Load ILD binary file (MANDATORY?)								
 				data->parameters[PARAM_LOAD_RESULT] = BuildPathString(state, data->strILDpath, data->strILDserializing, data->strILDlength, data->strILDcount, value);
 				if (data->parameters[PARAM_LOAD_RESULT] == TLoadResult::RESULT_LOAD_END)
 				{
