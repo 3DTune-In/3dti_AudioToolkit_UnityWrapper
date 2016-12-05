@@ -23,9 +23,7 @@
 #include <HRTF/HRTFCereal.h>
 #include <ILD/ILDCereal.h>
 
-#define RESULT_LOAD_WAITING 0
-#define RESULT_LOAD_OK 1
-#define RESULT_LOAD_ERROR -1
+typedef enum TLoadResult { RESULT_LOAD_WAITING = 0, RESULT_LOAD_CONTINUE=1, RESULT_LOAD_END=2, RESULT_LOAD_OK=3, RESULT_LOAD_ERROR = -1 };
 
 // DEBUG LOG 
 #ifdef UNITY_ANDROID
@@ -75,8 +73,7 @@ namespace UnityWrapper3DTI
 		bool coreReady;
 		float parameters[P_NUM];
 
-		// STRING SERIALIZER
-		//string HRTFpath;		// CANT FIND A WAY TO MAKE IT WORK WITH STRINGS IN ANDROID!
+		// STRING SERIALIZER		
 		char* strHRTFpath;
 		bool strHRTFserializing;
 		int strHRTFcount;
@@ -265,7 +262,7 @@ namespace UnityWrapper3DTI
 		effectdata->coreReady = false;		
 		effectdata->parameters[PARAM_SCALE_FACTOR] = 1.0f;		
 		effectdata->sourceID = -1;		
-		effectdata->parameters[PARAM_LOAD_RESULT] = RESULT_LOAD_WAITING;		
+		effectdata->parameters[PARAM_LOAD_RESULT] = TLoadResult::RESULT_LOAD_WAITING;		
 		WriteLog(state, "CREATE: Internal parameters set", "");
 
 		// Create source and set default interpolation method		
@@ -314,18 +311,20 @@ namespace UnityWrapper3DTI
 			WriteLog(state, "           HRIR length is ", data->listener->GetHRTF().GetHRIRLength());
 			WriteLog(state, "           Sample rate is ", state->samplerate);
 			WriteLog(state, "           Buffer size is ", state->dspbuffersize);
-			return RESULT_LOAD_OK;
+			free(data->strHRTFpath);
+			return TLoadResult::RESULT_LOAD_OK;
 		}
 		else
-		{
+		{			
 			WriteLog(state, "LOAD HRTF: ERROR!!! Could not create HRTF from path: ", data->strHRTFpath);
-			return RESULT_LOAD_ERROR;
+			free(data->strHRTFpath);
+			return TLoadResult::RESULT_LOAD_ERROR;
 		}
 	}
 
 	/////////////////////////////////////////////////////////////////////
 
-	int LoadILDBinaryFile(UnityAudioEffectState* state, float floatHandle)
+	int LoadILDBinaryFile(UnityAudioEffectState* state)
 	{
 		EffectData* data = state->GetEffectData<EffectData>();
 
@@ -337,47 +336,54 @@ namespace UnityWrapper3DTI
 			CILD::SetILD_HashTable(std::move(h));
 			WriteLog(state, "LOAD ILD: ILD loaded from binary 3DTI file: ", data->strILDpath);
 			WriteLog(state, "          Hast hable size is ", h.size());
-			return RESULT_LOAD_OK;
+			free(data->strILDpath);
+			return TLoadResult::RESULT_LOAD_OK;
 		}
 		else
-		{
+		{			
 			WriteLog(state, "LOAD ILD: ERROR!!! could not create ILD from path: ", data->strILDpath);
-			return RESULT_LOAD_ERROR;
+			free(data->strILDpath);
+			return TLoadResult::RESULT_LOAD_ERROR;
 		}
 	}
 
 	/////////////////////////////////////////////////////////////////////
 
-	int BuildPathString(UnityAudioEffectState* state, char* path, bool &serializing, int &length, int &count, float value)
+	int BuildPathString(UnityAudioEffectState* state, char*& path, bool &serializing, int &length, int &count, float value)
 	{
 		// Check if serialization was not started
 		if (!serializing)
 		{
 			// Receive string length
-
-			//path.clear();					
+			WriteLog(state, "Start serialization with value: ", value);
 			length = static_cast<int>(value);
-			path = (char*)malloc(length);
-			serializing = true;
+			path = (char*)malloc((length+1) * sizeof(char));
+			count = 0;
+			serializing = true;						
+			WriteLog(state, "Serialization started", "");
 		}
 		else
 		{
 			// Receive next character
-
+			WriteLog(state, "Character received: ", value);
 			// Concatenate char to string				
 			int valueInt = static_cast<int>(value);
-			char valueChr = static_cast<char>(valueInt);
-			//data->HRTFpath = data->HRTFpath + valueChr;
+			char valueChr = static_cast<char>(valueInt);	
+			WriteLog(state, "Writing to path character: ", valueChr);
+			WriteLog(state, "Position is: ", count);
 			path[count] = valueChr;
 			++count; 
+			WriteLog(state, "Written", "");
 
-			// Check if string has ended
-			//if (value == 0.0f)
+			// Check if string has ended			
 			if (count == length)
-			{
+			{		
+				path[count] = 0;	// End character
 				serializing = false;
-				return LoadHRTFBinaryFile(state);
+				return RESULT_LOAD_END;
 			}
+			else
+				return RESULT_LOAD_CONTINUE;
 		}
 	}
 
@@ -395,25 +401,34 @@ namespace UnityWrapper3DTI
 		// Process command sent by C# API
 		switch (index)
 		{
-			case PARAM_HRTF_FILE_STRING:	// Load HRTF binary file (MANDATORY)
-
-				data->parameters[PARAM_LOAD_RESULT] = BuildPathString(state, data->strHRTFpath, data->strHRTFserializing, data->strHRTFlength, data->strHRTFcount, value);
-				if (data->parameters[PARAM_LOAD_RESULT]== RESULT_LOAD_OK)
+			case PARAM_HRTF_FILE_STRING:	// Load HRTF binary file (MANDATORY)				
+				WriteLog(state, "Received value for HRTF: ", value);
+				data->parameters[PARAM_LOAD_RESULT] = BuildPathString(state, data->strHRTFpath, data->strHRTFserializing, data->strHRTFlength, data->strHRTFcount, value);				
+				if (data->parameters[PARAM_LOAD_RESULT]== TLoadResult::RESULT_LOAD_END)
 				{
-					if (!data->coreReady)
+					data->parameters[PARAM_LOAD_RESULT] = LoadHRTFBinaryFile(state);
+					if (data->parameters[PARAM_LOAD_RESULT] == TLoadResult::RESULT_LOAD_OK)
 					{
-						data->coreReady = true;
-						WriteLog(state, "Core ready!!!!!", "");
+						if (!data->coreReady)
+						{
+							data->coreReady = true;
+							WriteLog(state, "Core ready!!!!!", "");
+						}
 					}
 				}
 				break;
 
-			case PARAM_ILD_FILE_STRING:	// Load ILD binary file (MANDATORY?)
+			case PARAM_ILD_FILE_STRING:	// Load ILD binary file (MANDATORY?)				
+				WriteLog(state, "Received value for ILD: ", value);
 				data->parameters[PARAM_LOAD_RESULT] = BuildPathString(state, data->strILDpath, data->strILDserializing, data->strILDlength, data->strILDcount, value);
-				if (data->parameters[PARAM_LOAD_RESULT] == RESULT_LOAD_OK)
+				if (data->parameters[PARAM_LOAD_RESULT] == TLoadResult::RESULT_LOAD_END)
 				{
-					data->audioSource->modEnabler.doILD = true;
-					WriteLog(state, "SET PARAMETER: ILD Enabled", "");
+					data->parameters[PARAM_LOAD_RESULT] = LoadILDBinaryFile(state);
+					if (data->parameters[PARAM_LOAD_RESULT] == TLoadResult::RESULT_LOAD_OK)
+					{
+						data->audioSource->modEnabler.doILD = true;
+						WriteLog(state, "SET PARAMETER: ILD Enabled", "");
+					}
 				}
 				break;
 

@@ -177,6 +177,7 @@
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Conventions.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Debugger.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\DistanceAttenuator.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Fconvolver.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\fftsg.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\FiltersChain.h" />
@@ -184,6 +185,8 @@
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Quaternion.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Transform.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Vector3.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\FiltersBank.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.h" />
     <ClInclude Include="..\src\AudioPluginInterface.h" />
@@ -205,6 +208,7 @@
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Buffer.cpp" />
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Debugger.cpp" />
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\DistanceAttenuator.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.cpp" />
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Fconvolver.cpp" />
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\fftsg.cpp" />
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\FiltersChain.cpp" />
@@ -212,6 +216,8 @@
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Quaternion.cpp" />
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Transform.cpp" />
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Vector3.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\FiltersBank.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.cpp" />
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.cpp" />
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.cpp" />
     <ClCompile Include="..\src\audioplugin3DTIWrapper.cpp" />

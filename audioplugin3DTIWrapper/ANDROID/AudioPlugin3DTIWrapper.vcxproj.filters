@@ -69,6 +69,15 @@
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.cpp">
       <Filter>3DTI_Toolkit_Modules\ILD</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\FiltersBank.cpp">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.cpp">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -144,6 +153,15 @@
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.h">
       <Filter>3DTI_Toolkit_Modules\ILD</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\FiltersBank.h">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.h">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="3DTI_Toolkit_Core">
@@ -163,6 +181,9 @@
     </Filter>
     <Filter Include="3DTI_Toolkit_Modules\ILD">
       <UniqueIdentifier>{4b9bb371-cee4-4ab3-8e16-b4fb5cf02a39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3DTI_Toolkit_Core\HAHLSimulation">
+      <UniqueIdentifier>{ea88e744-3b83-4431-a63c-e7791d2ac0c3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
