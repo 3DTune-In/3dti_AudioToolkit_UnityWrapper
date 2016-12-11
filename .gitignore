@@ -281,3 +281,6 @@ _Pvt_Extensions
 .fake/
 audioplugin3DTIWrapper/audioplugin3DTIWrapper.VC.VC.opendb
 *.db
+*.xcworkspacedata
+*.xcworkspacedata
+*.xcscmblueprint
