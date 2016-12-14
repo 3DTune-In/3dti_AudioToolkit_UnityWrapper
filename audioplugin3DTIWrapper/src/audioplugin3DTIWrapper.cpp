@@ -23,7 +23,7 @@
 #include <HRTF/HRTFCereal.h>
 #include <ILD/ILDCereal.h>
 
-typedef enum TLoadResult { RESULT_LOAD_WAITING = 0, RESULT_LOAD_CONTINUE=1, RESULT_LOAD_END=2, RESULT_LOAD_OK=3, RESULT_LOAD_ERROR = -1 };
+enum TLoadResult { RESULT_LOAD_WAITING = 0, RESULT_LOAD_CONTINUE=1, RESULT_LOAD_END=2, RESULT_LOAD_OK=3, RESULT_LOAD_ERROR = -1 };
 
 // DEBUG LOG 
 #ifdef UNITY_ANDROID
@@ -37,6 +37,8 @@ typedef enum TLoadResult { RESULT_LOAD_WAITING = 0, RESULT_LOAD_CONTINUE=1, RESU
 #include <string>
 #include <sstream>
 #endif
+
+#include <cfloat>
 
 /////////////////////////////////////////////////////////////////////
 
@@ -359,7 +361,8 @@ namespace UnityWrapper3DTI
 			length = static_cast<int>(value);
 			path = (char*)malloc((length+1) * sizeof(char));
 			count = 0;
-			serializing = true;						
+			serializing = true;
+            return RESULT_LOAD_WAITING;  // TODO: @cgarre please check!!
 		}
 		else
 		{
