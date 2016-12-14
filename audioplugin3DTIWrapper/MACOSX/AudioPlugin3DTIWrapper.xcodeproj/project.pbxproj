@@ -7,9 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AF0555191E0146C3003430B0 /* FarDistanceEffects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF0555171E0146C2003430B0 /* FarDistanceEffects.cpp */; };
+		AF05551E1E014860003430B0 /* Environment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF05551A1E014860003430B0 /* Environment.cpp */; };
+		AF05551F1E014860003430B0 /* UPCBinaural.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF05551C1E014860003430B0 /* UPCBinaural.cpp */; };
+		AF0555241E0148B2003430B0 /* FiltersBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF0555201E0148B2003430B0 /* FiltersBank.cpp */; };
+		AF0555251E0148B2003430B0 /* HearingAidSim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF0555221E0148B2003430B0 /* HearingAidSim.cpp */; };
+		AF0555281E0148CC003430B0 /* EnvelopeDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF0555261E0148CC003430B0 /* EnvelopeDetector.cpp */; };
 		AFE88A1B1DCCB19A003505EF /* Convolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE889EE1DCCB19A003505EF /* Convolver.cpp */; };
 		AFE88A1C1DCCB19A003505EF /* Core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE889F01DCCB19A003505EF /* Core.cpp */; };
-		AFE88A1D1DCCB19A003505EF /* Environment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE889F21DCCB19A003505EF /* Environment.cpp */; };
 		AFE88A1E1DCCB19A003505EF /* HRTF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE889F41DCCB19A003505EF /* HRTF.cpp */; };
 		AFE88A1F1DCCB19A003505EF /* ILD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE889F61DCCB19A003505EF /* ILD.cpp */; };
 		AFE88A201DCCB19A003505EF /* Listener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE889F81DCCB19A003505EF /* Listener.cpp */; };
@@ -34,6 +39,18 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AF0555171E0146C2003430B0 /* FarDistanceEffects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FarDistanceEffects.cpp; sourceTree = "<group>"; };
+		AF0555181E0146C2003430B0 /* FarDistanceEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FarDistanceEffects.h; sourceTree = "<group>"; };
+		AF05551A1E014860003430B0 /* Environment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Environment.cpp; sourceTree = "<group>"; };
+		AF05551B1E014860003430B0 /* Environment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Environment.h; sourceTree = "<group>"; };
+		AF05551C1E014860003430B0 /* UPCBinaural.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UPCBinaural.cpp; sourceTree = "<group>"; };
+		AF05551D1E014860003430B0 /* UPCBinaural.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPCBinaural.h; sourceTree = "<group>"; };
+		AF0555201E0148B2003430B0 /* FiltersBank.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FiltersBank.cpp; path = ../../../../../3DTI_Toolkit_Core/HAHLSimulation/FiltersBank.cpp; sourceTree = "<group>"; };
+		AF0555211E0148B2003430B0 /* FiltersBank.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FiltersBank.h; path = ../../../../../3DTI_Toolkit_Core/HAHLSimulation/FiltersBank.h; sourceTree = "<group>"; };
+		AF0555221E0148B2003430B0 /* HearingAidSim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HearingAidSim.cpp; path = ../../../../../3DTI_Toolkit_Core/HAHLSimulation/HearingAidSim.cpp; sourceTree = "<group>"; };
+		AF0555231E0148B2003430B0 /* HearingAidSim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HearingAidSim.h; path = ../../../../../3DTI_Toolkit_Core/HAHLSimulation/HearingAidSim.h; sourceTree = "<group>"; };
+		AF0555261E0148CC003430B0 /* EnvelopeDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EnvelopeDetector.cpp; path = ../../../../../3DTI_Toolkit_Core/HAHLSimulation/EnvelopeDetector.cpp; sourceTree = "<group>"; };
+		AF0555271E0148CC003430B0 /* EnvelopeDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EnvelopeDetector.h; path = ../../../../../3DTI_Toolkit_Core/HAHLSimulation/EnvelopeDetector.h; sourceTree = "<group>"; };
 		AF766FED1DE9F8690003ED20 /* Config.Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.Common.xcconfig; sourceTree = "<group>"; };
 		AF766FEE1DE9F99C0003ED20 /* Config.Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.Debug.xcconfig; sourceTree = "<group>"; };
 		AFE8837F1DCCA8F6003505EF /* AudioPlugin3DTIWrapper.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AudioPlugin3DTIWrapper.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -43,8 +60,6 @@
 		AFE889EF1DCCB19A003505EF /* Convolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Convolver.h; sourceTree = "<group>"; };
 		AFE889F01DCCB19A003505EF /* Core.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Core.cpp; sourceTree = "<group>"; };
 		AFE889F11DCCB19A003505EF /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
-		AFE889F21DCCB19A003505EF /* Environment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Environment.cpp; sourceTree = "<group>"; };
-		AFE889F31DCCB19A003505EF /* Environment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Environment.h; sourceTree = "<group>"; };
 		AFE889F41DCCB19A003505EF /* HRTF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HRTF.cpp; sourceTree = "<group>"; };
 		AFE889F51DCCB19A003505EF /* HRTF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRTF.h; sourceTree = "<group>"; };
 		AFE889F61DCCB19A003505EF /* ILD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ILD.cpp; sourceTree = "<group>"; };
@@ -139,12 +154,14 @@
 		AFE889ED1DCCB19A003505EF /* BinauralSpatializer */ = {
 			isa = PBXGroup;
 			children = (
+				AF05551A1E014860003430B0 /* Environment.cpp */,
+				AF05551B1E014860003430B0 /* Environment.h */,
+				AF05551C1E014860003430B0 /* UPCBinaural.cpp */,
+				AF05551D1E014860003430B0 /* UPCBinaural.h */,
 				AFE889EE1DCCB19A003505EF /* Convolver.cpp */,
 				AFE889EF1DCCB19A003505EF /* Convolver.h */,
 				AFE889F01DCCB19A003505EF /* Core.cpp */,
 				AFE889F11DCCB19A003505EF /* Core.h */,
-				AFE889F21DCCB19A003505EF /* Environment.cpp */,
-				AFE889F31DCCB19A003505EF /* Environment.h */,
 				AFE889F41DCCB19A003505EF /* HRTF.cpp */,
 				AFE889F51DCCB19A003505EF /* HRTF.h */,
 				AFE889F61DCCB19A003505EF /* ILD.cpp */,
@@ -161,6 +178,8 @@
 		AFE889FC1DCCB19A003505EF /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				AF0555171E0146C2003430B0 /* FarDistanceEffects.cpp */,
+				AF0555181E0146C2003430B0 /* FarDistanceEffects.h */,
 				AFE889FD1DCCB19A003505EF /* AIR.cpp */,
 				AFE889FE1DCCB19A003505EF /* AIR.h */,
 				AFE889FF1DCCB19A003505EF /* AudioState.cpp */,
@@ -196,6 +215,12 @@
 		AFE88A311DCCB1A9003505EF /* 3DTI_Toolkit_Core */ = {
 			isa = PBXGroup;
 			children = (
+				AF0555261E0148CC003430B0 /* EnvelopeDetector.cpp */,
+				AF0555271E0148CC003430B0 /* EnvelopeDetector.h */,
+				AF0555201E0148B2003430B0 /* FiltersBank.cpp */,
+				AF0555211E0148B2003430B0 /* FiltersBank.h */,
+				AF0555221E0148B2003430B0 /* HearingAidSim.cpp */,
+				AF0555231E0148B2003430B0 /* HearingAidSim.h */,
 				AFE889FC1DCCB19A003505EF /* Common */,
 				AFE889ED1DCCB19A003505EF /* BinauralSpatializer */,
 			);
@@ -296,17 +321,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AFE88A1D1DCCB19A003505EF /* Environment.cpp in Sources */,
 				AFE88A2B1DCCB19A003505EF /* Magnitudes.cpp in Sources */,
 				AFE88A211DCCB19A003505EF /* SingleSourceDSP.cpp in Sources */,
 				AFE88A201DCCB19A003505EF /* Listener.cpp in Sources */,
 				AFE88A301DCCB19B003505EF /* Vector3.cpp in Sources */,
+				AF05551F1E014860003430B0 /* UPCBinaural.cpp in Sources */,
 				AFE88A291DCCB19A003505EF /* fftsg.cpp in Sources */,
 				AFE890951DCCB226003505EF /* ILDCereal.cpp in Sources */,
+				AF0555191E0146C3003430B0 /* FarDistanceEffects.cpp in Sources */,
+				AF05551E1E014860003430B0 /* Environment.cpp in Sources */,
 				AFE88A251DCCB19A003505EF /* Buffer.cpp in Sources */,
 				AFE890AB1DCCB3CF003505EF /* audioplugin3DTIWrapper.cpp in Sources */,
 				AFE88A271DCCB19A003505EF /* DistanceAttenuator.cpp in Sources */,
 				AFE88A1E1DCCB19A003505EF /* HRTF.cpp in Sources */,
+				AF0555281E0148CC003430B0 /* EnvelopeDetector.cpp in Sources */,
+				AF0555241E0148B2003430B0 /* FiltersBank.cpp in Sources */,
 				AFE890AC1DCCB3CF003505EF /* AudioPluginUtil.cpp in Sources */,
 				AFE88A221DCCB19A003505EF /* AIR.cpp in Sources */,
 				AFE88A2F1DCCB19B003505EF /* Transform.cpp in Sources */,
@@ -320,6 +349,7 @@
 				AFE88E781DCCB226003505EF /* HRTFCereal.cpp in Sources */,
 				AFE88A1B1DCCB19A003505EF /* Convolver.cpp in Sources */,
 				AFE88A281DCCB19A003505EF /* Fconvolver.cpp in Sources */,
+				AF0555251E0148B2003430B0 /* HearingAidSim.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
