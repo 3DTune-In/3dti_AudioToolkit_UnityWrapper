@@ -28,9 +28,6 @@
     <ClCompile Include="..\..\..\..\3DTI_Toolkit_Core\Common\AudioState.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\3DTI_Toolkit_Core\Common\BiquadFilter.cpp">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\3DTI_Toolkit_Core\Common\Buffer.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
@@ -69,6 +66,18 @@
     <ClCompile Include="..\..\..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.cpp">
       <Filter>3DTI_Toolkit_Modules\ILD</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3DTI_Toolkit_Core\Common\BiquadFilter.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.cpp">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\FiltersBank.cpp">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\Convolver.h">
@@ -96,9 +105,6 @@
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\3DTI_Toolkit_Core\Common\AudioState.h">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\3DTI_Toolkit_Core\Common\BiquadFilter.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\3DTI_Toolkit_Core\Common\Buffer.h">
@@ -143,6 +149,18 @@
     <ClInclude Include="..\..\..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.h">
       <Filter>3DTI_Toolkit_Modules\ILD</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3DTI_Toolkit_Core\Common\BiquadFilter.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.h">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\FiltersBank.h">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="3DTI_Toolkit_Core">
@@ -162,6 +180,9 @@
     </Filter>
     <Filter Include="3DTI_Toolkit_Modules\ILD">
       <UniqueIdentifier>{026a501b-3278-4d0c-9d4c-37830cc6ad24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3DTI_Toolkit_Core\HAHLSimulation">
+      <UniqueIdentifier>{c6e5ec50-7043-4a1b-a99c-3ddd8e84e90a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

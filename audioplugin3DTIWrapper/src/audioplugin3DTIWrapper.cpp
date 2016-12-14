@@ -16,27 +16,20 @@
 #include <BinauralSpatializer/Core.h>
 #include <Common/Debugger.h>
 
-// Includes for reading HRTF and ILD data and logging dor debug
+// Includes for debug logging
 #include <fstream>
 #include <iostream>
 
 #include <HRTF/HRTFCereal.h>
 #include <ILD/ILDCereal.h>
 
-#define RESULT_LOAD_WAITING 0
-#define RESULT_LOAD_OK 1
-#define RESULT_LOAD_BADHANDLE -1
-#define RESULT_LOAD_WRONGDATA -2
-
-//#ifdef UNITY_OSX FIXME: should get this define from config. 
-#include <cfloat>
-//#endif
+typedef enum TLoadResult { RESULT_LOAD_WAITING = 0, RESULT_LOAD_CONTINUE=1, RESULT_LOAD_END=2, RESULT_LOAD_OK=3, RESULT_LOAD_ERROR = -1 };
 
 // DEBUG LOG 
 #ifdef UNITY_ANDROID
 #define DEBUG_LOG_CAT
 #else
-//#define DEBUG_LOG_FILE
+#define DEBUG_LOG_FILE
 #endif
 
 #ifdef DEBUG_LOG_CAT
@@ -51,7 +44,7 @@ namespace UnityWrapper3DTI
 {
     enum
     {
-		PARAM_HRTF_FILE_HANDLE,
+		PARAM_HRTF_FILE_STRING,
 		PARAM_HEAD_RADIUS,
 		PARAM_SCALE_FACTOR,
 		PARAM_SOURCE_ID,	// DEBUG
@@ -64,7 +57,7 @@ namespace UnityWrapper3DTI
 		PARAM_MAG_ANECHATT,
 		PARAM_MAG_REVERBATT,
 		PARAM_MAG_SOUNDSPEED,
-		PARAM_ILD_FILE_HANDLE,
+		PARAM_ILD_FILE_STRING,
 		PARAM_LOAD_RESULT,
 		P_NUM
 	};
@@ -79,21 +72,27 @@ namespace UnityWrapper3DTI
 		Binaural::CCore* core;
 		bool coreReady;
 		float parameters[P_NUM];
+
+		// STRING SERIALIZER		
+		char* strHRTFpath;
+		bool strHRTFserializing;
+		int strHRTFcount;
+		int strHRTFlength;
+		char* strILDpath;
+		bool strILDserializing;
+		int strILDcount;
+		int strILDlength;
 	};
 
 	/////////////////////////////////////////////////////////////////////
 
 	template <class T>
-    void WriteLog(UnityAudioEffectState* state, std::string logtext, const T& value)
+	void WriteLog(UnityAudioEffectState* state, string logtext, const T& value)
 	{
 		#ifdef DEBUG_LOG_FILE
 			ofstream logfile;
 			int sourceid = state->GetEffectData<EffectData>()->sourceID;
-			#ifdef UNITY_ANDROID
-				logfile.open("/storage/emulated/0/Android/data/com.Consortium3DTI.UnityWrapper/files/debuglog.txt", ofstream::out | ofstream::app);
-			#else
-				logfile.open("debuglog.txt", ofstream::out | ofstream::app);
-			#endif
+			logfile.open("debuglog.txt", ofstream::out | ofstream::app);
 			logfile << sourceid << ": " << logtext << value << endl;
 			logfile.close();
 		#endif
@@ -123,7 +122,7 @@ namespace UnityWrapper3DTI
     {
         int numparams = P_NUM;
         definition.paramdefs = new UnityAudioParameterDefinition[numparams];
-		RegisterParameter(definition, "HRTFHandle", "", 0.0f, FLT_MAX, 0.0f, 1.0f, 1.0f, PARAM_HRTF_FILE_HANDLE, "Handle of HRTF binary file");
+		RegisterParameter(definition, "HRTFPath", "", 0.0f, 255.0f, 0.0f, 1.0f, 1.0f, PARAM_HRTF_FILE_STRING, "String with path of HRTF binary file");
 		RegisterParameter(definition, "HeadRadius", "m", 0.0f, FLT_MAX, 0.0875f, 1.0f, 1.0f, PARAM_HEAD_RADIUS, "Listener head radius");
 		RegisterParameter(definition, "ScaleFactor", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 1.0f, PARAM_SCALE_FACTOR, "Scale factor for over/under sized scenes");
 		RegisterParameter(definition, "SourceID", "", 0.0f, FLT_MAX, -1.0f, 1.0f, 1.0f, PARAM_SOURCE_ID, "Source ID for debug");
@@ -136,7 +135,7 @@ namespace UnityWrapper3DTI
 		RegisterParameter(definition, "MAGAneAtt", "dB", -30.0f, 0.0f, -6.0f, 1.0f, 1.0f, PARAM_MAG_ANECHATT, "Anechoic distance attenuation");
 		RegisterParameter(definition, "MAGRevAtt", "dB", -30.0f, 0.0f, -6.0f, 1.0f, 1.0f, PARAM_MAG_REVERBATT, "Reverb distance attenuation");
 		RegisterParameter(definition, "MAGSounSpd", "m/s", 0.0f, 1000.0f, 343.0f, 1.0f, 1.0f, PARAM_MAG_SOUNDSPEED, "Sound speed");
-		RegisterParameter(definition, "ILDHandle", "", 0.0f, FLT_MAX, 0.0f, 1.0f, 1.0f, PARAM_ILD_FILE_HANDLE, "Handle of ILD binary file");
+		RegisterParameter(definition, "ILDPath", "", 0.0f, 255.0f, 0.0f, 1.0f, 1.0f, PARAM_ILD_FILE_STRING, "String with path of ILD binary file");
 		RegisterParameter(definition, "LoadResult", "", -100.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_LOAD_RESULT, "Result of loading file");
         definition.flags |= UnityAudioEffectDefinitionFlags_IsSpatializer;
         return numparams;
@@ -263,7 +262,7 @@ namespace UnityWrapper3DTI
 		effectdata->coreReady = false;		
 		effectdata->parameters[PARAM_SCALE_FACTOR] = 1.0f;		
 		effectdata->sourceID = -1;		
-		effectdata->parameters[PARAM_LOAD_RESULT] = RESULT_LOAD_WAITING;		
+		effectdata->parameters[PARAM_LOAD_RESULT] = TLoadResult::RESULT_LOAD_WAITING;		
 		WriteLog(state, "CREATE: Internal parameters set", "");
 
 		// Create source and set default interpolation method		
@@ -279,6 +278,12 @@ namespace UnityWrapper3DTI
 		else
 			WriteLog(state, "CREATE: ERROR!!!! Source creation returned null pointer!", "");		
 
+		// STRING SERIALIZER
+		effectdata->strHRTFserializing = false;
+		effectdata->strHRTFcount = 0;
+		effectdata->strILDserializing = false;
+		effectdata->strILDcount = 0;
+
         return UNITY_AUDIODSP_OK;
     }
 
@@ -293,123 +298,89 @@ namespace UnityWrapper3DTI
 
 	/////////////////////////////////////////////////////////////////////
 
-	int LoadHRTFBinaryFile(UnityAudioEffectState* state, float floatHandle)
+	int LoadHRTFBinaryFile(UnityAudioEffectState* state)
 	{
 		EffectData* data = state->GetEffectData<EffectData>();
 
-		#ifdef UNITY_WIN
-
-			// Cast from float to HANDLE
-			int intHandle = (int)floatHandle;
-			HANDLE fileHandle = (HANDLE)intHandle;
-
-			// Check that handle is correct
-			if (fileHandle == INVALID_HANDLE_VALUE)
-			{
-				WriteLog(state, "LOAD HRTF: ERROR!!!! Invalid file handle in HRTF binary file", "");
-				return RESULT_LOAD_BADHANDLE;				
-			}
-
-			// Get HRTF and check errors
-			CHRTF myHead = HRTF::CreateFrom3dtiHandle(fileHandle, state->dspbuffersize, state->samplerate);		// Check if arguments are always correct
-			if (myHead.GetHRIRLength() != 0)		// TO DO: Improve this error check
-			{
-				data->listener->LoadHRTF(std::move(myHead));
-				WriteLog(state, "LOAD HRTF: HRTF loaded from binary 3DTI file: ", "");
-				WriteLog(state, "           HRIR length is ", data->listener->GetHRTF().GetHRIRLength());
-				WriteLog(state, "           Sample rate is ", state->samplerate);
-				WriteLog(state, "           Buffer size is ", state->dspbuffersize);
-				return RESULT_LOAD_OK;
-			}
-			else
-			{
-				WriteLog(state, "LOAD HRTF: ERROR!!! Could not create HRTF from handle", "");
-				return RESULT_LOAD_WRONGDATA;
-			}
-		#else
-
-			// Cast from float to HANDLE
-			int intHandle = (int)floatHandle;
-
-			// TO DO: check invalid handle!
-
-			// Get HRTF and check errors
-			CHRTF myHead = HRTF::CreateFrom3dtiHandle(intHandle, state->dspbuffersize, state->samplerate);		// Check if arguments are always correct
-			if (myHead.GetHRIRLength() != 0)		// TO DO: Improve this error check
-			{
-				data->listener->LoadHRTF(std::move(myHead));
-				WriteLog(state, "LOAD HRTF: HRTF loaded from binary 3DTI file: ", "");
-				WriteLog(state, "           HRIR length is ", data->listener->GetHRTF().GetHRIRLength());
-				WriteLog(state, "           Sample rate is ", state->samplerate);
-				WriteLog(state, "           Buffer size is ", state->dspbuffersize);
-				return RESULT_LOAD_OK;
-			}
-			else
-			{
-				WriteLog(state, "LOAD HRTF: ERROR!!! Could not create HRTF from handle", "");
-				return RESULT_LOAD_WRONGDATA;
-			}		
-
-		#endif
+		// Load HRTF
+		CHRTF myHead = HRTF::CreateFrom3dti(data->strHRTFpath, state->dspbuffersize, state->samplerate);		// Check if arguments are always correct
+		if (myHead.GetHRIRLength() != 0)		// TO DO: Improve this error check
+		{
+			data->listener->LoadHRTF(std::move(myHead));
+			WriteLog(state, "LOAD HRTF: HRTF loaded from binary 3DTI file: ", data->strHRTFpath);
+			WriteLog(state, "           HRIR length is ", data->listener->GetHRTF().GetHRIRLength());
+			WriteLog(state, "           Sample rate is ", state->samplerate);
+			WriteLog(state, "           Buffer size is ", state->dspbuffersize);
+			free(data->strHRTFpath);
+			return TLoadResult::RESULT_LOAD_OK;
+		}
+		else
+		{			
+			WriteLog(state, "LOAD HRTF: ERROR!!! Could not create HRTF from path: ", data->strHRTFpath);
+			free(data->strHRTFpath);
+			return TLoadResult::RESULT_LOAD_ERROR;
+		}
 	}
 
 	/////////////////////////////////////////////////////////////////////
 
-	int LoadILDBinaryFile(UnityAudioEffectState* state, float floatHandle)
+	int LoadILDBinaryFile(UnityAudioEffectState* state)
 	{
 		EffectData* data = state->GetEffectData<EffectData>();
 
-		#ifndef UNITY_ANDROID
-
-		// Cast from float to HANDLE
-		int intHandle = (int)floatHandle;
-		HANDLE fileHandle = (HANDLE)intHandle;
-
-		// Check that handle is correct
-		if (fileHandle == INVALID_HANDLE_VALUE)
-		{
-			WriteLog(state, "LOAD ILD: ERROR!!!! Invalid file handle in ILD binary file", "");
-			return RESULT_LOAD_BADHANDLE;
-		}
-
 		// Get ILD and check errors
 		ILD_HashTable h;
-		h = ILD::CreateFrom3dtiHandle(fileHandle);		
+		h = ILD::CreateFrom3dti(data->strILDpath);		
 		if (h.size() > 0)		// TO DO: Improve this error check		
 		{
 			CILD::SetILD_HashTable(std::move(h));
-			WriteLog(state, "LOAD ILD: ILD loaded from binary 3DTI file ", h.size());
-			return RESULT_LOAD_OK;
+			WriteLog(state, "LOAD ILD: ILD loaded from binary 3DTI file: ", data->strILDpath);
+			WriteLog(state, "          Hast hable size is ", h.size());
+			free(data->strILDpath);
+			return TLoadResult::RESULT_LOAD_OK;
+		}
+		else
+		{			
+			WriteLog(state, "LOAD ILD: ERROR!!! could not create ILD from path: ", data->strILDpath);
+			free(data->strILDpath);
+			return TLoadResult::RESULT_LOAD_ERROR;
+		}
+	}
+
+	/////////////////////////////////////////////////////////////////////
+
+	int BuildPathString(UnityAudioEffectState* state, char*& path, bool &serializing, int &length, int &count, float value)
+	{
+		// Check if serialization was not started
+		if (!serializing)
+		{
+			// Receive string length
+			
+			length = static_cast<int>(value);
+			path = (char*)malloc((length+1) * sizeof(char));
+			count = 0;
+			serializing = true;						
 		}
 		else
 		{
-			WriteLog(state, "LOAD ILD: ERROR!!! could not create ILD from handle", "");
-			return RESULT_LOAD_WRONGDATA;
+			// Receive next character
+
+			// Concatenate char to string				
+			int valueInt = static_cast<int>(value);
+			char valueChr = static_cast<char>(valueInt);	
+			path[count] = valueChr;
+			++count; 
+
+			// Check if string has ended			
+			if (count == length)
+			{		
+				path[count] = 0;	// End character
+				serializing = false;
+				return RESULT_LOAD_END;
+			}
+			else
+				return RESULT_LOAD_CONTINUE;
 		}
-
-		#else
-		
-		// Cast from float to HANDLE
-		int intHandle = (int)floatHandle;
-
-		// TO DO: check invalid handle!
-
-		// Get ILD and check errors
-		ILD_HashTable h;
-		h = ILD::CreateFrom3dtiHandle(intHandle);
-		if (h.size() > 0)		// TO DO: Improve this error check		
-		{
-			CILD::SetILD_HashTable(std::move(h));
-			WriteLog(state, "LOAD ILD: ILD loaded from binary 3DTI file ", h.size());
-			return RESULT_LOAD_OK;
-		}
-		else
-		{
-			WriteLog(state, "LOAD ILD: ERROR!!! could not create ILD from handle", "");
-			return RESULT_LOAD_WRONGDATA;
-		}
-
-		#endif
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -422,30 +393,36 @@ namespace UnityWrapper3DTI
         data->parameters[index] = value;
 
 		CMagnitudes magnitudes;
-		int loadResult;
 
 		// Process command sent by C# API
 		switch (index)
 		{
-			case PARAM_HRTF_FILE_HANDLE:	// Load HRTF binary file (MANDATORY)
-				WriteLog(state, "SET PARAMETER: Loading HRTF from file handle ", value);
-				loadResult = LoadHRTFBinaryFile(state, value);
-				data->parameters[PARAM_LOAD_RESULT] = loadResult;
-				if (loadResult == RESULT_LOAD_OK)
-				{					
-					data->coreReady = true;							
-					WriteLog(state, "Core ready!!!!!!!!!!!!!!!!", "");
+			case PARAM_HRTF_FILE_STRING:	// Load HRTF binary file (MANDATORY)								
+				data->parameters[PARAM_LOAD_RESULT] = BuildPathString(state, data->strHRTFpath, data->strHRTFserializing, data->strHRTFlength, data->strHRTFcount, value);				
+				if (data->parameters[PARAM_LOAD_RESULT]== TLoadResult::RESULT_LOAD_END)
+				{
+					data->parameters[PARAM_LOAD_RESULT] = LoadHRTFBinaryFile(state);
+					if (data->parameters[PARAM_LOAD_RESULT] == TLoadResult::RESULT_LOAD_OK)
+					{
+						if (!data->coreReady)
+						{
+							data->coreReady = true;
+							WriteLog(state, "Core ready!!!!!", "");
+						}
+					}
 				}
 				break;
 
-			case PARAM_ILD_FILE_HANDLE:	// Load ILD binary file (MANDATORY?)
-				WriteLog(state, "SET PARAMETER: Loading ILD from file handle ", value);	// TO DO: change this when we enable ILD
-				loadResult = LoadILDBinaryFile(state, value);
-				data->parameters[PARAM_LOAD_RESULT] = loadResult;
-				if (loadResult == RESULT_LOAD_OK)
+			case PARAM_ILD_FILE_STRING:	// Load ILD binary file (MANDATORY?)								
+				data->parameters[PARAM_LOAD_RESULT] = BuildPathString(state, data->strILDpath, data->strILDserializing, data->strILDlength, data->strILDcount, value);
+				if (data->parameters[PARAM_LOAD_RESULT] == TLoadResult::RESULT_LOAD_END)
 				{
-					data->audioSource->modEnabler.doILD = true;
-					WriteLog(state, "SET PARAMETER: ILD Enabled", "");
+					data->parameters[PARAM_LOAD_RESULT] = LoadILDBinaryFile(state);
+					if (data->parameters[PARAM_LOAD_RESULT] == TLoadResult::RESULT_LOAD_OK)
+					{
+						data->audioSource->modEnabler.doILD = true;
+						WriteLog(state, "SET PARAMETER: ILD Enabled", "");
+					}
 				}
 				break;
 
@@ -484,12 +461,12 @@ namespace UnityWrapper3DTI
 			case PARAM_MOD_FARLPF:
 				if (value > 0.0f)
 				{
-					data->audioSource->modEnabler.doFarDistanceLPF = true;
+					data->audioSource->modEnabler.doFarDistance = true;
 					WriteLog(state, "SET PARAMETER: Far distance LPF is ", "Enabled");
 				}
 				else
 				{
-					data->audioSource->modEnabler.doFarDistanceLPF = false;
+					data->audioSource->modEnabler.doFarDistance = false;
 					WriteLog(state, "SET PARAMETER: Far distance LPF is ", "Disabled");
 				}
 				break;
@@ -633,18 +610,6 @@ namespace UnityWrapper3DTI
 		{
 			inMonoBuffer[i] = inbuffer[i * 2]; // We take only the left channel
 		}
-
-		//CTransform sourcePosition = data->audioSource->GetSourceTransform();
-		//string sourcePositionStr = "(" + std::to_string(sourcePosition.GetPosition().x) + ", " + std::to_string(sourcePosition.GetPosition().y) + ", " + std::to_string(sourcePosition.GetPosition().z) + ")";		
-		//CTransform listenerPosition = data->listener->GetListenerTransform();
-		//string listenerPositionStr = "(" + std::to_string(listenerPosition.GetPosition().x) + ", " + std::to_string(listenerPosition.GetPosition().y) + ", " + std::to_string(listenerPosition.GetPosition().z) + ")";
-		//string listenerRotationStr = std::to_string(listenerPosition.GetOrientation().w) + "(" + std::to_string(listenerPosition.GetOrientation().x) + ", " + std::to_string(listenerPosition.GetOrientation().y) + ", " + std::to_string(listenerPosition.GetOrientation().z) + ")";
-		//CVector3 vectorTo = listenerPosition.GetVectorTo(sourcePosition);
-		//string vectorToStr = "(" + std::to_string(vectorTo.x) + ", " + std::to_string(vectorTo.y) + ", " + std::to_string(vectorTo.z) + ")";
-		//WriteLog(state, "Source position = ", sourcePositionStr);
-		//WriteLog(state, "Listener position = ", listenerPositionStr);
-		//WriteLog(state, "Listener rotation = ", listenerRotationStr);
-		//WriteLog(state, "Vector from listener to source = ", vectorToStr);
 
 		// Process!!
 		CStereoBuffer<float> outStereoBuffer(length * 2);
