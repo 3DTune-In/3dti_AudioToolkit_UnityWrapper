@@ -23,7 +23,7 @@
 #include <HRTF/HRTFCereal.h>
 #include <ILD/ILDCereal.h>
 
-typedef enum TLoadResult { RESULT_LOAD_WAITING = 0, RESULT_LOAD_CONTINUE=1, RESULT_LOAD_END=2, RESULT_LOAD_OK=3, RESULT_LOAD_ERROR = -1 };
+enum TLoadResult { RESULT_LOAD_WAITING = 0, RESULT_LOAD_CONTINUE=1, RESULT_LOAD_END=2, RESULT_LOAD_OK=3, RESULT_LOAD_ERROR = -1 };
 
 // DEBUG LOG 
 #ifdef UNITY_ANDROID
@@ -37,6 +37,8 @@ typedef enum TLoadResult { RESULT_LOAD_WAITING = 0, RESULT_LOAD_CONTINUE=1, RESU
 #include <string>
 #include <sstream>
 #endif
+
+#include <cfloat>
 
 /////////////////////////////////////////////////////////////////////
 
@@ -69,7 +71,7 @@ namespace UnityWrapper3DTI
 		int sourceID;	// DEBUG
 		std::shared_ptr<Binaural::CSingleSourceDSP> audioSource;
 		std::shared_ptr<Binaural::CListener> listener;
-		Binaural::CCore* core;
+		Binaural::CCore core;
 		bool coreReady;
 		float parameters[P_NUM];
 
@@ -231,7 +233,7 @@ namespace UnityWrapper3DTI
     UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectState* state)
     {
         EffectData* effectdata = new EffectData;
-        memset(effectdata, 0, sizeof(EffectData));
+        //memset(effectdata, 0, sizeof(EffectData)); // Prefer not to write 0s on smart_ptr & Core objects.
         state->effectdata = effectdata;
         if (IsHostCompatible(state))
             state->spatializerdata->distanceattenuationcallback = DistanceAttenuationCallback;
@@ -246,13 +248,11 @@ namespace UnityWrapper3DTI
 		WriteLog(state, "CREATE: Buffer size set to ", audioState.bufferSize);
 		
 		// Core and listener initialization
-		effectdata->core = new Binaural::CCore(audioState);		
-		effectdata->listener = effectdata->core->CreateListener();
-		if (effectdata->core != nullptr)
-			WriteLog(state, "CREATE: Core created successfully", "");
-		else
-			WriteLog(state, "CREATE: ERROR!!!! Core creation returned null pointer!", "");
-		if (effectdata->listener != nullptr)
+		//effectdata->core = new Binaural::CCore(audioState);
+        WriteLog(state, "CREATE: Core simulated successfully","");
+        effectdata->core.SetAudioState(audioState);
+		effectdata->listener = effectdata->core.CreateListener();
+        if (effectdata->listener != nullptr)
 			WriteLog(state, "CREATE: Listener created successfully", "");
 		else
 			WriteLog(state, "CREATE: ERROR!!!! Listener creation returned null pointer!", "");
@@ -266,7 +266,7 @@ namespace UnityWrapper3DTI
 		WriteLog(state, "CREATE: Internal parameters set", "");
 
 		// Create source and set default interpolation method		
-		effectdata->audioSource = effectdata->core->CreateSingleSourceDSP();	
+		effectdata->audioSource = effectdata->core.CreateSingleSourceDSP();
 		if (effectdata->audioSource != nullptr)
 		{
 			WriteLog(state, "CREATE: Source created successfully", "");
@@ -292,6 +292,7 @@ namespace UnityWrapper3DTI
     UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ReleaseCallback(UnityAudioEffectState* state)
     {
         EffectData* data = state->GetEffectData<EffectData>();
+//        delete data->core;
         delete data;
         return UNITY_AUDIODSP_OK;
     }
@@ -359,7 +360,8 @@ namespace UnityWrapper3DTI
 			length = static_cast<int>(value);
 			path = (char*)malloc((length+1) * sizeof(char));
 			count = 0;
-			serializing = true;						
+			serializing = true;
+            return RESULT_LOAD_WAITING;  // TODO: @cgarre please check!!
 		}
 		else
 		{
@@ -511,23 +513,23 @@ namespace UnityWrapper3DTI
 				break;
 
 			case PARAM_MAG_ANECHATT:
-				magnitudes = data->core->GetMagnitudes();
+				magnitudes = data->core.GetMagnitudes();
 				magnitudes.SetAnechoicDistanceAttenuation(value);
-				data->core->SetMagnitudes(magnitudes);
+				data->core.SetMagnitudes(magnitudes);
 				WriteLog(state, "SET PARAMETER: Anechoic distance attenuation set to (dB) ", value);
 				break;
 
 			case PARAM_MAG_REVERBATT:
-				magnitudes = data->core->GetMagnitudes();
+				magnitudes = data->core.GetMagnitudes();
 				magnitudes.SetReverbDistanceAttenuation(value);
-				data->core->SetMagnitudes(magnitudes);
+				data->core.SetMagnitudes(magnitudes);
 				WriteLog(state, "SET PARAMETER: Reverb distance attenuation set to (dB) ", value);
 				break;
 
 			case PARAM_MAG_SOUNDSPEED:
-				magnitudes = data->core->GetMagnitudes();
+				magnitudes = data->core.GetMagnitudes();
 				magnitudes.SetSoundSpeed(value);
-				data->core->SetMagnitudes(magnitudes);
+				data->core.SetMagnitudes(magnitudes);
 				WriteLog(state, "SET PARAMETER: Sound speed set to (m/s) ", value);
 				break;
 
