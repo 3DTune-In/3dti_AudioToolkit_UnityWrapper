@@ -97,6 +97,9 @@ public class API_3DTI_Spatializer : MonoBehaviour
             #if (UNITY_ANDROID && !UNITY_EDITOR)
                 SaveResourceAsBinary(ILDFileName, ".3dti-ild", out ILDFileName);                 
             #endif
+			//#if (!UNITY_EDITOR)
+			//GetStreamingAsset(ILDFileName, out ILDFileName);
+			//#endif
             LoadILDBinary(ILDFileName);
         }        
 
@@ -105,9 +108,24 @@ public class API_3DTI_Spatializer : MonoBehaviour
             #if (UNITY_ANDROID && !UNITY_EDITOR)
                 SaveResourceAsBinary(HRTFFileName, ".3dti-hrtf", out HRTFFileName); 
             #endif
+			//#if (!UNITY_EDITOR)
+			//GetStreamingAsset(HRTFFileName, out HRTFFileName);
+			//#endif
             LoadHRTFBinary(HRTFFileName);
         }
     }
+
+	public int GetStreamingAsset(string originalname, out string filename)
+	{
+		// Get file name from full path
+		string namewithoutpath = Path.GetFileName(originalname);
+
+		// Setup name for new file
+		string dataPath = Application.persistentDataPath;
+		string newfilename = dataPath + "/StreamingAssets/" + namewithoutpath;
+		filename = newfilename;
+		return 1;
+	}
 
     /// <summary>
     /// Load one file from resources and save it as a binary file (for Android)
