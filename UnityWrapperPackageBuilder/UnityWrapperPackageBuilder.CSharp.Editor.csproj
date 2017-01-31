@@ -109,9 +109,6 @@
     <Reference Include="UnityEditor.iOS.Extensions.Common">
       <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Common.dll</HintPath>
     </Reference>
-    <Reference Include="AudioPlugin3DTIHLGUI">
-      <HintPath>Assets\Editor\AudioPlugin3DTIHLGUI.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="UnityWrapperPackageBuilder.CSharp.csproj">
@@ -121,6 +118,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Editor\AudioPlugin3DTISpatializerGUI.cs" />
+    <Compile Include="Assets\Editor\GUIHelpers.cs" />
+    <Compile Include="Assets\Editor\MathHelpers.cs" />
+    <Compile Include="Assets\Editor\audioplugin3DTIHLGUI.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

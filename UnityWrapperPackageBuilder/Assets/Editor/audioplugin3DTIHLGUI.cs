@@ -123,8 +123,8 @@ public class ConvolutionReverbCustomGUI : IAudioEffectPluginGUI
         }
         EditorGUILayout.EndToggleGroup();
 
-        return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG)
-        //return false;     // DO NOT SHOW DEFAULT CONTROLS
+        //return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG)
+        return false;     // DO NOT SHOW DEFAULT CONTROLS
     }
 
 
