@@ -34,7 +34,7 @@ public class API_3DTI_HL : MonoBehaviour
     public const int PROCESS_COMPRESSOR_FIRST = 1;
 
     // Global variables
-    public AudioMixer hlMixer;  // Drag&drop here the HL_3DTI_Mixer
+    public AudioMixer hlMixer;  // Drag&drop here the HAHL_3DTI_Mixer
 
 
     /// <summary>
