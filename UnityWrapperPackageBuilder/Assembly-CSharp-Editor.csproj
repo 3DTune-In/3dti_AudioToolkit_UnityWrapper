@@ -46,6 +46,9 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Editor\AudioPlugin3DTISpatializerGUI.cs" />
+     <Compile Include="Assets\Editor\GUIHelpers.cs" />
+     <Compile Include="Assets\Editor\MathHelpers.cs" />
+     <Compile Include="Assets\Editor\audioplugin3DTIHLGUI.cs" />
  <Reference Include="UnityEditor.Advertisements">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
  </Reference>
