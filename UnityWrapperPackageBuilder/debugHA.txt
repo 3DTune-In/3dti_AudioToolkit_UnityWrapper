@@ -56791,3 +56791,198 @@ SET PARAMETER:
 SET PARAMETER: 
                Index = 60
                Value = 6
+CREATE: EQ setup:
+        Sample rate = 44100
+        Number of levels = 3
+        Number of bands = 7
+        Initial frequency = 125
+        Octave step = 1/1
+        Q factor of LPF = 0.707
+        Q factor of BPFs = 1.4142
+        Q factor of HPF = 0.707
+        LPF cutoff = 3000
+        HPF cutoff = 500
+CREATE: HA Simulation plugin created
+SET PARAMETER: 
+               Index = 0
+               Value = 1
+SET PARAMETER: 
+               Index = 1
+               Value = 1
+SET PARAMETER: 
+               Index = 2
+               Value = -3.8
+SET PARAMETER: 
+               Index = 3
+               Value = -0
+SET PARAMETER: 
+               Index = 4
+               Value = 1
+SET PARAMETER: 
+               Index = 5
+               Value = 16000
+SET PARAMETER: 
+               Index = 6
+               Value = 62.5
+SET PARAMETER: 
+               Index = 7
+               Value = 1
+SET PARAMETER: 
+               Index = 8
+               Value = -20
+SET PARAMETER: 
+               Index = 9
+               Value = -20
+SET PARAMETER: 
+               Index = 10
+               Value = -20
+SET PARAMETER: 
+               Index = 11
+               Value = -20
+SET PARAMETER: 
+               Index = 12
+               Value = -20
+SET PARAMETER: 
+               Index = 13
+               Value = -20
+SET PARAMETER: 
+               Index = 14
+               Value = 4.9
+SET PARAMETER: 
+               Index = 15
+               Value = 1
+SET PARAMETER: 
+               Index = 16
+               Value = 11.9
+SET PARAMETER: 
+               Index = 17
+               Value = 0
+SET PARAMETER: 
+               Index = 18
+               Value = 0
+SET PARAMETER: 
+               Index = 19
+               Value = 0
+SET PARAMETER: 
+               Index = 20
+               Value = 0
+SET PARAMETER: 
+               Index = 21
+               Value = 54.9
+SET PARAMETER: 
+               Index = 22
+               Value = 0
+SET PARAMETER: 
+               Index = 23
+               Value = 0
+SET PARAMETER: 
+               Index = 24
+               Value = 0
+SET PARAMETER: 
+               Index = 25
+               Value = 0
+SET PARAMETER: 
+               Index = 26
+               Value = 0
+SET PARAMETER: 
+               Index = 27
+               Value = 0
+SET PARAMETER: 
+               Index = 28
+               Value = 0
+SET PARAMETER: 
+               Index = 29
+               Value = 0
+SET PARAMETER: 
+               Index = 30
+               Value = 0
+SET PARAMETER: 
+               Index = 31
+               Value = 0
+SET PARAMETER: 
+               Index = 32
+               Value = 0
+SET PARAMETER: 
+               Index = 33
+               Value = 0
+SET PARAMETER: 
+               Index = 34
+               Value = 0
+SET PARAMETER: 
+               Index = 35
+               Value = 0
+SET PARAMETER: 
+               Index = 36
+               Value = 0
+SET PARAMETER: 
+               Index = 37
+               Value = 0
+SET PARAMETER: 
+               Index = 38
+               Value = 0
+SET PARAMETER: 
+               Index = 39
+               Value = 0
+SET PARAMETER: 
+               Index = 40
+               Value = 0
+SET PARAMETER: 
+               Index = 41
+               Value = 0
+SET PARAMETER: 
+               Index = 42
+               Value = 0
+SET PARAMETER: 
+               Index = 43
+               Value = 0
+SET PARAMETER: 
+               Index = 44
+               Value = 0
+SET PARAMETER: 
+               Index = 45
+               Value = 0
+SET PARAMETER: 
+               Index = 46
+               Value = 0
+SET PARAMETER: 
+               Index = 47
+               Value = 0
+SET PARAMETER: 
+               Index = 48
+               Value = 0
+SET PARAMETER: 
+               Index = 49
+               Value = 0
+SET PARAMETER: 
+               Index = 50
+               Value = 0
+SET PARAMETER: 
+               Index = 51
+               Value = 0
+SET PARAMETER: 
+               Index = 52
+               Value = 0
+SET PARAMETER: 
+               Index = 53
+               Value = 0
+SET PARAMETER: 
+               Index = 54
+               Value = 0
+SET PARAMETER: 
+               Index = 55
+               Value = 0
+SET PARAMETER: 
+               Index = 56
+               Value = 1000
+SET PARAMETER: 
+               Index = 57
+               Value = 1000
+SET PARAMETER: 
+               Index = 58
+               Value = 0
+SET PARAMETER: 
+               Index = 59
+               Value = 0
+SET PARAMETER: 
+               Index = 60
+               Value = 6
