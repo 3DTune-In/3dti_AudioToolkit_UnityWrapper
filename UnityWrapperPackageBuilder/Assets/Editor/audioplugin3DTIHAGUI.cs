@@ -9,24 +9,15 @@ using System.Collections.ObjectModel;   // For ReadOnlyCollection
 using UnityEditor;
 using UnityEngine;
 
-public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
+public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
 {    
     // Constant definitions
-    const int PRESET_CUSTOM = -1;
-    const int PRESET_MILD = 0;    
-    const int PRESET_MODERATE = 1;
-    const int PRESET_SEVERE = 2;
-    const int PRESET_PLAIN = 3;
     const int EAR_RIGHT = 0;
     const int EAR_LEFT = 1;
     const int DEFAULT_COMP_RATIO = 1;
     const int DEFAULT_COMP_THRESHOLD = 0;
     const int DEFAULT_COMP_ATTACK = 20;
     const int DEFAULT_COMP_RELEASE = 100;
-    static readonly ReadOnlyCollection<int> GAINS_PRESET_MILD = new ReadOnlyCollection<int>(new[] { -7, -7, -12, -15, -22, -25, -25, -25, -25 });
-    static readonly ReadOnlyCollection<int> GAINS_PRESET_MODERATE = new ReadOnlyCollection<int>(new[] { -22, -22, -27, -30, -37, -40, -40, -40, -40 });
-    static readonly ReadOnlyCollection<int> GAINS_PRESET_SEVERE = new ReadOnlyCollection<int>(new[] { -47, -47, -52, -55, -62, -65, -65, -65, -65 });
-    static readonly ReadOnlyCollection<int> GAINS_PRESET_PLAIN = new ReadOnlyCollection<int>(new[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 });
 
     // Look and feel parameters
     int logosize = 80;  // Size of 3DTI logo
@@ -39,14 +30,11 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     // Global variables
     bool switchLeftEar = true;
     bool switchRightEar = true;
-    bool advancedControls = false;
-    bool compressorFirst = true;
-    bool eqLeftOn = true;
-    bool eqRightOn = true;
-    bool compressorLeftOn = false;
-    bool compressorRightOn = false;
-    int selectedPresetLeft = PRESET_PLAIN;
-    int selectedPresetRight = PRESET_PLAIN;
+    bool noiseBefore = true;
+    bool noiseAfter = true;
+    bool dynamicEq = true;
+    bool interpolation = true;
+
     bool initDone = false;
 
     // GUI Styles
@@ -56,10 +44,11 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     GUIStyle rightColumnStyle;
     GUIStyle titleBoxStyle;
 
+
     //The GUI name must be unique for each GUI, the one specified in PluginList.h
     public override string Name
     {
-        get { return "3DTI Hearing Loss Simulation"; }
+        get { return "3DTI Hearing Aid Simulation"; }
     }
 
     public override string Description
@@ -103,44 +92,25 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         }
 
         // DRAW CUSTOM GUI
-
         DrawHeader(plugin);
-        DrawChainOrder(plugin);
-        DrawEars(plugin);        
-
-        advancedControls = EditorGUILayout.BeginToggleGroup("Advanced controls", advancedControls);
-        if (advancedControls)
-        {
-            if (compressorFirst)
-            {
-                DrawCompressor(plugin);
-                DrawEQ(plugin);
-            }
-            else
-            {
-                DrawEQ(plugin);
-                DrawCompressor(plugin);
-            }
-        }
-        EditorGUILayout.EndToggleGroup();
-
-       //return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG)
-       return false;     // DO NOT SHOW DEFAULT CONTROLS
+        DrawEars(plugin);
+        DrawDynamicEq(plugin);
+        DrawNoiseGenerator(plugin);
+           
+        
+        //return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG)
+        return false;     // DO NOT SHOW DEFAULT CONTROLS
     }
 
 
     public void InitializePlugin(IAudioEffectPlugin plugin)
     {
-        // Set presets
-        SetEQPreset(plugin, EAR_LEFT, GAINS_PRESET_PLAIN);
-        SetEQPreset(plugin, EAR_RIGHT, GAINS_PRESET_PLAIN);
-
         // Boolean switches
-        plugin.SetFloatParameter("EQLeftOn", Bool2Float(eqLeftOn));
-        plugin.SetFloatParameter("EQRightOn", Bool2Float(eqRightOn));
-        plugin.SetFloatParameter("CompLeftOn", Bool2Float(compressorLeftOn));
-        plugin.SetFloatParameter("CompRightOn", Bool2Float(compressorRightOn));
-        plugin.SetFloatParameter("CompFirst", Bool2Float(compressorFirst));
+        //plugin.SetFloatParameter("EQLeftOn", Bool2Float(eqLeftOn));
+        //plugin.SetFloatParameter("EQRightOn", Bool2Float(eqRightOn));
+        //plugin.SetFloatParameter("CompLeftOn", Bool2Float(compressorLeftOn));
+        //plugin.SetFloatParameter("CompRightOn", Bool2Float(compressorRightOn));
+        //plugin.SetFloatParameter("CompFirst", Bool2Float(compressorFirst));
 
         // Compressor
         // TO DO: Knee
@@ -173,108 +143,6 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         GUILayout.Space(spaceBetweenSections);
     }
 
-    /// <summary>
-    /// Draw option for changing Eq-Compressor chain
-    /// </summary>
-    /// <param name="plugin"></param>    
-    public void DrawChainOrder(IAudioEffectPlugin plugin)
-    {
-        string buttonText;
-        if (compressorFirst)
-            buttonText = "Switch to: Eq->Compressor";
-        else
-            buttonText = "Switch to: Compressor->Eq";
-        if (GUILayout.Button(buttonText, GUILayout.ExpandWidth(false)))
-        {
-            compressorFirst = !compressorFirst;
-            plugin.SetFloatParameter("CompFirst", Bool2Float(compressorFirst));
-        }
-        GUILayout.Space(spaceBetweenSections);
-    }
-
-    /// <summary>
-    ///  Draw preset buttons for left ear
-    /// </summary>
-    /// <param name="plugin"></param>
-    public void DrawLeftPresets(IAudioEffectPlugin plugin)
-    {
-        GUILayout.BeginVertical();
-
-        if (selectedPresetLeft == PRESET_MILD)
-            GUI.color = selectedColor;
-        else
-            GUI.color = baseColor;
-        if (GUILayout.Button("Mild", GUILayout.ExpandWidth(false)))
-        {
-            SetEQPreset(plugin, EAR_LEFT, GAINS_PRESET_MILD);
-            selectedPresetLeft = PRESET_MILD;
-        }
-
-        if (selectedPresetLeft == PRESET_MODERATE)
-            GUI.color = selectedColor;
-        else
-            GUI.color = baseColor;
-        if (GUILayout.Button("Moderate", GUILayout.ExpandWidth(false)))
-        {
-            SetEQPreset(plugin, EAR_LEFT, GAINS_PRESET_MODERATE);
-            selectedPresetLeft = PRESET_MODERATE;
-        }
-
-        if (selectedPresetLeft == PRESET_SEVERE)
-            GUI.color = selectedColor;
-        else
-            GUI.color = baseColor;
-        if (GUILayout.Button("Severe", GUILayout.ExpandWidth(false)))
-        {
-            SetEQPreset(plugin, EAR_LEFT, GAINS_PRESET_SEVERE);
-            selectedPresetLeft = PRESET_SEVERE;
-        }
-        GUI.color = baseColor;
-
-        GUILayout.EndVertical();
-    }
-
-    /// <summary>
-    ///  Draw preset buttons for right ear
-    /// </summary>
-    /// <param name="plugin"></param>
-    public void DrawRightPresets(IAudioEffectPlugin plugin)
-    {
-        GUILayout.BeginVertical();
-
-        if (selectedPresetRight == PRESET_MILD)
-            GUI.color = selectedColor;
-        else
-            GUI.color = baseColor;
-        if (GUILayout.Button("Mild", GUILayout.ExpandWidth(false)))
-        {
-            SetEQPreset(plugin, EAR_RIGHT, GAINS_PRESET_MILD);
-            selectedPresetRight = PRESET_MILD;
-        }
-
-        if (selectedPresetRight == PRESET_MODERATE)
-            GUI.color = selectedColor;
-        else
-            GUI.color = baseColor;
-        if (GUILayout.Button("Moderate", GUILayout.ExpandWidth(false)))
-        {
-            SetEQPreset(plugin, EAR_RIGHT, GAINS_PRESET_MODERATE);
-            selectedPresetRight = PRESET_MODERATE;
-        }
-
-        if (selectedPresetRight == PRESET_SEVERE)
-            GUI.color = selectedColor;
-        else
-            GUI.color = baseColor;
-        if (GUILayout.Button("Severe", GUILayout.ExpandWidth(false)))
-        {
-            SetEQPreset(plugin, EAR_RIGHT, GAINS_PRESET_SEVERE);
-            selectedPresetRight = PRESET_SEVERE;
-        }
-        GUI.color = baseColor;
-
-        GUILayout.EndVertical();
-    }
 
     /// <summary>
     ///  Draw preset buttons for left ear
@@ -325,9 +193,8 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 LeftEarTexture = Resources.Load("LeftEarAlpha") as Texture;
                 GUILayout.Box(LeftEarTexture, LeftEarStyle, GUILayout.Width(earsize), GUILayout.Height(earsize), GUILayout.ExpandWidth(false));
 
-                // Draw preset buttons
-                GUILayout.Space(spaceBetweenSections);
-                DrawLeftPresets(plugin);                
+                //Parameters
+                CreateParameterSlider(plugin, "VOLL", "Overall gain (dB):", false, "");               
             }
             GUILayout.EndHorizontal();
         }
@@ -337,10 +204,8 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         {
             GUILayout.BeginHorizontal();
             {
-                // Draw preset buttons
-                GUILayout.Space(spaceBetweenSections);
-                DrawRightPresets(plugin);                
-
+                //Parameters
+                CreateParameterSlider(plugin, "VOLR", "Overall gain (dB):", false, "");
                 // Draw ear icon
                 Texture RightEarTexture;
                 GUIStyle RightEarStyle = EditorStyles.label;
@@ -351,77 +216,168 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             GUILayout.EndHorizontal();
         }
         EndRightColumn(false);        
-    }  
-
-    /// <summary>
-    /// Draw EQ controls for both ears
-    /// </summary>
-    /// <param name="plugin"></param>
-    public void DrawEQ(IAudioEffectPlugin plugin)
-    {
-        BeginLeftColumn(plugin, ref eqLeftOn, "Equalizer", new List<string> { "EQLeftOn" });
-        {            
-            if (CreateParameterSlider(plugin, "EQL0", "62.5 Hz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQL1", "125 Hz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQL2", "250 Hz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQL3", "500 Hz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQL4", "1 KHz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQL5", "2 KHz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQL6", "4 KHz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQL7", "8 KHz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQL8", "16 KHz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
-        }
-        EndLeftColumn();
-
-        BeginRightColumn(plugin, ref eqRightOn, "Equalizer", new List<string> { "EQRightOn" });
-        {
-            if (CreateParameterSlider(plugin, "EQR0", "62.5 Hz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQR1", "125 Hz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQR2", "250 Hz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQR3", "500 Hz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQR4", "1 KHz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQR5", "2 KHz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQR6", "4 KHz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQR7", "8 KHz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQR8", "16 KHz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
-        }
-        EndRightColumn();
     }
 
     /// <summary>
     /// Draw Compressor controls for both ears
     /// </summary>
     /// <param name="plugin"></param>
-    public void DrawCompressor(IAudioEffectPlugin plugin)
+    public void DrawDynamicEq(IAudioEffectPlugin plugin)
     {
-
-        BeginLeftColumn(plugin, ref compressorLeftOn, "Compressor", new List<string> { "CompLeftOn" });
+        BeginCentralColumn("Equalizer");
         {
-            CreateParameterSlider(plugin, "LeftRatio", "Ratio 1:", false, "");
-            CreateParameterSlider(plugin, "LeftThreshold", "Threshold", false, "dB");
-            CreateParameterSlider(plugin, "LeftAttack", "Attack", false, "ms");
-            CreateParameterSlider(plugin, "LeftRelease", "Release", false, "ms");
-        }
-        EndLeftColumn();
+            CreateToggle(plugin, ref dynamicEq, "Dynamic Equalizer", "DYNEQ");
+            CreateParameterSlider(plugin, "LPF", "LPF CutOff", false, "Hz");
+            CreateParameterSlider(plugin, "HPF", "HPF CutOff", false, "Hz");
+            if (dynamicEq){ CreateToggle(plugin, ref interpolation, "Interpolation", "EQINT"); }
 
-        BeginRightColumn(plugin, ref compressorRightOn, "Compressor", new List<string> { "CompRightOn" });
-        {
-            CreateParameterSlider(plugin, "RightRatio", "Ratio 1:", false, "");
-            CreateParameterSlider(plugin, "RightThreshold", "Threshold", false, "dB");
-            CreateParameterSlider(plugin, "RightAttack", "Attack", false, "ms");
-            CreateParameterSlider(plugin, "RightRelease", "Release", false, "ms");
+            BeginLeftColumn();
+            {
+                GUILayout.Label("LEFT EAR");
+              
+               // BeginCentralColumn("Level 0");
+                //   {
+                if (dynamicEq)
+                {
+                    GUILayout.Label("Level 0 ----------------------------");
+                }
+                    CreateParameterSlider(plugin, "DEQL0B0L", "125Hz:", true, "dB");
+                    CreateParameterSlider(plugin, "DEQL0B1L", "250Hz",  true, "dB");
+                    CreateParameterSlider(plugin, "DEQL0B2L", "500Hz",  true, "dB");
+                    CreateParameterSlider(plugin, "DEQL0B3L", "1kHz",   true, "dB");
+                    CreateParameterSlider(plugin, "DEQL0B4L", "2kHz",   true, "dB");
+                    CreateParameterSlider(plugin, "DEQL0B5L", "4kHz",   true, "dB");
+                    CreateParameterSlider(plugin, "DEQL0B6L", "8kHz",   true, "dB");
+                  // }
+                 //  EndCentralColumn();
+                if (dynamicEq)
+                {
+                 // BeginCentralColumn("Level 1");
+                 // {
+                GUILayout.Label("Level 1 ----------------------------");
+                CreateParameterSlider(plugin, "DEQL1B0L", "125Hz:", false, "dB");
+                        CreateParameterSlider(plugin, "DEQL1B1L", "250Hz", true, "dB");
+                        CreateParameterSlider(plugin, "DEQL1B2L", "500Hz", true, "dB");
+                        CreateParameterSlider(plugin, "DEQL1B3L", "1kHz", true, "dB");
+                        CreateParameterSlider(plugin, "DEQL1B4L", "2kHz", true, "dB");
+                        CreateParameterSlider(plugin, "DEQL1B5L", "4kHz", true, "dB");
+                        CreateParameterSlider(plugin, "DEQL1B6L", "8kHz", true, "dB");
+                // }
+               // EndCentralColumn();
+
+               // BeginCentralColumn("Level 2");
+               // {
+                GUILayout.Label("Level 2 ----------------------------");
+                CreateParameterSlider(plugin, "DEQL2B0L", "125Hz:", true, "dB");
+                        CreateParameterSlider(plugin, "DEQL2B1L", "250Hz", true, "dB");
+                        CreateParameterSlider(plugin, "DEQL2B2L", "500Hz", true, "dB");
+                        CreateParameterSlider(plugin, "DEQL2B3L", "1kHz", true, "dB");
+                        CreateParameterSlider(plugin, "DEQL2B4L", "2kHz", true, "dB");
+                        CreateParameterSlider(plugin, "DEQL2B5L", "4kHz", true, "dB");
+                        CreateParameterSlider(plugin, "DEQL2B6L", "8kHz", true, "dB");
+                   //  }
+                   //   EndCentralColumn();
+                    GUILayout.Label("Level Threshold ----------------------------");
+                    CreateParameterSlider(plugin, "THRL0", "Threshold 1", false, "dBfs");
+                    CreateParameterSlider(plugin, "THRL1", "Threshold 2 ", false, "dBfs");
+                    CreateParameterSlider(plugin, "THRL2", "Threshold 3 ", false, "dBfs");
+
+                    GUILayout.Label("Attack Release ----------------------------");
+                    CreateParameterSlider(plugin, "ATREL", "Atack Release", false, "ms");
+                }
+            }
+            EndLeftColumn(true, false);
+
+            BeginRightColumn();
+            {
+                GUILayout.Label("RIGHT EAR");
+
+                // BeginCentralColumn("Level 0");
+                //{
+                if (dynamicEq)
+                {
+                    GUILayout.Label("Level 0 ----------------------------");
+                }
+                    CreateParameterSlider(plugin, "DEQL0B0R", "125Hz:", false, "dB");
+                    CreateParameterSlider(plugin, "DEQL0B1R", "250Hz", false, "dB");
+                    CreateParameterSlider(plugin, "DEQL0B2R", "500Hz", false, "dB");
+                    CreateParameterSlider(plugin, "DEQL0B3R", "1kHz", false, "dB");
+                    CreateParameterSlider(plugin, "DEQL0B4R", "2kHz", false, "dB");
+                    CreateParameterSlider(plugin, "DEQL0B5R", "4kHz", false, "dB");
+                    CreateParameterSlider(plugin, "DEQL0B6R", "8kHz", false, "dB");
+
+                //}
+               // EndCentralColumn();
+                if (dynamicEq)
+                {
+                    // BeginCentralColumn("Level 1");
+                    // {
+
+                     GUILayout.Label("Level 1 ----------------------------");
+                    CreateParameterSlider(plugin, "DEQL1B0R", "125Hz:", false, "dB");
+                        CreateParameterSlider(plugin, "DEQL1B1R", "250Hz", false, "dB");
+                        CreateParameterSlider(plugin, "DEQL1B2R", "500Hz", false, "dB");
+                        CreateParameterSlider(plugin, "DEQL1B3R", "1kHz", false, "dB");
+                        CreateParameterSlider(plugin, "DEQL1B4R", "2kHz", false, "dB");
+                        CreateParameterSlider(plugin, "DEQL1B5R", "4kHz", false, "dB");
+                        CreateParameterSlider(plugin, "DEQL1B6R", "8kHz", false, "dB");
+                    //}
+                    //EndCentralColumn();
+
+                    //BeginCentralColumn("Level 2");
+                    //{
+                    GUILayout.Label("Level 2 ----------------------------");
+                    CreateParameterSlider(plugin, "DEQL2B0R", "125Hz:", false, "dB");
+                        CreateParameterSlider(plugin, "DEQL2B1R", "250Hz", false, "dB");
+                        CreateParameterSlider(plugin, "DEQL2B2R", "500Hz", false, "dB");
+                        CreateParameterSlider(plugin, "DEQL2B3R", "1kHz", false, "dB");
+                        CreateParameterSlider(plugin, "DEQL2B4R", "2kHz", false, "dB");
+                        CreateParameterSlider(plugin, "DEQL2B5R", "4kHz", false, "dB");
+                        CreateParameterSlider(plugin, "DEQL2B6R", "8kHz", false, "dB");
+                    //}
+                    // EndCentralColumn();
+
+                    GUILayout.Label("Level Threshold ----------------------------");
+                    CreateParameterSlider(plugin, "THRR0", "Threshold 1", false, "dBfs");
+                    CreateParameterSlider(plugin, "THRR1", "Threshold 2 ", false, "dBfs");
+                    CreateParameterSlider(plugin, "THRR2", "Threshold 3 ", false, "dBfs");
+
+                    GUILayout.Label("Attack Release ----------------------------");
+                    CreateParameterSlider(plugin, "ATRER", "Atack Release", false, "ms");
+                }
+                EndRightColumn(true, false);
+            }
         }
-        EndRightColumn();
+    EndCentralColumn();
     }
+
+    /// <summary>
+    /// Draw Noise Generator controls for both ears
+    /// </summary>
+    /// <param name="plugin"></param>
+    public void DrawNoiseGenerator(IAudioEffectPlugin plugin)
+    {
+        BeginCentralColumn("Quantification Noise Generator");
+        {
+            CreateToggle(plugin,ref noiseBefore, "Quantization Before", "NOISEBEF");
+            CreateToggle(plugin,ref noiseAfter, "Quantization After", "NOISEAFT");
+            CreateParameterSlider(plugin, "NOISEBITS", "Noise Number of Bits:", true, "");
+        }
+        EndCentralColumn();
+    }
+
 
     /// <summary>
     ///  Auxiliary function for creating toogle input
     /// </summary>    
-    public bool CreateToggle(ref bool boolvar, string toggleText, GUIStyle toggleStyle)
+    public void CreateToggle(IAudioEffectPlugin plugin, ref bool boolvar, string toggleText, string switchParameter)
     {
         bool oldvar = boolvar;
-        boolvar = GUILayout.Toggle(boolvar, toggleText, toggleStyle, GUILayout.ExpandWidth(false));
-        return (oldvar != boolvar);
+        boolvar = GUILayout.Toggle(boolvar, toggleText, GUILayout.ExpandWidth(false));
+        if (oldvar != boolvar)
+        {
+            plugin.SetFloatParameter(switchParameter, Bool2Float(boolvar));
+        }
     }
 
     /// <summary>
@@ -514,12 +470,15 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                         }
     }
 
-    public void EndLeftColumn(bool earDisable=true)
+    public void EndLeftColumn(bool earDisable=true, bool endToogleGroup=true)
     {
-                    EditorGUILayout.EndToggleGroup();                               // End toggle
-                 if (earDisable) EditorGUI.EndDisabledGroup();                      // End disabled if left ear is switched off
-            GUILayout.EndVertical();                                                // End column
-            GUILayout.Space(spaceBetweenColumns);                                   // Space between columns
+        if (endToogleGroup)
+        {
+            EditorGUILayout.EndToggleGroup();                               // End toggle
+        }
+        if (earDisable) { EditorGUI.EndDisabledGroup(); }                  // End disabled if left ear is switched off
+        GUILayout.EndVertical();                                                // End column
+        GUILayout.Space(spaceBetweenColumns);                                   // Space between columns
     }
 
     public void BeginRightColumn(IAudioEffectPlugin plugin, ref bool enable, string title, List<string> switchParameters, bool earDisable=true)
@@ -537,12 +496,45 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                         }
     }
 
-    public void EndRightColumn(bool earDisable=true)
+    public void EndRightColumn(bool earDisable=true, bool endToogleGroup = true)
     {
-                    EditorGUILayout.EndToggleGroup();                               // End toggle
-                if (earDisable) EditorGUI.EndDisabledGroup();                       // End disabled if right ear is switched off
-            GUILayout.EndVertical();                                                // End column
+        if (endToogleGroup)
+        {
+            EditorGUILayout.EndToggleGroup();                               // End toggle
+        }
+        if (earDisable) { EditorGUI.EndDisabledGroup(); }                      // End disabled if right ear is switched off
+        GUILayout.EndVertical();                                                // End column
         GUILayout.EndHorizontal();                                                  // End section                  
         GUILayout.Space(spaceBetweenSections);                                      // Space between sections
     }
+
+    public void BeginLeftColumn(bool earDisable = true)
+    {
+        GUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));                    // Begin section             
+        GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(true));  // Begin column
+        if (earDisable) EditorGUI.BeginDisabledGroup(!switchLeftEar);       // Begin Disabled if left ear is switched off
+    }
+
+    public void BeginRightColumn(bool earDisable = true)
+    {
+        GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(true));    // Begin column
+        if (earDisable) EditorGUI.BeginDisabledGroup(!switchRightEar);      // Begin Disabled if right ear is switched off
+    }
+
+    public void BeginCentralColumn(string title)
+    {
+       GUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));                      
+        GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(true));
+        GUILayout.Label(title);
+    }
+
+    public void EndCentralColumn()
+    {
+        EditorGUILayout.EndToggleGroup();                               // End toggle
+        //  if (earDisable) EditorGUI.EndDisabledGroup();                      // End disabled if left ear is switched off
+        GUILayout.EndVertical();                                                // End column
+        
+        //GUILayout.Space(spaceBetweenColumns);                                   // Space between columns
+    }
+
 }
