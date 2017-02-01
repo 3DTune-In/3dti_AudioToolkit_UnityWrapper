@@ -55294,3 +55294,1110 @@ SET PARAMETER:
 SET PARAMETER: 
                Index = 60
                Value = 6
+CREATE: EQ setup:
+        Sample rate = 48000
+        Number of levels = 3
+        Number of bands = 7
+        Initial frequency = 125
+        Octave step = 1/1
+        Q factor of LPF = 0.707
+        Q factor of BPFs = 1.4142
+        Q factor of HPF = 0.707
+        LPF cutoff = 3000
+        HPF cutoff = 500
+CREATE: HA Simulation plugin created
+SET PARAMETER: 
+               Index = 0
+               Value = 1
+SET PARAMETER: 
+               Index = 1
+               Value = 1
+SET PARAMETER: 
+               Index = 2
+               Value = -3.8
+SET PARAMETER: 
+               Index = 3
+               Value = -0
+SET PARAMETER: 
+               Index = 4
+               Value = 1
+SET PARAMETER: 
+               Index = 5
+               Value = 16000
+SET PARAMETER: 
+               Index = 6
+               Value = 62.5
+SET PARAMETER: 
+               Index = 7
+               Value = 1
+SET PARAMETER: 
+               Index = 8
+               Value = -20
+SET PARAMETER: 
+               Index = 9
+               Value = -20
+SET PARAMETER: 
+               Index = 10
+               Value = -20
+SET PARAMETER: 
+               Index = 11
+               Value = -20
+SET PARAMETER: 
+               Index = 12
+               Value = -20
+SET PARAMETER: 
+               Index = 13
+               Value = -20
+SET PARAMETER: 
+               Index = 14
+               Value = 4.9
+SET PARAMETER: 
+               Index = 15
+               Value = 1
+SET PARAMETER: 
+               Index = 16
+               Value = 11.9
+SET PARAMETER: 
+               Index = 17
+               Value = 0
+SET PARAMETER: 
+               Index = 18
+               Value = 0
+SET PARAMETER: 
+               Index = 19
+               Value = 0
+SET PARAMETER: 
+               Index = 20
+               Value = 0
+SET PARAMETER: 
+               Index = 21
+               Value = 54.9
+SET PARAMETER: 
+               Index = 22
+               Value = 0
+SET PARAMETER: 
+               Index = 23
+               Value = 0
+SET PARAMETER: 
+               Index = 24
+               Value = 0
+SET PARAMETER: 
+               Index = 25
+               Value = 0
+SET PARAMETER: 
+               Index = 26
+               Value = 0
+SET PARAMETER: 
+               Index = 27
+               Value = 0
+SET PARAMETER: 
+               Index = 28
+               Value = 0
+SET PARAMETER: 
+               Index = 29
+               Value = 0
+SET PARAMETER: 
+               Index = 30
+               Value = 0
+SET PARAMETER: 
+               Index = 31
+               Value = 0
+SET PARAMETER: 
+               Index = 32
+               Value = 0
+SET PARAMETER: 
+               Index = 33
+               Value = 0
+SET PARAMETER: 
+               Index = 34
+               Value = 0
+SET PARAMETER: 
+               Index = 35
+               Value = 0
+SET PARAMETER: 
+               Index = 36
+               Value = 0
+SET PARAMETER: 
+               Index = 37
+               Value = 0
+SET PARAMETER: 
+               Index = 38
+               Value = 0
+SET PARAMETER: 
+               Index = 39
+               Value = 0
+SET PARAMETER: 
+               Index = 40
+               Value = 0
+SET PARAMETER: 
+               Index = 41
+               Value = 0
+SET PARAMETER: 
+               Index = 42
+               Value = 0
+SET PARAMETER: 
+               Index = 43
+               Value = 0
+SET PARAMETER: 
+               Index = 44
+               Value = 0
+SET PARAMETER: 
+               Index = 45
+               Value = 0
+SET PARAMETER: 
+               Index = 46
+               Value = 0
+SET PARAMETER: 
+               Index = 47
+               Value = 0
+SET PARAMETER: 
+               Index = 48
+               Value = 0
+SET PARAMETER: 
+               Index = 49
+               Value = 0
+SET PARAMETER: 
+               Index = 50
+               Value = 0
+SET PARAMETER: 
+               Index = 51
+               Value = 0
+SET PARAMETER: 
+               Index = 52
+               Value = 0
+SET PARAMETER: 
+               Index = 53
+               Value = 0
+SET PARAMETER: 
+               Index = 54
+               Value = 0
+SET PARAMETER: 
+               Index = 55
+               Value = 0
+SET PARAMETER: 
+               Index = 56
+               Value = 1000
+SET PARAMETER: 
+               Index = 57
+               Value = 1000
+SET PARAMETER: 
+               Index = 58
+               Value = 0
+SET PARAMETER: 
+               Index = 59
+               Value = 0
+SET PARAMETER: 
+               Index = 60
+               Value = 6
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 62.5
+SET PARAMETER: 
+               Index = 5
+               Value = 63
+SET PARAMETER: 
+               Index = 5
+               Value = 64
+SET PARAMETER: 
+               Index = 5
+               Value = 65
+SET PARAMETER: 
+               Index = 5
+               Value = 66
+SET PARAMETER: 
+               Index = 5
+               Value = 67
+SET PARAMETER: 
+               Index = 5
+               Value = 68
+SET PARAMETER: 
+               Index = 5
+               Value = 69
+SET PARAMETER: 
+               Index = 5
+               Value = 70
+SET PARAMETER: 
+               Index = 5
+               Value = 71
+SET PARAMETER: 
+               Index = 5
+               Value = 72
+SET PARAMETER: 
+               Index = 5
+               Value = 73
+SET PARAMETER: 
+               Index = 5
+               Value = 74
+SET PARAMETER: 
+               Index = 5
+               Value = 75
+SET PARAMETER: 
+               Index = 5
+               Value = 76
+SET PARAMETER: 
+               Index = 5
+               Value = 77
+SET PARAMETER: 
+               Index = 5
+               Value = 78
+SET PARAMETER: 
+               Index = 5
+               Value = 79
+SET PARAMETER: 
+               Index = 5
+               Value = 80
+SET PARAMETER: 
+               Index = 5
+               Value = 81
+SET PARAMETER: 
+               Index = 5
+               Value = 82
+SET PARAMETER: 
+               Index = 5
+               Value = 83
+SET PARAMETER: 
+               Index = 5
+               Value = 84
+SET PARAMETER: 
+               Index = 5
+               Value = 85
+SET PARAMETER: 
+               Index = 5
+               Value = 86
+SET PARAMETER: 
+               Index = 5
+               Value = 87
+SET PARAMETER: 
+               Index = 5
+               Value = 88
+SET PARAMETER: 
+               Index = 5
+               Value = 89
+SET PARAMETER: 
+               Index = 5
+               Value = 90
+SET PARAMETER: 
+               Index = 5
+               Value = 91
+SET PARAMETER: 
+               Index = 5
+               Value = 92
+SET PARAMETER: 
+               Index = 5
+               Value = 93
+SET PARAMETER: 
+               Index = 5
+               Value = 94
+SET PARAMETER: 
+               Index = 5
+               Value = 95
+SET PARAMETER: 
+               Index = 5
+               Value = 96
+SET PARAMETER: 
+               Index = 5
+               Value = 97
+SET PARAMETER: 
+               Index = 5
+               Value = 98
+SET PARAMETER: 
+               Index = 5
+               Value = 99
+SET PARAMETER: 
+               Index = 5
+               Value = 100
+SET PARAMETER: 
+               Index = 5
+               Value = 101
+SET PARAMETER: 
+               Index = 5
+               Value = 102
+SET PARAMETER: 
+               Index = 5
+               Value = 103
+SET PARAMETER: 
+               Index = 5
+               Value = 104
+SET PARAMETER: 
+               Index = 5
+               Value = 105
+SET PARAMETER: 
+               Index = 5
+               Value = 106
+SET PARAMETER: 
+               Index = 5
+               Value = 107
+SET PARAMETER: 
+               Index = 5
+               Value = 108
+SET PARAMETER: 
+               Index = 5
+               Value = 109
+SET PARAMETER: 
+               Index = 5
+               Value = 110
+SET PARAMETER: 
+               Index = 5
+               Value = 111
+SET PARAMETER: 
+               Index = 5
+               Value = 112
+SET PARAMETER: 
+               Index = 5
+               Value = 113
+SET PARAMETER: 
+               Index = 5
+               Value = 114
+SET PARAMETER: 
+               Index = 5
+               Value = 115
+SET PARAMETER: 
+               Index = 5
+               Value = 116
+SET PARAMETER: 
+               Index = 5
+               Value = 117
+SET PARAMETER: 
+               Index = 5
+               Value = 118
+SET PARAMETER: 
+               Index = 5
+               Value = 119
+SET PARAMETER: 
+               Index = 5
+               Value = 120
+SET PARAMETER: 
+               Index = 5
+               Value = 121
+SET PARAMETER: 
+               Index = 5
+               Value = 122
+SET PARAMETER: 
+               Index = 5
+               Value = 123
+SET PARAMETER: 
+               Index = 5
+               Value = 124
+SET PARAMETER: 
+               Index = 5
+               Value = 125
+SET PARAMETER: 
+               Index = 5
+               Value = 126
+SET PARAMETER: 
+               Index = 5
+               Value = 127
+SET PARAMETER: 
+               Index = 5
+               Value = 128
+SET PARAMETER: 
+               Index = 5
+               Value = 129
+SET PARAMETER: 
+               Index = 5
+               Value = 130
+SET PARAMETER: 
+               Index = 5
+               Value = 131
+SET PARAMETER: 
+               Index = 5
+               Value = 132
+SET PARAMETER: 
+               Index = 5
+               Value = 133
+SET PARAMETER: 
+               Index = 5
+               Value = 134
+SET PARAMETER: 
+               Index = 5
+               Value = 135
+SET PARAMETER: 
+               Index = 5
+               Value = 136
+SET PARAMETER: 
+               Index = 5
+               Value = 137
+SET PARAMETER: 
+               Index = 5
+               Value = 138
+SET PARAMETER: 
+               Index = 5
+               Value = 139
+SET PARAMETER: 
+               Index = 5
+               Value = 140
+SET PARAMETER: 
+               Index = 5
+               Value = 141
+SET PARAMETER: 
+               Index = 5
+               Value = 142
+SET PARAMETER: 
+               Index = 5
+               Value = 143
+SET PARAMETER: 
+               Index = 5
+               Value = 144
+SET PARAMETER: 
+               Index = 5
+               Value = 145
+SET PARAMETER: 
+               Index = 5
+               Value = 146
+SET PARAMETER: 
+               Index = 5
+               Value = 147
+SET PARAMETER: 
+               Index = 5
+               Value = 148
+SET PARAMETER: 
+               Index = 5
+               Value = 149
+SET PARAMETER: 
+               Index = 5
+               Value = 150
+SET PARAMETER: 
+               Index = 5
+               Value = 151
+SET PARAMETER: 
+               Index = 5
+               Value = 152
+SET PARAMETER: 
+               Index = 5
+               Value = 153
+SET PARAMETER: 
+               Index = 5
+               Value = 154
+SET PARAMETER: 
+               Index = 5
+               Value = 155
+SET PARAMETER: 
+               Index = 5
+               Value = 156
+SET PARAMETER: 
+               Index = 5
+               Value = 157
+SET PARAMETER: 
+               Index = 5
+               Value = 158
+SET PARAMETER: 
+               Index = 5
+               Value = 159
+SET PARAMETER: 
+               Index = 5
+               Value = 160
+SET PARAMETER: 
+               Index = 5
+               Value = 161
+SET PARAMETER: 
+               Index = 5
+               Value = 162
+SET PARAMETER: 
+               Index = 5
+               Value = 163
+SET PARAMETER: 
+               Index = 5
+               Value = 164
+SET PARAMETER: 
+               Index = 5
+               Value = 165
+SET PARAMETER: 
+               Index = 5
+               Value = 166
+SET PARAMETER: 
+               Index = 5
+               Value = 167
+SET PARAMETER: 
+               Index = 5
+               Value = 168
+SET PARAMETER: 
+               Index = 5
+               Value = 169
+SET PARAMETER: 
+               Index = 5
+               Value = 170
+SET PARAMETER: 
+               Index = 5
+               Value = 171
+SET PARAMETER: 
+               Index = 5
+               Value = 172
+SET PARAMETER: 
+               Index = 5
+               Value = 173
+SET PARAMETER: 
+               Index = 5
+               Value = 174
+SET PARAMETER: 
+               Index = 5
+               Value = 175
+SET PARAMETER: 
+               Index = 5
+               Value = 176
+SET PARAMETER: 
+               Index = 5
+               Value = 177
+SET PARAMETER: 
+               Index = 5
+               Value = 178
+SET PARAMETER: 
+               Index = 5
+               Value = 179
+SET PARAMETER: 
+               Index = 5
+               Value = 180
+SET PARAMETER: 
+               Index = 5
+               Value = 181
+SET PARAMETER: 
+               Index = 5
+               Value = 182
+SET PARAMETER: 
+               Index = 5
+               Value = 183
+SET PARAMETER: 
+               Index = 5
+               Value = 184
+SET PARAMETER: 
+               Index = 5
+               Value = 185
+SET PARAMETER: 
+               Index = 5
+               Value = 186
+SET PARAMETER: 
+               Index = 5
+               Value = 187
+SET PARAMETER: 
+               Index = 5
+               Value = 188
+SET PARAMETER: 
+               Index = 5
+               Value = 189
+SET PARAMETER: 
+               Index = 5
+               Value = 190
+SET PARAMETER: 
+               Index = 5
+               Value = 191
+SET PARAMETER: 
+               Index = 5
+               Value = 192
+SET PARAMETER: 
+               Index = 5
+               Value = 193
+SET PARAMETER: 
+               Index = 5
+               Value = 194
+SET PARAMETER: 
+               Index = 5
+               Value = 195
+SET PARAMETER: 
+               Index = 5
+               Value = 196
+SET PARAMETER: 
+               Index = 5
+               Value = 197
+SET PARAMETER: 
+               Index = 5
+               Value = 198
+SET PARAMETER: 
+               Index = 5
+               Value = 199
+SET PARAMETER: 
+               Index = 5
+               Value = 200
+SET PARAMETER: 
+               Index = 5
+               Value = 201
+SET PARAMETER: 
+               Index = 5
+               Value = 202
+SET PARAMETER: 
+               Index = 5
+               Value = 203
+SET PARAMETER: 
+               Index = 5
+               Value = 204
+SET PARAMETER: 
+               Index = 5
+               Value = 205
+SET PARAMETER: 
+               Index = 5
+               Value = 206
+SET PARAMETER: 
+               Index = 5
+               Value = 207
+SET PARAMETER: 
+               Index = 5
+               Value = 208
+SET PARAMETER: 
+               Index = 5
+               Value = 209
+SET PARAMETER: 
+               Index = 5
+               Value = 210
+SET PARAMETER: 
+               Index = 5
+               Value = 211
+SET PARAMETER: 
+               Index = 5
+               Value = 212
+SET PARAMETER: 
+               Index = 5
+               Value = 213
+SET PARAMETER: 
+               Index = 5
+               Value = 214
+SET PARAMETER: 
+               Index = 5
+               Value = 215
+SET PARAMETER: 
+               Index = 5
+               Value = 216
+SET PARAMETER: 
+               Index = 5
+               Value = 217
+SET PARAMETER: 
+               Index = 5
+               Value = 218
+SET PARAMETER: 
+               Index = 5
+               Value = 219
+SET PARAMETER: 
+               Index = 5
+               Value = 220
+SET PARAMETER: 
+               Index = 5
+               Value = 221
+SET PARAMETER: 
+               Index = 5
+               Value = 222
+SET PARAMETER: 
+               Index = 5
+               Value = 223
+SET PARAMETER: 
+               Index = 5
+               Value = 224
+SET PARAMETER: 
+               Index = 5
+               Value = 225
+SET PARAMETER: 
+               Index = 5
+               Value = 226
+SET PARAMETER: 
+               Index = 5
+               Value = 227
+SET PARAMETER: 
+               Index = 5
+               Value = 228
+SET PARAMETER: 
+               Index = 5
+               Value = 229
+SET PARAMETER: 
+               Index = 5
+               Value = 230
+SET PARAMETER: 
+               Index = 5
+               Value = 231
+SET PARAMETER: 
+               Index = 5
+               Value = 232
+SET PARAMETER: 
+               Index = 5
+               Value = 233
+SET PARAMETER: 
+               Index = 5
+               Value = 234
+SET PARAMETER: 
+               Index = 5
+               Value = 235
+SET PARAMETER: 
+               Index = 5
+               Value = 236
+SET PARAMETER: 
+               Index = 5
+               Value = 237
+SET PARAMETER: 
+               Index = 5
+               Value = 16000
+CREATE: EQ setup:
+        Sample rate = 48000
+        Number of levels = 3
+        Number of bands = 7
+        Initial frequency = 125
+        Octave step = 1/1
+        Q factor of LPF = 0.707
+        Q factor of BPFs = 1.4142
+        Q factor of HPF = 0.707
+        LPF cutoff = 3000
+        HPF cutoff = 500
+CREATE: HA Simulation plugin created
+SET PARAMETER: 
+               Index = 0
+               Value = 1
+SET PARAMETER: 
+               Index = 1
+               Value = 1
+SET PARAMETER: 
+               Index = 2
+               Value = -3.8
+SET PARAMETER: 
+               Index = 3
+               Value = -0
+SET PARAMETER: 
+               Index = 4
+               Value = 1
+SET PARAMETER: 
+               Index = 5
+               Value = 16000
+SET PARAMETER: 
+               Index = 6
+               Value = 62.5
+SET PARAMETER: 
+               Index = 7
+               Value = 1
+SET PARAMETER: 
+               Index = 8
+               Value = -20
+SET PARAMETER: 
+               Index = 9
+               Value = -20
+SET PARAMETER: 
+               Index = 10
+               Value = -20
+SET PARAMETER: 
+               Index = 11
+               Value = -20
+SET PARAMETER: 
+               Index = 12
+               Value = -20
+SET PARAMETER: 
+               Index = 13
+               Value = -20
+SET PARAMETER: 
+               Index = 14
+               Value = 4.9
+SET PARAMETER: 
+               Index = 15
+               Value = 1
+SET PARAMETER: 
+               Index = 16
+               Value = 11.9
+SET PARAMETER: 
+               Index = 17
+               Value = 0
+SET PARAMETER: 
+               Index = 18
+               Value = 0
+SET PARAMETER: 
+               Index = 19
+               Value = 0
+SET PARAMETER: 
+               Index = 20
+               Value = 0
+SET PARAMETER: 
+               Index = 21
+               Value = 54.9
+SET PARAMETER: 
+               Index = 22
+               Value = 0
+SET PARAMETER: 
+               Index = 23
+               Value = 0
+SET PARAMETER: 
+               Index = 24
+               Value = 0
+SET PARAMETER: 
+               Index = 25
+               Value = 0
+SET PARAMETER: 
+               Index = 26
+               Value = 0
+SET PARAMETER: 
+               Index = 27
+               Value = 0
+SET PARAMETER: 
+               Index = 28
+               Value = 0
+SET PARAMETER: 
+               Index = 29
+               Value = 0
+SET PARAMETER: 
+               Index = 30
+               Value = 0
+SET PARAMETER: 
+               Index = 31
+               Value = 0
+SET PARAMETER: 
+               Index = 32
+               Value = 0
+SET PARAMETER: 
+               Index = 33
+               Value = 0
+SET PARAMETER: 
+               Index = 34
+               Value = 0
+SET PARAMETER: 
+               Index = 35
+               Value = 0
+SET PARAMETER: 
+               Index = 36
+               Value = 0
+SET PARAMETER: 
+               Index = 37
+               Value = 0
+SET PARAMETER: 
+               Index = 38
+               Value = 0
+SET PARAMETER: 
+               Index = 39
+               Value = 0
+SET PARAMETER: 
+               Index = 40
+               Value = 0
+SET PARAMETER: 
+               Index = 41
+               Value = 0
+SET PARAMETER: 
+               Index = 42
+               Value = 0
+SET PARAMETER: 
+               Index = 43
+               Value = 0
+SET PARAMETER: 
+               Index = 44
+               Value = 0
+SET PARAMETER: 
+               Index = 45
+               Value = 0
+SET PARAMETER: 
+               Index = 46
+               Value = 0
+SET PARAMETER: 
+               Index = 47
+               Value = 0
+SET PARAMETER: 
+               Index = 48
+               Value = 0
+SET PARAMETER: 
+               Index = 49
+               Value = 0
+SET PARAMETER: 
+               Index = 50
+               Value = 0
+SET PARAMETER: 
+               Index = 51
+               Value = 0
+SET PARAMETER: 
+               Index = 52
+               Value = 0
+SET PARAMETER: 
+               Index = 53
+               Value = 0
+SET PARAMETER: 
+               Index = 54
+               Value = 0
+SET PARAMETER: 
+               Index = 55
+               Value = 0
+SET PARAMETER: 
+               Index = 56
+               Value = 1000
+SET PARAMETER: 
+               Index = 57
+               Value = 1000
+SET PARAMETER: 
+               Index = 58
+               Value = 0
+SET PARAMETER: 
+               Index = 59
+               Value = 0
+SET PARAMETER: 
+               Index = 60
+               Value = 6

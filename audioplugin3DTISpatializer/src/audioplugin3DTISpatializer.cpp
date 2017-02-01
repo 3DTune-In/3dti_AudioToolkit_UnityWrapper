@@ -60,6 +60,13 @@ namespace Spatializer3DTI
 		PARAM_MAG_SOUNDSPEED,
 		PARAM_ILD_FILE_STRING,		
 		PARAM_DEBUG_LOG,
+		
+		// HA directionality
+		PARAM_HA_DIRECTIONALITY_EXTEND_LEFT,
+		PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT,
+		PARAM_HA_DIRECTIONALITY_ON_LEFT,
+		PARAM_HA_DIRECTIONALITY_ON_RIGHT,
+
 		P_NUM
 	};
 
@@ -147,6 +154,13 @@ namespace Spatializer3DTI
 		RegisterParameter(definition, "MAGSounSpd", "m/s", 0.0f, 1000.0f, 343.0f, 1.0f, 1.0f, PARAM_MAG_SOUNDSPEED, "Sound speed");
 		RegisterParameter(definition, "ILDPath", "", 0.0f, 255.0f, 0.0f, 1.0f, 1.0f, PARAM_ILD_FILE_STRING, "String with path of ILD binary file");		
 		RegisterParameter(definition, "DebugLog", "", 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, PARAM_DEBUG_LOG, "Generate debug log");
+		
+		// HA directionality
+		RegisterParameter(definition, "HADirExtL", "dB", 0.0f, 30.0f, 15.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_EXTEND_LEFT, "HA directionality attenuation (in dB) for Left ear");
+		RegisterParameter(definition, "HADirExtR", "dB", 0.0f, 30.0f, 15.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT, "HA directionality attenuation (in dB) for Right ear");
+		RegisterParameter(definition, "HADirOnL", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_ON_LEFT, "HA directionality switch for Left ear");
+		RegisterParameter(definition, "HADirOnR", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_ON_RIGHT, "HA directionality switch for Right ear");		
+			
         definition.flags |= UnityAudioEffectDefinitionFlags_IsSpatializer;
         return numparams;
     }
@@ -586,6 +600,42 @@ namespace Spatializer3DTI
 					data->debugLog = false;
 				break;
 
+			case PARAM_HA_DIRECTIONALITY_EXTEND_LEFT:
+				data->listener->GetHA()->SetDirectionalityExtendL_dB(value);
+				WriteLog(state, "SET PARAMETER: HA Directionality for Left ear set to (dB) ", value);
+				break;
+
+			case PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT:
+				data->listener->GetHA()->SetDirectionalityExtendR_dB(value);
+				WriteLog(state, "SET PARAMETER: HA Directionality for Right ear set to (dB) ", value);
+				break;
+
+			case PARAM_HA_DIRECTIONALITY_ON_LEFT:
+				if (value > 0.0f)
+				{
+					data->listener->GetHA()->doDirectionalityL = true;
+					WriteLog(state, "SET PARAMETER: HA Directionality switched ON for Left ear", "");
+				}
+				else
+				{
+					data->listener->GetHA()->doDirectionalityL = false;
+					WriteLog(state, "SET PARAMETER: HA Directionality switched OFF for Left ear", "");
+				}				
+				break;
+
+			case PARAM_HA_DIRECTIONALITY_ON_RIGHT:
+				if (value > 0.0f)
+				{
+					data->listener->GetHA()->doDirectionalityR = true;
+					WriteLog(state, "SET PARAMETER: HA Directionality switched ON for Right ear", "");
+				}
+				else
+				{
+					data->listener->GetHA()->doDirectionalityR = false;
+					WriteLog(state, "SET PARAMETER: HA Directionality switched OFF for Right ear", "");
+				}
+				break;
+
 			default:
 				WriteLog(state, "SET PARAMETER: ERROR!!!! Unknown float parameter received from API: ", index);
 				return UNITY_AUDIODSP_ERR_UNSUPPORTED;
@@ -615,16 +665,6 @@ namespace Spatializer3DTI
     {
         return UNITY_AUDIODSP_OK;
     }
-
-	/////////////////////////////////////////////////////////////////////
-
-	float SquareWaveSample(int i, float amplitude, float period)
-	{
-		if (i < period)
-			return amplitude;
-		else
-			return 0.0f;
-	}
 
 	/////////////////////////////////////////////////////////////////////
 
