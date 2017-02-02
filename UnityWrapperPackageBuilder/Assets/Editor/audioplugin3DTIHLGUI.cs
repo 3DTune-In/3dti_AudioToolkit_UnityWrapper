@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;   // For ReadOnlyCollection
 using UnityEditor;
 using UnityEngine;
 
-public class ConvolutionReverbCustomGUI : IAudioEffectPluginGUI
+public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
 {    
     // Constant definitions
     const int PRESET_CUSTOM = -1;
@@ -55,7 +55,8 @@ public class ConvolutionReverbCustomGUI : IAudioEffectPluginGUI
     GUIStyle leftColumnStyle;
     GUIStyle rightColumnStyle;
     GUIStyle titleBoxStyle;
-    
+
+    //The GUI name must be unique for each GUI, the one specified in PluginList.h
     public override string Name
     {
         get { return "3DTI Hearing Loss Simulation"; }
@@ -123,8 +124,8 @@ public class ConvolutionReverbCustomGUI : IAudioEffectPluginGUI
         }
         EditorGUILayout.EndToggleGroup();
 
-        //return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG)
-        return false;     // DO NOT SHOW DEFAULT CONTROLS
+       //return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG)
+       return false;     // DO NOT SHOW DEFAULT CONTROLS
     }
 
 
