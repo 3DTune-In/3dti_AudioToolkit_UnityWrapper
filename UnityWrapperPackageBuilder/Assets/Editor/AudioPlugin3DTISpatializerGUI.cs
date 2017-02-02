@@ -23,12 +23,15 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 {
     API_3DTI_Spatializer toolkit;
     bool advancedSetup = false;
+    bool haSetup = false;
 
     // Limit possible values of sliders    
     float maxHeadRadius = 1.0f;        
     float maxScale = 10.0f;
     float minDB = -30.0f;
     float maxDB = 0.0f;
+    float minHADB = 0.0f;
+    float maxHADB = 30.0f;
     float maxSoundSpeed = 1000.0f;
     //List<int> sampleRateValues = new List<int>() { 11025, 22050, 44100, 48000, 88200, 96000, 112000, 192000 };    
     //List<int> bufferSizeValues = new List<int>() { 64, 128, 256, 512, 1024, 2048 };    
@@ -86,6 +89,9 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
         ////// ADVANCED SETUP
         DrawAdvancedPanel();
+
+        ////// HEARING AID DIRECTIONALITY SETUP
+        DrawHADirectionalityPanel();
     }
 
 
@@ -178,6 +184,22 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     public void SliderSoundSpeed()
     {
         toolkit.SetMagnitudeSoundSpeed(toolkit.magSoundSpeed);
+    }
+
+    /// <summary>
+    ///  Action for slider HA Directionality Left
+    /// </summary>
+    public void SliderHADirectionalityLeft()
+    {
+        toolkit.SetHADirectionalityExtend(API_3DTI_Spatializer.EAR_LEFT, toolkit.HADirectionalityExtendLeft);
+    }
+
+    /// <summary>
+    ///  Action for slider HA Directionality Right 
+    /// </summary>
+    public void SliderHADirectionalityRight()
+    {
+        toolkit.SetHADirectionalityExtend(API_3DTI_Spatializer.EAR_RIGHT, toolkit.HADirectionalityExtendRight);
     }
 
     ///////////////////////////////////////////////////////////
@@ -276,6 +298,36 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             BeginSubsection("Debug log:");
             if (CreateToggle(ref toolkit.debugLog, "Write debug log file"))
                 toolkit.SendWriteDebugLog(toolkit.debugLog);
+            EndSubsection();
+        }
+
+        EndSection();
+    }
+
+    /// <summary>
+    /// Draw panel with Hearing Aid directionality configuration
+    /// </summary>
+    public void DrawHADirectionalityPanel()
+    {
+        BeginSection("HA DIRECTIONALITY:");
+
+        haSetup = GUILayout.Toggle(haSetup, "Show Hearing Aid Directionality Setup", GUILayout.ExpandWidth(false));
+        if (haSetup)
+        {
+            SingleSpace();          
+
+            // Left ear
+            BeginSubsection("Left ear:");            
+            if (CreateToggle(ref toolkit.doHADirectionalityLeft, "Switch Directionality"))            
+                toolkit.SwitchOnOffHADirectionality(API_3DTI_Spatializer.EAR_LEFT, toolkit.doHADirectionalityLeft);
+            CreateFloatSlider(ref toolkit.HADirectionalityExtendLeft, "Directionality extend:", "F2", "dB", minHADB, maxHADB, SliderHADirectionalityLeft);            
+            EndSubsection();
+
+            // Right ear
+            BeginSubsection("Right ear:");            
+            if (CreateToggle(ref toolkit.doHADirectionalityRight, "Switch Directionality"))
+                toolkit.SwitchOnOffHADirectionality(API_3DTI_Spatializer.EAR_RIGHT, toolkit.doHADirectionalityRight);
+            CreateFloatSlider(ref toolkit.HADirectionalityExtendRight, "Directionality extend:", "F2", "dB", minHADB, maxHADB, SliderHADirectionalityRight);            
             EndSubsection();
         }
 

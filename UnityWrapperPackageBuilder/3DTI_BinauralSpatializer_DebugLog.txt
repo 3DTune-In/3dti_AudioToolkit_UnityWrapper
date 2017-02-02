@@ -146,3 +146,1076 @@ CREATE: Source created successfully
 1:            Sample rate is 44100
 1:            Buffer size is 1024
 1: Core ready!!!!!
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+1: SET PARAMETER: Source ID set to 1
+1: SET PARAMETER: Far distance LPF is Enabled
+1: SET PARAMETER: Distance attenuation is Enabled
+1: SET PARAMETER: Near distance ILD is Enabled
+1: SET PARAMETER: HRTF convolution is Enabled
+1: SET PARAMETER: Run-time HRTF Interpolation switched ON
+1: SET PARAMETER: Listener head radius changed to 0.0875
+1: SET PARAMETER: Custom ITD is Disabled
+1: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+1:           Hash hable size is 7067
+1: SET PARAMETER: ILD Enabled
+1: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+1:            HRIR length is 512
+1:            Sample rate is 48000
+1:            Buffer size is 1024
+1: Core ready!!!!!
+1: SET PARAMETER: HA Directionality switched OFF for Left ear
+1: SET PARAMETER: HA Directionality switched OFF for Right ear
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.04
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.41
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+1: SET PARAMETER: Source ID set to 1
+1: SET PARAMETER: Far distance LPF is Enabled
+1: SET PARAMETER: Distance attenuation is Enabled
+1: SET PARAMETER: Near distance ILD is Enabled
+1: SET PARAMETER: HRTF convolution is Enabled
+1: SET PARAMETER: Run-time HRTF Interpolation switched ON
+1: SET PARAMETER: Listener head radius changed to 0.0875
+1: SET PARAMETER: Custom ITD is Disabled
+1: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+1:           Hash hable size is 7067
+1: SET PARAMETER: ILD Enabled
+1: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+1:            HRIR length is 512
+1:            Sample rate is 48000
+1:            Buffer size is 1024
+1: Core ready!!!!!
+1: SET PARAMETER: HA Directionality switched OFF for Left ear
+1: SET PARAMETER: HA Directionality switched OFF for Right ear
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.04
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.41
+1: SET PARAMETER: HA Directionality switched ON for Left ear
+1: SET PARAMETER: HA Directionality switched ON for Right ear
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.18706
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.62823
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.70177
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 10.0694
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 10.2165
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 10.3635
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 10.8782
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 11.4665
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 11.9812
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 12.3488
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 12.4959
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 13.0106
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 13.1576
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 13.3782
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 13.7459
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 14.4812
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 15.0694
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 15.29
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 15.6576
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 15.8782
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 16.3929
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 16.7606
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 17.0547
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 17.4959
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 18.0106
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 18.7459
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 19.3341
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 19.6282
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 20.29
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 20.8047
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 21.3194
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 22.0547
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 22.6429
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 23.0106
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 23.3047
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 23.4518
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 23.6724
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 23.8194
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 24.1135
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 24.3341
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 24.4076
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 24.5547
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 24.7018
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 24.7753
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 24.9959
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 25.2165
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 25.29
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 25.5106
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 25.6576
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 25.8047
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 25.8782
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 26.0253
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 26.1724
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 26.4665
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 26.54
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 26.8341
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 26.9812
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.0547
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.2018
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.2753
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.3488
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.4224
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.4959
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.7165
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.8635
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.9371
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.0106
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.1576
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.2312
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.3782
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.4518
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.63059
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.99823
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 10.1453
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 10.4394
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 10.9541
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 11.6159
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 12.0571
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 13.16
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 14.41
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 15.5865
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 16.0276
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 17.0571
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 18.3071
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 18.8218
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 19.7776
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 20.4394
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 20.9541
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 21.2482
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 21.8365
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 23.0865
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 23.3806
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 24.0424
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 24.5571
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 24.8512
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 24.9247
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 25.3659
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 25.4394
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 25.5865
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 25.7335
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 25.8806
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 26.0276
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 26.1012
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 26.1747
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 26.3218
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 26.3953
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 26.6159
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 26.91
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 27.1306
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 27.2776
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 27.4247
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 27.4982
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 27.5718
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 27.7924
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 27.8659
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.0129
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.16
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.2335
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.3806
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.4541
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.5276
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.6012
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.6747
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.7482
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.8953
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.9688
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 29.1159
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 29.1159
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.1559
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.9353
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.7147
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.2
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 26.9059
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 26.3176
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 25.5824
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 25.0676
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 24.6265
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 23.6706
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 23.0824
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 21.8324
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 20.5824
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 19.3324
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 18.8176
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 17.7882
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 16.7588
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 15.8029
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 15.3618
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 14.5529
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 13.8176
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 13.3029
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 12.7882
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 12.2735
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 11.6853
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 11.2441
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 10.7294
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 10.1412
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.77353
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.11177
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 8.89118
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 8.30294
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 7.71471
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 7.12647
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 6.83235
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 6.46471
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 6.31765
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 5.65588
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 5.06765
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 4.25882
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 3.00883
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 2.56765
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 2.42059
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 2.34706
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 2.2
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 2.12647
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 2.05294
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.97941
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.75883
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.6853
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.61177
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.46471
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.39118
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.24412
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.02353
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 0.435296
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 0
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.8259
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.3112
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 27.6494
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 25.9582
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 24.9288
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 22.9435
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 20.7376
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 18.3112
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 17.0612
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 15.2229
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 13.1641
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 12.1347
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 11.62
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 10.5171
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.19353
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 8.67883
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 7.57588
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 6.91412
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 6.03177
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 5.37
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 5.00235
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 4.78177
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 4.63471
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 4.34059
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 3.97294
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 3.82588
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 3.31118
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 2.79647
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 2.42883
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 2.20824
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 2.06118
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 1.98765
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 1.62
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 1.1053
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 0.664119
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 0.370002
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 0.075884
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 0.0023546
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+1: SET PARAMETER: Source ID set to 1
+2: SET PARAMETER: Source ID set to 2
+1: SET PARAMETER: Far distance LPF is Enabled
+2: SET PARAMETER: Far distance LPF is Enabled
+1: SET PARAMETER: Distance attenuation is Enabled
+2: SET PARAMETER: Distance attenuation is Enabled
+1: SET PARAMETER: Near distance ILD is Enabled
+2: SET PARAMETER: Near distance ILD is Enabled
+1: SET PARAMETER: HRTF convolution is Enabled
+2: SET PARAMETER: HRTF convolution is Enabled
+1: SET PARAMETER: Run-time HRTF Interpolation switched ON
+2: SET PARAMETER: Run-time HRTF Interpolation switched ON
+1: SET PARAMETER: Listener head radius changed to 0.0875
+2: SET PARAMETER: Listener head radius changed to 0.0875
+1: SET PARAMETER: Custom ITD is Disabled
+2: SET PARAMETER: Custom ITD is Disabled
+1: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+1:           Hash hable size is 7067
+1: SET PARAMETER: ILD Enabled
+2: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+2:           Hash hable size is 7067
+2: SET PARAMETER: ILD Enabled
+1: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+1:            HRIR length is 512
+1:            Sample rate is 48000
+1:            Buffer size is 1024
+1: Core ready!!!!!
+2: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+2:            HRIR length is 512
+2:            Sample rate is 48000
+2:            Buffer size is 1024
+2: Core ready!!!!!
+1: SET PARAMETER: HA Directionality switched OFF for Left ear
+2: SET PARAMETER: HA Directionality switched OFF for Left ear
+1: SET PARAMETER: HA Directionality switched OFF for Right ear
+2: SET PARAMETER: HA Directionality switched OFF for Right ear
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.04
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.04
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.41
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.41
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.48118
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.48118
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.70177
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.70177
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 10.29
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 10.29
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 10.8047
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 10.8047
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 11.0988
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 11.0988
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 11.7606
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 11.7606
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 12.7165
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 12.7165
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 13.6724
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 13.6724
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 14.04
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 14.04
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 15.8782
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 15.8782
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 16.4665
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 16.4665
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 17.5694
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 17.5694
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 18.0106
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 18.0106
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 18.7459
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 18.7459
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 19.4076
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 19.4076
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 20.1429
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 20.1429
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 20.3635
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 20.3635
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 20.8782
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 20.8782
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 21.1724
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 21.1724
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 21.8341
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 21.8341
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 22.1282
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 22.1282
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 22.7165
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 22.7165
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 23.5253
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 23.5253
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 24.1135
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 24.1135
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 25.0694
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 25.0694
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 25.8782
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 25.8782
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 26.3194
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 26.3194
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 26.8341
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 26.8341
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.1282
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.1282
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.4959
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.4959
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.79
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.79
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.9371
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.9371
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.4518
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.4518
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.5253
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.5253
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.7459
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.7459
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.9665
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.9665
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.1871
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.1871
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.2606
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.2606
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.4076
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.4076
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.5547
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.5547
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.7018
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.7018
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.9224
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.9224
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 30
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 30
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.48353
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.48353
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.92471
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.92471
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 10.3659
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 10.3659
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 10.8806
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 10.8806
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 11.8365
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 11.8365
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 12.2041
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 12.2041
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 13.16
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 13.16
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 14.2629
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 14.2629
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 15.66
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 15.66
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 16.2482
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 16.2482
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 17.4982
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 17.4982
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 18.7482
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 18.7482
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 20.0718
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 20.0718
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 20.66
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 20.66
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 21.8365
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 21.8365
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 23.2335
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 23.2335
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 24.5571
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 24.5571
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 25.2188
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 25.2188
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 26.1012
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 26.1012
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 27.0571
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 27.0571
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 27.7188
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 27.7188
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.3806
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.3806
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.8953
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.8953
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 29.1894
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 29.1894
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 29.3365
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 29.3365
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 29.7041
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 29.7041
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 29.9247
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 29.9247
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 29.9982
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 29.9982
+1: SET PARAMETER: HA Directionality switched ON for Left ear
+2: SET PARAMETER: HA Directionality switched ON for Left ear
+1: SET PARAMETER: HA Directionality switched ON for Right ear
+2: SET PARAMETER: HA Directionality switched ON for Right ear
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.6324
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.6324
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.4118
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.4118
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.6029
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.6029
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 26.9853
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 26.9853
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 24.9265
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 24.9265
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 23.8971
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 23.8971
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 21.9118
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 21.9118
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 19.4853
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 19.4853
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 16.9853
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 16.9853
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 14.7059
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 14.7059
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 13.75
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 13.75
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 11.8382
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 11.8382
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 10.3676
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 10.3676
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.11765
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.11765
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 8.45588
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 8.45588
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 7.42647
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 7.42647
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 6.91177
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 6.91177
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 6.39706
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 6.39706
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 5.51471
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 5.51471
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 5
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 5
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 4.85294
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 4.85294
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 4.55882
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 4.55882
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 4.41177
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 4.41177
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 4.19118
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 4.19118
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 4.11765
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 4.11765
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 3.97059
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 3.97059
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 3.89706
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 3.89706
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 3.52941
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 3.52941
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 3.23529
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 3.23529
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 2.64706
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 2.64706
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 2.05882
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 2.05882
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.76471
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.76471
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.61765
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.61765
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.47059
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.47059
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.32353
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.32353
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.17647
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.17647
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.10294
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.10294
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.02941
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.02941
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 0.808824
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 0.808824
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 0.735295
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 0.735295
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 0.661766
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 0.661766
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 0.220589
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 0.220589
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 0.0735302
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 0.0735302
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 0
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 0
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 29.8529
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 29.8529
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.2353
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.2353
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 27.4265
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 27.4265
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 26.3971
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 26.3971
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 23.8235
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 23.8235
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 22.5
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 22.5
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 20.1471
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 20.1471
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 19.2647
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 19.2647
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 17.5
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 17.5
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 15.8088
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 15.8088
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 13.8971
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 13.8971
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 12.1324
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 12.1324
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 10.5147
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 10.5147
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.63235
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.63235
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 7.57353
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 7.57353
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 5.88235
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 5.88235
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 5.14706
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 5.14706
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 4.26471
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 4.26471
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 3.97059
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 3.97059
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 3.75
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 3.75
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 3.60294
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 3.60294
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 3.52941
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 3.52941
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 3.45588
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 3.45588
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 3.30882
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 3.30882
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 3.16177
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 3.16177
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 3.08824
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 3.08824
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 2.94118
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 2.94118
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 2.86765
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 2.86765
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 2.79412
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 2.79412
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 2.57353
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 2.57353
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 2.42647
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 2.42647
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 2.20588
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 2.20588
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 2.05882
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 2.05882
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 1.98529
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 1.98529
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 1.83824
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 1.83824
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 1.54412
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 1.54412
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 1.17647
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 1.17647
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 0.808824
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 0.808824
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 0.514707
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 0.514707
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 0.294118
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 0.294118
+1: SET PARAMETER: HA Directionality switched OFF for Left ear
+2: SET PARAMETER: HA Directionality switched OFF for Left ear
+1: SET PARAMETER: HA Directionality switched OFF for Right ear
+2: SET PARAMETER: HA Directionality switched OFF for Right ear
+1: SET PARAMETER: HA Directionality switched ON for Right ear
+2: SET PARAMETER: HA Directionality switched ON for Right ear
+1: SET PARAMETER: HA Directionality switched OFF for Right ear
+2: SET PARAMETER: HA Directionality switched OFF for Right ear
+1: SET PARAMETER: HA Directionality switched ON for Right ear
+2: SET PARAMETER: HA Directionality switched ON for Right ear
+1: SET PARAMETER: HA Directionality switched ON for Left ear
+2: SET PARAMETER: HA Directionality switched ON for Left ear
+1: SET PARAMETER: HA Directionality switched OFF for Left ear
+2: SET PARAMETER: HA Directionality switched OFF for Left ear
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 0.0735294
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 0.0735294
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 0.147059
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 0.147059
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 0.220588
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 0.220588
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 0.588235
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 0.588235
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 0.808824
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 0.808824
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.25
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.25
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.83824
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 1.83824
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 2.05882
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 2.05882
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 2.94118
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 2.94118
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 4.11765
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 4.11765
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 4.63235
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 4.63235
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 6.02941
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 6.02941
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 7.35294
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 7.35294
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 8.75
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 8.75
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.26471
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.26471
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.85294
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.85294
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 10.3676
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 10.3676
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 10.9559
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 10.9559
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 11.9118
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 11.9118
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 12.2794
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 12.2794
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 13.0882
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 13.0882
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 14.1176
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 14.1176
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 14.9265
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 14.9265
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 15.4412
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 15.4412
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 16.4706
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 16.4706
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 17.3529
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 17.3529
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 18.3088
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 18.3088
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 19.1912
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 19.1912
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 19.4118
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 19.4118
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 20.3676
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 20.3676
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 21.1029
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 21.1029
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 21.8382
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 21.8382
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 22.2059
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 22.2059
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 22.9412
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 22.9412
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 23.6029
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 23.6029
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 24.3382
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 24.3382
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 24.7059
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 24.7059
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 25.5882
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 25.5882
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 25.9559
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 25.9559
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 26.25
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 26.25
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 26.6912
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 26.6912
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.2059
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.2059
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.3529
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.3529
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.8676
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.8676
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.3824
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.3824
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.8971
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.8971
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.1176
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.1176
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.6324
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.6324
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 30
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 30
+1: SET PARAMETER: HA Directionality switched ON for Left ear
+2: SET PARAMETER: HA Directionality switched ON for Left ear
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 0.363529
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 0.363529
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 0.437059
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 0.437059
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 0.657647
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 0.657647
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 0.951765
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 0.951765
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 1.09882
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 1.09882
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 1.61353
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 1.61353
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 2.49588
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 2.49588
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 2.93706
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 2.93706
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 3.59882
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 3.59882
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 4.18706
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 4.18706
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 5.65765
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 5.65765
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 6.39294
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 6.39294
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 7.86353
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 7.86353
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.48118
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.48118
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 10.29
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 10.29
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 11.7606
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 11.7606
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 13.1576
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 13.1576
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 13.8929
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 13.8929
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 15.2165
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 15.2165
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 15.8782
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 15.8782
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 16.9812
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 16.9812
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 18.4518
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 18.4518
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 19.5547
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 19.5547
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 20.29
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 20.29
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 21.4665
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 21.4665
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 22.8635
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 22.8635
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 24.1135
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 24.1135
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 24.8488
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 24.8488
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 26.54
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 26.54
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.0841
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.0841
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 30
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 30
+1: SET PARAMETER: HA Directionality switched OFF for Right ear
+2: SET PARAMETER: HA Directionality switched OFF for Right ear
+1: SET PARAMETER: HA Directionality switched ON for Right ear
+2: SET PARAMETER: HA Directionality switched ON for Right ear
+1: SET PARAMETER: HA Directionality switched OFF for Right ear
+2: SET PARAMETER: HA Directionality switched OFF for Right ear
+1: SET PARAMETER: HA Directionality switched ON for Right ear
+2: SET PARAMETER: HA Directionality switched ON for Right ear
+1: SET PARAMETER: HA Directionality switched OFF for Right ear
+2: SET PARAMETER: HA Directionality switched OFF for Right ear
+1: SET PARAMETER: HA Directionality switched ON for Right ear
+2: SET PARAMETER: HA Directionality switched ON for Right ear
+1: SET PARAMETER: HA Directionality switched OFF for Right ear
+2: SET PARAMETER: HA Directionality switched OFF for Right ear
+1: SET PARAMETER: HA Directionality switched OFF for Left ear
+2: SET PARAMETER: HA Directionality switched OFF for Left ear
+1: SET PARAMETER: HA Directionality switched ON for Left ear
+2: SET PARAMETER: HA Directionality switched ON for Left ear
+1: SET PARAMETER: HA Directionality switched OFF for Left ear
+2: SET PARAMETER: HA Directionality switched OFF for Left ear
+1: SET PARAMETER: HA Directionality switched ON for Left ear
+2: SET PARAMETER: HA Directionality switched ON for Left ear
+1: SET PARAMETER: HA Directionality switched ON for Right ear
+2: SET PARAMETER: HA Directionality switched ON for Right ear
+1: SET PARAMETER: HA Directionality switched OFF for Right ear
+2: SET PARAMETER: HA Directionality switched OFF for Right ear
+1: SET PARAMETER: HA Directionality switched ON for Right ear
+2: SET PARAMETER: HA Directionality switched ON for Right ear
+1: SET PARAMETER: HA Directionality switched OFF for Right ear
+2: SET PARAMETER: HA Directionality switched OFF for Right ear
+1: SET PARAMETER: HA Directionality switched ON for Right ear
+2: SET PARAMETER: HA Directionality switched ON for Right ear
+1: SET PARAMETER: HA Directionality switched OFF for Right ear
+2: SET PARAMETER: HA Directionality switched OFF for Right ear
+1: SET PARAMETER: HA Directionality switched ON for Right ear
+2: SET PARAMETER: HA Directionality switched ON for Right ear
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+1: SET PARAMETER: Source ID set to 1
+2: SET PARAMETER: Source ID set to 2
+1: SET PARAMETER: Far distance LPF is Enabled
+2: SET PARAMETER: Far distance LPF is Enabled
+1: SET PARAMETER: Distance attenuation is Enabled
+2: SET PARAMETER: Distance attenuation is Enabled
+1: SET PARAMETER: Near distance ILD is Enabled
+2: SET PARAMETER: Near distance ILD is Enabled
+1: SET PARAMETER: HRTF convolution is Enabled
+2: SET PARAMETER: HRTF convolution is Enabled
+1: SET PARAMETER: Run-time HRTF Interpolation switched ON
+2: SET PARAMETER: Run-time HRTF Interpolation switched ON
+1: SET PARAMETER: Listener head radius changed to 0.0875
+2: SET PARAMETER: Listener head radius changed to 0.0875
+1: SET PARAMETER: Custom ITD is Disabled
+2: SET PARAMETER: Custom ITD is Disabled
+1: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+1:           Hash hable size is 7067
+1: SET PARAMETER: ILD Enabled
+2: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+2:           Hash hable size is 7067
+2: SET PARAMETER: ILD Enabled
+1: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+1:            HRIR length is 512
+1:            Sample rate is 48000
+1:            Buffer size is 1024
+1: Core ready!!!!!
+2: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+2:            HRIR length is 512
+2:            Sample rate is 48000
+2:            Buffer size is 1024
+2: Core ready!!!!!
+1: SET PARAMETER: HA Directionality switched ON for Left ear
+2: SET PARAMETER: HA Directionality switched ON for Left ear
+1: SET PARAMETER: HA Directionality switched ON for Right ear
+2: SET PARAMETER: HA Directionality switched ON for Right ear
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 30
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 30
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 30
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 30
+CREATE: Sample rate set to 44100
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 44100
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+1: SET PARAMETER: Source ID set to 1
+2: SET PARAMETER: Source ID set to 2
+1: SET PARAMETER: Far distance LPF is Enabled
+2: SET PARAMETER: Far distance LPF is Enabled
+1: SET PARAMETER: Distance attenuation is Enabled
+2: SET PARAMETER: Distance attenuation is Enabled
+1: SET PARAMETER: Near distance ILD is Enabled
+2: SET PARAMETER: Near distance ILD is Enabled
+1: SET PARAMETER: HRTF convolution is Enabled
+2: SET PARAMETER: HRTF convolution is Enabled
+1: SET PARAMETER: Run-time HRTF Interpolation switched ON
+2: SET PARAMETER: Run-time HRTF Interpolation switched ON
+1: SET PARAMETER: Listener head radius changed to 0.0875
+2: SET PARAMETER: Listener head radius changed to 0.0875
+1: SET PARAMETER: Custom ITD is Disabled
+2: SET PARAMETER: Custom ITD is Disabled
+1: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+1:           Hash hable size is 7067
+1: SET PARAMETER: ILD Enabled
+2: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+2:           Hash hable size is 7067
+2: SET PARAMETER: ILD Enabled
+1: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+1:            HRIR length is 512
+1:            Sample rate is 44100
+1:            Buffer size is 1024
+1: Core ready!!!!!
+2: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+2:            HRIR length is 512
+2:            Sample rate is 44100
+2:            Buffer size is 1024
+2: Core ready!!!!!
+1: SET PARAMETER: HA Directionality switched OFF for Left ear
+2: SET PARAMETER: HA Directionality switched OFF for Left ear
+1: SET PARAMETER: HA Directionality switched OFF for Right ear
+2: SET PARAMETER: HA Directionality switched OFF for Right ear
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.04
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.04
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.41
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.41
+1: SET PARAMETER: HA Directionality switched ON for Left ear
+2: SET PARAMETER: HA Directionality switched ON for Left ear
+1: SET PARAMETER: HA Directionality switched ON for Right ear
+2: SET PARAMETER: HA Directionality switched ON for Right ear
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.14753
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.14753
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 10.4378
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 10.4378
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 15.2766
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 15.2766
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 18.0723
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 18.0723
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 19.04
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 19.04
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 20.4378
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 20.4378
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 21.083
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 21.083
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 22.2658
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 22.2658
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 24.5239
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 24.5239
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 25.2766
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 25.2766
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 26.4594
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 26.4594
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.3196
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.3196
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.8572
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 27.8572
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.2873
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.2873
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.6099
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.6099
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.9325
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 28.9325
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.1475
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.1475
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.4701
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.4701
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.6852
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 29.6852
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 30
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 30
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.62505
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.62505
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 21.0229
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 21.0229
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 26.2917
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 26.2917
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 27.4745
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 27.4745
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.2272
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.2272
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.6573
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 28.6573
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 29.3025
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 29.3025
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 29.41
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 29.41
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 29.5175
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 29.5175
+CREATE: Sample rate set to 44100
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 44100
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+1: SET PARAMETER: Source ID set to 1
+2: SET PARAMETER: Source ID set to 2
+1: SET PARAMETER: Far distance LPF is Enabled
+2: SET PARAMETER: Far distance LPF is Enabled
+1: SET PARAMETER: Distance attenuation is Enabled
+2: SET PARAMETER: Distance attenuation is Enabled
+1: SET PARAMETER: Near distance ILD is Enabled
+2: SET PARAMETER: Near distance ILD is Enabled
+1: SET PARAMETER: HRTF convolution is Enabled
+2: SET PARAMETER: HRTF convolution is Enabled
+1: SET PARAMETER: Run-time HRTF Interpolation switched ON
+2: SET PARAMETER: Run-time HRTF Interpolation switched ON
+1: SET PARAMETER: Listener head radius changed to 0.0875
+2: SET PARAMETER: Listener head radius changed to 0.0875
+1: SET PARAMETER: Custom ITD is Disabled
+2: SET PARAMETER: Custom ITD is Disabled
+1: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+1:           Hash hable size is 7067
+1: SET PARAMETER: ILD Enabled
+2: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+2:           Hash hable size is 7067
+2: SET PARAMETER: ILD Enabled
+1: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+1:            HRIR length is 512
+1:            Sample rate is 44100
+1:            Buffer size is 1024
+1: Core ready!!!!!
+2: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+2:            HRIR length is 512
+2:            Sample rate is 44100
+2:            Buffer size is 1024
+2: Core ready!!!!!
+1: SET PARAMETER: HA Directionality switched OFF for Left ear
+2: SET PARAMETER: HA Directionality switched OFF for Left ear
+1: SET PARAMETER: HA Directionality switched OFF for Right ear
+2: SET PARAMETER: HA Directionality switched OFF for Right ear
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.04
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.04
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.41
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.41

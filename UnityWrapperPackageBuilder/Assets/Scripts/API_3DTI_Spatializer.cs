@@ -39,7 +39,16 @@ public class API_3DTI_Spatializer : MonoBehaviour
     public float magAnechoicAttenuation = -6.0f;    // Used by Inspector    
     public float magSoundSpeed = 343.0f;            // Used by Inspector
     public bool debugLog = false;                   // Used by Inspector
-        
+
+    // HEARING AID DIRECTIONALITY:
+    public const int EAR_RIGHT = 0;
+    public const int EAR_LEFT = 1;
+    public const int EAR_BOTH = 2;   
+    public bool doHADirectionalityLeft = false;     // Used by Inspector
+    public bool doHADirectionalityRight = false;    // Used by Inspector
+    public float HADirectionalityExtendLeft = 15.0f;    // Used by Inspector
+    public float HADirectionalityExtendRight = 15.0f;   // Used by Inspector
+
     // Definition of spatializer plugin commands
     int LOAD_3DTI_HRTF = 0;
     int SET_HEAD_RADIUS = 1;
@@ -55,6 +64,10 @@ public class API_3DTI_Spatializer : MonoBehaviour
     int SET_MAG_SOUNDSPEED = 11;
     int LOAD_3DTI_ILD = 12;    
     int SET_DEBUG_LOG = 13;
+    int SET_HA_DIRECTIONALITY_EXTEND_LEFT = 14;
+    int SET_HA_DIRECTIONALITY_EXTEND_RIGHT = 15;
+    int SET_HA_DIRECTIONALITY_ON_LEFT = 16;
+    int SET_HA_DIRECTIONALITY_ON_RIGHT = 17;
 
     /////////////////////////////////////////////////////////////////////
 
@@ -78,6 +91,9 @@ public class API_3DTI_Spatializer : MonoBehaviour
 
         // Listener setup:
         SetupListener();
+
+        // Hearing Aid directionality setup:
+        SetupHADirectionality();
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -366,6 +382,63 @@ public class API_3DTI_Spatializer : MonoBehaviour
         SendCommandForAllSources(SET_MAG_SOUNDSPEED, value);
     }
 
+    /////////////////////////////////////////////////////////////////////
+    // SOURCE API METHODS
+    /////////////////////////////////////////////////////////////////////
+    
+    /// <summary>
+    ///  Initial setup of HA directionality
+    /// </summary>
+    public void SetupHADirectionality()
+    {
+        SwitchOnOffHADirectionality(EAR_LEFT, doHADirectionalityLeft);
+        SwitchOnOffHADirectionality(EAR_RIGHT, doHADirectionalityRight);
+        SetHADirectionalityExtend(EAR_LEFT, HADirectionalityExtendLeft);
+        SetHADirectionalityExtend(EAR_RIGHT, HADirectionalityExtendRight);
+    }
+
+    /// <summary>
+    /// Switch on/off HA directionality for each ear
+    /// </summary>
+    /// <param name="ear"></param>
+    /// <param name="_enable"></param>
+    public void SwitchOnOffHADirectionality(int ear, bool _enable)
+    {
+        if (ear == EAR_BOTH)
+        {
+            SwitchOnOffHADirectionality(EAR_LEFT, _enable);
+            SwitchOnOffHADirectionality(EAR_RIGHT, _enable);
+        }
+
+        if (ear == EAR_LEFT)
+            SendCommandForAllSources(SET_HA_DIRECTIONALITY_ON_LEFT, Bool2Float(_enable));
+        if (ear == EAR_RIGHT)
+            SendCommandForAllSources(SET_HA_DIRECTIONALITY_ON_RIGHT, Bool2Float(_enable));
+    }
+
+    /// <summary>
+    /// Set HA directionality extend (in dB) for each ear
+    /// </summary>
+    /// <param name="ear"></param>
+    /// <param name="extendDB"></param>
+    public void SetHADirectionalityExtend(int ear, float extendDB)
+    {
+        if (ear == EAR_BOTH)
+        {
+            SetHADirectionalityExtend(EAR_LEFT, extendDB);
+            SetHADirectionalityExtend(EAR_RIGHT, extendDB);
+        }
+
+        if (ear == EAR_LEFT)
+            SendCommandForAllSources(SET_HA_DIRECTIONALITY_EXTEND_LEFT, extendDB);
+        if (ear == EAR_RIGHT)
+            SendCommandForAllSources(SET_HA_DIRECTIONALITY_EXTEND_RIGHT, extendDB);
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // AUXILIARY FUNCTIONS
+    /////////////////////////////////////////////////////////////////////
+
     /// <summary>
     /// Send command to plugin to switch on/off write to Debug Log file
     /// </summary>
@@ -419,5 +492,18 @@ public class API_3DTI_Spatializer : MonoBehaviour
         }
 
         return spatializedSources;
+    }
+
+    /// <summary>
+    /// Auxiliary function
+    /// </summary>
+    /// <param name="v"></param>
+    /// <returns></returns>
+    float Bool2Float(bool v)
+    {
+        if (v)
+            return 1.0f;
+        else
+            return 0.0f;
     }
 }
