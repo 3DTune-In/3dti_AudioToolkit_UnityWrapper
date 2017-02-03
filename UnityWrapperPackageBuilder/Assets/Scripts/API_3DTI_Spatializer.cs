@@ -80,7 +80,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
         SendWriteDebugLog(debugLog);
 
         // Global setup:
-        //SetScaleFactor(scaleFactor);
+        SetScaleFactor(scaleFactor);
         SendSourceIDs();    
 
         // Setup modules enabler:
