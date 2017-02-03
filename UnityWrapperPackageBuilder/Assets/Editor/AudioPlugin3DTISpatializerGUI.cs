@@ -26,7 +26,8 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     bool haSetup = false;
 
     // Limit possible values of sliders    
-    float maxHeadRadius = 1.0f;        
+    float maxHeadRadius = 1.0f;
+    float minScale = 0.1f;      
     float maxScale = 10.0f;
     float minDB = -30.0f;
     float maxDB = 0.0f;
@@ -168,6 +169,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     public void SliderScale()
     {
         //Debug.Log("Slider scale changed");
+        toolkit.SetScaleFactor(toolkit.scaleFactor);
     }
 
     /// <summary>
@@ -264,7 +266,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
         {
             // Scale factor slider
             SingleSpace();
-            //CreateFloatSlider(ref toolkit.scaleFactor, "Scale factor:", "F2", "", 0, maxScale, SliderScale);
+            CreateFloatSlider(ref toolkit.scaleFactor, "Scale factor:", "F2", " meters = 1.0 unit in Unity", minScale, maxScale, SliderScale);
 
             // HRTF interpolation
             BeginSubsection("HRTF Interpolation:");                        

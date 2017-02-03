@@ -23,7 +23,14 @@ public class API_3DTI_HA : MonoBehaviour
     public const int EAR_LEFT = 1;
     public const int EAR_RIGHT = 0;
     public const int EAR_BOTH = 2;
- 
+
+    // Internal use constants
+    public const float FIG6_THRESHOLD_0_DBSPL = 40.0f;
+    public const float FIG6_THRESHOLD_1_DBSPL = 65.0f;
+    public const float FIG6_THRESHOLD_2_DBSPL = 95.0f;
+    public const int FIG6_NUMBANDS = 7;
+    public const float DBSPL_FOR_0_DBFS = 100.0f;
+
     // Global variables
     public AudioMixer haMixer;  // Drag&drop here the HAHL_3DTI_Mixer
 
@@ -149,6 +156,49 @@ public class API_3DTI_HA : MonoBehaviour
         return HASetFloat(ear, "HA3DTI_AttackRelease_", attackRelease);
     }
 
+    /// <summary>
+    /// Configure dynamic equalizer using Fig6 method
+    /// </summary>
+    /// <param name="ear ({EAR_LEFT, EAR_RIGHT})"></param>
+    /// <param name="earLossList (dB[])"></param>
+    /// <returns></returns>
+    public bool SetEQFromFig6(int ear, List<float>earLossList)
+    {
+        // Both ears
+        if (ear == EAR_BOTH)
+        {
+            if (!SetEQFromFig6(EAR_LEFT, earLossList))
+                return false;
+            return SetEQFromFig6(EAR_RIGHT, earLossList);
+        }
+
+        // Left ear
+        if (ear == EAR_LEFT)
+        {
+            haMixer.SetFloat("HA3DTI_Dynamic_LeftOn", Bool2Float(true));    // Set Dynamic EQ for left channel
+            haMixer.SetFloat("HA3DTI_Threshold_0_Left", FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 0
+            haMixer.SetFloat("HA3DTI_Threshold_1_Left", FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 1
+            haMixer.SetFloat("HA3DTI_Threshold_2_Left", FIG6_THRESHOLD_2_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 2
+        }
+
+        // Left ear
+        if (ear == EAR_RIGHT)
+        {
+            haMixer.SetFloat("HA3DTI_Dynamic_RightOn", Bool2Float(true));    // Set Dynamic EQ for left channel
+            haMixer.SetFloat("HA3DTI_Threshold_0_Right", FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 0
+            haMixer.SetFloat("HA3DTI_Threshold_1_Right", FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 1
+            haMixer.SetFloat("HA3DTI_Threshold_2_Right", FIG6_THRESHOLD_2_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 2
+        }
+
+        for (int bandIndex = 0; bandIndex < FIG6_NUMBANDS; bandIndex++)
+        {
+            if (!SetEQBandFromFig6(ear, bandIndex, earLossList[bandIndex]))
+                return false;
+        }
+
+        return true;
+    }
+
     //////////////////////////////////////////////////////////////
     // QUANTIZATION NOISE
     //////////////////////////////////////////////////////////////
@@ -180,6 +230,47 @@ public class API_3DTI_HA : MonoBehaviour
     //////////////////////////////////////////////////////////////
     // AUXILIARY FUNCTIONS
     //////////////////////////////////////////////////////////////
+
+    public bool SetEQBandFromFig6(int ear, int bandIndex, float earLoss)
+    {
+        // Level 0 (40 dB)
+        float gain0;
+        if (earLoss < 20.0f)
+            gain0 = 0.0f;
+        else
+        {
+            if (earLoss <= 60.0f)
+                gain0 = earLoss - 20.0f;
+            else
+                gain0 = earLoss * 0.5f + 10.0f;
+        }
+
+        // Level 1 (65 dB)
+        float gain1;
+        if (earLoss < 20.0f)
+            gain1 = 0.0f;
+        else
+        {
+            if (earLoss <= 60.0f)
+                gain1 = 0.6f * (earLoss - 20.0f);
+            else
+                gain1 = earLoss * 0.8f - 23.0f;
+        }
+
+        // Level 2 (95 dB)
+        float gain2;
+        if (earLoss <= 40.0f)
+            gain2 = 0.0f;
+        else
+            gain2 = 0.1f * Mathf.Pow(earLoss - 40.0f, 1.4f);
+
+        // Set bands
+        if (!SetDynamicEQBandLevelGain(ear, bandIndex, 0, gain0)) return false;
+        if (!SetDynamicEQBandLevelGain(ear, bandIndex, 1, gain1)) return false;
+        if (!SetDynamicEQBandLevelGain(ear, bandIndex, 2, gain2)) return false;
+
+        return true;
+    }
 
     /// <summary>
     /// Generic Set method

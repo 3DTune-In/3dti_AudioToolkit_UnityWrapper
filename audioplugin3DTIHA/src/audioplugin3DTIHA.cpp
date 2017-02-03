@@ -25,7 +25,7 @@ using namespace std;
 #ifdef UNITY_ANDROID
 #define DEBUG_LOG_CAT
 #else
-#define DEBUG_LOG_FILE
+//#define DEBUG_LOG_FILE
 #endif
 
 #ifdef DEBUG_LOG_CAT
@@ -65,9 +65,11 @@ namespace HASimulation3DTI
 #define DEFAULT_LEVELTHRESHOLD_0	-20.0f
 #define DEFAULT_LEVELTHRESHOLD_1	-40.0f
 #define DEFAULT_LEVELTHRESHOLD_2	-60.0f
-#define DEFAULT_NOISENUMBITS	16
-#define DEFAULT_NOISEBEFORE		F_FALSE
-#define DEFAULT_NOISEAFTER		F_FALSE
+#define DEFAULT_NOISENUMBITS		16
+#define DEFAULT_NOISEBEFORE			F_FALSE
+#define DEFAULT_NOISEAFTER			F_FALSE
+#define DEFAULT_DBSPL_FOR_0DBS		0.0f
+#define DEFAULT_FIG6_BANDS_PER_EAR	7
 
 // Min/max values for parameters
 #define MIN_VOLDB			-24.0f
@@ -84,6 +86,8 @@ namespace HASimulation3DTI
 #define MAX_NOISENUMBITS	24
 #define MIN_ATTACKRELEASE	10.0f
 #define MAX_ATTACKRELEASE	2000.0f
+#define MIN_FIG6			0.0f
+#define MAX_FIG6			80.0f
 
 //////////////////////////////////////////////////////
 
@@ -158,6 +162,22 @@ namespace HASimulation3DTI
 		PARAM_NOISE_AFTER_ON,
 		PARAM_NOISE_NUMBITS,
 
+		//// Fig6
+		//PARAM_FIG6_BAND_0_LEFT,
+		//PARAM_FIG6_BAND_1_LEFT,
+		//PARAM_FIG6_BAND_2_LEFT,
+		//PARAM_FIG6_BAND_3_LEFT,
+		//PARAM_FIG6_BAND_4_LEFT,
+		//PARAM_FIG6_BAND_5_LEFT,
+		//PARAM_FIG6_BAND_6_LEFT,
+		//PARAM_FIG6_BAND_0_RIGHT,
+		//PARAM_FIG6_BAND_1_RIGHT,
+		//PARAM_FIG6_BAND_2_RIGHT,
+		//PARAM_FIG6_BAND_3_RIGHT,
+		//PARAM_FIG6_BAND_4_RIGHT,
+		//PARAM_FIG6_BAND_5_RIGHT,
+		//PARAM_FIG6_BAND_6_RIGHT,
+
 		P_NUM
 	};
 
@@ -165,8 +185,14 @@ namespace HASimulation3DTI
 
     struct EffectData
     {
-		CHearingAidSim HA;				
+		CHearingAidSim HA;		
 		float parameters[P_NUM];
+
+		//// Fig6
+		//bool settingFig6Left;
+		//int fig6ReceivedBandsLeft;	// TO DO: check each individual band
+		//bool settingFig6Right;
+		//int fig6ReceivedBandsRight;	// TO DO: check each individual band
 	};
 
 	/////////////////////////////////////////////////////////////////////
@@ -276,6 +302,22 @@ namespace HASimulation3DTI
 		RegisterParameter(definition, "NOISEAFT", "", F_FALSE, F_TRUE, DEFAULT_NOISEAFTER, 1.0f, 1.0f, PARAM_NOISE_AFTER_ON, "Apply quantization noise On/Off at the end of the process chain");
 		RegisterParameter(definition, "NOISEBITS", "", MIN_NOISENUMBITS, MAX_NOISENUMBITS, DEFAULT_NOISENUMBITS, 1.0f, 1.0f, PARAM_NOISE_NUMBITS, "Number of bits of quantization noise");	
 
+		//// Fig6
+		//RegisterParameter(definition, "FIG60L", "dB", MIN_FIG6, MAX_FIG6, 0.0f, 1.0f, 1.0f, PARAM_FIG6_BAND_0_LEFT, "Fig6 input band 0 Left");
+		//RegisterParameter(definition, "FIG61L", "dB", MIN_FIG6, MAX_FIG6, 0.0f, 1.0f, 1.0f, PARAM_FIG6_BAND_1_LEFT, "Fig6 input band 1 Left");
+		//RegisterParameter(definition, "FIG62L", "dB", MIN_FIG6, MAX_FIG6, 0.0f, 1.0f, 1.0f, PARAM_FIG6_BAND_2_LEFT, "Fig6 input band 2 Left");
+		//RegisterParameter(definition, "FIG63L", "dB", MIN_FIG6, MAX_FIG6, 0.0f, 1.0f, 1.0f, PARAM_FIG6_BAND_3_LEFT, "Fig6 input band 3 Left");
+		//RegisterParameter(definition, "FIG64L", "dB", MIN_FIG6, MAX_FIG6, 0.0f, 1.0f, 1.0f, PARAM_FIG6_BAND_4_LEFT, "Fig6 input band 4 Left");
+		//RegisterParameter(definition, "FIG65L", "dB", MIN_FIG6, MAX_FIG6, 0.0f, 1.0f, 1.0f, PARAM_FIG6_BAND_5_LEFT, "Fig6 input band 5 Left");
+		//RegisterParameter(definition, "FIG66L", "dB", MIN_FIG6, MAX_FIG6, 0.0f, 1.0f, 1.0f, PARAM_FIG6_BAND_6_LEFT, "Fig6 input band 6 Left");
+		//RegisterParameter(definition, "FIG60R", "dB", MIN_FIG6, MAX_FIG6, 0.0f, 1.0f, 1.0f, PARAM_FIG6_BAND_0_RIGHT, "Fig6 input band 0 Right");
+		//RegisterParameter(definition, "FIG61R", "dB", MIN_FIG6, MAX_FIG6, 0.0f, 1.0f, 1.0f, PARAM_FIG6_BAND_1_RIGHT, "Fig6 input band 1 Right");
+		//RegisterParameter(definition, "FIG62R", "dB", MIN_FIG6, MAX_FIG6, 0.0f, 1.0f, 1.0f, PARAM_FIG6_BAND_2_RIGHT, "Fig6 input band 2 Right");
+		//RegisterParameter(definition, "FIG63R", "dB", MIN_FIG6, MAX_FIG6, 0.0f, 1.0f, 1.0f, PARAM_FIG6_BAND_3_RIGHT, "Fig6 input band 3 Right");
+		//RegisterParameter(definition, "FIG64R", "dB", MIN_FIG6, MAX_FIG6, 0.0f, 1.0f, 1.0f, PARAM_FIG6_BAND_4_RIGHT, "Fig6 input band 4 Right");
+		//RegisterParameter(definition, "FIG65R", "dB", MIN_FIG6, MAX_FIG6, 0.0f, 1.0f, 1.0f, PARAM_FIG6_BAND_5_RIGHT, "Fig6 input band 5 Right");
+		//RegisterParameter(definition, "FIG66R", "dB", MIN_FIG6, MAX_FIG6, 0.0f, 1.0f, 1.0f, PARAM_FIG6_BAND_6_RIGHT, "Fig6 input band 6 Right");
+
         return numparams;
     }
 
@@ -348,6 +390,12 @@ namespace HASimulation3DTI
 		effectdata->HA.SetLevelThreshold(1, DEFAULT_LEVELTHRESHOLD_1, EAR_RIGHT);
 		effectdata->HA.SetLevelThreshold(2, DEFAULT_LEVELTHRESHOLD_2, EAR_LEFT);
 		effectdata->HA.SetLevelThreshold(2, DEFAULT_LEVELTHRESHOLD_2, EAR_RIGHT);	
+
+		//// Configure Fig6
+		//effectdata->settingFig6Left = false;
+		//effectdata->fig6ReceivedBandsLeft = 0;
+		//effectdata->settingFig6Right = false;
+		//effectdata->fig6ReceivedBandsRight = 0;
 
 		WriteLog(state, "CREATE: HA Simulation plugin created", "");		
 
@@ -449,6 +497,59 @@ namespace HASimulation3DTI
 			case PARAM_NOISE_BEFORE_ON:	data->HA.addNoiseBefore = FromFloatToBool(value); break;
 			case PARAM_NOISE_AFTER_ON:	data->HA.addNoiseAfter = FromFloatToBool(value); break;
 			case PARAM_NOISE_NUMBITS:	data->HA.noiseNumBits = (int)value; break;	
+
+			//// Fig6
+			//case PARAM_FIG6_BAND_0_LEFT: 
+			//case PARAM_FIG6_BAND_1_LEFT:
+			//case PARAM_FIG6_BAND_2_LEFT:
+			//case PARAM_FIG6_BAND_3_LEFT:
+			//case PARAM_FIG6_BAND_4_LEFT:
+			//case PARAM_FIG6_BAND_5_LEFT:
+			//case PARAM_FIG6_BAND_6_LEFT:
+			//	data->settingFig6Left = true;
+			//	data->fig6ReceivedBandsLeft++;
+			//	if (data->fig6ReceivedBandsLeft == DEFAULT_FIG6_BANDS_PER_EAR)
+			//	{
+			//		vector<float> fig6InputVectorLeft;
+			//		fig6InputVectorLeft.push_back(data->parameters[PARAM_FIG6_BAND_0_LEFT]);
+			//		fig6InputVectorLeft.push_back(data->parameters[PARAM_FIG6_BAND_1_LEFT]);
+			//		fig6InputVectorLeft.push_back(data->parameters[PARAM_FIG6_BAND_2_LEFT]);
+			//		fig6InputVectorLeft.push_back(data->parameters[PARAM_FIG6_BAND_3_LEFT]);
+			//		fig6InputVectorLeft.push_back(data->parameters[PARAM_FIG6_BAND_4_LEFT]);
+			//		fig6InputVectorLeft.push_back(data->parameters[PARAM_FIG6_BAND_5_LEFT]);
+			//		fig6InputVectorLeft.push_back(data->parameters[PARAM_FIG6_BAND_6_LEFT]);
+			//		data->HA.ApplyFig6Alg(fig6InputVectorLeft, DEFAULT_DBSPL_FOR_0DBS, EAR_LEFT);
+			//		WriteLog(state, "Fig6 method applied to Left HA", "");
+			//		data->settingFig6Left = false;
+			//		data->fig6ReceivedBandsLeft = 0;
+			//	}
+			//	break;
+
+			//case PARAM_FIG6_BAND_0_RIGHT:
+			//case PARAM_FIG6_BAND_1_RIGHT:
+			//case PARAM_FIG6_BAND_2_RIGHT:
+			//case PARAM_FIG6_BAND_3_RIGHT:
+			//case PARAM_FIG6_BAND_4_RIGHT:
+			//case PARAM_FIG6_BAND_5_RIGHT:
+			//case PARAM_FIG6_BAND_6_RIGHT:
+			//	data->settingFig6Right = true;
+			//	data->fig6ReceivedBandsRight++;
+			//	if (data->fig6ReceivedBandsRight == DEFAULT_FIG6_BANDS_PER_EAR)
+			//	{
+			//		vector<float> fig6InputVectorRight;
+			//		fig6InputVectorRight.push_back(data->parameters[PARAM_FIG6_BAND_0_RIGHT]);
+			//		fig6InputVectorRight.push_back(data->parameters[PARAM_FIG6_BAND_1_RIGHT]);
+			//		fig6InputVectorRight.push_back(data->parameters[PARAM_FIG6_BAND_2_RIGHT]);
+			//		fig6InputVectorRight.push_back(data->parameters[PARAM_FIG6_BAND_3_RIGHT]);
+			//		fig6InputVectorRight.push_back(data->parameters[PARAM_FIG6_BAND_4_RIGHT]);
+			//		fig6InputVectorRight.push_back(data->parameters[PARAM_FIG6_BAND_5_RIGHT]);
+			//		fig6InputVectorRight.push_back(data->parameters[PARAM_FIG6_BAND_6_RIGHT]);
+			//		data->HA.ApplyFig6Alg(fig6InputVectorRight, DEFAULT_DBSPL_FOR_0DBS, EAR_RIGHT);
+			//		WriteLog(state, "Fig6 method applied to Right HA", "");
+			//		data->settingFig6Right = false;
+			//		data->fig6ReceivedBandsRight = 0;
+			//	}
+			//	break;
 
 			default:
 				WriteLog(state, "SET PARAMETER: ERROR!!!! Unknown float parameter received from API: ", index);

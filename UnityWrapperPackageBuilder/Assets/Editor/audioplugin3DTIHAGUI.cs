@@ -28,8 +28,8 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     Color baseColor = Color.white;
 
     // Global variables
-    bool switchLeftEar = true;
-    bool switchRightEar = true;
+    bool switchLeftEar = false;
+    bool switchRightEar = false;
     bool noiseBefore = true;
     bool noiseAfter = true;
     bool dynamicEq = true;
@@ -106,22 +106,8 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     public void InitializePlugin(IAudioEffectPlugin plugin)
     {
         // Boolean switches
-        //plugin.SetFloatParameter("EQLeftOn", Bool2Float(eqLeftOn));
-        //plugin.SetFloatParameter("EQRightOn", Bool2Float(eqRightOn));
-        //plugin.SetFloatParameter("CompLeftOn", Bool2Float(compressorLeftOn));
-        //plugin.SetFloatParameter("CompRightOn", Bool2Float(compressorRightOn));
-        //plugin.SetFloatParameter("CompFirst", Bool2Float(compressorFirst));
-
-        // Compressor
-        // TO DO: Knee
-        plugin.SetFloatParameter("LeftRatio", (float)DEFAULT_COMP_RATIO);
-        plugin.SetFloatParameter("LeftThreshold", (float)DEFAULT_COMP_THRESHOLD);
-        plugin.SetFloatParameter("LeftAttack", (float)DEFAULT_COMP_ATTACK);
-        plugin.SetFloatParameter("LeftRelease", (float)DEFAULT_COMP_RELEASE);
-        plugin.SetFloatParameter("RightRatio", (float)DEFAULT_COMP_RATIO);
-        plugin.SetFloatParameter("RightThreshold", (float)DEFAULT_COMP_THRESHOLD);
-        plugin.SetFloatParameter("RightAttack", (float)DEFAULT_COMP_ATTACK);
-        plugin.SetFloatParameter("RightRelease", (float)DEFAULT_COMP_RELEASE);
+        plugin.SetFloatParameter("HA3DTI_Process_LeftOn", Bool2Float(switchLeftEar));
+        plugin.SetFloatParameter("HA3DTI_Process_RightOn", Bool2Float(switchRightEar));
 
         initDone = true;
     }
@@ -369,11 +355,11 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     /// <param name="plugin"></param>
     public void DrawNoiseGenerator(IAudioEffectPlugin plugin)
     {
-        BeginCentralColumn("Quantification Noise Generator");
+        BeginCentralColumn("Quantization Noise Generator");
         {
             CreateToggle(plugin,ref noiseBefore, "Quantization Before", "NOISEBEF");
             CreateToggle(plugin,ref noiseAfter, "Quantization After", "NOISEAFT");
-            CreateParameterSlider(plugin, "NOISEBITS", "Noise Number of Bits:", true, "");
+            CreateParameterSlider(plugin, "NOISEBITS", "Quantization Number of Bits:", true, "");
         }
         EndCentralColumn();
     }

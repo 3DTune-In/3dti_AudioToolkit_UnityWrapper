@@ -90,6 +90,9 @@
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\UPCEnvironment.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Fig6Algorithm.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -184,6 +187,9 @@
       <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\UPCEnvironment.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Fig6Algorithm.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
   </ItemGroup>
