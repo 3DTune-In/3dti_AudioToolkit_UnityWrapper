@@ -105,8 +105,8 @@
 		AF324A281E49E11E00070F5F /* HearingLossSim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HearingLossSim.h; sourceTree = "<group>"; };
 		AF324A341E49E11E00070F5F /* mainpage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mainpage.h; sourceTree = "<group>"; };
 		AF324A351E49E11E00070F5F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		AF324A5B1E49E37600070F5F /* AudioPluginInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPluginInterface.h; sourceTree = "<group>"; };
 		AF63299F1E376BA5000B40E8 /* libaudioplugin3DTIHL.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libaudioplugin3DTIHL.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF66C8361E4B4A09006F314E /* AudioPluginInterfaceHL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPluginInterfaceHL.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,7 +123,6 @@
 		AF3249D91E49E06800070F5F /* src */ = {
 			isa = PBXGroup;
 			children = (
-				AF324A5B1E49E37600070F5F /* AudioPluginInterface.h */,
 				AF3249DA1E49E06800070F5F /* audioplugin3DTIHL.cpp */,
 				AF3249DC1E49E06800070F5F /* AudioPluginUtil.cpp */,
 				AF3249DD1E49E06800070F5F /* AudioPluginUtil.h */,
@@ -210,6 +209,7 @@
 		AF6329961E376BA4000B40E8 = {
 			isa = PBXGroup;
 			children = (
+				AF66C8361E4B4A09006F314E /* AudioPluginInterfaceHL.h */,
 				AF3249E41E49E11E00070F5F /* 3DTI_Toolkit_Core */,
 				AF3249E11E49E0A400070F5F /* Config.Common.xcconfig */,
 				AF3249E21E49E0A400070F5F /* Config.Debug.xcconfig */,

@@ -11,7 +11,7 @@ public class TestHAAPI : MonoBehaviour {
     float volume = 0.0f;    
     float volIncrement = 0.1f;
     float cutoff = 0.0f;
-    float cutIncrement = 1.0f;
+    float cutIncrement = 5.0f;
 
     // Use this for initialization
     void Start () {
@@ -38,9 +38,9 @@ public class TestHAAPI : MonoBehaviour {
         //HAAPI.SetVolume(API_3DTI_HA.EAR_BOTH, volume);
         //volume -= volIncrement;
 
-        //if (cutoff >= 3000.0f)
-        //    cutoff = 0.0f;
-        //HAAPI.SetLPFCutoff(cutoff);
-        //cutoff += cutIncrement;
+        if (cutoff >= 3000.0f)
+            cutoff = 0.0f;
+        HAAPI.SetLPFCutoff(cutoff);
+        cutoff += cutIncrement;
     }
 }

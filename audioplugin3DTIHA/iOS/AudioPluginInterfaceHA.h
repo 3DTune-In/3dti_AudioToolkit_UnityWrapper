@@ -271,4 +271,4 @@ struct UnityAudioEffectDefinition
 };
 
 // This function fills in N pointers for the N effects contained in the library and returns N.
-extern "C" UNITY_AUDIODSP_EXPORT_API int UnityGetAudioEffectDefinitions(UnityAudioEffectDefinition*** descptr);
+extern "C" UNITY_AUDIODSP_EXPORT_API int UnityGetAudioEffectDefinitionsHA(UnityAudioEffectDefinition*** descptr);
