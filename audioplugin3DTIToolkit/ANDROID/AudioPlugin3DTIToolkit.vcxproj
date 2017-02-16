@@ -1,0 +1,245 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|ARM">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM">
+      <Configuration>Release</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM64">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM64">
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x86">
+      <Configuration>Debug</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x86">
+      <Configuration>Release</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{41d114cf-c808-4722-85f5-d1e1030b8ca8}</ProjectGuid>
+    <Keyword>Android</Keyword>
+    <RootNamespace>AudioPlugin3DTIToolkit</RootNamespace>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+    <ApplicationType>Android</ApplicationType>
+    <ApplicationTypeRevision>2.0</ApplicationTypeRevision>
+    <ProjectName>AudioPlugin3DTIToolkit</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+    <UseOfStl>gnustl_static</UseOfStl>
+    <AndroidAPILevel>android-19</AndroidAPILevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>NDEBUG;AudioPlugin3DTIToolkit_EXPORTS;_3DTI_AXIS_CONVENTION_UNITY;_3DTI_ANGLE_CONVENTION_LISTEN;UNITY_ANDROID;_3DTI_ANDROID_DEBUGGER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\..\..\3DTI_Toolkit_Core;..\..\..\..\..\3DTI_Toolkit_Modules;..\..\..\..\..\3DTI_Toolkit_Modules\HRTF\cereal\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CppLanguageStandard>c++1y</CppLanguageStandard>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <ExceptionHandling>Enabled</ExceptionHandling>
+    </ClCompile>
+    <Link>
+      <LibraryDependencies>$(StlLibraryName);%(LibraryDependencies);m</LibraryDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\BRIR.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\Core.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\Environment.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\HRTF.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\ILD.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\Listener.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\SingleSourceDSP.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\UPCAnechoic.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\AIR.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\AudioState.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\BiquadFilter.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Buffer.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Conventions.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Debugger.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\DistanceAttenuator.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Fconvolver.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\fftsg.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Fig6Algorithm.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\FiltersChain.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Magnitudes.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Quaternion.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Transform.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\UPCEnvironment.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Vector3.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\Compressor.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\DynamicEqualizer.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\EnvelopeDetector.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\FiltersBank.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingLossSim.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.h" />
+    <ClInclude Include="..\src\AudioPluginInterface.h" />
+    <ClInclude Include="..\src\AudioPluginUtil.h" />
+    <ClInclude Include="..\src\PluginList.h" />
+    <ClInclude Include="pch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\BRIR.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\Core.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\Environment.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\HRTF.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\ILD.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\Listener.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\SingleSourceDSP.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\BinauralSpatializer\UPCAnechoic.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\AIR.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\AudioState.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\BiquadFilter.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Buffer.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Debugger.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\DistanceAttenuator.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Fconvolver.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\fftsg.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Fig6Algorithm.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\FiltersChain.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Magnitudes.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Quaternion.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Transform.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\UPCEnvironment.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Vector3.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\Compressor.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\DynamicEqualizer.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\EnvelopeDetector.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\FiltersBank.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingLossSim.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.cpp" />
+    <ClCompile Include="..\src\AudioPluginUtil.cpp" />
+    <ClCompile Include="..\src\effect3DTIHA.cpp" />
+    <ClCompile Include="..\src\effect3DTIHL.cpp" />
+    <ClCompile Include="..\src\effect3DTISpatializer.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>

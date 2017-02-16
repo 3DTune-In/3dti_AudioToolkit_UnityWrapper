@@ -110,8 +110,9 @@ public class API_3DTI_Spatializer : MonoBehaviour
 
         if (!ILDFileName.Equals(""))
         {
-            #if (UNITY_ANDROID && !UNITY_EDITOR)
-                SaveResourceAsBinary(ILDFileName, ".3dti-ild", out ILDFileName);                 
+            //#if (UNITY_ANDROID && !UNITY_EDITOR)
+            #if (!UNITY_EDITOR)
+            SaveResourceAsBinary(ILDFileName, ".3dti-ild", out ILDFileName);                 
             #endif
 			//#if (!UNITY_EDITOR)
 			//GetStreamingAsset(ILDFileName, out ILDFileName);
@@ -121,8 +122,9 @@ public class API_3DTI_Spatializer : MonoBehaviour
 
         if (!HRTFFileName.Equals(""))
         {
-            #if (UNITY_ANDROID && !UNITY_EDITOR)
-                SaveResourceAsBinary(HRTFFileName, ".3dti-hrtf", out HRTFFileName); 
+            //#if (UNITY_ANDROID && !UNITY_EDITOR)
+            #if (!UNITY_EDITOR)
+            SaveResourceAsBinary(HRTFFileName, ".3dti-hrtf", out HRTFFileName); 
             #endif
 			//#if (!UNITY_EDITOR)
 			//GetStreamingAsset(HRTFFileName, out HRTFFileName);

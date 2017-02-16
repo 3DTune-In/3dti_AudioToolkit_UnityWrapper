@@ -108,12 +108,12 @@ public class AudioPlugin3DTISpatializerGUI : Editor
         // Set new name for toolkit API
         whichfilename = newname;
 
-    #if UNITY_ANDROID
+    //#if UNITY_ANDROID
         // Save it in resources as .byte                
         string newnamewithpath = "Assets/Resources/" + Path.GetFileNameWithoutExtension(newname) + ".bytes";
         if (!File.Exists(newnamewithpath)) 
             FileUtil.CopyFileOrDirectory(whichfilename, newnamewithpath);
-    #endif        
+    //#endif        
 	}
 
     /// <summary>
