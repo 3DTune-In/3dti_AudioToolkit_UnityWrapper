@@ -76,13 +76,13 @@ public class API_3DTI_HA : MonoBehaviour
     }
 
     /// <summary>
-    ///  Set gain (in dB) for one band of the static equalizer
+    ///  Set gain (in dB) for one band of the standard equalizer
     /// </summary>
     /// <param name="ear ({EAR_LEFT, EAR_RIGHT})"></param>
     /// <param name="band ([0..6])"></param>
     /// <param name="gain (dB)"></param>
     /// <returns></returns>
-    public bool SetStaticEQBandGain(int ear, int band, float gain)
+    public bool SetStandardEQBandGain(int ear, int band, float gain)
     {
         string paramName = "HA3DTI_Gain_Level_0_Band_" + band.ToString() + "_";
         return HASetFloat(ear, paramName, gain);
