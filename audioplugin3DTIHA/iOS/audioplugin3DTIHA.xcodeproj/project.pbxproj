@@ -29,8 +29,8 @@
 		AF324A521E49E11E00070F5F /* FiltersBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF324A231E49E11E00070F5F /* FiltersBank.cpp */; };
 		AF324A531E49E11E00070F5F /* HearingAidSim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF324A251E49E11E00070F5F /* HearingAidSim.cpp */; };
 		AF324A541E49E11E00070F5F /* HearingLossSim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF324A271E49E11E00070F5F /* HearingLossSim.cpp */; };
+		AF4CAC631E51C66200A892B5 /* AudioPluginUtilHA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF4CAC611E51C66200A892B5 /* AudioPluginUtilHA.cpp */; };
 		AF66C8331E4B33A2006F314E /* audioplugin3DTIHA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF66C82E1E4B33A2006F314E /* audioplugin3DTIHA.cpp */; };
-		AF66C8341E4B33A2006F314E /* AudioPluginUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF66C8301E4B33A2006F314E /* AudioPluginUtil.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -94,10 +94,10 @@
 		AF324A261E49E11E00070F5F /* HearingAidSim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HearingAidSim.h; sourceTree = "<group>"; };
 		AF324A271E49E11E00070F5F /* HearingLossSim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HearingLossSim.cpp; sourceTree = "<group>"; };
 		AF324A281E49E11E00070F5F /* HearingLossSim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HearingLossSim.h; sourceTree = "<group>"; };
+		AF4CAC611E51C66200A892B5 /* AudioPluginUtilHA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioPluginUtilHA.cpp; sourceTree = "<group>"; };
+		AF4CAC621E51C66200A892B5 /* AudioPluginUtilHA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPluginUtilHA.h; sourceTree = "<group>"; };
 		AF63299F1E376BA5000B40E8 /* libaudioplugin3DTIHA.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libaudioplugin3DTIHA.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF66C82E1E4B33A2006F314E /* audioplugin3DTIHA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audioplugin3DTIHA.cpp; sourceTree = "<group>"; };
-		AF66C8301E4B33A2006F314E /* AudioPluginUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioPluginUtil.cpp; sourceTree = "<group>"; };
-		AF66C8311E4B33A2006F314E /* AudioPluginUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPluginUtil.h; sourceTree = "<group>"; };
 		AF66C8321E4B33A2006F314E /* PluginList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PluginList.h; sourceTree = "<group>"; };
 		AF66C8351E4B4834006F314E /* AudioPluginInterfaceHA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPluginInterfaceHA.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -185,6 +185,8 @@
 		AF6329961E376BA4000B40E8 = {
 			isa = PBXGroup;
 			children = (
+				AF4CAC611E51C66200A892B5 /* AudioPluginUtilHA.cpp */,
+				AF4CAC621E51C66200A892B5 /* AudioPluginUtilHA.h */,
 				AF66C8351E4B4834006F314E /* AudioPluginInterfaceHA.h */,
 				AF66C82D1E4B33A2006F314E /* src */,
 				AF3249E41E49E11E00070F5F /* 3DTI_Toolkit_Core */,
@@ -207,8 +209,6 @@
 			isa = PBXGroup;
 			children = (
 				AF66C82E1E4B33A2006F314E /* audioplugin3DTIHA.cpp */,
-				AF66C8301E4B33A2006F314E /* AudioPluginUtil.cpp */,
-				AF66C8311E4B33A2006F314E /* AudioPluginUtil.h */,
 				AF66C8321E4B33A2006F314E /* PluginList.h */,
 			);
 			name = src;
@@ -284,7 +284,6 @@
 				AF324A521E49E11E00070F5F /* FiltersBank.cpp in Sources */,
 				AF324A4D1E49E11E00070F5F /* UPCEnvironment.cpp in Sources */,
 				AF324A541E49E11E00070F5F /* HearingLossSim.cpp in Sources */,
-				AF66C8341E4B33A2006F314E /* AudioPluginUtil.cpp in Sources */,
 				AF324A4F1E49E11E00070F5F /* Compressor.cpp in Sources */,
 				AF324A3E1E49E11E00070F5F /* AIR.cpp in Sources */,
 				AF324A431E49E11E00070F5F /* DistanceAttenuator.cpp in Sources */,
@@ -296,6 +295,7 @@
 				AF66C8331E4B33A2006F314E /* audioplugin3DTIHA.cpp in Sources */,
 				AF324A4C1E49E11E00070F5F /* Transform.cpp in Sources */,
 				AF324A4E1E49E11E00070F5F /* Vector3.cpp in Sources */,
+				AF4CAC631E51C66200A892B5 /* AudioPluginUtilHA.cpp in Sources */,
 				AF324A3F1E49E11E00070F5F /* AudioState.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

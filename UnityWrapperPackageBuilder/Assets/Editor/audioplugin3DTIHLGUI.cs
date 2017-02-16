@@ -469,7 +469,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     {
         // Get parameter info
         float newValue;
-        float minValue, maxValue, defaultValue;
+        float minValue, maxValue;
         plugin.GetFloatParameterInfo(parameterName, out minValue, out maxValue, out newValue);
 
         // Set float resolution

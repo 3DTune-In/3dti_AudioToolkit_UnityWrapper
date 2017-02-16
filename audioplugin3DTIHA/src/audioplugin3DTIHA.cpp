@@ -11,7 +11,7 @@
 * Module: 3DTI Toolkit Unity Wrapper
 **/
 
-#include "AudioPluginUtil.h"
+#include "AudioPluginUtilHA.h"
 
 #include <HAHLSimulation/HearingAidSim.h>
 
