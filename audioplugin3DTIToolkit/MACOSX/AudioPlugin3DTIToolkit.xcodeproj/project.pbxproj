@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AF6FA9CE1E3A158C0035B40E /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AF6FA9CD1E3A158C0035B40E /* Info.plist */; };
+		AF391F8A1E55F12800EB4AC6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AF391F891E55F12800EB4AC6 /* Info.plist */; };
+		AF391F8E1E55F14200EB4AC6 /* effect3DTIHA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF391F8B1E55F14200EB4AC6 /* effect3DTIHA.cpp */; };
+		AF391F8F1E55F14200EB4AC6 /* effect3DTIHL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF391F8C1E55F14200EB4AC6 /* effect3DTIHL.cpp */; };
+		AF391F901E55F14200EB4AC6 /* effect3DTISpatializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF391F8D1E55F14200EB4AC6 /* effect3DTISpatializer.cpp */; };
 		AF6FAA221E3A15E10035B40E /* BRIR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF6FA9D21E3A15E10035B40E /* BRIR.cpp */; };
 		AF6FAA231E3A15E10035B40E /* Core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF6FA9D41E3A15E10035B40E /* Core.cpp */; };
 		AF6FAA241E3A15E10035B40E /* Environment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF6FA9D61E3A15E10035B40E /* Environment.cpp */; };
@@ -40,12 +43,14 @@
 		AF6FAA411E3A15E10035B40E /* HearingLossSim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF6FAA121E3A15E10035B40E /* HearingLossSim.cpp */; };
 		AFE88E781DCCB226003505EF /* HRTFCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE88B001DCCB223003505EF /* HRTFCereal.cpp */; };
 		AFE890951DCCB226003505EF /* ILDCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE88E1A1DCCB226003505EF /* ILDCereal.cpp */; };
-		AFE890AB1DCCB3CF003505EF /* audioplugin3DTISpatializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE890A61DCCB3CF003505EF /* audioplugin3DTISpatializer.cpp */; };
 		AFE890AC1DCCB3CF003505EF /* AudioPluginUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE890A81DCCB3CF003505EF /* AudioPluginUtil.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		AF6FA9CD1E3A158C0035B40E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AF391F891E55F12800EB4AC6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AF391F8B1E55F14200EB4AC6 /* effect3DTIHA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = effect3DTIHA.cpp; path = ../src/effect3DTIHA.cpp; sourceTree = "<group>"; };
+		AF391F8C1E55F14200EB4AC6 /* effect3DTIHL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = effect3DTIHL.cpp; path = ../src/effect3DTIHL.cpp; sourceTree = "<group>"; };
+		AF391F8D1E55F14200EB4AC6 /* effect3DTISpatializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = effect3DTISpatializer.cpp; path = ../src/effect3DTISpatializer.cpp; sourceTree = "<group>"; };
 		AF6FA9D21E3A15E10035B40E /* BRIR.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BRIR.cpp; sourceTree = "<group>"; };
 		AF6FA9D31E3A15E10035B40E /* BRIR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRIR.h; sourceTree = "<group>"; };
 		AF6FA9D41E3A15E10035B40E /* Core.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Core.cpp; sourceTree = "<group>"; };
@@ -109,13 +114,12 @@
 		AF6FAA131E3A15E10035B40E /* HearingLossSim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HearingLossSim.h; sourceTree = "<group>"; };
 		AF766FED1DE9F8690003ED20 /* Config.Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.Common.xcconfig; sourceTree = "<group>"; };
 		AF766FEE1DE9F99C0003ED20 /* Config.Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.Debug.xcconfig; sourceTree = "<group>"; };
-		AFE8837F1DCCA8F6003505EF /* AudioPlugin3DTISpatializer.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AudioPlugin3DTISpatializer.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		AFE8837F1DCCA8F6003505EF /* AudioPlugin3DTIToolkit.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AudioPlugin3DTIToolkit.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFE889EC1DCCAC7E003505EF /* Config.Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.Release.xcconfig; sourceTree = "<group>"; };
 		AFE88B001DCCB223003505EF /* HRTFCereal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HRTFCereal.cpp; sourceTree = "<group>"; };
 		AFE88B011DCCB223003505EF /* HRTFCereal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRTFCereal.h; sourceTree = "<group>"; };
 		AFE88E1A1DCCB226003505EF /* ILDCereal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ILDCereal.cpp; sourceTree = "<group>"; };
 		AFE88E1B1DCCB226003505EF /* ILDCereal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILDCereal.h; sourceTree = "<group>"; };
-		AFE890A61DCCB3CF003505EF /* audioplugin3DTISpatializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = audioplugin3DTISpatializer.cpp; path = ../src/audioplugin3DTISpatializer.cpp; sourceTree = "<group>"; };
 		AFE890A71DCCB3CF003505EF /* AudioPluginInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioPluginInterface.h; path = ../src/AudioPluginInterface.h; sourceTree = "<group>"; };
 		AFE890A81DCCB3CF003505EF /* AudioPluginUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AudioPluginUtil.cpp; path = ../src/AudioPluginUtil.cpp; sourceTree = "<group>"; };
 		AFE890A91DCCB3CF003505EF /* AudioPluginUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioPluginUtil.h; path = ../src/AudioPluginUtil.h; sourceTree = "<group>"; };
@@ -133,12 +137,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		AF6FA9CC1E3A158C0035B40E /* AudioPlugin3DTISpatializer */ = {
+		AF391F881E55F12800EB4AC6 /* AudioPlugin3DTIToolkit */ = {
 			isa = PBXGroup;
 			children = (
-				AF6FA9CD1E3A158C0035B40E /* Info.plist */,
+				AF391F891E55F12800EB4AC6 /* Info.plist */,
 			);
-			path = AudioPlugin3DTISpatializer;
+			path = AudioPlugin3DTIToolkit;
 			sourceTree = "<group>";
 		};
 		AF6FA9CF1E3A15E10035B40E /* 3DTI_Toolkit_Core */ = {
@@ -237,7 +241,9 @@
 		AF6FAA481E3A16140035B40E /* src */ = {
 			isa = PBXGroup;
 			children = (
-				AFE890A61DCCB3CF003505EF /* audioplugin3DTISpatializer.cpp */,
+				AF391F8B1E55F14200EB4AC6 /* effect3DTIHA.cpp */,
+				AF391F8C1E55F14200EB4AC6 /* effect3DTIHL.cpp */,
+				AF391F8D1E55F14200EB4AC6 /* effect3DTISpatializer.cpp */,
 				AFE890A71DCCB3CF003505EF /* AudioPluginInterface.h */,
 				AFE890A81DCCB3CF003505EF /* AudioPluginUtil.cpp */,
 				AFE890A91DCCB3CF003505EF /* AudioPluginUtil.h */,
@@ -249,10 +255,10 @@
 		AFE883761DCCA8F6003505EF = {
 			isa = PBXGroup;
 			children = (
+				AF391F881E55F12800EB4AC6 /* AudioPlugin3DTIToolkit */,
 				AF6FAA481E3A16140035B40E /* src */,
 				AFE88A331DCCB223003505EF /* 3DTI_Toolkit_Modules */,
 				AF6FA9CF1E3A15E10035B40E /* 3DTI_Toolkit_Core */,
-				AF6FA9CC1E3A158C0035B40E /* AudioPlugin3DTISpatializer */,
 				AF766FED1DE9F8690003ED20 /* Config.Common.xcconfig */,
 				AF766FEE1DE9F99C0003ED20 /* Config.Debug.xcconfig */,
 				AFE889EC1DCCAC7E003505EF /* Config.Release.xcconfig */,
@@ -263,7 +269,7 @@
 		AFE883801DCCA8F6003505EF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AFE8837F1DCCA8F6003505EF /* AudioPlugin3DTISpatializer.bundle */,
+				AFE8837F1DCCA8F6003505EF /* AudioPlugin3DTIToolkit.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -299,9 +305,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		AFE8837E1DCCA8F6003505EF /* AudioPlugin3DTISpatializer */ = {
+		AFE8837E1DCCA8F6003505EF /* AudioPlugin3DTIToolkit */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AFE883851DCCA8F6003505EF /* Build configuration list for PBXNativeTarget "AudioPlugin3DTISpatializer" */;
+			buildConfigurationList = AFE883851DCCA8F6003505EF /* Build configuration list for PBXNativeTarget "AudioPlugin3DTIToolkit" */;
 			buildPhases = (
 				AFE8837B1DCCA8F6003505EF /* Sources */,
 				AFE8837C1DCCA8F6003505EF /* Frameworks */,
@@ -311,9 +317,9 @@
 			);
 			dependencies = (
 			);
-			name = AudioPlugin3DTISpatializer;
+			name = AudioPlugin3DTIToolkit;
 			productName = AudioPlugin3DTIWrapper;
-			productReference = AFE8837F1DCCA8F6003505EF /* AudioPlugin3DTISpatializer.bundle */;
+			productReference = AFE8837F1DCCA8F6003505EF /* AudioPlugin3DTIToolkit.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -332,7 +338,7 @@
 					};
 				};
 			};
-			buildConfigurationList = AFE8837A1DCCA8F6003505EF /* Build configuration list for PBXProject "AudioPlugin3DTISpatializer" */;
+			buildConfigurationList = AFE8837A1DCCA8F6003505EF /* Build configuration list for PBXProject "AudioPlugin3DTIToolkit" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -344,7 +350,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				AFE8837E1DCCA8F6003505EF /* AudioPlugin3DTISpatializer */,
+				AFE8837E1DCCA8F6003505EF /* AudioPlugin3DTIToolkit */,
 			);
 		};
 /* End PBXProject section */
@@ -354,7 +360,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AF6FA9CE1E3A158C0035B40E /* Info.plist in Resources */,
+				AF391F8A1E55F12800EB4AC6 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -372,13 +378,13 @@
 				AF6FAA3F1E3A15E10035B40E /* FiltersBank.cpp in Sources */,
 				AF6FAA2B1E3A15E10035B40E /* AudioState.cpp in Sources */,
 				AF6FAA281E3A15E10035B40E /* SingleSourceDSP.cpp in Sources */,
+				AF391F8E1E55F14200EB4AC6 /* effect3DTIHA.cpp in Sources */,
 				AF6FAA341E3A15E10035B40E /* FiltersChain.cpp in Sources */,
 				AF6FAA371E3A15E10035B40E /* Quaternion.cpp in Sources */,
 				AF6FAA231E3A15E10035B40E /* Core.cpp in Sources */,
 				AF6FAA291E3A15E10035B40E /* UPCAnechoic.cpp in Sources */,
 				AFE890951DCCB226003505EF /* ILDCereal.cpp in Sources */,
 				AF6FAA2D1E3A15E10035B40E /* Buffer.cpp in Sources */,
-				AFE890AB1DCCB3CF003505EF /* audioplugin3DTISpatializer.cpp in Sources */,
 				AF6FAA331E3A15E10035B40E /* Fig6Algorithm.cpp in Sources */,
 				AF6FAA311E3A15E10035B40E /* Fconvolver.cpp in Sources */,
 				AF6FAA2E1E3A15E10035B40E /* Debugger.cpp in Sources */,
@@ -390,7 +396,9 @@
 				AF6FAA351E3A15E10035B40E /* Magnitudes.cpp in Sources */,
 				AF6FAA251E3A15E10035B40E /* HRTF.cpp in Sources */,
 				AF6FAA321E3A15E10035B40E /* fftsg.cpp in Sources */,
+				AF391F8F1E55F14200EB4AC6 /* effect3DTIHL.cpp in Sources */,
 				AF6FAA3C1E3A15E10035B40E /* Compressor.cpp in Sources */,
+				AF391F901E55F14200EB4AC6 /* effect3DTISpatializer.cpp in Sources */,
 				AF6FAA301E3A15E10035B40E /* FarDistanceEffects.cpp in Sources */,
 				AF6FAA411E3A15E10035B40E /* HearingLossSim.cpp in Sources */,
 				AF6FAA221E3A15E10035B40E /* BRIR.cpp in Sources */,
@@ -494,7 +502,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 4QC5SRCTN7;
-				INFOPLIST_FILE = "$(SRCROOT)/AudioPlugin3DTISpatializer/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/AudioPlugin3DTIToolkit/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				PRODUCT_BUNDLE_IDENTIFIER = es.uma.diana.AudioPlugin3DTIWrapper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -511,7 +519,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 4QC5SRCTN7;
-				INFOPLIST_FILE = "$(SRCROOT)/AudioPlugin3DTISpatializer/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/AudioPlugin3DTIToolkit/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				PRODUCT_BUNDLE_IDENTIFIER = es.uma.diana.AudioPlugin3DTIWrapper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -524,7 +532,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AFE8837A1DCCA8F6003505EF /* Build configuration list for PBXProject "AudioPlugin3DTISpatializer" */ = {
+		AFE8837A1DCCA8F6003505EF /* Build configuration list for PBXProject "AudioPlugin3DTIToolkit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AFE883831DCCA8F6003505EF /* Debug */,
@@ -533,7 +541,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AFE883851DCCA8F6003505EF /* Build configuration list for PBXNativeTarget "AudioPlugin3DTISpatializer" */ = {
+		AFE883851DCCA8F6003505EF /* Build configuration list for PBXNativeTarget "AudioPlugin3DTIToolkit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AFE883861DCCA8F6003505EF /* Debug */,

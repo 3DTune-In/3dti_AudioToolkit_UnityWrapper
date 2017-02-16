@@ -7,13 +7,13 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
-	<string>AudioPlugin3DTIHL</string>
+	<string>AudioPlugin3DTIToolkit</string>
 	<key>CFBundleIdentifier</key>
 	<string>es.uma.diana.AudioPlugin3DTIWrapper</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>AudioPlugin3DTIHL</string>
+	<string>AudioPlugin3DTIToolkit</string>
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
