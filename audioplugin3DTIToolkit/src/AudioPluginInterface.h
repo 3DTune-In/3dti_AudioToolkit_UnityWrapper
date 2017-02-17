@@ -7,16 +7,15 @@
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(_WIN64)
 #   define UNITY_WIN 1
 #elif defined(__MACH__) || defined(__APPLE__)
-// This is changed by 3DTi
-//#   define UNITY_OSX 1
-	#include "TargetConditionals.h"
-	#if TARGET_IPHONE_SIMULATOR
-		#define UNITY_IOS 1	
-	#elif TARGET_OS_IPHONE
-		#define UNITY_IOS 1
-	#elif TARGET_OS_MAC
-		#define UNITY_OSX 1
-	#endif
+// This is added by 3DTi
+#   include "TargetConditionals.h"
+#   if TARGET_IPHONE_SIMULATOR
+#       define UNITY_IOS 1
+#    elif TARGET_OS_IPHONE
+#       define UNITY_IOS 1
+#    elif TARGET_OS_MAC
+#       define UNITY_OSX 1
+#    endif
 //
 #elif defined(__ANDROID__)
 #   define UNITY_ANDROID 1
@@ -112,17 +111,11 @@ typedef signed long long SInt64;
 #else
 #       ifndef SInt32_defined
 #           define SInt32_defined
-// Next condition is added by 3DTi
-#ifndef UNITY_IOS
 typedef signed int SInt32;
-#endif
 #       endif
 #       ifndef UInt32_defined
 #           define UInt32_defined
-// Next condition is added by 3DTi
-#ifndef UNITY_IOS
 typedef unsigned int UInt32;
-#endif
 #       endif
 #       ifndef UInt64_defined
 #           define UInt64_defined

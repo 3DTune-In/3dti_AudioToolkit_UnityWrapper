@@ -2092,3 +2092,57 @@ SET PARAMETER: Scale factor changed to 1
 2: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.04
 1: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.41
 2: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.41
+CREATE: Sample rate set to 44100
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 44100
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+1: SET PARAMETER: Source ID set to 1
+2: SET PARAMETER: Source ID set to 2
+1: SET PARAMETER: Far distance LPF is Enabled
+2: SET PARAMETER: Far distance LPF is Enabled
+1: SET PARAMETER: Distance attenuation is Enabled
+2: SET PARAMETER: Distance attenuation is Enabled
+1: SET PARAMETER: Near distance ILD is Enabled
+2: SET PARAMETER: Near distance ILD is Enabled
+1: SET PARAMETER: HRTF convolution is Enabled
+2: SET PARAMETER: HRTF convolution is Enabled
+1: SET PARAMETER: Run-time HRTF Interpolation switched ON
+2: SET PARAMETER: Run-time HRTF Interpolation switched ON
+1: SET PARAMETER: Listener head radius changed to 0.0875
+2: SET PARAMETER: Listener head radius changed to 0.0875
+1: SET PARAMETER: Custom ITD is Disabled
+2: SET PARAMETER: Custom ITD is Disabled
+1: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+1:           Hash hable size is 7067
+1: SET PARAMETER: ILD Enabled
+2: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+2:           Hash hable size is 7067
+2: SET PARAMETER: ILD Enabled
+1: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+1:            HRIR length is 512
+1:            Sample rate is 44100
+1:            Buffer size is 1024
+1: Core ready!!!!!
+2: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+2:            HRIR length is 512
+2:            Sample rate is 44100
+2:            Buffer size is 1024
+2: Core ready!!!!!
+1: SET PARAMETER: HA Directionality switched OFF for Left ear
+2: SET PARAMETER: HA Directionality switched OFF for Left ear
+1: SET PARAMETER: HA Directionality switched OFF for Right ear
+2: SET PARAMETER: HA Directionality switched OFF for Right ear
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.04
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 9.04
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.41
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 9.41
