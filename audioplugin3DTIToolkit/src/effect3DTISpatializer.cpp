@@ -79,6 +79,7 @@ namespace Spatializer3DTI
 		std::shared_ptr<Binaural::CListener> listener;
 		Binaural::CCore core;
 		bool coreReady;
+		bool coreInitialized=false;
 		float parameters[P_NUM];
 
 		// STRING SERIALIZER		
@@ -92,7 +93,7 @@ namespace Spatializer3DTI
 		int strILDlength;
 
 		// DEBUG LOG
-		bool debugLog;
+		bool debugLog;// = false;
 	};
 
 	/////////////////////////////////////////////////////////////////////
@@ -264,48 +265,45 @@ namespace Spatializer3DTI
         InitParametersFromDefinitions(InternalRegisterEffectDefinition, effectdata->parameters);
 		
 		// DEBUG LOG
-		effectdata->debugLog = false;
+		//effectdata->debugLog = false;
 
-		// Set default audio state
-		// QUESTION: How does this overlaps with explicit call to SetAudioState from C# API? 
-		AudioState_Struct audioState;
-		audioState.sampleRate = (int)state->samplerate;
-		audioState.bufferSize = (int)state->dspbuffersize;
-		effectdata->core.SetAudioState(audioState);
-		WriteLog(state, "CREATE: Sample rate set to ", audioState.sampleRate);
-		WriteLog(state, "CREATE: Buffer size set to ", audioState.bufferSize);
-		
-		// Core and listener initialization
-		effectdata->listener = effectdata->core.CreateListener();
-        if (effectdata->listener != nullptr)
-			WriteLog(state, "CREATE: Listener created successfully", "");
-		else
-			WriteLog(state, "CREATE: ERROR!!!! Listener creation returned null pointer!", "");
-				
-		// Init parameters. Core is not ready until we load the HRTF. ILD is disabled yet...
-		// What about environment?		
-		effectdata->coreReady = false;		
-		effectdata->parameters[PARAM_SCALE_FACTOR] = 1.0f;		
-		effectdata->sourceID = -1;				
-		WriteLog(state, "CREATE: Internal parameters set", "");
+		WriteLog(state, "Creating audio plugin...", "");
 
-		// Create source and set default interpolation method		
-		effectdata->audioSource = effectdata->core.CreateSingleSourceDSP();
-		if (effectdata->audioSource != nullptr)
+		if (!effectdata->coreInitialized)
 		{
-			WriteLog(state, "CREATE: Source created successfully", "");
-			effectdata->audioSource->SetInterpolation(true);
-			effectdata->audioSource->modEnabler.doILD = false;	// ILD disabled before loading ILD data
-			WriteLog(state, "CREATE: Source has been setup", "");
+			// Set default audio state			
+			AudioState_Struct audioState;
+			audioState.sampleRate = (int)state->samplerate;
+			audioState.bufferSize = (int)state->dspbuffersize;
+			effectdata->core.SetAudioState(audioState);
+			
+			// Create listener
+			effectdata->listener = effectdata->core.CreateListener();
+
+			// Init parameters. Core is not ready until we load the HRTF. ILD will be disabled, so we don't need to worry yet
+			effectdata->coreReady = false;
+			effectdata->parameters[PARAM_SCALE_FACTOR] = 1.0f;
+			effectdata->sourceID = -1;
+			
+			// Create source and set default interpolation method		
+			effectdata->audioSource = effectdata->core.CreateSingleSourceDSP();
+			if (effectdata->audioSource != nullptr)
+			{			
+				effectdata->audioSource->SetInterpolation(true);
+				effectdata->audioSource->modEnabler.doILD = false;	// ILD disabled before loading ILD data				
+			}
+
+			// STRING SERIALIZER
+			effectdata->strHRTFserializing = false;
+			effectdata->strHRTFcount = 0;
+			effectdata->strILDserializing = false;
+			effectdata->strILDcount = 0;
+
+			// Core has been initialized
+			effectdata->coreInitialized = true;
 		}
 		else
-			WriteLog(state, "CREATE: ERROR!!!! Source creation returned null pointer!", "");		
-
-		// STRING SERIALIZER
-		effectdata->strHRTFserializing = false;
-		effectdata->strHRTFcount = 0;
-		effectdata->strILDserializing = false;
-		effectdata->strILDcount = 0;
+			WriteLog(state, "Core was already setup. Doing nothing when creating audio plugin.", "");
 
         return UNITY_AUDIODSP_OK;
     }
@@ -313,10 +311,10 @@ namespace Spatializer3DTI
 	/////////////////////////////////////////////////////////////////////
 
     UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ReleaseCallback(UnityAudioEffectState* state)
-    {
-        EffectData* data = state->GetEffectData<EffectData>();
-//        delete data->core;
-        delete data;
+    {		
+		WriteLog(state, "Releasing audio plugin...", "");
+        //EffectData* data = state->GetEffectData<EffectData>();
+        //delete data;
         return UNITY_AUDIODSP_OK;
     }
 
