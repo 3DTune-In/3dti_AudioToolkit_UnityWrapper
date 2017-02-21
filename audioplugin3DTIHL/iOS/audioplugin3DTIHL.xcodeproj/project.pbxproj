@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		AF3249DF1E49E06800070F5F /* audioplugin3DTIHL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF3249DA1E49E06800070F5F /* audioplugin3DTIHL.cpp */; };
-		AF3249E01E49E06800070F5F /* AudioPluginUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF3249DC1E49E06800070F5F /* AudioPluginUtil.cpp */; };
 		AF324A3E1E49E11E00070F5F /* AIR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF3249F81E49E11E00070F5F /* AIR.cpp */; };
 		AF324A3F1E49E11E00070F5F /* AudioState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF3249FA1E49E11E00070F5F /* AudioState.cpp */; };
 		AF324A401E49E11E00070F5F /* BiquadFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF3249FC1E49E11E00070F5F /* BiquadFilter.cpp */; };
@@ -33,6 +32,7 @@
 		AF324A531E49E11E00070F5F /* HearingAidSim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF324A251E49E11E00070F5F /* HearingAidSim.cpp */; };
 		AF324A541E49E11E00070F5F /* HearingLossSim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF324A271E49E11E00070F5F /* HearingLossSim.cpp */; };
 		AF324A5A1E49E11E00070F5F /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = AF324A351E49E11E00070F5F /* README.md */; };
+		AF4CAC661E51C7C000A892B5 /* AudioPluginUtilHL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF4CAC641E51C7C000A892B5 /* AudioPluginUtilHL.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -49,8 +49,6 @@
 
 /* Begin PBXFileReference section */
 		AF3249DA1E49E06800070F5F /* audioplugin3DTIHL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audioplugin3DTIHL.cpp; sourceTree = "<group>"; };
-		AF3249DC1E49E06800070F5F /* AudioPluginUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioPluginUtil.cpp; sourceTree = "<group>"; };
-		AF3249DD1E49E06800070F5F /* AudioPluginUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPluginUtil.h; sourceTree = "<group>"; };
 		AF3249DE1E49E06800070F5F /* PluginList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PluginList.h; sourceTree = "<group>"; };
 		AF3249E11E49E0A400070F5F /* Config.Common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.Common.xcconfig; sourceTree = "<group>"; };
 		AF3249E21E49E0A400070F5F /* Config.Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.Debug.xcconfig; sourceTree = "<group>"; };
@@ -105,8 +103,10 @@
 		AF324A281E49E11E00070F5F /* HearingLossSim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HearingLossSim.h; sourceTree = "<group>"; };
 		AF324A341E49E11E00070F5F /* mainpage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mainpage.h; sourceTree = "<group>"; };
 		AF324A351E49E11E00070F5F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		AF324A5B1E49E37600070F5F /* AudioPluginInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPluginInterface.h; sourceTree = "<group>"; };
+		AF4CAC641E51C7C000A892B5 /* AudioPluginUtilHL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioPluginUtilHL.cpp; sourceTree = "<group>"; };
+		AF4CAC651E51C7C000A892B5 /* AudioPluginUtilHL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPluginUtilHL.h; sourceTree = "<group>"; };
 		AF63299F1E376BA5000B40E8 /* libaudioplugin3DTIHL.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libaudioplugin3DTIHL.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF66C8361E4B4A09006F314E /* AudioPluginInterfaceHL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPluginInterfaceHL.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,10 +123,7 @@
 		AF3249D91E49E06800070F5F /* src */ = {
 			isa = PBXGroup;
 			children = (
-				AF324A5B1E49E37600070F5F /* AudioPluginInterface.h */,
 				AF3249DA1E49E06800070F5F /* audioplugin3DTIHL.cpp */,
-				AF3249DC1E49E06800070F5F /* AudioPluginUtil.cpp */,
-				AF3249DD1E49E06800070F5F /* AudioPluginUtil.h */,
 				AF3249DE1E49E06800070F5F /* PluginList.h */,
 			);
 			name = src;
@@ -210,6 +207,9 @@
 		AF6329961E376BA4000B40E8 = {
 			isa = PBXGroup;
 			children = (
+				AF4CAC641E51C7C000A892B5 /* AudioPluginUtilHL.cpp */,
+				AF4CAC651E51C7C000A892B5 /* AudioPluginUtilHL.h */,
+				AF66C8361E4B4A09006F314E /* AudioPluginInterfaceHL.h */,
 				AF3249E41E49E11E00070F5F /* 3DTI_Toolkit_Core */,
 				AF3249E11E49E0A400070F5F /* Config.Common.xcconfig */,
 				AF3249E21E49E0A400070F5F /* Config.Debug.xcconfig */,
@@ -296,6 +296,7 @@
 				AF324A481E49E11E00070F5F /* FiltersChain.cpp in Sources */,
 				AF324A451E49E11E00070F5F /* Fconvolver.cpp in Sources */,
 				AF324A521E49E11E00070F5F /* FiltersBank.cpp in Sources */,
+				AF4CAC661E51C7C000A892B5 /* AudioPluginUtilHL.cpp in Sources */,
 				AF324A4D1E49E11E00070F5F /* UPCEnvironment.cpp in Sources */,
 				AF324A541E49E11E00070F5F /* HearingLossSim.cpp in Sources */,
 				AF324A4F1E49E11E00070F5F /* Compressor.cpp in Sources */,
@@ -310,7 +311,6 @@
 				AF324A4C1E49E11E00070F5F /* Transform.cpp in Sources */,
 				AF324A4E1E49E11E00070F5F /* Vector3.cpp in Sources */,
 				AF324A3F1E49E11E00070F5F /* AudioState.cpp in Sources */,
-				AF3249E01E49E06800070F5F /* AudioPluginUtil.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

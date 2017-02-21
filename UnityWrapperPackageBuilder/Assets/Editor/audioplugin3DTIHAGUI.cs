@@ -24,7 +24,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     int earsize = 60;   // Size of ear clipart
     float spaceBetweenColumns = 5;
     float spaceBetweenSections = 10;
-    Color selectedColor = Color.gray;
+    //Color selectedColor = Color.gray;
     Color baseColor = Color.white;
 
     // Global variables
@@ -423,7 +423,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     {
         // Get parameter info
         float newValue;
-        float minValue, maxValue, defaultValue;
+        float minValue, maxValue;
         plugin.GetFloatParameterInfo(parameterName, out minValue, out maxValue, out newValue);
 
         // Set float resolution

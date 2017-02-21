@@ -1,0 +1,14 @@
+//
+//  Config.Release.xcconfig
+//  AudioPlugin3DTIWrapper
+//
+//  Created by Diana UMA on 4/11/16.
+//  Copyright © 2016 Grupo Diana. All rights reserved.
+//
+
+
+// 3DTune-In
+#include "Config.Common.xcconfig"
+
+OTHER_CPLUSPLUSFLAGS = $(inherited) -DNDEBUG
+

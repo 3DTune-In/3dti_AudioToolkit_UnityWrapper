@@ -1,0 +1,21 @@
+//
+//  Config.Common.xcconfig
+//  AudioPlugin3DTIWrapper
+//
+//  Created by Diana UMA on 26/11/16.
+//  Copyright © 2016 Grupo Diana. All rights reserved.
+//
+
+_3DTI_MODULES = ../../../../../3DTI_Toolkit_Modules
+_3DTI_CORE = ../../../../../3DTI_Toolkit_Core
+OTHER_CFLAGS = -D_3DTI_AXIS_CONVENTION_UNITY -D_3DTI_ANGLE_CONVENTION_LISTEN
+
+// 3DTune-In 3rd party
+CEREAL = ../../../../../3DTI_Toolkit_Modules/ILD/cereal
+CEREAL_HEADERS = $(CEREAL)/include
+
+// 3DTune-In accumulated
+_3DTI_HEADERS = $(_3DTI_MODULES) $(_3DTI_CORE) $(CEREAL_HEADERS)
+
+// ALL accumulated
+HEADER_SEARCH_PATHS = $(_3DTI_HEADERS)

@@ -1,6 +1,10 @@
 #pragma once
 
+#if UNITY_IOS
+#include "AudioPluginInterfaceHL.h"
+#else
 #include "AudioPluginInterface.h"
+#endif
 
 #include <math.h>
 #include <stdlib.h>

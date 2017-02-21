@@ -11,7 +11,7 @@ public class TestHAAPI : MonoBehaviour {
     float volume = 0.0f;    
     float volIncrement = 0.1f;
     float cutoff = 0.0f;
-    float cutIncrement = 1.0f;
+    float cutIncrement = 5.0f;
 
     // Use this for initialization
     void Start () {
