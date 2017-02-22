@@ -14,17 +14,12 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     // Constant definitions
     const int EAR_RIGHT = 0;
     const int EAR_LEFT = 1;
-    const int DEFAULT_COMP_RATIO = 1;
-    const int DEFAULT_COMP_THRESHOLD = 0;
-    const int DEFAULT_COMP_ATTACK = 20;
-    const int DEFAULT_COMP_RELEASE = 100;
 
     // Look and feel parameters
     int logosize = 80;  // Size of 3DTI logo
     int earsize = 60;   // Size of ear clipart
     float spaceBetweenColumns = 5;
     float spaceBetweenSections = 10;
-    //Color selectedColor = Color.gray;
     Color baseColor = Color.white;
 
     // Global variables
@@ -95,8 +90,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         DrawHeader(plugin);
         DrawEars(plugin);
         DrawDynamicEq(plugin);
-        DrawNoiseGenerator(plugin);
-           
+        DrawNoiseGenerator(plugin);          
         
         //return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG)
         return false;     // DO NOT SHOW DEFAULT CONTROLS
@@ -129,46 +123,13 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         GUILayout.Space(spaceBetweenSections);
     }
 
-
-    /// <summary>
-    ///  Draw preset buttons for left ear
-    /// </summary>
-    /// <param name="plugin"></param>
-    public void SetEQPreset(IAudioEffectPlugin plugin, int ear, ReadOnlyCollection<int> presetGains)
-    {
-        if (ear == EAR_LEFT)
-        {
-            plugin.SetFloatParameter("EQL0", presetGains[0]);
-            plugin.SetFloatParameter("EQL1", presetGains[1]);
-            plugin.SetFloatParameter("EQL2", presetGains[2]);
-            plugin.SetFloatParameter("EQL3", presetGains[3]);
-            plugin.SetFloatParameter("EQL4", presetGains[4]);
-            plugin.SetFloatParameter("EQL5", presetGains[5]);
-            plugin.SetFloatParameter("EQL6", presetGains[6]);
-            plugin.SetFloatParameter("EQL7", presetGains[7]);
-            plugin.SetFloatParameter("EQL8", presetGains[8]);            
-        }
-        else
-        {
-            plugin.SetFloatParameter("EQR0", presetGains[0]);
-            plugin.SetFloatParameter("EQR1", presetGains[1]);
-            plugin.SetFloatParameter("EQR2", presetGains[2]);
-            plugin.SetFloatParameter("EQR3", presetGains[3]);
-            plugin.SetFloatParameter("EQR4", presetGains[4]);
-            plugin.SetFloatParameter("EQR5", presetGains[5]);
-            plugin.SetFloatParameter("EQR6", presetGains[6]);
-            plugin.SetFloatParameter("EQR7", presetGains[7]);
-            plugin.SetFloatParameter("EQR8", presetGains[8]);
-        }
-    }
-
     /// <summary>
     /// Draw ear icons and global on/off switches for both ears
     /// </summary>
     /// <param name="plugin"></param>
     public void DrawEars(IAudioEffectPlugin plugin)
     {        
-        BeginLeftColumn(plugin, ref switchLeftEar, "Left ear", new List<string> { "EQLeftOn", "CompLeftOn"}, false);  
+        BeginLeftColumn(plugin, ref switchLeftEar, "Left ear", new List<string> { "HAL" }, false);  
         {
             GUILayout.BeginHorizontal();
             {
@@ -186,7 +147,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         }
         EndLeftColumn(false);        
 
-        BeginRightColumn(plugin, ref switchRightEar, "Right ear", new List<string> { "EQRightOn", "CompRightOn" }, false);
+        BeginRightColumn(plugin, ref switchRightEar, "Right ear", new List<string> { "HAR" }, false);
         {
             GUILayout.BeginHorizontal();
             {
@@ -205,7 +166,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     }
 
     /// <summary>
-    /// Draw Compressor controls for both ears
+    /// Draw Dynamic EQ controls for both ears
     /// </summary>
     /// <param name="plugin"></param>
     public void DrawDynamicEq(IAudioEffectPlugin plugin)

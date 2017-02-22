@@ -29,6 +29,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
 
     // SOURCE:
     public bool runtimeInterpolateHRTF = true;  // Used by Inspector
+    int lastSourceID = 0;                       // Internal use for debug log
 
     // ADVANCED:
     public float scaleFactor = 1.0f;            // Used by Inspector
@@ -69,19 +70,39 @@ public class API_3DTI_Spatializer : MonoBehaviour
     int SET_HA_DIRECTIONALITY_ON_LEFT = 16;
     int SET_HA_DIRECTIONALITY_ON_RIGHT = 17;
 
+    // Hack for modifying one single AudioSource (TO DO: fix this)
+    bool selectSource = false;
+    AudioSource selectedSource;
+
     /////////////////////////////////////////////////////////////////////
 
     /// <summary>
     /// Automatic setup of Toolkit Core (as read from custom GUI in Unity Inspector)
     /// </summary>
     void Start ()
+    {        
+        StartBinauralSpatializer();
+    }
+
+    /// <summary>
+    /// Sends all configuration to all spatialized sources. 
+    /// Use it each time you reactive an audio source or reactive its "spatialize" attribute. 
+    /// </summary>
+    public void StartBinauralSpatializer(AudioSource source=null)
     {
+        // Select only one AudioSource
+        if (source != null)
+        {
+            selectSource = true;
+            selectedSource = source;
+        }
+
         // Debug log:
         SendWriteDebugLog(debugLog);
 
         // Global setup:
         SetScaleFactor(scaleFactor);
-        SendSourceIDs();    
+        SendSourceIDs();
 
         // Setup modules enabler:
         SetupModulesEnabler();
@@ -94,6 +115,9 @@ public class API_3DTI_Spatializer : MonoBehaviour
 
         // Hearing Aid directionality setup:
         SetupHADirectionality();
+
+        // Go back to default state, affecting all sources
+        selectSource = false;
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -109,67 +133,41 @@ public class API_3DTI_Spatializer : MonoBehaviour
         SetCustomITD(customITDEnabled);
 
         if (!ILDFileName.Equals(""))
-        {
-            //#if (UNITY_ANDROID && !UNITY_EDITOR)
+        {            
             #if (!UNITY_EDITOR)
             SaveResourceAsBinary(ILDFileName, ".3dti-ild", out ILDFileName);                 
             #endif
-			//#if (!UNITY_EDITOR)
-			//GetStreamingAsset(ILDFileName, out ILDFileName);
-			//#endif
             LoadILDBinary(ILDFileName);
         }        
 
         if (!HRTFFileName.Equals(""))
         {
-            //#if (UNITY_ANDROID && !UNITY_EDITOR)
             #if (!UNITY_EDITOR)
             SaveResourceAsBinary(HRTFFileName, ".3dti-hrtf", out HRTFFileName); 
             #endif
-			//#if (!UNITY_EDITOR)
-			//GetStreamingAsset(HRTFFileName, out HRTFFileName);
-			//#endif
             LoadHRTFBinary(HRTFFileName);
         }
     }
-
-	public int GetStreamingAsset(string originalname, out string filename)
-	{
-		// Get file name from full path
-		string namewithoutpath = Path.GetFileName(originalname);
-
-		// Setup name for new file
-		string dataPath = Application.persistentDataPath;
-		string newfilename = dataPath + "/StreamingAssets/" + namewithoutpath;
-		filename = newfilename;
-		return 1;
-	}
 
     /// <summary>
     /// Load one file from resources and save it as a binary file (for Android)
     /// </summary>    
     public int SaveResourceAsBinary(string originalname, string extension, out string filename)
-    {
-        DebugWrite("Storing resource as binary. Original name=" + originalname + ". Extension=" + extension);
-
+    {        
         // Get only file name from full path
-        string namewithoutextension = Path.GetFileNameWithoutExtension(originalname);
-        DebugWrite("Name without extension is: " + namewithoutextension);
+        string namewithoutextension = Path.GetFileNameWithoutExtension(originalname);        
 
         // Setup name for new file
         string dataPath = Application.persistentDataPath;
         string newfilename = dataPath + "/" + namewithoutextension + extension;
-        filename = newfilename;
-        DebugWrite("File name in Android device will be: " + filename);
+        filename = newfilename;        
 
         // Load as asset from resources 
         TextAsset txtAsset = Resources.Load(namewithoutextension) as TextAsset;
         if (txtAsset == null)
-        {
-            DebugWrite("ERROR! Could not load asset from resources");
+        {            
             return -1;  // Could not load asset from resources
-        }
-        DebugWrite("Asset " + namewithoutextension + ".bytes loaded from resources succesfully");
+        }        
 
         // Transform asset into stream and then into byte array
         MemoryStream streamData = new MemoryStream(txtAsset.bytes);
@@ -180,8 +178,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
         {
             writer.Write(dataArray);
         }
-
-        DebugWrite("File created OK");
+        
         return 1;
     }
 
@@ -201,6 +198,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>
     public void SetCustomITD(bool _enable)
     {
+        customITDEnabled = _enable;
         if (_enable)
             SendCommandForAllSources(SET_CUSTOM_ITD, 1.0f);
         else
@@ -214,7 +212,18 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>
     public void LoadHRTFBinary(string filename)
     {
-        List<AudioSource> audioSources = GetAllSpatializedSources();        
+        HRTFFileName = filename;
+
+        List<AudioSource> audioSources;
+        if (selectSource)
+        {
+            audioSources = new List<AudioSource>();
+            audioSources.Add(selectedSource);
+        }
+        else
+        {
+            audioSources = GetAllSpatializedSources();
+        }
 
         foreach (AudioSource source in audioSources)
         {
@@ -225,7 +234,6 @@ public class API_3DTI_Spatializer : MonoBehaviour
                 float chr2Float = (float)chr2Int;
                 source.SetSpatializerFloat(LOAD_3DTI_HRTF, chr2Float);
             }
-            //source.SetSpatializerFloat(LOAD_3DTI_HRTF, 0f);
         }
     }
 
@@ -236,7 +244,18 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>
     public void LoadILDBinary(string filename)
     {
-        List<AudioSource> audioSources = GetAllSpatializedSources();        
+        ILDFileName = filename;
+
+        List<AudioSource> audioSources;
+        if (selectSource)
+        {
+            audioSources = new List<AudioSource>();
+            audioSources.Add(selectedSource);
+        }
+        else
+        {
+            audioSources = GetAllSpatializedSources();
+        }
 
         foreach (AudioSource source in audioSources)
         {
@@ -246,8 +265,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
                 int chr2Int = (int)filename[i];
                 float chr2Float = (float)chr2Int;
                 source.SetSpatializerFloat(LOAD_3DTI_ILD, chr2Float);                
-            }
-            //source.SetSpatializerFloat(LOAD_3DTI_HRTF, 0f);
+            }            
         }
     }
 
@@ -271,10 +289,11 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>
     public void SetSourceInterpolation(bool _run)
     {
-        int value = 1;
-        if (!_run)
-            value = 0;
-        SendCommandForAllSources(SET_HRTF_INTERPOLATION, (float)value);
+        runtimeInterpolateHRTF = _run;        
+        if (!_run)            
+            SendCommandForAllSources(SET_HRTF_INTERPOLATION, 0.0f);
+        else
+            SendCommandForAllSources(SET_HRTF_INTERPOLATION, 1.0f);
     }
 
 
@@ -287,12 +306,16 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>
     public void SendSourceIDs()
     {
-        List<AudioSource> audioSources = GetAllSpatializedSources();
-        int i = 1;
-        foreach (AudioSource source in audioSources)
+        if (!selectSource)
         {
-            source.SetSpatializerFloat(SET_SOURCE_ID, (float)i++);
+            List<AudioSource> audioSources = GetAllSpatializedSources();
+            foreach (AudioSource source in audioSources)
+            {
+                source.SetSpatializerFloat(SET_SOURCE_ID, (float)++lastSourceID);
+            }
         }
+        else
+            selectedSource.SetSpatializerFloat(SET_SOURCE_ID, (float)++lastSourceID);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -302,6 +325,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>
     public void SetScaleFactor (float scale)
     {
+        scaleFactor = scale;
         SendCommandForAllSources(SET_SCALE_FACTOR, scale);
     }
 
@@ -323,6 +347,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>        
     public void SetModFarLPF(bool _enable)
     {
+        modFarLPF = _enable;
         if (_enable)
             SendCommandForAllSources(SET_MOD_FARLPF, 1.0f);
         else
@@ -336,6 +361,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>        
     public void SetModDistanceAttenuation(bool _enable)
     {
+        modDistAtt = _enable;
         if (_enable)
             SendCommandForAllSources(SET_MOD_DISTATT, 1.0f);
         else
@@ -349,6 +375,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>        
     public void SetModILD(bool _enable)
     {
+        modILD = _enable;
         if (_enable)
             SendCommandForAllSources(SET_MOD_ILD, 1.0f);
         else
@@ -362,6 +389,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>        
     public void SetModHRTF(bool _enable)
     {
+        modHRTF = _enable;
         if (_enable)
             SendCommandForAllSources(SET_MOD_HRTF, 1.0f);
         else
@@ -373,6 +401,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>    
     public void SetMagnitudeAnechoicAttenuation(float value)
     {
+        magAnechoicAttenuation = value;
         SendCommandForAllSources(SET_MAG_ANECHATT, value);
     }
 
@@ -381,6 +410,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>    
     public void SetMagnitudeSoundSpeed(float value)
     {
+        magSoundSpeed = value;
         SendCommandForAllSources(SET_MAG_SOUNDSPEED, value);
     }
 
@@ -413,9 +443,15 @@ public class API_3DTI_Spatializer : MonoBehaviour
         }
 
         if (ear == EAR_LEFT)
+        {
+            doHADirectionalityLeft = _enable;
             SendCommandForAllSources(SET_HA_DIRECTIONALITY_ON_LEFT, Bool2Float(_enable));
+        }
         if (ear == EAR_RIGHT)
+        {
+            doHADirectionalityRight = _enable;
             SendCommandForAllSources(SET_HA_DIRECTIONALITY_ON_RIGHT, Bool2Float(_enable));
+        }
     }
 
     /// <summary>
@@ -432,9 +468,15 @@ public class API_3DTI_Spatializer : MonoBehaviour
         }
 
         if (ear == EAR_LEFT)
+        {
+            HADirectionalityExtendLeft = extendDB;
             SendCommandForAllSources(SET_HA_DIRECTIONALITY_EXTEND_LEFT, extendDB);
+        }
         if (ear == EAR_RIGHT)
+        {
+            HADirectionalityExtendRight = extendDB;
             SendCommandForAllSources(SET_HA_DIRECTIONALITY_EXTEND_RIGHT, extendDB);
+        }
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -446,6 +488,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>
     public void SendWriteDebugLog(bool _enable)
     {
+        debugLog = _enable;
         if (_enable)
             SendCommandForAllSources(SET_DEBUG_LOG, 1.0f);
         else
@@ -472,9 +515,14 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>
     public void SendCommandForAllSources(int command, float value)
     {
-        List<AudioSource> audioSources = GetAllSpatializedSources();
-        foreach (AudioSource source in audioSources)
-            source.SetSpatializerFloat(command, value);
+        if (!selectSource)
+        {
+            List<AudioSource> audioSources = GetAllSpatializedSources();
+            foreach (AudioSource source in audioSources)
+                source.SetSpatializerFloat(command, value);
+        }
+        else
+            selectedSource.SetSpatializerFloat(command, value);
     }
 
     /// <summary>

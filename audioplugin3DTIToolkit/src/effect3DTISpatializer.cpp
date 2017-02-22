@@ -79,7 +79,6 @@ namespace Spatializer3DTI
 		std::shared_ptr<Binaural::CListener> listener;
 		Binaural::CCore core;
 		bool coreReady;
-		bool coreInitialized=false;
 		float parameters[P_NUM];
 
 		// STRING SERIALIZER		
@@ -93,7 +92,7 @@ namespace Spatializer3DTI
 		int strILDlength;
 
 		// DEBUG LOG
-		bool debugLog;// = false;
+		bool debugLog = false;
 	};
 
 	/////////////////////////////////////////////////////////////////////
@@ -146,7 +145,7 @@ namespace Spatializer3DTI
 		RegisterParameter(definition, "ScaleFactor", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 1.0f, PARAM_SCALE_FACTOR, "Scale factor for over/under sized scenes");
 		RegisterParameter(definition, "SourceID", "", -1.0f, FLT_MAX, -1.0f, 1.0f, 1.0f, PARAM_SOURCE_ID, "Source ID for debug");
 		RegisterParameter(definition, "CustomITD", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_CUSTOM_ITD, "Enabled custom ITD");
-		RegisterParameter(definition, "HRTFInterp", "", 0.0f, 3.0f, 3.0f, 1.0f, 1.0f, PARAM_HRTF_INTERPOLATION, "HRTF Interpolation method");
+		RegisterParameter(definition, "HRTFInterp", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_HRTF_INTERPOLATION, "HRTF Interpolation method");
 		RegisterParameter(definition, "MODfarLPF", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_FARLPF, "Far distance LPF module enabler");
 		RegisterParameter(definition, "MODDistAtt", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_DISTATT, "Distance attenuation module enabler");
 		RegisterParameter(definition, "MODILD", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_ILD, "Near distance ILD module enabler");
@@ -164,14 +163,6 @@ namespace Spatializer3DTI
 			
         definition.flags |= UnityAudioEffectDefinitionFlags_IsSpatializer;
         return numparams;
-    }
-
-	/////////////////////////////////////////////////////////////////////
-
-    static UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK DistanceAttenuationCallback(UnityAudioEffectState* state, float distanceIn, float attenuationIn, float* attenuationOut)
-    {		
-		*attenuationOut = attenuationIn;
-		return UNITY_AUDIODSP_OK;
     }
 
 	/////////////////////////////////////////////////////////////////////
@@ -252,71 +243,6 @@ namespace Spatializer3DTI
 		sourceTransform.SetPosition(CVector3(sourceMatrix[12] * scale, sourceMatrix[13] * scale, sourceMatrix[14] * scale));		
 		return sourceTransform;
 	}
-
-	/////////////////////////////////////////////////////////////////////
-
-    UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectState* state)
-    {
-        EffectData* effectdata = new EffectData;
-        //memset(effectdata, 0, sizeof(EffectData)); // Prefer not to write 0s on smart_ptr & Core objects.
-        state->effectdata = effectdata;
-        if (IsHostCompatible(state))
-            state->spatializerdata->distanceattenuationcallback = DistanceAttenuationCallback;
-        InitParametersFromDefinitions(InternalRegisterEffectDefinition, effectdata->parameters);
-		
-		// DEBUG LOG
-		//effectdata->debugLog = false;
-
-		WriteLog(state, "Creating audio plugin...", "");
-
-		if (!effectdata->coreInitialized)
-		{
-			// Set default audio state			
-			AudioState_Struct audioState;
-			audioState.sampleRate = (int)state->samplerate;
-			audioState.bufferSize = (int)state->dspbuffersize;
-			effectdata->core.SetAudioState(audioState);
-			
-			// Create listener
-			effectdata->listener = effectdata->core.CreateListener();
-
-			// Init parameters. Core is not ready until we load the HRTF. ILD will be disabled, so we don't need to worry yet
-			effectdata->coreReady = false;
-			effectdata->parameters[PARAM_SCALE_FACTOR] = 1.0f;
-			effectdata->sourceID = -1;
-			
-			// Create source and set default interpolation method		
-			effectdata->audioSource = effectdata->core.CreateSingleSourceDSP();
-			if (effectdata->audioSource != nullptr)
-			{			
-				effectdata->audioSource->SetInterpolation(true);
-				effectdata->audioSource->modEnabler.doILD = false;	// ILD disabled before loading ILD data				
-			}
-
-			// STRING SERIALIZER
-			effectdata->strHRTFserializing = false;
-			effectdata->strHRTFcount = 0;
-			effectdata->strILDserializing = false;
-			effectdata->strILDcount = 0;
-
-			// Core has been initialized
-			effectdata->coreInitialized = true;
-		}
-		else
-			WriteLog(state, "Core was already setup. Doing nothing when creating audio plugin.", "");
-
-        return UNITY_AUDIODSP_OK;
-    }
-
-	/////////////////////////////////////////////////////////////////////
-
-    UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ReleaseCallback(UnityAudioEffectState* state)
-    {		
-		WriteLog(state, "Releasing audio plugin...", "");
-        //EffectData* data = state->GetEffectData<EffectData>();
-        //delete data;
-        return UNITY_AUDIODSP_OK;
-    }
 
 	/////////////////////////////////////////////////////////////////////
 
@@ -438,6 +364,76 @@ namespace Spatializer3DTI
 	}
 
 	/////////////////////////////////////////////////////////////////////
+	// AUDIO PLUGIN SDK FUNCTIONS
+	/////////////////////////////////////////////////////////////////////
+
+	static UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK DistanceAttenuationCallback(UnityAudioEffectState* state, float distanceIn, float attenuationIn, float* attenuationOut)
+	{
+		*attenuationOut = attenuationIn;
+		return UNITY_AUDIODSP_OK;
+	}
+
+	/////////////////////////////////////////////////////////////////////
+
+	UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectState* state)
+	{
+		EffectData* effectdata = new EffectData;
+		//memset(effectdata, 0, sizeof(EffectData)); // Prefer not to write 0s on smart_ptr & Core objects.
+		state->effectdata = effectdata;
+		if (IsHostCompatible(state))
+			state->spatializerdata->distanceattenuationcallback = DistanceAttenuationCallback;
+		InitParametersFromDefinitions(InternalRegisterEffectDefinition, effectdata->parameters);
+
+		// DEBUG LOG
+		//effectdata->debugLog = false;
+
+		WriteLog(state, "Creating audio plugin...", "");
+
+		// Set default audio state			
+		AudioState_Struct audioState;
+		audioState.sampleRate = (int)state->samplerate;
+		audioState.bufferSize = (int)state->dspbuffersize;
+		effectdata->core.SetAudioState(audioState);
+
+		// Create listener
+		effectdata->listener = effectdata->core.CreateListener();
+
+		// Init parameters. Core is not ready until we load the HRTF. ILD will be disabled, so we don't need to worry yet
+		effectdata->coreReady = false;
+		effectdata->parameters[PARAM_SCALE_FACTOR] = 1.0f;
+		effectdata->sourceID = -1;
+
+		// Create source and set default interpolation method		
+		effectdata->audioSource = effectdata->core.CreateSingleSourceDSP();
+		if (effectdata->audioSource != nullptr)
+		{
+			effectdata->audioSource->SetInterpolation(true);
+			effectdata->audioSource->modEnabler.doILD = false;	// ILD disabled before loading ILD data				
+		}
+
+		// STRING SERIALIZER
+		effectdata->strHRTFserializing = false;
+		effectdata->strHRTFcount = 0;
+		effectdata->strILDserializing = false;
+		effectdata->strILDcount = 0;
+
+		WriteLog(state, "Core initialized. Waiting for configuration...", "");
+
+		return UNITY_AUDIODSP_OK;
+	}
+
+	/////////////////////////////////////////////////////////////////////
+
+	UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ReleaseCallback(UnityAudioEffectState* state)
+	{
+		WriteLog(state, "Releasing audio plugin...", "");
+		EffectData* data = state->GetEffectData<EffectData>();
+		delete data;
+		return UNITY_AUDIODSP_OK;
+	}
+
+	/////////////////////////////////////////////////////////////////////
+
 
     UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAudioEffectState* state, int index, float value)
     {
