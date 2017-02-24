@@ -7,7 +7,16 @@
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(_WIN64)
 #   define UNITY_WIN 1
 #elif defined(__MACH__) || defined(__APPLE__)
-#   define UNITY_OSX 1
+// This is added by 3DTi
+#   include "TargetConditionals.h"
+#   if TARGET_IPHONE_SIMULATOR
+#       define UNITY_IOS 1
+#    elif TARGET_OS_IPHONE
+#       define UNITY_IOS 1
+#    elif TARGET_OS_MAC
+#       define UNITY_OSX 1
+#    endif
+//
 #elif defined(__ANDROID__)
 #   define UNITY_ANDROID 1
 #elif defined(__linux__)

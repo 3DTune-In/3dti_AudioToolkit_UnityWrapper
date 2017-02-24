@@ -28,7 +28,6 @@
 		AFD34EB31E51DC89007810A6 /* FarDistanceEffects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD34E741E51DC89007810A6 /* FarDistanceEffects.cpp */; };
 		AFD34EB41E51DC89007810A6 /* Fconvolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD34E761E51DC89007810A6 /* Fconvolver.cpp */; };
 		AFD34EB51E51DC89007810A6 /* fftsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD34E781E51DC89007810A6 /* fftsg.cpp */; };
-		AFD34EB61E51DC89007810A6 /* Fig6Algorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD34E7A1E51DC89007810A6 /* Fig6Algorithm.cpp */; };
 		AFD34EB71E51DC89007810A6 /* FiltersChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD34E7C1E51DC89007810A6 /* FiltersChain.cpp */; };
 		AFD34EB81E51DC89007810A6 /* Magnitudes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD34E7E1E51DC89007810A6 /* Magnitudes.cpp */; };
 		AFD34EBA1E51DC89007810A6 /* Quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD34E821E51DC89007810A6 /* Quaternion.cpp */; };
@@ -43,6 +42,7 @@
 		AFD34EC31E51DC89007810A6 /* HearingLossSim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD34E961E51DC89007810A6 /* HearingLossSim.cpp */; };
 		AFD3524A1E51DCF2007810A6 /* HRTFCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD34F971E51DCF0007810A6 /* HRTFCereal.cpp */; };
 		AFD353021E51DCF3007810A6 /* ILDCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD352181E51DCF2007810A6 /* ILDCereal.cpp */; };
+		AFEBCA311E607D210035963B /* Fig6Algorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFEBCA2F1E607D210035963B /* Fig6Algorithm.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -104,8 +104,6 @@
 		AFD34E771E51DC89007810A6 /* Fconvolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fconvolver.h; sourceTree = "<group>"; };
 		AFD34E781E51DC89007810A6 /* fftsg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fftsg.cpp; sourceTree = "<group>"; };
 		AFD34E791E51DC89007810A6 /* fftsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fftsg.h; sourceTree = "<group>"; };
-		AFD34E7A1E51DC89007810A6 /* Fig6Algorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Fig6Algorithm.cpp; sourceTree = "<group>"; };
-		AFD34E7B1E51DC89007810A6 /* Fig6Algorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fig6Algorithm.h; sourceTree = "<group>"; };
 		AFD34E7C1E51DC89007810A6 /* FiltersChain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FiltersChain.cpp; sourceTree = "<group>"; };
 		AFD34E7D1E51DC89007810A6 /* FiltersChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FiltersChain.h; sourceTree = "<group>"; };
 		AFD34E7E1E51DC89007810A6 /* Magnitudes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Magnitudes.cpp; sourceTree = "<group>"; };
@@ -134,6 +132,8 @@
 		AFD34F981E51DCF0007810A6 /* HRTFCereal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRTFCereal.h; sourceTree = "<group>"; };
 		AFD352181E51DCF2007810A6 /* ILDCereal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ILDCereal.cpp; sourceTree = "<group>"; };
 		AFD352191E51DCF2007810A6 /* ILDCereal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILDCereal.h; sourceTree = "<group>"; };
+		AFEBCA2F1E607D210035963B /* Fig6Algorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Fig6Algorithm.cpp; sourceTree = "<group>"; };
+		AFEBCA301E607D210035963B /* Fig6Algorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fig6Algorithm.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -239,8 +239,6 @@
 				AFD34E771E51DC89007810A6 /* Fconvolver.h */,
 				AFD34E781E51DC89007810A6 /* fftsg.cpp */,
 				AFD34E791E51DC89007810A6 /* fftsg.h */,
-				AFD34E7A1E51DC89007810A6 /* Fig6Algorithm.cpp */,
-				AFD34E7B1E51DC89007810A6 /* Fig6Algorithm.h */,
 				AFD34E7C1E51DC89007810A6 /* FiltersChain.cpp */,
 				AFD34E7D1E51DC89007810A6 /* FiltersChain.h */,
 				AFD34E7E1E51DC89007810A6 /* Magnitudes.cpp */,
@@ -260,6 +258,8 @@
 		AFD34E8B1E51DC89007810A6 /* HAHLSimulation */ = {
 			isa = PBXGroup;
 			children = (
+				AFEBCA2F1E607D210035963B /* Fig6Algorithm.cpp */,
+				AFEBCA301E607D210035963B /* Fig6Algorithm.h */,
 				AFD34E8C1E51DC89007810A6 /* Compressor.cpp */,
 				AFD34E8D1E51DC89007810A6 /* Compressor.h */,
 				AFD34E8E1E51DC89007810A6 /* DynamicEqualizer.cpp */,
@@ -363,7 +363,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				AFD34EAF1E51DC89007810A6 /* BiquadFilter.cpp in Sources */,
-				AFD34EB61E51DC89007810A6 /* Fig6Algorithm.cpp in Sources */,
 				AFD34EBF1E51DC89007810A6 /* DynamicEqualizer.cpp in Sources */,
 				AFD34EB81E51DC89007810A6 /* Magnitudes.cpp in Sources */,
 				AFD34EB51E51DC89007810A6 /* fftsg.cpp in Sources */,
@@ -384,6 +383,7 @@
 				AFD34EA81E51DC89007810A6 /* HRTF.cpp in Sources */,
 				AFD34EBE1E51DC89007810A6 /* Compressor.cpp in Sources */,
 				AFD34EAD1E51DC89007810A6 /* AIR.cpp in Sources */,
+				AFEBCA311E607D210035963B /* Fig6Algorithm.cpp in Sources */,
 				AFD34EB21E51DC89007810A6 /* DistanceAttenuator.cpp in Sources */,
 				AFD34EB11E51DC89007810A6 /* Debugger.cpp in Sources */,
 				AFD34EB01E51DC89007810A6 /* Buffer.cpp in Sources */,

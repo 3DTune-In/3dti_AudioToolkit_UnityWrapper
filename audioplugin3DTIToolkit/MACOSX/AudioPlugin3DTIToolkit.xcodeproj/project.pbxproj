@@ -28,7 +28,6 @@
 		AF6FAA301E3A15E10035B40E /* FarDistanceEffects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF6FA9F01E3A15E10035B40E /* FarDistanceEffects.cpp */; };
 		AF6FAA311E3A15E10035B40E /* Fconvolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF6FA9F21E3A15E10035B40E /* Fconvolver.cpp */; };
 		AF6FAA321E3A15E10035B40E /* fftsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF6FA9F41E3A15E10035B40E /* fftsg.cpp */; };
-		AF6FAA331E3A15E10035B40E /* Fig6Algorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF6FA9F61E3A15E10035B40E /* Fig6Algorithm.cpp */; };
 		AF6FAA341E3A15E10035B40E /* FiltersChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF6FA9F81E3A15E10035B40E /* FiltersChain.cpp */; };
 		AF6FAA351E3A15E10035B40E /* Magnitudes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF6FA9FA1E3A15E10035B40E /* Magnitudes.cpp */; };
 		AF6FAA371E3A15E10035B40E /* Quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF6FA9FE1E3A15E10035B40E /* Quaternion.cpp */; };
@@ -44,6 +43,7 @@
 		AFE88E781DCCB226003505EF /* HRTFCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE88B001DCCB223003505EF /* HRTFCereal.cpp */; };
 		AFE890951DCCB226003505EF /* ILDCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE88E1A1DCCB226003505EF /* ILDCereal.cpp */; };
 		AFE890AC1DCCB3CF003505EF /* AudioPluginUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE890A81DCCB3CF003505EF /* AudioPluginUtil.cpp */; };
+		AFEBCA2E1E607C130035963B /* Fig6Algorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFEBCA2C1E607C130035963B /* Fig6Algorithm.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,8 +86,6 @@
 		AF6FA9F31E3A15E10035B40E /* Fconvolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fconvolver.h; sourceTree = "<group>"; };
 		AF6FA9F41E3A15E10035B40E /* fftsg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fftsg.cpp; sourceTree = "<group>"; };
 		AF6FA9F51E3A15E10035B40E /* fftsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fftsg.h; sourceTree = "<group>"; };
-		AF6FA9F61E3A15E10035B40E /* Fig6Algorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Fig6Algorithm.cpp; sourceTree = "<group>"; };
-		AF6FA9F71E3A15E10035B40E /* Fig6Algorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fig6Algorithm.h; sourceTree = "<group>"; };
 		AF6FA9F81E3A15E10035B40E /* FiltersChain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FiltersChain.cpp; sourceTree = "<group>"; };
 		AF6FA9F91E3A15E10035B40E /* FiltersChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FiltersChain.h; sourceTree = "<group>"; };
 		AF6FA9FA1E3A15E10035B40E /* Magnitudes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Magnitudes.cpp; sourceTree = "<group>"; };
@@ -124,6 +122,8 @@
 		AFE890A81DCCB3CF003505EF /* AudioPluginUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AudioPluginUtil.cpp; path = ../src/AudioPluginUtil.cpp; sourceTree = "<group>"; };
 		AFE890A91DCCB3CF003505EF /* AudioPluginUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioPluginUtil.h; path = ../src/AudioPluginUtil.h; sourceTree = "<group>"; };
 		AFE890AA1DCCB3CF003505EF /* PluginList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginList.h; path = ../src/PluginList.h; sourceTree = "<group>"; };
+		AFEBCA2C1E607C130035963B /* Fig6Algorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Fig6Algorithm.cpp; sourceTree = "<group>"; };
+		AFEBCA2D1E607C130035963B /* Fig6Algorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fig6Algorithm.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,8 +201,6 @@
 				AF6FA9F31E3A15E10035B40E /* Fconvolver.h */,
 				AF6FA9F41E3A15E10035B40E /* fftsg.cpp */,
 				AF6FA9F51E3A15E10035B40E /* fftsg.h */,
-				AF6FA9F61E3A15E10035B40E /* Fig6Algorithm.cpp */,
-				AF6FA9F71E3A15E10035B40E /* Fig6Algorithm.h */,
 				AF6FA9F81E3A15E10035B40E /* FiltersChain.cpp */,
 				AF6FA9F91E3A15E10035B40E /* FiltersChain.h */,
 				AF6FA9FA1E3A15E10035B40E /* Magnitudes.cpp */,
@@ -222,6 +220,8 @@
 		AF6FAA071E3A15E10035B40E /* HAHLSimulation */ = {
 			isa = PBXGroup;
 			children = (
+				AFEBCA2C1E607C130035963B /* Fig6Algorithm.cpp */,
+				AFEBCA2D1E607C130035963B /* Fig6Algorithm.h */,
 				AF6FAA081E3A15E10035B40E /* Compressor.cpp */,
 				AF6FAA091E3A15E10035B40E /* Compressor.h */,
 				AF6FAA0A1E3A15E10035B40E /* DynamicEqualizer.cpp */,
@@ -385,7 +385,6 @@
 				AF6FAA291E3A15E10035B40E /* UPCAnechoic.cpp in Sources */,
 				AFE890951DCCB226003505EF /* ILDCereal.cpp in Sources */,
 				AF6FAA2D1E3A15E10035B40E /* Buffer.cpp in Sources */,
-				AF6FAA331E3A15E10035B40E /* Fig6Algorithm.cpp in Sources */,
 				AF6FAA311E3A15E10035B40E /* Fconvolver.cpp in Sources */,
 				AF6FAA2E1E3A15E10035B40E /* Debugger.cpp in Sources */,
 				AF6FAA261E3A15E10035B40E /* ILD.cpp in Sources */,
@@ -393,6 +392,7 @@
 				AFE88E781DCCB226003505EF /* HRTFCereal.cpp in Sources */,
 				AF6FAA2A1E3A15E10035B40E /* AIR.cpp in Sources */,
 				AF6FAA2C1E3A15E10035B40E /* BiquadFilter.cpp in Sources */,
+				AFEBCA2E1E607C130035963B /* Fig6Algorithm.cpp in Sources */,
 				AF6FAA351E3A15E10035B40E /* Magnitudes.cpp in Sources */,
 				AF6FAA251E3A15E10035B40E /* HRTF.cpp in Sources */,
 				AF6FAA321E3A15E10035B40E /* fftsg.cpp in Sources */,
