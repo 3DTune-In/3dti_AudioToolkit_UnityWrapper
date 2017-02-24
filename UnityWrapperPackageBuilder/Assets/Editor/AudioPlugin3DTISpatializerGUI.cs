@@ -221,7 +221,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
         // ILD:
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Load Near Field Filter", GUILayout.ExpandWidth(false), GUILayout.Height(40)))
+        if (GUILayout.Button("Load ILD Near Field Filter", GUILayout.ExpandWidth(false), GUILayout.Height(40)))
             ButtonLoadILD();
         CreateDragDropBox(ref toolkit.ILDFileName);
         GUILayout.EndHorizontal();
@@ -280,7 +280,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
                 toolkit.SetModFarLPF(toolkit.modFarLPF);
             if (CreateToggle(ref toolkit.modDistAtt, "Distance attenuation"))
                 toolkit.SetModDistanceAttenuation(toolkit.modDistAtt);
-            if (CreateToggle(ref toolkit.modILD, "Near Field Filter"))
+            if (CreateToggle(ref toolkit.modILD, "ILD Near Field Filter"))
                 toolkit.SetModILD(toolkit.modILD);
             if (CreateToggle(ref toolkit.modHRTF, "HRTF convolution"))
                 toolkit.SetModHRTF(toolkit.modHRTF);

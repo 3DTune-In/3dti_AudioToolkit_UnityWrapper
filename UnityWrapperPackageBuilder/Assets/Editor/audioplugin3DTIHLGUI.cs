@@ -36,10 +36,10 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     Color selectedColor = Color.gray;
     Color baseColor = Color.white;
 
-    // Global variables
-    bool switchLeftEar = true;
-    bool switchRightEar = true;
-    bool advancedControls = false;
+    // Global variables 
+    bool switchLeftEar = false;     
+    bool switchRightEar = false;    
+    bool advancedControls = false;  
     bool compressorFirst = true;
     bool eqLeftOn = true;
     bool eqRightOn = true;
@@ -134,6 +134,18 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         // Set presets
         SetEQPreset(plugin, EAR_LEFT, GAINS_PRESET_PLAIN);
         SetEQPreset(plugin, EAR_RIGHT, GAINS_PRESET_PLAIN);
+
+        // Set global switches
+        if (!switchLeftEar)
+        {
+            eqLeftOn = false;
+            compressorLeftOn = false;
+        }
+        if (!switchRightEar)
+        {
+            eqRightOn = false;
+            compressorRightOn = false;
+        }
 
         // Boolean switches
         plugin.SetFloatParameter("EQLeftOn", Bool2Float(eqLeftOn));

@@ -36,7 +36,6 @@
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.cpp" />
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Fconvolver.cpp" />
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\fftsg.cpp" />
-    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Fig6Algorithm.cpp" />
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\FiltersChain.cpp" />
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Magnitudes.cpp" />
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Quaternion.cpp" />
@@ -46,6 +45,7 @@
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\Compressor.cpp" />
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\DynamicEqualizer.cpp" />
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\EnvelopeDetector.cpp" />
+    <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\Fig6Algorithm.cpp" />
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\FiltersBank.cpp" />
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.cpp" />
     <ClCompile Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingLossSim.cpp" />
@@ -75,7 +75,6 @@
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Fconvolver.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\fftsg.h" />
-    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Fig6Algorithm.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\FiltersChain.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Magnitudes.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Quaternion.h" />
@@ -85,6 +84,7 @@
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\Compressor.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\DynamicEqualizer.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\EnvelopeDetector.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\Fig6Algorithm.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\FiltersBank.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingLossSim.h" />

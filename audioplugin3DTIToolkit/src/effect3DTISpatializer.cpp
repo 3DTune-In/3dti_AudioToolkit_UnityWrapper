@@ -250,20 +250,18 @@ namespace Spatializer3DTI
 	{
 		EffectData* data = state->GetEffectData<EffectData>();
 
-		// Load HRTF
-		CHRTF myHead = HRTF::CreateFrom3dti(data->strHRTFpath, state->dspbuffersize, state->samplerate, 5);		
-		if (myHead.GetHRIRLength() != 0)		// TO DO: Improve this error check
+		// Load HRTF		
+		HRTF::CreateFrom3dti(data->strHRTFpath, data->listener);		
+		if (data->listener->GetHRTF()->GetHRIRLength() != 0)
 		{
-			data->listener->LoadHRTF(std::move(myHead));
+			//data->listener->LoadHRTF(std::move(myHead));
 			WriteLog(state, "LOAD HRTF: HRTF loaded from binary 3DTI file: ", data->strHRTFpath);
-			WriteLog(state, "           HRIR length is ", data->listener->GetHRTF().GetHRIRLength());
+			WriteLog(state, "           HRIR length is ", data->listener->GetHRTF()->GetHRIRLength());
 			WriteLog(state, "           Sample rate is ", state->samplerate);
 			WriteLog(state, "           Buffer size is ", state->dspbuffersize);
 
 			// Free memory
 			free(data->strHRTFpath);
-			CHRTF empty;
-			myHead = empty;
 
 			return TLoadResult::RESULT_LOAD_OK;
 		}
@@ -344,7 +342,7 @@ namespace Spatializer3DTI
 		EffectData* data = state->GetEffectData<EffectData>();
 		
 		// Audio state:
-		AudioState_Struct audioState = data->core.GetAudioState();
+		Common::AudioState_Struct audioState = data->core.GetAudioState();
 		WriteLog(state, "CREATE: Sample rate set to ", audioState.sampleRate);
 		WriteLog(state, "CREATE: Buffer size set to ", audioState.bufferSize);
 
@@ -390,9 +388,10 @@ namespace Spatializer3DTI
 		WriteLog(state, "Creating audio plugin...", "");
 
 		// Set default audio state			
-		AudioState_Struct audioState;
+		Common::AudioState_Struct audioState;
 		audioState.sampleRate = (int)state->samplerate;
 		audioState.bufferSize = (int)state->dspbuffersize;
+		audioState.HRTF_resamplingStep = 15;
 		effectdata->core.SetAudioState(audioState);
 
 		// Create listener

@@ -22,11 +22,11 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     float spaceBetweenSections = 10;
     Color baseColor = Color.white;
 
-    // Global variables
+    // Global variables 
     bool switchLeftEar = false;
     bool switchRightEar = false;
-    bool noiseBefore = true;
-    bool noiseAfter = true;
+    bool noiseBefore = false;
+    bool noiseAfter = false;
     bool dynamicEq = true;
     bool interpolation = true;
 
@@ -100,8 +100,12 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     public void InitializePlugin(IAudioEffectPlugin plugin)
     {
         // Boolean switches
-        plugin.SetFloatParameter("HA3DTI_Process_LeftOn", Bool2Float(switchLeftEar));
-        plugin.SetFloatParameter("HA3DTI_Process_RightOn", Bool2Float(switchRightEar));
+        plugin.SetFloatParameter("HAL", Bool2Float(switchLeftEar));
+        plugin.SetFloatParameter("HAR", Bool2Float(switchRightEar));
+        plugin.SetFloatParameter("NOISEBEF", Bool2Float(noiseBefore));
+        plugin.SetFloatParameter("NOISEAFT", Bool2Float(noiseAfter));
+        plugin.SetFloatParameter("DYNEQ", Bool2Float(dynamicEq));
+        plugin.SetFloatParameter("EQINT", Bool2Float(interpolation));
 
         initDone = true;
     }
@@ -181,26 +185,35 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
             BeginLeftColumn();
             {
                GUILayout.Label("LEFT EAR");
-               
-                if (dynamicEq) {
-                    GUILayout.BeginHorizontal();
-                    BeginCentralColumn("Level 0");
-                }
-               else { BeginCentralColumn(""); }
-               { 
+
+                // First level (both in Dynamic and Standard EQ)
+                {
+                    if (dynamicEq)
+                    {
+                        GUILayout.BeginHorizontal();
+                        BeginCentralColumn("Level 0");
+                    }
+                    else
+                    {
+                        BeginCentralColumn("");
+                    }
+
                     CreateParameterSlider(plugin, "DEQL0B0L", "125Hz:", true, "dB");
-                    CreateParameterSlider(plugin, "DEQL0B1L", "250Hz",  true, "dB");
-                    CreateParameterSlider(plugin, "DEQL0B2L", "500Hz",  true, "dB");
-                    CreateParameterSlider(plugin, "DEQL0B3L", "1kHz",   true, "dB");
-                    CreateParameterSlider(plugin, "DEQL0B4L", "2kHz",   true, "dB");
-                    CreateParameterSlider(plugin, "DEQL0B5L", "4kHz",   true, "dB");
-                    CreateParameterSlider(plugin, "DEQL0B6L", "8kHz",   true, "dB");
-              }
-              EndCentralColumn();
+                    CreateParameterSlider(plugin, "DEQL0B1L", "250Hz", true, "dB");
+                    CreateParameterSlider(plugin, "DEQL0B2L", "500Hz", true, "dB");
+                    CreateParameterSlider(plugin, "DEQL0B3L", "1kHz", true, "dB");
+                    CreateParameterSlider(plugin, "DEQL0B4L", "2kHz", true, "dB");
+                    CreateParameterSlider(plugin, "DEQL0B5L", "4kHz", true, "dB");
+                    CreateParameterSlider(plugin, "DEQL0B6L", "8kHz", true, "dB");
+
+                    EndCentralColumn();
+                }
+
+                // Levels 1 and 2 (only in dynamic EQ)
                 if (dynamicEq)
                 {
-                  BeginCentralColumn("Level 1");
-                  {
+                    BeginCentralColumn("Level 1");
+                    {
                         CreateParameterSlider(plugin, "DEQL1B0L", "125Hz:", false, "dB");
                         CreateParameterSlider(plugin, "DEQL1B1L", "250Hz", true, "dB");
                         CreateParameterSlider(plugin, "DEQL1B2L", "500Hz", true, "dB");
@@ -208,12 +221,12 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
                         CreateParameterSlider(plugin, "DEQL1B4L", "2kHz", true, "dB");
                         CreateParameterSlider(plugin, "DEQL1B5L", "4kHz", true, "dB");
                         CreateParameterSlider(plugin, "DEQL1B6L", "8kHz", true, "dB");
-                 }
-                EndCentralColumn();
+                    }
+                    EndCentralColumn();
 
-                BeginCentralColumn("Level 2");
-                {
-                CreateParameterSlider(plugin, "DEQL2B0L", "125Hz:", true, "dB");
+                    BeginCentralColumn("Level 2");
+                    {
+                        CreateParameterSlider(plugin, "DEQL2B0L", "125Hz:", true, "dB");
                         CreateParameterSlider(plugin, "DEQL2B1L", "250Hz", true, "dB");
                         CreateParameterSlider(plugin, "DEQL2B2L", "500Hz", true, "dB");
                         CreateParameterSlider(plugin, "DEQL2B3L", "1kHz", true, "dB");
@@ -221,22 +234,21 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
                         CreateParameterSlider(plugin, "DEQL2B5L", "4kHz", true, "dB");
                         CreateParameterSlider(plugin, "DEQL2B6L", "8kHz", true, "dB");
                      }
-                      EndCentralColumn();
-
+                     EndCentralColumn();
                    
-                    GUILayout.EndHorizontal();
-                    BeginCentralColumn("Level Threshold");
-                    {                       
+                     GUILayout.EndHorizontal();
+                     BeginCentralColumn("Level Threshold");
+                     {                       
                         CreateParameterSlider(plugin, "THRL0", "Threshold 1", false, "dBfs");
                         CreateParameterSlider(plugin, "THRL1", "Threshold 2 ", false, "dBfs");
                         CreateParameterSlider(plugin, "THRL2", "Threshold 3 ", false, "dBfs");
-                    }
-                    EndCentralColumn();
-                    BeginCentralColumn("Attack Release");
-                    {                       
+                     }
+                     EndCentralColumn();
+                     BeginCentralColumn("Attack Release");
+                     {                       
                         CreateParameterSlider(plugin, "ATREL", "Atack Release", false, "ms");
-                    }
-                    EndCentralColumn();
+                     }
+                     EndCentralColumn();
                 }
             }
             EndLeftColumn(true, false);
@@ -245,13 +257,18 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
             {
                 GUILayout.Label("RIGHT EAR");
 
-                if (dynamicEq) {
-                    GUILayout.BeginHorizontal();
-                    BeginCentralColumn("Level 0");
+                // First level (both in Dynamic and Standard EQ)
+                {
+                    if (dynamicEq)
+                    {
+                        GUILayout.BeginHorizontal();
+                        BeginCentralColumn("Level 0");
+                    }
+                    else
+                    {
+                        BeginCentralColumn("");
+                    }
                     
-                }
-                else { BeginCentralColumn(""); }
-                { 
                     CreateParameterSlider(plugin, "DEQL0B0R", "125Hz:", true, "dB");
                     CreateParameterSlider(plugin, "DEQL0B1R", "250Hz", true, "dB");
                     CreateParameterSlider(plugin, "DEQL0B2R", "500Hz", true, "dB");
@@ -259,13 +276,15 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
                     CreateParameterSlider(plugin, "DEQL0B4R", "2kHz", true, "dB");
                     CreateParameterSlider(plugin, "DEQL0B5R", "4kHz", true, "dB");
                     CreateParameterSlider(plugin, "DEQL0B6R", "8kHz", true, "dB");
-
+                    
+                    EndCentralColumn();
                 }
-                EndCentralColumn();
+
+                // Levels 1 and 2 (only in dynamic EQ)
                 if (dynamicEq)
                 {
-                     BeginCentralColumn("Level 1");
-                     {                                           
+                    BeginCentralColumn("Level 1");
+                    {                                           
                         CreateParameterSlider(plugin, "DEQL1B0R", "125Hz:", true, "dB");
                         CreateParameterSlider(plugin, "DEQL1B1R", "250Hz", true, "dB");
                         CreateParameterSlider(plugin, "DEQL1B2R", "500Hz", true, "dB");
@@ -278,8 +297,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
 
                     BeginCentralColumn("Level 2");
                     {
-                   
-                    CreateParameterSlider(plugin, "DEQL2B0R", "125Hz:", true, "dB");
+                        CreateParameterSlider(plugin, "DEQL2B0R", "125Hz:", true, "dB");
                         CreateParameterSlider(plugin, "DEQL2B1R", "250Hz", true, "dB");
                         CreateParameterSlider(plugin, "DEQL2B2R", "500Hz", true, "dB");
                         CreateParameterSlider(plugin, "DEQL2B3R", "1kHz", true, "dB");
@@ -287,7 +305,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
                         CreateParameterSlider(plugin, "DEQL2B5R", "4kHz", true, "dB");
                         CreateParameterSlider(plugin, "DEQL2B6R", "8kHz", true, "dB");
                     }
-                     EndCentralColumn();
+                    EndCentralColumn();
 
                     GUILayout.EndHorizontal();
 
@@ -300,14 +318,14 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
                     EndCentralColumn();
                     BeginCentralColumn("Attack Release");
                     {
-                    CreateParameterSlider(plugin, "ATRER", "Atack Release", false, "ms");
+                        CreateParameterSlider(plugin, "ATRER", "Atack Release", false, "ms");
                     }
                     EndCentralColumn();
                 }
                 EndRightColumn(true, false);
             }
         }
-    EndCentralColumn();
+        EndCentralColumn();
     }
 
     /// <summary>
@@ -353,13 +371,14 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
             GUILayout.BeginHorizontal();
             {
                 GUILayout.Label(name);
-                valueString = GUILayout.TextField(variable.ToString(decimalDigits), GUILayout.ExpandWidth(false));
+                valueString = variable.ToString(decimalDigits);
+                valueString = GUILayout.TextField(valueString, GUILayout.ExpandWidth(false));
                 GUILayout.Label(units, GUILayout.ExpandWidth(false));
             }
             GUILayout.EndHorizontal();
 
             float newValue;
-            bool valid = float.TryParse(valueString, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out newValue);
+            bool valid = float.TryParse(valueString, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out newValue);            
             if (valid)
                 variable = newValue;
 
@@ -411,6 +430,14 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
             return 1.0f;
         else
             return 0.0f;
+    }
+
+    bool Float2Bool(float v)
+    {
+        if (v == 0.0f)
+            return false;
+        else
+            return true;
     }
 
     public void BeginLeftColumn(IAudioEffectPlugin plugin, ref bool enable, string title, List<string> switchParameters, bool earDisable=true)

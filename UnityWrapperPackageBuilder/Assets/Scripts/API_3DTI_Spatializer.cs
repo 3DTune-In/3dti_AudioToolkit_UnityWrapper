@@ -84,11 +84,15 @@ public class API_3DTI_Spatializer : MonoBehaviour
         StartBinauralSpatializer();
     }
 
+    /////////////////////////////////////////////////////////////////////
+    // GLOBAL METHODS
+    /////////////////////////////////////////////////////////////////////
+    
     /// <summary>
     /// Sends all configuration to all spatialized sources. 
     /// Use it each time you reactive an audio source or reactive its "spatialize" attribute. 
     /// </summary>
-    public void StartBinauralSpatializer(AudioSource source=null)
+    public bool StartBinauralSpatializer(AudioSource source=null)
     {
         // Select only one AudioSource
         if (source != null)
@@ -98,26 +102,28 @@ public class API_3DTI_Spatializer : MonoBehaviour
         }
 
         // Debug log:
-        SendWriteDebugLog(debugLog);
+        if (!SendWriteDebugLog(debugLog))   return false;
 
         // Global setup:
-        SetScaleFactor(scaleFactor);
-        SendSourceIDs();
+        if (!SetScaleFactor(scaleFactor))   return false;
+        if (!SendSourceIDs())               return false;
 
         // Setup modules enabler:
-        SetupModulesEnabler();
+        if (!SetupModulesEnabler()) return false;
 
         // Source setup:
-        SetupSource();
+        if (!SetupSource()) return false;
 
         // Listener setup:
-        SetupListener();
+        if (!SetupListener()) return false;
 
         // Hearing Aid directionality setup:
-        SetupHADirectionality();
+        if (!SetupHADirectionality()) return false;
 
         // Go back to default state, affecting all sources
         selectSource = false;
+
+        return true;
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -127,26 +133,28 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Setup all listener parameters
     /// </summary>
-    public void SetupListener()
+    public bool SetupListener()
     {
-        SetHeadRadius(listenerHeadRadius);
-        SetCustomITD(customITDEnabled);
+        if (!SetHeadRadius(listenerHeadRadius)) return false;
+        if (!SetCustomITD(customITDEnabled)) return false;
 
         if (!ILDFileName.Equals(""))
         {            
             #if (!UNITY_EDITOR)
-            SaveResourceAsBinary(ILDFileName, ".3dti-ild", out ILDFileName);                 
+            if (SaveResourceAsBinary(ILDFileName, ".3dti-ild", out ILDFileName) != 1) return false;
             #endif
-            LoadILDBinary(ILDFileName);
+            if (!LoadILDBinary(ILDFileName)) return false;
         }        
 
         if (!HRTFFileName.Equals(""))
         {
             #if (!UNITY_EDITOR)
-            SaveResourceAsBinary(HRTFFileName, ".3dti-hrtf", out HRTFFileName); 
+            if (SaveResourceAsBinary(HRTFFileName, ".3dti-hrtf", out HRTFFileName) != 1) return false; 
             #endif
-            LoadHRTFBinary(HRTFFileName);
+            if (!LoadHRTFBinary(HRTFFileName)) return false;
         }
+
+        return true;
     }
 
     /// <summary>
@@ -185,10 +193,10 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Set listener head radius
     /// </summary>
-    public void SetHeadRadius(float headRadius)
+    public bool SetHeadRadius(float headRadius)
     {
         listenerHeadRadius = headRadius;
-        SendCommandForAllSources(SET_HEAD_RADIUS, headRadius);
+        return SendCommandForAllSources(SET_HEAD_RADIUS, headRadius);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -196,13 +204,13 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Set custom ITD enabled/disabled
     /// </summary>
-    public void SetCustomITD(bool _enable)
+    public bool SetCustomITD(bool _enable)
     {
         customITDEnabled = _enable;
         if (_enable)
-            SendCommandForAllSources(SET_CUSTOM_ITD, 1.0f);
+            return SendCommandForAllSources(SET_CUSTOM_ITD, 1.0f);
         else
-            SendCommandForAllSources(SET_CUSTOM_ITD, 0.0f);
+            return SendCommandForAllSources(SET_CUSTOM_ITD, 0.0f);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -210,7 +218,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Load HRTF from a binary .3dti file
     /// </summary>
-    public void LoadHRTFBinary(string filename)
+    public bool LoadHRTFBinary(string filename)
     {
         HRTFFileName = filename;
 
@@ -232,9 +240,11 @@ public class API_3DTI_Spatializer : MonoBehaviour
             {
                 int chr2Int = (int)filename[i];
                 float chr2Float = (float)chr2Int;
-                source.SetSpatializerFloat(LOAD_3DTI_HRTF, chr2Float);
+                if (!source.SetSpatializerFloat(LOAD_3DTI_HRTF, chr2Float)) return false;
             }
         }
+
+        return true;
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -242,7 +252,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Load ILD from a binary .3dti file
     /// </summary>
-    public void LoadILDBinary(string filename)
+    public bool LoadILDBinary(string filename)
     {
         ILDFileName = filename;
 
@@ -264,9 +274,11 @@ public class API_3DTI_Spatializer : MonoBehaviour
             {
                 int chr2Int = (int)filename[i];
                 float chr2Float = (float)chr2Int;
-                source.SetSpatializerFloat(LOAD_3DTI_ILD, chr2Float);                
+                if (!source.SetSpatializerFloat(LOAD_3DTI_ILD, chr2Float)) return false;
             }            
         }
+
+        return true;
     }
 
 
@@ -277,9 +289,9 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Setup all source parameters
     /// </summary>        
-    public void SetupSource()
+    public bool SetupSource()
     {
-        SetSourceInterpolation(runtimeInterpolateHRTF);
+        return SetSourceInterpolation(runtimeInterpolateHRTF);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -287,13 +299,13 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Set source HRTF interpolation method
     /// </summary>
-    public void SetSourceInterpolation(bool _run)
+    public bool SetSourceInterpolation(bool _run)
     {
         runtimeInterpolateHRTF = _run;        
         if (!_run)            
-            SendCommandForAllSources(SET_HRTF_INTERPOLATION, 0.0f);
+            return SendCommandForAllSources(SET_HRTF_INTERPOLATION, 0.0f);
         else
-            SendCommandForAllSources(SET_HRTF_INTERPOLATION, 1.0f);
+            return SendCommandForAllSources(SET_HRTF_INTERPOLATION, 1.0f);
     }
 
 
@@ -304,18 +316,19 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Set ID for all sources, for internal use of the wrapper
     /// </summary>
-    public void SendSourceIDs()
+    public bool SendSourceIDs()
     {
         if (!selectSource)
         {
             List<AudioSource> audioSources = GetAllSpatializedSources();
             foreach (AudioSource source in audioSources)
             {
-                source.SetSpatializerFloat(SET_SOURCE_ID, (float)++lastSourceID);
+                if (!source.SetSpatializerFloat(SET_SOURCE_ID, (float)++lastSourceID)) return false;
             }
+            return true;
         }
         else
-            selectedSource.SetSpatializerFloat(SET_SOURCE_ID, (float)++lastSourceID);
+            return selectedSource.SetSpatializerFloat(SET_SOURCE_ID, (float)++lastSourceID);    
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -323,21 +336,22 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Set scale factor. Allows the toolkit to work with big-scale or small-scale scenarios
     /// </summary>
-    public void SetScaleFactor (float scale)
+    public bool SetScaleFactor (float scale)
     {
         scaleFactor = scale;
-        SendCommandForAllSources(SET_SCALE_FACTOR, scale);
+        return SendCommandForAllSources(SET_SCALE_FACTOR, scale);
     }
 
     /// <summary>
     ///  Setup modules enabler, allowing to switch on/off core features
     /// </summary>
-    public void SetupModulesEnabler()
+    public bool SetupModulesEnabler()
     {
-        SetModFarLPF(modFarLPF);
-        SetModDistanceAttenuation(modDistAtt);
-        SetModILD(modILD);
-        SetModHRTF(modHRTF);
+        if (!SetModFarLPF(modFarLPF)) return false;
+        if (!SetModDistanceAttenuation(modDistAtt)) return false;
+        if (!SetModILD(modILD)) return false;
+        if (!SetModHRTF(modHRTF)) return false;
+        return true;
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -345,13 +359,13 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Switch on/off far distance LPF
     /// </summary>        
-    public void SetModFarLPF(bool _enable)
+    public bool SetModFarLPF(bool _enable)
     {
         modFarLPF = _enable;
         if (_enable)
-            SendCommandForAllSources(SET_MOD_FARLPF, 1.0f);
+            return SendCommandForAllSources(SET_MOD_FARLPF, 1.0f);
         else
-            SendCommandForAllSources(SET_MOD_FARLPF, 0.0f);
+            return SendCommandForAllSources(SET_MOD_FARLPF, 0.0f);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -359,13 +373,13 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Switch on/off distance attenuation
     /// </summary>        
-    public void SetModDistanceAttenuation(bool _enable)
+    public bool SetModDistanceAttenuation(bool _enable)
     {
         modDistAtt = _enable;
         if (_enable)
-            SendCommandForAllSources(SET_MOD_DISTATT, 1.0f);
+            return SendCommandForAllSources(SET_MOD_DISTATT, 1.0f);
         else
-            SendCommandForAllSources(SET_MOD_DISTATT, 0.0f);
+            return SendCommandForAllSources(SET_MOD_DISTATT, 0.0f);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -373,13 +387,13 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Switch on/off near distance ILD
     /// </summary>        
-    public void SetModILD(bool _enable)
+    public bool SetModILD(bool _enable)
     {
         modILD = _enable;
         if (_enable)
-            SendCommandForAllSources(SET_MOD_ILD, 1.0f);
+            return SendCommandForAllSources(SET_MOD_ILD, 1.0f);
         else
-            SendCommandForAllSources(SET_MOD_ILD, 0.0f);
+            return SendCommandForAllSources(SET_MOD_ILD, 0.0f);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -387,31 +401,31 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Switch on/off HRTF convolution
     /// </summary>        
-    public void SetModHRTF(bool _enable)
+    public bool SetModHRTF(bool _enable)
     {
         modHRTF = _enable;
         if (_enable)
-            SendCommandForAllSources(SET_MOD_HRTF, 1.0f);
+            return SendCommandForAllSources(SET_MOD_HRTF, 1.0f);
         else
-            SendCommandForAllSources(SET_MOD_HRTF, 0.0f);        
+            return SendCommandForAllSources(SET_MOD_HRTF, 0.0f);        
     }
 
     /// <summary>
     /// Set magnitude Anechoic Attenuation
     /// </summary>    
-    public void SetMagnitudeAnechoicAttenuation(float value)
+    public bool SetMagnitudeAnechoicAttenuation(float value)
     {
         magAnechoicAttenuation = value;
-        SendCommandForAllSources(SET_MAG_ANECHATT, value);
+        return SendCommandForAllSources(SET_MAG_ANECHATT, value);
     }
 
     /// <summary>
     /// Set magnitude Sound Speed
     /// </summary>    
-    public void SetMagnitudeSoundSpeed(float value)
+    public bool SetMagnitudeSoundSpeed(float value)
     {
         magSoundSpeed = value;
-        SendCommandForAllSources(SET_MAG_SOUNDSPEED, value);
+        return SendCommandForAllSources(SET_MAG_SOUNDSPEED, value);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -421,12 +435,13 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     ///  Initial setup of HA directionality
     /// </summary>
-    public void SetupHADirectionality()
+    public bool SetupHADirectionality()
     {
-        SwitchOnOffHADirectionality(EAR_LEFT, doHADirectionalityLeft);
-        SwitchOnOffHADirectionality(EAR_RIGHT, doHADirectionalityRight);
-        SetHADirectionalityExtend(EAR_LEFT, HADirectionalityExtendLeft);
-        SetHADirectionalityExtend(EAR_RIGHT, HADirectionalityExtendRight);
+        if (!SwitchOnOffHADirectionality(EAR_LEFT, doHADirectionalityLeft)) return false;
+        if (!SwitchOnOffHADirectionality(EAR_RIGHT, doHADirectionalityRight)) return false;
+        if (!SetHADirectionalityExtend(EAR_LEFT, HADirectionalityExtendLeft)) return false;
+        if (!SetHADirectionalityExtend(EAR_RIGHT, HADirectionalityExtendRight)) return false;
+        return true;
     }
 
     /// <summary>
@@ -434,7 +449,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>
     /// <param name="ear"></param>
     /// <param name="_enable"></param>
-    public void SwitchOnOffHADirectionality(int ear, bool _enable)
+    public bool SwitchOnOffHADirectionality(int ear, bool _enable)
     {
         if (ear == EAR_BOTH)
         {
@@ -445,13 +460,14 @@ public class API_3DTI_Spatializer : MonoBehaviour
         if (ear == EAR_LEFT)
         {
             doHADirectionalityLeft = _enable;
-            SendCommandForAllSources(SET_HA_DIRECTIONALITY_ON_LEFT, Bool2Float(_enable));
+            return SendCommandForAllSources(SET_HA_DIRECTIONALITY_ON_LEFT, Bool2Float(_enable));
         }
         if (ear == EAR_RIGHT)
         {
             doHADirectionalityRight = _enable;
-            SendCommandForAllSources(SET_HA_DIRECTIONALITY_ON_RIGHT, Bool2Float(_enable));
+            return SendCommandForAllSources(SET_HA_DIRECTIONALITY_ON_RIGHT, Bool2Float(_enable));
         }
+        return false;
     }
 
     /// <summary>
@@ -459,7 +475,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>
     /// <param name="ear"></param>
     /// <param name="extendDB"></param>
-    public void SetHADirectionalityExtend(int ear, float extendDB)
+    public bool SetHADirectionalityExtend(int ear, float extendDB)
     {
         if (ear == EAR_BOTH)
         {
@@ -470,13 +486,14 @@ public class API_3DTI_Spatializer : MonoBehaviour
         if (ear == EAR_LEFT)
         {
             HADirectionalityExtendLeft = extendDB;
-            SendCommandForAllSources(SET_HA_DIRECTIONALITY_EXTEND_LEFT, extendDB);
+            return SendCommandForAllSources(SET_HA_DIRECTIONALITY_EXTEND_LEFT, extendDB);
         }
         if (ear == EAR_RIGHT)
         {
             HADirectionalityExtendRight = extendDB;
-            SendCommandForAllSources(SET_HA_DIRECTIONALITY_EXTEND_RIGHT, extendDB);
+            return SendCommandForAllSources(SET_HA_DIRECTIONALITY_EXTEND_RIGHT, extendDB);
         }
+        return false;
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -486,43 +503,32 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Send command to plugin to switch on/off write to Debug Log file
     /// </summary>
-    public void SendWriteDebugLog(bool _enable)
+    public bool SendWriteDebugLog(bool _enable)
     {
         debugLog = _enable;
         if (_enable)
-            SendCommandForAllSources(SET_DEBUG_LOG, 1.0f);
+            return SendCommandForAllSources(SET_DEBUG_LOG, 1.0f);
         else
-            SendCommandForAllSources(SET_DEBUG_LOG, 0.0f);
-    }
-
-    /// <summary>
-    /// For debug. remove before release
-    /// </summary>        
-    public void DebugWrite(string text)
-    {
-        GameObject textGO = GameObject.Find("DebugText");
-        if (textGO == null)
-            Debug.Log(text);
-        else
-        {
-            TextMesh debugText = textGO.GetComponent<TextMesh>();
-            debugText.text = debugText.text + "\n" + text;
-        }
+            return SendCommandForAllSources(SET_DEBUG_LOG, 0.0f);
     }
 
     /// <summary>
     /// Send command to the DLL, for each registered source
     /// </summary>
-    public void SendCommandForAllSources(int command, float value)
+    public bool SendCommandForAllSources(int command, float value)
     {
         if (!selectSource)
         {
             List<AudioSource> audioSources = GetAllSpatializedSources();
             foreach (AudioSource source in audioSources)
-                source.SetSpatializerFloat(command, value);
+            {
+                if (!source.SetSpatializerFloat(command, value))
+                    return false;
+            }
+            return true;
         }
         else
-            selectedSource.SetSpatializerFloat(command, value);
+            return selectedSource.SetSpatializerFloat(command, value);
     }
 
     /// <summary>
