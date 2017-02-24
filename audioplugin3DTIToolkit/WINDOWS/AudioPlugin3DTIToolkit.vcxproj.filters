@@ -205,6 +205,9 @@
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\HAHLSimulation\Fig6Algorithm.h">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\CommonDefinitions.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="3DTI_Toolkit_Core">

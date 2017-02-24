@@ -69,6 +69,7 @@
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\AudioState.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\BiquadFilter.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Buffer.h" />
+    <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\CommonDefinitions.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Conventions.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\Debugger.h" />
     <ClInclude Include="..\..\..\..\..\3DTI_Toolkit_Core\Common\DistanceAttenuator.h" />
