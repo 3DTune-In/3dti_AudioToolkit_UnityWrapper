@@ -191,7 +191,7 @@
 				AFD34E8B1E51DC89007810A6 /* HAHLSimulation */,
 			);
 			name = 3DTI_Toolkit_Core;
-			path = ../../../../../3DTI_Toolkit_Core;
+			path = ../../3DTI_Toolkit_Core;
 			sourceTree = "<group>";
 		};
 		AFD34E551E51DC89007810A6 /* BinauralSpatializer */ = {
@@ -283,7 +283,7 @@
 				AFD3513D1E51DCF2007810A6 /* ILD */,
 			);
 			name = 3DTI_Toolkit_Modules;
-			path = ../../../../../3DTI_Toolkit_Modules;
+			path = ../../3DTI_Toolkit_Modules;
 			sourceTree = "<group>";
 		};
 		AFD34ECD1E51DCF0007810A6 /* HRTF */ = {
