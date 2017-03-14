@@ -153,7 +153,7 @@
 				AF6FAA071E3A15E10035B40E /* HAHLSimulation */,
 			);
 			name = 3DTI_Toolkit_Core;
-			path = ../../../../../3DTI_Toolkit_Core;
+			path = ../../3DTI_Toolkit_Core;
 			sourceTree = "<group>";
 		};
 		AF6FA9D11E3A15E10035B40E /* BinauralSpatializer */ = {
@@ -281,7 +281,7 @@
 				AFE88D5F1DCCB226003505EF /* ILD */,
 			);
 			name = 3DTI_Toolkit_Modules;
-			path = ../../../../../3DTI_Toolkit_Modules;
+			path = ../../3DTI_Toolkit_Modules;
 			sourceTree = "<group>";
 		};
 		AFE88A361DCCB223003505EF /* HRTF */ = {
