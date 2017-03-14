@@ -1,3 +1,6 @@
 [submodule "3DTI_Toolkit_Core"]
 	path = 3DTI_Toolkit_Core
 	url = https://github.com/3DTune-In/3DTI_Toolkit_Core.git
+[submodule "3DTI_Toolkit_Modules"]
+	path = 3DTI_Toolkit_Modules
+	url = https://github.com/3DTune-In/3DTI_Toolkit_Modules.git
