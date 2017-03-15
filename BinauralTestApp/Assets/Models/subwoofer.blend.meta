@@ -1,0 +1,204 @@
+fileFormatVersion: 2
+guid: a27f80763808f8b4b8227fbbaed81efc
+timeCreated: 1489499115
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: speakerholder_Subwoofer
+    100002: //RootNode
+    100004: Subwoofer_body
+    100006: Subwoofer_bolt1
+    100008: Subwoofer_bolt2
+    100010: Subwoofer_bolt3
+    100012: Subwoofer_bolt4
+    100014: Subwoofer_bolt5
+    100016: Subwoofer_bolt6
+    100018: Subwoofer_bolt7
+    100020: Subwoofer_bolt8
+    100022: Subwoofer_leg
+    100024: Subwoofer_leg1
+    100026: Subwoofer_leg2
+    100028: Subwoofer_leg3
+    100030: Subwoofer_leg4
+    100032: Subwoofer_leg5
+    100034: Subwoofer_leg6
+    100036: Subwoofer_leg7
+    100038: Subwoofer_roundthing
+    100040: Subwoofer_roundthing1
+    100042: Subwoofer_roundthing2
+    100044: Subwoofer_roundthing3
+    100046: Subwoofer_speaker
+    100048: Subwoofer_speakerholder1
+    100050: Subwoofer_yellowthing
+    400000: speakerholder_Subwoofer
+    400002: //RootNode
+    400004: Subwoofer_body
+    400006: Subwoofer_bolt1
+    400008: Subwoofer_bolt2
+    400010: Subwoofer_bolt3
+    400012: Subwoofer_bolt4
+    400014: Subwoofer_bolt5
+    400016: Subwoofer_bolt6
+    400018: Subwoofer_bolt7
+    400020: Subwoofer_bolt8
+    400022: Subwoofer_leg
+    400024: Subwoofer_leg1
+    400026: Subwoofer_leg2
+    400028: Subwoofer_leg3
+    400030: Subwoofer_leg4
+    400032: Subwoofer_leg5
+    400034: Subwoofer_leg6
+    400036: Subwoofer_leg7
+    400038: Subwoofer_roundthing
+    400040: Subwoofer_roundthing1
+    400042: Subwoofer_roundthing2
+    400044: Subwoofer_roundthing3
+    400046: Subwoofer_speaker
+    400048: Subwoofer_speakerholder1
+    400050: Subwoofer_yellowthing
+    2300000: speakerholder_Subwoofer
+    2300002: Subwoofer_body
+    2300004: Subwoofer_bolt1
+    2300006: Subwoofer_bolt2
+    2300008: Subwoofer_bolt3
+    2300010: Subwoofer_bolt4
+    2300012: Subwoofer_bolt5
+    2300014: Subwoofer_bolt6
+    2300016: Subwoofer_bolt7
+    2300018: Subwoofer_bolt8
+    2300020: Subwoofer_leg
+    2300022: Subwoofer_leg1
+    2300024: Subwoofer_leg2
+    2300026: Subwoofer_leg3
+    2300028: Subwoofer_leg4
+    2300030: Subwoofer_leg5
+    2300032: Subwoofer_leg6
+    2300034: Subwoofer_leg7
+    2300036: Subwoofer_roundthing
+    2300038: Subwoofer_roundthing1
+    2300040: Subwoofer_roundthing2
+    2300042: Subwoofer_roundthing3
+    2300044: Subwoofer_speaker
+    2300046: Subwoofer_speakerholder1
+    2300048: Subwoofer_yellowthing
+    3300000: speakerholder_Subwoofer
+    3300002: Subwoofer_body
+    3300004: Subwoofer_bolt1
+    3300006: Subwoofer_bolt2
+    3300008: Subwoofer_bolt3
+    3300010: Subwoofer_bolt4
+    3300012: Subwoofer_bolt5
+    3300014: Subwoofer_bolt6
+    3300016: Subwoofer_bolt7
+    3300018: Subwoofer_bolt8
+    3300020: Subwoofer_leg
+    3300022: Subwoofer_leg1
+    3300024: Subwoofer_leg2
+    3300026: Subwoofer_leg3
+    3300028: Subwoofer_leg4
+    3300030: Subwoofer_leg5
+    3300032: Subwoofer_leg6
+    3300034: Subwoofer_leg7
+    3300036: Subwoofer_roundthing
+    3300038: Subwoofer_roundthing1
+    3300040: Subwoofer_roundthing2
+    3300042: Subwoofer_roundthing3
+    3300044: Subwoofer_speaker
+    3300046: Subwoofer_speakerholder1
+    3300048: Subwoofer_yellowthing
+    4300000: Subwoofer_yellowthing
+    4300002: Subwoofer_leg4
+    4300004: Subwoofer_leg1
+    4300006: Subwoofer_leg3
+    4300008: Subwoofer_roundthing1
+    4300010: Subwoofer_body
+    4300012: Subwoofer_leg2
+    4300014: Subwoofer_bolt8
+    4300016: Subwoofer_speakerholder1
+    4300018: Subwoofer_leg7
+    4300020: Subwoofer_speaker
+    4300022: Subwoofer_bolt1
+    4300024: Subwoofer_leg
+    4300026: Subwoofer_leg6
+    4300028: Subwoofer_roundthing2
+    4300030: Subwoofer_roundthing
+    4300032: Subwoofer_bolt2
+    4300034: Subwoofer_bolt5
+    4300036: Subwoofer_bolt3
+    4300038: Subwoofer_bolt6
+    4300040: Subwoofer_leg5
+    4300042: Subwoofer_roundthing3
+    4300044: speakerholder_Subwoofer
+    4300046: Subwoofer_bolt7
+    4300048: Subwoofer_bolt4
+    7400000: Default Take
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
