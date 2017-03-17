@@ -100,7 +100,6 @@ GameObject:
   m_Component:
   - component: {fileID: 73463300}
   - component: {fileID: 73463299}
-  - component: {fileID: 73463298}
   m_Layer: 0
   m_Name: TestAudio Source Front
   m_TagString: Untagged
@@ -108,17 +107,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &73463298
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 73463297}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76165aac821434047aa95ca0cebe0209, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!82 &73463299
 AudioSource:
   m_ObjectHideFlags: 0
@@ -127,9 +115,9 @@ AudioSource:
   m_GameObject: {fileID: 73463297}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 24300001, guid: 0ee3966a90e1f344fa515ad67bb45291,
+  OutputAudioMixerGroup: {fileID: 24300001, guid: 02d04237d0308a14ea0c3b720849faae,
     type: 2}
-  m_audioClip: {fileID: 8300000, guid: 4713a4e3c323cff418a8b8b92977cf7c, type: 3}
+  m_audioClip: {fileID: 8300000, guid: fc0274a44de36614ab5fac77873ce5e2, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -228,7 +216,6 @@ GameObject:
   - component: {fileID: 244518583}
   - component: {fileID: 244518585}
   - component: {fileID: 244518584}
-  - component: {fileID: 244518586}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -312,11 +299,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 244518577}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02aa57c7a5daf37449f5b1d3b98645b6, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c0b0b66fe32e6446a7e3cb6e903d1b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HRTFFileName: 4173736574732f33445449446174612f485254462f4952435f313033325f525f485249525f3531322e336474692d68727466
-  ILDFileName: 4173736574732f33445449446174612f494c442f64656661756c742e336474692d696c64
+  HRTFFileName: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+  ILDFileName: Assets/3DTIData/ILD/default.3dti-ild
   customITDEnabled: 0
   listenerHeadRadius: 0.0875
   runtimeInterpolateHRTF: 1
@@ -327,11 +314,11 @@ MonoBehaviour:
   modHRTF: 1
   magAnechoicAttenuation: -6
   magSoundSpeed: 343
-  debugLog: 1
+  debugLog: 0
   doHADirectionalityLeft: 0
   doHADirectionalityRight: 0
-  HADirectionalityExtendLeft: 9.04
-  HADirectionalityExtendRight: 9.41
+  HADirectionalityExtendLeft: 15
+  HADirectionalityExtendRight: 15
 --- !u!114 &244518584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -340,10 +327,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 244518577}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5bebc6607a10284cb6857652237762d, type: 3}
+  m_Script: {fileID: 11500000, guid: ef6b4806b154c4644a96d122f1e56183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  haMixer: {fileID: 24100000, guid: 0ee3966a90e1f344fa515ad67bb45291, type: 2}
+  haMixer: {fileID: 24100000, guid: 02d04237d0308a14ea0c3b720849faae, type: 2}
 --- !u!114 &244518585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -352,21 +339,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 244518577}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a8af1dfd5086324a998176b213f0163, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d3e47873e845404fa98d69278291f61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hlMixer: {fileID: 24100000, guid: 0ee3966a90e1f344fa515ad67bb45291, type: 2}
---- !u!114 &244518586
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 244518577}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2611e571e69417448a86d6dcf242eca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  hlMixer: {fileID: 24100000, guid: 02d04237d0308a14ea0c3b720849faae, type: 2}
 --- !u!1 &1582799887
 GameObject:
   m_ObjectHideFlags: 0
@@ -391,9 +367,9 @@ AudioSource:
   m_GameObject: {fileID: 1582799887}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 24300001, guid: 0ee3966a90e1f344fa515ad67bb45291,
+  OutputAudioMixerGroup: {fileID: 24300001, guid: 02d04237d0308a14ea0c3b720849faae,
     type: 2}
-  m_audioClip: {fileID: 8300000, guid: 7785cba08cf333d43888bd4e65621f4a, type: 3}
+  m_audioClip: {fileID: 8300000, guid: c5630708c841bac439c535c9acd1ec97, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
