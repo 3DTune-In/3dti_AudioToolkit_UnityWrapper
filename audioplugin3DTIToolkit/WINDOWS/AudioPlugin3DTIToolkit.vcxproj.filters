@@ -77,13 +77,7 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Vector3.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\Compressor.cpp">
-      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\DynamicEqualizer.cpp">
-      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\EnvelopeDetector.cpp">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\FiltersBank.cpp">
@@ -100,6 +94,15 @@
     <ClCompile Include="..\src\effect3DTIHA.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\Fig6Algorithm.cpp">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorMono.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorStereo.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\EnvelopeDetector.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -184,13 +187,7 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Vector3.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\Compressor.h">
-      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\DynamicEqualizer.h">
-      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\EnvelopeDetector.h">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\FiltersBank.h">
@@ -206,6 +203,18 @@
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\CommonDefinitions.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressor.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorMono.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorStereo.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\EnvelopeDetector.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
   </ItemGroup>
