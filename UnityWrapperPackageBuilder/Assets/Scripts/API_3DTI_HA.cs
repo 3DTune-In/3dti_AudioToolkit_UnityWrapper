@@ -29,6 +29,7 @@ public class API_3DTI_HA : MonoBehaviour
     public const float FIG6_THRESHOLD_1_DBSPL = 65.0f;
     public const float FIG6_THRESHOLD_2_DBSPL = 95.0f;
     public const int FIG6_NUMBANDS = 7;
+    public const int NUM_LEVELS = 3;
     public const float DBSPL_FOR_0_DBFS = 100.0f;
 
     // Global variables
@@ -162,20 +163,30 @@ public class API_3DTI_HA : MonoBehaviour
     /// <param name="ear ({EAR_LEFT, EAR_RIGHT})"></param>
     /// <param name="earLossList (dB[])"></param>
     /// <returns></returns>
-    public bool SetEQFromFig6(int ear, List<float>earLossList)
+    public bool SetEQFromFig6(int ear, List<float>earLossList, out List<float>gains)
     {
         // Both ears
         if (ear == EAR_BOTH)
         {
-            if (!SetEQFromFig6(EAR_LEFT, earLossList))
+            if (!SetEQFromFig6(EAR_LEFT, earLossList, out gains))
                 return false;
-            return SetEQFromFig6(EAR_RIGHT, earLossList);
+            return SetEQFromFig6(EAR_RIGHT, earLossList, out gains);
+        }
+
+        // Init gains
+        gains = new List<float>();        
+        for (int band = 0; band < FIG6_NUMBANDS; band++)
+        {
+            for (int level = 0; level < NUM_LEVELS; level++)
+            {
+                gains.Add(0.0f);                
+            }
         }
 
         // Left ear
         if (ear == EAR_LEFT)
         {
-            haMixer.SetFloat("HA3DTI_Dynamic_LeftOn", Bool2Float(true));    // Set Dynamic EQ for left channel
+            haMixer.SetFloat("HA3DTI_Dynamic_On", Bool2Float(true));    // Set Dynamic EQ On
             haMixer.SetFloat("HA3DTI_Threshold_0_Left", FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 0
             haMixer.SetFloat("HA3DTI_Threshold_1_Left", FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 1
             haMixer.SetFloat("HA3DTI_Threshold_2_Left", FIG6_THRESHOLD_2_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 2
@@ -184,7 +195,7 @@ public class API_3DTI_HA : MonoBehaviour
         // Left ear
         if (ear == EAR_RIGHT)
         {
-            haMixer.SetFloat("HA3DTI_Dynamic_RightOn", Bool2Float(true));    // Set Dynamic EQ for left channel
+            haMixer.SetFloat("HA3DTI_Dynamic_On", Bool2Float(true));    // Set Dynamic EQ On
             haMixer.SetFloat("HA3DTI_Threshold_0_Right", FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 0
             haMixer.SetFloat("HA3DTI_Threshold_1_Right", FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 1
             haMixer.SetFloat("HA3DTI_Threshold_2_Right", FIG6_THRESHOLD_2_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 2
@@ -192,8 +203,13 @@ public class API_3DTI_HA : MonoBehaviour
 
         for (int bandIndex = 0; bandIndex < FIG6_NUMBANDS; bandIndex++)
         {
-            if (!SetEQBandFromFig6(ear, bandIndex, earLossList[bandIndex]))
+            float gain0, gain1, gain2;
+            if (!SetEQBandFromFig6(ear, bandIndex, earLossList[bandIndex], out gain0, out gain1, out gain2))
                 return false;
+
+            gains[bandIndex * NUM_LEVELS] = gain0;
+            gains[bandIndex * NUM_LEVELS + 1] = gain1;
+            gains[bandIndex * NUM_LEVELS + 2] = gain2;
         }
 
         return true;
@@ -231,10 +247,9 @@ public class API_3DTI_HA : MonoBehaviour
     // AUXILIARY FUNCTIONS
     //////////////////////////////////////////////////////////////
 
-    public bool SetEQBandFromFig6(int ear, int bandIndex, float earLoss)
+    public bool SetEQBandFromFig6(int ear, int bandIndex, float earLoss, out float gain0, out float gain1, out float gain2)
     {
-        // Level 0 (40 dB)
-        float gain0;
+        // Level 0 (40 dB)        
         if (earLoss < 20.0f)
             gain0 = 0.0f;
         else
@@ -245,8 +260,7 @@ public class API_3DTI_HA : MonoBehaviour
                 gain0 = earLoss * 0.5f + 10.0f;
         }
 
-        // Level 1 (65 dB)
-        float gain1;
+        // Level 1 (65 dB)        
         if (earLoss < 20.0f)
             gain1 = 0.0f;
         else
@@ -257,8 +271,7 @@ public class API_3DTI_HA : MonoBehaviour
                 gain1 = earLoss * 0.8f - 23.0f;
         }
 
-        // Level 2 (95 dB)
-        float gain2;
+        // Level 2 (95 dB)        
         if (earLoss <= 40.0f)
             gain2 = 0.0f;
         else
