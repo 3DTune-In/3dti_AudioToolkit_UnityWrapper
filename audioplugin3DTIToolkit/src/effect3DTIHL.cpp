@@ -233,8 +233,8 @@ namespace HLSimulation3DTI
 		effectdata->HL.SetGains_dB(DEFAULT_BAND_GAINS, EAR_RIGHT);
 		
 		// Setup of Compressor
-		effectdata->HL.Compr_L.Setup(state->samplerate);
-		effectdata->HL.Compr_R.Setup(state->samplerate);
+		//effectdata->HL.Compr_L.Setup(state->samplerate);
+		//effectdata->HL.Compr_R.Setup(state->samplerate);
 		WriteLog(state, "CREATE: Compressor setup with sample rate ", state->samplerate);
 
 		WriteLog(state, "CREATE: HL Simulation plugin created", "");		
@@ -372,54 +372,54 @@ namespace HLSimulation3DTI
 
 			case PARAM_COMP_LEFT_KNEE:
 				WriteLog(state, "SET PARAMETER: Knee for Left compressor set to: ", value);
-				data->HL.Compr_L.knee = value;				
+				//data->HL.Compr_L.knee = value;				
 				break;
 
 			case PARAM_COMP_LEFT_RATIO:
 				WriteLog(state, "SET PARAMETER: Ratio for Left compressor set to: ", value);
-				data->HL.Compr_L.ratio = value;
+				//data->HL.Compr_L.ratio = value;
 				break;
 
 			case PARAM_COMP_LEFT_THRESHOLD:
 				WriteLog(state, "SET PARAMETER: Threshold for Left compressor set to: ", value);
-				data->HL.Compr_L.threshold = value;
+				//data->HL.Compr_L.threshold = value;
 				break;
 
 			case PARAM_COMP_RIGHT_KNEE:
 				WriteLog(state, "SET PARAMETER: Knee for Right compressor set to: ", value);
-				data->HL.Compr_R.knee = value;
+				//data->HL.Compr_R.knee = value;
 				break;
 
 			case PARAM_COMP_RIGHT_RATIO:
 				WriteLog(state, "SET PARAMETER: Ratio for Right compressor set to: ", value);
-				data->HL.Compr_R.ratio = value;
+				//data->HL.Compr_R.ratio = value;
 				break;
 
 			case PARAM_COMP_RIGHT_THRESHOLD:
 				WriteLog(state, "SET PARAMETER: Threshold for Right compressor set to: ", value);
-				data->HL.Compr_R.threshold = value;
+				//data->HL.Compr_R.threshold = value;
 				break;
 
 			// ENVELOPE DETECTOR:
 
 			case PARAM_COMP_LEFT_ATTACK:
 				WriteLog(state, "SET PARAMETER: Attack for Left compressor set to: ", value);
-				data->HL.Compr_L.envDetector.SetAttackTime(value);
+				//data->HL.Compr_L.envDetector.SetAttackTime(value);
 				break;
 
 			case PARAM_COMP_LEFT_RELEASE:
 				WriteLog(state, "SET PARAMETER: Release for Left compressor set to: ", value);
-				data->HL.Compr_L.envDetector.SetReleaseTime(value);
+				//data->HL.Compr_L.envDetector.SetReleaseTime(value);
 				break;
 
 			case PARAM_COMP_RIGHT_ATTACK:
 				WriteLog(state, "SET PARAMETER: Attack for Right compressor set to: ", value);
-				data->HL.Compr_R.envDetector.SetAttackTime(value);
+				//data->HL.Compr_R.envDetector.SetAttackTime(value);
 				break;
 
 			case PARAM_COMP_RIGHT_RELEASE:
 				WriteLog(state, "SET PARAMETER: Release for Right compressor set to: ", value);
-				data->HL.Compr_R.envDetector.SetReleaseTime(value);
+				//data->HL.Compr_R.envDetector.SetReleaseTime(value);
 				break;
 
 			default:

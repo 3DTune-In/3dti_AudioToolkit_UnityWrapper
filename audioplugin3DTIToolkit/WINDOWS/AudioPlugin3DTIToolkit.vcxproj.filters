@@ -104,6 +104,22 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\EnvelopeDetector.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\effect3DTILoudspeakersSpatializer.cpp" />
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\Core_LS.cpp">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\Environment_LS.cpp">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SingleSourceDSP_LS.cpp">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SpeakerSet.cpp">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SpeakerSetConfiguration.cpp">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.h">
@@ -217,6 +233,21 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\EnvelopeDetector.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\Core_LS.h">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\Environment_LS.h">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SingleSourceDSP_LS.h">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SpeakerSet.h">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SpeakerSetConfiguration.h">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="3DTI_Toolkit_Core">
@@ -239,6 +270,9 @@
     </Filter>
     <Filter Include="3DTI_Toolkit_Core\HAHLSimulation">
       <UniqueIdentifier>{c6e5ec50-7043-4a1b-a99c-3ddd8e84e90a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3DTI_Toolkit_Core\LoudspeakersSpatializer">
+      <UniqueIdentifier>{fe47855c-6499-4de9-878f-e54cbaed7186}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
