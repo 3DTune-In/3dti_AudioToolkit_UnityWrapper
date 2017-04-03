@@ -121,6 +121,17 @@ public class API_3DTI_HA : MonoBehaviour
         return true;
     }
 
+    public bool SetCompressionPercentage(API_3DTI_Common.T_ear ear, float value)
+    {
+        if (ear == API_3DTI_Common.T_ear.BOTH)
+        {
+            if (!SetCompressionPercentage(API_3DTI_Common.T_ear.LEFT, value)) return false;
+            return SetCompressionPercentage(API_3DTI_Common.T_ear.RIGHT, value);
+        }
+
+        return HASetFloat(ear, "HA3DTI_Compression_", value);
+    }
+
     //////////////////////////////////////////////////////////////
     // DYNAMIC EQ
     //////////////////////////////////////////////////////////////
@@ -130,10 +141,10 @@ public class API_3DTI_HA : MonoBehaviour
     /// </summary>    
     /// <param name="value"></param>
     /// <returns></returns>
-    public bool SwitchDynamicEQOnOff(bool value)
-    {
-        return haMixer.SetFloat("HA3DTI_Dynamic_On", Bool2Float(value)); 
-    }
+    //public bool SwitchDynamicEQOnOff(bool value)
+    //{
+    //    return haMixer.SetFloat("HA3DTI_Dynamic_On", Bool2Float(value)); 
+    //}
 
     /// <summary>
     ///  Set gain (in dB) for one band of the standard equalizer
@@ -244,8 +255,7 @@ public class API_3DTI_HA : MonoBehaviour
 
         // Left ear
         if (ear == API_3DTI_Common.T_ear.LEFT)
-        {
-            haMixer.SetFloat("HA3DTI_Dynamic_On", Bool2Float(true));    // Set Dynamic EQ On
+        {            
             haMixer.SetFloat("HA3DTI_Threshold_0_Left", FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 0
             haMixer.SetFloat("HA3DTI_Threshold_1_Left", FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 1
             haMixer.SetFloat("HA3DTI_Threshold_2_Left", FIG6_THRESHOLD_2_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 2
@@ -253,8 +263,7 @@ public class API_3DTI_HA : MonoBehaviour
 
         // Left ear
         if (ear == API_3DTI_Common.T_ear.RIGHT)
-        {
-            haMixer.SetFloat("HA3DTI_Dynamic_On", Bool2Float(true));    // Set Dynamic EQ On
+        {         
             haMixer.SetFloat("HA3DTI_Threshold_0_Right", FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 0
             haMixer.SetFloat("HA3DTI_Threshold_1_Right", FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 1
             haMixer.SetFloat("HA3DTI_Threshold_2_Right", FIG6_THRESHOLD_2_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 2
