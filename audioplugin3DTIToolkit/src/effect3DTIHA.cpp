@@ -166,6 +166,9 @@ namespace HASimulation3DTI
 		PARAM_COMPRESSION_PERCENTAGE_LEFT,
 		PARAM_COMPRESSION_PERCENTAGE_RIGHT,
 
+		// Debug log
+		PARAM_DEBUG_LOG,
+
 		//// Fig6
 		//PARAM_FIG6_BAND_0_LEFT,
 		//PARAM_FIG6_BAND_1_LEFT,
@@ -192,6 +195,9 @@ namespace HASimulation3DTI
 		CHearingAidSim HA;		
 		float parameters[P_NUM];
 
+		// DEBUG LOG
+		bool debugLog = false;
+
 		//// Fig6
 		//bool settingFig6Left;
 		//int fig6ReceivedBandsLeft;	// TO DO: check each individual band
@@ -204,19 +210,23 @@ namespace HASimulation3DTI
 	template <class T>
 	void WriteLog(UnityAudioEffectState* state, string logtext, const T& value)
 	{
-		#ifdef DEBUG_LOG_FILE_HA
-			ofstream logfile;			
+		EffectData* data = state->GetEffectData<EffectData>();
+		if (data->debugLog)
+		{
+			#ifdef DEBUG_LOG_FILE_HA
+			ofstream logfile;
 			logfile.open("3DTI_HearingAidSimulation_DebugLog.txt", ofstream::out | ofstream::app);
 			logfile << logtext << value << endl;
 			logfile.close();
-		#endif
+			#endif
 
-		#ifdef DEBUG_LOG_CAT						
+			#ifdef DEBUG_LOG_CAT						
 			std::ostringstream os;
 			os << logtext << value;
-			string fulltext = os.str();			
+			string fulltext = os.str();
 			__android_log_print(ANDROID_LOG_DEBUG, "3DTIHASIMULATION", fulltext.c_str());
-		#endif
+			#endif
+		}
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -309,6 +319,9 @@ namespace HASimulation3DTI
 		RegisterParameter(definition, "COMPRL", "%", 0.0f, MAX_COMPRESSION_PERCENTAGE, DEFAULT_COMPRESSION_PERCENTAGE, 1.0f, 1.0f, PARAM_COMPRESSION_PERCENTAGE_LEFT, "Amount of compression, Left");
 		RegisterParameter(definition, "COMPRR", "%", 0.0f, MAX_COMPRESSION_PERCENTAGE, DEFAULT_COMPRESSION_PERCENTAGE, 1.0f, 1.0f, PARAM_COMPRESSION_PERCENTAGE_RIGHT, "Amount of compression, Right");
 
+		// Debug log
+		RegisterParameter(definition, "DebugLogHA", "", 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, PARAM_DEBUG_LOG, "Generate debug log for HA");
+
 		//// Fig6
 		//RegisterParameter(definition, "FIG60L", "dB", MIN_FIG6, MAX_FIG6, 0.0f, 1.0f, 1.0f, PARAM_FIG6_BAND_0_LEFT, "Fig6 input band 0 Left");
 		//RegisterParameter(definition, "FIG61L", "dB", MIN_FIG6, MAX_FIG6, 0.0f, 1.0f, 1.0f, PARAM_FIG6_BAND_1_LEFT, "Fig6 input band 1 Left");
@@ -354,6 +367,28 @@ namespace HASimulation3DTI
 
 	/////////////////////////////////////////////////////////////////////
 
+	void WriteLogHeader(UnityAudioEffectState* state)
+	{
+		EffectData* data = state->GetEffectData<EffectData>();
+
+		// EQ:
+		WriteLog(state, "CREATE: EQ setup:", "");
+		WriteLog(state, "        Sample rate = ", state->samplerate);
+		WriteLog(state, "        Number of levels = ", DEFAULT_NUMLEVELS);
+		WriteLog(state, "        Number of bands = ", DEFAULT_BANDSNUMBER);
+		WriteLog(state, "        Initial frequency = ", DEFAULT_INIFREQ);
+		WriteLog(state, "        Octave step = 1/", DEFAULT_OCTAVEBANDSTEP);
+		WriteLog(state, "        Q factor of LPF = ", DEFAULT_QLPF);
+		WriteLog(state, "        Q factor of BPFs = ", DEFAULT_QBPF);
+		WriteLog(state, "        Q factor of HPF = ", DEFAULT_QHPF);
+		WriteLog(state, "        LPF cutoff = ", DEFAULT_LPFCUTOFF);
+		WriteLog(state, "        HPF cutoff = ", DEFAULT_HPFCUTOFF);
+
+		WriteLog(state, "--------------------------------------", "\n");
+	}
+
+	/////////////////////////////////////////////////////////////////////
+
     UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectState* state)
     {
         EffectData* effectdata = new EffectData;
@@ -364,20 +399,22 @@ namespace HASimulation3DTI
 		// TO DO: check errors with debugger
 		// TO DO: add more WriteLog
 		
+		effectdata->debugLog = true;
+
 		// Setup HA
 		effectdata->HA.Setup(state->samplerate, DEFAULT_NUMLEVELS, DEFAULT_INIFREQ, DEFAULT_BANDSNUMBER, DEFAULT_OCTAVEBANDSTEP,
 												DEFAULT_LPFCUTOFF, DEFAULT_HPFCUTOFF, DEFAULT_QLPF, DEFAULT_QBPF, DEFAULT_QHPF);
-		WriteLog(state, "CREATE: EQ setup:", "");
-		WriteLog(state, "        Sample rate = ", state->samplerate);
-		WriteLog(state, "        Number of levels = ", DEFAULT_NUMLEVELS);
-		WriteLog(state, "        Number of bands = ", DEFAULT_BANDSNUMBER);
-		WriteLog(state, "        Initial frequency = ", DEFAULT_INIFREQ);		
-		WriteLog(state, "        Octave step = 1/", DEFAULT_OCTAVEBANDSTEP);
-		WriteLog(state, "        Q factor of LPF = ", DEFAULT_QLPF);
-		WriteLog(state, "        Q factor of BPFs = ", DEFAULT_QBPF);
-		WriteLog(state, "        Q factor of HPF = ", DEFAULT_QHPF);
-		WriteLog(state, "        LPF cutoff = ", DEFAULT_LPFCUTOFF);
-		WriteLog(state, "        HPF cutoff = ", DEFAULT_HPFCUTOFF);
+		//WriteLog(state, "CREATE: EQ setup:", "");
+		//WriteLog(state, "        Sample rate = ", state->samplerate);
+		//WriteLog(state, "        Number of levels = ", DEFAULT_NUMLEVELS);
+		//WriteLog(state, "        Number of bands = ", DEFAULT_BANDSNUMBER);
+		//WriteLog(state, "        Initial frequency = ", DEFAULT_INIFREQ);		
+		//WriteLog(state, "        Octave step = 1/", DEFAULT_OCTAVEBANDSTEP);
+		//WriteLog(state, "        Q factor of LPF = ", DEFAULT_QLPF);
+		//WriteLog(state, "        Q factor of BPFs = ", DEFAULT_QBPF);
+		//WriteLog(state, "        Q factor of HPF = ", DEFAULT_QHPF);
+		//WriteLog(state, "        LPF cutoff = ", DEFAULT_LPFCUTOFF);
+		//WriteLog(state, "        HPF cutoff = ", DEFAULT_HPFCUTOFF);
 		
 		// Setup HA switches and default values
 		//effectdata->HA.deq.dynamicOn = DEFAULT_DYNAMICON;	// TO DO: writelog
@@ -574,6 +611,16 @@ namespace HASimulation3DTI
 			case PARAM_COMPRESSION_PERCENTAGE_RIGHT: 
 				data->HA.GetDynamicEqualizer()->SetCompressionPercentage(value, RIGHT); 
 				WriteLog(state, "SET PARAMETER: Compression amount for Right channel = ", value);
+				break;
+
+			case PARAM_DEBUG_LOG:
+				if (value != 0.0f)
+				{
+					data->debugLog = true;
+					WriteLogHeader(state);
+				}
+				else
+					data->debugLog = false;
 				break;
 
 			//// Fig6

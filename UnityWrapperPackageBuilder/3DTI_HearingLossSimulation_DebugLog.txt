@@ -1,0 +1,132 @@
+SET PARAMETER: Left ear EQ process switched ON
+SET PARAMETER: Left ear Compression process switched ON
+SET PARAMETER: Right ear EQ process switched ON
+SET PARAMETER: Right ear Compression process switched ON
+SET PARAMETER: Gain of band 0 for Left ear set to -47.000000 dB
+SET PARAMETER: Gain of band 1 for Left ear set to -47.000000 dB
+SET PARAMETER: Gain of band 2 for Left ear set to -52.000000 dB
+SET PARAMETER: Gain of band 3 for Left ear set to -55.000000 dB
+SET PARAMETER: Gain of band 4 for Left ear set to -62.000000 dB
+SET PARAMETER: Gain of band 5 for Left ear set to -65.000000 dB
+SET PARAMETER: Gain of band 6 for Left ear set to -65.000000 dB
+SET PARAMETER: Gain of band 7 for Left ear set to -65.000000 dB
+SET PARAMETER: Gain of band 8 for Left ear set to -65.000000 dB
+SET PARAMETER: Gain of band 0 for Right ear set to -47.000000 dB
+SET PARAMETER: Gain of band 1 for Right ear set to -47.000000 dB
+SET PARAMETER: Gain of band 2 for Right ear set to -52.000000 dB
+SET PARAMETER: Gain of band 3 for Right ear set to -55.000000 dB
+SET PARAMETER: Gain of band 4 for Right ear set to -62.000000 dB
+SET PARAMETER: Gain of band 5 for Right ear set to -65.000000 dB
+SET PARAMETER: Gain of band 6 for Right ear set to -65.000000 dB
+SET PARAMETER: Gain of band 7 for Right ear set to -65.000000 dB
+SET PARAMETER: Gain of band 8 for Right ear set to -65.000000 dB
+SET PARAMETER: Gain of band 0 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 1 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 2 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 3 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 4 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 5 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 6 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 7 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 8 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 0 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 1 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 2 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 3 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 4 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 5 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 6 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 7 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 8 for Right ear set to 0.000000 dB
+SET PARAMETER: Left ear EQ process switched OFF
+SET PARAMETER: Right ear EQ process switched OFF
+SET PARAMETER: Left ear Compression process switched OFF
+SET PARAMETER: Right ear Compression process switched OFF
+SET PARAMETER: Left ear EQ process switched ON
+SET PARAMETER: Left ear Compression process switched ON
+SET PARAMETER: Right ear EQ process switched ON
+SET PARAMETER: Right ear Compression process switched ON
+SET PARAMETER: Gain of band 0 for Left ear set to -47.000000 dB
+SET PARAMETER: Gain of band 1 for Left ear set to -47.000000 dB
+SET PARAMETER: Gain of band 2 for Left ear set to -52.000000 dB
+SET PARAMETER: Gain of band 3 for Left ear set to -55.000000 dB
+SET PARAMETER: Gain of band 4 for Left ear set to -62.000000 dB
+SET PARAMETER: Gain of band 5 for Left ear set to -65.000000 dB
+SET PARAMETER: Gain of band 6 for Left ear set to -65.000000 dB
+SET PARAMETER: Gain of band 7 for Left ear set to -65.000000 dB
+SET PARAMETER: Gain of band 8 for Left ear set to -65.000000 dB
+SET PARAMETER: Gain of band 0 for Right ear set to -47.000000 dB
+SET PARAMETER: Gain of band 1 for Right ear set to -47.000000 dB
+SET PARAMETER: Gain of band 2 for Right ear set to -52.000000 dB
+SET PARAMETER: Gain of band 3 for Right ear set to -55.000000 dB
+SET PARAMETER: Gain of band 4 for Right ear set to -62.000000 dB
+SET PARAMETER: Gain of band 5 for Right ear set to -65.000000 dB
+SET PARAMETER: Gain of band 6 for Right ear set to -65.000000 dB
+SET PARAMETER: Gain of band 7 for Right ear set to -65.000000 dB
+SET PARAMETER: Gain of band 8 for Right ear set to -65.000000 dB
+SET PARAMETER: Gain of band 0 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 1 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 2 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 3 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 4 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 5 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 6 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 7 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 8 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 0 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 1 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 2 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 3 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 4 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 5 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 6 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 7 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 8 for Right ear set to 0.000000 dB
+SET PARAMETER: Left ear EQ process switched OFF
+SET PARAMETER: Right ear EQ process switched OFF
+SET PARAMETER: Left ear Compression process switched OFF
+SET PARAMETER: Right ear Compression process switched OFF
+SET PARAMETER: Left ear EQ process switched ON
+SET PARAMETER: Left ear Compression process switched ON
+SET PARAMETER: Gain of band 0 for Left ear set to -47.000000 dB
+SET PARAMETER: Gain of band 1 for Left ear set to -47.000000 dB
+SET PARAMETER: Gain of band 2 for Left ear set to -52.000000 dB
+SET PARAMETER: Gain of band 3 for Left ear set to -55.000000 dB
+SET PARAMETER: Gain of band 4 for Left ear set to -62.000000 dB
+SET PARAMETER: Gain of band 5 for Left ear set to -65.000000 dB
+SET PARAMETER: Gain of band 6 for Left ear set to -65.000000 dB
+SET PARAMETER: Gain of band 7 for Left ear set to -65.000000 dB
+SET PARAMETER: Gain of band 8 for Left ear set to -65.000000 dB
+SET PARAMETER: Right ear EQ process switched ON
+SET PARAMETER: Right ear Compression process switched ON
+SET PARAMETER: Gain of band 0 for Right ear set to -47.000000 dB
+SET PARAMETER: Gain of band 1 for Right ear set to -47.000000 dB
+SET PARAMETER: Gain of band 2 for Right ear set to -52.000000 dB
+SET PARAMETER: Gain of band 3 for Right ear set to -55.000000 dB
+SET PARAMETER: Gain of band 4 for Right ear set to -62.000000 dB
+SET PARAMETER: Gain of band 5 for Right ear set to -65.000000 dB
+SET PARAMETER: Gain of band 6 for Right ear set to -65.000000 dB
+SET PARAMETER: Gain of band 7 for Right ear set to -65.000000 dB
+SET PARAMETER: Gain of band 8 for Right ear set to -65.000000 dB
+SET PARAMETER: Gain of band 0 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 1 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 2 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 3 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 4 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 5 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 6 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 7 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 8 for Left ear set to 0.000000 dB
+SET PARAMETER: Gain of band 0 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 1 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 2 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 3 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 4 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 5 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 6 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 7 for Right ear set to 0.000000 dB
+SET PARAMETER: Gain of band 8 for Right ear set to 0.000000 dB
+SET PARAMETER: Left ear EQ process switched OFF
+SET PARAMETER: Right ear EQ process switched OFF
+SET PARAMETER: Left ear Compression process switched OFF
+SET PARAMETER: Right ear Compression process switched OFF

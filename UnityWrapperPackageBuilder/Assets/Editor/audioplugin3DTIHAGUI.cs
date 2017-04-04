@@ -29,6 +29,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     bool noiseAfter = false;
     //bool dynamicEq = true;
     bool interpolation = true;
+    bool debugLogHA = false;
 
     bool initDone = false;
 
@@ -90,7 +91,8 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         DrawHeader(plugin);
         DrawEars(plugin);
         DrawDynamicEq(plugin);
-        DrawNoiseGenerator(plugin);          
+        DrawNoiseGenerator(plugin);
+        //DrawDebugLog(plugin);       
         
         //return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG)
         return false;     // DO NOT SHOW DEFAULT CONTROLS
@@ -105,7 +107,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         plugin.SetFloatParameter("NOISEBEF", Bool2Float(noiseBefore));
         plugin.SetFloatParameter("NOISEAFT", Bool2Float(noiseAfter));        
         plugin.SetFloatParameter("EQINT", Bool2Float(interpolation));
-
+        
         initDone = true;
     }
 
@@ -342,6 +344,18 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         EndCentralColumn();
     }
 
+    /// <summary>
+    /// Draw debug log controls 
+    /// </summary>
+    /// <param name="plugin"></param>
+    public void DrawDebugLog(IAudioEffectPlugin plugin)
+    {
+        BeginCentralColumn("Debug Log File");
+        {
+            CreateToggle(plugin, ref debugLogHA, "Write Debug Log File", "DebugLogHA");
+        }
+        EndCentralColumn();
+    }
 
     /// <summary>
     ///  Auxiliary function for creating toogle input

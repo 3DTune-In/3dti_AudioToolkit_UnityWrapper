@@ -30,6 +30,7 @@ public class TestHAAPI : MonoBehaviour {
         //HAMIXER = HAAPI.haMixer;
 
         HAAPI.SwitchHAOnOff(API_3DTI_Common.T_ear.BOTH, true);
+        HAAPI.SetWriteDebugLog(true);
 
         //RunFig6Test();
         //RunFig6TestSevere();        
@@ -75,6 +76,8 @@ public class TestHAAPI : MonoBehaviour {
             HAAPI.SetCompressionPercentage(API_3DTI_Common.T_ear.BOTH, 120.0f);
         if (Input.GetKeyDown(KeyCode.K))
             HAAPI.SetDynamicEQAttackRelease(API_3DTI_Common.T_ear.BOTH, 100.0f);
+        if (Input.GetKeyDown(KeyCode.L))
+            HAAPI.SetWriteDebugLog(true);
     }
 
     
