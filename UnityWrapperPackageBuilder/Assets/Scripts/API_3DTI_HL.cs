@@ -205,16 +205,14 @@ public class API_3DTI_HL : MonoBehaviour
             return SetDefaultCompressor(EAR_RIGHT);
         }
         if (ear == EAR_LEFT)
-        {
-            // TO DO: Knee
+        {            
             if (!hlMixer.ClearFloat("HL3DTI_LeftRatio")) return false;
             if (!hlMixer.ClearFloat("HL3DTI_LeftThreshold")) return false;
             if (!hlMixer.ClearFloat("HL3DTI_LeftAttack")) return false;
             if (!hlMixer.ClearFloat("HL3DTI_LeftRelease")) return false;
         }
         else
-        {
-            // TO DO: Knee
+        {         
             if (!hlMixer.ClearFloat("HL3DTI_RightRatio")) return false;
             if (!hlMixer.ClearFloat("HL3DTI_RightThreshold")) return false;
             if (!hlMixer.ClearFloat("HL3DTI_RightAttack")) return false;

@@ -12,9 +12,9 @@
 **/
 
 #include "AudioPluginUtil.h"
-
 #include <BinauralSpatializer/Core.h>
 #include <Common/Debugger.h>
+
 
 // Includes for debug logging
 #include <fstream>
@@ -76,7 +76,7 @@ namespace Spatializer3DTI
     {
 		int sourceID;	// DEBUG
 		std::shared_ptr<Binaural::CSingleSourceDSP> audioSource;
-		std::shared_ptr<Binaural::CListener> listener;
+		std::shared_ptr<Binaural::CListener> listener;				
 		Binaural::CCore core;
 		bool coreReady;
 		float parameters[P_NUM];

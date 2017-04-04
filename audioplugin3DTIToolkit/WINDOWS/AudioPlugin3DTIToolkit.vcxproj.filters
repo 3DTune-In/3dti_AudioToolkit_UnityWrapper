@@ -248,6 +248,12 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SpeakerSetConfiguration.h">
       <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\3DTI_BinauralSpatializer.h">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\3DTI_LoudspeakersSpatializer.h">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="3DTI_Toolkit_Core">
