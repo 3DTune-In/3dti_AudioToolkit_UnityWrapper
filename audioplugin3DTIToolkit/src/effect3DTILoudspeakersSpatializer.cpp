@@ -12,8 +12,7 @@
 **/
 
 #include "AudioPluginUtil.h"
-
-#include <LoudspeakersSpatializer/Core_LS.h>
+#include <LoudspeakersSpatializer/3DTI_LoudspeakersSpatializer.h>
 #include <Common/Debugger.h>
 
 // Includes for debug logging
@@ -46,6 +45,7 @@ namespace LoudspeakersSpatializer3DTI
     {
 		//PARAM_HRTF_FILE_STRING,
 		//PARAM_HEAD_RADIUS,
+		PARAM_SAVE_SPEAKERS_CONFIG,
 		PARAM_SCALE_FACTOR,
 		PARAM_SOURCE_ID,	// DEBUG
 		PARAM_CUSTOM_ITD,
@@ -65,6 +65,33 @@ namespace LoudspeakersSpatializer3DTI
 		PARAM_HA_DIRECTIONALITY_ON_LEFT,
 		PARAM_HA_DIRECTIONALITY_ON_RIGHT,*/
 
+		//Speakers
+		PARAM_SPEAKER_1_X,
+		PARAM_SPEAKER_2_X,
+		PARAM_SPEAKER_3_X,
+		PARAM_SPEAKER_4_X,
+		PARAM_SPEAKER_5_X,
+		PARAM_SPEAKER_6_X,
+		PARAM_SPEAKER_7_X,
+		PARAM_SPEAKER_8_X,
+		PARAM_SPEAKER_1_Y,
+		PARAM_SPEAKER_2_Y,
+		PARAM_SPEAKER_3_Y,
+		PARAM_SPEAKER_4_Y,
+		PARAM_SPEAKER_5_Y,
+		PARAM_SPEAKER_6_Y,
+		PARAM_SPEAKER_7_Y,
+		PARAM_SPEAKER_8_Y,
+		PARAM_SPEAKER_1_Z,
+		PARAM_SPEAKER_2_Z,
+		PARAM_SPEAKER_3_Z,
+		PARAM_SPEAKER_4_Z,
+		PARAM_SPEAKER_5_Z,
+		PARAM_SPEAKER_6_Z,
+		PARAM_SPEAKER_7_Z,
+		PARAM_SPEAKER_8_Z,
+
+		//Param number
 		P_NUM
 	};
 
@@ -73,10 +100,23 @@ namespace LoudspeakersSpatializer3DTI
     struct EffectData
     {
 		int sourceID;	// DEBUG
-		std::shared_ptr<Loudspeaker::CSingleSourceDSP_LS> audioSource;
-		Loudspeaker::CCore_LS core;
-		bool coreReady;
+		Loudspeaker::CCore_LS core;											//LoudSpeakers Core
+		std::shared_ptr<Loudspeaker::CSingleSourceDSP_LS> audioSource;		//Loud AudioSource AudioSource Core		
+		shared_ptr<Loudspeaker::CSpeakerSet> speakers;						//Speakers configuration
+
+		bool speakersConfigured;
 		float parameters[P_NUM];
+
+		//Speakers - store geometric position of each speaker
+		//FIXME use a vector
+		CVector3 speaker1_Position;
+		CVector3 speaker2_Position;
+		CVector3 speaker3_Position;
+		CVector3 speaker4_Position;
+		CVector3 speaker5_Position;
+		CVector3 speaker6_Position;
+		CVector3 speaker7_Position;
+		CVector3 speaker8_Position;
 
 		// STRING SERIALIZER		
 		/*char* strHRTFpath;
@@ -151,13 +191,34 @@ namespace LoudspeakersSpatializer3DTI
 		RegisterParameter(definition, "MAGSounSpd", "m/s", 0.0f, 1000.0f, 343.0f, 1.0f, 1.0f, PARAM_MAG_SOUNDSPEED, "Sound speed");
 		//RegisterParameter(definition, "ILDPath", "", 0.0f, 255.0f, 0.0f, 1.0f, 1.0f, PARAM_ILD_FILE_STRING, "String with path of ILD binary file");		
 		RegisterParameter(definition, "DebugLog", "", 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, PARAM_DEBUG_LOG, "Generate debug log");
-		
-		// HA directionality
-		//RegisterParameter(definition, "HADirExtL", "dB", 0.0f, 30.0f, 15.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_EXTEND_LEFT, "HA directionality attenuation (in dB) for Left ear");
-		//RegisterParameter(definition, "HADirExtR", "dB", 0.0f, 30.0f, 15.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT, "HA directionality attenuation (in dB) for Right ear");
-		//RegisterParameter(definition, "HADirOnL", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_ON_LEFT, "HA directionality switch for Left ear");
-		//RegisterParameter(definition, "HADirOnR", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_ON_RIGHT, "HA directionality switch for Right ear");		
-			
+						
+		//SPEAKERS
+		RegisterParameter(definition, "speaker1_x", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_1_X, "Speaker 1 position, x coordinate");
+		RegisterParameter(definition, "speaker1_y", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_1_Y, "Speaker 1 position, y coordinate");
+		RegisterParameter(definition, "speaker1_z", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_1_Z, "Speaker 1 position, z coordinate");
+		RegisterParameter(definition, "speaker2_x", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_2_X, "Speaker 2 position, x coordinate");
+		RegisterParameter(definition, "speaker2_y", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_2_Y, "Speaker 2 position, y coordinate");
+		RegisterParameter(definition, "speaker2_z", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_2_Z, "Speaker 2 position, z coordinate");
+		RegisterParameter(definition, "speaker3_x", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_3_X, "Speaker 3 position, x coordinate");
+		RegisterParameter(definition, "speaker3_y", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_3_Y, "Speaker 3 position, y coordinate");
+		RegisterParameter(definition, "speaker3_z", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_3_Z, "Speaker 3 position, z coordinate");		
+		RegisterParameter(definition, "speaker4_x", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_4_X, "Speaker 4 position, x coordinate");
+		RegisterParameter(definition, "speaker4_y", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_4_Y, "Speaker 4 position, y coordinate");
+		RegisterParameter(definition, "speaker4_z", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_4_Z, "Speaker 4 position, z coordinate");
+		RegisterParameter(definition, "speaker5_x", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_5_X, "Speaker 5 position, x coordinate");
+		RegisterParameter(definition, "speaker5_y", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_5_Y, "Speaker 5 position, y coordinate");
+		RegisterParameter(definition, "speaker5_z", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_5_Z, "Speaker 5 position, z coordinate");
+		RegisterParameter(definition, "speaker6_x", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_6_X, "Speaker 6 position, x coordinate");
+		RegisterParameter(definition, "speaker6_y", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_6_Y, "Speaker 6 position, y coordinate");
+		RegisterParameter(definition, "speaker6_z", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_6_Z, "Speaker 6 position, z coordinate");
+		RegisterParameter(definition, "speaker7_x", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_7_X, "Speaker 7 position, x coordinate");
+		RegisterParameter(definition, "speaker7_y", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_7_Y, "Speaker 7 position, y coordinate");
+		RegisterParameter(definition, "speaker7_z", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_7_Z, "Speaker 7 position, z coordinate");
+		RegisterParameter(definition, "speaker8_x", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_8_X, "Speaker 8 position, x coordinate");
+		RegisterParameter(definition, "speaker8_y", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_8_Y, "Speaker 8 position, y coordinate");
+		RegisterParameter(definition, "speaker8_z", "m", FLT_MIN, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_8_Z, "Speaker 8 position, z coordinate");
+
+
         definition.flags |= UnityAudioEffectDefinitionFlags_IsSpatializer;
         return numparams;
     }
@@ -306,6 +367,30 @@ namespace LoudspeakersSpatializer3DTI
 		WriteLog(state, "--------------------------------------", "\n");
 	}
 
+
+	void SaveSpeakersConfiguration(UnityAudioEffectState* state)
+	{
+		EffectData* data = state->GetEffectData<EffectData>();
+		
+		// Configuration of Speakers
+		Loudspeaker::CSpeakerSetConfiguration loudSpeakersConf;
+		loudSpeakersConf.BeginSetup();
+
+		loudSpeakersConf.AddLoudspeaker(data->speaker1_Position);
+		loudSpeakersConf.AddLoudspeaker(data->speaker2_Position);
+		loudSpeakersConf.AddLoudspeaker(data->speaker3_Position);
+		loudSpeakersConf.AddLoudspeaker(data->speaker4_Position);
+		loudSpeakersConf.AddLoudspeaker(data->speaker5_Position);
+		loudSpeakersConf.AddLoudspeaker(data->speaker6_Position);
+		loudSpeakersConf.AddLoudspeaker(data->speaker7_Position);
+		loudSpeakersConf.AddLoudspeaker(data->speaker8_Position);
+
+		loudSpeakersConf.EndSetup();
+
+		//Set Speakers Configuration
+		data->speakers->LoadSpeakerConfiguration(std::move(loudSpeakersConf));		
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	// AUDIO PLUGIN SDK FUNCTIONS
 	/////////////////////////////////////////////////////////////////////
@@ -343,7 +428,7 @@ namespace LoudspeakersSpatializer3DTI
 		//effectdata->listener = effectdata->core.CreateListener();
 
 		// Init parameters. Core is not ready until we load the HRTF. ILD will be disabled, so we don't need to worry yet
-		effectdata->coreReady = false;
+		effectdata->speakersConfigured = false;
 		effectdata->parameters[PARAM_SCALE_FACTOR] = 1.0f;
 		effectdata->sourceID = -1;
 
@@ -354,6 +439,9 @@ namespace LoudspeakersSpatializer3DTI
 			//effectdata->audioSource->SetInterpolation(true);
 			//effectdata->audioSource->modEnabler.doILD = false;	// ILD disabled before loading ILD data				
 		}
+
+		//Create Speakers Configuration
+		effectdata->speakers = effectdata->core.CreateSpeakers();
 
 		// STRING SERIALIZER
 		//effectdata->strHRTFserializing = false;
@@ -392,6 +480,14 @@ namespace LoudspeakersSpatializer3DTI
 		// Process command sent by C# API
 		switch (index)
 		{
+			case PARAM_SAVE_SPEAKERS_CONFIG:	// Save Speakers Configuration (MANDATORY)								
+				WriteLog(state, "SET PARAMETER: Save Speakers Config", value);
+
+				SaveSpeakersConfiguration(state);
+				data->speakersConfigured = true;
+				WriteLog(state, "Core ready!!!!!", "");				
+				break;
+
 			// FUNCTIONALITY TO BE IMPLEMENTED
 			case PARAM_SCALE_FACTOR:	// Set scale factor (OPTIONAL)				
 				WriteLog(state, "SET PARAMETER: Scale factor changed to ", value);
@@ -428,6 +524,125 @@ namespace LoudspeakersSpatializer3DTI
 				}
 				break;
 
+			case PARAM_SPEAKER_1_X:
+				data->speaker1_Position.x = value;
+				WriteLog(state, "SET PARAMETER: Speaker 1 position, x coordinate, set to ", data->sourceID);			
+				break;
+
+			case PARAM_SPEAKER_1_Y:
+				data->speaker1_Position.y = value;
+				WriteLog(state, "SET PARAMETER: Speaker 1 position, x coordinate, set to ", data->sourceID);
+				break;
+
+			case PARAM_SPEAKER_1_Z:
+				data->speaker1_Position.z = value;
+				WriteLog(state, "SET PARAMETER: Speaker 1 position, x coordinate, set to ", data->sourceID);
+				break;
+
+			case PARAM_SPEAKER_2_X:
+				data->speaker2_Position.x = value;
+				WriteLog(state, "SET PARAMETER: Speaker 2 position, x coordinate, set to ", data->sourceID);
+				break;
+
+			case PARAM_SPEAKER_2_Y:
+				data->speaker2_Position.y = value;
+				WriteLog(state, "SET PARAMETER: Speaker 2 position, x coordinate, set to ", data->sourceID);
+				break;
+
+			case PARAM_SPEAKER_2_Z:
+				data->speaker2_Position.z = value;
+				WriteLog(state, "SET PARAMETER: Speaker 2 position, x coordinate, set to ", data->sourceID);
+				break;
+
+			case PARAM_SPEAKER_3_X:
+				data->speaker3_Position.x = value;
+				WriteLog(state, "SET PARAMETER: Speaker 3 position, x coordinate, set to ", data->sourceID);
+				break;
+
+			case PARAM_SPEAKER_3_Y:
+				data->speaker3_Position.y = value;
+				WriteLog(state, "SET PARAMETER: Speaker 3 position, x coordinate, set to ", data->sourceID);
+				break;
+
+			case PARAM_SPEAKER_3_Z:
+				data->speaker3_Position.z = value;
+				WriteLog(state, "SET PARAMETER: Speaker 3 position, x coordinate, set to ", data->sourceID);
+				break;
+
+			case PARAM_SPEAKER_4_X:
+				data->speaker4_Position.x = value;
+				WriteLog(state, "SET PARAMETER: Speaker 4 position, x coordinate, set to ", data->sourceID);
+				break;
+
+			case PARAM_SPEAKER_4_Y:
+				data->speaker4_Position.y = value;
+				WriteLog(state, "SET PARAMETER: Speaker 4 position, x coordinate, set to ", data->sourceID);
+				break;
+
+			case PARAM_SPEAKER_4_Z:
+				data->speaker4_Position.z = value;
+				WriteLog(state, "SET PARAMETER: Speaker 4 position, x coordinate, set to ", data->sourceID);
+				break;
+
+			case PARAM_SPEAKER_5_X:
+				data->speaker5_Position.x = value;
+				WriteLog(state, "SET PARAMETER: Speaker 5 position, x coordinate, set to ", data->sourceID);
+				break;
+
+			case PARAM_SPEAKER_5_Y:
+				data->speaker5_Position.y = value;
+				WriteLog(state, "SET PARAMETER: Speaker 5 position, x coordinate, set to ", data->sourceID);
+				break;
+
+			case PARAM_SPEAKER_5_Z:
+				data->speaker5_Position.z = value;
+				WriteLog(state, "SET PARAMETER: Speaker 5 position, x coordinate, set to ", data->sourceID);
+				break;
+
+			case PARAM_SPEAKER_6_X:
+				data->speaker6_Position.x = value;
+				WriteLog(state, "SET PARAMETER: Speaker 6 position, x coordinate, set to ", data->sourceID);
+				break;
+
+			case PARAM_SPEAKER_6_Y:
+				data->speaker6_Position.y = value;
+				WriteLog(state, "SET PARAMETER: Speaker 6 position, x coordinate, set to ", data->sourceID);
+				break;
+
+			case PARAM_SPEAKER_6_Z:
+				data->speaker6_Position.z = value;
+				WriteLog(state, "SET PARAMETER: Speaker 6 position, x coordinate, set to ", data->sourceID);
+				break;
+
+			case PARAM_SPEAKER_7_X:
+				data->speaker7_Position.x = value;
+				WriteLog(state, "SET PARAMETER: Speaker 7 position, x coordinate, set to ", data->sourceID);
+				break;
+
+			case PARAM_SPEAKER_7_Y:
+				data->speaker7_Position.y = value;
+				WriteLog(state, "SET PARAMETER: Speaker 7 position, x coordinate, set to ", data->sourceID);
+				break;
+
+			case PARAM_SPEAKER_7_Z:
+				data->speaker7_Position.z = value;
+				WriteLog(state, "SET PARAMETER: Speaker 7 position, x coordinate, set to ", data->sourceID);
+				break;
+
+			case PARAM_SPEAKER_8_X:
+				data->speaker8_Position.x = value;
+				WriteLog(state, "SET PARAMETER: Speaker 8 position, x coordinate, set to ", data->sourceID);
+				break;
+
+			case PARAM_SPEAKER_8_Y:
+				data->speaker8_Position.y = value;
+				WriteLog(state, "SET PARAMETER: Speaker 8 position, x coordinate, set to ", data->sourceID);
+				break;
+
+			case PARAM_SPEAKER_8_Z:
+				data->speaker8_Position.z = value;
+				WriteLog(state, "SET PARAMETER: Speaker 8 position, x coordinate, set to ", data->sourceID);
+				break;
 
 			case PARAM_DEBUG_LOG:				
 				if (value != 0.0f)
@@ -473,8 +688,8 @@ namespace LoudspeakersSpatializer3DTI
     UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectState* state, float* inbuffer, float* outbuffer, unsigned int length, int inchannels, int outchannels)
     {
         // Check that I/O formats are right and that the host API supports this feature
-        if (inchannels != 2 || outchannels != 2 ||
-            !IsHostCompatible(state) || state->spatializerdata == NULL)
+		//FIXME are we goint to work always with 8 channels?
+        if (inchannels != 8 || outchannels != 8 || !IsHostCompatible(state) || state->spatializerdata == NULL)
         {
 			WriteLog(state, "PROCESS: ERROR!!!! Wrong number of channels or Host is not compatible:", "");
 			WriteLog(state, "         Input channels = ", inchannels);
@@ -489,7 +704,7 @@ namespace LoudspeakersSpatializer3DTI
 		EffectData* data = state->GetEffectData<EffectData>();
 
 		// Before doing anything, check that the core is ready
-		if (!data->coreReady)
+		if (!data->speakersConfigured)
 		{
 			// Put silence in outbuffer
 			//WriteLog(state, "PROCESS: Core is not ready yet...", "");
@@ -509,13 +724,14 @@ namespace LoudspeakersSpatializer3DTI
 		}
 
 		// Process!!
-		CStereoBuffer<float> outStereoBuffer(length * 2);
+		CMultiChannelBuffer<float> outMultiChannelBuffer(length * outchannels);
 		data->audioSource->UpdateBuffer(inMonoBuffer);
+		data->core.ProcessLoudspeakerAnechoic(outMultiChannelBuffer);
 		//data->audioSource->ProcessAnechoic(*data->listener, outStereoBuffer);
 
 		// Transform output buffer			
 		int i = 0;
-		for (auto it = outStereoBuffer.begin(); it != outStereoBuffer.end(); it++)
+		for (auto it = outMultiChannelBuffer.begin(); it != outMultiChannelBuffer.end(); it++)
 		{
 			outbuffer[i++] = *it;
 		}
