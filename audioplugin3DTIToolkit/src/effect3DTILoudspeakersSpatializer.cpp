@@ -44,28 +44,14 @@ enum TLoadResult { RESULT_LOAD_WAITING = 0, RESULT_LOAD_CONTINUE = 1, RESULT_LOA
 namespace LoudspeakersSpatializer3DTI
 {
 	enum
-	{
-		//PARAM_HRTF_FILE_STRING,
-		//PARAM_HEAD_RADIUS,
+	{		
 		PARAM_SCALE_FACTOR,
 		PARAM_SOURCE_ID,	// DEBUG
-		PARAM_CUSTOM_ITD,
-		//PARAM_HRTF_INTERPOLATION,
 		PARAM_MOD_FARLPF,
-		PARAM_MOD_DISTATT,
-		//PARAM_MOD_ILD,
-		//PARAM_MOD_HRTF,
+		PARAM_MOD_DISTATT,		
 		PARAM_MAG_ANECHATT,
-		PARAM_MAG_SOUNDSPEED,
-		//PARAM_ILD_FILE_STRING,		
-		PARAM_DEBUG_LOG,
-
-		// HA directionality
-		/*PARAM_HA_DIRECTIONALITY_EXTEND_LEFT,
-		PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT,
-		PARAM_HA_DIRECTIONALITY_ON_LEFT,
-		PARAM_HA_DIRECTIONALITY_ON_RIGHT,*/
-
+		PARAM_MAG_SOUNDSPEED,		
+		PARAM_DEBUG_LOG,		
 		//Speakers
 		PARAM_SAVE_SPEAKERS_CONFIG,
 		PARAM_SPEAKER_1_X,
@@ -185,7 +171,7 @@ namespace LoudspeakersSpatializer3DTI
 		//RegisterParameter(definition, "HeadRadius", "m", 0.0f, FLT_MAX, 0.0875f, 1.0f, 1.0f, PARAM_HEAD_RADIUS, "Listener head radius");
 		RegisterParameter(definition, "ScaleFactor", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 1.0f, PARAM_SCALE_FACTOR, "Scale factor for over/under sized scenes");
 		RegisterParameter(definition, "SourceID", "", -1.0f, FLT_MAX, -1.0f, 1.0f, 1.0f, PARAM_SOURCE_ID, "Source ID for debug");
-		RegisterParameter(definition, "CustomITD", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_CUSTOM_ITD, "Enabled custom ITD");
+		//RegisterParameter(definition, "CustomITD", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_CUSTOM_ITD, "Enabled custom ITD");
 		//RegisterParameter(definition, "HRTFInterp", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_HRTF_INTERPOLATION, "HRTF Interpolation method");
 		RegisterParameter(definition, "MODfarLPF", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_FARLPF, "Far distance LPF module enabler");
 		RegisterParameter(definition, "MODDistAtt", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_DISTATT, "Distance attenuation module enabler");
