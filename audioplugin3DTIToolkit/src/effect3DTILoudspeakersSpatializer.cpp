@@ -517,7 +517,7 @@ namespace LoudspeakersSpatializer3DTI
 
 		case PARAM_SAVE_SPEAKERS_CONFIG:	// Save Speakers Configuration (MANDATORY)											
 			if (value > 0.0f) {
-				WriteLog(state, "SET PARAMETER: Save Speakers Config", value);
+				WriteLog(state, "SET PARAMETER: Save Speakers Config :", value);
 
 				SaveSpeakersConfiguration(state);
 				data->coreReady = true;
@@ -531,122 +531,122 @@ namespace LoudspeakersSpatializer3DTI
 			
 		case PARAM_SPEAKER_1_X:
 			data->speaker1_Position.x = value;
-			WriteLog(state, "SET PARAMETER: Speaker 1 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 1 position, x coordinate, set to ", data->speaker1_Position.x);
 			break;
 
 		case PARAM_SPEAKER_1_Y:
 			data->speaker1_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 1 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 1 position, x coordinate, set to ", data->speaker1_Position.y);
 			break;
 
 		case PARAM_SPEAKER_1_Z:
 			data->speaker1_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 1 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 1 position, x coordinate, set to ", data->speaker1_Position.z);
 			break;
 
 		case PARAM_SPEAKER_2_X:
 			data->speaker2_Position.x = value;
-			WriteLog(state, "SET PARAMETER: Speaker 2 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 2 position, x coordinate, set to ", data->speaker2_Position.x);
 			break;
 
 		case PARAM_SPEAKER_2_Y:
 			data->speaker2_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 2 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 2 position, x coordinate, set to ", data->speaker2_Position.y);
 			break;
 
 		case PARAM_SPEAKER_2_Z:
 			data->speaker2_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 2 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 2 position, x coordinate, set to ", data->speaker2_Position.z);
 			break;
 
 		case PARAM_SPEAKER_3_X:
 			data->speaker3_Position.x = value;
-			WriteLog(state, "SET PARAMETER: Speaker 3 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 3 position, x coordinate, set to ", data->speaker3_Position.x);
 			break;
 
 		case PARAM_SPEAKER_3_Y:
 			data->speaker3_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 3 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 3 position, x coordinate, set to ", data->speaker3_Position.y);
 			break;
 
 		case PARAM_SPEAKER_3_Z:
 			data->speaker3_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 3 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 3 position, x coordinate, set to ", data->speaker3_Position.z);
 			break;
 
 		case PARAM_SPEAKER_4_X:
 			data->speaker4_Position.x = value;
-			WriteLog(state, "SET PARAMETER: Speaker 4 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 4 position, x coordinate, set to ", data->speaker4_Position.x);
 			break;
 
 		case PARAM_SPEAKER_4_Y:
 			data->speaker4_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 4 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 4 position, x coordinate, set to ", data->speaker4_Position.y);
 			break;
 
 		case PARAM_SPEAKER_4_Z:
 			data->speaker4_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 4 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 4 position, x coordinate, set to ", data->speaker4_Position.z);
 			break;
 
 		case PARAM_SPEAKER_5_X:
 			data->speaker5_Position.x = value;
-			WriteLog(state, "SET PARAMETER: Speaker 5 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 5 position, x coordinate, set to ", data->speaker5_Position.x);
 			break;
 
 		case PARAM_SPEAKER_5_Y:
 			data->speaker5_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 5 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 5 position, x coordinate, set to ", data->speaker5_Position.y);
 			break;
 
 		case PARAM_SPEAKER_5_Z:
 			data->speaker5_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 5 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 5 position, x coordinate, set to ", data->speaker5_Position.z);
 			break;
 
 		case PARAM_SPEAKER_6_X:
 			data->speaker6_Position.x = value;
-			WriteLog(state, "SET PARAMETER: Speaker 6 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 6 position, x coordinate, set to ", data->speaker6_Position.x);
 			break;
 
 		case PARAM_SPEAKER_6_Y:
 			data->speaker6_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 6 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 6 position, x coordinate, set to ", data->speaker6_Position.y);
 			break;
 
 		case PARAM_SPEAKER_6_Z:
 			data->speaker6_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 6 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 6 position, x coordinate, set to ", data->speaker6_Position.z);
 			break;
 
 		case PARAM_SPEAKER_7_X:
 			data->speaker7_Position.x = value;
-			WriteLog(state, "SET PARAMETER: Speaker 7 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 7 position, x coordinate, set to ", data->speaker7_Position.x);
 			break;
 
 		case PARAM_SPEAKER_7_Y:
 			data->speaker7_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 7 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 7 position, x coordinate, set to ", data->speaker7_Position.y);
 			break;
 
 		case PARAM_SPEAKER_7_Z:
 			data->speaker7_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 7 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 7 position, x coordinate, set to ", data->speaker7_Position.z);
 			break;
 
 		case PARAM_SPEAKER_8_X:
 			data->speaker8_Position.x = value;
-			WriteLog(state, "SET PARAMETER: Speaker 8 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 8 position, x coordinate, set to ", data->speaker8_Position.x);
 			break;
 
 		case PARAM_SPEAKER_8_Y:
 			data->speaker8_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 8 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 8 position, x coordinate, set to ", data->speaker8_Position.y);
 			break;
 
 		case PARAM_SPEAKER_8_Z:
 			data->speaker8_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 8 position, x coordinate, set to ", data->sourceID);
+			WriteLog(state, "SET PARAMETER: Speaker 8 position, x coordinate, set to ", data->speaker8_Position.z);
 			break;
 
 		default:
@@ -684,7 +684,7 @@ namespace LoudspeakersSpatializer3DTI
 	UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectState* state, float* inbuffer, float* outbuffer, unsigned int length, int inchannels, int outchannels)
 	{
 		// Check that I/O formats are right and that the host API supports this feature
-		if (inchannels != 2 || outchannels != 2 ||
+		if (inchannels != 8 || outchannels != 8 ||
 			!IsHostCompatible(state) || state->spatializerdata == NULL)
 		{
 			WriteLog(state, "PROCESS: ERROR!!!! Wrong number of channels or Host is not compatible:", "");
