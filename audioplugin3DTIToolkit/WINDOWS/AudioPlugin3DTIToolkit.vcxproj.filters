@@ -149,11 +149,7 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\UPCAnechoic.h">
       <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\AIR.h">
-=======
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\AudioState.h">
->>>>>>> develop
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\BiquadFilter.h">
