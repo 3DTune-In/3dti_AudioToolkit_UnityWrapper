@@ -348,7 +348,7 @@ namespace LoudspeakersSpatializer3DTI
 		EffectData* data = state->GetEffectData<EffectData>();
 		
 		// Audio state:
-		Common::AudioState_Struct audioState = data->core.GetAudioState();
+		Loudspeaker::AudioStateLoudSpeakers_Struct audioState = data->core.GetAudioState();
 		WriteLog(state, "CREATE: Sample rate set to ", audioState.sampleRate);
 		WriteLog(state, "CREATE: Buffer size set to ", audioState.bufferSize);
 
@@ -418,10 +418,9 @@ namespace LoudspeakersSpatializer3DTI
 		WriteLog(state, "Creating audio plugin...", "");
 
 		// Set default audio state			
-		Common::AudioState_Struct audioState;
+		Loudspeaker::AudioStateLoudSpeakers_Struct audioState;
 		audioState.sampleRate = (int)state->samplerate;
-		audioState.bufferSize = (int)state->dspbuffersize;
-		audioState.HRTF_resamplingStep = 15;
+		audioState.bufferSize = (int)state->dspbuffersize;		
 		effectdata->core.SetAudioState(audioState);
 
 		// Create listener

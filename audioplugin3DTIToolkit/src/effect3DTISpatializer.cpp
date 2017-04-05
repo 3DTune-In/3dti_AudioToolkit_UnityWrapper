@@ -341,8 +341,8 @@ namespace Spatializer3DTI
 	{		
 		EffectData* data = state->GetEffectData<EffectData>();
 		
-		// Audio state:
-		Common::AudioState_Struct audioState = data->core.GetAudioState();
+		// Audio state:		
+		Binaural::AudioStateBinaural_Struct audioState = data->core.GetAudioState();
 		WriteLog(state, "CREATE: Sample rate set to ", audioState.sampleRate);
 		WriteLog(state, "CREATE: Buffer size set to ", audioState.bufferSize);
 
@@ -388,7 +388,7 @@ namespace Spatializer3DTI
 		WriteLog(state, "Creating audio plugin...", "");
 
 		// Set default audio state			
-		Common::AudioState_Struct audioState;
+		Binaural::AudioStateBinaural_Struct audioState;
 		audioState.sampleRate = (int)state->samplerate;
 		audioState.bufferSize = (int)state->dspbuffersize;
 		audioState.HRTF_resamplingStep = 15;
