@@ -35,9 +35,6 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\AIR.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\AudioState.cpp">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\BiquadFilter.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
@@ -120,6 +117,9 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SpeakerSetConfiguration.cpp">
       <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\AudioStateBinaural.cpp">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.h">
@@ -156,9 +156,6 @@
       <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\AIR.h">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\AudioState.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\BiquadFilter.h">
@@ -252,6 +249,12 @@
       <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\3DTI_LoudspeakersSpatializer.h">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\AudioStateBinaural.h">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\AudioState_LS.h">
       <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
     </ClInclude>
   </ItemGroup>
