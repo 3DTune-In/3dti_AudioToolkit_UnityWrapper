@@ -11,6 +11,6 @@ AudioManager:
   m_DSPBufferSize: 1024
   m_VirtualVoiceCount: 512
   m_RealVoiceCount: 32
-  m_SpatializerPlugin: 3DTI Binaural Spatializer
+  m_SpatializerPlugin: 3DTI LoudSpeakers Spatializer
   m_DisableAudio: 0
   m_VirtualizeEffects: 1
