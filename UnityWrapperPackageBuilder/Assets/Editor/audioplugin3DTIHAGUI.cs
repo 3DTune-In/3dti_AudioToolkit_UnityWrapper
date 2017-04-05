@@ -10,7 +10,7 @@ using UnityEditor;
 using UnityEngine;
 
 public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
-{    
+{        
     // Constant definitions
     const int EAR_RIGHT = 0;
     const int EAR_LEFT = 1;
@@ -27,8 +27,9 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     bool switchRightEar = false;
     bool noiseBefore = false;
     bool noiseAfter = false;
-    bool dynamicEq = true;
+    //bool dynamicEq = true;
     bool interpolation = true;
+    bool debugLogHA = false;
 
     bool initDone = false;
 
@@ -90,7 +91,8 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         DrawHeader(plugin);
         DrawEars(plugin);
         DrawDynamicEq(plugin);
-        DrawNoiseGenerator(plugin);          
+        DrawNoiseGenerator(plugin);
+        //DrawDebugLog(plugin);       
         
         //return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG)
         return false;     // DO NOT SHOW DEFAULT CONTROLS
@@ -103,10 +105,9 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         plugin.SetFloatParameter("HAL", Bool2Float(switchLeftEar));
         plugin.SetFloatParameter("HAR", Bool2Float(switchRightEar));
         plugin.SetFloatParameter("NOISEBEF", Bool2Float(noiseBefore));
-        plugin.SetFloatParameter("NOISEAFT", Bool2Float(noiseAfter));
-        plugin.SetFloatParameter("DYNEQ", Bool2Float(dynamicEq));
+        plugin.SetFloatParameter("NOISEAFT", Bool2Float(noiseAfter));        
         plugin.SetFloatParameter("EQINT", Bool2Float(interpolation));
-
+        
         initDone = true;
     }
 
@@ -177,10 +178,10 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     {
         BeginCentralColumn("Equalizer");
         {
-            CreateToggle(plugin, ref dynamicEq, "Dynamic Equalizer", "DYNEQ");
+            //CreateToggle(plugin, ref dynamicEq, "Dynamic Equalizer", "DYNEQ");
             CreateParameterSlider(plugin, "LPF", "LPF CutOff", false, "Hz");
             CreateParameterSlider(plugin, "HPF", "HPF CutOff", false, "Hz");
-            if (dynamicEq){ CreateToggle(plugin, ref interpolation, "Interpolation", "EQINT"); }
+            CreateToggle(plugin, ref interpolation, "Interpolation", "EQINT");
 
             BeginLeftColumn();
             {
@@ -188,7 +189,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
 
                 // First level (both in Dynamic and Standard EQ)
                 {
-                    if (dynamicEq)
+                    if (true)
                     {
                         GUILayout.BeginHorizontal();
                         BeginCentralColumn("Level 0");
@@ -210,7 +211,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
                 }
 
                 // Levels 1 and 2 (only in dynamic EQ)
-                if (dynamicEq)
+                if (true)
                 {
                     BeginCentralColumn("Level 1");
                     {
@@ -259,7 +260,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
 
                 // First level (both in Dynamic and Standard EQ)
                 {
-                    if (dynamicEq)
+                    if (true)
                     {
                         GUILayout.BeginHorizontal();
                         BeginCentralColumn("Level 0");
@@ -281,7 +282,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
                 }
 
                 // Levels 1 and 2 (only in dynamic EQ)
-                if (dynamicEq)
+                if (true)
                 {
                     BeginCentralColumn("Level 1");
                     {                                           
@@ -343,6 +344,18 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         EndCentralColumn();
     }
 
+    /// <summary>
+    /// Draw debug log controls 
+    /// </summary>
+    /// <param name="plugin"></param>
+    public void DrawDebugLog(IAudioEffectPlugin plugin)
+    {
+        BeginCentralColumn("Debug Log File");
+        {
+            CreateToggle(plugin, ref debugLogHA, "Write Debug Log File", "DebugLogHA");
+        }
+        EndCentralColumn();
+    }
 
     /// <summary>
     ///  Auxiliary function for creating toogle input

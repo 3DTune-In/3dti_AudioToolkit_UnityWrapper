@@ -8,13 +8,10 @@
       <Filter>3DTI_Toolkit_Modules\ILD</Filter>
     </ClCompile>
     <ClCompile Include="..\src\AudioPluginUtil.cpp" />
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\BRIR.cpp">
-      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
-    </ClCompile>
+    <ClCompile Include="..\src\effect3DTISpatializer.cpp" />
+    <ClCompile Include="..\src\effect3DTIHL.cpp" />
+    <ClCompile Include="..\src\effect3DTIHA.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\Core.cpp">
-      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\Environment.cpp">
       <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\HRTF.cpp">
@@ -47,6 +44,15 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DistanceAttenuator.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorMono.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorStereo.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\EnvelopeDetector.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
@@ -68,9 +74,6 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Transform.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\UPCEnvironment.cpp">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Vector3.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
@@ -86,20 +89,17 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingLossSim.cpp">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\effect3DTISpatializer.cpp" />
-    <ClCompile Include="..\src\effect3DTIHL.cpp" />
-    <ClCompile Include="..\src\effect3DTIHA.cpp" />
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\Environment.cpp">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\UPCEnvironment.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\BRIR.cpp">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\Fig6Algorithm.cpp">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorMono.cpp">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorStereo.cpp">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\EnvelopeDetector.cpp">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
     <ClCompile Include="..\src\effect3DTILoudspeakersSpatializer.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\Core_LS.cpp">
@@ -131,13 +131,7 @@
     <ClInclude Include="..\src\AudioPluginInterface.h" />
     <ClInclude Include="..\src\AudioPluginUtil.h" />
     <ClInclude Include="..\src\PluginList.h" />
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\BRIR.h">
-      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\Core.h">
-      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\Environment.h">
       <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\HRTF.h">
@@ -155,13 +149,20 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\UPCAnechoic.h">
       <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\AIR.h">
+=======
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\AudioState.h">
+>>>>>>> develop
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\BiquadFilter.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Buffer.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\CommonDefinitions.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Conventions.h">
@@ -171,6 +172,18 @@
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DistanceAttenuator.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressor.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorMono.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorStereo.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\EnvelopeDetector.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.h">
@@ -194,9 +207,6 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Transform.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\UPCEnvironment.h">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Vector3.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
@@ -212,23 +222,17 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingLossSim.h">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\Environment.h">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\UPCEnvironment.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\BRIR.h">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\Fig6Algorithm.h">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\CommonDefinitions.h">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressor.h">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorMono.h">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorStereo.h">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\EnvelopeDetector.h">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\Core_LS.h">
       <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>

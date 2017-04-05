@@ -74,7 +74,11 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\Listener.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\SingleSourceDSP.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\UPCAnechoic.h" />
+<<<<<<< HEAD
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\AIR.h" />
+=======
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\AudioState.h" />
+>>>>>>> develop
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\BiquadFilter.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Buffer.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\CommonDefinitions.h" />

@@ -29,7 +29,7 @@ enum TLoadResult { RESULT_LOAD_WAITING = 0, RESULT_LOAD_CONTINUE=1, RESULT_LOAD_
 #ifdef UNITY_ANDROID
 #define DEBUG_LOG_CAT
 #else
-#define DEBUG_LOG_FILE
+#define DEBUG_LOG_FILE_BINSP
 #endif
 
 #ifdef DEBUG_LOG_CAT
@@ -103,7 +103,7 @@ namespace Spatializer3DTI
 		EffectData* data = state->GetEffectData<EffectData>();
 		if (data->debugLog)
 		{
-			#ifdef DEBUG_LOG_FILE
+			#ifdef DEBUG_LOG_FILE_BINSP
 			ofstream logfile;
 			int sourceid = data->sourceID;
 			logfile.open("3DTI_BinauralSpatializer_DebugLog.txt", ofstream::out | ofstream::app);
