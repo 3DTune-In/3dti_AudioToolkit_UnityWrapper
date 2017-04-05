@@ -38,6 +38,77 @@ public class API_3DTI_HA : MonoBehaviour
     // Internal use variables
     float [,] tone = new float[2, 3] { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } };    // Tone values for each EAR and each tone BAND
 
+    // Internal parameters for consistency with GUI
+ //   public bool PARAM_PROCESS_LEFT_ON = false;
+ //   public bool PARAM_PROCESS_RIGHT_ON = false;
+ //   public float PARAM_VOLUME_L_DB = -1.0f;
+ //   public float PARAM_VOLUME_R_DB = -1.0f;
+ //   // Common values for both ears in EQ		
+ //   public float PARAM_EQ_LPFCUTOFF_HZ = -1.0f;
+ //   public float PARAM_EQ_HPFCUTOFF_HZ = -1.0f;
+	//// Dynamic EQ
+	//public bool PARAM_DYNAMICEQ_INTERPOLATION_ON = true;
+ //   public float PARAM_DYNAMICEQ_LEVELTHRESHOLD_0_LEFT_DBFS = -1.0f;
+ //   public float PARAM_DYNAMICEQ_LEVELTHRESHOLD_1_LEFT_DBFS = -1.0f;
+ //   public float PARAM_DYNAMICEQ_LEVELTHRESHOLD_2_LEFT_DBFS = -1.0f;
+ //   public float PARAM_DYNAMICEQ_LEVELTHRESHOLD_0_RIGHT_DBFS = -1.0f;
+ //   public float PARAM_DYNAMICEQ_LEVELTHRESHOLD_1_RIGHT_DBFS = -1.0f;
+ //   public float PARAM_DYNAMICEQ_LEVELTHRESHOLD_2_RIGHT_DBFS = -1.0f;
+ //   public float PARAM_DYNAMICEQ_LEVEL_0_BAND_0_LEFT_DB = -1.0f;
+ //   public float PARAM_DYNAMICEQ_LEVEL_0_BAND_1_LEFT_DB = -1.0f;
+ //   public float PARAM_DYNAMICEQ_LEVEL_0_BAND_2_LEFT_DB = -1.0f;
+ //   public float PARAM_DYNAMICEQ_LEVEL_0_BAND_3_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_0_BAND_4_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_0_BAND_5_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_0_BAND_6_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_0_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_1_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_2_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_3_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_4_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_5_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_6_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_0_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_1_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_2_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_3_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_4_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_5_LEFT_DB = -1.0f;
+ //   public float PARAM_DYNAMICEQ_LEVEL_2_BAND_6_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_0_BAND_0_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_0_BAND_1_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_0_BAND_2_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_0_BAND_3_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_0_BAND_4_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_0_BAND_5_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_0_BAND_6_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_0_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_1_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_2_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_3_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_4_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_5_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_6_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_0_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_1_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_2_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_3_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_4_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_5_RIGHT_DB = -1.0f;
+ //   public float PARAM_DYNAMICEQ_LEVEL_2_BAND_6_RIGHT_DB = -1.0f;
+ //   public float PARAM_DYNAMICEQ_ATTACKRELEASE_LEFT_MS = -1.0f;
+ //   public float PARAM_DYNAMICEQ_ATTACKRELEASE_RIGHT_MS = -1.0f;
+ //   // Quantization noise
+ //   public bool PARAM_NOISE_BEFORE_ON = false;
+ //   public bool PARAM_NOISE_AFTER_ON = false;
+ //   public int PARAM_NOISE_NUMBITS = -1;
+ //   // Simplified controls
+ //   public float PARAM_COMPRESSION_PERCENTAGE_LEFT = -1.0f;
+ //   public float PARAM_COMPRESSION_PERCENTAGE_RIGHT = -1.0f;
+ //   // Debug log
+ //   public bool PARAM_DEBUG_LOG = false;
+
+
     //////////////////////////////////////////////////////////////
     // GLOBAL METHODS
     //////////////////////////////////////////////////////////////
@@ -49,7 +120,7 @@ public class API_3DTI_HA : MonoBehaviour
     /// <param name="value"></param>
     /// <returns></returns>
     public bool SwitchHAOnOff(API_3DTI_Common.T_ear ear, bool value)
-    {
+    {        
         return HASwitch(ear, "HA3DTI_Process_", value);
     }
 
@@ -62,6 +133,11 @@ public class API_3DTI_HA : MonoBehaviour
     public bool SetVolume(API_3DTI_Common.T_ear ear, float volume)
     {
         return HASetFloat(ear, "HA3DTI_Volume_", volume);
+    }
+
+    public bool SetWriteDebugLog(bool value)
+    {
+        return haMixer.SetFloat("HA3DTI_DebugLog", Bool2Float(value)); 
     }
 
     //////////////////////////////////////////////////////////////
@@ -121,6 +197,17 @@ public class API_3DTI_HA : MonoBehaviour
         return true;
     }
 
+    public bool SetCompressionPercentage(API_3DTI_Common.T_ear ear, float value)
+    {
+        if (ear == API_3DTI_Common.T_ear.BOTH)
+        {
+            if (!SetCompressionPercentage(API_3DTI_Common.T_ear.LEFT, value)) return false;
+            return SetCompressionPercentage(API_3DTI_Common.T_ear.RIGHT, value);
+        }
+
+        return HASetFloat(ear, "HA3DTI_Compression_", value);
+    }
+
     //////////////////////////////////////////////////////////////
     // DYNAMIC EQ
     //////////////////////////////////////////////////////////////
@@ -130,10 +217,10 @@ public class API_3DTI_HA : MonoBehaviour
     /// </summary>    
     /// <param name="value"></param>
     /// <returns></returns>
-    public bool SwitchDynamicEQOnOff(bool value)
-    {
-        return haMixer.SetFloat("HA3DTI_Dynamic_On", Bool2Float(value)); 
-    }
+    //public bool SwitchDynamicEQOnOff(bool value)
+    //{
+    //    return haMixer.SetFloat("HA3DTI_Dynamic_On", Bool2Float(value)); 
+    //}
 
     /// <summary>
     ///  Set gain (in dB) for one band of the standard equalizer
@@ -244,8 +331,7 @@ public class API_3DTI_HA : MonoBehaviour
 
         // Left ear
         if (ear == API_3DTI_Common.T_ear.LEFT)
-        {
-            haMixer.SetFloat("HA3DTI_Dynamic_On", Bool2Float(true));    // Set Dynamic EQ On
+        {            
             haMixer.SetFloat("HA3DTI_Threshold_0_Left", FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 0
             haMixer.SetFloat("HA3DTI_Threshold_1_Left", FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 1
             haMixer.SetFloat("HA3DTI_Threshold_2_Left", FIG6_THRESHOLD_2_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 2
@@ -253,8 +339,7 @@ public class API_3DTI_HA : MonoBehaviour
 
         // Left ear
         if (ear == API_3DTI_Common.T_ear.RIGHT)
-        {
-            haMixer.SetFloat("HA3DTI_Dynamic_On", Bool2Float(true));    // Set Dynamic EQ On
+        {         
             haMixer.SetFloat("HA3DTI_Threshold_0_Right", FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 0
             haMixer.SetFloat("HA3DTI_Threshold_1_Right", FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 1
             haMixer.SetFloat("HA3DTI_Threshold_2_Right", FIG6_THRESHOLD_2_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 2

@@ -48,6 +48,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     int selectedPresetLeft = PRESET_PLAIN;
     int selectedPresetRight = PRESET_PLAIN;
     bool initDone = false;
+    bool debugLogHL = false;
 
     // GUI Styles
     GUIStyle leftAlign;
@@ -121,11 +122,12 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 DrawEQ(plugin);
                 DrawCompressor(plugin);
             }
+            DrawDebugLog(plugin);
         }
         EditorGUILayout.EndToggleGroup();
-
-       //return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG)
-       return false;     // DO NOT SHOW DEFAULT CONTROLS
+        
+        //return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG)
+        return false;     // DO NOT SHOW DEFAULT CONTROLS
     }
 
 
@@ -154,8 +156,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         plugin.SetFloatParameter("CompRightOn", Bool2Float(compressorRightOn));
         plugin.SetFloatParameter("CompFirst", Bool2Float(compressorFirst));
 
-        // Compressor
-        // TO DO: Knee
+        // Compressor        
         plugin.SetFloatParameter("LeftRatio", (float)DEFAULT_COMP_RATIO);
         plugin.SetFloatParameter("LeftThreshold", (float)DEFAULT_COMP_THRESHOLD);
         plugin.SetFloatParameter("LeftAttack", (float)DEFAULT_COMP_ATTACK);
@@ -286,6 +287,32 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         GUI.color = baseColor;
 
         GUILayout.EndVertical();
+    }
+
+    /// <summary>
+    /// Draw debug log controls 
+    /// </summary>
+    /// <param name="plugin"></param>
+    public void DrawDebugLog(IAudioEffectPlugin plugin)
+    {
+        //BeginCentralColumn("Debug Log File");
+        {
+            CreateToggle(plugin, ref debugLogHL, "Write Debug Log File", "DebugLogHL");
+        }
+        //EndCentralColumn();
+    }
+    
+    /// <summary>
+    ///  Auxiliary function for creating toogle input
+    /// </summary>    
+    public void CreateToggle(IAudioEffectPlugin plugin, ref bool boolvar, string toggleText, string switchParameter)
+    {
+        bool oldvar = boolvar;
+        boolvar = GUILayout.Toggle(boolvar, toggleText, GUILayout.ExpandWidth(false));
+        if (oldvar != boolvar)
+        {
+            plugin.SetFloatParameter(switchParameter, Bool2Float(boolvar));
+        }
     }
 
     /// <summary>

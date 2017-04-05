@@ -25,7 +25,7 @@ using namespace std;
 #ifdef UNITY_ANDROID
 #define DEBUG_LOG_CAT
 #else
-//#define DEBUG_LOG_FILE
+#define DEBUG_LOG_FILE_HL
 #endif
 
 #ifdef DEBUG_LOG_CAT
@@ -114,6 +114,9 @@ namespace HLSimulation3DTI
 		PARAM_COMP_RIGHT_ATTACK,
 		PARAM_COMP_RIGHT_RELEASE,		
 
+		// Debug log
+		PARAM_DEBUG_LOG,
+
 		P_NUM
 	};
 
@@ -123,6 +126,9 @@ namespace HLSimulation3DTI
     {
 		CHearingLossSim HL;				
 		float parameters[P_NUM];
+
+		// DEBUG LOG
+		bool debugLog = false;
 	};
 
 	/////////////////////////////////////////////////////////////////////
@@ -130,19 +136,23 @@ namespace HLSimulation3DTI
 	template <class T>
 	void WriteLog(UnityAudioEffectState* state, string logtext, const T& value)
 	{
-		#ifdef DEBUG_LOG_FILE
-			ofstream logfile;			
-			logfile.open("debugHL.txt", ofstream::out | ofstream::app);
+		EffectData* data = state->GetEffectData<EffectData>();
+		if (data->debugLog)
+		{
+			#ifdef DEBUG_LOG_FILE_HL
+			ofstream logfile;
+			logfile.open("3DTI_HearingLossSimulation_DebugLog.txt", ofstream::out | ofstream::app);
 			logfile << logtext << value << endl;
 			logfile.close();
-		#endif
+			#endif
 
-		#ifdef DEBUG_LOG_CAT						
+			#ifdef DEBUG_LOG_CAT						
 			std::ostringstream os;
 			os << logtext << value;
-			string fulltext = os.str();			
+			string fulltext = os.str();
 			__android_log_print(ANDROID_LOG_DEBUG, "3DTIHLSIMULATION", fulltext.c_str());
-		#endif
+			#endif
+		}
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -202,8 +212,36 @@ namespace HLSimulation3DTI
 		RegisterParameter(definition, "RightAttack", "ms", 0.0f, MAX_ATTACK, DEFAULT_ATTACK, 1.0f, 1.0f, PARAM_COMP_RIGHT_ATTACK, "Right compressor: Attack");
 		RegisterParameter(definition, "RightRelease", "ms", 0.0f, MAX_RELEASE, DEFAULT_RELEASE, 1.0f, 1.0f, PARAM_COMP_RIGHT_RELEASE, "Right compressor: Release");
 		
+		// Debug log
+		RegisterParameter(definition, "DebugLogHL", "", 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, PARAM_DEBUG_LOG, "Generate debug log for HL");
+
         return numparams;
     }
+
+
+	/////////////////////////////////////////////////////////////////////
+
+	void WriteLogHeader(UnityAudioEffectState* state)
+	{
+		EffectData* data = state->GetEffectData<EffectData>();
+
+		// EQ:
+		WriteLog(state, "CREATE: EQ setup:", "");
+		WriteLog(state, "        Initial frequency = ", DEFAULT_INIFREQ);
+		WriteLog(state, "        Number of bands = ", DEFAULT_BANDSNUMBER);
+		WriteLog(state, "        Octave step = 1/", DEFAULT_OCTAVEBANDSTEP);
+		WriteLog(state, "        Q factor of BPFs = ", DEFAULT_QBPF);
+
+		// Compressor:
+		WriteLog(state, "CREATE: Compressor setup:", "");
+		WriteLog(state, "        Sample rate = ", state->samplerate);
+		WriteLog(state, "        Ratio = ", DEFAULT_RATIO);
+		WriteLog(state, "        Threshold = ", DEFAULT_THRESHOLD);
+		WriteLog(state, "        Attack time = ", DEFAULT_ATTACK);
+		WriteLog(state, "        Release time = ", DEFAULT_RELEASE);
+
+		WriteLog(state, "--------------------------------------", "\n");
+	}
 
 	/////////////////////////////////////////////////////////////////////	
 
@@ -218,28 +256,33 @@ namespace HLSimulation3DTI
 
 		// EQ Setup		
 		effectdata->HL.Setup(DEFAULT_INIFREQ, DEFAULT_BANDSNUMBER, DEFAULT_OCTAVEBANDSTEP, DEFAULT_QBPF);
-		WriteLog(state, "CREATE: EQ setup:", "");
-		WriteLog(state, "        Initial frequency = ", DEFAULT_INIFREQ);
-		WriteLog(state, "        Number of bands = ", DEFAULT_BANDSNUMBER);
-		WriteLog(state, "        Octave step = 1/", DEFAULT_OCTAVEBANDSTEP);
-		WriteLog(state, "        Q factor of BPFs = ", DEFAULT_QBPF);
+		//WriteLog(state, "CREATE: EQ setup:", "");
+		//WriteLog(state, "        Initial frequency = ", DEFAULT_INIFREQ);
+		//WriteLog(state, "        Number of bands = ", DEFAULT_BANDSNUMBER);
+		//WriteLog(state, "        Octave step = 1/", DEFAULT_OCTAVEBANDSTEP);
+		//WriteLog(state, "        Q factor of BPFs = ", DEFAULT_QBPF);
 
 		// Initial setup of band gains
 		effectdata->HL.SetGains_dB(DEFAULT_BAND_GAINS, EAR_LEFT);
 		effectdata->HL.SetGains_dB(DEFAULT_BAND_GAINS, EAR_RIGHT);
 		
 		// Setup of Compressor
-		effectdata->HL.Compr_L.Setup(state->samplerate, 
-									effectdata->parameters[PARAM_COMP_LEFT_RATIO], 
-									effectdata->parameters[PARAM_COMP_LEFT_THRESHOLD],
-									effectdata->parameters[PARAM_COMP_LEFT_ATTACK], 
-									effectdata->parameters[PARAM_COMP_LEFT_RELEASE]);
-		effectdata->HL.Compr_R.Setup(state->samplerate,
-									effectdata->parameters[PARAM_COMP_RIGHT_RATIO],
-									effectdata->parameters[PARAM_COMP_RIGHT_THRESHOLD],
-									effectdata->parameters[PARAM_COMP_RIGHT_ATTACK],
-									effectdata->parameters[PARAM_COMP_RIGHT_RELEASE]);
-		WriteLog(state, "CREATE: Compressor setup with sample rate ", state->samplerate);
+		((CDynamicCompressorMono)effectdata->HL.Compr_L).Setup(state->samplerate,
+									DEFAULT_RATIO, 
+									DEFAULT_THRESHOLD,
+									DEFAULT_ATTACK, 
+									DEFAULT_RELEASE);
+		((CDynamicCompressorMono)effectdata->HL.Compr_R).Setup(state->samplerate,
+									DEFAULT_RATIO,
+									DEFAULT_THRESHOLD,
+									DEFAULT_ATTACK,
+									DEFAULT_RELEASE);
+		//WriteLog(state, "CREATE: Compressor setup:", "");
+		//WriteLog(state, "        Sample rate = ", state->samplerate);
+		//WriteLog(state, "        Ratio = ", DEFAULT_RATIO);
+		//WriteLog(state, "        Threshold = ", DEFAULT_THRESHOLD);
+		//WriteLog(state, "        Attack time = ", DEFAULT_ATTACK);
+		//WriteLog(state, "        Release time = ", DEFAULT_RELEASE);
 
 		WriteLog(state, "CREATE: HL Simulation plugin created", "");		
 
@@ -398,22 +441,32 @@ namespace HLSimulation3DTI
 
 			case PARAM_COMP_LEFT_ATTACK:
 				WriteLog(state, "SET PARAMETER: Attack for Left compressor set to: ", value);
-				data->HL.Compr_L.SetAttack(value);
+				((CDynamicCompressorMono)data->HL.Compr_L).SetAttack(value);
 				break;
 
 			case PARAM_COMP_LEFT_RELEASE:
 				WriteLog(state, "SET PARAMETER: Release for Left compressor set to: ", value);
-				data->HL.Compr_L.SetRelease(value);
+				((CDynamicCompressorMono)data->HL.Compr_L).SetRelease(value);
 				break;
 
 			case PARAM_COMP_RIGHT_ATTACK:
 				WriteLog(state, "SET PARAMETER: Attack for Right compressor set to: ", value);
-				data->HL.Compr_R.SetAttack(value);
+				((CDynamicCompressorMono)data->HL.Compr_R).SetAttack(value);
 				break;
 
 			case PARAM_COMP_RIGHT_RELEASE:
 				WriteLog(state, "SET PARAMETER: Release for Right compressor set to: ", value);
-				data->HL.Compr_R.SetRelease(value);
+				((CDynamicCompressorMono)data->HL.Compr_R).SetRelease(value);
+				break;
+
+			case PARAM_DEBUG_LOG:
+				if (value != 0.0f)
+				{
+					data->debugLog = true;
+					WriteLogHeader(state);
+				}
+				else
+					data->debugLog = false;
 				break;
 
 			default:
@@ -483,7 +536,7 @@ namespace HLSimulation3DTI
 			outbuffer[i++] = *it;
 		}
 
-		// DUMMY PROCESS (DEBUG):
+		//// DUMMY PROCESS (DEBUG):
 		//for (unsigned int n = 0; n < length; n++)
 		//{
 		//	for (int i = 0; i < outchannels; i++)

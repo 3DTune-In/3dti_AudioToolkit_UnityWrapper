@@ -25,7 +25,7 @@ using namespace std;
 #ifdef UNITY_ANDROID
 #define DEBUG_LOG_CAT
 #else
-//#define DEBUG_LOG_FILE
+#define DEBUG_LOG_FILE_HA
 #endif
 
 #ifdef DEBUG_LOG_CAT
@@ -46,7 +46,6 @@ namespace HASimulation3DTI
 #define F_FALSE	0.0f
 
 // Default values 
-#define DEFAULT_DYNAMICON			F_TRUE
 #define DEFAULT_LEVELSINTERPOLATION	F_TRUE
 #define DEFAULT_PROCESSLEFT			F_FALSE
 #define DEFAULT_PROCESSRIGHT		F_FALSE
@@ -70,6 +69,7 @@ namespace HASimulation3DTI
 #define DEFAULT_NOISEAFTER			F_FALSE
 #define DEFAULT_DBSPL_FOR_0DBS		0.0f
 #define DEFAULT_FIG6_BANDS_PER_EAR	7
+#define DEFAULT_COMPRESSION_PERCENTAGE	100.0f
 
 // Min/max values for parameters
 #define MIN_VOLDB			-24.0f
@@ -88,6 +88,7 @@ namespace HASimulation3DTI
 #define MAX_ATTACKRELEASE	2000.0f
 #define MIN_FIG6			0.0f
 #define MAX_FIG6			80.0f
+#define MAX_COMPRESSION_PERCENTAGE	120.0f
 
 //////////////////////////////////////////////////////
 
@@ -99,8 +100,7 @@ namespace HASimulation3DTI
 		PARAM_VOLUME_L_DB,
 		PARAM_VOLUME_R_DB,
 
-		// Common switches and values for EQ
-		PARAM_EQ_DYNAMIC_ON,
+		// Common values for both ears in EQ		
 		PARAM_EQ_LPFCUTOFF_HZ,
 		PARAM_EQ_HPFCUTOFF_HZ,
 
@@ -162,6 +162,13 @@ namespace HASimulation3DTI
 		PARAM_NOISE_AFTER_ON,
 		PARAM_NOISE_NUMBITS,
 
+		// Simplified controls
+		PARAM_COMPRESSION_PERCENTAGE_LEFT,
+		PARAM_COMPRESSION_PERCENTAGE_RIGHT,
+
+		// Debug log
+		PARAM_DEBUG_LOG,
+
 		//// Fig6
 		//PARAM_FIG6_BAND_0_LEFT,
 		//PARAM_FIG6_BAND_1_LEFT,
@@ -188,6 +195,9 @@ namespace HASimulation3DTI
 		CHearingAidSim HA;		
 		float parameters[P_NUM];
 
+		// DEBUG LOG
+		bool debugLog = false;
+
 		//// Fig6
 		//bool settingFig6Left;
 		//int fig6ReceivedBandsLeft;	// TO DO: check each individual band
@@ -200,19 +210,23 @@ namespace HASimulation3DTI
 	template <class T>
 	void WriteLog(UnityAudioEffectState* state, string logtext, const T& value)
 	{
-		#ifdef DEBUG_LOG_FILE
-			ofstream logfile;			
-			logfile.open("debugHA.txt", ofstream::out | ofstream::app);
+		EffectData* data = state->GetEffectData<EffectData>();
+		if (data->debugLog)
+		{
+			#ifdef DEBUG_LOG_FILE_HA
+			ofstream logfile;
+			logfile.open("3DTI_HearingAidSimulation_DebugLog.txt", ofstream::out | ofstream::app);
 			logfile << logtext << value << endl;
 			logfile.close();
-		#endif
+			#endif
 
-		#ifdef DEBUG_LOG_CAT						
+			#ifdef DEBUG_LOG_CAT						
 			std::ostringstream os;
 			os << logtext << value;
-			string fulltext = os.str();			
+			string fulltext = os.str();
 			__android_log_print(ANDROID_LOG_DEBUG, "3DTIHASIMULATION", fulltext.c_str());
-		#endif
+			#endif
+		}
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -239,8 +253,7 @@ namespace HASimulation3DTI
 		RegisterParameter(definition, "VOLL", "dB", MIN_VOLDB, MAX_VOLDB, DEFAULT_VOLDB, 1.0f, 1.0f, PARAM_VOLUME_L_DB, "Left HA volume (dB)");
 		RegisterParameter(definition, "VOLR", "dB", MIN_VOLDB, MAX_VOLDB, DEFAULT_VOLDB, 1.0f, 1.0f, PARAM_VOLUME_R_DB, "Right HA volume (dB)");
 
-		// Common switches and values for EQ
-		RegisterParameter(definition, "DYNEQ", "", F_FALSE, F_TRUE, DEFAULT_DYNAMICON, 1.0f, 1.0f, PARAM_EQ_DYNAMIC_ON, "Switch On/Off Dynamic EQ");
+		// Common switches and values for EQ		
 		RegisterParameter(definition, "LPF", "Hz", MIN_LPFCUTOFF, MAX_LPFCUTOFF, DEFAULT_LPFCUTOFF, 1.0f, 1.0f, PARAM_EQ_LPFCUTOFF_HZ, "Cutoff frequency of LPF");
 		RegisterParameter(definition, "HPF", "Hz", MIN_HPFCUTOFF, MAX_HPFCUTOFF, DEFAULT_HPFCUTOFF, 1.0f, 1.0f, PARAM_EQ_HPFCUTOFF_HZ, "Cutoff frequency of HPF");	
 
@@ -302,6 +315,13 @@ namespace HASimulation3DTI
 		RegisterParameter(definition, "NOISEAFT", "", F_FALSE, F_TRUE, DEFAULT_NOISEAFTER, 1.0f, 1.0f, PARAM_NOISE_AFTER_ON, "Apply quantization noise On/Off at the end of the process chain");
 		RegisterParameter(definition, "NOISEBITS", "", MIN_NOISENUMBITS, MAX_NOISENUMBITS, DEFAULT_NOISENUMBITS, 1.0f, 1.0f, PARAM_NOISE_NUMBITS, "Number of bits of quantization noise");	
 
+		// Simplified controls
+		RegisterParameter(definition, "COMPRL", "%", 0.0f, MAX_COMPRESSION_PERCENTAGE, DEFAULT_COMPRESSION_PERCENTAGE, 1.0f, 1.0f, PARAM_COMPRESSION_PERCENTAGE_LEFT, "Amount of compression, Left");
+		RegisterParameter(definition, "COMPRR", "%", 0.0f, MAX_COMPRESSION_PERCENTAGE, DEFAULT_COMPRESSION_PERCENTAGE, 1.0f, 1.0f, PARAM_COMPRESSION_PERCENTAGE_RIGHT, "Amount of compression, Right");
+
+		// Debug log
+		RegisterParameter(definition, "DebugLogHA", "", 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, PARAM_DEBUG_LOG, "Generate debug log for HA");
+
 		//// Fig6
 		//RegisterParameter(definition, "FIG60L", "dB", MIN_FIG6, MAX_FIG6, 0.0f, 1.0f, 1.0f, PARAM_FIG6_BAND_0_LEFT, "Fig6 input band 0 Left");
 		//RegisterParameter(definition, "FIG61L", "dB", MIN_FIG6, MAX_FIG6, 0.0f, 1.0f, 1.0f, PARAM_FIG6_BAND_1_LEFT, "Fig6 input band 1 Left");
@@ -337,6 +357,38 @@ namespace HASimulation3DTI
 
 	/////////////////////////////////////////////////////////////////////
 
+	string FromBoolToOnOffStr(bool bvalue)
+	{
+		if (bvalue)
+			return "On";
+		else
+			return "Off";
+	}
+
+	/////////////////////////////////////////////////////////////////////
+
+	void WriteLogHeader(UnityAudioEffectState* state)
+	{
+		EffectData* data = state->GetEffectData<EffectData>();
+
+		// EQ:
+		WriteLog(state, "CREATE: EQ setup:", "");
+		WriteLog(state, "        Sample rate = ", state->samplerate);
+		WriteLog(state, "        Number of levels = ", DEFAULT_NUMLEVELS);
+		WriteLog(state, "        Number of bands = ", DEFAULT_BANDSNUMBER);
+		WriteLog(state, "        Initial frequency = ", DEFAULT_INIFREQ);
+		WriteLog(state, "        Octave step = 1/", DEFAULT_OCTAVEBANDSTEP);
+		WriteLog(state, "        Q factor of LPF = ", DEFAULT_QLPF);
+		WriteLog(state, "        Q factor of BPFs = ", DEFAULT_QBPF);
+		WriteLog(state, "        Q factor of HPF = ", DEFAULT_QHPF);
+		WriteLog(state, "        LPF cutoff = ", DEFAULT_LPFCUTOFF);
+		WriteLog(state, "        HPF cutoff = ", DEFAULT_HPFCUTOFF);
+
+		WriteLog(state, "--------------------------------------", "\n");
+	}
+
+	/////////////////////////////////////////////////////////////////////
+
     UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectState* state)
     {
         EffectData* effectdata = new EffectData;
@@ -347,31 +399,45 @@ namespace HASimulation3DTI
 		// TO DO: check errors with debugger
 		// TO DO: add more WriteLog
 		
+		effectdata->debugLog = true;
+
 		// Setup HA
 		effectdata->HA.Setup(state->samplerate, DEFAULT_NUMLEVELS, DEFAULT_INIFREQ, DEFAULT_BANDSNUMBER, DEFAULT_OCTAVEBANDSTEP,
 												DEFAULT_LPFCUTOFF, DEFAULT_HPFCUTOFF, DEFAULT_QLPF, DEFAULT_QBPF, DEFAULT_QHPF);
-		WriteLog(state, "CREATE: EQ setup:", "");
-		WriteLog(state, "        Sample rate = ", state->samplerate);
-		WriteLog(state, "        Number of levels = ", DEFAULT_NUMLEVELS);
-		WriteLog(state, "        Number of bands = ", DEFAULT_BANDSNUMBER);
-		WriteLog(state, "        Initial frequency = ", DEFAULT_INIFREQ);		
-		WriteLog(state, "        Octave step = 1/", DEFAULT_OCTAVEBANDSTEP);
-		WriteLog(state, "        Q factor of LPF = ", DEFAULT_QLPF);
-		WriteLog(state, "        Q factor of BPFs = ", DEFAULT_QBPF);
-		WriteLog(state, "        Q factor of HPF = ", DEFAULT_QHPF);
-		WriteLog(state, "        LPF cutoff = ", DEFAULT_LPFCUTOFF);
-		WriteLog(state, "        HPF cutoff = ", DEFAULT_HPFCUTOFF);
+		//WriteLog(state, "CREATE: EQ setup:", "");
+		//WriteLog(state, "        Sample rate = ", state->samplerate);
+		//WriteLog(state, "        Number of levels = ", DEFAULT_NUMLEVELS);
+		//WriteLog(state, "        Number of bands = ", DEFAULT_BANDSNUMBER);
+		//WriteLog(state, "        Initial frequency = ", DEFAULT_INIFREQ);		
+		//WriteLog(state, "        Octave step = 1/", DEFAULT_OCTAVEBANDSTEP);
+		//WriteLog(state, "        Q factor of LPF = ", DEFAULT_QLPF);
+		//WriteLog(state, "        Q factor of BPFs = ", DEFAULT_QBPF);
+		//WriteLog(state, "        Q factor of HPF = ", DEFAULT_QHPF);
+		//WriteLog(state, "        LPF cutoff = ", DEFAULT_LPFCUTOFF);
+		//WriteLog(state, "        HPF cutoff = ", DEFAULT_HPFCUTOFF);
 		
 		// Setup HA switches and default values
-		effectdata->HA.deq.dynamicOn = DEFAULT_DYNAMICON;	// TO DO: writelog
+		//effectdata->HA.deq.dynamicOn = DEFAULT_DYNAMICON;	// TO DO: writelog
+		//effectdata->HA.volL = FromDBToGain(DEFAULT_VOLDB);	// TO DO: writelog
+		//effectdata->HA.volR = FromDBToGain(DEFAULT_VOLDB);	// TO DO: writelog
+		//effectdata->HA.addNoiseBefore = FromFloatToBool(DEFAULT_NOISEBEFORE); // TO DO: writelog
+		//effectdata->HA.addNoiseAfter = FromFloatToBool(DEFAULT_NOISEAFTER); // TO DO: writelog
+		//effectdata->HA.noiseNumBits = DEFAULT_NOISENUMBITS;		// TO DO: writelog
+		//effectdata->HA.deq.levelsInterpolation = DEFAULT_LEVELSINTERPOLATION;	// TO DO: writelog
+		//effectdata->HA.deq.attackReleaseL_ms = DEFAULT_ATTACKRELEASE;	// TO DO: writelog
+		//effectdata->HA.deq.attackReleaseR_ms = DEFAULT_ATTACKRELEASE;	// TO DO: writelog	
+		effectdata->HA.GetDynamicEqualizer()->dynamicOn = true;	// TO DO: will be removed from core
 		effectdata->HA.volL = FromDBToGain(DEFAULT_VOLDB);	// TO DO: writelog
 		effectdata->HA.volR = FromDBToGain(DEFAULT_VOLDB);	// TO DO: writelog
 		effectdata->HA.addNoiseBefore = FromFloatToBool(DEFAULT_NOISEBEFORE); // TO DO: writelog
 		effectdata->HA.addNoiseAfter = FromFloatToBool(DEFAULT_NOISEAFTER); // TO DO: writelog
 		effectdata->HA.noiseNumBits = DEFAULT_NOISENUMBITS;		// TO DO: writelog
-		effectdata->HA.deq.levelsInterpolation = DEFAULT_LEVELSINTERPOLATION;	// TO DO: writelog
-		effectdata->HA.deq.attackReleaseL_ms = DEFAULT_ATTACKRELEASE;	// TO DO: writelog
-		effectdata->HA.deq.attackReleaseR_ms = DEFAULT_ATTACKRELEASE;	// TO DO: writelog
+		effectdata->HA.GetDynamicEqualizer()->levelsInterpolation = DEFAULT_LEVELSINTERPOLATION;	// TO DO: writelog
+		effectdata->HA.GetDynamicEqualizer()->EnvL.SetAttackTime(DEFAULT_ATTACKRELEASE);	// TO DO: writelog
+		effectdata->HA.GetDynamicEqualizer()->EnvL.SetReleaseTime(DEFAULT_ATTACKRELEASE);	// TO DO: writelog
+		effectdata->HA.GetDynamicEqualizer()->EnvR.SetAttackTime(DEFAULT_ATTACKRELEASE);	// TO DO: writelog
+		effectdata->HA.GetDynamicEqualizer()->EnvR.SetReleaseTime(DEFAULT_ATTACKRELEASE);	// TO DO: writelog
+		effectdata->HA.GetDynamicEqualizer()->SetCompressionPercentage(DEFAULT_COMPRESSION_PERCENTAGE, T_ear::BOTH);
 
 		// Setup band gains (TO DO: writelog)
 		for (int level = 0; level < DEFAULT_NUMLEVELS; level++)
@@ -421,9 +487,9 @@ namespace HASimulation3DTI
         if (index >= P_NUM)
             return UNITY_AUDIODSP_ERR_UNSUPPORTED;
         data->parameters[index] = value;
-		WriteLog(state, "SET PARAMETER: ", "");
-		WriteLog(state, "               Index = ", index);
-		WriteLog(state, "               Value = ", value);
+		//WriteLog(state, "SET PARAMETER: ", "");
+		//WriteLog(state, "               Index = ", index);
+		//WriteLog(state, "               Value = ", value);		
 
 		// Process command sent by C# API
 		// TO DO: Check errors with debugger, incorrect values...
@@ -435,68 +501,127 @@ namespace HASimulation3DTI
 			case PARAM_VOLUME_L_DB: data->HA.volL = FromDBToGain(value); break;
 			case PARAM_VOLUME_R_DB:	data->HA.volR = FromDBToGain(value); break;
 
-			// Common switches and values for EQ
-			case PARAM_EQ_DYNAMIC_ON: data->HA.deq.dynamicOn = FromFloatToBool(value); break;
+			// Common switches and values for EQ			
 			case PARAM_EQ_LPFCUTOFF_HZ:	data->HA.ConfigLPF(value, DEFAULT_QLPF); break;
 			case PARAM_EQ_HPFCUTOFF_HZ:	data->HA.ConfigHPF(value, DEFAULT_QHPF); break;
 
 			// Dynamic EQ
-			case PARAM_DYNAMICEQ_INTERPOLATION_ON:				data->HA.deq.levelsInterpolation = FromFloatToBool(value);	break;
-			case PARAM_DYNAMICEQ_LEVELTHRESHOLD_0_LEFT_DBFS:	data->HA.deq.SetLevelThreshold(0, value, EAR_LEFT);			break;
-			case PARAM_DYNAMICEQ_LEVELTHRESHOLD_1_LEFT_DBFS:	data->HA.deq.SetLevelThreshold(1, value, EAR_LEFT);			break;
-			case PARAM_DYNAMICEQ_LEVELTHRESHOLD_2_LEFT_DBFS:	data->HA.deq.SetLevelThreshold(2, value, EAR_LEFT);			break;
-			case PARAM_DYNAMICEQ_LEVELTHRESHOLD_0_RIGHT_DBFS:	data->HA.deq.SetLevelThreshold(0, value, EAR_RIGHT);		break;
-			case PARAM_DYNAMICEQ_LEVELTHRESHOLD_1_RIGHT_DBFS:	data->HA.deq.SetLevelThreshold(1, value, EAR_RIGHT);		break;
-			case PARAM_DYNAMICEQ_LEVELTHRESHOLD_2_RIGHT_DBFS:	data->HA.deq.SetLevelThreshold(2, value, EAR_RIGHT);		break;
-			case PARAM_DYNAMICEQ_LEVEL_0_BAND_0_LEFT_DB:		data->HA.deq.SetLevelBandGain_dB(0, 0, value, EAR_LEFT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_0_BAND_1_LEFT_DB:		data->HA.deq.SetLevelBandGain_dB(0, 1, value, EAR_LEFT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_0_BAND_2_LEFT_DB:		data->HA.deq.SetLevelBandGain_dB(0, 2, value, EAR_LEFT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_0_BAND_3_LEFT_DB:		data->HA.deq.SetLevelBandGain_dB(0, 3, value, EAR_LEFT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_0_BAND_4_LEFT_DB:		data->HA.deq.SetLevelBandGain_dB(0, 4, value, EAR_LEFT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_0_BAND_5_LEFT_DB:		data->HA.deq.SetLevelBandGain_dB(0, 5, value, EAR_LEFT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_0_BAND_6_LEFT_DB:		data->HA.deq.SetLevelBandGain_dB(0, 6, value, EAR_LEFT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_1_BAND_0_LEFT_DB:		data->HA.deq.SetLevelBandGain_dB(1, 0, value, EAR_LEFT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_1_BAND_1_LEFT_DB:		data->HA.deq.SetLevelBandGain_dB(1, 1, value, EAR_LEFT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_1_BAND_2_LEFT_DB:		data->HA.deq.SetLevelBandGain_dB(1, 2, value, EAR_LEFT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_1_BAND_3_LEFT_DB:		data->HA.deq.SetLevelBandGain_dB(1, 3, value, EAR_LEFT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_1_BAND_4_LEFT_DB:		data->HA.deq.SetLevelBandGain_dB(1, 4, value, EAR_LEFT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_1_BAND_5_LEFT_DB:		data->HA.deq.SetLevelBandGain_dB(1, 5, value, EAR_LEFT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_1_BAND_6_LEFT_DB:		data->HA.deq.SetLevelBandGain_dB(1, 6, value, EAR_LEFT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_2_BAND_0_LEFT_DB:		data->HA.deq.SetLevelBandGain_dB(2, 0, value, EAR_LEFT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_2_BAND_1_LEFT_DB:		data->HA.deq.SetLevelBandGain_dB(2, 1, value, EAR_LEFT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_2_BAND_2_LEFT_DB:		data->HA.deq.SetLevelBandGain_dB(2, 2, value, EAR_LEFT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_2_BAND_3_LEFT_DB:		data->HA.deq.SetLevelBandGain_dB(2, 3, value, EAR_LEFT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_2_BAND_4_LEFT_DB:		data->HA.deq.SetLevelBandGain_dB(2, 4, value, EAR_LEFT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_2_BAND_5_LEFT_DB:		data->HA.deq.SetLevelBandGain_dB(2, 5, value, EAR_LEFT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_2_BAND_6_LEFT_DB:		data->HA.deq.SetLevelBandGain_dB(2, 6, value, EAR_LEFT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_0_BAND_0_RIGHT_DB:		data->HA.deq.SetLevelBandGain_dB(0, 0, value, EAR_RIGHT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_0_BAND_1_RIGHT_DB:		data->HA.deq.SetLevelBandGain_dB(0, 1, value, EAR_RIGHT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_0_BAND_2_RIGHT_DB:		data->HA.deq.SetLevelBandGain_dB(0, 2, value, EAR_RIGHT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_0_BAND_3_RIGHT_DB:		data->HA.deq.SetLevelBandGain_dB(0, 3, value, EAR_RIGHT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_0_BAND_4_RIGHT_DB:		data->HA.deq.SetLevelBandGain_dB(0, 4, value, EAR_RIGHT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_0_BAND_5_RIGHT_DB:		data->HA.deq.SetLevelBandGain_dB(0, 5, value, EAR_RIGHT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_0_BAND_6_RIGHT_DB:		data->HA.deq.SetLevelBandGain_dB(0, 6, value, EAR_RIGHT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_1_BAND_0_RIGHT_DB:		data->HA.deq.SetLevelBandGain_dB(1, 0, value, EAR_RIGHT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_1_BAND_1_RIGHT_DB:		data->HA.deq.SetLevelBandGain_dB(1, 1, value, EAR_RIGHT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_1_BAND_2_RIGHT_DB:		data->HA.deq.SetLevelBandGain_dB(1, 2, value, EAR_RIGHT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_1_BAND_3_RIGHT_DB:		data->HA.deq.SetLevelBandGain_dB(1, 3, value, EAR_RIGHT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_1_BAND_4_RIGHT_DB:		data->HA.deq.SetLevelBandGain_dB(1, 4, value, EAR_RIGHT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_1_BAND_5_RIGHT_DB:		data->HA.deq.SetLevelBandGain_dB(1, 5, value, EAR_RIGHT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_1_BAND_6_RIGHT_DB:		data->HA.deq.SetLevelBandGain_dB(1, 6, value, EAR_RIGHT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_2_BAND_0_RIGHT_DB:		data->HA.deq.SetLevelBandGain_dB(2, 0, value, EAR_RIGHT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_2_BAND_1_RIGHT_DB:		data->HA.deq.SetLevelBandGain_dB(2, 1, value, EAR_RIGHT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_2_BAND_2_RIGHT_DB:		data->HA.deq.SetLevelBandGain_dB(2, 2, value, EAR_RIGHT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_2_BAND_3_RIGHT_DB:		data->HA.deq.SetLevelBandGain_dB(2, 3, value, EAR_RIGHT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_2_BAND_4_RIGHT_DB:		data->HA.deq.SetLevelBandGain_dB(2, 4, value, EAR_RIGHT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_2_BAND_5_RIGHT_DB:		data->HA.deq.SetLevelBandGain_dB(2, 5, value, EAR_RIGHT);	break;
-			case PARAM_DYNAMICEQ_LEVEL_2_BAND_6_RIGHT_DB:		data->HA.deq.SetLevelBandGain_dB(2, 6, value, EAR_RIGHT);	break;
-			case PARAM_DYNAMICEQ_ATTACKRELEASE_LEFT_MS:			data->HA.deq.attackReleaseL_ms = value; break;
-			case PARAM_DYNAMICEQ_ATTACKRELEASE_RIGHT_MS:		data->HA.deq.attackReleaseR_ms = value; break;
+			case PARAM_DYNAMICEQ_INTERPOLATION_ON:				
+				data->HA.GetDynamicEqualizer()->levelsInterpolation = FromFloatToBool(value);	
+				WriteLog(state, "SET PARAMETER: Levels interpolation in dynamic equalizer set to ", FromBoolToOnOffStr(FromFloatToBool(value)));
+				break;
+			case PARAM_DYNAMICEQ_LEVELTHRESHOLD_0_LEFT_DBFS:	
+				data->HA.SetLevelThreshold(0, value, EAR_LEFT);			
+				WriteLog(state, "SET PARAMETER: First threshold for Left channel = ", value);
+				break;
+			case PARAM_DYNAMICEQ_LEVELTHRESHOLD_1_LEFT_DBFS:	
+				data->HA.SetLevelThreshold(1, value, EAR_LEFT);			
+				WriteLog(state, "SET PARAMETER: Second threshold for Left channel = ", value);
+				break;
+			case PARAM_DYNAMICEQ_LEVELTHRESHOLD_2_LEFT_DBFS:	
+				data->HA.SetLevelThreshold(2, value, EAR_LEFT);			
+				WriteLog(state, "SET PARAMETER: Third threshold for Left channel = ", value);
+				break;
+			case PARAM_DYNAMICEQ_LEVELTHRESHOLD_0_RIGHT_DBFS:	
+				data->HA.SetLevelThreshold(0, value, EAR_RIGHT);		
+				WriteLog(state, "SET PARAMETER: First threshold for Right channel = ", value);
+				break;
+			case PARAM_DYNAMICEQ_LEVELTHRESHOLD_1_RIGHT_DBFS:	
+				data->HA.SetLevelThreshold(1, value, EAR_RIGHT);		
+				WriteLog(state, "SET PARAMETER: Second threshold for Right channel = ", value);
+				break;
+			case PARAM_DYNAMICEQ_LEVELTHRESHOLD_2_RIGHT_DBFS:	
+				data->HA.SetLevelThreshold(2, value, EAR_RIGHT);		
+				WriteLog(state, "SET PARAMETER: Third threshold for Right channel = ", value);
+				break;
+			case PARAM_DYNAMICEQ_LEVEL_0_BAND_0_LEFT_DB:		data->HA.SetLevelBandGain_dB(0, 0, value, EAR_LEFT);	WriteLog(state, "SET PARAMETER: Gain for Level 0, Band 0, Left channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_0_BAND_1_LEFT_DB:		data->HA.SetLevelBandGain_dB(0, 1, value, EAR_LEFT);	WriteLog(state, "SET PARAMETER: Gain for Level 0, Band 1, Left channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_0_BAND_2_LEFT_DB:		data->HA.SetLevelBandGain_dB(0, 2, value, EAR_LEFT);	WriteLog(state, "SET PARAMETER: Gain for Level 0, Band 2, Left channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_0_BAND_3_LEFT_DB:		data->HA.SetLevelBandGain_dB(0, 3, value, EAR_LEFT);	WriteLog(state, "SET PARAMETER: Gain for Level 0, Band 3, Left channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_0_BAND_4_LEFT_DB:		data->HA.SetLevelBandGain_dB(0, 4, value, EAR_LEFT);	WriteLog(state, "SET PARAMETER: Gain for Level 0, Band 4, Left channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_0_BAND_5_LEFT_DB:		data->HA.SetLevelBandGain_dB(0, 5, value, EAR_LEFT);	WriteLog(state, "SET PARAMETER: Gain for Level 0, Band 5, Left channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_0_BAND_6_LEFT_DB:		data->HA.SetLevelBandGain_dB(0, 6, value, EAR_LEFT);	WriteLog(state, "SET PARAMETER: Gain for Level 0, Band 6, Left channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_1_BAND_0_LEFT_DB:		data->HA.SetLevelBandGain_dB(1, 0, value, EAR_LEFT);	WriteLog(state, "SET PARAMETER: Gain for Level 1, Band 0, Left channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_1_BAND_1_LEFT_DB:		data->HA.SetLevelBandGain_dB(1, 1, value, EAR_LEFT);	WriteLog(state, "SET PARAMETER: Gain for Level 1, Band 1, Left channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_1_BAND_2_LEFT_DB:		data->HA.SetLevelBandGain_dB(1, 2, value, EAR_LEFT);	WriteLog(state, "SET PARAMETER: Gain for Level 1, Band 2, Left channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_1_BAND_3_LEFT_DB:		data->HA.SetLevelBandGain_dB(1, 3, value, EAR_LEFT);	WriteLog(state, "SET PARAMETER: Gain for Level 1, Band 3, Left channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_1_BAND_4_LEFT_DB:		data->HA.SetLevelBandGain_dB(1, 4, value, EAR_LEFT);	WriteLog(state, "SET PARAMETER: Gain for Level 1, Band 4, Left channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_1_BAND_5_LEFT_DB:		data->HA.SetLevelBandGain_dB(1, 5, value, EAR_LEFT);	WriteLog(state, "SET PARAMETER: Gain for Level 1, Band 5, Left channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_1_BAND_6_LEFT_DB:		data->HA.SetLevelBandGain_dB(1, 6, value, EAR_LEFT);	WriteLog(state, "SET PARAMETER: Gain for Level 1, Band 6, Left channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_2_BAND_0_LEFT_DB:		data->HA.SetLevelBandGain_dB(2, 0, value, EAR_LEFT);	WriteLog(state, "SET PARAMETER: Gain for Level 2, Band 0, Left channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_2_BAND_1_LEFT_DB:		data->HA.SetLevelBandGain_dB(2, 1, value, EAR_LEFT);	WriteLog(state, "SET PARAMETER: Gain for Level 2, Band 1, Left channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_2_BAND_2_LEFT_DB:		data->HA.SetLevelBandGain_dB(2, 2, value, EAR_LEFT);	WriteLog(state, "SET PARAMETER: Gain for Level 2, Band 2, Left channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_2_BAND_3_LEFT_DB:		data->HA.SetLevelBandGain_dB(2, 3, value, EAR_LEFT);	WriteLog(state, "SET PARAMETER: Gain for Level 2, Band 3, Left channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_2_BAND_4_LEFT_DB:		data->HA.SetLevelBandGain_dB(2, 4, value, EAR_LEFT);	WriteLog(state, "SET PARAMETER: Gain for Level 2, Band 4, Left channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_2_BAND_5_LEFT_DB:		data->HA.SetLevelBandGain_dB(2, 5, value, EAR_LEFT);	WriteLog(state, "SET PARAMETER: Gain for Level 2, Band 5, Left channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_2_BAND_6_LEFT_DB:		data->HA.SetLevelBandGain_dB(2, 6, value, EAR_LEFT);	WriteLog(state, "SET PARAMETER: Gain for Level 2, Band 6, Left channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_0_BAND_0_RIGHT_DB:		data->HA.SetLevelBandGain_dB(0, 0, value, EAR_RIGHT);	WriteLog(state, "SET PARAMETER: Gain for Level 0, Band 0, Right channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_0_BAND_1_RIGHT_DB:		data->HA.SetLevelBandGain_dB(0, 1, value, EAR_RIGHT);	WriteLog(state, "SET PARAMETER: Gain for Level 0, Band 1, Right channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_0_BAND_2_RIGHT_DB:		data->HA.SetLevelBandGain_dB(0, 2, value, EAR_RIGHT);	WriteLog(state, "SET PARAMETER: Gain for Level 0, Band 2, Right channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_0_BAND_3_RIGHT_DB:		data->HA.SetLevelBandGain_dB(0, 3, value, EAR_RIGHT);	WriteLog(state, "SET PARAMETER: Gain for Level 0, Band 3, Right channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_0_BAND_4_RIGHT_DB:		data->HA.SetLevelBandGain_dB(0, 4, value, EAR_RIGHT);	WriteLog(state, "SET PARAMETER: Gain for Level 0, Band 4, Right channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_0_BAND_5_RIGHT_DB:		data->HA.SetLevelBandGain_dB(0, 5, value, EAR_RIGHT);	WriteLog(state, "SET PARAMETER: Gain for Level 0, Band 5, Right channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_0_BAND_6_RIGHT_DB:		data->HA.SetLevelBandGain_dB(0, 6, value, EAR_RIGHT);	WriteLog(state, "SET PARAMETER: Gain for Level 0, Band 6, Right channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_1_BAND_0_RIGHT_DB:		data->HA.SetLevelBandGain_dB(1, 0, value, EAR_RIGHT);	WriteLog(state, "SET PARAMETER: Gain for Level 1, Band 0, Right channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_1_BAND_1_RIGHT_DB:		data->HA.SetLevelBandGain_dB(1, 1, value, EAR_RIGHT);	WriteLog(state, "SET PARAMETER: Gain for Level 1, Band 1, Right channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_1_BAND_2_RIGHT_DB:		data->HA.SetLevelBandGain_dB(1, 2, value, EAR_RIGHT);	WriteLog(state, "SET PARAMETER: Gain for Level 1, Band 2, Right channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_1_BAND_3_RIGHT_DB:		data->HA.SetLevelBandGain_dB(1, 3, value, EAR_RIGHT);	WriteLog(state, "SET PARAMETER: Gain for Level 1, Band 3, Right channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_1_BAND_4_RIGHT_DB:		data->HA.SetLevelBandGain_dB(1, 4, value, EAR_RIGHT);	WriteLog(state, "SET PARAMETER: Gain for Level 1, Band 4, Right channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_1_BAND_5_RIGHT_DB:		data->HA.SetLevelBandGain_dB(1, 5, value, EAR_RIGHT);	WriteLog(state, "SET PARAMETER: Gain for Level 1, Band 5, Right channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_1_BAND_6_RIGHT_DB:		data->HA.SetLevelBandGain_dB(1, 6, value, EAR_RIGHT);	WriteLog(state, "SET PARAMETER: Gain for Level 1, Band 6, Right channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_2_BAND_0_RIGHT_DB:		data->HA.SetLevelBandGain_dB(2, 0, value, EAR_RIGHT);	WriteLog(state, "SET PARAMETER: Gain for Level 2, Band 0, Right channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_2_BAND_1_RIGHT_DB:		data->HA.SetLevelBandGain_dB(2, 1, value, EAR_RIGHT);	WriteLog(state, "SET PARAMETER: Gain for Level 2, Band 1, Right channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_2_BAND_2_RIGHT_DB:		data->HA.SetLevelBandGain_dB(2, 2, value, EAR_RIGHT);	WriteLog(state, "SET PARAMETER: Gain for Level 2, Band 2, Right channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_2_BAND_3_RIGHT_DB:		data->HA.SetLevelBandGain_dB(2, 3, value, EAR_RIGHT);	WriteLog(state, "SET PARAMETER: Gain for Level 2, Band 3, Right channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_2_BAND_4_RIGHT_DB:		data->HA.SetLevelBandGain_dB(2, 4, value, EAR_RIGHT);	WriteLog(state, "SET PARAMETER: Gain for Level 2, Band 4, Right channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_2_BAND_5_RIGHT_DB:		data->HA.SetLevelBandGain_dB(2, 5, value, EAR_RIGHT);	WriteLog(state, "SET PARAMETER: Gain for Level 2, Band 5, Right channel = ", value); break;
+			case PARAM_DYNAMICEQ_LEVEL_2_BAND_6_RIGHT_DB:		data->HA.SetLevelBandGain_dB(2, 6, value, EAR_RIGHT);	WriteLog(state, "SET PARAMETER: Gain for Level 2, Band 6, Right channel = ", value); break;
+			case PARAM_DYNAMICEQ_ATTACKRELEASE_LEFT_MS:			
+				//data->HA.GetDynamicEqualizer()->EnvL.SetAttackTime(value); 
+				//data->HA.GetDynamicEqualizer()->EnvL.SetReleaseTime(value);
+				data->HA.GetDynamicEqualizer()->attackReleaseL_ms = value;
+				WriteLog(state, "SET PARAMETER: Attack/Release time for Left channel = ", value);
+				break;
+			case PARAM_DYNAMICEQ_ATTACKRELEASE_RIGHT_MS:		
+				//data->HA.GetDynamicEqualizer()->EnvR.SetAttackTime(value);
+				//data->HA.GetDynamicEqualizer()->EnvR.SetReleaseTime(value);
+				data->HA.GetDynamicEqualizer()->attackReleaseR_ms = value;
+				WriteLog(state, "SET PARAMETER: Attack/Release time for Right channel = ", value);
+				break;
 
 			// Quantization noise
-			case PARAM_NOISE_BEFORE_ON:	data->HA.addNoiseBefore = FromFloatToBool(value); break;
-			case PARAM_NOISE_AFTER_ON:	data->HA.addNoiseAfter = FromFloatToBool(value); break;
-			case PARAM_NOISE_NUMBITS:	data->HA.noiseNumBits = (int)value; break;	
+			case PARAM_NOISE_BEFORE_ON:	
+				data->HA.addNoiseBefore = FromFloatToBool(value); 
+				WriteLog(state, "SET PARAMETER: Quantization noise Before EQ is ", FromBoolToOnOffStr(FromFloatToBool(value)));
+				break;
+			case PARAM_NOISE_AFTER_ON:	
+				data->HA.addNoiseAfter = FromFloatToBool(value); 
+				WriteLog(state, "SET PARAMETER: Quantization noise After EQ is ", FromBoolToOnOffStr(FromFloatToBool(value)));
+				break;
+			case PARAM_NOISE_NUMBITS:	
+				data->HA.noiseNumBits = (int)value; 
+				WriteLog(state, "SET PARAMETER: Quantization noise number of bits = ", (int)value);
+				break;	
+
+			// Simplified controls
+			case PARAM_COMPRESSION_PERCENTAGE_LEFT: 
+				data->HA.GetDynamicEqualizer()->SetCompressionPercentage(value, LEFT); 
+				WriteLog(state, "SET PARAMETER: Compression amount for Left channel = ", value);
+				break;
+			case PARAM_COMPRESSION_PERCENTAGE_RIGHT: 
+				data->HA.GetDynamicEqualizer()->SetCompressionPercentage(value, RIGHT); 
+				WriteLog(state, "SET PARAMETER: Compression amount for Right channel = ", value);
+				break;
+
+			case PARAM_DEBUG_LOG:
+				if (value != 0.0f)
+				{
+					data->debugLog = true;
+					WriteLogHeader(state);
+				}
+				else
+					data->debugLog = false;
+				break;
 
 			//// Fig6
 			//case PARAM_FIG6_BAND_0_LEFT: 
