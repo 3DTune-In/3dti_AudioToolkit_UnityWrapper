@@ -727,10 +727,15 @@ namespace LoudspeakersSpatializer3DTI
 
 		// Transform output buffer			
 		int i = 0;
+		bool temp = false;
 		for (auto it = outMultiChannelBuffer.begin(); it != outMultiChannelBuffer.end(); it++)
 		{
 			outbuffer[i++] = *it;
+			if (outbuffer[i++] != 0.0f) { temp = true; }
 		}
+
+		if (!temp) { WriteLog(state, "PROCESS: Buffer all with Zeros.", ""); }
+
 
 		return UNITY_AUDIODSP_OK;
 	}
