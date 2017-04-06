@@ -213,11 +213,6 @@ GameObject:
   - component: {fileID: 244518580}
   - component: {fileID: 244518579}
   - component: {fileID: 244518578}
-  - component: {fileID: 244518583}
-  - component: {fileID: 244518585}
-  - component: {fileID: 244518584}
-  - component: {fileID: 244518586}
-  - component: {fileID: 244518587}
   - component: {fileID: 244518589}
   - component: {fileID: 244518588}
   m_Layer: 0
@@ -295,87 +290,13 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &244518583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 244518577}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c0b0b66fe32e6446a7e3cb6e903d1b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HRTFFileName: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
-  ILDFileName: Assets/3DTIData/ILD/default.3dti-ild
-  customITDEnabled: 0
-  listenerHeadRadius: 0.0875
-  runtimeInterpolateHRTF: 1
-  scaleFactor: 1
-  modFarLPF: 1
-  modDistAtt: 1
-  modILD: 1
-  modHRTF: 1
-  magAnechoicAttenuation: -6
-  magSoundSpeed: 343
-  debugLog: 0
-  doHADirectionalityLeft: 0
-  doHADirectionalityRight: 0
-  HADirectionalityExtendLeft: 15
-  HADirectionalityExtendRight: 15
---- !u!114 &244518584
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 244518577}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef6b4806b154c4644a96d122f1e56183, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  haMixer: {fileID: 24100000, guid: 02d04237d0308a14ea0c3b720849faae, type: 2}
---- !u!114 &244518585
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 244518577}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d3e47873e845404fa98d69278291f61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hlMixer: {fileID: 24100000, guid: 02d04237d0308a14ea0c3b720849faae, type: 2}
---- !u!114 &244518586
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 244518577}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cb5fe59c67d5474f88ca96fe04cdcca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &244518587
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 244518577}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f375fae467806c846a54d4ef189cecbc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &244518588
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 244518577}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 879508e7c2d55f14fac2ed0a90e9faf0, type: 3}
   m_Name: 
@@ -421,10 +342,10 @@ AudioSource:
   m_GameObject: {fileID: 1582799887}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 24300001, guid: 02d04237d0308a14ea0c3b720849faae,
+  OutputAudioMixerGroup: {fileID: 24300001, guid: f13986cc3301ba344bab0941545606e9,
     type: 2}
   m_audioClip: {fileID: 8300000, guid: c5630708c841bac439c535c9acd1ec97, type: 3}
-  m_PlayOnAwake: 0
+  m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
   Loop: 1
