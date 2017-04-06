@@ -20,7 +20,7 @@ public class TestLoudSpeakerSpatializer : MonoBehaviour {
     {
         if (Input.GetKeyDown("space"))
         {
-            Debug.Log("Space pressed");
+            Debug.Log("Space pressed Loudspeakers");
             toggleSource = !toggleSource;
             if (toggleSource)
             {

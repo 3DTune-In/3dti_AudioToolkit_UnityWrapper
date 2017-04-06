@@ -172,6 +172,11 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         return true;
     }
 
+    public bool SendLoadSpeakerConfiguration()
+    {        
+        return SendCommandForAllSources(SET_SAVE_SPEAKERS_CONFIG, 1.0f);     
+    }
+
     /// <summary>
     ///  Setup speakers configuration
     /// </summary>
@@ -185,6 +190,10 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         if (!SetSpeaker(6, new Vector3(-1.0f, -1.0f, 1.0f))) return false;
         if (!SetSpeaker(7, new Vector3(-1.0f, 1.0f, -1.0f))) return false;
         if (!SetSpeaker(8, new Vector3(-1.0f, -1.0f, -1.0f))) return false;
+
+        //Once the configuration is ready, load it into the core
+        if (!SendLoadSpeakerConfiguration()) return false;
+
         return true;
     }
 
