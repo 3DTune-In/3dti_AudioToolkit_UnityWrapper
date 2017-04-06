@@ -721,9 +721,24 @@ namespace LoudspeakersSpatializer3DTI
 
 		// Process!!
 		CMultiChannelBuffer<float> outMultiChannelBuffer(length * outchannels);
+		
+		WriteLog(state, "PROCESS: Mono Buffer Size :", inMonoBuffer.size());
+		WriteLog(state, "PROCESS: Multi Buffer Size :", length * outchannels);
+		
 		data->audioSource->UpdateBuffer(inMonoBuffer);
-		data->core.ProcessLoudspeakerAnechoic(outMultiChannelBuffer);
+		//data->core.ProcessLoudspeakerAnechoic(outMultiChannelBuffer);
 		//data->audioSource->ProcessAnechoic(*data->listener, outStereoBuffer);
+
+		for (int i = 0; i < inMonoBuffer.size(); i++) {
+			outMultiChannelBuffer[8*i] = inbuffer[2*i];
+			outMultiChannelBuffer[8*i + 1]	= inbuffer[2 * i +1];
+			outMultiChannelBuffer[8*i + 2]	= 0.0f;
+			outMultiChannelBuffer[8*i + 3]	= 0.0f;
+			outMultiChannelBuffer[8*i + 4]	= 0.0f;
+			outMultiChannelBuffer[8*i + 5]	= 0.0f;
+			outMultiChannelBuffer[8*i + 6]	= 0.0f;
+			outMultiChannelBuffer[8*i + 7]	= 0.0f;			
+		}
 
 		// Transform output buffer			
 		int i = 0;
@@ -731,7 +746,7 @@ namespace LoudspeakersSpatializer3DTI
 		for (auto it = outMultiChannelBuffer.begin(); it != outMultiChannelBuffer.end(); it++)
 		{
 			outbuffer[i++] = *it;
-			if (outbuffer[i++] != 0.0f) { temp = true; }
+			if (outbuffer[i] > 0.0001f) { temp = true; }
 		}
 
 		if (!temp) { WriteLog(state, "PROCESS: Buffer all with Zeros.", ""); }
