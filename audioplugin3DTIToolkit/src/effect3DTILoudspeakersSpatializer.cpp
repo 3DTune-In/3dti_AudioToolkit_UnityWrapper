@@ -91,6 +91,7 @@ namespace LoudspeakersSpatializer3DTI
 		std::shared_ptr<Loudspeaker::CSingleSourceDSP_LS> audioSource;			//LoudSpeakers Core			
 		Loudspeaker::CCore_LS core;												//Loud AudioSource AudioSource Core	
 		std::shared_ptr<Loudspeaker::CSpeakerSet> speakers;						//Speakers configuration
+		Loudspeaker::CSpeakerSetConfiguration loudSpeakersConf;
 
 		//Speakers - store geometric position of each speaker	//FIXME use a vector
 		CVector3 speaker1_Position;
@@ -105,15 +106,8 @@ namespace LoudspeakersSpatializer3DTI
 		bool coreReady;
 		float parameters[P_NUM];
 
-		// STRING SERIALIZER		
-		/*char* strHRTFpath;
-		bool strHRTFserializing;
-		int strHRTFcount;
-		int strHRTFlength;
-		char* strILDpath;
-		bool strILDserializing;
-		int strILDcount;
-		int strILDlength;*/
+		//FIXME delete me
+		bool firstTime = true;
 
 		// DEBUG LOG
 		bool debugLog = false;
@@ -363,22 +357,22 @@ namespace LoudspeakersSpatializer3DTI
 		EffectData* data = state->GetEffectData<EffectData>();
 
 		// Configuration of Speakers
-		Loudspeaker::CSpeakerSetConfiguration loudSpeakersConf;
-		loudSpeakersConf.BeginSetup();
+		
+		data->loudSpeakersConf.BeginSetup();
 
-		loudSpeakersConf.AddLoudspeaker(data->speaker1_Position);
-		loudSpeakersConf.AddLoudspeaker(data->speaker2_Position);
-		loudSpeakersConf.AddLoudspeaker(data->speaker3_Position);
-		loudSpeakersConf.AddLoudspeaker(data->speaker4_Position);
-		loudSpeakersConf.AddLoudspeaker(data->speaker5_Position);
-		loudSpeakersConf.AddLoudspeaker(data->speaker6_Position);
-		loudSpeakersConf.AddLoudspeaker(data->speaker7_Position);
-		loudSpeakersConf.AddLoudspeaker(data->speaker8_Position);
+		data->loudSpeakersConf.AddLoudspeaker(data->speaker1_Position);
+		data->loudSpeakersConf.AddLoudspeaker(data->speaker2_Position);
+		data->loudSpeakersConf.AddLoudspeaker(data->speaker3_Position);
+		data->loudSpeakersConf.AddLoudspeaker(data->speaker4_Position);
+		data->loudSpeakersConf.AddLoudspeaker(data->speaker5_Position);
+		data->loudSpeakersConf.AddLoudspeaker(data->speaker6_Position);
+		data->loudSpeakersConf.AddLoudspeaker(data->speaker7_Position);
+		data->loudSpeakersConf.AddLoudspeaker(data->speaker8_Position);
 
-		loudSpeakersConf.EndSetup();
+		data->loudSpeakersConf.EndSetup();
 
 		//Set Speakers Configuration
-		data->speakers->LoadSpeakerConfiguration(std::move(loudSpeakersConf));
+		data->speakers->LoadSpeakerConfiguration(std::move(data->loudSpeakersConf));
 	}
 	/////////////////////////////////////////////////////////////////////
 	// AUDIO PLUGIN SDK FUNCTIONS
@@ -536,12 +530,12 @@ namespace LoudspeakersSpatializer3DTI
 
 		case PARAM_SPEAKER_1_Y:
 			data->speaker1_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 1 position, x coordinate, set to ", data->speaker1_Position.y);
+			WriteLog(state, "SET PARAMETER: Speaker 1 position, y coordinate, set to ", data->speaker1_Position.y);
 			break;
 
 		case PARAM_SPEAKER_1_Z:
 			data->speaker1_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 1 position, x coordinate, set to ", data->speaker1_Position.z);
+			WriteLog(state, "SET PARAMETER: Speaker 1 position, z coordinate, set to ", data->speaker1_Position.z);
 			break;
 
 		case PARAM_SPEAKER_2_X:
@@ -551,12 +545,12 @@ namespace LoudspeakersSpatializer3DTI
 
 		case PARAM_SPEAKER_2_Y:
 			data->speaker2_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 2 position, x coordinate, set to ", data->speaker2_Position.y);
+			WriteLog(state, "SET PARAMETER: Speaker 2 position, y coordinate, set to ", data->speaker2_Position.y);
 			break;
 
 		case PARAM_SPEAKER_2_Z:
 			data->speaker2_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 2 position, x coordinate, set to ", data->speaker2_Position.z);
+			WriteLog(state, "SET PARAMETER: Speaker 2 position, z coordinate, set to ", data->speaker2_Position.z);
 			break;
 
 		case PARAM_SPEAKER_3_X:
@@ -566,12 +560,12 @@ namespace LoudspeakersSpatializer3DTI
 
 		case PARAM_SPEAKER_3_Y:
 			data->speaker3_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 3 position, x coordinate, set to ", data->speaker3_Position.y);
+			WriteLog(state, "SET PARAMETER: Speaker 3 position, y coordinate, set to ", data->speaker3_Position.y);
 			break;
 
 		case PARAM_SPEAKER_3_Z:
 			data->speaker3_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 3 position, x coordinate, set to ", data->speaker3_Position.z);
+			WriteLog(state, "SET PARAMETER: Speaker 3 position, z coordinate, set to ", data->speaker3_Position.z);
 			break;
 
 		case PARAM_SPEAKER_4_X:
@@ -581,12 +575,12 @@ namespace LoudspeakersSpatializer3DTI
 
 		case PARAM_SPEAKER_4_Y:
 			data->speaker4_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 4 position, x coordinate, set to ", data->speaker4_Position.y);
+			WriteLog(state, "SET PARAMETER: Speaker 4 position, y coordinate, set to ", data->speaker4_Position.y);
 			break;
 
 		case PARAM_SPEAKER_4_Z:
 			data->speaker4_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 4 position, x coordinate, set to ", data->speaker4_Position.z);
+			WriteLog(state, "SET PARAMETER: Speaker 4 position, z coordinate, set to ", data->speaker4_Position.z);
 			break;
 
 		case PARAM_SPEAKER_5_X:
@@ -596,12 +590,12 @@ namespace LoudspeakersSpatializer3DTI
 
 		case PARAM_SPEAKER_5_Y:
 			data->speaker5_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 5 position, x coordinate, set to ", data->speaker5_Position.y);
+			WriteLog(state, "SET PARAMETER: Speaker 5 position, y coordinate, set to ", data->speaker5_Position.y);
 			break;
 
 		case PARAM_SPEAKER_5_Z:
 			data->speaker5_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 5 position, x coordinate, set to ", data->speaker5_Position.z);
+			WriteLog(state, "SET PARAMETER: Speaker 5 position, z coordinate, set to ", data->speaker5_Position.z);
 			break;
 
 		case PARAM_SPEAKER_6_X:
@@ -611,12 +605,12 @@ namespace LoudspeakersSpatializer3DTI
 
 		case PARAM_SPEAKER_6_Y:
 			data->speaker6_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 6 position, x coordinate, set to ", data->speaker6_Position.y);
+			WriteLog(state, "SET PARAMETER: Speaker 6 position, y coordinate, set to ", data->speaker6_Position.y);
 			break;
 
 		case PARAM_SPEAKER_6_Z:
 			data->speaker6_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 6 position, x coordinate, set to ", data->speaker6_Position.z);
+			WriteLog(state, "SET PARAMETER: Speaker 6 position, z coordinate, set to ", data->speaker6_Position.z);
 			break;
 
 		case PARAM_SPEAKER_7_X:
@@ -626,12 +620,12 @@ namespace LoudspeakersSpatializer3DTI
 
 		case PARAM_SPEAKER_7_Y:
 			data->speaker7_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 7 position, x coordinate, set to ", data->speaker7_Position.y);
+			WriteLog(state, "SET PARAMETER: Speaker 7 position, y coordinate, set to ", data->speaker7_Position.y);
 			break;
 
 		case PARAM_SPEAKER_7_Z:
 			data->speaker7_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 7 position, x coordinate, set to ", data->speaker7_Position.z);
+			WriteLog(state, "SET PARAMETER: Speaker 7 position, z coordinate, set to ", data->speaker7_Position.z);
 			break;
 
 		case PARAM_SPEAKER_8_X:
@@ -641,12 +635,12 @@ namespace LoudspeakersSpatializer3DTI
 
 		case PARAM_SPEAKER_8_Y:
 			data->speaker8_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 8 position, x coordinate, set to ", data->speaker8_Position.y);
+			WriteLog(state, "SET PARAMETER: Speaker 8 position, y coordinate, set to ", data->speaker8_Position.y);
 			break;
 
 		case PARAM_SPEAKER_8_Z:
 			data->speaker8_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 8 position, x coordinate, set to ", data->speaker8_Position.z);
+			WriteLog(state, "SET PARAMETER: Speaker 8 position, z coordinate, set to ", data->speaker8_Position.z);
 			break;
 
 		default:
@@ -716,40 +710,43 @@ namespace LoudspeakersSpatializer3DTI
 		CMonoBuffer<float> inMonoBuffer(length);
 		for (int i = 0; i < length; i++)
 		{
-			inMonoBuffer[i] = inbuffer[i * 2]; // We take only the left channel
+			inMonoBuffer[i] = inbuffer[i * inchannels]; // We take only the left channel
 		}
 
 		// Process!!
-		CMultiChannelBuffer<float> outMultiChannelBuffer(length * outchannels);
-		
-		WriteLog(state, "PROCESS: Mono Buffer Size :", inMonoBuffer.size());
-		WriteLog(state, "PROCESS: Multi Buffer Size :", length * outchannels);
-		
+		CMultiChannelBuffer<float> outMultiChannelBuffer;
+		//CMultiChannelBuffer<float> outMultiChannelBuffer(length * outchannels);		
 		data->audioSource->UpdateBuffer(inMonoBuffer);
-		//data->core.ProcessLoudspeakerAnechoic(outMultiChannelBuffer);
-		//data->audioSource->ProcessAnechoic(*data->listener, outStereoBuffer);
+		data->core.ProcessLoudspeakerAnechoic(outMultiChannelBuffer);		
 
-		for (int i = 0; i < inMonoBuffer.size(); i++) {
-			outMultiChannelBuffer[8*i] = inbuffer[2*i];
-			outMultiChannelBuffer[8*i + 1]	= inbuffer[2 * i +1];
-			outMultiChannelBuffer[8*i + 2]	= 0.0f;
-			outMultiChannelBuffer[8*i + 3]	= 0.0f;
-			outMultiChannelBuffer[8*i + 4]	= 0.0f;
-			outMultiChannelBuffer[8*i + 5]	= 0.0f;
-			outMultiChannelBuffer[8*i + 6]	= 0.0f;
-			outMultiChannelBuffer[8*i + 7]	= 0.0f;			
-		}
+		/*for (int i = 0; i < inMonoBuffer.size(); i++) {
+			outMultiChannelBuffer[8*i]		= inMonoBuffer[i];
+			outMultiChannelBuffer[8*i + 1]	= inMonoBuffer[i];
+			outMultiChannelBuffer[8*i + 2]	= inMonoBuffer[i];
+			outMultiChannelBuffer[8*i + 3]	= inMonoBuffer[i];
+			outMultiChannelBuffer[8*i + 4]	= inMonoBuffer[i];
+			outMultiChannelBuffer[8*i + 5]	= inMonoBuffer[i];
+			outMultiChannelBuffer[8*i + 6]	= inMonoBuffer[i];
+			outMultiChannelBuffer[8*i + 7]	= inMonoBuffer[i];			
+		}*/
 
 		// Transform output buffer			
 		int i = 0;
-		bool temp = false;
+		//bool temp = false;
 		for (auto it = outMultiChannelBuffer.begin(); it != outMultiChannelBuffer.end(); it++)
 		{
 			outbuffer[i++] = *it;
-			if (outbuffer[i] > 0.0001f) { temp = true; }
+			//if (outbuffer[i] > 0.0001f) { temp = true; }
 		}
 
-		if (!temp) { WriteLog(state, "PROCESS: Buffer all with Zeros.", ""); }
+		if (data->firstTime) {
+			WriteLog(state, "PROCESS: Mono Buffer Size :", inMonoBuffer.size());
+			WriteLog(state, "PROCESS: Multi Buffer Size :", length * outchannels);
+			WriteLog(state, "PROCESS: SampleRate   Size :", (int)state->samplerate);
+			data->firstTime = false;
+		}
+
+		//if (!temp) { WriteLog(state, "PROCESS: Buffer all with Zeros.", ""); }
 
 
 		return UNITY_AUDIODSP_OK;
