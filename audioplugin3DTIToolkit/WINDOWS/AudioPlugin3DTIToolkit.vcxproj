@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\AudioStateBinaural.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\BRIR.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\Core.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\Environment.cpp" />
@@ -27,7 +28,7 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\Listener.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\SingleSourceDSP.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\UPCAnechoic.cpp" />
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\AudioState.cpp" />
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\AIR.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\BiquadFilter.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Buffer.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Debugger.cpp" />
@@ -49,14 +50,22 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\FiltersBank.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingLossSim.cpp" />
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\Core_LS.cpp" />
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\Environment_LS.cpp" />
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SingleSourceDSP_LS.cpp" />
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SpeakerSet.cpp" />
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SpeakerSetConfiguration.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.cpp" />
     <ClCompile Include="..\src\effect3DTIHA.cpp" />
     <ClCompile Include="..\src\effect3DTIHL.cpp" />
+    <ClCompile Include="..\src\effect3DTILoudspeakersSpatializer.cpp" />
     <ClCompile Include="..\src\effect3DTISpatializer.cpp" />
     <ClCompile Include="..\src\AudioPluginUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\3DTI_BinauralSpatializer.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\AudioStateBinaural.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\BRIR.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\Core.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\Environment.h" />
@@ -65,7 +74,7 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\Listener.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\SingleSourceDSP.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\UPCAnechoic.h" />
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\AudioState.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\AIR.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\BiquadFilter.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Buffer.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\CommonDefinitions.h" />
@@ -90,6 +99,13 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\FiltersBank.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingLossSim.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\3DTI_LoudspeakersSpatializer.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\AudioState_LS.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\Core_LS.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\Environment_LS.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SingleSourceDSP_LS.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SpeakerSet.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SpeakerSetConfiguration.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.h" />
     <ClInclude Include="..\src\AudioPluginInterface.h" />
