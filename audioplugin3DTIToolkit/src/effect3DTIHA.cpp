@@ -425,8 +425,7 @@ namespace HASimulation3DTI
 		//effectdata->HA.noiseNumBits = DEFAULT_NOISENUMBITS;		// TO DO: writelog
 		//effectdata->HA.deq.levelsInterpolation = DEFAULT_LEVELSINTERPOLATION;	// TO DO: writelog
 		//effectdata->HA.deq.attackReleaseL_ms = DEFAULT_ATTACKRELEASE;	// TO DO: writelog
-		//effectdata->HA.deq.attackReleaseR_ms = DEFAULT_ATTACKRELEASE;	// TO DO: writelog	
-		effectdata->HA.GetDynamicEqualizer()->dynamicOn = true;	// TO DO: will be removed from core
+		//effectdata->HA.deq.attackReleaseR_ms = DEFAULT_ATTACKRELEASE;	// TO DO: writelog			
 		effectdata->HA.volL = FromDBToGain(DEFAULT_VOLDB);	// TO DO: writelog
 		effectdata->HA.volR = FromDBToGain(DEFAULT_VOLDB);	// TO DO: writelog
 		effectdata->HA.addNoiseBefore = FromFloatToBool(DEFAULT_NOISEBEFORE); // TO DO: writelog
