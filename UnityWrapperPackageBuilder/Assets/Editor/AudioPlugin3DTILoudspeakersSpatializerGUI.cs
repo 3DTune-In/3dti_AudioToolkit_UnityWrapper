@@ -174,9 +174,13 @@ public class AudioPlugin3DTILoudspeakerSpatializerGUI : Editor
             // Magnitudes
             BeginSubsection("");
             CreateFloatSlider(ref toolkit.structureSide,    "Structure side size:", "F2", "meters", minStructSide, maxStructSide, SliderSpeakersConfiguration);
-            //CreateFloatSlider(ref toolkit.structureYaw,     "Structure yaw:", "F2", "degrees", minStructureYawPitch, maxStructureYawPitch, SliderSpeakersConfiguration);
-            //CreateFloatSlider(ref toolkit.structurePitch,   "Structure pitch:", "F0", "degrees", minStructureYawPitch, maxStructureYawPitch, SliderSpeakersConfiguration);
-            EndSubsection();
+
+        //TODO: minDistance to the listener value should come from the toolkit. Due to the current GIU allows the user introduce just the speakers structure side, the minimun distance can be calculated from that size
+        float minDistanceToListener = Mathf.Sqrt(3) * 0.5f * toolkit.structureSide;
+        GUILayout.Label("Minumun distance between listener and source: " + minDistanceToListener + " m");
+        //CreateFloatSlider(ref toolkit.structureYaw,     "Structure yaw:", "F2", "degrees", minStructureYawPitch, maxStructureYawPitch, SliderSpeakersConfiguration);
+        //CreateFloatSlider(ref toolkit.structurePitch,   "Structure pitch:", "F0", "degrees", minStructureYawPitch, maxStructureYawPitch, SliderSpeakersConfiguration);
+        EndSubsection();
 
         EndSection();
     }
