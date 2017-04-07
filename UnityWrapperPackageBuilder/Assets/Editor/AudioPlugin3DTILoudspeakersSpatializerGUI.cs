@@ -2,7 +2,7 @@
 *** Programmers GUI on Unity Inspector for 3D-Tune-In Toolkit Unity Wrapper ***
 *
 * version beta 1.0
-* Created on: April 2017
+* Created on: July 2016
 * 
 * Author: 3DI-DIANA Research Group / University of Malaga / Spain
 * Contact: areyes@uma.es
@@ -53,7 +53,7 @@ public class AudioPlugin3DTILoudspeakerSpatializerGUI : Editor
     {
         // Get access to API script
         toolkit = (API_3DTI_LoudSpeakersSpatializer)target;
-        toolkit.debugLog_LS = false;
+        toolkit.debugLog = false;
     }
 
     /// <summary>
@@ -201,10 +201,10 @@ public class AudioPlugin3DTILoudspeakerSpatializerGUI : Editor
             CreateFloatSlider(ref toolkit.scaleFactor, "Scale factor:", "F2", " meters = 1.0 unit in Unity", minScale, maxScale, SliderScale);
             // Mod enabler
             BeginSubsection("Modules enabler:");
-            if (CreateToggle(ref toolkit.modFarLPF_LS, "Far LPF"))
-                toolkit.SetModFarLPF(toolkit.modFarLPF_LS);
-            if (CreateToggle(ref toolkit.modDistAtt_LS, "Distance attenuation"))
-                toolkit.SetModDistanceAttenuation(toolkit.modDistAtt_LS);
+            if (CreateToggle(ref toolkit.modFarLPF, "Far LPF"))
+                toolkit.SetModFarLPF(toolkit.modFarLPF);
+            if (CreateToggle(ref toolkit.modDistAtt, "Distance attenuation"))
+                toolkit.SetModDistanceAttenuation(toolkit.modDistAtt);
             EndSubsection();
 
             // Magnitudes
@@ -216,8 +216,8 @@ public class AudioPlugin3DTILoudspeakerSpatializerGUI : Editor
 
             // Debug Log
             BeginSubsection("Debug log:");
-            if (CreateToggle(ref toolkit.debugLog_LS, "Write debug log file"))
-                toolkit.SendWriteDebugLog(toolkit.debugLog_LS);
+            if (CreateToggle(ref toolkit.debugLog, "Write debug log file"))
+                toolkit.SendWriteDebugLog(toolkit.debugLog);
             EndSubsection();
         }
 

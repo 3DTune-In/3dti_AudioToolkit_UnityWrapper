@@ -16,11 +16,13 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
 
     // ADVANCED:
     public float scaleFactor = 1.0f;            // Used by Inspector
-    public bool modFarLPF_LS = true;               // Used by Inspector
-    public bool modDistAtt_LS = true;              // Used by Inspector
+    public bool modFarLPF = true;               // Used by Inspector
+    public bool modDistAtt = true;              // Used by Inspector
+    //public bool modILD = true;                  // Used by Inspector
+    //public bool modHRTF = true;                 // Used by Inspector
     public float magAnechoicAttenuation = -6.0f;    // Used by Inspector    
     public float magSoundSpeed = 343.0f;            // Used by Inspector
-    public bool debugLog_LS = false;                   // Used by Inspector
+    public bool debugLog = false;                   // Used by Inspector
 
     public float structureSide  = 1.70f;
     public float structureYaw   = 0.0f;
@@ -92,7 +94,7 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         }
 
         // Debug log:
-        if (!SendWriteDebugLog(debugLog_LS)) return false;
+        if (!SendWriteDebugLog(debugLog)) return false;
 
         // Global setup:
         if (!SetScaleFactor(scaleFactor)) return false;
@@ -251,8 +253,8 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     /// </summary>
     public bool SetupModulesEnabler()
     {
-        if (!SetModFarLPF(modFarLPF_LS)) return false;
-        if (!SetModDistanceAttenuation(modDistAtt_LS)) return false;       
+        if (!SetModFarLPF(modFarLPF)) return false;
+        if (!SetModDistanceAttenuation(modDistAtt)) return false;       
         return true;
     }
 
@@ -263,7 +265,7 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     /// </summary>        
     public bool SetModFarLPF(bool _enable)
     {
-        modFarLPF_LS = _enable;
+        modFarLPF = _enable;
         if (_enable)
             return SendCommandForAllSources(SET_MOD_FARLPF, 1.0f);
         else
@@ -277,7 +279,7 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     /// </summary>        
     public bool SetModDistanceAttenuation(bool _enable)
     {
-        modDistAtt_LS = _enable;
+        modDistAtt = _enable;
         if (_enable)
             return SendCommandForAllSources(SET_MOD_DISTATT, 1.0f);
         else
@@ -319,7 +321,7 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     /// </summary>
     public bool SendWriteDebugLog(bool _enable)
     {
-        debugLog_LS = _enable;
+        debugLog = _enable;
         if (_enable)
             return SendCommandForAllSources(SET_DEBUG_LOG, 1.0f);
         else
