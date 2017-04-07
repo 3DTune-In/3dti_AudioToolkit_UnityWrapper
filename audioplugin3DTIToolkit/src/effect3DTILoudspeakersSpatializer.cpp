@@ -703,8 +703,7 @@ namespace LoudspeakersSpatializer3DTI
 		}
 
 		// Set source and listener transforms		
-		data->audioSource->SetSourceTransform(ComputeSourceTransformFromMatrix(state->spatializerdata->sourcematrix, data->parameters[PARAM_SCALE_FACTOR]));
-		//data->listener->SetListenerTransform(ComputeListenerTransformFromMatrix(state->spatializerdata->listenermatrix, data->parameters[PARAM_SCALE_FACTOR]));
+		data->audioSource->SetSourceTransform(ComputeSourceTransformFromMatrix(state->spatializerdata->sourcematrix, data->parameters[PARAM_SCALE_FACTOR]));		
 
 		// Transform input buffer
 		CMonoBuffer<float> inMonoBuffer(length);
@@ -714,29 +713,17 @@ namespace LoudspeakersSpatializer3DTI
 		}
 
 		// Process!!
-		CMultiChannelBuffer<float> outMultiChannelBuffer;
-		//CMultiChannelBuffer<float> outMultiChannelBuffer(length * outchannels);		
+		//CMultiChannelBuffer<float> outMultiChannelBuffer;
+		CMultiChannelBuffer<float> outMultiChannelBuffer(length * outchannels);		
 		data->audioSource->UpdateBuffer(inMonoBuffer);
 		data->core.ProcessLoudspeakerAnechoic(outMultiChannelBuffer);		
-
-		/*for (int i = 0; i < inMonoBuffer.size(); i++) {
-			outMultiChannelBuffer[8*i]		= inMonoBuffer[i];
-			outMultiChannelBuffer[8*i + 1]	= inMonoBuffer[i];
-			outMultiChannelBuffer[8*i + 2]	= inMonoBuffer[i];
-			outMultiChannelBuffer[8*i + 3]	= inMonoBuffer[i];
-			outMultiChannelBuffer[8*i + 4]	= inMonoBuffer[i];
-			outMultiChannelBuffer[8*i + 5]	= inMonoBuffer[i];
-			outMultiChannelBuffer[8*i + 6]	= inMonoBuffer[i];
-			outMultiChannelBuffer[8*i + 7]	= inMonoBuffer[i];			
-		}*/
-
+		
 		// Transform output buffer			
 		int i = 0;
 		//bool temp = false;
 		for (auto it = outMultiChannelBuffer.begin(); it != outMultiChannelBuffer.end(); it++)
 		{
-			outbuffer[i++] = *it;
-			//if (outbuffer[i] > 0.0001f) { temp = true; }
+			outbuffer[i++] = *it;		
 		}
 
 		if (data->firstTime) {
@@ -745,10 +732,7 @@ namespace LoudspeakersSpatializer3DTI
 			WriteLog(state, "PROCESS: SampleRate   Size :", (int)state->samplerate);
 			data->firstTime = false;
 		}
-
-		//if (!temp) { WriteLog(state, "PROCESS: Buffer all with Zeros.", ""); }
-
-
+		
 		return UNITY_AUDIODSP_OK;
 	}
 }
