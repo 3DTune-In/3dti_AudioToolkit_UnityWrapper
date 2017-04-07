@@ -4,7 +4,7 @@ using System.Collections;
 public class TestSpatializer : MonoBehaviour
 {
     API_3DTI_Spatializer SpatializerAPI;
-    bool toggleSource = true;
+    bool toggleSource = false;
     AudioSource testSource;
 
     void Start()
