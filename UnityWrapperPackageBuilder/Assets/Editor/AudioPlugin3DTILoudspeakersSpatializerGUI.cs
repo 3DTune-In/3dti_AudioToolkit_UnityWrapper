@@ -25,6 +25,8 @@ public class AudioPlugin3DTILoudspeakerSpatializerGUI : Editor
     bool advancedSetup = false;
 
     // Limit possible values of sliders   
+    float minScale = 0.1f;
+    float maxScale = 10.0f;
     float minStructSide = 1.25f;
     float maxStructSide = 3.0f;
     float minStructureYawPitch = -180.0f;
@@ -190,6 +192,9 @@ public class AudioPlugin3DTILoudspeakerSpatializerGUI : Editor
         advancedSetup = GUILayout.Toggle(advancedSetup, "Show Advanced Setup", GUILayout.ExpandWidth(false));
         if (advancedSetup)
         {
+            // Scale factor slider
+            SingleSpace();
+            CreateFloatSlider(ref toolkit.scaleFactor, "Scale factor:", "F2", " meters = 1.0 unit in Unity", minScale, maxScale, SliderScale);
             // Mod enabler
             BeginSubsection("Modules enabler:");
             if (CreateToggle(ref toolkit.modFarLPF, "Far LPF"))
@@ -202,7 +207,7 @@ public class AudioPlugin3DTILoudspeakerSpatializerGUI : Editor
             BeginSubsection("Physical magnitudes:");
             CreateFloatSlider(ref toolkit.magAnechoicAttenuation, "Anechoic distance attenuation:", "F2", "dB", minDB, maxDB, SliderAnechoicAttenuation);
             //CreateFloatSlider(ref toolkit.magReverbAttenuation, "Reverb distance attenuation:", "F2", "dB", minDB, maxDB, SliderReverbAttenuation);
-            CreateFloatSlider(ref toolkit.magSoundSpeed, "Sound speed:", "F0", "m/s", 0.0f, maxSoundSpeed, SliderSoundSpeed);
+            //CreateFloatSlider(ref toolkit.magSoundSpeed, "Sound speed:", "F0", "m/s", 0.0f, maxSoundSpeed, SliderSoundSpeed);
             EndSubsection();
 
             // Debug Log
