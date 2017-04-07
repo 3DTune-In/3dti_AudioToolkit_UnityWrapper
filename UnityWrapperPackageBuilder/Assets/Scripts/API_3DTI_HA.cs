@@ -19,20 +19,95 @@ using System.Collections.ObjectModel;   // For ReadOnlyCollection
 
 public class API_3DTI_HA : MonoBehaviour
 {
-    // Constant definitions 
-    public const int EAR_LEFT = 1;
-    public const int EAR_RIGHT = 0;
-    public const int EAR_BOTH = 2;
-
-    // Internal use constants
-    public const float FIG6_THRESHOLD_0_DBSPL = 40.0f;
-    public const float FIG6_THRESHOLD_1_DBSPL = 65.0f;
-    public const float FIG6_THRESHOLD_2_DBSPL = 95.0f;
-    public const int FIG6_NUMBANDS = 7;
-    public const float DBSPL_FOR_0_DBFS = 100.0f;
-
     // Global variables
     public AudioMixer haMixer;  // Drag&drop here the HAHL_3DTI_Mixer
+
+    // Type definitions
+    public enum T_toneBand { LOW=0, MID=1, HIGH=2 };
+
+    // Public constant definitions
+    public const int NUM_EQ_CURVES = 3;
+    public const int FIG6_NUMBANDS = 7;
+
+    // Internal use constants
+    const float FIG6_THRESHOLD_0_DBSPL = 40.0f;
+    const float FIG6_THRESHOLD_1_DBSPL = 65.0f;
+    const float FIG6_THRESHOLD_2_DBSPL = 95.0f;    
+    const float DBSPL_FOR_0_DBFS = 100.0f;
+
+    // Internal use variables
+    float [,] tone = new float[2, 3] { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } };    // Tone values for each EAR and each tone BAND
+
+    // Internal parameters for consistency with GUI
+ //   public bool PARAM_PROCESS_LEFT_ON = false;
+ //   public bool PARAM_PROCESS_RIGHT_ON = false;
+ //   public float PARAM_VOLUME_L_DB = -1.0f;
+ //   public float PARAM_VOLUME_R_DB = -1.0f;
+ //   // Common values for both ears in EQ		
+ //   public float PARAM_EQ_LPFCUTOFF_HZ = -1.0f;
+ //   public float PARAM_EQ_HPFCUTOFF_HZ = -1.0f;
+	//// Dynamic EQ
+	//public bool PARAM_DYNAMICEQ_INTERPOLATION_ON = true;
+ //   public float PARAM_DYNAMICEQ_LEVELTHRESHOLD_0_LEFT_DBFS = -1.0f;
+ //   public float PARAM_DYNAMICEQ_LEVELTHRESHOLD_1_LEFT_DBFS = -1.0f;
+ //   public float PARAM_DYNAMICEQ_LEVELTHRESHOLD_2_LEFT_DBFS = -1.0f;
+ //   public float PARAM_DYNAMICEQ_LEVELTHRESHOLD_0_RIGHT_DBFS = -1.0f;
+ //   public float PARAM_DYNAMICEQ_LEVELTHRESHOLD_1_RIGHT_DBFS = -1.0f;
+ //   public float PARAM_DYNAMICEQ_LEVELTHRESHOLD_2_RIGHT_DBFS = -1.0f;
+ //   public float PARAM_DYNAMICEQ_LEVEL_0_BAND_0_LEFT_DB = -1.0f;
+ //   public float PARAM_DYNAMICEQ_LEVEL_0_BAND_1_LEFT_DB = -1.0f;
+ //   public float PARAM_DYNAMICEQ_LEVEL_0_BAND_2_LEFT_DB = -1.0f;
+ //   public float PARAM_DYNAMICEQ_LEVEL_0_BAND_3_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_0_BAND_4_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_0_BAND_5_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_0_BAND_6_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_0_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_1_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_2_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_3_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_4_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_5_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_6_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_0_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_1_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_2_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_3_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_4_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_5_LEFT_DB = -1.0f;
+ //   public float PARAM_DYNAMICEQ_LEVEL_2_BAND_6_LEFT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_0_BAND_0_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_0_BAND_1_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_0_BAND_2_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_0_BAND_3_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_0_BAND_4_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_0_BAND_5_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_0_BAND_6_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_0_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_1_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_2_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_3_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_4_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_5_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_1_BAND_6_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_0_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_1_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_2_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_3_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_4_RIGHT_DB = -1.0f;
+	//public float PARAM_DYNAMICEQ_LEVEL_2_BAND_5_RIGHT_DB = -1.0f;
+ //   public float PARAM_DYNAMICEQ_LEVEL_2_BAND_6_RIGHT_DB = -1.0f;
+ //   public float PARAM_DYNAMICEQ_ATTACKRELEASE_LEFT_MS = -1.0f;
+ //   public float PARAM_DYNAMICEQ_ATTACKRELEASE_RIGHT_MS = -1.0f;
+ //   // Quantization noise
+ //   public bool PARAM_NOISE_BEFORE_ON = false;
+ //   public bool PARAM_NOISE_AFTER_ON = false;
+ //   public int PARAM_NOISE_NUMBITS = -1;
+ //   // Simplified controls
+ //   public float PARAM_COMPRESSION_PERCENTAGE_LEFT = -1.0f;
+ //   public float PARAM_COMPRESSION_PERCENTAGE_RIGHT = -1.0f;
+ //   // Debug log
+ //   public bool PARAM_DEBUG_LOG = false;
+
 
     //////////////////////////////////////////////////////////////
     // GLOBAL METHODS
@@ -41,25 +116,97 @@ public class API_3DTI_HA : MonoBehaviour
     /// <summary>
     /// Switch on/off whole HA process
     /// </summary>
-    /// <param name="ear ({EAR_LEFT, EAR_RIGHT})"></param>
+    /// <param name="ear"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public bool SwitchHAOnOff(int ear, bool value)
-    {
+    public bool SwitchHAOnOff(API_3DTI_Common.T_ear ear, bool value)
+    {        
         return HASwitch(ear, "HA3DTI_Process_", value);
     }
 
     /// <summary>
     /// Set volume in decibels of HA for each ear
     /// </summary>
-    /// <param name="ear ({EAR_LEFT, EAR_RIGHT})"></param>
+    /// <param name="ear"></param>
     /// <param name="volume (dB)"></param>
     /// <returns></returns>
-    public bool SetVolume(int ear, float volume)
+    public bool SetVolume(API_3DTI_Common.T_ear ear, float volume)
     {
         return HASetFloat(ear, "HA3DTI_Volume_", volume);
     }
 
+    public bool SetWriteDebugLog(bool value)
+    {
+        return haMixer.SetFloat("HA3DTI_DebugLog", Bool2Float(value)); 
+    }
+
+    //////////////////////////////////////////////////////////////
+    // SIMPLIFIED HIGH LEVEL CONTROLS
+    //////////////////////////////////////////////////////////////
+
+    /// <summary>
+    /// Set volume in decibels of one tone band 
+    /// </summary>
+    /// <param name="ear"></param>
+    /// <param name="band"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public bool SetTone(API_3DTI_Common.T_ear ear, T_toneBand band, float value)
+    {
+        if (ear == API_3DTI_Common.T_ear.BOTH)
+        {
+            if (!SetTone(API_3DTI_Common.T_ear.LEFT, band, value)) return false;
+            return SetTone(API_3DTI_Common.T_ear.RIGHT, band, value);
+        }
+
+        switch (band) 
+        {
+            case T_toneBand.LOW:                                
+                AddToHAFloat(ear, "HA3DTI_Gain_Level_0_Band_0_", tone[(int)ear, (int)band], value);
+                AddToHAFloat(ear, "HA3DTI_Gain_Level_1_Band_0_", tone[(int)ear, (int)band], value);
+                AddToHAFloat(ear, "HA3DTI_Gain_Level_2_Band_0_", tone[(int)ear, (int)band], value);
+                AddToHAFloat(ear, "HA3DTI_Gain_Level_0_Band_1_", tone[(int)ear, (int)band], value);
+                AddToHAFloat(ear, "HA3DTI_Gain_Level_1_Band_1_", tone[(int)ear, (int)band], value);
+                AddToHAFloat(ear, "HA3DTI_Gain_Level_2_Band_1_", tone[(int)ear, (int)band], value);
+                AddToHAFloat(ear, "HA3DTI_Gain_Level_0_Band_2_", tone[(int)ear, (int)band], value);
+                AddToHAFloat(ear, "HA3DTI_Gain_Level_1_Band_2_", tone[(int)ear, (int)band], value);
+                AddToHAFloat(ear, "HA3DTI_Gain_Level_2_Band_2_", tone[(int)ear, (int)band], value);
+                break;                                           
+            case T_toneBand.MID:                                 
+                AddToHAFloat(ear, "HA3DTI_Gain_Level_0_Band_3_", tone[(int)ear, (int)band], value);
+                AddToHAFloat(ear, "HA3DTI_Gain_Level_1_Band_3_", tone[(int)ear, (int)band], value);
+                AddToHAFloat(ear, "HA3DTI_Gain_Level_2_Band_3_", tone[(int)ear, (int)band], value);
+                AddToHAFloat(ear, "HA3DTI_Gain_Level_0_Band_4_", tone[(int)ear, (int)band], value);
+                AddToHAFloat(ear, "HA3DTI_Gain_Level_1_Band_4_", tone[(int)ear, (int)band], value);
+                AddToHAFloat(ear, "HA3DTI_Gain_Level_2_Band_4_", tone[(int)ear, (int)band], value);
+                break;
+            case T_toneBand.HIGH:                
+                AddToHAFloat(ear, "HA3DTI_Gain_Level_0_Band_5_", tone[(int)ear, (int)band], value);
+                AddToHAFloat(ear, "HA3DTI_Gain_Level_1_Band_5_", tone[(int)ear, (int)band], value);
+                AddToHAFloat(ear, "HA3DTI_Gain_Level_2_Band_5_", tone[(int)ear, (int)band], value);
+                AddToHAFloat(ear, "HA3DTI_Gain_Level_0_Band_6_", tone[(int)ear, (int)band], value);
+                AddToHAFloat(ear, "HA3DTI_Gain_Level_1_Band_6_", tone[(int)ear, (int)band], value);
+                AddToHAFloat(ear, "HA3DTI_Gain_Level_2_Band_6_", tone[(int)ear, (int)band], value);
+                break;
+            default:
+                return false;                
+        }
+
+        tone[(int)ear, (int)band] = value;
+
+        return true;
+    }
+
+    public bool SetCompressionPercentage(API_3DTI_Common.T_ear ear, float value)
+    {
+        if (ear == API_3DTI_Common.T_ear.BOTH)
+        {
+            if (!SetCompressionPercentage(API_3DTI_Common.T_ear.LEFT, value)) return false;
+            return SetCompressionPercentage(API_3DTI_Common.T_ear.RIGHT, value);
+        }
+
+        return HASetFloat(ear, "HA3DTI_Compression_", value);
+    }
 
     //////////////////////////////////////////////////////////////
     // DYNAMIC EQ
@@ -70,33 +217,33 @@ public class API_3DTI_HA : MonoBehaviour
     /// </summary>    
     /// <param name="value"></param>
     /// <returns></returns>
-    public bool SwitchDynamicEQOnOff(bool value)
-    {
-        return haMixer.SetFloat("HA3DTI_Dynamic_On", Bool2Float(value)); 
-    }
+    //public bool SwitchDynamicEQOnOff(bool value)
+    //{
+    //    return haMixer.SetFloat("HA3DTI_Dynamic_On", Bool2Float(value)); 
+    //}
 
     /// <summary>
     ///  Set gain (in dB) for one band of the standard equalizer
     /// </summary>
-    /// <param name="ear ({EAR_LEFT, EAR_RIGHT})"></param>
+    /// <param name="ear"></param>
     /// <param name="band ([0..6])"></param>
     /// <param name="gain (dB)"></param>
     /// <returns></returns>
-    public bool SetStandardEQBandGain(int ear, int band, float gain)
+    public bool SetStandardEQBandGain(API_3DTI_Common.T_ear ear, int band, float gain)
     {
-        string paramName = "HA3DTI_Gain_Level_0_Band_" + band.ToString() + "_";
+        string paramName = "HA3DTI_Gain_Level_0_Band_0_Left";
         return HASetFloat(ear, paramName, gain);
     }
 
     /// <summary>
     /// Set gain (in dB) for one level of one band of the dynamic equalizer
     /// </summary>
-    /// <param name="ear ({EAR_LEFT, EAR_RIGHT})"></param>
+    /// <param name="ear"></param>
     /// <param name="band ([0..6])"></param>
     /// <param name="level ([0..2])"></param>
     /// <param name="gain (dB)"></param>
     /// <returns></returns>
-    public bool SetDynamicEQBandLevelGain(int ear, int band, int level, float gain)
+    public bool SetDynamicEQBandLevelGain(API_3DTI_Common.T_ear ear, int band, int level, float gain)
     {
         string paramName = "HA3DTI_Gain_Level_" + level.ToString() + "_Band_" + band.ToString() + "_";
         return HASetFloat(ear, paramName, gain);
@@ -105,11 +252,11 @@ public class API_3DTI_HA : MonoBehaviour
     /// <summary>
     /// Set threshold (in dB) for one level of the dynamic equalizer
     /// </summary>
-    /// <param name="ear ({EAR_LEFT, EAR_RIGHT})"></param>
+    /// <param name="ear"></param>
     /// <param name="level ([0..2]"></param>
     /// <param name="threshold (dB)"></param>
     /// <returns></returns>
-    public bool SetDynamicEQLevelThreshold(int ear, int level, float threshold)
+    public bool SetDynamicEQLevelThreshold(API_3DTI_Common.T_ear ear, int level, float threshold)
     {
         string paramName = "HA3DTI_Threshold_" + level.ToString() + "_";
         return HASetFloat(ear, paramName, threshold);
@@ -148,10 +295,10 @@ public class API_3DTI_HA : MonoBehaviour
     /// <summary>
     /// Set attack and release time (in milliseconds) for dynamic equalizer envelope detector
     /// </summary>
-    /// <param name="ear ({EAR_LEFT, EAR_RIGHT})"></param>
+    /// <param name="ear"></param>
     /// <param name="attackRelease (ms)"></param>
     /// <returns></returns>
-    public bool SetDynamicEQAttackRelease(int ear, float attackRelease)
+    public bool SetDynamicEQAttackRelease(API_3DTI_Common.T_ear ear, float attackRelease)
     {
         return HASetFloat(ear, "HA3DTI_AttackRelease_", attackRelease);
     }
@@ -159,32 +306,40 @@ public class API_3DTI_HA : MonoBehaviour
     /// <summary>
     /// Configure dynamic equalizer using Fig6 method
     /// </summary>
-    /// <param name="ear ({EAR_LEFT, EAR_RIGHT})"></param>
+    /// <param name="ear"></param>
     /// <param name="earLossList (dB[])"></param>
     /// <returns></returns>
-    public bool SetEQFromFig6(int ear, List<float>earLossList)
+    public bool SetEQFromFig6(API_3DTI_Common.T_ear ear, List<float>earLossList, out List<float>gains)
     {
         // Both ears
-        if (ear == EAR_BOTH)
+        if (ear == API_3DTI_Common.T_ear.BOTH)
         {
-            if (!SetEQFromFig6(EAR_LEFT, earLossList))
+            if (!SetEQFromFig6(API_3DTI_Common.T_ear.LEFT, earLossList, out gains))
                 return false;
-            return SetEQFromFig6(EAR_RIGHT, earLossList);
+            return SetEQFromFig6(API_3DTI_Common.T_ear.RIGHT, earLossList, out gains);
+        }
+
+        // Init gains
+        gains = new List<float>();        
+        for (int band = 0; band < FIG6_NUMBANDS; band++)
+        {
+            for (int level = 0; level < NUM_EQ_CURVES; level++)
+            {
+                gains.Add(0.0f);                
+            }
         }
 
         // Left ear
-        if (ear == EAR_LEFT)
-        {
-            haMixer.SetFloat("HA3DTI_Dynamic_LeftOn", Bool2Float(true));    // Set Dynamic EQ for left channel
+        if (ear == API_3DTI_Common.T_ear.LEFT)
+        {            
             haMixer.SetFloat("HA3DTI_Threshold_0_Left", FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 0
             haMixer.SetFloat("HA3DTI_Threshold_1_Left", FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 1
             haMixer.SetFloat("HA3DTI_Threshold_2_Left", FIG6_THRESHOLD_2_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 2
         }
 
         // Left ear
-        if (ear == EAR_RIGHT)
-        {
-            haMixer.SetFloat("HA3DTI_Dynamic_RightOn", Bool2Float(true));    // Set Dynamic EQ for left channel
+        if (ear == API_3DTI_Common.T_ear.RIGHT)
+        {         
             haMixer.SetFloat("HA3DTI_Threshold_0_Right", FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 0
             haMixer.SetFloat("HA3DTI_Threshold_1_Right", FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 1
             haMixer.SetFloat("HA3DTI_Threshold_2_Right", FIG6_THRESHOLD_2_DBSPL - DBSPL_FOR_0_DBFS);  // Set level threshold 2
@@ -192,8 +347,13 @@ public class API_3DTI_HA : MonoBehaviour
 
         for (int bandIndex = 0; bandIndex < FIG6_NUMBANDS; bandIndex++)
         {
-            if (!SetEQBandFromFig6(ear, bandIndex, earLossList[bandIndex]))
+            float gain0, gain1, gain2;
+            if (!SetEQBandFromFig6(ear, bandIndex, earLossList[bandIndex], out gain0, out gain1, out gain2))
                 return false;
+
+            gains[bandIndex * NUM_EQ_CURVES] = gain0;
+            gains[bandIndex * NUM_EQ_CURVES + 1] = gain1;
+            gains[bandIndex * NUM_EQ_CURVES + 2] = gain2;
         }
 
         return true;
@@ -231,10 +391,9 @@ public class API_3DTI_HA : MonoBehaviour
     // AUXILIARY FUNCTIONS
     //////////////////////////////////////////////////////////////
 
-    public bool SetEQBandFromFig6(int ear, int bandIndex, float earLoss)
+    public bool SetEQBandFromFig6(API_3DTI_Common.T_ear ear, int bandIndex, float earLoss, out float gain0, out float gain1, out float gain2)
     {
-        // Level 0 (40 dB)
-        float gain0;
+        // Level 0 (40 dB)        
         if (earLoss < 20.0f)
             gain0 = 0.0f;
         else
@@ -245,8 +404,7 @@ public class API_3DTI_HA : MonoBehaviour
                 gain0 = earLoss * 0.5f + 10.0f;
         }
 
-        // Level 1 (65 dB)
-        float gain1;
+        // Level 1 (65 dB)        
         if (earLoss < 20.0f)
             gain1 = 0.0f;
         else
@@ -257,8 +415,7 @@ public class API_3DTI_HA : MonoBehaviour
                 gain1 = earLoss * 0.8f - 23.0f;
         }
 
-        // Level 2 (95 dB)
-        float gain2;
+        // Level 2 (95 dB)        
         if (earLoss <= 40.0f)
             gain2 = 0.0f;
         else
@@ -273,24 +430,24 @@ public class API_3DTI_HA : MonoBehaviour
     }
 
     /// <summary>
-    /// Generic Set method
+    /// Method for setting value of an exposed parameter
     /// </summary>
-    /// <param name="ear ({EAR_LEFT, EAR_RIGHT})"></param>
+    /// <param name="ear"></param>
     /// <param name="paramPrefix"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public bool HASetFloat(int ear, string paramPrefix, float value)
+    public bool HASetFloat(API_3DTI_Common.T_ear ear, string paramPrefix, float value)
     {
         // Both ears
-        if (ear == EAR_BOTH)
+        if (ear == API_3DTI_Common.T_ear.BOTH)
         {
-            if (!HASetFloat(EAR_LEFT, paramPrefix, value)) return false;
-            return HASetFloat(EAR_RIGHT, paramPrefix, value);
+            if (!HASetFloat(API_3DTI_Common.T_ear.LEFT, paramPrefix, value)) return false;
+            return HASetFloat(API_3DTI_Common.T_ear.RIGHT, paramPrefix, value);
         }
 
         // Build exposed parameter name string
         string paramName = paramPrefix;
-        if (ear == EAR_LEFT)
+        if (ear == API_3DTI_Common.T_ear.LEFT)
             paramName += "Left";
         else
             paramName += "Right";
@@ -298,26 +455,60 @@ public class API_3DTI_HA : MonoBehaviour
         // Set value
         return haMixer.SetFloat(paramName, value);
     }
-
+       
     /// <summary>
-    /// Generic Switch method
+    /// Method for adding a (positive/negative) increment to an exposed parameter. 
+    /// The actual increment applied is newIncrement - oldIncrement.
     /// </summary>
-    /// <param name="ear ({EAR_LEFT, EAR_RIGHT})"></param>
+    /// <param name="ear"></param>
     /// <param name="paramPrefix"></param>
-    /// <param name="value"></param>
+    /// <param name="oldIncrement"></param>
+    /// <param name="newIncrement"></param>
     /// <returns></returns>
-    public bool HASwitch(int ear, string paramPrefix, bool value)
+    public bool AddToHAFloat(API_3DTI_Common.T_ear ear, string paramPrefix, float oldIncrement, float newIncrement)
     {
         // Both ears
-        if (ear == EAR_BOTH)
+        if (ear == API_3DTI_Common.T_ear.BOTH)
         {
-            if (!HASwitch(EAR_LEFT, paramPrefix, value)) return false;
-            return HASwitch(EAR_RIGHT, paramPrefix, value);
+            if (!AddToHAFloat(API_3DTI_Common.T_ear.LEFT, paramPrefix, oldIncrement, newIncrement)) return false;
+            return AddToHAFloat(API_3DTI_Common.T_ear.RIGHT, paramPrefix, oldIncrement, newIncrement);
         }
 
         // Build exposed parameter name string
         string paramName = paramPrefix;
-        if (ear == EAR_LEFT)
+        if (ear == API_3DTI_Common.T_ear.LEFT)
+            paramName += "Left";
+        else
+            paramName += "Right";
+
+        // Get current value, considering oldIncrement
+        float currentValue;
+        if (!haMixer.GetFloat(paramName, out currentValue)) return false;
+        currentValue = currentValue - oldIncrement;
+
+        // Set new value, with newIncrement
+        return haMixer.SetFloat(paramName, currentValue + newIncrement);
+    }
+
+    /// <summary>
+    /// Generic Switch method
+    /// </summary>
+    /// <param name="ear"></param>
+    /// <param name="paramPrefix"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public bool HASwitch(API_3DTI_Common.T_ear ear, string paramPrefix, bool value)
+    {
+        // Both ears
+        if (ear == API_3DTI_Common.T_ear.BOTH)
+        {
+            if (!HASwitch(API_3DTI_Common.T_ear.LEFT, paramPrefix, value)) return false;
+            return HASwitch(API_3DTI_Common.T_ear.RIGHT, paramPrefix, value);
+        }
+
+        // Build exposed parameter name string
+        string paramName = paramPrefix;
+        if (ear == API_3DTI_Common.T_ear.LEFT)
             paramName += "LeftOn";
         else
             paramName += "RightOn";

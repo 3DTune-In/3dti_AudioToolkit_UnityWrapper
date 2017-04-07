@@ -1,0 +1,1512 @@
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+CREATE: Sample rate set to 48000
+CREATE: Buffer size set to 1024
+CREATE: Listener created successfully
+CREATE: Source created successfully
+--------------------------------------
+
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+SET PARAMETER: Scale factor changed to 1
+1: SET PARAMETER: Source ID set to 1
+2: SET PARAMETER: Source ID set to 2
+3: SET PARAMETER: Source ID set to 3
+4: SET PARAMETER: Source ID set to 4
+5: SET PARAMETER: Source ID set to 5
+6: SET PARAMETER: Source ID set to 6
+7: SET PARAMETER: Source ID set to 7
+8: SET PARAMETER: Source ID set to 8
+9: SET PARAMETER: Source ID set to 9
+10: SET PARAMETER: Source ID set to 10
+11: SET PARAMETER: Source ID set to 11
+12: SET PARAMETER: Source ID set to 12
+13: SET PARAMETER: Source ID set to 13
+14: SET PARAMETER: Source ID set to 14
+15: SET PARAMETER: Source ID set to 15
+16: SET PARAMETER: Source ID set to 16
+17: SET PARAMETER: Source ID set to 17
+18: SET PARAMETER: Source ID set to 18
+19: SET PARAMETER: Source ID set to 19
+20: SET PARAMETER: Source ID set to 20
+21: SET PARAMETER: Source ID set to 21
+22: SET PARAMETER: Source ID set to 22
+23: SET PARAMETER: Source ID set to 23
+24: SET PARAMETER: Source ID set to 24
+25: SET PARAMETER: Source ID set to 25
+26: SET PARAMETER: Source ID set to 26
+27: SET PARAMETER: Source ID set to 27
+28: SET PARAMETER: Source ID set to 28
+29: SET PARAMETER: Source ID set to 29
+30: SET PARAMETER: Source ID set to 30
+31: SET PARAMETER: Source ID set to 31
+32: SET PARAMETER: Source ID set to 32
+33: SET PARAMETER: Source ID set to 33
+34: SET PARAMETER: Source ID set to 34
+35: SET PARAMETER: Source ID set to 35
+36: SET PARAMETER: Source ID set to 36
+37: SET PARAMETER: Source ID set to 37
+38: SET PARAMETER: Source ID set to 38
+39: SET PARAMETER: Source ID set to 39
+40: SET PARAMETER: Source ID set to 40
+41: SET PARAMETER: Source ID set to 41
+42: SET PARAMETER: Source ID set to 42
+43: SET PARAMETER: Source ID set to 43
+44: SET PARAMETER: Source ID set to 44
+45: SET PARAMETER: Source ID set to 45
+46: SET PARAMETER: Source ID set to 46
+47: SET PARAMETER: Source ID set to 47
+48: SET PARAMETER: Source ID set to 48
+49: SET PARAMETER: Source ID set to 49
+50: SET PARAMETER: Source ID set to 50
+51: SET PARAMETER: Source ID set to 51
+52: SET PARAMETER: Source ID set to 52
+53: SET PARAMETER: Source ID set to 53
+54: SET PARAMETER: Source ID set to 54
+1: SET PARAMETER: Far distance LPF is Enabled
+2: SET PARAMETER: Far distance LPF is Enabled
+3: SET PARAMETER: Far distance LPF is Enabled
+4: SET PARAMETER: Far distance LPF is Enabled
+5: SET PARAMETER: Far distance LPF is Enabled
+6: SET PARAMETER: Far distance LPF is Enabled
+7: SET PARAMETER: Far distance LPF is Enabled
+8: SET PARAMETER: Far distance LPF is Enabled
+9: SET PARAMETER: Far distance LPF is Enabled
+10: SET PARAMETER: Far distance LPF is Enabled
+11: SET PARAMETER: Far distance LPF is Enabled
+12: SET PARAMETER: Far distance LPF is Enabled
+13: SET PARAMETER: Far distance LPF is Enabled
+14: SET PARAMETER: Far distance LPF is Enabled
+15: SET PARAMETER: Far distance LPF is Enabled
+16: SET PARAMETER: Far distance LPF is Enabled
+17: SET PARAMETER: Far distance LPF is Enabled
+18: SET PARAMETER: Far distance LPF is Enabled
+19: SET PARAMETER: Far distance LPF is Enabled
+20: SET PARAMETER: Far distance LPF is Enabled
+21: SET PARAMETER: Far distance LPF is Enabled
+22: SET PARAMETER: Far distance LPF is Enabled
+23: SET PARAMETER: Far distance LPF is Enabled
+24: SET PARAMETER: Far distance LPF is Enabled
+25: SET PARAMETER: Far distance LPF is Enabled
+26: SET PARAMETER: Far distance LPF is Enabled
+27: SET PARAMETER: Far distance LPF is Enabled
+28: SET PARAMETER: Far distance LPF is Enabled
+29: SET PARAMETER: Far distance LPF is Enabled
+30: SET PARAMETER: Far distance LPF is Enabled
+31: SET PARAMETER: Far distance LPF is Enabled
+32: SET PARAMETER: Far distance LPF is Enabled
+33: SET PARAMETER: Far distance LPF is Enabled
+34: SET PARAMETER: Far distance LPF is Enabled
+35: SET PARAMETER: Far distance LPF is Enabled
+36: SET PARAMETER: Far distance LPF is Enabled
+37: SET PARAMETER: Far distance LPF is Enabled
+38: SET PARAMETER: Far distance LPF is Enabled
+39: SET PARAMETER: Far distance LPF is Enabled
+40: SET PARAMETER: Far distance LPF is Enabled
+41: SET PARAMETER: Far distance LPF is Enabled
+42: SET PARAMETER: Far distance LPF is Enabled
+43: SET PARAMETER: Far distance LPF is Enabled
+44: SET PARAMETER: Far distance LPF is Enabled
+45: SET PARAMETER: Far distance LPF is Enabled
+46: SET PARAMETER: Far distance LPF is Enabled
+47: SET PARAMETER: Far distance LPF is Enabled
+48: SET PARAMETER: Far distance LPF is Enabled
+49: SET PARAMETER: Far distance LPF is Enabled
+50: SET PARAMETER: Far distance LPF is Enabled
+51: SET PARAMETER: Far distance LPF is Enabled
+52: SET PARAMETER: Far distance LPF is Enabled
+53: SET PARAMETER: Far distance LPF is Enabled
+54: SET PARAMETER: Far distance LPF is Enabled
+1: SET PARAMETER: Distance attenuation is Enabled
+2: SET PARAMETER: Distance attenuation is Enabled
+3: SET PARAMETER: Distance attenuation is Enabled
+4: SET PARAMETER: Distance attenuation is Enabled
+5: SET PARAMETER: Distance attenuation is Enabled
+6: SET PARAMETER: Distance attenuation is Enabled
+7: SET PARAMETER: Distance attenuation is Enabled
+8: SET PARAMETER: Distance attenuation is Enabled
+9: SET PARAMETER: Distance attenuation is Enabled
+10: SET PARAMETER: Distance attenuation is Enabled
+11: SET PARAMETER: Distance attenuation is Enabled
+12: SET PARAMETER: Distance attenuation is Enabled
+13: SET PARAMETER: Distance attenuation is Enabled
+14: SET PARAMETER: Distance attenuation is Enabled
+15: SET PARAMETER: Distance attenuation is Enabled
+16: SET PARAMETER: Distance attenuation is Enabled
+17: SET PARAMETER: Distance attenuation is Enabled
+18: SET PARAMETER: Distance attenuation is Enabled
+19: SET PARAMETER: Distance attenuation is Enabled
+20: SET PARAMETER: Distance attenuation is Enabled
+21: SET PARAMETER: Distance attenuation is Enabled
+22: SET PARAMETER: Distance attenuation is Enabled
+23: SET PARAMETER: Distance attenuation is Enabled
+24: SET PARAMETER: Distance attenuation is Enabled
+25: SET PARAMETER: Distance attenuation is Enabled
+26: SET PARAMETER: Distance attenuation is Enabled
+27: SET PARAMETER: Distance attenuation is Enabled
+28: SET PARAMETER: Distance attenuation is Enabled
+29: SET PARAMETER: Distance attenuation is Enabled
+30: SET PARAMETER: Distance attenuation is Enabled
+31: SET PARAMETER: Distance attenuation is Enabled
+32: SET PARAMETER: Distance attenuation is Enabled
+33: SET PARAMETER: Distance attenuation is Enabled
+34: SET PARAMETER: Distance attenuation is Enabled
+35: SET PARAMETER: Distance attenuation is Enabled
+36: SET PARAMETER: Distance attenuation is Enabled
+37: SET PARAMETER: Distance attenuation is Enabled
+38: SET PARAMETER: Distance attenuation is Enabled
+39: SET PARAMETER: Distance attenuation is Enabled
+40: SET PARAMETER: Distance attenuation is Enabled
+41: SET PARAMETER: Distance attenuation is Enabled
+42: SET PARAMETER: Distance attenuation is Enabled
+43: SET PARAMETER: Distance attenuation is Enabled
+44: SET PARAMETER: Distance attenuation is Enabled
+45: SET PARAMETER: Distance attenuation is Enabled
+46: SET PARAMETER: Distance attenuation is Enabled
+47: SET PARAMETER: Distance attenuation is Enabled
+48: SET PARAMETER: Distance attenuation is Enabled
+49: SET PARAMETER: Distance attenuation is Enabled
+50: SET PARAMETER: Distance attenuation is Enabled
+51: SET PARAMETER: Distance attenuation is Enabled
+52: SET PARAMETER: Distance attenuation is Enabled
+53: SET PARAMETER: Distance attenuation is Enabled
+54: SET PARAMETER: Distance attenuation is Enabled
+1: SET PARAMETER: Near distance ILD is Enabled
+2: SET PARAMETER: Near distance ILD is Enabled
+3: SET PARAMETER: Near distance ILD is Enabled
+4: SET PARAMETER: Near distance ILD is Enabled
+5: SET PARAMETER: Near distance ILD is Enabled
+6: SET PARAMETER: Near distance ILD is Enabled
+7: SET PARAMETER: Near distance ILD is Enabled
+8: SET PARAMETER: Near distance ILD is Enabled
+9: SET PARAMETER: Near distance ILD is Enabled
+10: SET PARAMETER: Near distance ILD is Enabled
+11: SET PARAMETER: Near distance ILD is Enabled
+12: SET PARAMETER: Near distance ILD is Enabled
+13: SET PARAMETER: Near distance ILD is Enabled
+14: SET PARAMETER: Near distance ILD is Enabled
+15: SET PARAMETER: Near distance ILD is Enabled
+16: SET PARAMETER: Near distance ILD is Enabled
+17: SET PARAMETER: Near distance ILD is Enabled
+18: SET PARAMETER: Near distance ILD is Enabled
+19: SET PARAMETER: Near distance ILD is Enabled
+20: SET PARAMETER: Near distance ILD is Enabled
+21: SET PARAMETER: Near distance ILD is Enabled
+22: SET PARAMETER: Near distance ILD is Enabled
+23: SET PARAMETER: Near distance ILD is Enabled
+24: SET PARAMETER: Near distance ILD is Enabled
+25: SET PARAMETER: Near distance ILD is Enabled
+26: SET PARAMETER: Near distance ILD is Enabled
+27: SET PARAMETER: Near distance ILD is Enabled
+28: SET PARAMETER: Near distance ILD is Enabled
+29: SET PARAMETER: Near distance ILD is Enabled
+30: SET PARAMETER: Near distance ILD is Enabled
+31: SET PARAMETER: Near distance ILD is Enabled
+32: SET PARAMETER: Near distance ILD is Enabled
+33: SET PARAMETER: Near distance ILD is Enabled
+34: SET PARAMETER: Near distance ILD is Enabled
+35: SET PARAMETER: Near distance ILD is Enabled
+36: SET PARAMETER: Near distance ILD is Enabled
+37: SET PARAMETER: Near distance ILD is Enabled
+38: SET PARAMETER: Near distance ILD is Enabled
+39: SET PARAMETER: Near distance ILD is Enabled
+40: SET PARAMETER: Near distance ILD is Enabled
+41: SET PARAMETER: Near distance ILD is Enabled
+42: SET PARAMETER: Near distance ILD is Enabled
+43: SET PARAMETER: Near distance ILD is Enabled
+44: SET PARAMETER: Near distance ILD is Enabled
+45: SET PARAMETER: Near distance ILD is Enabled
+46: SET PARAMETER: Near distance ILD is Enabled
+47: SET PARAMETER: Near distance ILD is Enabled
+48: SET PARAMETER: Near distance ILD is Enabled
+49: SET PARAMETER: Near distance ILD is Enabled
+50: SET PARAMETER: Near distance ILD is Enabled
+51: SET PARAMETER: Near distance ILD is Enabled
+52: SET PARAMETER: Near distance ILD is Enabled
+53: SET PARAMETER: Near distance ILD is Enabled
+54: SET PARAMETER: Near distance ILD is Enabled
+1: SET PARAMETER: HRTF convolution is Enabled
+2: SET PARAMETER: HRTF convolution is Enabled
+3: SET PARAMETER: HRTF convolution is Enabled
+4: SET PARAMETER: HRTF convolution is Enabled
+5: SET PARAMETER: HRTF convolution is Enabled
+6: SET PARAMETER: HRTF convolution is Enabled
+7: SET PARAMETER: HRTF convolution is Enabled
+8: SET PARAMETER: HRTF convolution is Enabled
+9: SET PARAMETER: HRTF convolution is Enabled
+10: SET PARAMETER: HRTF convolution is Enabled
+11: SET PARAMETER: HRTF convolution is Enabled
+12: SET PARAMETER: HRTF convolution is Enabled
+13: SET PARAMETER: HRTF convolution is Enabled
+14: SET PARAMETER: HRTF convolution is Enabled
+15: SET PARAMETER: HRTF convolution is Enabled
+16: SET PARAMETER: HRTF convolution is Enabled
+17: SET PARAMETER: HRTF convolution is Enabled
+18: SET PARAMETER: HRTF convolution is Enabled
+19: SET PARAMETER: HRTF convolution is Enabled
+20: SET PARAMETER: HRTF convolution is Enabled
+21: SET PARAMETER: HRTF convolution is Enabled
+22: SET PARAMETER: HRTF convolution is Enabled
+23: SET PARAMETER: HRTF convolution is Enabled
+24: SET PARAMETER: HRTF convolution is Enabled
+25: SET PARAMETER: HRTF convolution is Enabled
+26: SET PARAMETER: HRTF convolution is Enabled
+27: SET PARAMETER: HRTF convolution is Enabled
+28: SET PARAMETER: HRTF convolution is Enabled
+29: SET PARAMETER: HRTF convolution is Enabled
+30: SET PARAMETER: HRTF convolution is Enabled
+31: SET PARAMETER: HRTF convolution is Enabled
+32: SET PARAMETER: HRTF convolution is Enabled
+33: SET PARAMETER: HRTF convolution is Enabled
+34: SET PARAMETER: HRTF convolution is Enabled
+35: SET PARAMETER: HRTF convolution is Enabled
+36: SET PARAMETER: HRTF convolution is Enabled
+37: SET PARAMETER: HRTF convolution is Enabled
+38: SET PARAMETER: HRTF convolution is Enabled
+39: SET PARAMETER: HRTF convolution is Enabled
+40: SET PARAMETER: HRTF convolution is Enabled
+41: SET PARAMETER: HRTF convolution is Enabled
+42: SET PARAMETER: HRTF convolution is Enabled
+43: SET PARAMETER: HRTF convolution is Enabled
+44: SET PARAMETER: HRTF convolution is Enabled
+45: SET PARAMETER: HRTF convolution is Enabled
+46: SET PARAMETER: HRTF convolution is Enabled
+47: SET PARAMETER: HRTF convolution is Enabled
+48: SET PARAMETER: HRTF convolution is Enabled
+49: SET PARAMETER: HRTF convolution is Enabled
+50: SET PARAMETER: HRTF convolution is Enabled
+51: SET PARAMETER: HRTF convolution is Enabled
+52: SET PARAMETER: HRTF convolution is Enabled
+53: SET PARAMETER: HRTF convolution is Enabled
+54: SET PARAMETER: HRTF convolution is Enabled
+1: SET PARAMETER: Run-time HRTF Interpolation switched ON
+2: SET PARAMETER: Run-time HRTF Interpolation switched ON
+3: SET PARAMETER: Run-time HRTF Interpolation switched ON
+4: SET PARAMETER: Run-time HRTF Interpolation switched ON
+5: SET PARAMETER: Run-time HRTF Interpolation switched ON
+6: SET PARAMETER: Run-time HRTF Interpolation switched ON
+7: SET PARAMETER: Run-time HRTF Interpolation switched ON
+8: SET PARAMETER: Run-time HRTF Interpolation switched ON
+9: SET PARAMETER: Run-time HRTF Interpolation switched ON
+10: SET PARAMETER: Run-time HRTF Interpolation switched ON
+11: SET PARAMETER: Run-time HRTF Interpolation switched ON
+12: SET PARAMETER: Run-time HRTF Interpolation switched ON
+13: SET PARAMETER: Run-time HRTF Interpolation switched ON
+14: SET PARAMETER: Run-time HRTF Interpolation switched ON
+15: SET PARAMETER: Run-time HRTF Interpolation switched ON
+16: SET PARAMETER: Run-time HRTF Interpolation switched ON
+17: SET PARAMETER: Run-time HRTF Interpolation switched ON
+18: SET PARAMETER: Run-time HRTF Interpolation switched ON
+19: SET PARAMETER: Run-time HRTF Interpolation switched ON
+20: SET PARAMETER: Run-time HRTF Interpolation switched ON
+21: SET PARAMETER: Run-time HRTF Interpolation switched ON
+22: SET PARAMETER: Run-time HRTF Interpolation switched ON
+23: SET PARAMETER: Run-time HRTF Interpolation switched ON
+24: SET PARAMETER: Run-time HRTF Interpolation switched ON
+25: SET PARAMETER: Run-time HRTF Interpolation switched ON
+26: SET PARAMETER: Run-time HRTF Interpolation switched ON
+27: SET PARAMETER: Run-time HRTF Interpolation switched ON
+28: SET PARAMETER: Run-time HRTF Interpolation switched ON
+29: SET PARAMETER: Run-time HRTF Interpolation switched ON
+30: SET PARAMETER: Run-time HRTF Interpolation switched ON
+31: SET PARAMETER: Run-time HRTF Interpolation switched ON
+32: SET PARAMETER: Run-time HRTF Interpolation switched ON
+33: SET PARAMETER: Run-time HRTF Interpolation switched ON
+34: SET PARAMETER: Run-time HRTF Interpolation switched ON
+35: SET PARAMETER: Run-time HRTF Interpolation switched ON
+36: SET PARAMETER: Run-time HRTF Interpolation switched ON
+37: SET PARAMETER: Run-time HRTF Interpolation switched ON
+38: SET PARAMETER: Run-time HRTF Interpolation switched ON
+39: SET PARAMETER: Run-time HRTF Interpolation switched ON
+40: SET PARAMETER: Run-time HRTF Interpolation switched ON
+41: SET PARAMETER: Run-time HRTF Interpolation switched ON
+42: SET PARAMETER: Run-time HRTF Interpolation switched ON
+43: SET PARAMETER: Run-time HRTF Interpolation switched ON
+44: SET PARAMETER: Run-time HRTF Interpolation switched ON
+45: SET PARAMETER: Run-time HRTF Interpolation switched ON
+46: SET PARAMETER: Run-time HRTF Interpolation switched ON
+47: SET PARAMETER: Run-time HRTF Interpolation switched ON
+48: SET PARAMETER: Run-time HRTF Interpolation switched ON
+49: SET PARAMETER: Run-time HRTF Interpolation switched ON
+50: SET PARAMETER: Run-time HRTF Interpolation switched ON
+51: SET PARAMETER: Run-time HRTF Interpolation switched ON
+52: SET PARAMETER: Run-time HRTF Interpolation switched ON
+53: SET PARAMETER: Run-time HRTF Interpolation switched ON
+54: SET PARAMETER: Run-time HRTF Interpolation switched ON
+1: SET PARAMETER: Listener head radius changed to 0.0875
+2: SET PARAMETER: Listener head radius changed to 0.0875
+3: SET PARAMETER: Listener head radius changed to 0.0875
+4: SET PARAMETER: Listener head radius changed to 0.0875
+5: SET PARAMETER: Listener head radius changed to 0.0875
+6: SET PARAMETER: Listener head radius changed to 0.0875
+7: SET PARAMETER: Listener head radius changed to 0.0875
+8: SET PARAMETER: Listener head radius changed to 0.0875
+9: SET PARAMETER: Listener head radius changed to 0.0875
+10: SET PARAMETER: Listener head radius changed to 0.0875
+11: SET PARAMETER: Listener head radius changed to 0.0875
+12: SET PARAMETER: Listener head radius changed to 0.0875
+13: SET PARAMETER: Listener head radius changed to 0.0875
+14: SET PARAMETER: Listener head radius changed to 0.0875
+15: SET PARAMETER: Listener head radius changed to 0.0875
+16: SET PARAMETER: Listener head radius changed to 0.0875
+17: SET PARAMETER: Listener head radius changed to 0.0875
+18: SET PARAMETER: Listener head radius changed to 0.0875
+19: SET PARAMETER: Listener head radius changed to 0.0875
+20: SET PARAMETER: Listener head radius changed to 0.0875
+21: SET PARAMETER: Listener head radius changed to 0.0875
+22: SET PARAMETER: Listener head radius changed to 0.0875
+23: SET PARAMETER: Listener head radius changed to 0.0875
+24: SET PARAMETER: Listener head radius changed to 0.0875
+25: SET PARAMETER: Listener head radius changed to 0.0875
+26: SET PARAMETER: Listener head radius changed to 0.0875
+27: SET PARAMETER: Listener head radius changed to 0.0875
+28: SET PARAMETER: Listener head radius changed to 0.0875
+29: SET PARAMETER: Listener head radius changed to 0.0875
+30: SET PARAMETER: Listener head radius changed to 0.0875
+31: SET PARAMETER: Listener head radius changed to 0.0875
+32: SET PARAMETER: Listener head radius changed to 0.0875
+33: SET PARAMETER: Listener head radius changed to 0.0875
+34: SET PARAMETER: Listener head radius changed to 0.0875
+35: SET PARAMETER: Listener head radius changed to 0.0875
+36: SET PARAMETER: Listener head radius changed to 0.0875
+37: SET PARAMETER: Listener head radius changed to 0.0875
+38: SET PARAMETER: Listener head radius changed to 0.0875
+39: SET PARAMETER: Listener head radius changed to 0.0875
+40: SET PARAMETER: Listener head radius changed to 0.0875
+41: SET PARAMETER: Listener head radius changed to 0.0875
+42: SET PARAMETER: Listener head radius changed to 0.0875
+43: SET PARAMETER: Listener head radius changed to 0.0875
+44: SET PARAMETER: Listener head radius changed to 0.0875
+45: SET PARAMETER: Listener head radius changed to 0.0875
+46: SET PARAMETER: Listener head radius changed to 0.0875
+47: SET PARAMETER: Listener head radius changed to 0.0875
+48: SET PARAMETER: Listener head radius changed to 0.0875
+49: SET PARAMETER: Listener head radius changed to 0.0875
+50: SET PARAMETER: Listener head radius changed to 0.0875
+51: SET PARAMETER: Listener head radius changed to 0.0875
+52: SET PARAMETER: Listener head radius changed to 0.0875
+53: SET PARAMETER: Listener head radius changed to 0.0875
+54: SET PARAMETER: Listener head radius changed to 0.0875
+1: SET PARAMETER: Custom ITD is Disabled
+2: SET PARAMETER: Custom ITD is Disabled
+3: SET PARAMETER: Custom ITD is Disabled
+4: SET PARAMETER: Custom ITD is Disabled
+5: SET PARAMETER: Custom ITD is Disabled
+6: SET PARAMETER: Custom ITD is Disabled
+7: SET PARAMETER: Custom ITD is Disabled
+8: SET PARAMETER: Custom ITD is Disabled
+9: SET PARAMETER: Custom ITD is Disabled
+10: SET PARAMETER: Custom ITD is Disabled
+11: SET PARAMETER: Custom ITD is Disabled
+12: SET PARAMETER: Custom ITD is Disabled
+13: SET PARAMETER: Custom ITD is Disabled
+14: SET PARAMETER: Custom ITD is Disabled
+15: SET PARAMETER: Custom ITD is Disabled
+16: SET PARAMETER: Custom ITD is Disabled
+17: SET PARAMETER: Custom ITD is Disabled
+18: SET PARAMETER: Custom ITD is Disabled
+19: SET PARAMETER: Custom ITD is Disabled
+20: SET PARAMETER: Custom ITD is Disabled
+21: SET PARAMETER: Custom ITD is Disabled
+22: SET PARAMETER: Custom ITD is Disabled
+23: SET PARAMETER: Custom ITD is Disabled
+24: SET PARAMETER: Custom ITD is Disabled
+25: SET PARAMETER: Custom ITD is Disabled
+26: SET PARAMETER: Custom ITD is Disabled
+27: SET PARAMETER: Custom ITD is Disabled
+28: SET PARAMETER: Custom ITD is Disabled
+29: SET PARAMETER: Custom ITD is Disabled
+30: SET PARAMETER: Custom ITD is Disabled
+31: SET PARAMETER: Custom ITD is Disabled
+32: SET PARAMETER: Custom ITD is Disabled
+33: SET PARAMETER: Custom ITD is Disabled
+34: SET PARAMETER: Custom ITD is Disabled
+35: SET PARAMETER: Custom ITD is Disabled
+36: SET PARAMETER: Custom ITD is Disabled
+37: SET PARAMETER: Custom ITD is Disabled
+38: SET PARAMETER: Custom ITD is Disabled
+39: SET PARAMETER: Custom ITD is Disabled
+40: SET PARAMETER: Custom ITD is Disabled
+41: SET PARAMETER: Custom ITD is Disabled
+42: SET PARAMETER: Custom ITD is Disabled
+43: SET PARAMETER: Custom ITD is Disabled
+44: SET PARAMETER: Custom ITD is Disabled
+45: SET PARAMETER: Custom ITD is Disabled
+46: SET PARAMETER: Custom ITD is Disabled
+47: SET PARAMETER: Custom ITD is Disabled
+48: SET PARAMETER: Custom ITD is Disabled
+49: SET PARAMETER: Custom ITD is Disabled
+50: SET PARAMETER: Custom ITD is Disabled
+51: SET PARAMETER: Custom ITD is Disabled
+52: SET PARAMETER: Custom ITD is Disabled
+53: SET PARAMETER: Custom ITD is Disabled
+54: SET PARAMETER: Custom ITD is Disabled
+1: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+1:           Hash hable size is 7067
+1: SET PARAMETER: ILD Enabled
+2: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+2:           Hash hable size is 7067
+2: SET PARAMETER: ILD Enabled
+3: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+3:           Hash hable size is 7067
+3: SET PARAMETER: ILD Enabled
+4: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+4:           Hash hable size is 7067
+4: SET PARAMETER: ILD Enabled
+5: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+5:           Hash hable size is 7067
+5: SET PARAMETER: ILD Enabled
+6: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+6:           Hash hable size is 7067
+6: SET PARAMETER: ILD Enabled
+7: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+7:           Hash hable size is 7067
+7: SET PARAMETER: ILD Enabled
+8: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+8:           Hash hable size is 7067
+8: SET PARAMETER: ILD Enabled
+9: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+9:           Hash hable size is 7067
+9: SET PARAMETER: ILD Enabled
+10: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+10:           Hash hable size is 7067
+10: SET PARAMETER: ILD Enabled
+11: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+11:           Hash hable size is 7067
+11: SET PARAMETER: ILD Enabled
+12: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+12:           Hash hable size is 7067
+12: SET PARAMETER: ILD Enabled
+13: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+13:           Hash hable size is 7067
+13: SET PARAMETER: ILD Enabled
+14: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+14:           Hash hable size is 7067
+14: SET PARAMETER: ILD Enabled
+15: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+15:           Hash hable size is 7067
+15: SET PARAMETER: ILD Enabled
+16: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+16:           Hash hable size is 7067
+16: SET PARAMETER: ILD Enabled
+17: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+17:           Hash hable size is 7067
+17: SET PARAMETER: ILD Enabled
+18: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+18:           Hash hable size is 7067
+18: SET PARAMETER: ILD Enabled
+19: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+19:           Hash hable size is 7067
+19: SET PARAMETER: ILD Enabled
+20: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+20:           Hash hable size is 7067
+20: SET PARAMETER: ILD Enabled
+21: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+21:           Hash hable size is 7067
+21: SET PARAMETER: ILD Enabled
+22: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+22:           Hash hable size is 7067
+22: SET PARAMETER: ILD Enabled
+23: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+23:           Hash hable size is 7067
+23: SET PARAMETER: ILD Enabled
+24: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+24:           Hash hable size is 7067
+24: SET PARAMETER: ILD Enabled
+25: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+25:           Hash hable size is 7067
+25: SET PARAMETER: ILD Enabled
+26: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+26:           Hash hable size is 7067
+26: SET PARAMETER: ILD Enabled
+27: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+27:           Hash hable size is 7067
+27: SET PARAMETER: ILD Enabled
+28: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+28:           Hash hable size is 7067
+28: SET PARAMETER: ILD Enabled
+29: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+29:           Hash hable size is 7067
+29: SET PARAMETER: ILD Enabled
+30: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+30:           Hash hable size is 7067
+30: SET PARAMETER: ILD Enabled
+31: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+31:           Hash hable size is 7067
+31: SET PARAMETER: ILD Enabled
+32: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+32:           Hash hable size is 7067
+32: SET PARAMETER: ILD Enabled
+33: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+33:           Hash hable size is 7067
+33: SET PARAMETER: ILD Enabled
+34: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+34:           Hash hable size is 7067
+34: SET PARAMETER: ILD Enabled
+35: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+35:           Hash hable size is 7067
+35: SET PARAMETER: ILD Enabled
+36: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+36:           Hash hable size is 7067
+36: SET PARAMETER: ILD Enabled
+37: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+37:           Hash hable size is 7067
+37: SET PARAMETER: ILD Enabled
+38: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+38:           Hash hable size is 7067
+38: SET PARAMETER: ILD Enabled
+39: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+39:           Hash hable size is 7067
+39: SET PARAMETER: ILD Enabled
+40: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+40:           Hash hable size is 7067
+40: SET PARAMETER: ILD Enabled
+41: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+41:           Hash hable size is 7067
+41: SET PARAMETER: ILD Enabled
+42: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+42:           Hash hable size is 7067
+42: SET PARAMETER: ILD Enabled
+43: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+43:           Hash hable size is 7067
+43: SET PARAMETER: ILD Enabled
+44: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+44:           Hash hable size is 7067
+44: SET PARAMETER: ILD Enabled
+45: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+45:           Hash hable size is 7067
+45: SET PARAMETER: ILD Enabled
+46: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+46:           Hash hable size is 7067
+46: SET PARAMETER: ILD Enabled
+47: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+47:           Hash hable size is 7067
+47: SET PARAMETER: ILD Enabled
+48: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+48:           Hash hable size is 7067
+48: SET PARAMETER: ILD Enabled
+49: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+49:           Hash hable size is 7067
+49: SET PARAMETER: ILD Enabled
+50: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+50:           Hash hable size is 7067
+50: SET PARAMETER: ILD Enabled
+51: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+51:           Hash hable size is 7067
+51: SET PARAMETER: ILD Enabled
+52: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+52:           Hash hable size is 7067
+52: SET PARAMETER: ILD Enabled
+53: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+53:           Hash hable size is 7067
+53: SET PARAMETER: ILD Enabled
+54: LOAD ILD: ILD loaded from binary 3DTI file: Assets/3DTIData/ILD/default.3dti-ild
+54:           Hash hable size is 7067
+54: SET PARAMETER: ILD Enabled
+1: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+1:            HRIR length is 512
+1:            Sample rate is 48000
+1:            Buffer size is 1024
+1: Core ready!!!!!
+2: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+2:            HRIR length is 512
+2:            Sample rate is 48000
+2:            Buffer size is 1024
+2: Core ready!!!!!
+3: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+3:            HRIR length is 512
+3:            Sample rate is 48000
+3:            Buffer size is 1024
+3: Core ready!!!!!
+4: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+4:            HRIR length is 512
+4:            Sample rate is 48000
+4:            Buffer size is 1024
+4: Core ready!!!!!
+5: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+5:            HRIR length is 512
+5:            Sample rate is 48000
+5:            Buffer size is 1024
+5: Core ready!!!!!
+6: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+6:            HRIR length is 512
+6:            Sample rate is 48000
+6:            Buffer size is 1024
+6: Core ready!!!!!
+7: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+7:            HRIR length is 512
+7:            Sample rate is 48000
+7:            Buffer size is 1024
+7: Core ready!!!!!
+8: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+8:            HRIR length is 512
+8:            Sample rate is 48000
+8:            Buffer size is 1024
+8: Core ready!!!!!
+9: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+9:            HRIR length is 512
+9:            Sample rate is 48000
+9:            Buffer size is 1024
+9: Core ready!!!!!
+10: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+10:            HRIR length is 512
+10:            Sample rate is 48000
+10:            Buffer size is 1024
+10: Core ready!!!!!
+11: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+11:            HRIR length is 512
+11:            Sample rate is 48000
+11:            Buffer size is 1024
+11: Core ready!!!!!
+12: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+12:            HRIR length is 512
+12:            Sample rate is 48000
+12:            Buffer size is 1024
+12: Core ready!!!!!
+13: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+13:            HRIR length is 512
+13:            Sample rate is 48000
+13:            Buffer size is 1024
+13: Core ready!!!!!
+14: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+14:            HRIR length is 512
+14:            Sample rate is 48000
+14:            Buffer size is 1024
+14: Core ready!!!!!
+15: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+15:            HRIR length is 512
+15:            Sample rate is 48000
+15:            Buffer size is 1024
+15: Core ready!!!!!
+16: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+16:            HRIR length is 512
+16:            Sample rate is 48000
+16:            Buffer size is 1024
+16: Core ready!!!!!
+17: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+17:            HRIR length is 512
+17:            Sample rate is 48000
+17:            Buffer size is 1024
+17: Core ready!!!!!
+18: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+18:            HRIR length is 512
+18:            Sample rate is 48000
+18:            Buffer size is 1024
+18: Core ready!!!!!
+19: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+19:            HRIR length is 512
+19:            Sample rate is 48000
+19:            Buffer size is 1024
+19: Core ready!!!!!
+20: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+20:            HRIR length is 512
+20:            Sample rate is 48000
+20:            Buffer size is 1024
+20: Core ready!!!!!
+21: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+21:            HRIR length is 512
+21:            Sample rate is 48000
+21:            Buffer size is 1024
+21: Core ready!!!!!
+22: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+22:            HRIR length is 512
+22:            Sample rate is 48000
+22:            Buffer size is 1024
+22: Core ready!!!!!
+23: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+23:            HRIR length is 512
+23:            Sample rate is 48000
+23:            Buffer size is 1024
+23: Core ready!!!!!
+24: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+24:            HRIR length is 512
+24:            Sample rate is 48000
+24:            Buffer size is 1024
+24: Core ready!!!!!
+25: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+25:            HRIR length is 512
+25:            Sample rate is 48000
+25:            Buffer size is 1024
+25: Core ready!!!!!
+26: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+26:            HRIR length is 512
+26:            Sample rate is 48000
+26:            Buffer size is 1024
+26: Core ready!!!!!
+27: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+27:            HRIR length is 512
+27:            Sample rate is 48000
+27:            Buffer size is 1024
+27: Core ready!!!!!
+28: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+28:            HRIR length is 512
+28:            Sample rate is 48000
+28:            Buffer size is 1024
+28: Core ready!!!!!
+29: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+29:            HRIR length is 512
+29:            Sample rate is 48000
+29:            Buffer size is 1024
+29: Core ready!!!!!
+30: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+30:            HRIR length is 512
+30:            Sample rate is 48000
+30:            Buffer size is 1024
+30: Core ready!!!!!
+31: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+31:            HRIR length is 512
+31:            Sample rate is 48000
+31:            Buffer size is 1024
+31: Core ready!!!!!
+32: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+32:            HRIR length is 512
+32:            Sample rate is 48000
+32:            Buffer size is 1024
+32: Core ready!!!!!
+33: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+33:            HRIR length is 512
+33:            Sample rate is 48000
+33:            Buffer size is 1024
+33: Core ready!!!!!
+34: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+34:            HRIR length is 512
+34:            Sample rate is 48000
+34:            Buffer size is 1024
+34: Core ready!!!!!
+35: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+35:            HRIR length is 512
+35:            Sample rate is 48000
+35:            Buffer size is 1024
+35: Core ready!!!!!
+36: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+36:            HRIR length is 512
+36:            Sample rate is 48000
+36:            Buffer size is 1024
+36: Core ready!!!!!
+37: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+37:            HRIR length is 512
+37:            Sample rate is 48000
+37:            Buffer size is 1024
+37: Core ready!!!!!
+38: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+38:            HRIR length is 512
+38:            Sample rate is 48000
+38:            Buffer size is 1024
+38: Core ready!!!!!
+39: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+39:            HRIR length is 512
+39:            Sample rate is 48000
+39:            Buffer size is 1024
+39: Core ready!!!!!
+40: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+40:            HRIR length is 512
+40:            Sample rate is 48000
+40:            Buffer size is 1024
+40: Core ready!!!!!
+41: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+41:            HRIR length is 512
+41:            Sample rate is 48000
+41:            Buffer size is 1024
+41: Core ready!!!!!
+42: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+42:            HRIR length is 512
+42:            Sample rate is 48000
+42:            Buffer size is 1024
+42: Core ready!!!!!
+43: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+43:            HRIR length is 512
+43:            Sample rate is 48000
+43:            Buffer size is 1024
+43: Core ready!!!!!
+44: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+44:            HRIR length is 512
+44:            Sample rate is 48000
+44:            Buffer size is 1024
+44: Core ready!!!!!
+45: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+45:            HRIR length is 512
+45:            Sample rate is 48000
+45:            Buffer size is 1024
+45: Core ready!!!!!
+46: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+46:            HRIR length is 512
+46:            Sample rate is 48000
+46:            Buffer size is 1024
+46: Core ready!!!!!
+47: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+47:            HRIR length is 512
+47:            Sample rate is 48000
+47:            Buffer size is 1024
+47: Core ready!!!!!
+48: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+48:            HRIR length is 512
+48:            Sample rate is 48000
+48:            Buffer size is 1024
+48: Core ready!!!!!
+49: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+49:            HRIR length is 512
+49:            Sample rate is 48000
+49:            Buffer size is 1024
+49: Core ready!!!!!
+50: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+50:            HRIR length is 512
+50:            Sample rate is 48000
+50:            Buffer size is 1024
+50: Core ready!!!!!
+51: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+51:            HRIR length is 512
+51:            Sample rate is 48000
+51:            Buffer size is 1024
+51: Core ready!!!!!
+52: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+52:            HRIR length is 512
+52:            Sample rate is 48000
+52:            Buffer size is 1024
+52: Core ready!!!!!
+53: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+53:            HRIR length is 512
+53:            Sample rate is 48000
+53:            Buffer size is 1024
+53: Core ready!!!!!
+54: LOAD HRTF: HRTF loaded from binary 3DTI file: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
+54:            HRIR length is 512
+54:            Sample rate is 48000
+54:            Buffer size is 1024
+54: Core ready!!!!!
+1: SET PARAMETER: HA Directionality switched OFF for Left ear
+2: SET PARAMETER: HA Directionality switched OFF for Left ear
+3: SET PARAMETER: HA Directionality switched OFF for Left ear
+4: SET PARAMETER: HA Directionality switched OFF for Left ear
+5: SET PARAMETER: HA Directionality switched OFF for Left ear
+6: SET PARAMETER: HA Directionality switched OFF for Left ear
+7: SET PARAMETER: HA Directionality switched OFF for Left ear
+8: SET PARAMETER: HA Directionality switched OFF for Left ear
+9: SET PARAMETER: HA Directionality switched OFF for Left ear
+10: SET PARAMETER: HA Directionality switched OFF for Left ear
+11: SET PARAMETER: HA Directionality switched OFF for Left ear
+12: SET PARAMETER: HA Directionality switched OFF for Left ear
+13: SET PARAMETER: HA Directionality switched OFF for Left ear
+14: SET PARAMETER: HA Directionality switched OFF for Left ear
+15: SET PARAMETER: HA Directionality switched OFF for Left ear
+16: SET PARAMETER: HA Directionality switched OFF for Left ear
+17: SET PARAMETER: HA Directionality switched OFF for Left ear
+18: SET PARAMETER: HA Directionality switched OFF for Left ear
+19: SET PARAMETER: HA Directionality switched OFF for Left ear
+20: SET PARAMETER: HA Directionality switched OFF for Left ear
+21: SET PARAMETER: HA Directionality switched OFF for Left ear
+22: SET PARAMETER: HA Directionality switched OFF for Left ear
+23: SET PARAMETER: HA Directionality switched OFF for Left ear
+24: SET PARAMETER: HA Directionality switched OFF for Left ear
+25: SET PARAMETER: HA Directionality switched OFF for Left ear
+26: SET PARAMETER: HA Directionality switched OFF for Left ear
+27: SET PARAMETER: HA Directionality switched OFF for Left ear
+28: SET PARAMETER: HA Directionality switched OFF for Left ear
+29: SET PARAMETER: HA Directionality switched OFF for Left ear
+30: SET PARAMETER: HA Directionality switched OFF for Left ear
+31: SET PARAMETER: HA Directionality switched OFF for Left ear
+32: SET PARAMETER: HA Directionality switched OFF for Left ear
+33: SET PARAMETER: HA Directionality switched OFF for Left ear
+34: SET PARAMETER: HA Directionality switched OFF for Left ear
+35: SET PARAMETER: HA Directionality switched OFF for Left ear
+36: SET PARAMETER: HA Directionality switched OFF for Left ear
+37: SET PARAMETER: HA Directionality switched OFF for Left ear
+38: SET PARAMETER: HA Directionality switched OFF for Left ear
+39: SET PARAMETER: HA Directionality switched OFF for Left ear
+40: SET PARAMETER: HA Directionality switched OFF for Left ear
+41: SET PARAMETER: HA Directionality switched OFF for Left ear
+42: SET PARAMETER: HA Directionality switched OFF for Left ear
+43: SET PARAMETER: HA Directionality switched OFF for Left ear
+44: SET PARAMETER: HA Directionality switched OFF for Left ear
+45: SET PARAMETER: HA Directionality switched OFF for Left ear
+46: SET PARAMETER: HA Directionality switched OFF for Left ear
+47: SET PARAMETER: HA Directionality switched OFF for Left ear
+48: SET PARAMETER: HA Directionality switched OFF for Left ear
+49: SET PARAMETER: HA Directionality switched OFF for Left ear
+50: SET PARAMETER: HA Directionality switched OFF for Left ear
+51: SET PARAMETER: HA Directionality switched OFF for Left ear
+52: SET PARAMETER: HA Directionality switched OFF for Left ear
+53: SET PARAMETER: HA Directionality switched OFF for Left ear
+54: SET PARAMETER: HA Directionality switched OFF for Left ear
+1: SET PARAMETER: HA Directionality switched OFF for Right ear
+2: SET PARAMETER: HA Directionality switched OFF for Right ear
+3: SET PARAMETER: HA Directionality switched OFF for Right ear
+4: SET PARAMETER: HA Directionality switched OFF for Right ear
+5: SET PARAMETER: HA Directionality switched OFF for Right ear
+6: SET PARAMETER: HA Directionality switched OFF for Right ear
+7: SET PARAMETER: HA Directionality switched OFF for Right ear
+8: SET PARAMETER: HA Directionality switched OFF for Right ear
+9: SET PARAMETER: HA Directionality switched OFF for Right ear
+10: SET PARAMETER: HA Directionality switched OFF for Right ear
+11: SET PARAMETER: HA Directionality switched OFF for Right ear
+12: SET PARAMETER: HA Directionality switched OFF for Right ear
+13: SET PARAMETER: HA Directionality switched OFF for Right ear
+14: SET PARAMETER: HA Directionality switched OFF for Right ear
+15: SET PARAMETER: HA Directionality switched OFF for Right ear
+16: SET PARAMETER: HA Directionality switched OFF for Right ear
+17: SET PARAMETER: HA Directionality switched OFF for Right ear
+18: SET PARAMETER: HA Directionality switched OFF for Right ear
+19: SET PARAMETER: HA Directionality switched OFF for Right ear
+20: SET PARAMETER: HA Directionality switched OFF for Right ear
+21: SET PARAMETER: HA Directionality switched OFF for Right ear
+22: SET PARAMETER: HA Directionality switched OFF for Right ear
+23: SET PARAMETER: HA Directionality switched OFF for Right ear
+24: SET PARAMETER: HA Directionality switched OFF for Right ear
+25: SET PARAMETER: HA Directionality switched OFF for Right ear
+26: SET PARAMETER: HA Directionality switched OFF for Right ear
+27: SET PARAMETER: HA Directionality switched OFF for Right ear
+28: SET PARAMETER: HA Directionality switched OFF for Right ear
+29: SET PARAMETER: HA Directionality switched OFF for Right ear
+30: SET PARAMETER: HA Directionality switched OFF for Right ear
+31: SET PARAMETER: HA Directionality switched OFF for Right ear
+32: SET PARAMETER: HA Directionality switched OFF for Right ear
+33: SET PARAMETER: HA Directionality switched OFF for Right ear
+34: SET PARAMETER: HA Directionality switched OFF for Right ear
+35: SET PARAMETER: HA Directionality switched OFF for Right ear
+36: SET PARAMETER: HA Directionality switched OFF for Right ear
+37: SET PARAMETER: HA Directionality switched OFF for Right ear
+38: SET PARAMETER: HA Directionality switched OFF for Right ear
+39: SET PARAMETER: HA Directionality switched OFF for Right ear
+40: SET PARAMETER: HA Directionality switched OFF for Right ear
+41: SET PARAMETER: HA Directionality switched OFF for Right ear
+42: SET PARAMETER: HA Directionality switched OFF for Right ear
+43: SET PARAMETER: HA Directionality switched OFF for Right ear
+44: SET PARAMETER: HA Directionality switched OFF for Right ear
+45: SET PARAMETER: HA Directionality switched OFF for Right ear
+46: SET PARAMETER: HA Directionality switched OFF for Right ear
+47: SET PARAMETER: HA Directionality switched OFF for Right ear
+48: SET PARAMETER: HA Directionality switched OFF for Right ear
+49: SET PARAMETER: HA Directionality switched OFF for Right ear
+50: SET PARAMETER: HA Directionality switched OFF for Right ear
+51: SET PARAMETER: HA Directionality switched OFF for Right ear
+52: SET PARAMETER: HA Directionality switched OFF for Right ear
+53: SET PARAMETER: HA Directionality switched OFF for Right ear
+54: SET PARAMETER: HA Directionality switched OFF for Right ear
+1: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+2: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+3: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+4: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+5: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+6: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+7: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+8: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+9: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+10: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+11: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+12: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+13: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+14: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+15: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+16: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+17: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+18: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+19: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+20: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+21: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+22: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+23: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+24: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+25: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+26: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+27: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+28: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+29: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+30: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+31: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+32: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+33: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+34: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+35: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+36: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+37: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+38: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+39: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+40: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+41: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+42: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+43: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+44: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+45: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+46: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+47: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+48: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+49: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+50: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+51: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+52: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+53: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+54: SET PARAMETER: HA Directionality for Left ear set to (dB) 15
+1: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+2: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+3: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+4: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+5: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+6: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+7: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+8: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+9: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+10: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+11: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+12: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+13: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+14: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+15: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+16: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+17: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+18: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+19: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+20: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+21: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+22: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+23: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+24: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+25: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+26: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+27: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+28: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+29: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+30: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+31: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+32: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+33: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+34: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+35: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+36: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+37: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+38: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+39: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+40: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+41: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+42: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+43: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+44: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+45: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+46: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+47: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+48: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+49: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+50: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+51: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+52: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+53: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+54: SET PARAMETER: HA Directionality for Right ear set to (dB) 15
+3: Releasing audio plugin...
+26: Releasing audio plugin...
+20: Releasing audio plugin...
+25: Releasing audio plugin...
+18: Releasing audio plugin...
+53: Releasing audio plugin...
+17: Releasing audio plugin...
+50: Releasing audio plugin...
+51: Releasing audio plugin...
+10: Releasing audio plugin...
+48: Releasing audio plugin...
+34: Releasing audio plugin...
+27: Releasing audio plugin...
+16: Releasing audio plugin...
+41: Releasing audio plugin...
+43: Releasing audio plugin...
+21: Releasing audio plugin...
+12: Releasing audio plugin...
+8: Releasing audio plugin...
+30: Releasing audio plugin...
+32: Releasing audio plugin...
+45: Releasing audio plugin...
+29: Releasing audio plugin...
+14: Releasing audio plugin...
+39: Releasing audio plugin...
+5: Releasing audio plugin...
+49: Releasing audio plugin...
+35: Releasing audio plugin...
+9: Releasing audio plugin...
+11: Releasing audio plugin...
+36: Releasing audio plugin...
+54: Releasing audio plugin...
+44: Releasing audio plugin...
+28: Releasing audio plugin...
+31: Releasing audio plugin...
+42: Releasing audio plugin...
+6: Releasing audio plugin...
+7: Releasing audio plugin...
+52: Releasing audio plugin...
+33: Releasing audio plugin...
+15: Releasing audio plugin...
+37: Releasing audio plugin...
+13: Releasing audio plugin...
+22: Releasing audio plugin...
+40: Releasing audio plugin...
+23: Releasing audio plugin...
+46: Releasing audio plugin...
+19: Releasing audio plugin...
+47: Releasing audio plugin...
+38: Releasing audio plugin...
+1: Releasing audio plugin...
+24: Releasing audio plugin...
+4: Releasing audio plugin...
+2: Releasing audio plugin...

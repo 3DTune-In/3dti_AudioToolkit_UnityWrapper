@@ -12,9 +12,9 @@
 **/
 
 #include "AudioPluginUtil.h"
-
 #include <BinauralSpatializer/Core.h>
 #include <Common/Debugger.h>
+
 
 // Includes for debug logging
 #include <fstream>
@@ -29,7 +29,7 @@ enum TLoadResult { RESULT_LOAD_WAITING = 0, RESULT_LOAD_CONTINUE=1, RESULT_LOAD_
 #ifdef UNITY_ANDROID
 #define DEBUG_LOG_CAT
 #else
-#define DEBUG_LOG_FILE
+#define DEBUG_LOG_FILE_BINSP
 #endif
 
 #ifdef DEBUG_LOG_CAT
@@ -76,7 +76,7 @@ namespace Spatializer3DTI
     {
 		int sourceID;	// DEBUG
 		std::shared_ptr<Binaural::CSingleSourceDSP> audioSource;
-		std::shared_ptr<Binaural::CListener> listener;
+		std::shared_ptr<Binaural::CListener> listener;				
 		Binaural::CCore core;
 		bool coreReady;
 		float parameters[P_NUM];
@@ -103,7 +103,7 @@ namespace Spatializer3DTI
 		EffectData* data = state->GetEffectData<EffectData>();
 		if (data->debugLog)
 		{
-			#ifdef DEBUG_LOG_FILE
+			#ifdef DEBUG_LOG_FILE_BINSP
 			ofstream logfile;
 			int sourceid = data->sourceID;
 			logfile.open("3DTI_BinauralSpatializer_DebugLog.txt", ofstream::out | ofstream::app);
@@ -341,8 +341,8 @@ namespace Spatializer3DTI
 	{		
 		EffectData* data = state->GetEffectData<EffectData>();
 		
-		// Audio state:
-		Common::AudioState_Struct audioState = data->core.GetAudioState();
+		// Audio state:		
+		Binaural::AudioStateBinaural_Struct audioState = data->core.GetAudioState();
 		WriteLog(state, "CREATE: Sample rate set to ", audioState.sampleRate);
 		WriteLog(state, "CREATE: Buffer size set to ", audioState.bufferSize);
 
@@ -388,7 +388,7 @@ namespace Spatializer3DTI
 		WriteLog(state, "Creating audio plugin...", "");
 
 		// Set default audio state			
-		Common::AudioState_Struct audioState;
+		Binaural::AudioStateBinaural_Struct audioState;
 		audioState.sampleRate = (int)state->samplerate;
 		audioState.bufferSize = (int)state->dspbuffersize;
 		audioState.HRTF_resamplingStep = 15;
