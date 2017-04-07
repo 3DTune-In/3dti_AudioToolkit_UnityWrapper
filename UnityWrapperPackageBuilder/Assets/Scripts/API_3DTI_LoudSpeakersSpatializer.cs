@@ -23,7 +23,11 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     public float magAnechoicAttenuation = -6.0f;    // Used by Inspector    
     public float magSoundSpeed = 343.0f;            // Used by Inspector
     public bool debugLog = false;                   // Used by Inspector
-       
+
+    public float structureSide  = 1.5f;
+    public float structureYaw   = 0.0f;
+    public float structurePitch = 0.0f;
+
     // Definition of spatializer plugin commands   
     int SET_SCALE_FACTOR    = 0;
     int SET_SOURCE_ID       = 1;    
@@ -100,7 +104,7 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         if (!SetupModulesEnabler()) return false;
 
         // Setup speakers configuration (position)
-        if (!SetupSpeakersConfiguration()) return false;
+        if (!SetupSpeakersConfiguration(structureSide)) return false;
 
         // Go back to default state, affecting all sources
         selectSource = false;
@@ -180,17 +184,30 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     /// <summary>
     ///  Setup speakers configuration
     /// </summary>
-    public bool SetupSpeakersConfiguration()
+    public bool SetupSpeakersConfiguration(float _structureSide/*, float _structureYaw, float structurePitch*/)
     {
-        if (!SetSpeaker(1, new Vector3(1.0f, 1.0f, 1.0f))) return false;
-        if (!SetSpeaker(2, new Vector3(1.0f, -1.0f, 1.0f))) return false;
-        if (!SetSpeaker(3, new Vector3(1.0f, 1.0f, -1.0f))) return false;
-        if (!SetSpeaker(4, new Vector3(1.0f, -1.0f, -1.0f))) return false;
-        if (!SetSpeaker(5, new Vector3(-1.0f, 1.0f, 1.0f))) return false;
-        if (!SetSpeaker(6, new Vector3(-1.0f, -1.0f, 1.0f))) return false;
-        if (!SetSpeaker(7, new Vector3(-1.0f, 1.0f, -1.0f))) return false;
-        if (!SetSpeaker(8, new Vector3(-1.0f, -1.0f, -1.0f))) return false;
+        //Calculate Speakers Positions
+        Debug.Log("_structureSide: " + _structureSide);
+        float halfSize = 0.5f * _structureSide;
 
+        //if (!SetSpeaker(1, new Vector3(1.0f, 1.0f, 1.0f))) return false;
+        //if (!SetSpeaker(2, new Vector3(1.0f, -1.0f, 1.0f))) return false;
+        //if (!SetSpeaker(3, new Vector3(1.0f, 1.0f, -1.0f))) return false;
+        //if (!SetSpeaker(4, new Vector3(1.0f, -1.0f, -1.0f))) return false;
+        //if (!SetSpeaker(5, new Vector3(-1.0f, 1.0f, 1.0f))) return false;
+        //if (!SetSpeaker(6, new Vector3(-1.0f, -1.0f, 1.0f))) return false;
+        //if (!SetSpeaker(7, new Vector3(-1.0f, 1.0f, -1.0f))) return false;
+        //if (!SetSpeaker(8, new Vector3(-1.0f, -1.0f, -1.0f))) return false;
+
+        if (!SetSpeaker(1, new Vector3  (-halfSize, halfSize, -halfSize)))    return false;
+        if (!SetSpeaker(2, new Vector3  (halfSize, halfSize, -halfSize)))     return false;
+        if (!SetSpeaker(3, new Vector3  (-halfSize, -halfSize, -halfSize)))   return false;
+        if (!SetSpeaker(4, new Vector3  (halfSize, -halfSize, -halfSize)))    return false;
+        if (!SetSpeaker(5, new Vector3  (-halfSize, halfSize, halfSize)))     return false;
+        if (!SetSpeaker(6, new Vector3  (halfSize, halfSize, halfSize)))      return false;
+        if (!SetSpeaker(7, new Vector3  (-halfSize, -halfSize, halfSize)))    return false;
+        if (!SetSpeaker(8, new Vector3  (halfSize, -halfSize, halfSize)))     return false;
+                                      
         //Once the configuration is ready, load it into the core
         if (!SendLoadSpeakerConfiguration()) return false;
 
