@@ -106,7 +106,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!82 &73463299
 AudioSource:
   m_ObjectHideFlags: 0
@@ -118,7 +118,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 24300001, guid: 02d04237d0308a14ea0c3b720849faae,
     type: 2}
   m_audioClip: {fileID: 8300000, guid: c5630708c841bac439c535c9acd1ec97, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 1
@@ -217,6 +217,7 @@ GameObject:
   - component: {fileID: 244518585}
   - component: {fileID: 244518584}
   - component: {fileID: 244518586}
+  - component: {fileID: 244518587}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -315,7 +316,7 @@ MonoBehaviour:
   modHRTF: 1
   magAnechoicAttenuation: -6
   magSoundSpeed: 343
-  debugLog: 0
+  debugLog: 1
   doHADirectionalityLeft: 0
   doHADirectionalityRight: 0
   HADirectionalityExtendLeft: 15
@@ -332,6 +333,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   haMixer: {fileID: 24100000, guid: 02d04237d0308a14ea0c3b720849faae, type: 2}
+  PARAM_PROCESS_LEFT_ON: 0
+  PARAM_PROCESS_RIGHT_ON: 0
+  PARAM_VOLUME_L_DB: 0
+  PARAM_VOLUME_R_DB: 0
+  PARAM_EQ_LPFCUTOFF_HZ: 0
+  PARAM_EQ_HPFCUTOFF_HZ: 0
+  PARAM_DYNAMICEQ_INTERPOLATION_ON: 1
+  PARAM_DYNAMICEQ_LEVELTHRESHOLDS_LEFT_DBFS:
+  - -51.763004
+  - -48.231213
+  - 0
+  PARAM_DYNAMICEQ_LEVELTHRESHOLDS_RIGHT_DBFS:
+  - 0
+  - 0
+  - 0
+  PARAM_DYNAMICEQ_ATTACKRELEASE_LEFT_MS: 0
+  PARAM_DYNAMICEQ_ATTACKRELEASE_RIGHT_MS: 0
+  PARAM_NOISE_BEFORE_ON: 0
+  PARAM_NOISE_AFTER_ON: 0
+  PARAM_NOISE_NUMBITS: 24
+  PARAM_COMPRESSION_PERCENTAGE_LEFT: 0
+  PARAM_COMPRESSION_PERCENTAGE_RIGHT: 0
+  PARAM_DEBUG_LOG: 0
 --- !u!114 &244518585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -355,6 +379,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cb5fe59c67d5474f88ca96fe04cdcca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &244518587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 244518577}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f375fae467806c846a54d4ef189cecbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1582799887
 GameObject:
   m_ObjectHideFlags: 0
@@ -370,7 +405,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!82 &1582799888
 AudioSource:
   m_ObjectHideFlags: 0

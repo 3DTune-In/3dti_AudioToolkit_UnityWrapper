@@ -10,10 +10,13 @@ using UnityEditor;
 using UnityEngine;
 
 public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
-{        
-    // Constant definitions
-    const int EAR_RIGHT = 0;
-    const int EAR_LEFT = 1;
+{
+    // Access to the HA API
+    API_3DTI_HA HAAPI;
+
+    //// Constant definitions
+    //const int EAR_RIGHT = 0;
+    //const int EAR_LEFT = 1;
 
     // Look and feel parameters
     int logosize = 80;  // Size of 3DTI logo
@@ -23,13 +26,13 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     Color baseColor = Color.white;
 
     // Global variables 
-    bool switchLeftEar = false;
-    bool switchRightEar = false;
-    bool noiseBefore = false;
-    bool noiseAfter = false;
-    //bool dynamicEq = true;
-    bool interpolation = true;
-    bool debugLogHA = false;
+    //bool switchLeftEar = false;
+    //bool switchRightEar = false;
+    //bool noiseBefore = false;
+    //bool noiseAfter = false;
+    ////bool dynamicEq = true;
+    //bool interpolation = true;
+    //bool debugLogHA = false;
 
     bool initDone = false;
 
@@ -49,7 +52,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
 
     public override string Description
     {
-        get { return "Hearing loss simulation effect from 3D-Tune-In Toolkit"; }
+        get { return "Hearing Aid simulation effect from 3D-Tune-In Toolkit"; }
     }
 
     public override string Vendor
@@ -68,6 +71,9 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         // Initialization (first run)
         if (!initDone)
         {
+            // Get HA API instance (TO DO: Error check)
+            HAAPI = GameObject.FindObjectOfType<API_3DTI_HA>();
+
             // Send commands to plugin to set all parameters
             InitializePlugin(plugin);
 
@@ -101,12 +107,12 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
 
     public void InitializePlugin(IAudioEffectPlugin plugin)
     {
-        // Boolean switches
-        plugin.SetFloatParameter("HAL", Bool2Float(switchLeftEar));
-        plugin.SetFloatParameter("HAR", Bool2Float(switchRightEar));
-        plugin.SetFloatParameter("NOISEBEF", Bool2Float(noiseBefore));
-        plugin.SetFloatParameter("NOISEAFT", Bool2Float(noiseAfter));        
-        plugin.SetFloatParameter("EQINT", Bool2Float(interpolation));
+        //HAAPI.Initialize();        
+        //plugin.SetFloatParameter("HAL", Bool2Float(switchLeftEar));
+        //plugin.SetFloatParameter("HAR", Bool2Float(switchRightEar));
+        //plugin.SetFloatParameter("NOISEBEF", Bool2Float(noiseBefore));
+        //plugin.SetFloatParameter("NOISEAFT", Bool2Float(noiseAfter));        
+        //plugin.SetFloatParameter("EQINT", Bool2Float(interpolation));
         
         initDone = true;
     }
@@ -134,7 +140,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     /// <param name="plugin"></param>
     public void DrawEars(IAudioEffectPlugin plugin)
     {        
-        BeginLeftColumn(plugin, ref switchLeftEar, "Left ear", new List<string> { "HAL" }, false);  
+        BeginLeftColumn(plugin, ref HAAPI.PARAM_PROCESS_LEFT_ON, "Left ear", new List<string> { "HAL" });
         {
             GUILayout.BeginHorizontal();
             {
@@ -146,18 +152,18 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
                 GUILayout.Box(LeftEarTexture, LeftEarStyle, GUILayout.Width(earsize), GUILayout.Height(earsize), GUILayout.ExpandWidth(false));
 
                 //Parameters
-                CreateParameterSlider(plugin, "VOLL", "Overall gain (dB):", false, "");               
+                CreateParameterSlider(plugin, ref HAAPI.PARAM_VOLUME_L_DB, "VOLL", "Overall gain (dB):", false, "");
             }
             GUILayout.EndHorizontal();
         }
-        EndLeftColumn(false);        
+        EndLeftColumn();        
 
-        BeginRightColumn(plugin, ref switchRightEar, "Right ear", new List<string> { "HAR" }, false);
+        BeginRightColumn(plugin, ref HAAPI.PARAM_PROCESS_RIGHT_ON, "Right ear", new List<string> { "HAR" });        
         {
             GUILayout.BeginHorizontal();
             {
                 //Parameters
-                CreateParameterSlider(plugin, "VOLR", "Overall gain (dB):", false, "");
+                CreateParameterSlider(plugin, ref HAAPI.PARAM_VOLUME_R_DB, "VOLR", "Overall gain (dB):", false, "");
                 // Draw ear icon
                 Texture RightEarTexture;
                 GUIStyle RightEarStyle = EditorStyles.label;
@@ -167,7 +173,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
             }
             GUILayout.EndHorizontal();
         }
-        EndRightColumn(false);        
+        EndRightColumn();        
     }
 
     /// <summary>
@@ -179,154 +185,125 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         BeginCentralColumn("Equalizer");
         {
             //CreateToggle(plugin, ref dynamicEq, "Dynamic Equalizer", "DYNEQ");
-            CreateParameterSlider(plugin, "LPF", "LPF CutOff", false, "Hz");
-            CreateParameterSlider(plugin, "HPF", "HPF CutOff", false, "Hz");
-            CreateToggle(plugin, ref interpolation, "Interpolation", "EQINT");
+            CreateParameterSlider(plugin, ref HAAPI.PARAM_EQ_LPFCUTOFF_HZ, "LPF", "LPF CutOff", false, "Hz");
+            CreateParameterSlider(plugin, ref HAAPI.PARAM_EQ_HPFCUTOFF_HZ, "HPF", "HPF CutOff", false, "Hz");
+            CreateToggle(plugin, ref HAAPI.PARAM_DYNAMICEQ_INTERPOLATION_ON, "Interpolation", "EQINT");
 
             BeginLeftColumn();
             {
-               GUILayout.Label("LEFT EAR");
+                GUILayout.Label("LEFT EAR");
 
-                // First level (both in Dynamic and Standard EQ)
+                // Band gains
+                GUILayout.BeginHorizontal();
                 {
-                    if (true)
+                    BeginCentralColumn("Level 0");
                     {
-                        GUILayout.BeginHorizontal();
-                        BeginCentralColumn("Level 0");
-                    }
-                    else
-                    {
-                        BeginCentralColumn("");
-                    }
-
-                    CreateParameterSlider(plugin, "DEQL0B0L", "125Hz:", true, "dB");
-                    CreateParameterSlider(plugin, "DEQL0B1L", "250Hz", true, "dB");
-                    CreateParameterSlider(plugin, "DEQL0B2L", "500Hz", true, "dB");
-                    CreateParameterSlider(plugin, "DEQL0B3L", "1kHz", true, "dB");
-                    CreateParameterSlider(plugin, "DEQL0B4L", "2kHz", true, "dB");
-                    CreateParameterSlider(plugin, "DEQL0B5L", "4kHz", true, "dB");
-                    CreateParameterSlider(plugin, "DEQL0B6L", "8kHz", true, "dB");
-
-                    EndCentralColumn();
-                }
-
-                // Levels 1 and 2 (only in dynamic EQ)
-                if (true)
-                {
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 0], "DEQL0B0L", "125Hz:", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 1], "DEQL0B1L", "250Hz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 2], "DEQL0B2L", "500Hz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 3], "DEQL0B3L", "1kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 4], "DEQL0B4L", "2kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 5], "DEQL0B5L", "4kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 6], "DEQL0B6L", "8kHz", true, "dB");
+                    } EndCentralColumn();
+                    
                     BeginCentralColumn("Level 1");
                     {
-                        CreateParameterSlider(plugin, "DEQL1B0L", "125Hz:", false, "dB");
-                        CreateParameterSlider(plugin, "DEQL1B1L", "250Hz", true, "dB");
-                        CreateParameterSlider(plugin, "DEQL1B2L", "500Hz", true, "dB");
-                        CreateParameterSlider(plugin, "DEQL1B3L", "1kHz", true, "dB");
-                        CreateParameterSlider(plugin, "DEQL1B4L", "2kHz", true, "dB");
-                        CreateParameterSlider(plugin, "DEQL1B5L", "4kHz", true, "dB");
-                        CreateParameterSlider(plugin, "DEQL1B6L", "8kHz", true, "dB");
-                    }
-                    EndCentralColumn();
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 0], "DEQL1B0L", "125Hz:", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 1], "DEQL1B1L", "250Hz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 2], "DEQL1B2L", "500Hz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 3], "DEQL1B3L", "1kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 4], "DEQL1B4L", "2kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 5], "DEQL1B5L", "4kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 6], "DEQL1B6L", "8kHz", true, "dB");
+                    } EndCentralColumn();
 
                     BeginCentralColumn("Level 2");
                     {
-                        CreateParameterSlider(plugin, "DEQL2B0L", "125Hz:", true, "dB");
-                        CreateParameterSlider(plugin, "DEQL2B1L", "250Hz", true, "dB");
-                        CreateParameterSlider(plugin, "DEQL2B2L", "500Hz", true, "dB");
-                        CreateParameterSlider(plugin, "DEQL2B3L", "1kHz", true, "dB");
-                        CreateParameterSlider(plugin, "DEQL2B4L", "2kHz", true, "dB");
-                        CreateParameterSlider(plugin, "DEQL2B5L", "4kHz", true, "dB");
-                        CreateParameterSlider(plugin, "DEQL2B6L", "8kHz", true, "dB");
-                     }
-                     EndCentralColumn();
-                   
-                     GUILayout.EndHorizontal();
-                     BeginCentralColumn("Level Threshold");
-                     {                       
-                        CreateParameterSlider(plugin, "THRL0", "Threshold 1", false, "dBfs");
-                        CreateParameterSlider(plugin, "THRL1", "Threshold 2 ", false, "dBfs");
-                        CreateParameterSlider(plugin, "THRL2", "Threshold 3 ", false, "dBfs");
-                     }
-                     EndCentralColumn();
-                     BeginCentralColumn("Attack Release");
-                     {                       
-                        CreateParameterSlider(plugin, "ATREL", "Atack Release", false, "ms");
-                     }
-                     EndCentralColumn();
-                }
-            }
-            EndLeftColumn(true, false);
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 0], "DEQL2B0L", "125Hz:", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 1], "DEQL2B1L", "250Hz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 2], "DEQL2B2L", "500Hz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 3], "DEQL2B3L", "1kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 4], "DEQL2B4L", "2kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 5], "DEQL2B5L", "4kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 6], "DEQL2B6L", "8kHz", true, "dB");
+                    } EndCentralColumn();
+
+                } GUILayout.EndHorizontal();
+                // End Band Gains
+                
+                BeginCentralColumn("Level Threshold");
+                {
+                    CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_LEVELTHRESHOLDS_LEFT_DBFS[0], "THRL0", "Threshold 1", false, "dBfs");
+                    CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_LEVELTHRESHOLDS_LEFT_DBFS[1], "THRL1", "Threshold 2 ", false, "dBfs");
+                    CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_LEVELTHRESHOLDS_LEFT_DBFS[2], "THRL2", "Threshold 3 ", false, "dBfs");
+                } EndCentralColumn();
+
+                BeginCentralColumn("Attack Release");
+                {                       
+                    CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_ATTACKRELEASE_LEFT_MS, "ATREL", "Atack Release", false, "ms");
+                } EndCentralColumn();
+
+            } EndLeftColumn(false);
 
             BeginRightColumn();
             {
                 GUILayout.Label("RIGHT EAR");
 
-                // First level (both in Dynamic and Standard EQ)
+                // Band Gains
+                GUILayout.BeginHorizontal();
                 {
-                    if (true)
+                    BeginCentralColumn("Level 0");
                     {
-                        GUILayout.BeginHorizontal();
-                        BeginCentralColumn("Level 0");
-                    }
-                    else
-                    {
-                        BeginCentralColumn("");
-                    }
-                    
-                    CreateParameterSlider(plugin, "DEQL0B0R", "125Hz:", true, "dB");
-                    CreateParameterSlider(plugin, "DEQL0B1R", "250Hz", true, "dB");
-                    CreateParameterSlider(plugin, "DEQL0B2R", "500Hz", true, "dB");
-                    CreateParameterSlider(plugin, "DEQL0B3R", "1kHz", true, "dB");
-                    CreateParameterSlider(plugin, "DEQL0B4R", "2kHz", true, "dB");
-                    CreateParameterSlider(plugin, "DEQL0B5R", "4kHz", true, "dB");
-                    CreateParameterSlider(plugin, "DEQL0B6R", "8kHz", true, "dB");
-                    
-                    EndCentralColumn();
-                }
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 0], "DEQL0B0R", "125Hz:", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 1], "DEQL0B1R", "250Hz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 2], "DEQL0B2R", "500Hz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 3], "DEQL0B3R", "1kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 4], "DEQL0B4R", "2kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 5], "DEQL0B5R", "4kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 6], "DEQL0B6R", "8kHz", true, "dB");
+                    } EndCentralColumn();
 
-                // Levels 1 and 2 (only in dynamic EQ)
-                if (true)
-                {
                     BeginCentralColumn("Level 1");
-                    {                                           
-                        CreateParameterSlider(plugin, "DEQL1B0R", "125Hz:", true, "dB");
-                        CreateParameterSlider(plugin, "DEQL1B1R", "250Hz", true, "dB");
-                        CreateParameterSlider(plugin, "DEQL1B2R", "500Hz", true, "dB");
-                        CreateParameterSlider(plugin, "DEQL1B3R", "1kHz", true, "dB");
-                        CreateParameterSlider(plugin, "DEQL1B4R", "2kHz", true, "dB");
-                        CreateParameterSlider(plugin, "DEQL1B5R", "4kHz", true, "dB");
-                        CreateParameterSlider(plugin, "DEQL1B6R", "8kHz", true, "dB");
-                    }
-                    EndCentralColumn();
+                    {
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 0], "DEQL1B0R", "125Hz:", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 1], "DEQL1B1R", "250Hz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 2], "DEQL1B2R", "500Hz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 3], "DEQL1B3R", "1kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 4], "DEQL1B4R", "2kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 5], "DEQL1B5R", "4kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 6], "DEQL1B6R", "8kHz", true, "dB");
+                    } EndCentralColumn();
 
                     BeginCentralColumn("Level 2");
                     {
-                        CreateParameterSlider(plugin, "DEQL2B0R", "125Hz:", true, "dB");
-                        CreateParameterSlider(plugin, "DEQL2B1R", "250Hz", true, "dB");
-                        CreateParameterSlider(plugin, "DEQL2B2R", "500Hz", true, "dB");
-                        CreateParameterSlider(plugin, "DEQL2B3R", "1kHz", true, "dB");
-                        CreateParameterSlider(plugin, "DEQL2B4R", "2kHz", true, "dB");
-                        CreateParameterSlider(plugin, "DEQL2B5R", "4kHz", true, "dB");
-                        CreateParameterSlider(plugin, "DEQL2B6R", "8kHz", true, "dB");
-                    }
-                    EndCentralColumn();
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 0], "DEQL2B0R", "125Hz:", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 1], "DEQL2B1R", "250Hz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 2], "DEQL2B2R", "500Hz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 3], "DEQL2B3R", "1kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 4], "DEQL2B4R", "2kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 5], "DEQL2B5R", "4kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 6], "DEQL2B6R", "8kHz", true, "dB");
+                    } EndCentralColumn();
 
-                    GUILayout.EndHorizontal();
+                } GUILayout.EndHorizontal();
+                // End Band Gains
 
-                    BeginCentralColumn("Level Threshold");
-                    {
-                        CreateParameterSlider(plugin, "THRR0", "Threshold 1", false, "dBfs");
-                        CreateParameterSlider(plugin, "THRR1", "Threshold 2 ", false, "dBfs");
-                        CreateParameterSlider(plugin, "THRR2", "Threshold 3 ", false, "dBfs");
-                    }
-                    EndCentralColumn();
-                    BeginCentralColumn("Attack Release");
-                    {
-                        CreateParameterSlider(plugin, "ATRER", "Atack Release", false, "ms");
-                    }
-                    EndCentralColumn();
-                }
-                EndRightColumn(true, false);
-            }
-        }
-        EndCentralColumn();
+                BeginCentralColumn("Level Threshold");
+                {
+                    CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_LEVELTHRESHOLDS_RIGHT_DBFS[0], "THRR0", "Threshold 1", false, "dBfs");
+                    CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_LEVELTHRESHOLDS_RIGHT_DBFS[1], "THRR1", "Threshold 2 ", false, "dBfs");
+                    CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_LEVELTHRESHOLDS_RIGHT_DBFS[2], "THRR2", "Threshold 3 ", false, "dBfs");
+                } EndCentralColumn();
+
+                BeginCentralColumn("Attack Release");
+                {
+                    CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_ATTACKRELEASE_RIGHT_MS, "ATRER", "Atack Release", false, "ms");
+                } EndCentralColumn();
+
+            } EndRightColumn(false);            
+
+        }   EndCentralColumn();
     }
 
     /// <summary>
@@ -337,9 +314,12 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     {
         BeginCentralColumn("Quantization Noise Generator");
         {
-            CreateToggle(plugin,ref noiseBefore, "Quantization Before", "NOISEBEF");
-            CreateToggle(plugin,ref noiseAfter, "Quantization After", "NOISEAFT");
-            CreateParameterSlider(plugin, "NOISEBITS", "Quantization Number of Bits:", true, "");
+            CreateToggle(plugin,ref HAAPI.PARAM_NOISE_BEFORE_ON, "Quantization Before", "NOISEBEF");
+            CreateToggle(plugin,ref HAAPI.PARAM_NOISE_AFTER_ON, "Quantization After", "NOISEAFT");
+
+            float FloatNBits = (float)HAAPI.PARAM_NOISE_NUMBITS;
+            CreateParameterSlider(plugin, ref FloatNBits, "NOISEBITS", "Quantization Number of Bits:", true, "");
+            HAAPI.PARAM_NOISE_NUMBITS = (int)FloatNBits;
         }
         EndCentralColumn();
     }
@@ -352,7 +332,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     {
         BeginCentralColumn("Debug Log File");
         {
-            CreateToggle(plugin, ref debugLogHA, "Write Debug Log File", "DebugLogHA");
+            CreateToggle(plugin, ref HAAPI.PARAM_DEBUG_LOG, "Write Debug Log File", "DebugLogHA");
         }
         EndCentralColumn();
     }
@@ -412,7 +392,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     /// <param name="isFloat"></param>
     /// <param name="units"></param>
     /// <returns>True if slider value has changed</returns>
-    public bool CreateParameterSlider(IAudioEffectPlugin plugin, string parameterName, string parameterText, bool isFloat, string units)
+    public bool CreateParameterSlider(IAudioEffectPlugin plugin, ref float APIparam, string parameterName, string parameterText, bool isFloat, string units)
     {
         // Get parameter info
         float newValue;
@@ -431,6 +411,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         if (CreateFloatSlider(ref newValue, parameterText, resolution, units, minValue, maxValue))
         {
             plugin.SetFloatParameter(parameterName, newValue);
+            APIparam = newValue;
             return true;
         }
 
@@ -453,83 +434,83 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
             return true;
     }
 
-    public void BeginLeftColumn(IAudioEffectPlugin plugin, ref bool enable, string title, List<string> switchParameters, bool earDisable=true)
+    public void BeginLeftColumn(IAudioEffectPlugin plugin, ref bool enable, string title, List<string> switchParameters)
     {        
         GUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));                    // Begin section             
-            GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(true));  // Begin column
-                if (earDisable) EditorGUI.BeginDisabledGroup(!switchLeftEar);       // Begin Disabled if left ear is switched off
-                    bool previousenable = enable;
-                    enable = EditorGUILayout.BeginToggleGroup(title, enable);       // Begin toggle   
-                        if (previousenable != enable)
+            GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(true));  // Begin column                
+                bool previousenable = enable;
+                enable = EditorGUILayout.BeginToggleGroup(title, enable);       // Begin toggle   
+                    if (previousenable != enable)
+                    {
+                        foreach (string switchParameter in switchParameters)
                         {
-                            foreach (string switchParameter in switchParameters)
-                            {
-                                plugin.SetFloatParameter(switchParameter, Bool2Float(enable));
-                            }
+                            plugin.SetFloatParameter(switchParameter, Bool2Float(enable));
                         }
+                    }
+                    EditorGUI.BeginDisabledGroup(!enable); // Begin DisabledGroup 
     }
 
-    public void EndLeftColumn(bool earDisable=true, bool endToogleGroup=true)
+    public void EndLeftColumn(bool endToogleGroup=true)
     {
-        if (endToogleGroup)
-        {
-            EditorGUILayout.EndToggleGroup();                               // End toggle
-        }
-        if (earDisable) { EditorGUI.EndDisabledGroup(); }                  // End disabled if left ear is switched off
-        GUILayout.EndVertical();                                                // End column
-        GUILayout.Space(spaceBetweenColumns);                                   // Space between columns
+                        if (endToogleGroup)
+                        {
+                            EditorGUILayout.EndToggleGroup();                               // End toggle
+                        }
+                    EditorGUI.EndDisabledGroup();                   // End DisabledGroup
+                GUILayout.EndVertical();                                                // End column
+            GUILayout.Space(spaceBetweenColumns);                                   // Space between columns        
     }
 
-    public void BeginRightColumn(IAudioEffectPlugin plugin, ref bool enable, string title, List<string> switchParameters, bool earDisable=true)
+    public void BeginRightColumn(IAudioEffectPlugin plugin, ref bool enable, string title, List<string> switchParameters)
     {        
-            GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(true));    // Begin column
-                if (earDisable) EditorGUI.BeginDisabledGroup(!switchRightEar);      // Begin Disabled if right ear is switched off
-                    bool previousenable = enable;
-                    enable = EditorGUILayout.BeginToggleGroup(title, enable);       // Begin toggle  
-                        if (previousenable != enable)
+            GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(true));    // Begin column                
+                bool previousenable = enable;
+                enable = EditorGUILayout.BeginToggleGroup(title, enable);       // Begin toggle  
+                    if (previousenable != enable)
+                    {
+                        foreach (string switchParameter in switchParameters)
                         {
-                            foreach (string switchParameter in switchParameters)
-                            {
-                                plugin.SetFloatParameter(switchParameter, Bool2Float(enable));
-                            }
+                            plugin.SetFloatParameter(switchParameter, Bool2Float(enable));
                         }
+                    }
+                    EditorGUI.BeginDisabledGroup(!enable);      // Begin Disabled if right ear is switched off
     }
 
-    public void EndRightColumn(bool earDisable=true, bool endToogleGroup = true)
+    public void EndRightColumn(bool endToogleGroup = true)
     {
-        if (endToogleGroup)
-        {
-            EditorGUILayout.EndToggleGroup();                               // End toggle
-        }
-        if (earDisable) { EditorGUI.EndDisabledGroup(); }                      // End disabled if right ear is switched off
-        GUILayout.EndVertical();                                                // End column
-        GUILayout.EndHorizontal();                                                  // End section                  
+                        if (endToogleGroup)
+                        {
+                            EditorGUILayout.EndToggleGroup();                               // End toggle
+                        }
+                    EditorGUI.EndDisabledGroup();                       // End disabled if right ear is switched off
+                GUILayout.EndVertical();                                                // End column
+            GUILayout.EndHorizontal();                                                  // End section                  
         GUILayout.Space(spaceBetweenSections);                                      // Space between sections
     }
 
-    public void BeginLeftColumn(bool earDisable = true)
+    public void BeginLeftColumn()
     {
         GUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));                    // Begin section             
-        GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(true));  // Begin column
-        if (earDisable) EditorGUI.BeginDisabledGroup(!switchLeftEar);       // Begin Disabled if left ear is switched off
+           GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(true));  // Begin column
+                EditorGUI.BeginDisabledGroup(!HAAPI.PARAM_PROCESS_LEFT_ON);       // Begin Disabled if left ear is switched off
     }
 
-    public void BeginRightColumn(bool earDisable = true)
+    public void BeginRightColumn()
     {
-        GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(true));    // Begin column
-        if (earDisable) EditorGUI.BeginDisabledGroup(!switchRightEar);      // Begin Disabled if right ear is switched off
+            GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(true));    // Begin column
+                EditorGUI.BeginDisabledGroup(!HAAPI.PARAM_PROCESS_RIGHT_ON);      // Begin Disabled if right ear is switched off
     }
 
     public void BeginCentralColumn(string title)
     {
         GUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));                      
-        GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(true));
-        GUILayout.Label(title);
+            GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(true));
+                GUILayout.Label(title);
     }
 
     public void EndCentralColumn()
     {
-        GUILayout.EndVertical();                                                // End column
+            GUILayout.EndVertical();                                               // End column
         GUILayout.EndHorizontal();
     }
 
