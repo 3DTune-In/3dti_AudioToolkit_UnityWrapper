@@ -306,8 +306,8 @@ public class API_3DTI_HA : MonoBehaviour
         }
 
         // Set level thresholds
-        SetDynamicEQLevelThreshold(ear, 0, FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS);
-        SetDynamicEQLevelThreshold(ear, 1, FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS);
+        SetDynamicEQLevelThreshold(ear, 1, FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS);  // TO DO: coherent numbering. Curve 0 is now the reference for compression percentage
+        SetDynamicEQLevelThreshold(ear, 0, FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS);  // TO DO: coherent numbering. Curve 0 is now the reference for compression percentage
         SetDynamicEQLevelThreshold(ear, 2, FIG6_THRESHOLD_2_DBSPL - DBSPL_FOR_0_DBFS);
 
         // Set band gains
@@ -392,8 +392,8 @@ public class API_3DTI_HA : MonoBehaviour
             gain2 = 0.1f * Mathf.Pow(earLoss - 40.0f, 1.4f);
 
         // Set bands
-        if (!SetDynamicEQBandLevelGain(ear, bandIndex, 0, gain0)) return false;
-        if (!SetDynamicEQBandLevelGain(ear, bandIndex, 1, gain1)) return false;
+        if (!SetDynamicEQBandLevelGain(ear, bandIndex, 1, gain0)) return false; // TO DO: coherent numbering. Curve 0 is now the reference for compression percentage
+        if (!SetDynamicEQBandLevelGain(ear, bandIndex, 0, gain1)) return false; // TO DO: coherent numbering. Curve 0 is now the reference for compression percentage
         if (!SetDynamicEQBandLevelGain(ear, bandIndex, 2, gain2)) return false;
 
         return true;

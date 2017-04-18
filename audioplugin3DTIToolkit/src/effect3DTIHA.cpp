@@ -167,7 +167,7 @@ namespace HASimulation3DTI
 		PARAM_COMPRESSION_PERCENTAGE_RIGHT,
 
 		// Debug log
-		PARAM_DEBUG_LOG,
+		//PARAM_DEBUG_LOG,
 
 		//// Fig6
 		//PARAM_FIG6_BAND_0_LEFT,
@@ -195,8 +195,11 @@ namespace HASimulation3DTI
 		CHearingAidSim HA;		
 		float parameters[P_NUM];
 
+		// READY TO PROCESS
+		//bool haReady = false;
+
 		// DEBUG LOG
-		bool debugLog = true;
+		//bool debugLog = true;
 
 		//// Fig6
 		//bool settingFig6Left;
@@ -211,7 +214,7 @@ namespace HASimulation3DTI
 	void WriteLog(UnityAudioEffectState* state, string logtext, const T& value)
 	{
 		EffectData* data = state->GetEffectData<EffectData>();
-		if (data->debugLog)
+		//if (data->debugLog)
 		{
 			#ifdef DEBUG_LOG_FILE_HA
 			ofstream logfile;
@@ -320,7 +323,7 @@ namespace HASimulation3DTI
 		RegisterParameter(definition, "COMPRR", "%", 0.0f, MAX_COMPRESSION_PERCENTAGE, DEFAULT_COMPRESSION_PERCENTAGE, 1.0f, 1.0f, PARAM_COMPRESSION_PERCENTAGE_RIGHT, "Amount of compression, Right");
 
 		// Debug log
-		RegisterParameter(definition, "DebugLogHA", "", 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, PARAM_DEBUG_LOG, "Generate debug log for HA");
+		//RegisterParameter(definition, "DebugLogHA", "", 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, PARAM_DEBUG_LOG, "Generate debug log for HA");
 
 		//// Fig6
 		//RegisterParameter(definition, "FIG60L", "dB", MIN_FIG6, MAX_FIG6, 0.0f, 1.0f, 1.0f, PARAM_FIG6_BAND_0_LEFT, "Fig6 input band 0 Left");
@@ -399,7 +402,9 @@ namespace HASimulation3DTI
 		// TO DO: check errors with debugger
 		// TO DO: add more WriteLog
 		
-		effectdata->debugLog = true;
+		//effectdata->debugLog = true;
+
+		//effectdata->haReady = false;
 
 		// Setup HA
 		effectdata->HA.Setup(state->samplerate, DEFAULT_NUMLEVELS, DEFAULT_INIFREQ, DEFAULT_BANDSNUMBER, DEFAULT_OCTAVEBANDSTEP,
@@ -432,10 +437,12 @@ namespace HASimulation3DTI
 		effectdata->HA.addNoiseAfter = FromFloatToBool(DEFAULT_NOISEAFTER); // TO DO: writelog
 		effectdata->HA.noiseNumBits = DEFAULT_NOISENUMBITS;		// TO DO: writelog
 		effectdata->HA.GetDynamicEqualizer()->levelsInterpolation = DEFAULT_LEVELSINTERPOLATION;	// TO DO: writelog
-		effectdata->HA.GetDynamicEqualizer()->EnvL.SetAttackTime(DEFAULT_ATTACKRELEASE);	// TO DO: writelog
-		effectdata->HA.GetDynamicEqualizer()->EnvL.SetReleaseTime(DEFAULT_ATTACKRELEASE);	// TO DO: writelog
-		effectdata->HA.GetDynamicEqualizer()->EnvR.SetAttackTime(DEFAULT_ATTACKRELEASE);	// TO DO: writelog
-		effectdata->HA.GetDynamicEqualizer()->EnvR.SetReleaseTime(DEFAULT_ATTACKRELEASE);	// TO DO: writelog
+		//effectdata->HA.GetDynamicEqualizer()->EnvL.SetAttackTime(DEFAULT_ATTACKRELEASE);	// TO DO: writelog
+		//effectdata->HA.GetDynamicEqualizer()->EnvL.SetReleaseTime(DEFAULT_ATTACKRELEASE);	// TO DO: writelog
+		//effectdata->HA.GetDynamicEqualizer()->EnvR.SetAttackTime(DEFAULT_ATTACKRELEASE);	// TO DO: writelog
+		//effectdata->HA.GetDynamicEqualizer()->EnvR.SetReleaseTime(DEFAULT_ATTACKRELEASE);	// TO DO: writelog
+		effectdata->HA.GetDynamicEqualizer()->attackReleaseL_ms = DEFAULT_ATTACKRELEASE;
+		effectdata->HA.GetDynamicEqualizer()->attackReleaseR_ms = DEFAULT_ATTACKRELEASE;
 		effectdata->HA.GetDynamicEqualizer()->SetCompressionPercentage(DEFAULT_COMPRESSION_PERCENTAGE, T_ear::BOTH);
 
 		// Setup band gains (TO DO: writelog)
@@ -455,6 +462,10 @@ namespace HASimulation3DTI
 		effectdata->HA.SetLevelThreshold(1, DEFAULT_LEVELTHRESHOLD_1, EAR_RIGHT);
 		effectdata->HA.SetLevelThreshold(2, DEFAULT_LEVELTHRESHOLD_2, EAR_LEFT);
 		effectdata->HA.SetLevelThreshold(2, DEFAULT_LEVELTHRESHOLD_2, EAR_RIGHT);	
+
+		// New setup parameters
+		effectdata->HA.GetDynamicEqualizer()->SetMaxGain_dB(MAX_BANDGAINDB);
+		effectdata->HA.GetDynamicEqualizer()->SetMinGain_dB(MIN_BANDGAINDB);		
 
 		//// Configure Fig6
 		//effectdata->settingFig6Left = false;
@@ -626,17 +637,19 @@ namespace HASimulation3DTI
 			case PARAM_COMPRESSION_PERCENTAGE_RIGHT: 
 				data->HA.GetDynamicEqualizer()->SetCompressionPercentage(value, RIGHT); 
 				WriteLog(state, "SET PARAMETER: Compression amount for Right channel = ", value);
+				//data->haReady = true;
+				//WriteLog(state, "Hearing Aid Simulation is ready to Process!", "");
 				break;
 
-			case PARAM_DEBUG_LOG:
+			//case PARAM_DEBUG_LOG:
 				//if (value != 0.0f)
 				//{
 				//	data->debugLog = true;
 				//	WriteLogHeader(state);
 				//}
 				//else
-				//	data->debugLog = false;
-				break;
+				//	data->debugLog = false;				
+				//break;
 
 			//// Fig6
 			//case PARAM_FIG6_BAND_0_LEFT: 
@@ -739,15 +752,22 @@ namespace HASimulation3DTI
 
 		EffectData* data = state->GetEffectData<EffectData>();
 
+		// Before doing anything, check that HA is ready
+		//if (!data->haReady)
+		//{						
+		//	memset(outbuffer, 0.0f, length * outchannels * sizeof(float));
+		//	return UNITY_AUDIODSP_OK;
+		//}
+
 		// Transform input buffer
-		CStereoBuffer<float> inStereoBuffer(length * 2);		
-		for (int i = 0; i < length*2; i++)
+		CStereoBuffer<float> inStereoBuffer(length * outchannels);		
+		for (int i = 0; i < length*outchannels; i++)
 		{
 			inStereoBuffer[i] = inbuffer[i]; 
 		}
 
 		// Process!!
-		CStereoBuffer<float> outStereoBuffer(length * 2);
+		CStereoBuffer<float> outStereoBuffer(length * outchannels);
 		data->HA.Process(inStereoBuffer, outStereoBuffer, data->parameters[PARAM_PROCESS_LEFT_ON], data->parameters[PARAM_PROCESS_RIGHT_ON]);
 
 		// Transform output buffer			

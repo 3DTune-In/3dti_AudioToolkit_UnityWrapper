@@ -34,7 +34,7 @@ public class TestHAAPI : MonoBehaviour {
         //HAAPI.SetWriteDebugLog(true);
 
         //RunFig6Test();
-        RunFig6TestSevere();        
+        //RunFig6TestSevere();        
     }
 
     // Update is called once per frame
