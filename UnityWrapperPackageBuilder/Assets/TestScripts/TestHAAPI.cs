@@ -26,14 +26,8 @@ public class TestHAAPI : MonoBehaviour {
     void Start ()
     {
         // Find main elements (API and mixer)
-        HAAPI = Camera.main.GetComponent<API_3DTI_HA>();
-        //HAMIXER = HAAPI.haMixer;
-
+		HAAPI = Camera.main.GetComponent<API_3DTI_HA>();
         HAAPI.SwitchHAOnOff(API_3DTI_Common.T_ear.BOTH, true);
-        HAAPI.SetWriteDebugLog(true);
-
-        //RunFig6Test();
-        //RunFig6TestSevere();        
     }
 
     // Update is called once per frame
@@ -67,9 +61,11 @@ public class TestHAAPI : MonoBehaviour {
         //HAAPI.SetCompressionPercentage(API_3DTI_Common.T_ear.BOTH, compression);
         //compression += compressionIncrement;
 
+		HAAPI.SwitchHAOnOff(API_3DTI_Common.T_ear.BOTH, true);
+
         // Test Fig6 and Compression
         if (Input.GetKeyDown(KeyCode.F))
-            RunFig6TestSevere();
+            RunFig6TestMild();
         if (Input.GetKeyDown(KeyCode.O))
             HAAPI.SetCompressionPercentage(API_3DTI_Common.T_ear.BOTH, 0.0f);
         if (Input.GetKeyDown(KeyCode.P))
@@ -78,6 +74,8 @@ public class TestHAAPI : MonoBehaviour {
             HAAPI.SetDynamicEQAttackRelease(API_3DTI_Common.T_ear.BOTH, 100.0f);
         if (Input.GetKeyDown(KeyCode.L))
             HAAPI.SetWriteDebugLog(true);
+		if (Input.GetKeyDown(KeyCode.V))
+			HAAPI.SetVolume(API_3DTI_Common.T_ear.BOTH, 20.0f);
     }
 
     
@@ -123,4 +121,18 @@ public class TestHAAPI : MonoBehaviour {
         earLossList.Add(65.0f);
         HAAPI.SetEQFromFig6(API_3DTI_Common.T_ear.BOTH, earLossList, out gains);
     }
+
+	public void RunFig6TestMild()
+	{
+		List<float> earLossList = new List<float>();
+		List<float> gains;
+		earLossList.Add(7.0f);
+		earLossList.Add(12.0f);
+		earLossList.Add(15.0f);
+		earLossList.Add(22.0f);
+		earLossList.Add(25.0f);
+		earLossList.Add(25.0f);
+		earLossList.Add(25.0f);
+		HAAPI.SetEQFromFig6(API_3DTI_Common.T_ear.BOTH, earLossList, out gains);
+	}
 }
