@@ -30,10 +30,11 @@ public class TestHAAPI : MonoBehaviour {
         //HAMIXER = HAAPI.haMixer;
 
         HAAPI.SwitchHAOnOff(API_3DTI_Common.T_ear.BOTH, true);
-        HAAPI.SetWriteDebugLog(true);
+        HAAPI.SetDynamicEQAttackRelease(API_3DTI_Common.T_ear.BOTH, 100.0f);
+        //HAAPI.SetWriteDebugLog(true);
 
         //RunFig6Test();
-        //RunFig6TestSevere();        
+        RunFig6TestSevere();        
     }
 
     // Update is called once per frame
@@ -67,6 +68,8 @@ public class TestHAAPI : MonoBehaviour {
         //HAAPI.SetCompressionPercentage(API_3DTI_Common.T_ear.BOTH, compression);
         //compression += compressionIncrement;
 
+        //HAAPI.SwitchHAOnOff(API_3DTI_Common.T_ear.BOTH, true);
+
         // Test Fig6 and Compression
         if (Input.GetKeyDown(KeyCode.F))
             RunFig6TestSevere();
@@ -74,10 +77,10 @@ public class TestHAAPI : MonoBehaviour {
             HAAPI.SetCompressionPercentage(API_3DTI_Common.T_ear.BOTH, 0.0f);
         if (Input.GetKeyDown(KeyCode.P))
             HAAPI.SetCompressionPercentage(API_3DTI_Common.T_ear.BOTH, 120.0f);
-        if (Input.GetKeyDown(KeyCode.K))
-            HAAPI.SetDynamicEQAttackRelease(API_3DTI_Common.T_ear.BOTH, 100.0f);
-        if (Input.GetKeyDown(KeyCode.L))
-            HAAPI.SetWriteDebugLog(true);
+        //if (Input.GetKeyDown(KeyCode.K))
+        //    HAAPI.SetDynamicEQAttackRelease(API_3DTI_Common.T_ear.BOTH, 100.0f);
+        //if (Input.GetKeyDown(KeyCode.L))
+        //    HAAPI.SetWriteDebugLog(true);
     }
 
     

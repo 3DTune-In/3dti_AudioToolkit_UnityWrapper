@@ -196,7 +196,7 @@ namespace HASimulation3DTI
 		float parameters[P_NUM];
 
 		// DEBUG LOG
-		bool debugLog = false;
+		bool debugLog = true;
 
 		//// Fig6
 		//bool settingFig6Left;
@@ -425,7 +425,7 @@ namespace HASimulation3DTI
 		//effectdata->HA.noiseNumBits = DEFAULT_NOISENUMBITS;		// TO DO: writelog
 		//effectdata->HA.deq.levelsInterpolation = DEFAULT_LEVELSINTERPOLATION;	// TO DO: writelog
 		//effectdata->HA.deq.attackReleaseL_ms = DEFAULT_ATTACKRELEASE;	// TO DO: writelog
-		//effectdata->HA.deq.attackReleaseR_ms = DEFAULT_ATTACKRELEASE;	// TO DO: writelog			
+		//effectdata->HA.deq.attackReleaseR_ms = DEFAULT_ATTACKRELEASE;	// TO DO: writelog					
 		effectdata->HA.volL = FromDBToGain(DEFAULT_VOLDB);	// TO DO: writelog
 		effectdata->HA.volR = FromDBToGain(DEFAULT_VOLDB);	// TO DO: writelog
 		effectdata->HA.addNoiseBefore = FromFloatToBool(DEFAULT_NOISEBEFORE); // TO DO: writelog
@@ -495,14 +495,30 @@ namespace HASimulation3DTI
 		switch (index)
 		{		
 			// Global parameters
-			case PARAM_PROCESS_LEFT_ON: break;
-			case PARAM_PROCESS_RIGHT_ON: break;
-			case PARAM_VOLUME_L_DB: data->HA.volL = FromDBToGain(value); break;
-			case PARAM_VOLUME_R_DB:	data->HA.volR = FromDBToGain(value); break;
+			case PARAM_PROCESS_LEFT_ON: 
+				WriteLog(state, "SET PARAMETER: Left HA switched ", FromBoolToOnOffStr(FromFloatToBool(value)));
+				break;
+			case PARAM_PROCESS_RIGHT_ON: 
+				WriteLog(state, "SET PARAMETER: Right HA switched ", FromBoolToOnOffStr(FromFloatToBool(value)));
+				break;
+			case PARAM_VOLUME_L_DB: 
+				data->HA.volL = FromDBToGain(value); 
+				WriteLog(state, "SET PARAMETER: Left volume set to (dB): ", value);
+				break;
+			case PARAM_VOLUME_R_DB:	
+				data->HA.volR = FromDBToGain(value); 
+				WriteLog(state, "SET PARAMETER: Right volume set to (dB): ", value);
+				break;
 
 			// Common switches and values for EQ			
-			case PARAM_EQ_LPFCUTOFF_HZ:	data->HA.ConfigLPF(value, DEFAULT_QLPF); break;
-			case PARAM_EQ_HPFCUTOFF_HZ:	data->HA.ConfigHPF(value, DEFAULT_QHPF); break;
+			case PARAM_EQ_LPFCUTOFF_HZ:	
+				data->HA.ConfigLPF(value, DEFAULT_QLPF); 
+				WriteLog(state, "SET PARAMETER: Low pass filter cutoff frequency set to: ", value);
+				break;
+			case PARAM_EQ_HPFCUTOFF_HZ:	
+				data->HA.ConfigHPF(value, DEFAULT_QHPF); 
+				WriteLog(state, "SET PARAMETER: High pass filter cutoff frequency set to: ", value);
+				break;
 
 			// Dynamic EQ
 			case PARAM_DYNAMICEQ_INTERPOLATION_ON:				
@@ -613,13 +629,13 @@ namespace HASimulation3DTI
 				break;
 
 			case PARAM_DEBUG_LOG:
-				if (value != 0.0f)
-				{
-					data->debugLog = true;
-					WriteLogHeader(state);
-				}
-				else
-					data->debugLog = false;
+				//if (value != 0.0f)
+				//{
+				//	data->debugLog = true;
+				//	WriteLogHeader(state);
+				//}
+				//else
+				//	data->debugLog = false;
 				break;
 
 			//// Fig6
