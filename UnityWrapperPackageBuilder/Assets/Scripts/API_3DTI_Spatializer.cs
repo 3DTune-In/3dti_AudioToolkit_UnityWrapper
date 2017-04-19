@@ -22,33 +22,36 @@ using System.Runtime.InteropServices;
 public class API_3DTI_Spatializer : MonoBehaviour
 {
     // LISTENER:
-    public string HRTFFileName = "";            // Used by Inspector
-    public string ILDFileName = "";             // Used by Inspector
-    public bool customITDEnabled = false;       // Used by Inspector
-    public float listenerHeadRadius = 0.0875f;  // Used by Inspector    
+    public string HRTFFileName = "";            // Used by GUI
+    public string ILDFileName = "";             // Used by GUI
+    public bool customITDEnabled = false;       // Used by GUI
+    public float listenerHeadRadius = 0.0875f;  // Used by GUI    
 
     // SOURCE:
-    public bool runtimeInterpolateHRTF = true;  // Used by Inspector
+    public bool runtimeInterpolateHRTF = true;  // Used by GUI
     int lastSourceID = 0;                       // Internal use for debug log
 
     // ADVANCED:
-    public float scaleFactor = 1.0f;            // Used by Inspector
-    public bool modFarLPF = true;               // Used by Inspector
-    public bool modDistAtt = true;              // Used by Inspector
-    public bool modILD = true;                  // Used by Inspector
-    public bool modHRTF = true;                 // Used by Inspector
-    public float magAnechoicAttenuation = -6.0f;    // Used by Inspector    
-    public float magSoundSpeed = 343.0f;            // Used by Inspector
-    public bool debugLog = false;                   // Used by Inspector
+    public float scaleFactor = 1.0f;            // Used by GUI
+    public bool modFarLPF = true;               // Used by GUI
+    public bool modDistAtt = true;              // Used by GUI
+    public bool modILD = true;                  // Used by GUI
+    public bool modHRTF = true;                 // Used by GUI
+    public float magAnechoicAttenuation = -6.0f;    // Used by GUI    
+    public float magSoundSpeed = 343.0f;            // Used by GUI
+    public bool debugLog = false;                   // Used by GUI
 
     // HEARING AID DIRECTIONALITY:
     public const int EAR_RIGHT = 0;
     public const int EAR_LEFT = 1;
     public const int EAR_BOTH = 2;   
-    public bool doHADirectionalityLeft = false;     // Used by Inspector
-    public bool doHADirectionalityRight = false;    // Used by Inspector
-    public float HADirectionalityExtendLeft = 15.0f;    // Used by Inspector
-    public float HADirectionalityExtendRight = 15.0f;   // Used by Inspector
+    public bool doHADirectionalityLeft = false;     // Used by GUI
+    public bool doHADirectionalityRight = false;    // Used by GUI
+    public float HADirectionalityExtendLeft = 15.0f;    // Used by GUI
+    public float HADirectionalityExtendRight = 15.0f;   // Used by GUI
+
+    // LIMITER
+    public bool doLimiter = true;               // Used by GUI
 
     // Definition of spatializer plugin commands
     int LOAD_3DTI_HRTF = 0;
@@ -69,6 +72,8 @@ public class API_3DTI_Spatializer : MonoBehaviour
     int SET_HA_DIRECTIONALITY_EXTEND_RIGHT = 15;
     int SET_HA_DIRECTIONALITY_ON_LEFT = 16;
     int SET_HA_DIRECTIONALITY_ON_RIGHT = 17;
+    int SET_LIMITER_ON = 18;
+    int GET_LIMITER_COMPRESSION = 19;
 
     // Hack for modifying one single AudioSource (TO DO: fix this)
     bool selectSource = false;
@@ -119,6 +124,9 @@ public class API_3DTI_Spatializer : MonoBehaviour
 
         // Hearing Aid directionality setup:
         if (!SetupHADirectionality()) return false;
+
+        // Limiter setup:
+        if (!SetupLimiter()) return false;
 
         // Go back to default state, affecting all sources
         selectSource = false;
@@ -429,7 +437,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     }
 
     /////////////////////////////////////////////////////////////////////
-    // SOURCE API METHODS
+    // HA DIRECTIONALITY METHODS
     /////////////////////////////////////////////////////////////////////
     
     /// <summary>
@@ -497,8 +505,79 @@ public class API_3DTI_Spatializer : MonoBehaviour
     }
 
     /////////////////////////////////////////////////////////////////////
+    // LIMITER METHODS
+    /////////////////////////////////////////////////////////////////////
+
+    /// <summary>
+    ///  Initial setup of limiter
+    /// </summary>
+    public bool SetupLimiter()
+    {
+        if (!SwitchOnOffLimiter(doLimiter)) return false;
+        return true;
+    }
+
+    /// <summary>
+    /// Switc on/off limiter after spatialization process
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public bool SwitchOnOffLimiter(bool _enable)
+    {
+        doLimiter = _enable;
+        return SendCommandForAllSources(SET_LIMITER_ON, Bool2Float(_enable));
+    }
+
+    /// <summary>
+    /// Get state of limiter (currently compressing or not)
+    /// </summary>
+    /// <param name="_compressing"></param>
+    /// <returns></returns>
+    public bool GetLimiterCompression(out bool _compressing)
+    {
+        return GetBoolParameter(GET_LIMITER_COMPRESSION, out _compressing);        
+    }
+
+    /////////////////////////////////////////////////////////////////////
     // AUXILIARY FUNCTIONS
     /////////////////////////////////////////////////////////////////////
+
+    /// <summary>
+    /// Get the value of one bool parameter from the first instance of the spatialization plugin
+    /// </summary>
+    /// <param name="parameter"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public bool GetBoolParameter(int parameter, out bool value)
+    {
+        value = false;
+        float floatValue;
+        if (!GetFloatParameter(parameter, out floatValue)) return false;
+        value = Float2Bool(floatValue);
+        return true;
+    }
+
+    /// <summary>
+    /// Get the value of one float parameter from the first instance of the spatialization plugin 
+    /// </summary>
+    /// <param name="parameter"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public bool GetFloatParameter(int parameter, out float value)
+    {
+        value = 0.0f;
+
+        // We will get value from the first spatialized source
+        AudioSource source;
+        List<AudioSource> sources = GetAllSpatializedSources();
+        if (sources.Count > 0)
+            source = sources[0];
+        else
+            return false;
+
+        // Send the command to get the value        
+        return (source.GetSpatializerFloat(parameter, out value));
+    }
 
     /// <summary>
     /// Send command to plugin to switch on/off write to Debug Log file
@@ -561,5 +640,18 @@ public class API_3DTI_Spatializer : MonoBehaviour
             return 1.0f;
         else
             return 0.0f;
+    }
+
+    /// <summary>
+    ///  Auxiliary function
+    /// </summary>
+    /// <param name="v"></param>
+    /// <returns></returns>
+    bool Float2Bool(float v)
+    {
+        if (v == 1.0f)
+            return true;
+        else
+            return false;
     }
 }

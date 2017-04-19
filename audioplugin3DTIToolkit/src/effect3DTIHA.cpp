@@ -13,7 +13,9 @@
 
 #include "AudioPluginUtil.h"
 
-#include <HAHLSimulation/HearingAidSim.h>
+#include <HAHLSimulation\3DTI_HAHLSimulator.h>
+#include <Common\DynamicCompressorStereo.h>
+//#include <HAHLSimulation/HearingAidSim.h>
 
 // Includes for debug logging
 #include <fstream>
@@ -70,6 +72,7 @@ namespace HASimulation3DTI
 #define DEFAULT_DBSPL_FOR_0DBS		0.0f
 #define DEFAULT_FIG6_BANDS_PER_EAR	7
 #define DEFAULT_COMPRESSION_PERCENTAGE	100.0f
+#define DEFAULT_NORMALIZATION		20.0f
 
 // Min/max values for parameters
 #define MIN_VOLDB			-24.0f
@@ -89,6 +92,14 @@ namespace HASimulation3DTI
 #define MIN_FIG6			0.0f
 #define MAX_FIG6			80.0f
 #define MAX_COMPRESSION_PERCENTAGE	120.0f
+#define MIN_NORMALIZATION	1.0f
+#define MAX_NORMALIZATION	40.0f
+
+// Fixed values
+#define HA_LIMITER_THRESHOLD	-30.0f
+#define HA_LIMITER_ATTACK		500.0f
+#define HA_LIMITER_RELEASE		500.0f
+#define HA_LIMITER_RATIO		6
 
 //////////////////////////////////////////////////////
 
@@ -166,6 +177,18 @@ namespace HASimulation3DTI
 		PARAM_COMPRESSION_PERCENTAGE_LEFT,
 		PARAM_COMPRESSION_PERCENTAGE_RIGHT,
 
+		// Limiter
+		PARAM_LIMITER_SET_ON,
+		PARAM_LIMITER_GET_COMPRESSION,
+
+		// Normalization
+		PARAM_NORMALIZATION_LEFT_ON,
+		PARAM_NORMALIZATION_LEFT_DBS,
+		PARAM_NORMALIZATION_LEFT_GET,
+		PARAM_NORMALIZATION_RIGHT_ON,
+		PARAM_NORMALIZATION_RIGHT_DBS,
+		PARAM_NORMALIZATION_RIGHT_GET,
+
 		// Debug log
 		//PARAM_DEBUG_LOG,
 
@@ -193,6 +216,11 @@ namespace HASimulation3DTI
     struct EffectData
     {
 		CHearingAidSim HA;		
+
+		// Limiter
+		CDynamicCompressorStereo limiter;
+		bool limiterNotInitialized;
+
 		float parameters[P_NUM];
 
 		// READY TO PROCESS
@@ -322,6 +350,18 @@ namespace HASimulation3DTI
 		RegisterParameter(definition, "COMPRL", "%", 0.0f, MAX_COMPRESSION_PERCENTAGE, DEFAULT_COMPRESSION_PERCENTAGE, 1.0f, 1.0f, PARAM_COMPRESSION_PERCENTAGE_LEFT, "Amount of compression, Left");
 		RegisterParameter(definition, "COMPRR", "%", 0.0f, MAX_COMPRESSION_PERCENTAGE, DEFAULT_COMPRESSION_PERCENTAGE, 1.0f, 1.0f, PARAM_COMPRESSION_PERCENTAGE_RIGHT, "Amount of compression, Right");
 
+		// Limiter
+		RegisterParameter(definition, "LIMITON", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_LIMITER_SET_ON, "Limiter enabler for HA");
+		RegisterParameter(definition, "LIMITGET", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_LIMITER_GET_COMPRESSION, "Is HA limiter compressing?");
+
+		// Normalization
+		RegisterParameter(definition, "NORMONL", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_NORMALIZATION_LEFT_ON, "Normalization enabler for Left ear");
+		RegisterParameter(definition, "NORMDBL", "dB", MIN_NORMALIZATION, MAX_NORMALIZATION, DEFAULT_NORMALIZATION, 1.0f, 1.0f, PARAM_NORMALIZATION_LEFT_DBS, "Amount of normalization (in dBs), Left");
+		RegisterParameter(definition, "NORMGL", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_NORMALIZATION_LEFT_GET, "Is left normalization applying offset?");
+		RegisterParameter(definition, "NORMONR", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_NORMALIZATION_RIGHT_ON, "Normalization enabler for Right ear");
+		RegisterParameter(definition, "NORMDBR", "dB", MIN_NORMALIZATION, MAX_NORMALIZATION, DEFAULT_NORMALIZATION, 1.0f, 1.0f, PARAM_NORMALIZATION_RIGHT_DBS, "Amount of normalization (in dBs), Right");
+		RegisterParameter(definition, "NORMGR", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_NORMALIZATION_RIGHT_GET, "Is right normalization applying offset?");
+
 		// Debug log
 		//RegisterParameter(definition, "DebugLogHA", "", 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, PARAM_DEBUG_LOG, "Generate debug log for HA");
 
@@ -386,6 +426,7 @@ namespace HASimulation3DTI
 		WriteLog(state, "        Q factor of HPF = ", DEFAULT_QHPF);
 		WriteLog(state, "        LPF cutoff = ", DEFAULT_LPFCUTOFF);
 		WriteLog(state, "        HPF cutoff = ", DEFAULT_HPFCUTOFF);
+		// TO DO: Add limiter and normalization
 
 		WriteLog(state, "--------------------------------------", "\n");
 	}
@@ -466,6 +507,18 @@ namespace HASimulation3DTI
 		// New setup parameters
 		effectdata->HA.GetDynamicEqualizer()->SetMaxGain_dB(MAX_BANDGAINDB);
 		effectdata->HA.GetDynamicEqualizer()->SetMinGain_dB(MIN_BANDGAINDB);		
+
+		// Setup limiter
+		// FIX THIS:
+		((CDynamicCompressorStereo)effectdata->limiter).Setup(state->samplerate, HA_LIMITER_RATIO, HA_LIMITER_THRESHOLD, HA_LIMITER_ATTACK, HA_LIMITER_RELEASE);
+		effectdata->limiterNotInitialized = true;
+		effectdata->limiter.SetRatio(HA_LIMITER_RATIO);
+		effectdata->limiter.SetThreshold(HA_LIMITER_THRESHOLD);
+		((CDynamicCompressorStereo)effectdata->limiter).SetAttack(HA_LIMITER_ATTACK);
+		((CDynamicCompressorStereo)effectdata->limiter).SetRelease(HA_LIMITER_RELEASE);
+
+		// Setup normalization
+		effectdata->HA.DisableNormalization(BOTH);		
 
 		//// Configure Fig6
 		//effectdata->settingFig6Left = false;
@@ -641,6 +694,55 @@ namespace HASimulation3DTI
 				//WriteLog(state, "Hearing Aid Simulation is ready to Process!", "");
 				break;
 
+			case PARAM_LIMITER_SET_ON:
+				if (FromFloatToBool(value))
+				{
+					WriteLog(state, "SET PARAMETER: Limiter switched ON", "");
+				}
+				else
+				{
+					WriteLog(state, "SET PARAMETER: Limiter switched OFF", "");
+				}
+				break;
+
+			case PARAM_LIMITER_GET_COMPRESSION:
+				WriteLog(state, "SET PARAMETER: WARNING! PARAM_LIMIT_GET_COMPRESSION is read only", "");
+				break;
+
+			case PARAM_NORMALIZATION_LEFT_ON:
+				if (FromFloatToBool(value))
+					data->HA.EnableNormalization(LEFT);
+				else
+					data->HA.DisableNormalization(LEFT);
+				WriteLog(state, "SET PARAMETER: Normalization in Left ear switched ", FromBoolToOnOffStr(FromFloatToBool(value)));
+				break;
+
+			case PARAM_NORMALIZATION_LEFT_DBS:
+				data->HA.SetNormalizationLevel(LEFT, value);
+				WriteLog(state, "SET PARAMETER: Normalization in Left ear set to level: ", value);
+				break;
+
+			case PARAM_NORMALIZATION_LEFT_GET:
+				WriteLog(state, "SET PARAMETER: WARNING! PARAM_NORMALIZATION_LEFT_GET is read only", "");
+				break;
+
+			case PARAM_NORMALIZATION_RIGHT_ON:
+				if (FromFloatToBool(value))
+					data->HA.EnableNormalization(RIGHT);
+				else
+					data->HA.DisableNormalization(RIGHT);
+				WriteLog(state, "SET PARAMETER: Normalization in Right ear switched ", FromBoolToOnOffStr(FromFloatToBool(value)));
+				break;
+
+			case PARAM_NORMALIZATION_RIGHT_DBS:
+				data->HA.SetNormalizationLevel(RIGHT, value);
+				WriteLog(state, "SET PARAMETER: Normalization in Right ear set to level: ", value);
+				break;
+
+			case PARAM_NORMALIZATION_RIGHT_GET:
+				WriteLog(state, "SET PARAMETER: WARNING! PARAM_NORMALIZATION_RIGHT_GET is read only", "");
+				break;
+
 			//case PARAM_DEBUG_LOG:
 				//if (value != 0.0f)
 				//{
@@ -716,14 +818,37 @@ namespace HASimulation3DTI
 	/////////////////////////////////////////////////////////////////////
 	
     UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK GetFloatParameterCallback(UnityAudioEffectState* state, int index, float* value, char *valuestr)
-    {
+    {		
         EffectData* data = state->GetEffectData<EffectData>();
         if (index >= P_NUM)
             return UNITY_AUDIODSP_ERR_UNSUPPORTED;
-        if (value != NULL)
-            *value = data->parameters[index];
-        if (valuestr != NULL)
-            valuestr[0] = 0;
+		if (valuestr != NULL)
+			valuestr[0] = 0;
+		
+		if (value != NULL)
+		{
+			switch (index)
+			{
+				case PARAM_LIMITER_GET_COMPRESSION:
+					if (data->limiter.GetCompression())
+						*value = 1.0f;
+					else
+						*value = 0.0f;					
+					break;
+
+				case PARAM_NORMALIZATION_LEFT_GET:
+					*value = data->HA.GetDynamicEqualizer()->GetOveralOffset_dB(LEFT);
+					break;
+
+				case PARAM_NORMALIZATION_RIGHT_GET:
+					*value = data->HA.GetDynamicEqualizer()->GetOveralOffset_dB(RIGHT);
+					break;
+
+				default:
+					*value = data->parameters[index];
+					break;
+			}
+		}
         return UNITY_AUDIODSP_OK;
     }
 
@@ -769,6 +894,12 @@ namespace HASimulation3DTI
 		// Process!!
 		CStereoBuffer<float> outStereoBuffer(length * outchannels);
 		data->HA.Process(inStereoBuffer, outStereoBuffer, data->parameters[PARAM_PROCESS_LEFT_ON], data->parameters[PARAM_PROCESS_RIGHT_ON]);
+
+		// Limiter
+		if (data->parameters[PARAM_LIMITER_SET_ON] > 0.0f)
+		{		
+			((CDynamicCompressorStereo)data->limiter).Process(outStereoBuffer);
+		}
 
 		// Transform output buffer			
 		int i = 0;

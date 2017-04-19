@@ -45,15 +45,32 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     GUIStyle subtitleBoxStyle;
     GUIStyle sectionStyle;
     GUIStyle subsectionStyle;
-    GUIStyle dragdropStyle; 
+    GUIStyle dragdropStyle;
+    GUIStyle lampStyle = null;
+    bool initDone = false;
 
     //////////////////////////////////////////////////////////////////////////////
 
-    void Start()
+    void InitGUI()
     {
         // Get access to API script
         toolkit = (API_3DTI_Spatializer)target;
         toolkit.debugLog = false;
+
+        // Init styles
+        subtitleBoxStyle = EditorStyles.label;
+        sectionStyle = EditorStyles.miniButton;
+        subsectionStyle = EditorStyles.miniButton;
+        dragdropStyle = EditorStyles.textField;
+        if (titleBoxStyle == null)
+        {
+            titleBoxStyle = new GUIStyle(GUI.skin.box);
+            titleBoxStyle.normal.textColor = Color.white;
+        }
+        if (lampStyle == null)
+        {
+            lampStyle = new GUIStyle(GUI.skin.button);
+        }
     }
 
     /// <summary>
@@ -62,18 +79,11 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     public override void OnInspectorGUI()
     {
         // Get access to API script
-        toolkit = (API_3DTI_Spatializer)target;
-
-        // Init styles
-        if (titleBoxStyle == null)
+        if (!initDone)
         {
-            titleBoxStyle = new GUIStyle(GUI.skin.box);
-            titleBoxStyle.normal.textColor = Color.white;                      
+            InitGUI();
+            //initDone = true;
         }
-        subtitleBoxStyle = EditorStyles.label;
-        sectionStyle = EditorStyles.miniButton;
-        subsectionStyle = EditorStyles.miniButton;
-        dragdropStyle = EditorStyles.textField;
 
         // Show 3D-Tune-In logo         
         Texture logo3DTI;        
@@ -93,6 +103,9 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
         ////// HEARING AID DIRECTIONALITY SETUP
         DrawHADirectionalityPanel();
+
+        ////// LIMITER SETUP
+        //DrawLimiterPanel();
     }
 
 
@@ -293,6 +306,9 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             CreateFloatSlider(ref toolkit.magSoundSpeed, "Sound speed:", "F0", "m/s", 0.0f, maxSoundSpeed, SliderSoundSpeed);
             EndSubsection();
 
+            // Draw Limiter panel
+            DrawLimiterPanel();
+
             // Debug Log
             BeginSubsection("Debug log:");
             if (CreateToggle(ref toolkit.debugLog, "Write debug log file"))
@@ -330,6 +346,27 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             EndSubsection();
         }
 
+        EndSection();
+    }
+
+    /// <summary>
+    /// Draw panel with Limiter configuration
+    /// </summary>
+    public void DrawLimiterPanel()
+    {
+        //BeginSection("LIMITER:");
+        BeginSubsection("Limiter:");
+        GUILayout.BeginHorizontal();
+            SingleSpace();
+            if (CreateToggle(ref toolkit.doLimiter, "Switch Limiter"))
+                toolkit.SwitchOnOffLimiter(toolkit.doLimiter);
+            if (toolkit.doLimiter)
+            {
+                bool compressing;
+                toolkit.GetLimiterCompression(out compressing);
+                CreateLamp(compressing);
+            }
+        GUILayout.EndHorizontal();
         EndSection();
     }
 
@@ -469,6 +506,16 @@ public class AudioPlugin3DTISpatializerGUI : Editor
         bool oldvar = boolvar;
         boolvar = GUILayout.Toggle(boolvar, toggleText, GUILayout.ExpandWidth(false));
         return (oldvar != boolvar);
+    }
+
+    /// <summary>
+    /// Auxiliary function for creating a led/lamp indicator
+    /// </summary>
+    /// <param name="lightOn"></param>
+    public void CreateLamp(bool lightOn)
+    {
+        //GUILayout.Button("", lampStyle, GUILayout.ExpandWidth(false));        
+        //GUILayout.Button("", GUILayout.ExpandWidth(false));
     }
 
     /// <summary>

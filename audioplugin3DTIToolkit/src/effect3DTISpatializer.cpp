@@ -12,8 +12,10 @@
 **/
 
 #include "AudioPluginUtil.h"
-#include <BinauralSpatializer/Core.h>
-#include <Common/Debugger.h>
+#include <BinauralSpatializer\3DTI_BinauralSpatializer.h>
+#include <Common\DynamicCompressorStereo.h>
+//#include <BinauralSpatializer/Core.h>
+//#include <Common/Debugger.h>
 
 
 // Includes for debug logging
@@ -44,6 +46,12 @@ enum TLoadResult { RESULT_LOAD_WAITING = 0, RESULT_LOAD_CONTINUE=1, RESULT_LOAD_
 
 namespace Spatializer3DTI
 {
+
+#define LIMITER_THRESHOLD	-30.0f
+#define LIMITER_ATTACK		500.0f
+#define LIMITER_RELEASE		500.0f
+#define LIMITER_RATIO		6
+
     enum
     {
 		PARAM_HRTF_FILE_STRING,
@@ -66,6 +74,10 @@ namespace Spatializer3DTI
 		PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT,
 		PARAM_HA_DIRECTIONALITY_ON_LEFT,
 		PARAM_HA_DIRECTIONALITY_ON_RIGHT,
+
+		// Limiter
+		PARAM_LIMITER_SET_ON,
+		PARAM_LIMITER_GET_COMPRESSION,
 
 		P_NUM
 	};
@@ -90,6 +102,9 @@ namespace Spatializer3DTI
 		bool strILDserializing;
 		int strILDcount;
 		int strILDlength;
+
+		// Limiter
+		CDynamicCompressorStereo limiter;
 
 		// DEBUG LOG
 		bool debugLog = false;
@@ -160,6 +175,10 @@ namespace Spatializer3DTI
 		RegisterParameter(definition, "HADirExtR", "dB", 0.0f, 30.0f, 15.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT, "HA directionality attenuation (in dB) for Right ear");
 		RegisterParameter(definition, "HADirOnL", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_ON_LEFT, "HA directionality switch for Left ear");
 		RegisterParameter(definition, "HADirOnR", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_ON_RIGHT, "HA directionality switch for Right ear");		
+
+		// Limiter
+		RegisterParameter(definition, "LimitOn", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_LIMITER_SET_ON, "Limiter enabler for binaural spatializer");
+		RegisterParameter(definition, "LimitGet", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_LIMITER_GET_COMPRESSION, "Is binaural spatializer limiter compressing?");
 			
         definition.flags |= UnityAudioEffectDefinitionFlags_IsSpatializer;
         return numparams;
@@ -416,6 +435,9 @@ namespace Spatializer3DTI
 		effectdata->strILDserializing = false;
 		effectdata->strILDcount = 0;
 
+		// Setup limiter
+		effectdata->limiter.Setup(state->samplerate, LIMITER_RATIO, LIMITER_THRESHOLD, LIMITER_ATTACK, LIMITER_RELEASE);
+
 		WriteLog(state, "Core initialized. Waiting for configuration...", "");
 
 		return UNITY_AUDIODSP_OK;
@@ -629,6 +651,21 @@ namespace Spatializer3DTI
 				}
 				break;
 
+			case PARAM_LIMITER_SET_ON:
+				if (value > 0.0f)
+				{					
+					WriteLog(state, "SET PARAMETER: Limiter switched ON", "");
+				}
+				else
+				{					
+					WriteLog(state, "SET PARAMETER: Limiter switched OFF", "");
+				}
+				break;				
+
+			case PARAM_LIMITER_GET_COMPRESSION:
+				WriteLog(state, "SET PARAMETER: WARNING! PARAM_LIMIT_GET_COMPRESSION is read only", "");
+				break;
+
 			default:
 				WriteLog(state, "SET PARAMETER: ERROR!!!! Unknown float parameter received from API: ", index);
 				return UNITY_AUDIODSP_ERR_UNSUPPORTED;
@@ -645,10 +682,25 @@ namespace Spatializer3DTI
         EffectData* data = state->GetEffectData<EffectData>();
         if (index >= P_NUM)
             return UNITY_AUDIODSP_ERR_UNSUPPORTED;
-        if (value != NULL)
-            *value = data->parameters[index];
-        if (valuestr != NULL)
-            valuestr[0] = 0;
+		if (valuestr != NULL)
+			valuestr[0] = 0;
+
+		if (value != NULL)
+		{ 
+			switch (index)
+			{
+				case PARAM_LIMITER_GET_COMPRESSION:
+					if (data->limiter.GetCompression())
+						*value = 1.0f;
+					else
+						*value = 0.0f;
+					break;
+
+				default:
+					*value = data->parameters[index];
+					break;
+			}						
+		}
         return UNITY_AUDIODSP_OK;
     }
 
@@ -703,6 +755,12 @@ namespace Spatializer3DTI
 		CStereoBuffer<float> outStereoBuffer(length * 2);
 		data->audioSource->UpdateBuffer(inMonoBuffer);
 		data->audioSource->ProcessAnechoic(*data->listener, outStereoBuffer);
+
+		// Limiter
+		if (data->parameters[PARAM_LIMITER_SET_ON])
+		{
+			data->limiter.Process(outStereoBuffer);
+		}
 
 		// Transform output buffer			
 		int i = 0;

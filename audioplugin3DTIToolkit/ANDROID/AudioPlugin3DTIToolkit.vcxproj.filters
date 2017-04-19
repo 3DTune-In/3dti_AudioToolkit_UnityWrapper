@@ -101,6 +101,9 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\AudioStateBinaural.cpp">
       <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorStereo.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -208,6 +211,12 @@
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\AudioStateBinaural.h">
       <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressor.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorStereo.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -182,7 +182,9 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Conventions.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Debugger.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DistanceAttenuator.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressor.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorMono.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorStereo.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\EnvelopeDetector.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Fconvolver.h" />
@@ -221,6 +223,7 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Debugger.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DistanceAttenuator.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorMono.cpp" />
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorStereo.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\EnvelopeDetector.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Fconvolver.cpp" />

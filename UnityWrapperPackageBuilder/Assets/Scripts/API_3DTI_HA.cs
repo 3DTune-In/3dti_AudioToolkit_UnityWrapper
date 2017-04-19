@@ -61,8 +61,15 @@ public class API_3DTI_HA : MonoBehaviour
     // Simplified controls
     public float PARAM_COMPRESSION_PERCENTAGE_LEFT = 0.0f;
     public float PARAM_COMPRESSION_PERCENTAGE_RIGHT = 0.0f;
+    // Limiter
+    public bool PARAM_LIMITER_ON = false;
+    // Normalization
+    public bool PARAM_NORMALIZATION_SET_ON_LEFT = false;
+    public float PARAM_NORMALIZATION_DBS_LEFT = 20.0f;
+    public bool PARAM_NORMALIZATION_SET_ON_RIGHT = false;
+    public float PARAM_NORMALIZATION_DBS_RIGHT = 20.0f;
     // Debug log
-    public bool PARAM_DEBUG_LOG = false;
+    public bool PARAM_DEBUG_LOG = false;    
 
     //////////////////////////////////////////////////////////////
     // INITIALIZATION
@@ -101,12 +108,62 @@ public class API_3DTI_HA : MonoBehaviour
         SetQuantizationNoiseBits(PARAM_NOISE_NUMBITS);
         SetCompressionPercentage(API_3DTI_Common.T_ear.LEFT, PARAM_COMPRESSION_PERCENTAGE_LEFT);
         SetCompressionPercentage(API_3DTI_Common.T_ear.RIGHT, PARAM_COMPRESSION_PERCENTAGE_RIGHT);
+        SwitchLimiterOnOff(PARAM_LIMITER_ON);
+        SwitchNormalizationOnOff(API_3DTI_Common.T_ear.LEFT, PARAM_NORMALIZATION_SET_ON_LEFT);
+        SwitchNormalizationOnOff(API_3DTI_Common.T_ear.RIGHT, PARAM_NORMALIZATION_SET_ON_RIGHT);
+        SetNormalizationLevel(API_3DTI_Common.T_ear.LEFT, PARAM_NORMALIZATION_DBS_LEFT);
+        SetNormalizationLevel(API_3DTI_Common.T_ear.RIGHT, PARAM_NORMALIZATION_DBS_RIGHT);
         //public bool PARAM_DEBUG_LOG = false;
     }
 
-//////////////////////////////////////////////////////////////
-// GLOBAL METHODS
-//////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////
+    // GET METHODS
+    //////////////////////////////////////////////////////////////
+
+    /// <summary>
+    /// Gets the current state of the limiter (compressing or not)
+    /// </summary>
+    /// <param name="compressing"></param>
+    /// <returns></returns>
+    public bool GetLimiterCompression(out bool compressing)
+    {
+        compressing = false;
+        float floatValue;
+        if (!haMixer.GetFloat("HA3DTI_Get_Limiter_Compression", out floatValue)) return false;
+        compressing = Float2Bool(floatValue);
+        return true;
+    }
+
+    /// <summary>
+    /// Gets the current state of normalization (applying offset or not)
+    /// </summary>
+    /// <param name="normalizing"></param>
+    /// <returns></returns>
+    public bool GetNormalization(API_3DTI_Common.T_ear ear, out bool normalizing)
+    {
+        normalizing = false;
+
+        // Does not make sense to read a single value from both ears
+        if (ear == API_3DTI_Common.T_ear.BOTH)
+            return false;
+        
+        float floatValue;
+        if (ear == API_3DTI_Common.T_ear.LEFT)
+        {
+            if (!haMixer.GetFloat("HA3DTI_Normalization_Get_Left", out floatValue)) return false;
+        }
+        else
+        {
+            if (!haMixer.GetFloat("HA3DTI_Normalization_Get_Right", out floatValue)) return false;
+        }
+
+        normalizing = Float2Bool(floatValue);
+        return true;
+    }
+
+    //////////////////////////////////////////////////////////////
+    // GLOBAL METHODS
+    //////////////////////////////////////////////////////////////
 
     /// <summary>
     /// Switch on/off whole HA process
@@ -128,6 +185,39 @@ public class API_3DTI_HA : MonoBehaviour
     public bool SetVolume(API_3DTI_Common.T_ear ear, float volume)
     {
         return HASetFloat(ear, "HA3DTI_Volume_", volume, ref PARAM_VOLUME_L_DB, ref PARAM_VOLUME_R_DB);
+    }
+
+    /// <summary>
+    /// Switch on/off limiter after HA process
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public bool SwitchLimiterOnOff(bool value)
+    {
+        PARAM_LIMITER_ON = value;    
+        return haMixer.SetFloat("HA3DTI_Limiter_On", Bool2Float(value));
+    }
+
+    /// <summary>
+    /// Switch on/off normalization for one ear
+    /// </summary>
+    /// <param name="ear"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public bool SwitchNormalizationOnOff(API_3DTI_Common.T_ear ear, bool value)
+    {
+        return HASwitch(ear, "HA3DTI_Normalization_On_", value, ref PARAM_NORMALIZATION_SET_ON_LEFT, ref PARAM_NORMALIZATION_SET_ON_RIGHT);
+    }
+
+    /// <summary>
+    /// Set normalization level in decibels
+    /// </summary>
+    /// <param name="ear"></param>
+    /// <param name="level"></param>
+    /// <returns></returns>
+    public bool SetNormalizationLevel(API_3DTI_Common.T_ear ear, float level)
+    {
+        return HASetFloat(ear, "HA3DTI_Normalization_DB_", level, ref PARAM_NORMALIZATION_DBS_LEFT, ref PARAM_NORMALIZATION_DBS_RIGHT);
     }
 
     public bool SetWriteDebugLog(bool value)
