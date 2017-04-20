@@ -139,26 +139,55 @@ public class API_3DTI_HA : MonoBehaviour
     /// </summary>
     /// <param name="normalizing"></param>
     /// <returns></returns>
-    public bool GetNormalization(API_3DTI_Common.T_ear ear, out bool normalizing)
+    public bool GetNormalizationOffset(API_3DTI_Common.T_ear ear, out float offset)
     {
-        normalizing = false;
+        //normalizing = false;
+		offset = 0.0f;
 
         // Does not make sense to read a single value from both ears
         if (ear == API_3DTI_Common.T_ear.BOTH)
             return false;
         
-        float floatValue;
-        if (ear == API_3DTI_Common.T_ear.LEFT)
-        {
-            if (!haMixer.GetFloat("HA3DTI_Normalization_Get_Left", out floatValue)) return false;
-        }
-        else
-        {
-            if (!haMixer.GetFloat("HA3DTI_Normalization_Get_Right", out floatValue)) return false;
-        }
+        //float floatValue;
+        //if (ear == API_3DTI_Common.T_ear.LEFT)
+        //{
+        //    if (!haMixer.GetFloat("HA3DTI_Normalization_Get_Left", out floatValue)) return false;
+        //}
+        //else
+        //{
+        //    if (!haMixer.GetFloat("HA3DTI_Normalization_Get_Right", out floatValue)) return false;
+        //}
 
-        normalizing = Float2Bool(floatValue);
-        return true;
+        //normalizing = Float2Bool(floatValue);
+        //return true;
+
+		// Find the max gain within all bands of first curve
+		if (ear == API_3DTI_Common.T_ear.LEFT)
+		{
+			float max = PARAM_DYNAMICEQ_GAINS_LEFT[0,0];
+			for (int i=0; i < FIG6_NUMBANDS; i++)
+			{
+				if (PARAM_DYNAMICEQ_GAINS_LEFT[0,i] > max)
+					max = PARAM_DYNAMICEQ_GAINS_LEFT[0,i];
+			}
+			offset = PARAM_NORMALIZATION_DBS_LEFT - max;
+		}
+		else
+		{
+			float max = PARAM_DYNAMICEQ_GAINS_RIGHT[0,0];
+			for (int i=0; i < FIG6_NUMBANDS; i++)
+			{
+				if (PARAM_DYNAMICEQ_GAINS_RIGHT[0,i] > max)
+					max = PARAM_DYNAMICEQ_GAINS_RIGHT[0,i];
+			}
+			offset = PARAM_NORMALIZATION_DBS_RIGHT - max;
+		}
+
+		// The offset is applied only if the maximum gain is above the threshold
+		if (offset > 0.0f)
+			offset = 0.0f;
+		
+		return true;
     }
 
     //////////////////////////////////////////////////////////////

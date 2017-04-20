@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641252, b: 0.574817, a: 1}
+  m_IndirectSpecularColor: {r: 0.44659364, g: 0.4964301, b: 0.5748256, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -471,8 +471,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   haMixer: {fileID: 24100000, guid: 02d04237d0308a14ea0c3b720849faae, type: 2}
-  PARAM_PROCESS_LEFT_ON: 0
-  PARAM_PROCESS_RIGHT_ON: 0
+  PARAM_PROCESS_LEFT_ON: 1
+  PARAM_PROCESS_RIGHT_ON: 1
   PARAM_VOLUME_L_DB: 0
   PARAM_VOLUME_R_DB: 0
   PARAM_EQ_LPFCUTOFF_HZ: 0
@@ -494,6 +494,10 @@ MonoBehaviour:
   PARAM_COMPRESSION_PERCENTAGE_LEFT: 0
   PARAM_COMPRESSION_PERCENTAGE_RIGHT: 0
   PARAM_LIMITER_ON: 0
+  PARAM_NORMALIZATION_SET_ON_LEFT: 0
+  PARAM_NORMALIZATION_DBS_LEFT: 20
+  PARAM_NORMALIZATION_SET_ON_RIGHT: 0
+  PARAM_NORMALIZATION_DBS_RIGHT: 20
   PARAM_DEBUG_LOG: 0
 --- !u!114 &244518585
 MonoBehaviour:

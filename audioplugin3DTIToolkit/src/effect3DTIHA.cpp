@@ -13,9 +13,8 @@
 
 #include "AudioPluginUtil.h"
 
-#include <HAHLSimulation\3DTI_HAHLSimulator.h>
-#include <Common\DynamicCompressorStereo.h>
-//#include <HAHLSimulation/HearingAidSim.h>
+#include <Common/DynamicCompressorStereo.h>
+#include <HAHLSimulation/HearingAidSim.h>
 
 // Includes for debug logging
 #include <fstream>
