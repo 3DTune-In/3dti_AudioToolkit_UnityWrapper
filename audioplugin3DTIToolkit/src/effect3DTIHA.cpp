@@ -895,9 +895,10 @@ namespace HASimulation3DTI
 		data->HA.Process(inStereoBuffer, outStereoBuffer, data->parameters[PARAM_PROCESS_LEFT_ON], data->parameters[PARAM_PROCESS_RIGHT_ON]);
 
 		// Limiter
-		if (data->parameters[PARAM_LIMITER_SET_ON] > 0.0f)
+		if (data->parameters[PARAM_LIMITER_SET_ON] > 0.0f) 
 		{		
-			((CDynamicCompressorStereo)data->limiter).Process(outStereoBuffer);
+			if ((bool)data->parameters[PARAM_PROCESS_LEFT_ON] || (bool)data->parameters[PARAM_PROCESS_RIGHT_ON])
+				((CDynamicCompressorStereo)data->limiter).Process(outStereoBuffer);
 		}
 
 		// Transform output buffer			

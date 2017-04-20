@@ -116,7 +116,7 @@ namespace Spatializer3DTI
 	void WriteLog(UnityAudioEffectState* state, string logtext, const T& value)
 	{
 		EffectData* data = state->GetEffectData<EffectData>();
-		//if (data->debugLog)
+		if (data->debugLog)
 		{
 			#ifdef DEBUG_LOG_FILE_BINSP
 			ofstream logfile;

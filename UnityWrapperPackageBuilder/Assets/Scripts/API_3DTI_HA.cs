@@ -36,7 +36,7 @@ public class API_3DTI_HA : MonoBehaviour
     const float DBSPL_FOR_0_DBFS = 100.0f;
 
     // Internal use variables
-    float [,] tone = new float[2, 3] { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } };    // Tone values for each EAR and each tone BAND
+    public float [,] tone = new float[2, 3] { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } };    // Tone values for each EAR and each tone BAND
 
     // Internal parameters for consistency with GUI
     public bool PARAM_PROCESS_LEFT_ON = false;
@@ -147,7 +147,7 @@ public class API_3DTI_HA : MonoBehaviour
         // Does not make sense to read a single value from both ears
         if (ear == API_3DTI_Common.T_ear.BOTH)
             return false;
-        
+
         //float floatValue;
         //if (ear == API_3DTI_Common.T_ear.LEFT)
         //{
@@ -161,8 +161,17 @@ public class API_3DTI_HA : MonoBehaviour
         //normalizing = Float2Bool(floatValue);
         //return true;
 
-		// Find the max gain within all bands of first curve
-		if (ear == API_3DTI_Common.T_ear.LEFT)
+        // FIX: Fill the parameters from mixer sliders
+        for (int i = 0; i < FIG6_NUMBANDS; i++)
+        {
+            string paramStrL = "HA3DTI_Gain_Level_0_Band_" + i.ToString() + "_Left";
+            if (!haMixer.GetFloat(paramStrL, out PARAM_DYNAMICEQ_GAINS_LEFT[0, i])) return false;
+            string paramStrR = "HA3DTI_Gain_Level_0_Band_" + i.ToString() + "_Right";
+            if (!haMixer.GetFloat(paramStrR, out PARAM_DYNAMICEQ_GAINS_RIGHT[0, i])) return false;
+        }
+
+        // Find the max gain within all bands of first curve
+        if (ear == API_3DTI_Common.T_ear.LEFT)
 		{
 			float max = PARAM_DYNAMICEQ_GAINS_LEFT[0,0];
 			for (int i=0; i < FIG6_NUMBANDS; i++)
@@ -235,7 +244,7 @@ public class API_3DTI_HA : MonoBehaviour
     /// <returns></returns>
     public bool SwitchNormalizationOnOff(API_3DTI_Common.T_ear ear, bool value)
     {
-        return HASwitch(ear, "HA3DTI_Normalization_On_", value, ref PARAM_NORMALIZATION_SET_ON_LEFT, ref PARAM_NORMALIZATION_SET_ON_RIGHT);
+        return HASwitch(ear, "HA3DTI_Normalization_", value, ref PARAM_NORMALIZATION_SET_ON_LEFT, ref PARAM_NORMALIZATION_SET_ON_RIGHT);
     }
 
     /// <summary>
@@ -277,31 +286,31 @@ public class API_3DTI_HA : MonoBehaviour
         switch (band) 
         {
             case T_toneBand.LOW:                                
-                AddToHABand(ear, 0, 0, value);
-                AddToHABand(ear, 1, 0, value);
-                AddToHABand(ear, 2, 0, value);
-                AddToHABand(ear, 0, 1, value);
-                AddToHABand(ear, 1, 1, value);
-                AddToHABand(ear, 2, 1, value);
-                AddToHABand(ear, 0, 2, value);
-                AddToHABand(ear, 1, 2, value);
-                AddToHABand(ear, 2, 2, value);
+                AddToHABand(ear, 0, 0, T_toneBand.LOW, value);
+                AddToHABand(ear, 1, 0, T_toneBand.LOW, value);
+                AddToHABand(ear, 2, 0, T_toneBand.LOW, value);
+                AddToHABand(ear, 0, 1, T_toneBand.LOW, value);
+                AddToHABand(ear, 1, 1, T_toneBand.LOW, value);
+                AddToHABand(ear, 2, 1, T_toneBand.LOW, value);
+                AddToHABand(ear, 0, 2, T_toneBand.LOW, value);
+                AddToHABand(ear, 1, 2, T_toneBand.LOW, value);
+                AddToHABand(ear, 2, 2, T_toneBand.LOW, value);
                 break;                                           
             case T_toneBand.MID:                                 
-                AddToHABand(ear, 0, 3, value);
-                AddToHABand(ear, 1, 3, value);
-                AddToHABand(ear, 2, 3, value);
-                AddToHABand(ear, 0, 4, value);
-                AddToHABand(ear, 1, 4, value);
-                AddToHABand(ear, 1, 4, value);
+                AddToHABand(ear, 0, 3, T_toneBand.MID, value);
+                AddToHABand(ear, 1, 3, T_toneBand.MID, value);
+                AddToHABand(ear, 2, 3, T_toneBand.MID, value);
+                AddToHABand(ear, 0, 4, T_toneBand.MID, value);
+                AddToHABand(ear, 1, 4, T_toneBand.MID, value);
+                AddToHABand(ear, 1, 4, T_toneBand.MID, value);
                 break;
             case T_toneBand.HIGH:                
-                AddToHABand(ear, 0, 5, value);
-                AddToHABand(ear, 1, 5, value);
-                AddToHABand(ear, 2, 5, value);
-                AddToHABand(ear, 0, 6, value);
-                AddToHABand(ear, 1, 6, value);
-                AddToHABand(ear, 2, 6, value);
+                AddToHABand(ear, 0, 5, T_toneBand.HIGH, value);
+                AddToHABand(ear, 1, 5, T_toneBand.HIGH, value);
+                AddToHABand(ear, 2, 5, T_toneBand.HIGH, value);
+                AddToHABand(ear, 0, 6, T_toneBand.HIGH, value);
+                AddToHABand(ear, 1, 6, T_toneBand.HIGH, value);
+                AddToHABand(ear, 2, 6, T_toneBand.HIGH, value);
                 break;
             default:
                 return false;                
@@ -561,17 +570,17 @@ public class API_3DTI_HA : MonoBehaviour
     /// <param name="oldIncrement"></param>
     /// <param name="newIncrement"></param>
     /// <returns></returns>
-    public bool AddToHABand(API_3DTI_Common.T_ear ear, int level, int band, float newIncrement)
+    public bool AddToHABand(API_3DTI_Common.T_ear ear, int level, int band, API_3DTI_HA.T_toneBand toneBand, float newIncrement)
     {        
         // Both ears
         if (ear == API_3DTI_Common.T_ear.BOTH)
         {
-            if (!AddToHABand(API_3DTI_Common.T_ear.LEFT, level, band, newIncrement)) return false;
-            return AddToHABand(API_3DTI_Common.T_ear.RIGHT, level, band, newIncrement);
+            if (!AddToHABand(API_3DTI_Common.T_ear.LEFT, level, band, toneBand, newIncrement)) return false;
+            return AddToHABand(API_3DTI_Common.T_ear.RIGHT, level, band, toneBand, newIncrement);
         }        
 
         // Build exposed parameter name string 
-        string paramName = "HA_3DTI_Gain_Level_" + level.ToString() + "_Band_" + band.ToString() + "_";
+        string paramName = "HA3DTI_Gain_Level_" + level.ToString() + "_Band_" + band.ToString() + "_";
         if (ear == API_3DTI_Common.T_ear.LEFT)
         {
             paramName += "Left";            
@@ -583,23 +592,25 @@ public class API_3DTI_HA : MonoBehaviour
 
         // Get current value, considering oldIncrement
         float currentValue;
-        float oldIncrement = tone[(int)ear, (int)band];
+        float oldIncrement = tone[(int)ear, (int)toneBand];
         if (!haMixer.GetFloat(paramName, out currentValue)) return false;
         currentValue = currentValue - oldIncrement;
 
-        // Set new value, with newIncrement
-        if (!haMixer.SetFloat(paramName, currentValue + newIncrement))
-            return false;
+        // Set new value, with newIncrement    
+        //if (!haMixer.SetFloat(paramName, currentValue + newIncrement))
+        //    return false;
 
-        // Set internal API parameters
-        if (ear == API_3DTI_Common.T_ear.LEFT)
-        {
-            PARAM_DYNAMICEQ_GAINS_LEFT[level, band] = currentValue + newIncrement;
-        }
-        else
-        {
-            PARAM_DYNAMICEQ_GAINS_RIGHT[level, band] = currentValue + newIncrement;
-        }
+        //// Set internal API parameters
+        //if (ear == API_3DTI_Common.T_ear.LEFT)
+        //{
+        //    PARAM_DYNAMICEQ_GAINS_LEFT[level, band] = currentValue + newIncrement;
+        //}
+        //else
+        //{
+        //    PARAM_DYNAMICEQ_GAINS_RIGHT[level, band] = currentValue + newIncrement;
+        //}
+        if (!SetDynamicEQBandLevelGain(ear, band, level, currentValue + newIncrement))
+            return false;
 
         return true;
     }

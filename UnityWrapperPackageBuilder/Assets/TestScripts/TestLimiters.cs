@@ -7,7 +7,7 @@ public class TestLimiters : MonoBehaviour {
 
     Text debugText;
     API_3DTI_Spatializer spatializer;
-    API_3DTI_HA ha;
+    API_3DTI_HA ha;    
 
 	// Use this for initialization
 	void Start ()
@@ -17,14 +17,23 @@ public class TestLimiters : MonoBehaviour {
         ha = Camera.main.GetComponent<API_3DTI_HA>();
         ha.SwitchLimiterOnOff(true);
 
-		ha.SetNormalizationLevel(API_3DTI_Common.T_ear.BOTH, 10.0f);
-		ha.SwitchNormalizationOnOff(API_3DTI_Common.T_ear.BOTH, true);
+		//ha.SetNormalizationLevel(API_3DTI_Common.T_ear.BOTH, 10.0f);
+		//ha.SwitchNormalizationOnOff(API_3DTI_Common.T_ear.BOTH, true);
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        //ha.SwitchLimiterOnOff(true);
+        if (Input.GetKeyDown(KeyCode.L))
+            ha.SwitchLimiterOnOff(true);
+        if (Input.GetKeyDown(KeyCode.O))
+            ha.SwitchLimiterOnOff(false);
+
+        if (Input.GetKeyDown(KeyCode.N))
+            ha.SwitchNormalizationOnOff(API_3DTI_Common.T_ear.BOTH, true);
+        if (Input.GetKeyDown(KeyCode.H))
+            ha.SwitchNormalizationOnOff(API_3DTI_Common.T_ear.BOTH, false);
+
         //bool compSpat, compHA;
         //if (!spatializer.GetLimiterCompression(out compSpat))
         //    debugText.text = "ERROR Reading parameter from spatializer plugin";
@@ -42,10 +51,10 @@ public class TestLimiters : MonoBehaviour {
         //    }
         //}
 
-		float offsetL;
-		if (!ha.GetNormalizationOffset(API_3DTI_Common.T_ear.LEFT, out offsetL))
-			debugText.text = "Error reading normalization offset";
-		else
-			debugText.text = "Left Normalization offset is " + offsetL;
-	}
+        //float offsetL;
+        //if (!ha.GetNormalizationOffset(API_3DTI_Common.T_ear.LEFT, out offsetL))
+        //	debugText.text = "Error reading normalization offset";
+        //else
+        //	debugText.text = "Left Normalization offset is " + offsetL;
+    }
 }

@@ -14,9 +14,9 @@ public class TestHAAPI : MonoBehaviour {
     //float cutIncrement = 5.0f;
 
     // Tone Test:
-    //float tone = 0.0f;
-    //bool adding = true;
-    //float toneIncrement = 1.0f;
+    float tone = 0.0f;
+    bool adding = true;
+    float toneIncrement = 1.0f;
 
     // Compression Test:
     //float compression = 0.0f;
@@ -47,20 +47,20 @@ public class TestHAAPI : MonoBehaviour {
         //cutoff += cutIncrement;
 
         // Tone Test:
-        //if (adding)
-        //{
-        //    HAAPI.SetTone(API_3DTI_Common.T_ear.BOTH, API_3DTI_HA.T_toneBand.MID, tone);
-        //    tone += toneIncrement;
-        //    if (tone >= 30.0f)
-        //        adding = false;            
-        //}
-        //if (!adding)
-        //{
-        //    HAAPI.SetTone(API_3DTI_Common.T_ear.BOTH, API_3DTI_HA.T_toneBand.MID, tone);
-        //    tone -= toneIncrement;
-        //    if (tone <= -30.0f)
-        //        adding = true;            
-        //}
+        if (adding)
+        {
+            HAAPI.SetTone(API_3DTI_Common.T_ear.BOTH, API_3DTI_HA.T_toneBand.MID, tone);
+            tone += toneIncrement;
+            if (tone >= 30.0f)
+                adding = false;
+        }
+        if (!adding)
+        {
+            HAAPI.SetTone(API_3DTI_Common.T_ear.BOTH, API_3DTI_HA.T_toneBand.MID, tone);
+            tone -= toneIncrement;
+            if (tone <= -30.0f)
+                adding = true;
+        }
 
         // Compression Test:
         //if (compression >= 120.0f)
@@ -71,12 +71,12 @@ public class TestHAAPI : MonoBehaviour {
         //HAAPI.SwitchHAOnOff(API_3DTI_Common.T_ear.BOTH, true);
 
         // Test Fig6 and Compression
-        if (Input.GetKeyDown(KeyCode.F))
-            RunFig6TestSevere();
-        if (Input.GetKeyDown(KeyCode.O))
-            HAAPI.SetCompressionPercentage(API_3DTI_Common.T_ear.BOTH, 0.0f);
-        if (Input.GetKeyDown(KeyCode.P))
-            HAAPI.SetCompressionPercentage(API_3DTI_Common.T_ear.BOTH, 120.0f);
+        //if (Input.GetKeyDown(KeyCode.F))
+        //    RunFig6TestSevere();
+        //if (Input.GetKeyDown(KeyCode.O))
+        //    HAAPI.SetCompressionPercentage(API_3DTI_Common.T_ear.BOTH, 0.0f);
+        //if (Input.GetKeyDown(KeyCode.P))
+        //    HAAPI.SetCompressionPercentage(API_3DTI_Common.T_ear.BOTH, 120.0f);
         //if (Input.GetKeyDown(KeyCode.K))
         //    HAAPI.SetDynamicEQAttackRelease(API_3DTI_Common.T_ear.BOTH, 100.0f);
         //if (Input.GetKeyDown(KeyCode.L))

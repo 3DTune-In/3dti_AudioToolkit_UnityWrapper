@@ -75,7 +75,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
             HAAPI = GameObject.FindObjectOfType<API_3DTI_HA>();
 
             // Send commands to plugin to set all parameters
-            InitializePlugin(plugin);
+            //InitializePlugin(plugin);
 
             // Setup styles
             leftAlign = EditorStyles.label;
@@ -98,10 +98,13 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         DrawEars(plugin);
         DrawDynamicEq(plugin);
         DrawNoiseGenerator(plugin);
+        DrawLimiter(plugin);
         //DrawDebugLog(plugin);       
-        
-        return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG)
-        //return false;     // DO NOT SHOW DEFAULT CONTROLS
+
+        initDone = true;
+
+        //return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG)
+        return false;     // DO NOT SHOW DEFAULT CONTROLS
     }
 
 
@@ -114,7 +117,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         //plugin.SetFloatParameter("NOISEAFT", Bool2Float(noiseAfter));        
         //plugin.SetFloatParameter("EQINT", Bool2Float(interpolation));
         
-        initDone = true;
+        //initDone = true;
     }
 
     /// <summary>
@@ -130,7 +133,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         logo3DTI = Resources.Load("3D_tuneinNoAlpha") as Texture;
         GUILayout.Box(logo3DTI, logoStyle, GUILayout.Width(logosize), GUILayout.Height(logosize), GUILayout.ExpandWidth(true));
 
-        // Add space belo
+        // Add space below
         GUILayout.Space(spaceBetweenSections);
     }
 
@@ -244,7 +247,43 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
                     CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_ATTACKRELEASE_LEFT_MS, "ATREL", "Atack Release", false, "ms");
                 } EndCentralColumn();
 
-            } EndLeftColumn(false);
+                BeginCentralColumn("Tone Control");
+                {
+                    float toneLow = HAAPI.tone[(int)API_3DTI_Common.T_ear.LEFT, (int)API_3DTI_HA.T_toneBand.LOW];
+                    float toneMid = HAAPI.tone[(int)API_3DTI_Common.T_ear.LEFT, (int)API_3DTI_HA.T_toneBand.MID];
+                    float toneHigh = HAAPI.tone[(int)API_3DTI_Common.T_ear.LEFT, (int)API_3DTI_HA.T_toneBand.HIGH];
+                    if (CreateAPIParameterSlider(plugin, ref toneLow, "Low", false, "dB", -10.0f, 10.0f))
+                        HAAPI.SetTone(API_3DTI_Common.T_ear.LEFT, API_3DTI_HA.T_toneBand.LOW, toneLow);
+                    if (CreateAPIParameterSlider(plugin, ref toneMid, "Mid", false, "dB", -10.0f, 10.0f))
+                        HAAPI.SetTone(API_3DTI_Common.T_ear.LEFT, API_3DTI_HA.T_toneBand.MID, toneMid);
+                    if (CreateAPIParameterSlider(plugin, ref toneHigh, "High", false, "dB", -10.0f, 10.0f))
+                        HAAPI.SetTone(API_3DTI_Common.T_ear.LEFT, API_3DTI_HA.T_toneBand.HIGH, toneHigh);
+                } EndCentralColumn();
+
+                BeginCentralColumn("Compression");
+                {                    
+                    CreateParameterSlider(plugin, ref HAAPI.PARAM_COMPRESSION_PERCENTAGE_LEFT, "COMPRL", "Compression Percentage", false, "%");
+                }
+                EndCentralColumn();
+
+                BeginCentralColumn("Normalization");
+                {
+                    GUILayout.BeginHorizontal();
+                        CreateToggle(plugin, ref HAAPI.PARAM_NORMALIZATION_SET_ON_LEFT, "Switch Normalization", "NORMONL");
+                        if (HAAPI.PARAM_NORMALIZATION_SET_ON_LEFT)
+                        {
+                            GUILayout.Label("Applied offset: ", GUILayout.ExpandWidth(false));
+                            float offsetL;
+                            HAAPI.GetNormalizationOffset(API_3DTI_Common.T_ear.LEFT, out offsetL);
+                            string offsetStrL = offsetL.ToString();
+                            GUILayout.TextArea(offsetStrL, GUILayout.ExpandWidth(false));
+                            GUILayout.Label("dB", GUILayout.ExpandWidth(false));
+                        }
+                    GUILayout.EndHorizontal();
+                }
+                EndCentralColumn();
+            }
+            EndLeftColumn(false);
 
             BeginRightColumn();
             {
@@ -301,6 +340,37 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
                     CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_ATTACKRELEASE_RIGHT_MS, "ATRER", "Atack Release", false, "ms");
                 } EndCentralColumn();
 
+                BeginCentralColumn("Tone Control");
+                {
+                    CreateAPIParameterSlider(plugin, ref HAAPI.tone[(int)API_3DTI_Common.T_ear.RIGHT, (int)API_3DTI_HA.T_toneBand.LOW], "Low", false, "dB", -10.0f, 10.0f);
+                    CreateAPIParameterSlider(plugin, ref HAAPI.tone[(int)API_3DTI_Common.T_ear.RIGHT, (int)API_3DTI_HA.T_toneBand.MID], "Mid", false, "dB", -10.0f, 10.0f);
+                    CreateAPIParameterSlider(plugin, ref HAAPI.tone[(int)API_3DTI_Common.T_ear.RIGHT, (int)API_3DTI_HA.T_toneBand.HIGH], "High", false, "dB", -10.0f, 10.0f);
+                }
+                EndCentralColumn();
+
+                BeginCentralColumn("Compression");
+                {
+                    CreateParameterSlider(plugin, ref HAAPI.PARAM_COMPRESSION_PERCENTAGE_RIGHT, "COMPRR", "Compression Percentage", false, "%");
+                }
+                EndCentralColumn();
+
+                BeginCentralColumn("Normalization");
+                {
+                    GUILayout.BeginHorizontal();
+                    CreateToggle(plugin, ref HAAPI.PARAM_NORMALIZATION_SET_ON_RIGHT, "Switch Normalization", "NORMONR");
+                    if (HAAPI.PARAM_NORMALIZATION_SET_ON_RIGHT)
+                    {
+                        GUILayout.Label("Applied offset: ", GUILayout.ExpandWidth(false));
+                        float offsetR;
+                        HAAPI.GetNormalizationOffset(API_3DTI_Common.T_ear.RIGHT, out offsetR);
+                        string offsetStrR = offsetR.ToString();
+                        GUILayout.TextArea(offsetStrR, GUILayout.ExpandWidth(false));
+                        GUILayout.Label("dB", GUILayout.ExpandWidth(false));
+                    }
+                    GUILayout.EndHorizontal();                    
+                }
+                EndCentralColumn();
+
             } EndRightColumn(false);            
 
         }   EndCentralColumn();
@@ -325,6 +395,19 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     }
 
     /// <summary>
+    /// Draw limiter controls 
+    /// </summary>
+    /// <param name="plugin"></param>
+    public void DrawLimiter(IAudioEffectPlugin plugin)
+    {
+        BeginCentralColumn("Limiter");
+        {
+            CreateToggle(plugin, ref HAAPI.PARAM_LIMITER_ON, "Switch Limiter", "LIMITON");            
+        }
+        EndCentralColumn();
+    }
+
+    /// <summary>
     /// Draw debug log controls 
     /// </summary>
     /// <param name="plugin"></param>
@@ -344,7 +427,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     {
         bool oldvar = boolvar;
         boolvar = GUILayout.Toggle(boolvar, toggleText, GUILayout.ExpandWidth(false));
-        if (oldvar != boolvar)
+        if (oldvar != boolvar) 
         {
             plugin.SetFloatParameter(switchParameter, Bool2Float(boolvar));
         }
@@ -416,6 +499,22 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         }
 
         return false;
+    }
+
+    public bool CreateAPIParameterSlider(IAudioEffectPlugin plugin, ref float APIparam, string parameterText, bool isFloat, string units, float minValue, float maxValue)
+    {
+        // Set float resolution
+        string resolution;
+        if (isFloat)
+            resolution = "F2";
+        else
+            resolution = "F0";
+
+        // Create slider and set value        
+        if (CreateFloatSlider(ref APIparam, parameterText, resolution, units, minValue, maxValue))
+            return true;
+        else
+            return false;
     }
 
     public float Bool2Float(bool v)
