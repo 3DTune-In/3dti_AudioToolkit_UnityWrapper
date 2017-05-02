@@ -269,6 +269,8 @@ namespace Spatializer3DTI
 	{
 		EffectData* data = state->GetEffectData<EffectData>();
 
+        WriteLog(state, "LOADING HRTF from file... ", data->strHRTFpath);
+        
 		// Load HRTF		
 		HRTF::CreateFrom3dti(data->strHRTFpath, data->listener);		
 		if (data->listener->GetHRTF()->GetHRIRLength() != 0)
@@ -298,6 +300,8 @@ namespace Spatializer3DTI
 	{
 		EffectData* data = state->GetEffectData<EffectData>();
 
+        WriteLog(state, "LOADING ILD from file... ", data->strILDpath);
+        
 		// Get ILD and check errors
 		ILD_HashTable h;
 		h = ILD::CreateFrom3dti(data->strILDpath);		
@@ -344,7 +348,7 @@ namespace Spatializer3DTI
 
 			// Check if string has ended			
 			if (count == length)
-			{		
+			{
 				path[count] = 0;	// End character
 				serializing = false;
 				return RESULT_LOAD_END;

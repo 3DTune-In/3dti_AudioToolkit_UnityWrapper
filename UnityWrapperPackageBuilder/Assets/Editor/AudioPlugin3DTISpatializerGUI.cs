@@ -55,7 +55,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     {
         // Get access to API script
         toolkit = (API_3DTI_Spatializer)target;
-        toolkit.debugLog = false;
+        //toolkit.debugLog = false;
 
         // Init styles
         subtitleBoxStyle = EditorStyles.label;
