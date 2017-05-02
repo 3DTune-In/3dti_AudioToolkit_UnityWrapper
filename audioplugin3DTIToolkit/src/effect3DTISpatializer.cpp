@@ -79,6 +79,9 @@ namespace Spatializer3DTI
 		PARAM_LIMITER_SET_ON,
 		PARAM_LIMITER_GET_COMPRESSION,
 
+		// INITIALIZATION CHECK
+		PARAM_IS_CORE_READY,
+
 		P_NUM
 	};
 
@@ -179,6 +182,9 @@ namespace Spatializer3DTI
 		// Limiter
 		RegisterParameter(definition, "LimitOn", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_LIMITER_SET_ON, "Limiter enabler for binaural spatializer");
 		RegisterParameter(definition, "LimitGet", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_LIMITER_GET_COMPRESSION, "Is binaural spatializer limiter compressing?");
+
+		// Initialization check
+		RegisterParameter(definition, "IsReady", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_IS_CORE_READY, "Is binaural spatializer ready?");
 			
         definition.flags |= UnityAudioEffectDefinitionFlags_IsSpatializer;
         return numparams;
@@ -695,6 +701,13 @@ namespace Spatializer3DTI
 			{
 				case PARAM_LIMITER_GET_COMPRESSION:
 					if (data->limiter.GetCompression())
+						*value = 1.0f;
+					else
+						*value = 0.0f;
+					break;
+
+				case PARAM_IS_CORE_READY:
+					if (data->coreReady)
 						*value = 1.0f;
 					else
 						*value = 0.0f;
