@@ -1,0 +1,286 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.cpp">
+      <Filter>3DTI_Toolkit_Modules\HRTF</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.cpp">
+      <Filter>3DTI_Toolkit_Modules\ILD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\AudioPluginUtil.cpp" />
+    <ClCompile Include="..\src\effect3DTISpatializer.cpp" />
+    <ClCompile Include="..\src\effect3DTIHL.cpp" />
+    <ClCompile Include="..\src\effect3DTIHA.cpp" />
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\Core.cpp">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\HRTF.cpp">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\ILD.cpp">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\Listener.cpp">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\SingleSourceDSP.cpp">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\UPCAnechoic.cpp">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\AIR.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\BiquadFilter.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Buffer.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Debugger.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DistanceAttenuator.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorMono.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorStereo.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\EnvelopeDetector.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Fconvolver.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\fftsg.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\FiltersChain.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Magnitudes.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Quaternion.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Transform.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Vector3.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\DynamicEqualizer.cpp">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\FiltersBank.cpp">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.cpp">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingLossSim.cpp">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\Environment.cpp">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\UPCEnvironment.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\BRIR.cpp">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\Fig6Algorithm.cpp">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\Core_LS.cpp">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\Environment_LS.cpp">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SingleSourceDSP_LS.cpp">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SpeakerSet.cpp">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SpeakerSetConfiguration.cpp">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\AudioStateBinaural.cpp">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.h">
+      <Filter>3DTI_Toolkit_Modules\HRTF</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.h">
+      <Filter>3DTI_Toolkit_Modules\ILD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\AudioPluginInterface.h" />
+    <ClInclude Include="..\src\AudioPluginUtil.h" />
+    <ClInclude Include="..\src\PluginList.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\Core.h">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\HRTF.h">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\ILD.h">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\Listener.h">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\SingleSourceDSP.h">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\UPCAnechoic.h">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\AIR.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\BiquadFilter.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Buffer.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\CommonDefinitions.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Conventions.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Debugger.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DistanceAttenuator.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressor.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorMono.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorStereo.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\EnvelopeDetector.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Fconvolver.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\fftsg.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\FiltersChain.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Magnitudes.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Quaternion.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Transform.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Vector3.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\DynamicEqualizer.h">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\FiltersBank.h">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.h">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingLossSim.h">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\Environment.h">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\UPCEnvironment.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\BRIR.h">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\Fig6Algorithm.h">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\Core_LS.h">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\Environment_LS.h">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SingleSourceDSP_LS.h">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SpeakerSet.h">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SpeakerSetConfiguration.h">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\3DTI_BinauralSpatializer.h">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\3DTI_LoudspeakersSpatializer.h">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\AudioStateBinaural.h">
+      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\AudioState_LS.h">
+      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="3DTI_Toolkit_Core">
+      <UniqueIdentifier>{5b7481f0-ef73-4394-b243-73f7f46c4aec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3DTI_Toolkit_Core\BinauralSpatializer">
+      <UniqueIdentifier>{bdcee911-daa6-4840-b6a0-e90d5973df26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3DTI_Toolkit_Core\Common">
+      <UniqueIdentifier>{148a8ee9-fad5-4e37-a0ea-f7ec7241d9a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3DTI_Toolkit_Modules">
+      <UniqueIdentifier>{0998a70b-6982-484f-b02c-a13536196268}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3DTI_Toolkit_Modules\HRTF">
+      <UniqueIdentifier>{6ae249e3-24ed-469f-a135-a895c37968fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3DTI_Toolkit_Modules\ILD">
+      <UniqueIdentifier>{026a501b-3278-4d0c-9d4c-37830cc6ad24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3DTI_Toolkit_Core\HAHLSimulation">
+      <UniqueIdentifier>{c6e5ec50-7043-4a1b-a99c-3ddd8e84e90a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3DTI_Toolkit_Core\LoudspeakersSpatializer">
+      <UniqueIdentifier>{fe47855c-6499-4de9-878f-e54cbaed7186}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

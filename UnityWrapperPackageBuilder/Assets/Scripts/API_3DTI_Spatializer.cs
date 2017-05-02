@@ -74,6 +74,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     int SET_HA_DIRECTIONALITY_ON_RIGHT = 17;
     int SET_LIMITER_ON = 18;
     int GET_LIMITER_COMPRESSION = 19;
+    int GET_IS_CORE_READY = 20;
 
     // Hack for modifying one single AudioSource (TO DO: fix this)
     bool selectSource = false;
@@ -104,6 +105,16 @@ public class API_3DTI_Spatializer : MonoBehaviour
         {
             selectSource = true;
             selectedSource = source;
+
+            // Check if core is already started
+            bool isReady;
+            if (!GetBoolParameter(GET_IS_CORE_READY, out isReady))
+                return false;
+            else
+            {
+                if (isReady)
+                    return false;
+            }
         }
 
         // Debug log:
