@@ -130,14 +130,14 @@ public class API_3DTI_Spatializer : MonoBehaviour
         // Source setup:
         if (!SetupSource()) return false;
 
-        // Listener setup:
-        if (!SetupListener()) return false;
-
         // Hearing Aid directionality setup:
         if (!SetupHADirectionality()) return false;
 
         // Limiter setup:
         if (!SetupLimiter()) return false;
+
+        // Listener setup:
+        if (!SetupListener()) return false;
 
         // Go back to default state, affecting all sources
         selectSource = false;

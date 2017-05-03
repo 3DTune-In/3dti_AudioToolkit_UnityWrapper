@@ -757,6 +757,14 @@ namespace Spatializer3DTI
 		data->audioSource->SetSourceTransform(ComputeSourceTransformFromMatrix(state->spatializerdata->sourcematrix, data->parameters[PARAM_SCALE_FACTOR]));
 		data->listener->SetListenerTransform(ComputeListenerTransformFromMatrix(state->spatializerdata->listenermatrix, data->parameters[PARAM_SCALE_FACTOR]));
 
+		// Now check that listener and source are not in the same position. 
+		// This might happens in some weird cases, such as when trying to process a source with no clip
+		if (data->listener->GetListenerTransform().GetVectorTo(data->audioSource->GetSourceTransform()).GetSqrDistance() < 0.0001f)
+		{
+			WriteLog(state, "WARNING during Process! AudioSource and Listener positions are the same (do you have a source with no clip?)", "");
+			return UNITY_AUDIODSP_OK;
+		}
+
 		// Transform input buffer
 		CMonoBuffer<float> inMonoBuffer(length);
 		for (int i = 0; i < length; i++)
