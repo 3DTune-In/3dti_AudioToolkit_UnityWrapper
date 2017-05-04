@@ -276,7 +276,13 @@ namespace Spatializer3DTI
 		EffectData* data = state->GetEffectData<EffectData>();
 
 		// Load HRTF		
-		HRTF::CreateFrom3dti(data->strHRTFpath, data->listener);		
+		if (!HRTF::CreateFrom3dti(data->strHRTFpath, data->listener))
+		{
+			TDebuggerResultStruct result = GET_LAST_RESULT_STRUCT();
+			WriteLog(state, "ERROR TRYING TO LOAD HRTF!!! ", result.suggestion);
+			return TLoadResult::RESULT_LOAD_ERROR;
+		}
+
 		if (data->listener->GetHRTF()->GetHRIRLength() != 0)
 		{
 			//data->listener->LoadHRTF(std::move(myHead));
@@ -304,9 +310,18 @@ namespace Spatializer3DTI
 	{
 		EffectData* data = state->GetEffectData<EffectData>();
 
-		// Get ILD and check errors
+		// Get ILD 
 		ILD_HashTable h;
-		h = ILD::CreateFrom3dti(data->strILDpath);		
+		h = ILD::CreateFrom3dti(data->strILDpath);	
+
+		// Check errors
+		TDebuggerResultStruct result = GET_LAST_RESULT_STRUCT();
+		if (result.id != RESULT_OK)
+		{			
+			WriteLog(state, "ERROR TRYING TO LOAD ILD!!! ", result.suggestion);
+			return TLoadResult::RESULT_LOAD_ERROR;
+		}
+
 		if (h.size() > 0)		// TO DO: Improve this error check		
 		{
 			CILD::SetILD_HashTable(std::move(h));
