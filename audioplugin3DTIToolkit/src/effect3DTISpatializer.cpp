@@ -275,10 +275,14 @@ namespace Spatializer3DTI
 	{
 		EffectData* data = state->GetEffectData<EffectData>();
 
-        WriteLog(state, "LOADING HRTF from file... ", data->strHRTFpath);
-        
 		// Load HRTF		
-		HRTF::CreateFrom3dti(data->strHRTFpath, data->listener);		
+		if (!HRTF::CreateFrom3dti(data->strHRTFpath, data->listener))
+		{
+			TDebuggerResultStruct result = GET_LAST_RESULT_STRUCT();
+			WriteLog(state, "ERROR TRYING TO LOAD HRTF!!! ", result.suggestion);
+			return TLoadResult::RESULT_LOAD_ERROR;
+		}
+
 		if (data->listener->GetHRTF()->GetHRIRLength() != 0)
 		{
 			//data->listener->LoadHRTF(std::move(myHead));
@@ -306,11 +310,18 @@ namespace Spatializer3DTI
 	{
 		EffectData* data = state->GetEffectData<EffectData>();
 
-        WriteLog(state, "LOADING ILD from file... ", data->strILDpath);
-        
-		// Get ILD and check errors
+		// Get ILD 
 		ILD_HashTable h;
-		h = ILD::CreateFrom3dti(data->strILDpath);		
+		h = ILD::CreateFrom3dti(data->strILDpath);	
+
+		// Check errors
+		TDebuggerResultStruct result = GET_LAST_RESULT_STRUCT();
+		if (result.id != RESULT_OK)
+		{			
+			WriteLog(state, "ERROR TRYING TO LOAD ILD!!! ", result.suggestion);
+			return TLoadResult::RESULT_LOAD_ERROR;
+		}
+
 		if (h.size() > 0)		// TO DO: Improve this error check		
 		{
 			CILD::SetILD_HashTable(std::move(h));
@@ -354,7 +365,7 @@ namespace Spatializer3DTI
 
 			// Check if string has ended			
 			if (count == length)
-			{
+			{		
 				path[count] = 0;	// End character
 				serializing = false;
 				return RESULT_LOAD_END;
@@ -760,6 +771,14 @@ namespace Spatializer3DTI
 		// Set source and listener transforms		
 		data->audioSource->SetSourceTransform(ComputeSourceTransformFromMatrix(state->spatializerdata->sourcematrix, data->parameters[PARAM_SCALE_FACTOR]));
 		data->listener->SetListenerTransform(ComputeListenerTransformFromMatrix(state->spatializerdata->listenermatrix, data->parameters[PARAM_SCALE_FACTOR]));
+
+		// Now check that listener and source are not in the same position. 
+		// This might happens in some weird cases, such as when trying to process a source with no clip
+		if (data->listener->GetListenerTransform().GetVectorTo(data->audioSource->GetSourceTransform()).GetSqrDistance() < 0.0001f)
+		{
+			WriteLog(state, "WARNING during Process! AudioSource and Listener positions are the same (do you have a source with no clip?)", "");
+			return UNITY_AUDIODSP_OK;
+		}
 
 		// Transform input buffer
 		CMonoBuffer<float> inMonoBuffer(length);

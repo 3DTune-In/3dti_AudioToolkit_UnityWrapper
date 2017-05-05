@@ -441,8 +441,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0b0b66fe32e6446a7e3cb6e903d1b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HRTFFileName: Assets/3DTIData/HRTF/IRC_1032_R_HRIR_512.3dti-hrtf
-  ILDFileName: Assets/3DTIData/ILD/default.3dti-ild
+  HRTFFileName: Assets/3DTuneIn/3DTIData/HRTF/IRC_1022_R_HRIR_128.3dti-hrtf
+  ILDFileName: Assets/3DTuneIn/3DTIData/ILD/default.3dti-ild
   customITDEnabled: 0
   listenerHeadRadius: 0.0875
   runtimeInterpolateHRTF: 1
@@ -471,9 +471,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   haMixer: {fileID: 24100000, guid: 02d04237d0308a14ea0c3b720849faae, type: 2}
-  PARAM_PROCESS_LEFT_ON: 1
+  PARAM_PROCESS_LEFT_ON: 0
   PARAM_PROCESS_RIGHT_ON: 0
-  PARAM_VOLUME_L_DB: -0.30188635
+  PARAM_VOLUME_L_DB: 3.9245284
   PARAM_VOLUME_R_DB: 0
   PARAM_EQ_LPFCUTOFF_HZ: 0
   PARAM_EQ_HPFCUTOFF_HZ: 0
