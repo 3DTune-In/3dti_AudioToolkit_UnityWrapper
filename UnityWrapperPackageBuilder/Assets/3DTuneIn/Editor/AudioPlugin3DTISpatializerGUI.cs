@@ -16,7 +16,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
-
+using API_3DTI_Common;
 
 [CustomEditor(typeof(API_3DTI_Spatializer))]
 public class AudioPlugin3DTISpatializerGUI : Editor
@@ -121,12 +121,16 @@ public class AudioPlugin3DTISpatializerGUI : Editor
         // Set new name for toolkit API
         whichfilename = newname;
 
-    //#if UNITY_ANDROID
+        // Check that Resources folder exists. Create it otherwise.
+        if (!Directory.Exists("Assets/Resources"))
+        {
+            Directory.CreateDirectory("Assets/Resources");
+        }
+
         // Save it in resources as .byte                
         string newnamewithpath = "Assets/Resources/" + Path.GetFileNameWithoutExtension(newname) + ".bytes";
         if (!File.Exists(newnamewithpath)) 
-            FileUtil.CopyFileOrDirectory(whichfilename, newnamewithpath);
-    //#endif        
+            FileUtil.CopyFileOrDirectory(whichfilename, newnamewithpath);    
 	}
 
     /// <summary>
@@ -203,7 +207,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     /// </summary>
     public void SliderHADirectionalityLeft()
     {
-        toolkit.SetHADirectionalityExtend(API_3DTI_Spatializer.EAR_LEFT, toolkit.HADirectionalityExtendLeft);
+        toolkit.SetHADirectionalityExtend(T_ear.LEFT, toolkit.HADirectionalityExtendLeft);
     }
 
     /// <summary>
@@ -211,7 +215,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     /// </summary>
     public void SliderHADirectionalityRight()
     {
-        toolkit.SetHADirectionalityExtend(API_3DTI_Spatializer.EAR_RIGHT, toolkit.HADirectionalityExtendRight);
+        toolkit.SetHADirectionalityExtend(T_ear.RIGHT, toolkit.HADirectionalityExtendRight);
     }
 
     ///////////////////////////////////////////////////////////
@@ -334,14 +338,14 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             // Left ear
             BeginSubsection("Left ear:");            
             if (CreateToggle(ref toolkit.doHADirectionalityLeft, "Switch Directionality"))            
-                toolkit.SwitchOnOffHADirectionality(API_3DTI_Spatializer.EAR_LEFT, toolkit.doHADirectionalityLeft);
+                toolkit.SwitchOnOffHADirectionality(T_ear.LEFT, toolkit.doHADirectionalityLeft);
             CreateFloatSlider(ref toolkit.HADirectionalityExtendLeft, "Directionality extend:", "F2", "dB", minHADB, maxHADB, SliderHADirectionalityLeft);            
             EndSubsection();
 
             // Right ear
             BeginSubsection("Right ear:");            
             if (CreateToggle(ref toolkit.doHADirectionalityRight, "Switch Directionality"))
-                toolkit.SwitchOnOffHADirectionality(API_3DTI_Spatializer.EAR_RIGHT, toolkit.doHADirectionalityRight);
+                toolkit.SwitchOnOffHADirectionality(T_ear.RIGHT, toolkit.doHADirectionalityRight);
             CreateFloatSlider(ref toolkit.HADirectionalityExtendRight, "Directionality extend:", "F2", "dB", minHADB, maxHADB, SliderHADirectionalityRight);            
             EndSubsection();
         }

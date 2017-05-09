@@ -3,30 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 //using System.Threading.Tasks;
-
 using System.Collections.ObjectModel;   // For ReadOnlyCollection
 
 using UnityEditor;
 using UnityEngine;
+using API_3DTI_Common;
 
 public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
-{    
+{
+    // Access to the HL API
+    API_3DTI_HL HLAPI;
+
     // Constant definitions
     const int PRESET_CUSTOM = -1;
     const int PRESET_MILD = 0;    
     const int PRESET_MODERATE = 1;
     const int PRESET_SEVERE = 2;
     const int PRESET_PLAIN = 3;
-    const int EAR_RIGHT = 0;
-    const int EAR_LEFT = 1;
-    const int DEFAULT_COMP_RATIO = 1;
-    const int DEFAULT_COMP_THRESHOLD = 0;
-    const int DEFAULT_COMP_ATTACK = 20;
-    const int DEFAULT_COMP_RELEASE = 100;
-    static readonly ReadOnlyCollection<int> GAINS_PRESET_MILD = new ReadOnlyCollection<int>(new[] { -7, -7, -12, -15, -22, -25, -25, -25, -25 });
-    static readonly ReadOnlyCollection<int> GAINS_PRESET_MODERATE = new ReadOnlyCollection<int>(new[] { -22, -22, -27, -30, -37, -40, -40, -40, -40 });
-    static readonly ReadOnlyCollection<int> GAINS_PRESET_SEVERE = new ReadOnlyCollection<int>(new[] { -47, -47, -52, -55, -62, -65, -65, -65, -65 });
-    static readonly ReadOnlyCollection<int> GAINS_PRESET_PLAIN = new ReadOnlyCollection<int>(new[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 });
+    //static readonly ReadOnlyCollection<int> GAINS_PRESET_MILD = new ReadOnlyCollection<int>(new[] { -7, -7, -12, -15, -22, -25, -25, -25, -25 });
+    //static readonly ReadOnlyCollection<int> GAINS_PRESET_MODERATE = new ReadOnlyCollection<int>(new[] { -22, -22, -27, -30, -37, -40, -40, -40, -40 });
+    //static readonly ReadOnlyCollection<int> GAINS_PRESET_SEVERE = new ReadOnlyCollection<int>(new[] { -47, -47, -52, -55, -62, -65, -65, -65, -65 });
+    //static readonly ReadOnlyCollection<int> GAINS_PRESET_PLAIN = new ReadOnlyCollection<int>(new[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 });
 
     // Look and feel parameters
     int logosize = 80;  // Size of 3DTI logo
@@ -37,18 +34,16 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     Color baseColor = Color.white;
 
     // Global variables 
-    bool switchLeftEar = false;     
-    bool switchRightEar = false;    
     bool advancedControls = false;  
-    bool compressorFirst = true;
-    bool eqLeftOn = true;
-    bool eqRightOn = true;
-    bool compressorLeftOn = false;
-    bool compressorRightOn = false;
+    //bool compressorFirst = true;
+    //bool eqLeftOn = true;
+    //bool eqRightOn = true;
+    //bool compressorLeftOn = false;
+    //bool compressorRightOn = false;
     int selectedPresetLeft = PRESET_PLAIN;
     int selectedPresetRight = PRESET_PLAIN;
     bool initDone = false;
-    bool debugLogHL = false;
+    //bool debugLogHL = false;
 
     // GUI Styles
     GUIStyle leftAlign;
@@ -84,8 +79,11 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         // Initialization (first run)
         if (!initDone)
         {
+            // Get HL API instance (TO DO: Error check)
+            HLAPI = GameObject.FindObjectOfType<API_3DTI_HL>();
+
             // Send commands to plugin to set all parameters
-            InitializePlugin(plugin);
+            //InitializePlugin(plugin);
 
             // Setup styles
             leftAlign = EditorStyles.label;
@@ -112,7 +110,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         advancedControls = EditorGUILayout.BeginToggleGroup("Advanced controls", advancedControls);
         if (advancedControls)
         {
-            if (compressorFirst)
+            if (HLAPI.PARAM_COMPRESSOR_FIRST)
             {
                 DrawCompressor(plugin);
                 DrawEQ(plugin);
@@ -125,49 +123,49 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             DrawDebugLog(plugin);
         }
         EditorGUILayout.EndToggleGroup();
-        
+
+        initDone = true;
+
         //return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG)
         return false;     // DO NOT SHOW DEFAULT CONTROLS
     }
 
 
-    public void InitializePlugin(IAudioEffectPlugin plugin)
-    {
-        // Set presets
-        SetEQPreset(plugin, EAR_LEFT, GAINS_PRESET_PLAIN);
-        SetEQPreset(plugin, EAR_RIGHT, GAINS_PRESET_PLAIN);
+    //public void InitializePlugin(IAudioEffectPlugin plugin)
+    //{
+    //    // Set presets
+    //    SetEQPreset(plugin, T_ear.LEFT, API_3DTI_HL.EQ_PRESET_PLAIN);
+    //    SetEQPreset(plugin, T_ear.RIGHT, API_3DTI_HL.EQ_PRESET_PLAIN);
 
-        // Set global switches
-        if (!switchLeftEar)
-        {
-            eqLeftOn = false;
-            compressorLeftOn = false;
-        }
-        if (!switchRightEar)
-        {
-            eqRightOn = false;
-            compressorRightOn = false;
-        }
+    //    // Set global switches
+    //    if (!switchLeftEar)
+    //    {
+    //        HLAPI.SwitchOnOffEffect(T_ear.LEFT, API_3DTI_HL.T_HLEffect.EFFECT_HEARINGLOSS, false);
+    //    }
+    //    if (!switchRightEar)
+    //    {
+    //        HLAPI.SwitchOnOffEffect(T_ear.RIGHT, API_3DTI_HL.T_HLEffect.EFFECT_HEARINGLOSS, false);
+    //    }
 
-        // Boolean switches
-        plugin.SetFloatParameter("EQLeftOn", Bool2Float(eqLeftOn));
-        plugin.SetFloatParameter("EQRightOn", Bool2Float(eqRightOn));
-        plugin.SetFloatParameter("CompLeftOn", Bool2Float(compressorLeftOn));
-        plugin.SetFloatParameter("CompRightOn", Bool2Float(compressorRightOn));
-        plugin.SetFloatParameter("CompFirst", Bool2Float(compressorFirst));
+    //    // Boolean switches
+    //    plugin.SetFloatParameter("EQLeftOn", Bool2Float(eqLeftOn));
+    //    plugin.SetFloatParameter("EQRightOn", Bool2Float(eqRightOn));
+    //    plugin.SetFloatParameter("CompLeftOn", Bool2Float(compressorLeftOn));
+    //    plugin.SetFloatParameter("CompRightOn", Bool2Float(compressorRightOn));
+    //    plugin.SetFloatParameter("CompFirst", Bool2Float(compressorFirst));
 
-        // Compressor        
-        plugin.SetFloatParameter("LeftRatio", (float)DEFAULT_COMP_RATIO);
-        plugin.SetFloatParameter("LeftThreshold", (float)DEFAULT_COMP_THRESHOLD);
-        plugin.SetFloatParameter("LeftAttack", (float)DEFAULT_COMP_ATTACK);
-        plugin.SetFloatParameter("LeftRelease", (float)DEFAULT_COMP_RELEASE);
-        plugin.SetFloatParameter("RightRatio", (float)DEFAULT_COMP_RATIO);
-        plugin.SetFloatParameter("RightThreshold", (float)DEFAULT_COMP_THRESHOLD);
-        plugin.SetFloatParameter("RightAttack", (float)DEFAULT_COMP_ATTACK);
-        plugin.SetFloatParameter("RightRelease", (float)DEFAULT_COMP_RELEASE);
+    //    // Compressor        
+    //    plugin.SetFloatParameter("LeftRatio", (float)DEFAULT_COMP_RATIO);
+    //    plugin.SetFloatParameter("LeftThreshold", (float)DEFAULT_COMP_THRESHOLD);
+    //    plugin.SetFloatParameter("LeftAttack", (float)DEFAULT_COMP_ATTACK);
+    //    plugin.SetFloatParameter("LeftRelease", (float)DEFAULT_COMP_RELEASE);
+    //    plugin.SetFloatParameter("RightRatio", (float)DEFAULT_COMP_RATIO);
+    //    plugin.SetFloatParameter("RightThreshold", (float)DEFAULT_COMP_THRESHOLD);
+    //    plugin.SetFloatParameter("RightAttack", (float)DEFAULT_COMP_ATTACK);
+    //    plugin.SetFloatParameter("RightRelease", (float)DEFAULT_COMP_RELEASE);
 
-        initDone = true;
-    }
+    //    initDone = true;
+    //}
 
     /// <summary>
     /// Draw header (title and logo)
@@ -182,7 +180,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         logo3DTI = Resources.Load("3D_tuneinNoAlpha") as Texture;
         GUILayout.Box(logo3DTI, logoStyle, GUILayout.Width(logosize), GUILayout.Height(logosize), GUILayout.ExpandWidth(true));
 
-        // Add space belo
+        // Add space below
         GUILayout.Space(spaceBetweenSections);
     }
 
@@ -193,14 +191,14 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     public void DrawChainOrder(IAudioEffectPlugin plugin)
     {
         string buttonText;
-        if (compressorFirst)
+        if (HLAPI.PARAM_COMPRESSOR_FIRST)
             buttonText = "Switch to: Eq->Compressor";
         else
             buttonText = "Switch to: Compressor->Eq";
         if (GUILayout.Button(buttonText, GUILayout.ExpandWidth(false)))
         {
-            compressorFirst = !compressorFirst;
-            plugin.SetFloatParameter("CompFirst", Bool2Float(compressorFirst));
+            HLAPI.PARAM_COMPRESSOR_FIRST = !HLAPI.PARAM_COMPRESSOR_FIRST;
+            plugin.SetFloatParameter("CompFirst", CommonFunctions.Bool2Float(HLAPI.PARAM_COMPRESSOR_FIRST));
         }
         GUILayout.Space(spaceBetweenSections);
     }
@@ -219,7 +217,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             GUI.color = baseColor;
         if (GUILayout.Button("Mild", GUILayout.ExpandWidth(false)))
         {
-            SetEQPreset(plugin, EAR_LEFT, GAINS_PRESET_MILD);
+            SetEQPreset(plugin, T_ear.LEFT, API_3DTI_HL.EQ_PRESET_MILD);
             selectedPresetLeft = PRESET_MILD;
         }
 
@@ -229,7 +227,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             GUI.color = baseColor;
         if (GUILayout.Button("Moderate", GUILayout.ExpandWidth(false)))
         {
-            SetEQPreset(plugin, EAR_LEFT, GAINS_PRESET_MODERATE);
+            SetEQPreset(plugin, T_ear.LEFT, API_3DTI_HL.EQ_PRESET_MODERATE);
             selectedPresetLeft = PRESET_MODERATE;
         }
 
@@ -239,7 +237,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             GUI.color = baseColor;
         if (GUILayout.Button("Severe", GUILayout.ExpandWidth(false)))
         {
-            SetEQPreset(plugin, EAR_LEFT, GAINS_PRESET_SEVERE);
+            SetEQPreset(plugin, T_ear.LEFT, API_3DTI_HL.EQ_PRESET_SEVERE);
             selectedPresetLeft = PRESET_SEVERE;
         }
         GUI.color = baseColor;
@@ -261,7 +259,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             GUI.color = baseColor;
         if (GUILayout.Button("Mild", GUILayout.ExpandWidth(false)))
         {
-            SetEQPreset(plugin, EAR_RIGHT, GAINS_PRESET_MILD);
+            SetEQPreset(plugin, T_ear.RIGHT, API_3DTI_HL.EQ_PRESET_MILD);
             selectedPresetRight = PRESET_MILD;
         }
 
@@ -271,7 +269,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             GUI.color = baseColor;
         if (GUILayout.Button("Moderate", GUILayout.ExpandWidth(false)))
         {
-            SetEQPreset(plugin, EAR_RIGHT, GAINS_PRESET_MODERATE);
+            SetEQPreset(plugin, T_ear.RIGHT, API_3DTI_HL.EQ_PRESET_MODERATE);
             selectedPresetRight = PRESET_MODERATE;
         }
 
@@ -281,7 +279,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             GUI.color = baseColor;
         if (GUILayout.Button("Severe", GUILayout.ExpandWidth(false)))
         {
-            SetEQPreset(plugin, EAR_RIGHT, GAINS_PRESET_SEVERE);
+            SetEQPreset(plugin, T_ear.RIGHT, API_3DTI_HL.EQ_PRESET_SEVERE);
             selectedPresetRight = PRESET_SEVERE;
         }
         GUI.color = baseColor;
@@ -296,9 +294,9 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     public void DrawDebugLog(IAudioEffectPlugin plugin)
     {
         //BeginCentralColumn("Debug Log File");
-        {
-            CreateToggle(plugin, ref debugLogHL, "Write Debug Log File", "DebugLogHL");
-        }
+        //{
+        //    CreateToggle(plugin, ref debugLogHL, "Write Debug Log File", "DebugLogHL");
+        //}
         //EndCentralColumn();
     }
     
@@ -311,7 +309,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         boolvar = GUILayout.Toggle(boolvar, toggleText, GUILayout.ExpandWidth(false));
         if (oldvar != boolvar)
         {
-            plugin.SetFloatParameter(switchParameter, Bool2Float(boolvar));
+            plugin.SetFloatParameter(switchParameter, CommonFunctions.Bool2Float(boolvar));
         }
     }
 
@@ -319,11 +317,11 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     ///  Draw preset buttons for left ear
     /// </summary>
     /// <param name="plugin"></param>
-    public void SetEQPreset(IAudioEffectPlugin plugin, int ear, ReadOnlyCollection<int> presetGains)
+    public void SetEQPreset(IAudioEffectPlugin plugin, T_ear ear, ReadOnlyCollection<float> presetGains)
     {
-        if (ear == EAR_LEFT)
+        if (ear == T_ear.LEFT)
         {
-            plugin.SetFloatParameter("EQL0", presetGains[0]);
+            plugin.SetFloatParameter("EQL0", presetGains[0]);            
             plugin.SetFloatParameter("EQL1", presetGains[1]);
             plugin.SetFloatParameter("EQL2", presetGains[2]);
             plugin.SetFloatParameter("EQL3", presetGains[3]);
@@ -331,7 +329,9 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             plugin.SetFloatParameter("EQL5", presetGains[5]);
             plugin.SetFloatParameter("EQL6", presetGains[6]);
             plugin.SetFloatParameter("EQL7", presetGains[7]);
-            plugin.SetFloatParameter("EQL8", presetGains[8]);            
+            plugin.SetFloatParameter("EQL8", presetGains[8]);
+            for (int b=0; b<presetGains.Count; b++)
+                HLAPI.PARAM_BANDS_DB_LEFT[b] = presetGains[b];
         }
         else
         {
@@ -344,6 +344,8 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             plugin.SetFloatParameter("EQR6", presetGains[6]);
             plugin.SetFloatParameter("EQR7", presetGains[7]);
             plugin.SetFloatParameter("EQR8", presetGains[8]);
+            for (int b = 0; b < presetGains.Count; b++)
+                HLAPI.PARAM_BANDS_DB_RIGHT[b] = presetGains[b];
         }
     }
 
@@ -352,8 +354,8 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     /// </summary>
     /// <param name="plugin"></param>
     public void DrawEars(IAudioEffectPlugin plugin)
-    {        
-        BeginLeftColumn(plugin, ref switchLeftEar, "Left ear", new List<string> { "EQLeftOn", "CompLeftOn"}, false);  
+    {
+        BeginLeftColumn(plugin, API_3DTI_HL.T_HLEffect.EFFECT_HEARINGLOSS, ref HLAPI.GLOBAL_LEFT_ON, "Left ear", new List<string> { "EQLeftOn", "CompLeftOn"}, false);          
         {
             GUILayout.BeginHorizontal();
             {
@@ -370,9 +372,9 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             }
             GUILayout.EndHorizontal();
         }
-        EndLeftColumn(false);        
+        EndLeftColumn(false);
 
-        BeginRightColumn(plugin, ref switchRightEar, "Right ear", new List<string> { "EQRightOn", "CompRightOn" }, false);
+        BeginRightColumn(plugin, API_3DTI_HL.T_HLEffect.EFFECT_HEARINGLOSS, ref HLAPI.GLOBAL_RIGHT_ON, "Right ear", new List<string> { "EQRightOn", "CompRightOn" }, false);        
         {
             GUILayout.BeginHorizontal();
             {
@@ -398,31 +400,31 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     /// <param name="plugin"></param>
     public void DrawEQ(IAudioEffectPlugin plugin)
     {
-        BeginLeftColumn(plugin, ref eqLeftOn, "Equalizer", new List<string> { "EQLeftOn" });
+        BeginLeftColumn(plugin, API_3DTI_HL.T_HLEffect.EFFECT_EQ, ref HLAPI.PARAM_LEFT_EQ_ON, "Equalizer", new List<string> { "EQLeftOn" });        
         {            
-            if (CreateParameterSlider(plugin, "EQL0", "62.5 Hz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQL1", "125 Hz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQL2", "250 Hz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQL3", "500 Hz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQL4", "1 KHz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQL5", "2 KHz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQL6", "4 KHz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQL7", "8 KHz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQL8", "16 KHz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
+            if (CreateParameterSlider(plugin, ref HLAPI.PARAM_BANDS_DB_LEFT[0], "EQL0", "62.5 Hz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
+            if (CreateParameterSlider(plugin, ref HLAPI.PARAM_BANDS_DB_LEFT[1], "EQL1", "125 Hz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
+            if (CreateParameterSlider(plugin, ref HLAPI.PARAM_BANDS_DB_LEFT[2], "EQL2", "250 Hz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
+            if (CreateParameterSlider(plugin, ref HLAPI.PARAM_BANDS_DB_LEFT[3], "EQL3", "500 Hz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
+            if (CreateParameterSlider(plugin, ref HLAPI.PARAM_BANDS_DB_LEFT[4], "EQL4", "1 KHz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
+            if (CreateParameterSlider(plugin, ref HLAPI.PARAM_BANDS_DB_LEFT[5], "EQL5", "2 KHz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
+            if (CreateParameterSlider(plugin, ref HLAPI.PARAM_BANDS_DB_LEFT[6], "EQL6", "4 KHz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
+            if (CreateParameterSlider(plugin, ref HLAPI.PARAM_BANDS_DB_LEFT[7], "EQL7", "8 KHz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
+            if (CreateParameterSlider(plugin, ref HLAPI.PARAM_BANDS_DB_LEFT[8], "EQL8", "16 KHz", false, "dB")) selectedPresetLeft = PRESET_CUSTOM;
         }
         EndLeftColumn();
 
-        BeginRightColumn(plugin, ref eqRightOn, "Equalizer", new List<string> { "EQRightOn" });
+        BeginRightColumn(plugin, API_3DTI_HL.T_HLEffect.EFFECT_EQ, ref HLAPI.PARAM_RIGHT_EQ_ON, "Equalizer", new List<string> { "EQRightOn" });        
         {
-            if (CreateParameterSlider(plugin, "EQR0", "62.5 Hz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQR1", "125 Hz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQR2", "250 Hz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQR3", "500 Hz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQR4", "1 KHz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQR5", "2 KHz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQR6", "4 KHz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQR7", "8 KHz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
-            if (CreateParameterSlider(plugin, "EQR8", "16 KHz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
+            if (CreateParameterSlider(plugin, ref HLAPI.PARAM_BANDS_DB_RIGHT[0], "EQR0", "62.5 Hz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
+            if (CreateParameterSlider(plugin, ref HLAPI.PARAM_BANDS_DB_RIGHT[1], "EQR1", "125 Hz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
+            if (CreateParameterSlider(plugin, ref HLAPI.PARAM_BANDS_DB_RIGHT[2], "EQR2", "250 Hz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
+            if (CreateParameterSlider(plugin, ref HLAPI.PARAM_BANDS_DB_RIGHT[3], "EQR3", "500 Hz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
+            if (CreateParameterSlider(plugin, ref HLAPI.PARAM_BANDS_DB_RIGHT[4], "EQR4", "1 KHz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
+            if (CreateParameterSlider(plugin, ref HLAPI.PARAM_BANDS_DB_RIGHT[5], "EQR5", "2 KHz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
+            if (CreateParameterSlider(plugin, ref HLAPI.PARAM_BANDS_DB_RIGHT[6], "EQR6", "4 KHz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
+            if (CreateParameterSlider(plugin, ref HLAPI.PARAM_BANDS_DB_RIGHT[7], "EQR7", "8 KHz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
+            if (CreateParameterSlider(plugin, ref HLAPI.PARAM_BANDS_DB_RIGHT[8], "EQR8", "16 KHz", false, "dB")) selectedPresetRight = PRESET_CUSTOM;
         }
         EndRightColumn();
     }
@@ -434,21 +436,21 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     public void DrawCompressor(IAudioEffectPlugin plugin)
     {
 
-        BeginLeftColumn(plugin, ref compressorLeftOn, "Compressor", new List<string> { "CompLeftOn" });
+        BeginLeftColumn(plugin, API_3DTI_HL.T_HLEffect.EFFECT_COMPRESSOR, ref HLAPI.PARAM_LEFT_COMPRESSOR_ON, "Compressor", new List<string> { "CompLeftOn" });        
         {
-            CreateParameterSlider(plugin, "LeftRatio", "Ratio 1:", false, "");
-            CreateParameterSlider(plugin, "LeftThreshold", "Threshold", false, "dB");
-            CreateParameterSlider(plugin, "LeftAttack", "Attack", false, "ms");
-            CreateParameterSlider(plugin, "LeftRelease", "Release", false, "ms");
+            CreateParameterSlider(plugin, ref HLAPI.PARAM_COMP_LEFT_RATIO, "LeftRatio", "Ratio 1:", false, "");
+            CreateParameterSlider(plugin, ref HLAPI.PARAM_COMP_LEFT_THRESHOLD, "LeftThreshold", "Threshold", false, "dB");
+            CreateParameterSlider(plugin, ref HLAPI.PARAM_COMP_LEFT_ATTACK, "LeftAttack", "Attack", false, "ms");
+            CreateParameterSlider(plugin, ref HLAPI.PARAM_COMP_LEFT_RELEASE, "LeftRelease", "Release", false, "ms");
         }
         EndLeftColumn();
 
-        BeginRightColumn(plugin, ref compressorRightOn, "Compressor", new List<string> { "CompRightOn" });
+        BeginRightColumn(plugin, API_3DTI_HL.T_HLEffect.EFFECT_COMPRESSOR, ref HLAPI.PARAM_RIGHT_COMPRESSOR_ON, "Compressor", new List<string> { "CompRightOn" });        
         {
-            CreateParameterSlider(plugin, "RightRatio", "Ratio 1:", false, "");
-            CreateParameterSlider(plugin, "RightThreshold", "Threshold", false, "dB");
-            CreateParameterSlider(plugin, "RightAttack", "Attack", false, "ms");
-            CreateParameterSlider(plugin, "RightRelease", "Release", false, "ms");
+            CreateParameterSlider(plugin, ref HLAPI.PARAM_COMP_RIGHT_RATIO, "RightRatio", "Ratio 1:", false, "");
+            CreateParameterSlider(plugin, ref HLAPI.PARAM_COMP_RIGHT_THRESHOLD, "RightThreshold", "Threshold", false, "dB");
+            CreateParameterSlider(plugin, ref HLAPI.PARAM_COMP_RIGHT_ATTACK, "RightAttack", "Attack", false, "ms");
+            CreateParameterSlider(plugin, ref HLAPI.PARAM_COMP_RIGHT_RELEASE, "RightRelease", "Release", false, "ms");
         }
         EndRightColumn();
     }
@@ -504,7 +506,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     /// <param name="isFloat"></param>
     /// <param name="units"></param>
     /// <returns>True if slider value has changed</returns>
-    public bool CreateParameterSlider(IAudioEffectPlugin plugin, string parameterName, string parameterText, bool isFloat, string units)
+    public bool CreateParameterSlider(IAudioEffectPlugin plugin, ref float APIparam, string parameterName, string parameterText, bool isFloat, string units)
     {
         // Get parameter info
         float newValue;
@@ -523,34 +525,28 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         if (CreateFloatSlider(ref newValue, parameterText, resolution, units, minValue, maxValue))
         {
             plugin.SetFloatParameter(parameterName, newValue);
+            APIparam = newValue;
             return true;
         }
 
         return false;
     }
 
-    public float Bool2Float(bool v)
+    public void BeginLeftColumn(IAudioEffectPlugin plugin, API_3DTI_HL.T_HLEffect whichEffect, ref bool enable, string title, List<string> switchParameters, bool earDisable = true)
     {
-        if (v)
-            return 1.0f;
-        else
-            return 0.0f;
-    }
-
-    public void BeginLeftColumn(IAudioEffectPlugin plugin, ref bool enable, string title, List<string> switchParameters, bool earDisable=true)
-    {        
         GUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));                    // Begin section             
-            GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(true));  // Begin column
-                if (earDisable) EditorGUI.BeginDisabledGroup(!switchLeftEar);       // Begin Disabled if left ear is switched off
-                    bool previousenable = enable;
-                    enable = EditorGUILayout.BeginToggleGroup(title, enable);       // Begin toggle   
-                        if (previousenable != enable)
-                        {
-                            foreach (string switchParameter in switchParameters)
-                            {
-                                plugin.SetFloatParameter(switchParameter, Bool2Float(enable));
-                            }
-                        }
+        GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(true));  // Begin column
+        if (earDisable) EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_LEFT_ON);       // Begin Disabled if left ear is switched off
+        bool previousenable = enable;
+        enable = EditorGUILayout.BeginToggleGroup(title, enable);       // Begin toggle   
+        if (previousenable != enable)
+        {
+            HLAPI.SwitchOnOffEffect(T_ear.LEFT, whichEffect, enable);
+            foreach (string switchParameter in switchParameters)
+            {
+                plugin.SetFloatParameter(switchParameter, CommonFunctions.Bool2Float(enable));
+            }
+        }
     }
 
     public void EndLeftColumn(bool earDisable=true)
@@ -561,19 +557,20 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             GUILayout.Space(spaceBetweenColumns);                                   // Space between columns
     }
 
-    public void BeginRightColumn(IAudioEffectPlugin plugin, ref bool enable, string title, List<string> switchParameters, bool earDisable=true)
-    {        
-            GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(true));    // Begin column
-                if (earDisable) EditorGUI.BeginDisabledGroup(!switchRightEar);      // Begin Disabled if right ear is switched off
-                    bool previousenable = enable;
-                    enable = EditorGUILayout.BeginToggleGroup(title, enable);       // Begin toggle  
-                        if (previousenable != enable)
-                        {
-                            foreach (string switchParameter in switchParameters)
-                            {
-                                plugin.SetFloatParameter(switchParameter, Bool2Float(enable));
-                            }
-                        }
+    public void BeginRightColumn(IAudioEffectPlugin plugin, API_3DTI_HL.T_HLEffect whichEffect, ref bool enable, string title, List<string> switchParameters, bool earDisable = true)
+    {
+        GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(true));    // Begin column
+        if (earDisable) EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_RIGHT_ON);      // Begin Disabled if right ear is switched off
+        bool previousenable = enable;
+        enable = EditorGUILayout.BeginToggleGroup(title, enable);       // Begin toggle  
+        if (previousenable != enable)
+        {
+            HLAPI.SwitchOnOffEffect(T_ear.RIGHT, whichEffect, enable);
+            foreach (string switchParameter in switchParameters)
+            {
+                plugin.SetFloatParameter(switchParameter, CommonFunctions.Bool2Float(enable));
+            }
+        }
     }
 
     public void EndRightColumn(bool earDisable=true)

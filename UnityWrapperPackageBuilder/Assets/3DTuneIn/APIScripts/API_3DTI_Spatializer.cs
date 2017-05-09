@@ -17,7 +17,7 @@ using System.IO;            // Needed for FileStream
 using System.Collections.Generic;
 using System;
 using System.Runtime.InteropServices;
-
+using API_3DTI_Common;
 
 public class API_3DTI_Spatializer : MonoBehaviour
 {
@@ -42,11 +42,9 @@ public class API_3DTI_Spatializer : MonoBehaviour
     public bool debugLog = false;                   // Used by GUI
 
     // HEARING AID DIRECTIONALITY:
-    public const int EAR_RIGHT = 0;
-    public const int EAR_LEFT = 1;
-    public const int EAR_BOTH = 2;   
-    public bool doHADirectionalityLeft = false;     // Used by GUI
-    public bool doHADirectionalityRight = false;    // Used by GUI
+    //public CEarAPIParameter<bool> doHADirectionality = new CEarAPIParameter<bool>(false);
+    public bool doHADirectionalityLeft = false;     // Used by GUI    
+    public bool doHADirectionalityRight = false;    // Used by GUI    
     public float HADirectionalityExtendLeft = 15.0f;    // Used by GUI
     public float HADirectionalityExtendRight = 15.0f;   // Used by GUI
 
@@ -226,10 +224,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     public bool SetCustomITD(bool _enable)
     {
         customITDEnabled = _enable;
-        if (_enable)
-            return SendCommandForAllSources(SET_CUSTOM_ITD, 1.0f);
-        else
-            return SendCommandForAllSources(SET_CUSTOM_ITD, 0.0f);
+        return SendCommandForAllSources(SET_CUSTOM_ITD, CommonFunctions.Bool2Float(_enable));
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -320,11 +315,8 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>
     public bool SetSourceInterpolation(bool _run)
     {
-        runtimeInterpolateHRTF = _run;        
-        if (!_run)            
-            return SendCommandForAllSources(SET_HRTF_INTERPOLATION, 0.0f);
-        else
-            return SendCommandForAllSources(SET_HRTF_INTERPOLATION, 1.0f);
+        runtimeInterpolateHRTF = _run;
+        return SendCommandForAllSources(SET_HRTF_INTERPOLATION, CommonFunctions.Bool2Float(_run));     
     }
 
 
@@ -381,10 +373,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     public bool SetModFarLPF(bool _enable)
     {
         modFarLPF = _enable;
-        if (_enable)
-            return SendCommandForAllSources(SET_MOD_FARLPF, 1.0f);
-        else
-            return SendCommandForAllSources(SET_MOD_FARLPF, 0.0f);
+        return SendCommandForAllSources(SET_MOD_FARLPF, CommonFunctions.Bool2Float(_enable));
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -395,10 +384,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     public bool SetModDistanceAttenuation(bool _enable)
     {
         modDistAtt = _enable;
-        if (_enable)
-            return SendCommandForAllSources(SET_MOD_DISTATT, 1.0f);
-        else
-            return SendCommandForAllSources(SET_MOD_DISTATT, 0.0f);
+        return SendCommandForAllSources(SET_MOD_DISTATT, CommonFunctions.Bool2Float(_enable));
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -409,10 +395,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     public bool SetModILD(bool _enable)
     {
         modILD = _enable;
-        if (_enable)
-            return SendCommandForAllSources(SET_MOD_ILD, 1.0f);
-        else
-            return SendCommandForAllSources(SET_MOD_ILD, 0.0f);
+        return SendCommandForAllSources(SET_MOD_ILD, CommonFunctions.Bool2Float(_enable));
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -423,10 +406,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     public bool SetModHRTF(bool _enable)
     {
         modHRTF = _enable;
-        if (_enable)
-            return SendCommandForAllSources(SET_MOD_HRTF, 1.0f);
-        else
-            return SendCommandForAllSources(SET_MOD_HRTF, 0.0f);        
+        return SendCommandForAllSources(SET_MOD_HRTF, CommonFunctions.Bool2Float(_enable));
     }
 
     /// <summary>
@@ -456,10 +436,12 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>
     public bool SetupHADirectionality()
     {
-        if (!SwitchOnOffHADirectionality(EAR_LEFT, doHADirectionalityLeft)) return false;
-        if (!SwitchOnOffHADirectionality(EAR_RIGHT, doHADirectionalityRight)) return false;
-        if (!SetHADirectionalityExtend(EAR_LEFT, HADirectionalityExtendLeft)) return false;
-        if (!SetHADirectionalityExtend(EAR_RIGHT, HADirectionalityExtendRight)) return false;
+        //if (!SwitchOnOffHADirectionality(T_ear.LEFT, doHADirectionality.Get(T_ear.LEFT))) return false;
+        //if (!SwitchOnOffHADirectionality(T_ear.RIGHT, doHADirectionality.Get(T_ear.RIGHT))) return false;
+        if (!SwitchOnOffHADirectionality(T_ear.LEFT, doHADirectionalityLeft)) return false;
+        if (!SwitchOnOffHADirectionality(T_ear.RIGHT, doHADirectionalityRight)) return false;
+        if (!SetHADirectionalityExtend(T_ear.LEFT, HADirectionalityExtendLeft)) return false;
+        if (!SetHADirectionalityExtend(T_ear.RIGHT, HADirectionalityExtendRight)) return false;
         return true;
     }
 
@@ -468,23 +450,25 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>
     /// <param name="ear"></param>
     /// <param name="_enable"></param>
-    public bool SwitchOnOffHADirectionality(int ear, bool _enable)
+    public bool SwitchOnOffHADirectionality(T_ear ear, bool _enable)
     {
-        if (ear == EAR_BOTH)
+        if (ear == T_ear.BOTH)
         {
-            SwitchOnOffHADirectionality(EAR_LEFT, _enable);
-            SwitchOnOffHADirectionality(EAR_RIGHT, _enable);
+            SwitchOnOffHADirectionality(T_ear.LEFT, _enable);
+            SwitchOnOffHADirectionality(T_ear.RIGHT, _enable);
         }
 
-        if (ear == EAR_LEFT)
+        if (ear == T_ear.LEFT)
         {
+            //doHADirectionality.Set(T_ear.LEFT, _enable);
             doHADirectionalityLeft = _enable;
-            return SendCommandForAllSources(SET_HA_DIRECTIONALITY_ON_LEFT, Bool2Float(_enable));
+            return SendCommandForAllSources(SET_HA_DIRECTIONALITY_ON_LEFT, CommonFunctions.Bool2Float(_enable));
         }
-        if (ear == EAR_RIGHT)
+        if (ear == T_ear.RIGHT)
         {
+            //doHADirectionality.Set(T_ear.RIGHT, _enable);
             doHADirectionalityRight = _enable;
-            return SendCommandForAllSources(SET_HA_DIRECTIONALITY_ON_RIGHT, Bool2Float(_enable));
+            return SendCommandForAllSources(SET_HA_DIRECTIONALITY_ON_RIGHT, CommonFunctions.Bool2Float(_enable));
         }
         return false;
     }
@@ -494,20 +478,20 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>
     /// <param name="ear"></param>
     /// <param name="extendDB"></param>
-    public bool SetHADirectionalityExtend(int ear, float extendDB)
+    public bool SetHADirectionalityExtend(T_ear ear, float extendDB)
     {
-        if (ear == EAR_BOTH)
+        if (ear == T_ear.BOTH)
         {
-            SetHADirectionalityExtend(EAR_LEFT, extendDB);
-            SetHADirectionalityExtend(EAR_RIGHT, extendDB);
+            SetHADirectionalityExtend(T_ear.LEFT, extendDB);
+            SetHADirectionalityExtend(T_ear.RIGHT, extendDB);
         }
 
-        if (ear == EAR_LEFT)
+        if (ear == T_ear.LEFT)
         {
             HADirectionalityExtendLeft = extendDB;
             return SendCommandForAllSources(SET_HA_DIRECTIONALITY_EXTEND_LEFT, extendDB);
         }
-        if (ear == EAR_RIGHT)
+        if (ear == T_ear.RIGHT)
         {
             HADirectionalityExtendRight = extendDB;
             return SendCommandForAllSources(SET_HA_DIRECTIONALITY_EXTEND_RIGHT, extendDB);
@@ -536,7 +520,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     public bool SwitchOnOffLimiter(bool _enable)
     {
         doLimiter = _enable;
-        return SendCommandForAllSources(SET_LIMITER_ON, Bool2Float(_enable));
+        return SendCommandForAllSources(SET_LIMITER_ON, CommonFunctions.Bool2Float(_enable));
     }
 
     /// <summary>
@@ -564,7 +548,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
         value = false;
         float floatValue;
         if (!GetFloatParameter(parameter, out floatValue)) return false;
-        value = Float2Bool(floatValue);
+        value = CommonFunctions.Float2Bool(floatValue);
         return true;
     }
 
@@ -596,10 +580,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     public bool SendWriteDebugLog(bool _enable)
     {
         debugLog = _enable;
-        if (_enable)
-            return SendCommandForAllSources(SET_DEBUG_LOG, 1.0f);
-        else
-            return SendCommandForAllSources(SET_DEBUG_LOG, 0.0f);
+        return SendCommandForAllSources(SET_DEBUG_LOG, CommonFunctions.Bool2Float(_enable));
     }
 
     /// <summary>
@@ -640,29 +621,4 @@ public class API_3DTI_Spatializer : MonoBehaviour
         return spatializedSources;
     }
 
-    /// <summary>
-    /// Auxiliary function
-    /// </summary>
-    /// <param name="v"></param>
-    /// <returns></returns>
-    float Bool2Float(bool v)
-    {
-        if (v)
-            return 1.0f;
-        else
-            return 0.0f;
-    }
-
-    /// <summary>
-    ///  Auxiliary function
-    /// </summary>
-    /// <param name="v"></param>
-    /// <returns></returns>
-    bool Float2Bool(float v)
-    {
-        if (v == 1.0f)
-            return true;
-        else
-            return false;
-    }
 }

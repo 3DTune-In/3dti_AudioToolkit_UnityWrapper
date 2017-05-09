@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;   // For ReadOnlyCollection
 
 using UnityEditor;
 using UnityEngine;
+using API_3DTI_Common;
 
 public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
 {
@@ -429,7 +430,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         boolvar = GUILayout.Toggle(boolvar, toggleText, GUILayout.ExpandWidth(false));
         if (oldvar != boolvar) 
         {
-            plugin.SetFloatParameter(switchParameter, Bool2Float(boolvar));
+            plugin.SetFloatParameter(switchParameter, CommonFunctions.Bool2Float(boolvar));
         }
     }
 
@@ -517,22 +518,6 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
             return false;
     }
 
-    public float Bool2Float(bool v)
-    {
-        if (v)
-            return 1.0f;
-        else
-            return 0.0f;
-    }
-
-    bool Float2Bool(float v)
-    {
-        if (v == 0.0f)
-            return false;
-        else
-            return true;
-    }
-
     public void BeginLeftColumn(IAudioEffectPlugin plugin, ref bool enable, string title, List<string> switchParameters)
     {        
         GUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));                    // Begin section             
@@ -543,7 +528,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
                     {
                         foreach (string switchParameter in switchParameters)
                         {
-                            plugin.SetFloatParameter(switchParameter, Bool2Float(enable));
+                            plugin.SetFloatParameter(switchParameter, CommonFunctions.Bool2Float(enable));
                         }
                     }
                     EditorGUI.BeginDisabledGroup(!enable); // Begin DisabledGroup 
@@ -569,7 +554,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
                     {
                         foreach (string switchParameter in switchParameters)
                         {
-                            plugin.SetFloatParameter(switchParameter, Bool2Float(enable));
+                            plugin.SetFloatParameter(switchParameter, CommonFunctions.Bool2Float(enable));
                         }
                     }
                     EditorGUI.BeginDisabledGroup(!enable);      // Begin Disabled if right ear is switched off

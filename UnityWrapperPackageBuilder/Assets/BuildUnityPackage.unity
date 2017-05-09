@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44659364, g: 0.4964301, b: 0.5748256, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641252, b: 0.574817, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -352,9 +352,6 @@ GameObject:
   - component: {fileID: 244518583}
   - component: {fileID: 244518585}
   - component: {fileID: 244518584}
-  - component: {fileID: 244518586}
-  - component: {fileID: 244518587}
-  - component: {fileID: 244518588}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -441,8 +438,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0b0b66fe32e6446a7e3cb6e903d1b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HRTFFileName: Assets/3DTuneIn/3DTIData/HRTF/IRC_1022_R_HRIR_128.3dti-hrtf
-  ILDFileName: Assets/3DTuneIn/3DTIData/ILD/default.3dti-ild
+  HRTFFileName: Assets/3DTuneIn/Data/HRTF/IRC_1022_R_HRIR_128.3dti-hrtf
+  ILDFileName: Assets/3DTuneIn/Data/ILD/default.3dti-ild
   customITDEnabled: 0
   listenerHeadRadius: 0.0875
   runtimeInterpolateHRTF: 1
@@ -511,39 +508,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hlMixer: {fileID: 24100000, guid: 02d04237d0308a14ea0c3b720849faae, type: 2}
---- !u!114 &244518586
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 244518577}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cb5fe59c67d5474f88ca96fe04cdcca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &244518587
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 244518577}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f375fae467806c846a54d4ef189cecbc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &244518588
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 244518577}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a70e5d4a03755e4c9149e75747c809b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  PARAM_BANDS_DB_LEFT:
+  - -22
+  - -22
+  - -27
+  - -30
+  - -37
+  - -40
+  - -40
+  - -40
+  - -40
+  PARAM_BANDS_DB_RIGHT:
+  - -22
+  - -22
+  - -27
+  - -30
+  - -37
+  - -40
+  - -40
+  - -40
+  - -40
+  PARAM_LEFT_EQ_ON: 1
+  PARAM_RIGHT_EQ_ON: 1
+  PARAM_LEFT_COMPRESSOR_ON: 0
+  PARAM_RIGHT_COMPRESSOR_ON: 0
+  PARAM_COMPRESSOR_FIRST: 0
+  PARAM_COMP_LEFT_RATIO: 1
+  PARAM_COMP_LEFT_THRESHOLD: 0
+  PARAM_COMP_RIGHT_RATIO: 1
+  PARAM_COMP_RIGHT_THRESHOLD: 0
+  PARAM_COMP_LEFT_ATTACK: 20
+  PARAM_COMP_LEFT_RELEASE: 100
+  PARAM_COMP_RIGHT_ATTACK: 20
+  PARAM_COMP_RIGHT_RELEASE: 100
 --- !u!1 &585364504
 GameObject:
   m_ObjectHideFlags: 0
