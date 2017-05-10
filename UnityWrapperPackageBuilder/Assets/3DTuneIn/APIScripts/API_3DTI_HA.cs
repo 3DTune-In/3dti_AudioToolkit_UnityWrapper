@@ -414,23 +414,23 @@ public class API_3DTI_HA : MonoBehaviour
     /// <param name="ear"></param>
     /// <param name="earLossList (dB[])"></param>
     /// <returns></returns>
-    public bool SetEQFromFig6(T_ear ear, List<float>earLossList, out List<float>gains)
+    public bool SetEQFromFig6(T_ear ear, T_LevelsList earLossInput, out T_LevelsList calculatedGains)
     {
         // Both ears
         if (ear == T_ear.BOTH)
         {
-            if (!SetEQFromFig6(T_ear.LEFT, earLossList, out gains))
+            if (!SetEQFromFig6(T_ear.LEFT, earLossInput, out calculatedGains))
                 return false;
-            return SetEQFromFig6(T_ear.RIGHT, earLossList, out gains);
+            return SetEQFromFig6(T_ear.RIGHT, earLossInput, out calculatedGains);
         }
 
         // Init gains
-        gains = new List<float>();        
+        calculatedGains = new T_LevelsList(); 
         for (int band = 0; band < FIG6_NUMBANDS; band++)
         {
             for (int level = 0; level < NUM_EQ_CURVES; level++)
             {
-                gains.Add(0.0f);                
+                calculatedGains.Add(0.0f);                
             }
         }
 
@@ -443,12 +443,12 @@ public class API_3DTI_HA : MonoBehaviour
         for (int bandIndex = 0; bandIndex < FIG6_NUMBANDS; bandIndex++)
         {
             float gain0, gain1, gain2;
-            if (!SetEQBandFromFig6(ear, bandIndex, earLossList[bandIndex], out gain0, out gain1, out gain2))
+            if (!SetEQBandFromFig6(ear, bandIndex, earLossInput[bandIndex], out gain0, out gain1, out gain2))
                 return false;
 
-            gains[bandIndex * NUM_EQ_CURVES] = gain0;
-            gains[bandIndex * NUM_EQ_CURVES + 1] = gain1;
-            gains[bandIndex * NUM_EQ_CURVES + 2] = gain2;
+            calculatedGains[bandIndex * NUM_EQ_CURVES] = gain0;
+            calculatedGains[bandIndex * NUM_EQ_CURVES + 1] = gain1;
+            calculatedGains[bandIndex * NUM_EQ_CURVES + 2] = gain2;
         }
 
         return true;

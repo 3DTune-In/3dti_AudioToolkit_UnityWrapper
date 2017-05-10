@@ -1,4 +1,6 @@
-﻿
+﻿using System.Collections.Generic;       // List
+using System.Collections.ObjectModel;   // ReadOnlyCollection
+
 namespace API_3DTI_Common
 {
     //////////////////////////////////////////////////////////////
@@ -12,6 +14,8 @@ namespace API_3DTI_Common
         BOTH = 2   // Both ears
                     //NONE = 3    // No ear
     };
+
+    public class T_LevelsList: List<float> { }
 
     //////////////////////////////////////////////////////////////
     // CLASS DEFINITIONS FOR INTERNAL USE OF THE WRAPPER

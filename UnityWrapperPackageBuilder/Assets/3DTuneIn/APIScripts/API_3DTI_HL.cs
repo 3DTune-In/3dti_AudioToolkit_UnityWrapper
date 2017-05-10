@@ -71,7 +71,7 @@ public class API_3DTI_HL : MonoBehaviour
             return SetEQPreset(T_ear.RIGHT, presetGains);
         }
 
-        List<float> gains = new List<float>(presetGains);
+        T_LevelsList gains = (T_LevelsList)new List<float>(presetGains); 
         return SetEQGains(ear, gains);
     }
 
@@ -210,7 +210,7 @@ public class API_3DTI_HL : MonoBehaviour
     /// <param name="ear ({EAR_LEFT, EAR_RIGHT})"></param>
     /// <param name="gains (dB[])"></param>
     /// <returns></returns>
-    public bool SetEQGains(T_ear ear, List<float> gains)
+    public bool SetEQGains(T_ear ear, T_LevelsList gains)
     {
         if (ear == T_ear.BOTH)
         {
