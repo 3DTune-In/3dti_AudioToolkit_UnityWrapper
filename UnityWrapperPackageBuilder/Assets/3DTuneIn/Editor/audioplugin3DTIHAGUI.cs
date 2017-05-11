@@ -104,8 +104,8 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
 
         initDone = true;
 
-        //return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG)
-        return false;     // DO NOT SHOW DEFAULT CONTROLS
+        return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG)
+        //return false;     // DO NOT SHOW DEFAULT CONTROLS
     }
 
 
@@ -202,35 +202,35 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
                 {
                     BeginCentralColumn("Level 0");
                     {
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 0], "DEQL0B0L", "125Hz:", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 1], "DEQL0B1L", "250Hz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 2], "DEQL0B2L", "500Hz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 3], "DEQL0B3L", "1kHz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 4], "DEQL0B4L", "2kHz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 5], "DEQL0B5L", "4kHz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 6], "DEQL0B6L", "8kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 0], "DEQL0B0L", "125Hz:", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 1], "DEQL0B1L", "250Hz",false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 2], "DEQL0B2L", "500Hz",false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 3], "DEQL0B3L", "1kHz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 4], "DEQL0B4L", "2kHz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 5], "DEQL0B5L", "4kHz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 6], "DEQL0B6L", "8kHz", false, "dB");
                     } EndCentralColumn();
                     
                     BeginCentralColumn("Level 1");
                     {
                         CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 0], "DEQL1B0L", "125Hz:", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 1], "DEQL1B1L", "250Hz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 2], "DEQL1B2L", "500Hz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 3], "DEQL1B3L", "1kHz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 4], "DEQL1B4L", "2kHz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 5], "DEQL1B5L", "4kHz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 6], "DEQL1B6L", "8kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 1], "DEQL1B1L", "250Hz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 2], "DEQL1B2L", "500Hz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 3], "DEQL1B3L", "1kHz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 4], "DEQL1B4L", "2kHz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 5], "DEQL1B5L", "4kHz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 6], "DEQL1B6L", "8kHz", false, "dB");
                     } EndCentralColumn();
 
                     BeginCentralColumn("Level 2");
                     {
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 0], "DEQL2B0L", "125Hz:", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 1], "DEQL2B1L", "250Hz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 2], "DEQL2B2L", "500Hz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 3], "DEQL2B3L", "1kHz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 4], "DEQL2B4L", "2kHz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 5], "DEQL2B5L", "4kHz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 6], "DEQL2B6L", "8kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 0], "DEQL2B0L", "125Hz:", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 1], "DEQL2B1L", "250Hz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 2], "DEQL2B2L", "500Hz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 3], "DEQL2B3L", "1kHz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 4], "DEQL2B4L", "2kHz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 5], "DEQL2B5L", "4kHz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 6], "DEQL2B6L", "8kHz", false, "dB");
                     } EndCentralColumn();
 
                 } GUILayout.EndHorizontal();
@@ -250,15 +250,15 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
 
                 BeginCentralColumn("Tone Control");
                 {
-                    float toneLow = HAAPI.tone[(int)API_3DTI_Common.T_ear.LEFT, (int)API_3DTI_HA.T_toneBand.LOW];
-                    float toneMid = HAAPI.tone[(int)API_3DTI_Common.T_ear.LEFT, (int)API_3DTI_HA.T_toneBand.MID];
-                    float toneHigh = HAAPI.tone[(int)API_3DTI_Common.T_ear.LEFT, (int)API_3DTI_HA.T_toneBand.HIGH];
+                    float toneLow = HAAPI.tone[(int)T_ear.LEFT, (int)API_3DTI_HA.T_HAToneBand.LOW];
+                    float toneMid = HAAPI.tone[(int)T_ear.LEFT, (int)API_3DTI_HA.T_HAToneBand.MID];
+                    float toneHigh = HAAPI.tone[(int)T_ear.LEFT, (int)API_3DTI_HA.T_HAToneBand.HIGH];
                     if (CreateAPIParameterSlider(plugin, ref toneLow, "Low", false, "dB", -10.0f, 10.0f))
-                        HAAPI.SetTone(API_3DTI_Common.T_ear.LEFT, API_3DTI_HA.T_toneBand.LOW, toneLow);
+                        HAAPI.SetTone(T_ear.LEFT, API_3DTI_HA.T_HAToneBand.LOW, toneLow);
                     if (CreateAPIParameterSlider(plugin, ref toneMid, "Mid", false, "dB", -10.0f, 10.0f))
-                        HAAPI.SetTone(API_3DTI_Common.T_ear.LEFT, API_3DTI_HA.T_toneBand.MID, toneMid);
+                        HAAPI.SetTone(T_ear.LEFT, API_3DTI_HA.T_HAToneBand.MID, toneMid);
                     if (CreateAPIParameterSlider(plugin, ref toneHigh, "High", false, "dB", -10.0f, 10.0f))
-                        HAAPI.SetTone(API_3DTI_Common.T_ear.LEFT, API_3DTI_HA.T_toneBand.HIGH, toneHigh);
+                        HAAPI.SetTone(T_ear.LEFT, API_3DTI_HA.T_HAToneBand.HIGH, toneHigh);
                 } EndCentralColumn();
 
                 BeginCentralColumn("Compression");
@@ -276,7 +276,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
                             GUILayout.Label("Applied offset: ", GUILayout.ExpandWidth(false));
                             float offsetL;
                             HAAPI.GetNormalizationOffset(API_3DTI_Common.T_ear.LEFT, out offsetL);
-                            string offsetStrL = offsetL.ToString();
+                            string offsetStrL = offsetL.ToString("F2");
                             GUILayout.TextArea(offsetStrL, GUILayout.ExpandWidth(false));
                             GUILayout.Label("dB", GUILayout.ExpandWidth(false));
                         }
@@ -295,35 +295,35 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
                 {
                     BeginCentralColumn("Level 0");
                     {
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 0], "DEQL0B0R", "125Hz:", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 1], "DEQL0B1R", "250Hz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 2], "DEQL0B2R", "500Hz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 3], "DEQL0B3R", "1kHz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 4], "DEQL0B4R", "2kHz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 5], "DEQL0B5R", "4kHz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 6], "DEQL0B6R", "8kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 0], "DEQL0B0R", "125Hz:", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 1], "DEQL0B1R", "250Hz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 2], "DEQL0B2R", "500Hz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 3], "DEQL0B3R", "1kHz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 4], "DEQL0B4R", "2kHz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 5], "DEQL0B5R", "4kHz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 6], "DEQL0B6R", "8kHz", false, "dB");
                     } EndCentralColumn();
 
                     BeginCentralColumn("Level 1");
                     {
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 0], "DEQL1B0R", "125Hz:", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 1], "DEQL1B1R", "250Hz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 2], "DEQL1B2R", "500Hz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 3], "DEQL1B3R", "1kHz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 4], "DEQL1B4R", "2kHz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 5], "DEQL1B5R", "4kHz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 6], "DEQL1B6R", "8kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 0], "DEQL1B0R", "125Hz:", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 1], "DEQL1B1R", "250Hz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 2], "DEQL1B2R", "500Hz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 3], "DEQL1B3R", "1kHz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 4], "DEQL1B4R", "2kHz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 5], "DEQL1B5R", "4kHz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 6], "DEQL1B6R", "8kHz", false, "dB");
                     } EndCentralColumn();
 
                     BeginCentralColumn("Level 2");
                     {
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 0], "DEQL2B0R", "125Hz:", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 1], "DEQL2B1R", "250Hz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 2], "DEQL2B2R", "500Hz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 3], "DEQL2B3R", "1kHz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 4], "DEQL2B4R", "2kHz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 5], "DEQL2B5R", "4kHz", true, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 6], "DEQL2B6R", "8kHz", true, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 0], "DEQL2B0R", "125Hz:", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 1], "DEQL2B1R", "250Hz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 2], "DEQL2B2R", "500Hz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 3], "DEQL2B3R", "1kHz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 4], "DEQL2B4R", "2kHz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 5], "DEQL2B5R", "4kHz", false, "dB");
+                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 6], "DEQL2B6R", "8kHz", false, "dB");
                     } EndCentralColumn();
 
                 } GUILayout.EndHorizontal();
@@ -343,9 +343,9 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
 
                 BeginCentralColumn("Tone Control");
                 {
-                    CreateAPIParameterSlider(plugin, ref HAAPI.tone[(int)API_3DTI_Common.T_ear.RIGHT, (int)API_3DTI_HA.T_toneBand.LOW], "Low", false, "dB", -10.0f, 10.0f);
-                    CreateAPIParameterSlider(plugin, ref HAAPI.tone[(int)API_3DTI_Common.T_ear.RIGHT, (int)API_3DTI_HA.T_toneBand.MID], "Mid", false, "dB", -10.0f, 10.0f);
-                    CreateAPIParameterSlider(plugin, ref HAAPI.tone[(int)API_3DTI_Common.T_ear.RIGHT, (int)API_3DTI_HA.T_toneBand.HIGH], "High", false, "dB", -10.0f, 10.0f);
+                    CreateAPIParameterSlider(plugin, ref HAAPI.tone[(int)API_3DTI_Common.T_ear.RIGHT, (int)API_3DTI_HA.T_HAToneBand.LOW], "Low", false, "dB", -10.0f, 10.0f);
+                    CreateAPIParameterSlider(plugin, ref HAAPI.tone[(int)API_3DTI_Common.T_ear.RIGHT, (int)API_3DTI_HA.T_HAToneBand.MID], "Mid", false, "dB", -10.0f, 10.0f);
+                    CreateAPIParameterSlider(plugin, ref HAAPI.tone[(int)API_3DTI_Common.T_ear.RIGHT, (int)API_3DTI_HA.T_HAToneBand.HIGH], "High", false, "dB", -10.0f, 10.0f);
                 }
                 EndCentralColumn();
 
@@ -389,7 +389,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
             CreateToggle(plugin,ref HAAPI.PARAM_NOISE_AFTER_ON, "Quantization After", "NOISEAFT");
 
             float FloatNBits = (float)HAAPI.PARAM_NOISE_NUMBITS;
-            CreateParameterSlider(plugin, ref FloatNBits, "NOISEBITS", "Quantization Number of Bits:", true, "");
+            CreateParameterSlider(plugin, ref FloatNBits, "NOISEBITS", "Quantization Number of Bits:", false, "");
             HAAPI.PARAM_NOISE_NUMBITS = (int)FloatNBits;
         }
         EndCentralColumn();
@@ -511,9 +511,13 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         else
             resolution = "F0";
 
-        // Create slider and set value        
-        if (CreateFloatSlider(ref APIparam, parameterText, resolution, units, minValue, maxValue))
+        // Create slider and set value    
+        float newValue = APIparam;
+        if (CreateFloatSlider(ref newValue, parameterText, resolution, units, minValue, maxValue))
+        {
+            APIparam = newValue;
             return true;
+        }
         else
             return false;
     }

@@ -37,7 +37,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     public bool modDistAtt = true;              // Used by GUI
     public bool modILD = true;                  // Used by GUI
     public bool modHRTF = true;                 // Used by GUI
-    public float magAnechoicAttenuation = -6.0f;    // Used by GUI    
+    public float magAnechoicAttenuation = -3.0f;    // Used by GUI    
     public float magSoundSpeed = 343.0f;            // Used by GUI
     public bool debugLog = false;                   // Used by GUI
 

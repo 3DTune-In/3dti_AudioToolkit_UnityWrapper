@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.Audio;
 using System.Collections.Generic;
-
+using API_3DTI_Common;
 
 public class TestHAAPI : MonoBehaviour {
 
@@ -49,14 +49,14 @@ public class TestHAAPI : MonoBehaviour {
         // Tone Test:
         if (adding)
         {
-            HAAPI.SetTone(API_3DTI_Common.T_ear.BOTH, API_3DTI_HA.T_toneBand.MID, tone);
+            HAAPI.SetTone(API_3DTI_Common.T_ear.BOTH, API_3DTI_HA.T_HAToneBand.MID, tone);
             tone += toneIncrement;
             if (tone >= 30.0f)
                 adding = false;
         }
         if (!adding)
         {
-            HAAPI.SetTone(API_3DTI_Common.T_ear.BOTH, API_3DTI_HA.T_toneBand.MID, tone);
+            HAAPI.SetTone(API_3DTI_Common.T_ear.BOTH, API_3DTI_HA.T_HAToneBand.MID, tone);
             tone -= toneIncrement;
             if (tone <= -30.0f)
                 adding = true;
@@ -88,8 +88,8 @@ public class TestHAAPI : MonoBehaviour {
 
     public void RunFig6Test()
     {
-        List<float> earLossList = new List<float>();
-        List<float> gains;
+        T_LevelsList earLossList = (T_LevelsList)new List<float>();
+        T_LevelsList gains;
         earLossList.Add(0.0f);
         earLossList.Add(30.0f);
         earLossList.Add(0.0f);
@@ -115,8 +115,8 @@ public class TestHAAPI : MonoBehaviour {
 
     public void RunFig6TestSevere()
     {
-        List<float> earLossList = new List<float>();
-        List<float> gains;        
+        T_LevelsList earLossList = (T_LevelsList)new List<float>();
+        T_LevelsList gains;        
         earLossList.Add(47.0f);
         earLossList.Add(52.0f);
         earLossList.Add(55.0f);
