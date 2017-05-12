@@ -27,6 +27,8 @@ public class API_3DTI_HL : MonoBehaviour
     public static readonly ReadOnlyCollection<float> EQ_PRESET_PLAIN = new ReadOnlyCollection<float>(new[] { 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f });
     public enum T_HLEffect { EFFECT_EQ = 0, EFFECT_COMPRESSOR = 1, EFFECT_HEARINGLOSS = 2 };
     public enum T_HLProcessChain { PROCESS_EQ_FIRST = 0, PROCESS_COMPRESSOR_FIRST = 1 };
+    public enum T_HLEQBand { HZ_62 =0, HZ_125 =1, HZ_250 =2, HZ_500 = 3, HZ_1K = 4, HZ_2K = 5, HZ_4K = 6, HZ_8K =7, HZ_16K =8 };
+    public const int NUM_EQ_BANDS = 9;
 
     // Internal constants
     const int DEFAULT_COMPRESSOR_RATIO = 1;

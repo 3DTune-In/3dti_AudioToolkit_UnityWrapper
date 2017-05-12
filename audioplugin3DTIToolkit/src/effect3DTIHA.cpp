@@ -448,12 +448,12 @@ namespace HASimulation3DTI
 			if (ear == T_ear::LEFT)
 			{				
 				oldIncrement = data->toneLeft[toneband];
-				currentValue = data->HA.GetDynamicEqualizer()->GetLevelBandGain_dB(level, eqband, true);
+				currentValue = data->HA.GetLeftDynamicEqualizer()->GetLevelBandGain_dB(level, eqband);
 			}
 			else
 			{
 				oldIncrement = data->toneRight[toneband];
-				currentValue = data->HA.GetDynamicEqualizer()->GetLevelBandGain_dB(level, eqband, false);
+				currentValue = data->HA.GetRightDynamicEqualizer()->GetLevelBandGain_dB(level, eqband);
 			}
 
 			// Apply old increment to current value
@@ -461,9 +461,9 @@ namespace HASimulation3DTI
 
 			// Set band gain with increment
 			if (ear == T_ear::LEFT)
-				data->HA.GetDynamicEqualizer()->SetLevelBandGain_dB(level, eqband, currentValue + newIncrement, true);
+				data->HA.GetLeftDynamicEqualizer()->SetLevelBandGain_dB(level, eqband, currentValue + newIncrement);
 			else
-				data->HA.GetDynamicEqualizer()->SetLevelBandGain_dB(level, eqband, currentValue + newIncrement, false);
+				data->HA.GetRightDynamicEqualizer()->SetLevelBandGain_dB(level, eqband, currentValue + newIncrement);
 		}
 	}
 
@@ -565,14 +565,16 @@ namespace HASimulation3DTI
 		effectdata->HA.addNoiseBefore = FromFloatToBool(DEFAULT_NOISEBEFORE); // TO DO: writelog
 		effectdata->HA.addNoiseAfter = FromFloatToBool(DEFAULT_NOISEAFTER); // TO DO: writelog
 		effectdata->HA.noiseNumBits = DEFAULT_NOISENUMBITS;		// TO DO: writelog
-		effectdata->HA.GetDynamicEqualizer()->levelsInterpolation = DEFAULT_LEVELSINTERPOLATION;	// TO DO: writelog
+		effectdata->HA.GetLeftDynamicEqualizer()->SetLevelsInterpolation(DEFAULT_LEVELSINTERPOLATION);	// TO DO: writelog
+		effectdata->HA.GetRightDynamicEqualizer()->SetLevelsInterpolation(DEFAULT_LEVELSINTERPOLATION);	// TO DO: writelog
 		//effectdata->HA.GetDynamicEqualizer()->EnvL.SetAttackTime(DEFAULT_ATTACKRELEASE);	// TO DO: writelog
 		//effectdata->HA.GetDynamicEqualizer()->EnvL.SetReleaseTime(DEFAULT_ATTACKRELEASE);	// TO DO: writelog
 		//effectdata->HA.GetDynamicEqualizer()->EnvR.SetAttackTime(DEFAULT_ATTACKRELEASE);	// TO DO: writelog
 		//effectdata->HA.GetDynamicEqualizer()->EnvR.SetReleaseTime(DEFAULT_ATTACKRELEASE);	// TO DO: writelog
-		effectdata->HA.GetDynamicEqualizer()->attackReleaseL_ms = DEFAULT_ATTACKRELEASE;
-		effectdata->HA.GetDynamicEqualizer()->attackReleaseR_ms = DEFAULT_ATTACKRELEASE;
-		effectdata->HA.GetDynamicEqualizer()->SetCompressionPercentage(DEFAULT_COMPRESSION_PERCENTAGE, T_ear::BOTH);
+		effectdata->HA.GetLeftDynamicEqualizer()->SetAttackRelease_ms(DEFAULT_ATTACKRELEASE);
+		effectdata->HA.GetRightDynamicEqualizer()->SetAttackRelease_ms(DEFAULT_ATTACKRELEASE);
+		effectdata->HA.GetLeftDynamicEqualizer()->SetCompressionPercentage(DEFAULT_COMPRESSION_PERCENTAGE);
+		effectdata->HA.GetRightDynamicEqualizer()->SetCompressionPercentage(DEFAULT_COMPRESSION_PERCENTAGE);
 
 		// Setup band gains (TO DO: writelog)
 		for (int level = 0; level < DEFAULT_NUMLEVELS; level++)
@@ -593,8 +595,10 @@ namespace HASimulation3DTI
 		effectdata->HA.SetLevelThreshold(2, DEFAULT_LEVELTHRESHOLD_2, EAR_RIGHT);	
 
 		// New setup parameters
-		effectdata->HA.GetDynamicEqualizer()->SetMaxGain_dB(MAX_BANDGAINDB);
-		effectdata->HA.GetDynamicEqualizer()->SetMinGain_dB(MIN_BANDGAINDB);		
+		effectdata->HA.GetLeftDynamicEqualizer()->SetMaxGain_dB(MAX_BANDGAINDB);
+		effectdata->HA.GetLeftDynamicEqualizer()->SetMinGain_dB(MIN_BANDGAINDB);		
+		effectdata->HA.GetRightDynamicEqualizer()->SetMaxGain_dB(MAX_BANDGAINDB);
+		effectdata->HA.GetRightDynamicEqualizer()->SetMinGain_dB(MIN_BANDGAINDB);
 
 		// Setup limiter
 		// FIX THIS:
@@ -681,7 +685,8 @@ namespace HASimulation3DTI
 
 			// Dynamic EQ
 			case PARAM_DYNAMICEQ_INTERPOLATION_ON:				
-				data->HA.GetDynamicEqualizer()->levelsInterpolation = FromFloatToBool(value);	
+				data->HA.GetLeftDynamicEqualizer()->SetLevelsInterpolation(FromFloatToBool(value));	
+				data->HA.GetRightDynamicEqualizer()->SetLevelsInterpolation(FromFloatToBool(value));
 				WriteLog(state, "SET PARAMETER: Levels interpolation in dynamic equalizer set to ", FromBoolToOnOffStr(FromFloatToBool(value)));
 				break;
 			case PARAM_DYNAMICEQ_LEVELTHRESHOLD_0_LEFT_DBFS:	
@@ -753,13 +758,13 @@ namespace HASimulation3DTI
 			case PARAM_DYNAMICEQ_ATTACKRELEASE_LEFT_MS:			
 				//data->HA.GetDynamicEqualizer()->EnvL.SetAttackTime(value); 
 				//data->HA.GetDynamicEqualizer()->EnvL.SetReleaseTime(value);
-				data->HA.GetDynamicEqualizer()->attackReleaseL_ms = value;
+				data->HA.GetLeftDynamicEqualizer()->SetAttackRelease_ms(value);
 				WriteLog(state, "SET PARAMETER: Attack/Release time for Left channel = ", value);
 				break;
 			case PARAM_DYNAMICEQ_ATTACKRELEASE_RIGHT_MS:		
 				//data->HA.GetDynamicEqualizer()->EnvR.SetAttackTime(value);
 				//data->HA.GetDynamicEqualizer()->EnvR.SetReleaseTime(value);
-				data->HA.GetDynamicEqualizer()->attackReleaseR_ms = value;
+				data->HA.GetRightDynamicEqualizer()->SetAttackRelease_ms(value);
 				WriteLog(state, "SET PARAMETER: Attack/Release time for Right channel = ", value);
 				break;
 
@@ -779,11 +784,11 @@ namespace HASimulation3DTI
 
 			// Simplified controls
 			case PARAM_COMPRESSION_PERCENTAGE_LEFT: 
-				data->HA.GetDynamicEqualizer()->SetCompressionPercentage(value, LEFT); 
+				data->HA.GetLeftDynamicEqualizer()->SetCompressionPercentage(value); 
 				WriteLog(state, "SET PARAMETER: Compression amount for Left channel = ", value);
 				break;
 			case PARAM_COMPRESSION_PERCENTAGE_RIGHT: 
-				data->HA.GetDynamicEqualizer()->SetCompressionPercentage(value, RIGHT); 
+				data->HA.GetRightDynamicEqualizer()->SetCompressionPercentage(value); 
 				WriteLog(state, "SET PARAMETER: Compression amount for Right channel = ", value);
 				//data->haReady = true;
 				//WriteLog(state, "Hearing Aid Simulation is ready to Process!", "");
@@ -962,11 +967,11 @@ namespace HASimulation3DTI
 					break;
 
 				case PARAM_NORMALIZATION_LEFT_GET:
-					*value = data->HA.GetDynamicEqualizer()->GetOveralOffset_dB(LEFT);
+					*value = data->HA.GetLeftDynamicEqualizer()->GetOveralOffset_dB();
 					break;
 
 				case PARAM_NORMALIZATION_RIGHT_GET:
-					*value = data->HA.GetDynamicEqualizer()->GetOveralOffset_dB(RIGHT);
+					*value = data->HA.GetRightDynamicEqualizer()->GetOveralOffset_dB();
 					break;
 
 				default:
@@ -1017,7 +1022,7 @@ namespace HASimulation3DTI
 		}
 
 		// Process!!
-		CStereoBuffer<float> outStereoBuffer(length * outchannels);
+		CStereoBuffer<float> outStereoBuffer(length * outchannels);		
 		data->HA.Process(inStereoBuffer, outStereoBuffer, data->parameters[PARAM_PROCESS_LEFT_ON], data->parameters[PARAM_PROCESS_RIGHT_ON]);
 
 		// Limiter
