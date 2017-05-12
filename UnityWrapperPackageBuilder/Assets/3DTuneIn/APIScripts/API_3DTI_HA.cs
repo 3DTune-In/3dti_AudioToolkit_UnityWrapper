@@ -26,7 +26,7 @@ public class API_3DTI_HA : MonoBehaviour
     // Public type definitions
     public enum T_HAToneBand { LOW =0, MID =1, HIGH =2 };
     public enum T_HADynamicEQBand { HZ_125 =0, HZ_250 =1, HZ_500 =2, HZ_1K =3, HZ_2K =4, HZ_4K =5, HZ_8K =6};    
-    public enum T_HADynamicEQLevel { LEVEL_0_REF =0, LEVEL_1 =1, LEVEL_2 =2 };
+    public enum T_HADynamicEQLevel { LEVEL_0 =0, LEVEL_1 =1, LEVEL_2 =2 };
 
     // Public constant definitions
     public const int NUM_EQ_CURVES = 3;
@@ -35,13 +35,13 @@ public class API_3DTI_HA : MonoBehaviour
     //
 
     // Internal use constants
-    const float FIG6_THRESHOLD_0_DBSPL = 65.0f;
-    const float FIG6_THRESHOLD_1_DBSPL = 40.0f;    
+    const float FIG6_THRESHOLD_0_DBSPL = 40.0f; // TO DO: consistent numbering
+    const float FIG6_THRESHOLD_1_DBSPL = 65.0f; // TO DO: consistent numbering
     const float FIG6_THRESHOLD_2_DBSPL = 95.0f;    
     const float DBSPL_FOR_0_DBFS = 100.0f;
 
     // Internal use variables
-    public float [,] tone = new float[2, 3] { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } };    // Tone values for each EAR and each tone BAND
+    //public float [,] tone = new float[2, 3] { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } };    // Tone values for each EAR and each tone BAND
 
     // Internal parameters for consistency with GUI
     public bool PARAM_PROCESS_LEFT_ON = false;
@@ -73,6 +73,13 @@ public class API_3DTI_HA : MonoBehaviour
     public float PARAM_NORMALIZATION_DBS_LEFT = 20.0f;
     public bool PARAM_NORMALIZATION_SET_ON_RIGHT = false;
     public float PARAM_NORMALIZATION_DBS_RIGHT = 20.0f;
+    // Tone control
+    public float PARAM_TONE_LOW_LEFT = 0.0f;
+    public float PARAM_TONE_MID_LEFT = 0.0f;
+    public float PARAM_TONE_HIGH_LEFT = 0.0f;
+    public float PARAM_TONE_LOW_RIGHT = 0.0f;
+    public float PARAM_TONE_MID_RIGHT = 0.0f;
+    public float PARAM_TONE_HIGH_RIGHT = 0.0f;
     // Debug log
     public bool PARAM_DEBUG_LOG = false;    
 
@@ -215,7 +222,7 @@ public class API_3DTI_HA : MonoBehaviour
     /// <param name="value"></param>
     /// <returns></returns>
     public bool SwitchHAOnOff(T_ear ear, bool value)
-    {        
+    {              
         return HASwitch(ear, "HA3DTI_Process_", value, ref PARAM_PROCESS_LEFT_ON, ref PARAM_PROCESS_RIGHT_ON);
     }
 
@@ -288,26 +295,39 @@ public class API_3DTI_HA : MonoBehaviour
             return SetTone(T_ear.RIGHT, toneband, value);
         }
 
+        string paramName = "HA3DTI_Tone_";
+        string paramSufix;
+        if (ear == T_ear.LEFT)
+            paramSufix = "Left";
+        else
+            paramSufix = "Right";
+
         switch (toneband) 
         {
             case T_HAToneBand.LOW:
-                if (!AddToHABand(ear, T_HADynamicEQBand.HZ_125, T_HAToneBand.LOW, value)) return false;
-                if (!AddToHABand(ear, T_HADynamicEQBand.HZ_250, T_HAToneBand.LOW, value)) return false;
-                if (!AddToHABand(ear, T_HADynamicEQBand.HZ_500, T_HAToneBand.LOW, value)) return false;
+                paramName += "Low_" + paramSufix;
+                if (!HASetFloat(ear, paramName, value, ref PARAM_TONE_LOW_LEFT, ref PARAM_TONE_LOW_RIGHT)) return false;
+                //if (!AddToHABand(ear, T_HADynamicEQBand.HZ_125, T_HAToneBand.LOW, value)) return false;
+                //if (!AddToHABand(ear, T_HADynamicEQBand.HZ_250, T_HAToneBand.LOW, value)) return false;
+                //if (!AddToHABand(ear, T_HADynamicEQBand.HZ_500, T_HAToneBand.LOW, value)) return false;
                 break;                                           
-            case T_HAToneBand.MID:                                 
-                if (!AddToHABand(ear, T_HADynamicEQBand.HZ_1K, T_HAToneBand.MID, value)) return false;
-                if (!AddToHABand(ear, T_HADynamicEQBand.HZ_2K, T_HAToneBand.MID, value)) return false;
+            case T_HAToneBand.MID:
+                paramName += "Mid_" + paramSufix;
+                if (!HASetFloat(ear, paramName, value, ref PARAM_TONE_MID_LEFT, ref PARAM_TONE_MID_RIGHT)) return false;
+                //if (!AddToHABand(ear, T_HADynamicEQBand.HZ_1K, T_HAToneBand.MID, value)) return false;
+                //if (!AddToHABand(ear, T_HADynamicEQBand.HZ_2K, T_HAToneBand.MID, value)) return false;
                 break;
-            case T_HAToneBand.HIGH:                
-                if (!AddToHABand(ear, T_HADynamicEQBand.HZ_4K, T_HAToneBand.HIGH, value)) return false;
-                if (!AddToHABand(ear, T_HADynamicEQBand.HZ_8K, T_HAToneBand.HIGH, value)) return false;
+            case T_HAToneBand.HIGH:
+                paramName += "High_" + paramSufix;
+                if (!HASetFloat(ear, paramName, value, ref PARAM_TONE_HIGH_LEFT, ref PARAM_TONE_HIGH_RIGHT)) return false;
+                //if (!AddToHABand(ear, T_HADynamicEQBand.HZ_4K, T_HAToneBand.HIGH, value)) return false;
+                //if (!AddToHABand(ear, T_HADynamicEQBand.HZ_8K, T_HAToneBand.HIGH, value)) return false;
                 break;
             default:
                 return false;                
         }
 
-        tone[(int)ear, (int)toneband] = value;
+        //tone[(int)ear, (int)toneband] = value;
 
         return true;
     }
@@ -404,7 +424,7 @@ public class API_3DTI_HA : MonoBehaviour
     /// <param name="ear"></param>
     /// <param name="earLossList (dB[])"></param>
     /// <returns></returns>
-    public bool SetEQFromFig6(T_ear ear, T_LevelsList earLossInput, out T_LevelsList calculatedGains)
+    public bool SetEQFromFig6(T_ear ear, List<float> earLossInput, out List<float> calculatedGains)
     {
         // Both ears
         if (ear == T_ear.BOTH)
@@ -415,7 +435,7 @@ public class API_3DTI_HA : MonoBehaviour
         }
 
         // Init gains
-        calculatedGains = new T_LevelsList(); 
+        calculatedGains = new List<float>(); 
         for (int band = 0; band < NUM_EQ_BANDS; band++)
         {
             for (int level = 0; level < NUM_EQ_CURVES; level++)
@@ -425,8 +445,8 @@ public class API_3DTI_HA : MonoBehaviour
         }
 
         // Set level thresholds        
-        SetDynamicEQLevelThreshold(ear, T_HADynamicEQLevel.LEVEL_0_REF, FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS);  
-        SetDynamicEQLevelThreshold(ear, T_HADynamicEQLevel.LEVEL_1, FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS);  
+        SetDynamicEQLevelThreshold(ear, T_HADynamicEQLevel.LEVEL_1, FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS);  // TO DO: consistent numbering
+        SetDynamicEQLevelThreshold(ear, T_HADynamicEQLevel.LEVEL_0, FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS);  // TO DO: consistent numbering
         SetDynamicEQLevelThreshold(ear, T_HADynamicEQLevel.LEVEL_2, FIG6_THRESHOLD_2_DBSPL - DBSPL_FOR_0_DBFS);
 
         // Set band gains        
@@ -512,7 +532,7 @@ public class API_3DTI_HA : MonoBehaviour
 
         // Set bands
         if (!SetDynamicEQBandLevelGain(ear, bandIndex, T_HADynamicEQLevel.LEVEL_1, gain0)) return false; // TO DO: coherent numbering. Curve 0 is now the reference for compression percentage
-        if (!SetDynamicEQBandLevelGain(ear, bandIndex, T_HADynamicEQLevel.LEVEL_0_REF, gain1)) return false; // TO DO: coherent numbering. Curve 0 is now the reference for compression percentage
+        if (!SetDynamicEQBandLevelGain(ear, bandIndex, T_HADynamicEQLevel.LEVEL_0, gain1)) return false; // TO DO: coherent numbering. Curve 0 is now the reference for compression percentage
         if (!SetDynamicEQBandLevelGain(ear, bandIndex, T_HADynamicEQLevel.LEVEL_2, gain2)) return false;
 
         return true;
@@ -551,62 +571,62 @@ public class API_3DTI_HA : MonoBehaviour
         return haMixer.SetFloat(paramName, value);
     }
 
-    /// <summary>
-    /// Method for adding a (positive/negative) increment to a band in a curve of the dynamic eq
-    /// The actual increment applied is newIncrement - oldIncrement.
-    /// </summary>
-    /// <param name="ear"></param>    
-    /// <param name="eqband"></param>
-    /// <param name="oldIncrement"></param>
-    /// <param name="newIncrement"></param>
-    /// <returns></returns>
-    public bool AddToHABand(T_ear ear, T_HADynamicEQBand eqband, T_HAToneBand toneBand, float newIncrement)
-    {        
-        // Both ears
-        if (ear == T_ear.BOTH)
-        {
-            if (!AddToHABand(T_ear.LEFT, eqband, toneBand, newIncrement)) return false;
-            return AddToHABand(T_ear.RIGHT, eqband, toneBand, newIncrement);
-        }
+    ///// <summary>
+    ///// Method for adding a (positive/negative) increment to a band in a curve of the dynamic eq
+    ///// The actual increment applied is newIncrement - oldIncrement.
+    ///// </summary>
+    ///// <param name="ear"></param>    
+    ///// <param name="eqband"></param>
+    ///// <param name="oldIncrement"></param>
+    ///// <param name="newIncrement"></param>
+    ///// <returns></returns>
+    //public bool AddToHABand(T_ear ear, T_HADynamicEQBand eqband, T_HAToneBand toneBand, float newIncrement)
+    //{        
+    //    // Both ears
+    //    if (ear == T_ear.BOTH)
+    //    {
+    //        if (!AddToHABand(T_ear.LEFT, eqband, toneBand, newIncrement)) return false;
+    //        return AddToHABand(T_ear.RIGHT, eqband, toneBand, newIncrement);
+    //    }
 
-        // Go through all dynamic eq levels        
-        foreach (T_HADynamicEQLevel eqlevel in T_HADynamicEQLevel.GetValues(typeof(T_HADynamicEQLevel)))
-        {
-            // Build exposed parameter name string 
-            string paramName = "HA3DTI_Gain_Level_" + ((int)eqlevel).ToString() + "_Band_" + ((int)eqband).ToString() + "_";
-            if (ear == T_ear.LEFT)
-            {
-                paramName += "Left";
-            }
-            else
-            {
-                paramName += "Right";
-            }
+    //    // Go through all dynamic eq levels        
+    //    foreach (T_HADynamicEQLevel eqlevel in T_HADynamicEQLevel.GetValues(typeof(T_HADynamicEQLevel)))
+    //    {
+    //        // Build exposed parameter name string 
+    //        string paramName = "HA3DTI_Gain_Level_" + ((int)eqlevel).ToString() + "_Band_" + ((int)eqband).ToString() + "_";
+    //        if (ear == T_ear.LEFT)
+    //        {
+    //            paramName += "Left";
+    //        }
+    //        else
+    //        {
+    //            paramName += "Right";
+    //        }
 
-            // Get current value, considering oldIncrement
-            float currentValue;
-            float oldIncrement = tone[(int)ear, (int)toneBand];
-            if (!haMixer.GetFloat(paramName, out currentValue)) return false;
-            currentValue = currentValue - oldIncrement;
+    //        // Get current value, considering oldIncrement
+    //        float currentValue;
+    //        float oldIncrement = tone[(int)ear, (int)toneBand];
+    //        if (!haMixer.GetFloat(paramName, out currentValue)) return false;
+    //        currentValue = currentValue - oldIncrement;
 
-            // Set new value, with newIncrement    
-            //if (!haMixer.SetFloat(paramName, currentValue + newIncrement))
-            //    return false;
+    //        // Set new value, with newIncrement    
+    //        //if (!haMixer.SetFloat(paramName, currentValue + newIncrement))
+    //        //    return false;
 
-            //// Set internal API parameters
-            //if (ear == T_ear.LEFT)
-            //{
-            //    PARAM_DYNAMICEQ_GAINS_LEFT[level, band] = currentValue + newIncrement;
-            //}
-            //else
-            //{
-            //    PARAM_DYNAMICEQ_GAINS_RIGHT[level, band] = currentValue + newIncrement;
-            //}
-            if (!SetDynamicEQBandLevelGain(ear, eqband, eqlevel, currentValue + newIncrement))
-                return false;
-        }
-        return true;
-    }
+    //        //// Set internal API parameters
+    //        //if (ear == T_ear.LEFT)
+    //        //{
+    //        //    PARAM_DYNAMICEQ_GAINS_LEFT[level, band] = currentValue + newIncrement;
+    //        //}
+    //        //else
+    //        //{
+    //        //    PARAM_DYNAMICEQ_GAINS_RIGHT[level, band] = currentValue + newIncrement;
+    //        //}
+    //        if (!SetDynamicEQBandLevelGain(ear, eqband, eqlevel, currentValue + newIncrement))
+    //            return false;
+    //    }
+    //    return true;
+    //}
 
     /// <summary>
     /// Generic Switch method

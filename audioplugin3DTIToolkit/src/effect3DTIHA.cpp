@@ -45,6 +45,10 @@ namespace HASimulation3DTI
 #define EAR_LEFT 1
 #define F_TRUE	1.0f
 #define F_FALSE	0.0f
+#define TONE_BANDS 3
+#define BAND_LOW 0
+#define BAND_MID 1
+#define BAND_HIGH 2
 
 // Default values 
 #define DEFAULT_LEVELSINTERPOLATION	F_TRUE
@@ -93,6 +97,8 @@ namespace HASimulation3DTI
 #define MAX_COMPRESSION_PERCENTAGE	120.0f
 #define MIN_NORMALIZATION	1.0f
 #define MAX_NORMALIZATION	40.0f
+#define MIN_TONECONTROL		-10.0f
+#define MAX_TONECONTROL		10.0f
 
 // Fixed values
 #define HA_LIMITER_THRESHOLD	-30.0f
@@ -188,6 +194,14 @@ namespace HASimulation3DTI
 		PARAM_NORMALIZATION_RIGHT_DBS,
 		PARAM_NORMALIZATION_RIGHT_GET,
 
+		// Tone control
+		PARAM_TONE_LOW_LEFT,
+		PARAM_TONE_MID_LEFT,
+		PARAM_TONE_HIGH_LEFT,
+		PARAM_TONE_LOW_RIGHT,
+		PARAM_TONE_MID_RIGHT,
+		PARAM_TONE_HIGH_RIGHT,
+
 		// Debug log
 		//PARAM_DEBUG_LOG,
 
@@ -219,6 +233,10 @@ namespace HASimulation3DTI
 		// Limiter
 		CDynamicCompressorStereo limiter;
 		bool limiterNotInitialized;
+
+		// Tone control
+		float toneLeft[TONE_BANDS] = { 0.0f, 0.0f, 0.0f };
+		float toneRight[TONE_BANDS] = { 0.0f, 0.0f, 0.0f };
 
 		float parameters[P_NUM];
 
@@ -361,6 +379,14 @@ namespace HASimulation3DTI
 		RegisterParameter(definition, "NORMDBR", "dB", MIN_NORMALIZATION, MAX_NORMALIZATION, DEFAULT_NORMALIZATION, 1.0f, 1.0f, PARAM_NORMALIZATION_RIGHT_DBS, "Amount of normalization (in dBs), Right");
 		RegisterParameter(definition, "NORMGR", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_NORMALIZATION_RIGHT_GET, "Is right normalization applying offset?");
 
+		// Tone control
+		RegisterParameter(definition, "TONLOL", "dB", MIN_TONECONTROL, MAX_TONECONTROL, 0.0f, 1.0f, 1.0f, PARAM_TONE_LOW_LEFT, "Left tone control for low band (dB)");
+		RegisterParameter(definition, "TONMIL", "dB", MIN_TONECONTROL, MAX_TONECONTROL, 0.0f, 1.0f, 1.0f, PARAM_TONE_MID_LEFT, "Left tone control for mid band (dB)");
+		RegisterParameter(definition, "TONHIL", "dB", MIN_TONECONTROL, MAX_TONECONTROL, 0.0f, 1.0f, 1.0f, PARAM_TONE_HIGH_LEFT, "Left tone control for high band (dB)");
+		RegisterParameter(definition, "TONLOR", "dB", MIN_TONECONTROL, MAX_TONECONTROL, 0.0f, 1.0f, 1.0f, PARAM_TONE_LOW_RIGHT, "Right tone control for low band (dB)");
+		RegisterParameter(definition, "TONMIR", "dB", MIN_TONECONTROL, MAX_TONECONTROL, 0.0f, 1.0f, 1.0f, PARAM_TONE_MID_RIGHT, "Right tone control for mid band (dB)");
+		RegisterParameter(definition, "TONHIR", "dB", MIN_TONECONTROL, MAX_TONECONTROL, 0.0f, 1.0f, 1.0f, PARAM_TONE_HIGH_RIGHT, "Right tone control for high band (dB)");
+
 		// Debug log
 		//RegisterParameter(definition, "DebugLogHA", "", 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, PARAM_DEBUG_LOG, "Generate debug log for HA");
 
@@ -405,6 +431,69 @@ namespace HASimulation3DTI
 			return "On";
 		else
 			return "Off";
+	}
+
+	/////////////////////////////////////////////////////////////////////
+
+	void AddToBand(UnityAudioEffectState* state, T_ear ear, int eqband, int toneband, float newIncrement)
+	{		
+		EffectData* data = state->GetEffectData<EffectData>();
+
+		// Go through all dynamic eq levels        
+		for (int level=0; level < DEFAULT_NUMLEVELS; level++)
+		{
+			// Get old increment and current value
+			float currentValue;
+			float oldIncrement;
+			if (ear == T_ear::LEFT)
+			{				
+				oldIncrement = data->toneLeft[toneband];
+				currentValue = data->HA.GetDynamicEqualizer()->GetLevelBandGain_dB(level, eqband, true);
+			}
+			else
+			{
+				oldIncrement = data->toneRight[toneband];
+				currentValue = data->HA.GetDynamicEqualizer()->GetLevelBandGain_dB(level, eqband, false);
+			}
+
+			// Apply old increment to current value
+			currentValue = currentValue - oldIncrement;
+
+			// Set band gain with increment
+			if (ear == T_ear::LEFT)
+				data->HA.GetDynamicEqualizer()->SetLevelBandGain_dB(level, eqband, currentValue + newIncrement, true);
+			else
+				data->HA.GetDynamicEqualizer()->SetLevelBandGain_dB(level, eqband, currentValue + newIncrement, false);
+		}
+	}
+
+	/////////////////////////////////////////////////////////////////////
+
+	void SetTone(UnityAudioEffectState* state, T_ear ear, int band, float value)
+	{
+		EffectData* data = state->GetEffectData<EffectData>();
+
+		switch (band)
+		{
+			case BAND_LOW:
+				AddToBand(state, ear, 0, band, value);
+				AddToBand(state, ear, 1, band, value);
+				AddToBand(state, ear, 2, band, value);
+				break;
+			case BAND_MID:
+				AddToBand(state, ear, 3, band, value);
+				AddToBand(state, ear, 4, band, value);
+				break;
+			case BAND_HIGH:
+				AddToBand(state, ear, 5, band, value);
+				AddToBand(state, ear, 6, band, value);
+				break;
+		}
+
+		if (ear == T_ear::LEFT)
+			data->toneLeft[band] = value;
+		else
+			data->toneRight[band] = value;
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -518,6 +607,13 @@ namespace HASimulation3DTI
 
 		// Setup normalization
 		effectdata->HA.DisableNormalization(BOTH);		
+
+		// Tone control
+		for (int i = 0; i < TONE_BANDS; i++)
+		{
+			effectdata->toneLeft[i] = 0.0f;
+			effectdata->toneRight[i] = 0.0f;
+		}
 
 		//// Configure Fig6
 		//effectdata->settingFig6Left = false;
@@ -740,6 +836,36 @@ namespace HASimulation3DTI
 
 			case PARAM_NORMALIZATION_RIGHT_GET:
 				WriteLog(state, "SET PARAMETER: WARNING! PARAM_NORMALIZATION_RIGHT_GET is read only", "");
+				break;
+
+			case PARAM_TONE_LOW_LEFT:
+				SetTone(state, T_ear::LEFT, BAND_LOW, value);
+				WriteLog(state, "SET PARAMETER: Low tone band Left set to (dB) ", value);
+				break;
+
+			case PARAM_TONE_MID_LEFT:
+				SetTone(state, T_ear::LEFT, BAND_MID, value);
+				WriteLog(state, "SET PARAMETER: Mid tone band Left set to (dB) ", value);
+				break;
+
+			case PARAM_TONE_HIGH_LEFT:
+				SetTone(state, T_ear::LEFT, BAND_HIGH, value);
+				WriteLog(state, "SET PARAMETER: HIgh tone band Left set to (dB) ", value);
+				break;
+
+			case PARAM_TONE_LOW_RIGHT:
+				SetTone(state, T_ear::RIGHT, BAND_LOW, value);
+				WriteLog(state, "SET PARAMETER: Low tone band Right set to (dB) ", value);
+				break;
+
+			case PARAM_TONE_MID_RIGHT:
+				SetTone(state, T_ear::RIGHT, BAND_MID, value);
+				WriteLog(state, "SET PARAMETER: Mid tone band Right set to (dB) ", value);
+				break;
+
+			case PARAM_TONE_HIGH_RIGHT:
+				SetTone(state, T_ear::RIGHT, BAND_HIGH, value);
+				WriteLog(state, "SET PARAMETER: High tone band Right set to (dB) ", value);
 				break;
 
 			//case PARAM_DEBUG_LOG:

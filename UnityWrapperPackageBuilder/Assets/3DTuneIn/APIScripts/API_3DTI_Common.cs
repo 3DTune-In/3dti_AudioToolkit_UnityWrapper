@@ -15,7 +15,7 @@ namespace API_3DTI_Common
                     //NONE = 3    // No ear
     };
 
-    public class T_LevelsList: List<float> { }
+    //public class T_LevelsList: List<float> { }
 
     //////////////////////////////////////////////////////////////
     // CLASS DEFINITIONS FOR INTERNAL USE OF THE WRAPPER

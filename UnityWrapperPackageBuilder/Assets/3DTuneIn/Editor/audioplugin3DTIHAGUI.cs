@@ -250,15 +250,18 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
 
                 BeginCentralColumn("Tone Control");
                 {
-                    float toneLow = HAAPI.tone[(int)T_ear.LEFT, (int)API_3DTI_HA.T_HAToneBand.LOW];
-                    float toneMid = HAAPI.tone[(int)T_ear.LEFT, (int)API_3DTI_HA.T_HAToneBand.MID];
-                    float toneHigh = HAAPI.tone[(int)T_ear.LEFT, (int)API_3DTI_HA.T_HAToneBand.HIGH];
-                    if (CreateAPIParameterSlider(plugin, ref toneLow, "Low", false, "dB", -10.0f, 10.0f))
-                        HAAPI.SetTone(T_ear.LEFT, API_3DTI_HA.T_HAToneBand.LOW, toneLow);
-                    if (CreateAPIParameterSlider(plugin, ref toneMid, "Mid", false, "dB", -10.0f, 10.0f))
-                        HAAPI.SetTone(T_ear.LEFT, API_3DTI_HA.T_HAToneBand.MID, toneMid);
-                    if (CreateAPIParameterSlider(plugin, ref toneHigh, "High", false, "dB", -10.0f, 10.0f))
-                        HAAPI.SetTone(T_ear.LEFT, API_3DTI_HA.T_HAToneBand.HIGH, toneHigh);
+                    //float toneLow = HAAPI.tone[(int)T_ear.LEFT, (int)API_3DTI_HA.T_HAToneBand.LOW];
+                    //float toneMid = HAAPI.tone[(int)T_ear.LEFT, (int)API_3DTI_HA.T_HAToneBand.MID];
+                    //float toneHigh = HAAPI.tone[(int)T_ear.LEFT, (int)API_3DTI_HA.T_HAToneBand.HIGH];
+                    //if (CreateAPIParameterSlider(plugin, ref toneLow, "Low", false, "dB", -10.0f, 10.0f))
+                    //    HAAPI.SetTone(T_ear.LEFT, API_3DTI_HA.T_HAToneBand.LOW, toneLow);
+                    //if (CreateAPIParameterSlider(plugin, ref toneMid, "Mid", false, "dB", -10.0f, 10.0f))
+                    //    HAAPI.SetTone(T_ear.LEFT, API_3DTI_HA.T_HAToneBand.MID, toneMid);
+                    //if (CreateAPIParameterSlider(plugin, ref toneHigh, "High", false, "dB", -10.0f, 10.0f))
+                    //    HAAPI.SetTone(T_ear.LEFT, API_3DTI_HA.T_HAToneBand.HIGH, toneHigh);
+                    CreateParameterSlider(plugin, ref HAAPI.PARAM_TONE_LOW_LEFT, "TONLOL", "Low", false, "dB");
+                    CreateParameterSlider(plugin, ref HAAPI.PARAM_TONE_MID_LEFT, "TONMIL", "Mid", false, "dB");
+                    CreateParameterSlider(plugin, ref HAAPI.PARAM_TONE_HIGH_LEFT, "TONHIL", "High", false, "dB");
                 } EndCentralColumn();
 
                 BeginCentralColumn("Compression");
@@ -343,9 +346,12 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
 
                 BeginCentralColumn("Tone Control");
                 {
-                    CreateAPIParameterSlider(plugin, ref HAAPI.tone[(int)API_3DTI_Common.T_ear.RIGHT, (int)API_3DTI_HA.T_HAToneBand.LOW], "Low", false, "dB", -10.0f, 10.0f);
-                    CreateAPIParameterSlider(plugin, ref HAAPI.tone[(int)API_3DTI_Common.T_ear.RIGHT, (int)API_3DTI_HA.T_HAToneBand.MID], "Mid", false, "dB", -10.0f, 10.0f);
-                    CreateAPIParameterSlider(plugin, ref HAAPI.tone[(int)API_3DTI_Common.T_ear.RIGHT, (int)API_3DTI_HA.T_HAToneBand.HIGH], "High", false, "dB", -10.0f, 10.0f);
+                    //CreateAPIParameterSlider(plugin, ref HAAPI.tone[(int)API_3DTI_Common.T_ear.RIGHT, (int)API_3DTI_HA.T_HAToneBand.LOW], "Low", false, "dB", -10.0f, 10.0f);
+                    //CreateAPIParameterSlider(plugin, ref HAAPI.tone[(int)API_3DTI_Common.T_ear.RIGHT, (int)API_3DTI_HA.T_HAToneBand.MID], "Mid", false, "dB", -10.0f, 10.0f);
+                    //CreateAPIParameterSlider(plugin, ref HAAPI.tone[(int)API_3DTI_Common.T_ear.RIGHT, (int)API_3DTI_HA.T_HAToneBand.HIGH], "High", false, "dB", -10.0f, 10.0f);
+                    CreateParameterSlider(plugin, ref HAAPI.PARAM_TONE_LOW_RIGHT, "TONLOR", "Low", false, "dB");
+                    CreateParameterSlider(plugin, ref HAAPI.PARAM_TONE_MID_RIGHT, "TONMIR", "Mid", false, "dB");
+                    CreateParameterSlider(plugin, ref HAAPI.PARAM_TONE_HIGH_RIGHT, "TONHIR", "High", false, "dB");
                 }
                 EndCentralColumn();
 

@@ -106,7 +106,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!82 &73463299
 AudioSource:
   m_ObjectHideFlags: 0
@@ -352,6 +352,7 @@ GameObject:
   - component: {fileID: 244518583}
   - component: {fileID: 244518585}
   - component: {fileID: 244518584}
+  - component: {fileID: 244518586}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -470,21 +471,21 @@ MonoBehaviour:
   haMixer: {fileID: 24100000, guid: 02d04237d0308a14ea0c3b720849faae, type: 2}
   PARAM_PROCESS_LEFT_ON: 1
   PARAM_PROCESS_RIGHT_ON: 1
-  PARAM_VOLUME_L_DB: 0
+  PARAM_VOLUME_L_DB: 0.080266945
   PARAM_VOLUME_R_DB: 0
   PARAM_EQ_LPFCUTOFF_HZ: 0
-  PARAM_EQ_HPFCUTOFF_HZ: 0
+  PARAM_EQ_HPFCUTOFF_HZ: 62.5
   PARAM_DYNAMICEQ_INTERPOLATION_ON: 1
   PARAM_DYNAMICEQ_LEVELTHRESHOLDS_LEFT_DBFS:
-  - 0
-  - 0
-  - 0
+  - -79.90643
+  - -80
+  - -80
   PARAM_DYNAMICEQ_LEVELTHRESHOLDS_RIGHT_DBFS:
   - 0
-  - 0
-  - 0
-  PARAM_DYNAMICEQ_ATTACKRELEASE_LEFT_MS: 303.67816
-  PARAM_DYNAMICEQ_ATTACKRELEASE_RIGHT_MS: 0
+  - -80
+  - -80
+  PARAM_DYNAMICEQ_ATTACKRELEASE_LEFT_MS: 2000
+  PARAM_DYNAMICEQ_ATTACKRELEASE_RIGHT_MS: 2000
   PARAM_NOISE_BEFORE_ON: 0
   PARAM_NOISE_AFTER_ON: 0
   PARAM_NOISE_NUMBITS: 24
@@ -495,6 +496,12 @@ MonoBehaviour:
   PARAM_NORMALIZATION_DBS_LEFT: 20
   PARAM_NORMALIZATION_SET_ON_RIGHT: 0
   PARAM_NORMALIZATION_DBS_RIGHT: 20
+  PARAM_TONE_LOW_LEFT: -0.11111131
+  PARAM_TONE_MID_LEFT: -0.16374265
+  PARAM_TONE_HIGH_LEFT: 0.13450299
+  PARAM_TONE_LOW_RIGHT: -0.081395656
+  PARAM_TONE_MID_RIGHT: -2.7565985
+  PARAM_TONE_HIGH_RIGHT: 0.13953452
   PARAM_DEBUG_LOG: 0
 --- !u!114 &244518585
 MonoBehaviour:
@@ -511,25 +518,25 @@ MonoBehaviour:
   GLOBAL_LEFT_ON: 0
   GLOBAL_RIGHT_ON: 0
   PARAM_BANDS_DB_LEFT:
-  - -22
-  - -22
-  - -27
-  - -30
-  - -37
-  - -40
-  - -40
-  - -40
-  - -40
+  - -47
+  - -47
+  - -52
+  - -55
+  - -62
+  - -65
+  - -65
+  - -65
+  - -65
   PARAM_BANDS_DB_RIGHT:
-  - -22
-  - -22
-  - -27
-  - -30
-  - -37
-  - -40
-  - -40
-  - -40
-  - -40
+  - -47
+  - -47
+  - -52
+  - -55
+  - -62
+  - -65
+  - -65
+  - -65
+  - -65
   PARAM_LEFT_EQ_ON: 1
   PARAM_RIGHT_EQ_ON: 1
   PARAM_LEFT_COMPRESSOR_ON: 0
@@ -543,6 +550,17 @@ MonoBehaviour:
   PARAM_COMP_LEFT_RELEASE: 100
   PARAM_COMP_RIGHT_ATTACK: 20
   PARAM_COMP_RIGHT_RELEASE: 100
+--- !u!114 &244518586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 244518577}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cb5fe59c67d5474f88ca96fe04cdcca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &585364504
 GameObject:
   m_ObjectHideFlags: 0
@@ -681,7 +699,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!82 &1582799888
 AudioSource:
   m_ObjectHideFlags: 0
