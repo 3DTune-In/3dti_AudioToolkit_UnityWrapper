@@ -154,6 +154,14 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     }
 
     /// <summary>
+    /// Action for HRTF resampling step input
+    /// </summary>
+    public void InputResamplingStep()
+    {
+        //Debug.Log("HRTF resampling step changed");
+    }
+
+    /// <summary>
     /// Action for slider Head Radius
     /// </summary>
     public void SliderHeadRadius()
@@ -285,15 +293,16 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             // HRTF interpolation
             BeginSubsection("HRTF Interpolation:");                        
             GUILayout.BeginHorizontal();                                              
-            bool run = CreateToggle(ref toolkit.runtimeInterpolateHRTF, "Runtime");
+            bool run = CreateToggle(ref toolkit.runtimeInterpolateHRTF, "Runtime interpolation");
             if (run)
                 toolkit.SetSourceInterpolation(toolkit.runtimeInterpolateHRTF);
             GUILayout.EndHorizontal();
+            CreateIntInput(ref toolkit.HRTFstep, "Resampling step", "º", InputResamplingStep);
             EndSubsection();
 
             // Mod enabler
             BeginSubsection("Modules enabler:");
-            if (CreateToggle(ref toolkit.modFarLPF, "Far LPF"))
+            if (CreateToggle(ref toolkit.modFarLPF, "Far distance LPF"))
                 toolkit.SetModFarLPF(toolkit.modFarLPF);
             if (CreateToggle(ref toolkit.modDistAtt, "Distance attenuation"))
                 toolkit.SetModDistanceAttenuation(toolkit.modDistAtt);
@@ -435,6 +444,35 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
         if (variable != previousVar)
             action();        
+    }
+
+    /// <summary>
+    /// Auxiliary function for creating a text input accepting integer variables with specific format
+    /// </summary>
+    /// <param name="variable"></param>
+    /// <param name="name"></param>
+    /// <param name="units"></param>
+    /// <param name="action"></param>
+    public void CreateIntInput(ref int variable, string name, string units, System.Action action)
+    {
+        SingleSpace();
+
+        GUILayout.BeginHorizontal();
+
+        GUILayout.Label(name);
+        string valueString = GUILayout.TextField(variable.ToString(), GUILayout.ExpandWidth(false));
+        GUILayout.Label(units, GUILayout.ExpandWidth(false));
+
+        GUILayout.EndHorizontal();
+
+        int newValue;
+        float previousVar = variable;
+        bool valid = int.TryParse(valueString, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out newValue);
+        if (valid)
+            variable = newValue;
+
+        if (variable != previousVar)
+            action();
     }
 
     /// <summary>
