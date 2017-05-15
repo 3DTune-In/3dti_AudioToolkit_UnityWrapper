@@ -28,11 +28,12 @@ public class API_3DTI_Spatializer : MonoBehaviour
     public float listenerHeadRadius = 0.0875f;  // Used by GUI    
 
     // SOURCE:
-    public bool runtimeInterpolateHRTF = true;  // Used by GUI
     int lastSourceID = 0;                       // Internal use for debug log
 
     // ADVANCED:
     public float scaleFactor = 1.0f;            // Used by GUI
+    public bool runtimeInterpolateHRTF = true;  // Used by GUI
+    public int HRTFstep = 15;                   // Used by GUI
     public bool modFarLPF = true;               // Used by GUI
     public bool modDistAtt = true;              // Used by GUI
     public bool modILD = true;                  // Used by GUI
@@ -73,6 +74,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     int SET_LIMITER_ON = 18;
     int GET_LIMITER_COMPRESSION = 19;
     int GET_IS_CORE_READY = 20;
+    int SET_HRTF_STEP = 21;
 
     // Hack for modifying one single AudioSource (TO DO: fix this)
     bool selectSource = false;
@@ -305,7 +307,8 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>        
     public bool SetupSource()
     {
-        return SetSourceInterpolation(runtimeInterpolateHRTF);
+        if (!SetSourceInterpolation(runtimeInterpolateHRTF)) return false;
+        return SetHRTFResamplingStep(HRTFstep);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -319,6 +322,16 @@ public class API_3DTI_Spatializer : MonoBehaviour
         return SendCommandForAllSources(SET_HRTF_INTERPOLATION, CommonFunctions.Bool2Float(_run));     
     }
 
+    /// <summary>
+    /// Set HRTF resampling step
+    /// </summary>
+    /// <param name="step"></param>
+    /// <returns></returns>
+    public bool SetHRTFResamplingStep(int step)
+    {
+        HRTFstep = step;
+        return SendCommandForAllSources(SET_HRTF_STEP, (float)step);
+    }
 
     /////////////////////////////////////////////////////////////////////
     // ADVANCED API METHODS

@@ -81,6 +81,9 @@ namespace Spatializer3DTI
 
 		// INITIALIZATION CHECK
 		PARAM_IS_CORE_READY,
+		
+		// HRTF resampling step
+		PARAM_HRTF_STEP,
 
 		P_NUM
 	};
@@ -185,7 +188,10 @@ namespace Spatializer3DTI
 
 		// Initialization check
 		RegisterParameter(definition, "IsReady", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_IS_CORE_READY, "Is binaural spatializer ready?");
-			
+
+		// HRTF resampling step
+		RegisterParameter(definition, "HRTFstep", "deg", 1.0f, 90.0f, 15.0f, 1.0f, 1.0f, PARAM_HRTF_STEP, "HRTF resampling step (in degrees)");
+
         definition.flags |= UnityAudioEffectDefinitionFlags_IsSpatializer;
         return numparams;
     }
@@ -385,6 +391,7 @@ namespace Spatializer3DTI
 		Binaural::AudioStateBinaural_Struct audioState = data->core.GetAudioState();
 		WriteLog(state, "CREATE: Sample rate set to ", audioState.sampleRate);
 		WriteLog(state, "CREATE: Buffer size set to ", audioState.bufferSize);
+		WriteLog(state, "CREATE: HRTF resampling step set to ", audioState.HRTF_resamplingStep);
 
 		// Listener:		
 		if (data->listener != nullptr)
@@ -431,7 +438,7 @@ namespace Spatializer3DTI
 		Binaural::AudioStateBinaural_Struct audioState;
 		audioState.sampleRate = (int)state->samplerate;
 		audioState.bufferSize = (int)state->dspbuffersize;
-		audioState.HRTF_resamplingStep = 15;
+		audioState.HRTF_resamplingStep = effectdata->parameters[PARAM_HRTF_STEP];
 		effectdata->core.SetAudioState(audioState);
 
 		// Create listener
@@ -485,6 +492,7 @@ namespace Spatializer3DTI
         data->parameters[index] = value;
 
 		CMagnitudes magnitudes;
+		Binaural::AudioStateBinaural_Struct audioState;
 		int loadResult;		
 
 		// Process command sent by C# API
@@ -685,6 +693,13 @@ namespace Spatializer3DTI
 
 			case PARAM_LIMITER_GET_COMPRESSION:
 				WriteLog(state, "SET PARAMETER: WARNING! PARAM_LIMIT_GET_COMPRESSION is read only", "");
+				break;
+
+			case PARAM_HRTF_STEP:				
+				audioState = data->core.GetAudioState();
+				audioState.HRTF_resamplingStep = (int)value;
+				data->core.SetAudioState(audioState);
+				WriteLog(state, "SET PARAMETER: HRTF resampling step set to (degrees) ", value);
 				break;
 
 			default:
