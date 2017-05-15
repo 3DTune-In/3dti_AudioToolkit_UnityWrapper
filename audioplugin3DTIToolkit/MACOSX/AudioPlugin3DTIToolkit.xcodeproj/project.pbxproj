@@ -54,6 +54,7 @@
 		AF391F8D1E55F14200EB4AC6 /* effect3DTISpatializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = effect3DTISpatializer.cpp; path = ../src/effect3DTISpatializer.cpp; sourceTree = "<group>"; };
 		AF766FED1DE9F8690003ED20 /* Config.Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.Common.xcconfig; sourceTree = "<group>"; };
 		AF766FEE1DE9F99C0003ED20 /* Config.Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.Debug.xcconfig; sourceTree = "<group>"; };
+		AF9B83831EC9B588002BD963 /* EarPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EarPair.h; sourceTree = "<group>"; };
 		AFD67CB31E978F80000F4387 /* 3DTI_BinauralSpatializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 3DTI_BinauralSpatializer.h; sourceTree = "<group>"; };
 		AFD67CB41E978F80000F4387 /* AudioStateBinaural.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioStateBinaural.cpp; sourceTree = "<group>"; };
 		AFD67CB51E978F80000F4387 /* AudioStateBinaural.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioStateBinaural.h; sourceTree = "<group>"; };
@@ -206,6 +207,7 @@
 		AFD67CC61E978F80000F4387 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				AF9B83831EC9B588002BD963 /* EarPair.h */,
 				AFD67CC71E978F80000F4387 /* AIR.cpp */,
 				AFD67CC81E978F80000F4387 /* AIR.h */,
 				AFD67CC91E978F80000F4387 /* BiquadFilter.cpp */,

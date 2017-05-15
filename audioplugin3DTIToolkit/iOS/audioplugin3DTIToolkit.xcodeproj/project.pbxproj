@@ -61,6 +61,7 @@
 
 /* Begin PBXFileReference section */
 		AF63299F1E376BA5000B40E8 /* libaudioplugin3DTIToolkit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libaudioplugin3DTIToolkit.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF9B83841EC9BD25002BD963 /* EarPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EarPair.h; sourceTree = "<group>"; };
 		AFA2D2D31E570B480078DEEF /* effect3DTIHA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = effect3DTIHA.cpp; sourceTree = "<group>"; };
 		AFA2D2D41E570B480078DEEF /* effect3DTIHL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = effect3DTIHL.cpp; sourceTree = "<group>"; };
 		AFA2D2D51E570B480078DEEF /* effect3DTISpatializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = effect3DTISpatializer.cpp; sourceTree = "<group>"; };
@@ -219,6 +220,7 @@
 		AFB9B2291EBC87BA00199425 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				AF9B83841EC9BD25002BD963 /* EarPair.h */,
 				AFB9B22A1EBC87BA00199425 /* AIR.cpp */,
 				AFB9B22B1EBC87BA00199425 /* AIR.h */,
 				AFB9B22C1EBC87BA00199425 /* BiquadFilter.cpp */,
