@@ -218,6 +218,9 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorStereo.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\EarPair.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="3DTI_Toolkit_Core">

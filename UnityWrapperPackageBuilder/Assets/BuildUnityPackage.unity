@@ -106,7 +106,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!82 &73463299
 AudioSource:
   m_ObjectHideFlags: 0
@@ -469,12 +469,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   haMixer: {fileID: 24100000, guid: 02d04237d0308a14ea0c3b720849faae, type: 2}
-  PARAM_PROCESS_LEFT_ON: 0
-  PARAM_PROCESS_RIGHT_ON: 0
+  PARAM_PROCESS_LEFT_ON: 1
+  PARAM_PROCESS_RIGHT_ON: 1
   PARAM_VOLUME_L_DB: 0.080266945
   PARAM_VOLUME_R_DB: 0
   PARAM_EQ_LPFCUTOFF_HZ: 0
-  PARAM_EQ_HPFCUTOFF_HZ: 62.5
+  PARAM_EQ_HPFCUTOFF_HZ: 5178.2188
   PARAM_DYNAMICEQ_INTERPOLATION_ON: 1
   PARAM_DYNAMICEQ_LEVELTHRESHOLDS_LEFT_DBFS:
   - -79.90643
@@ -699,7 +699,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!82 &1582799888
 AudioSource:
   m_ObjectHideFlags: 0
