@@ -70,20 +70,15 @@ public class TestSpatializer : MonoBehaviour
             toggleSource = !toggleSource;
             if (toggleSource)
             {
-                Debug.Log("Enabling source");
-                testSource.spatialize = true;
-                testSource.gameObject.SetActive(true);
-                testSource.Play();
-                SpatializerAPI.StartBinauralSpatializer(testSource);
+                Debug.Log("Enabling spatialization!");
+                SpatializerAPI.EnableSpatialization(testSource);
             }
             else
             {
-                Debug.Log("Disabling source");
-                testSource.Stop();
-                testSource.gameObject.SetActive(false);
-                testSource.spatialize = false;
+                Debug.Log("Disabling spatialization!");
+                SpatializerAPI.DisableSpatialization(testSource);
             }
-        }
+        }        
     }
 }
 

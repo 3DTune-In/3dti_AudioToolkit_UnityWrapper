@@ -145,6 +145,44 @@ public class API_3DTI_Spatializer : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// Enable all binaural spatialization processes for one (or all) source/s
+    /// </summary>
+    /// <param name="source"></param>
+    /// <returns></returns>
+    public bool EnableSpatialization(AudioSource source=null)
+    {
+        if (source != null)
+        {
+            selectSource = true;
+            selectedSource = source;
+        }
+
+        if (!SetModHRTF(true)) return false;
+        if (!SetModILD(true)) return false;
+        if (!SetModFarLPF(true)) return false;
+        return SetModDistanceAttenuation(true);
+    }
+
+    /// <summary>
+    /// Enable all binaural spatialization processes for one (or all) source/s
+    /// </summary>
+    /// <param name="source"></param>
+    /// <returns></returns>
+    public bool DisableSpatialization(AudioSource source = null)
+    {
+        if (source != null)
+        {
+            selectSource = true;
+            selectedSource = source;
+        }
+
+        if (!SetModHRTF(false)) return false;
+        if (!SetModILD(false)) return false;
+        if (!SetModFarLPF(false)) return false;
+        return SetModDistanceAttenuation(false);
+    }
+
     /////////////////////////////////////////////////////////////////////
     // LISTENER METHODS
     /////////////////////////////////////////////////////////////////////
