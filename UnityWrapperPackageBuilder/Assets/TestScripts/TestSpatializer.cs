@@ -13,6 +13,8 @@ public class TestSpatializer : MonoBehaviour
     int countdown = COUNTTIME;
     float lastTime;  
 
+    public AudioClip otherClip;
+
     void Start()
     {
         SpatializerAPI = Camera.main.GetComponent<API_3DTI_Spatializer>();        
@@ -79,6 +81,12 @@ public class TestSpatializer : MonoBehaviour
                 SpatializerAPI.DisableSpatialization(testSource);
             }
         }        
+
+        if (Input.GetKeyDown("l"))
+        {
+            testSource.clip = otherClip;
+            testSource.Play();
+        }
     }
 }
 
