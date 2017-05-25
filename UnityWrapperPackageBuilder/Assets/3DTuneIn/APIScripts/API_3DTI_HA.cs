@@ -296,29 +296,29 @@ public class API_3DTI_HA : MonoBehaviour
         }
 
         string paramName = "HA3DTI_Tone_";
-        string paramSufix;
-        if (ear == T_ear.LEFT)
-            paramSufix = "Left";
-        else
-            paramSufix = "Right";
+        //string paramSufix;
+        //if (ear == T_ear.LEFT)
+        //    paramSufix = "Left";
+        //else
+        //    paramSufix = "Right";
 
         switch (toneband) 
         {
             case T_HAToneBand.LOW:
-                paramName += "Low_" + paramSufix;
+                paramName += "Low_";// + paramSufix;
                 if (!HASetFloat(ear, paramName, value, ref PARAM_TONE_LOW_LEFT, ref PARAM_TONE_LOW_RIGHT)) return false;
                 //if (!AddToHABand(ear, T_HADynamicEQBand.HZ_125, T_HAToneBand.LOW, value)) return false;
                 //if (!AddToHABand(ear, T_HADynamicEQBand.HZ_250, T_HAToneBand.LOW, value)) return false;
                 //if (!AddToHABand(ear, T_HADynamicEQBand.HZ_500, T_HAToneBand.LOW, value)) return false;
                 break;                                           
             case T_HAToneBand.MID:
-                paramName += "Mid_" + paramSufix;
+                paramName += "Mid_";// + paramSufix;
                 if (!HASetFloat(ear, paramName, value, ref PARAM_TONE_MID_LEFT, ref PARAM_TONE_MID_RIGHT)) return false;
                 //if (!AddToHABand(ear, T_HADynamicEQBand.HZ_1K, T_HAToneBand.MID, value)) return false;
                 //if (!AddToHABand(ear, T_HADynamicEQBand.HZ_2K, T_HAToneBand.MID, value)) return false;
                 break;
             case T_HAToneBand.HIGH:
-                paramName += "High_" + paramSufix;
+                paramName += "High_";// + paramSufix;
                 if (!HASetFloat(ear, paramName, value, ref PARAM_TONE_HIGH_LEFT, ref PARAM_TONE_HIGH_RIGHT)) return false;
                 //if (!AddToHABand(ear, T_HADynamicEQBand.HZ_4K, T_HAToneBand.HIGH, value)) return false;
                 //if (!AddToHABand(ear, T_HADynamicEQBand.HZ_8K, T_HAToneBand.HIGH, value)) return false;
