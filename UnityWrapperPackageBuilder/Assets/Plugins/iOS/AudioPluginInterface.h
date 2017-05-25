@@ -111,11 +111,15 @@ typedef signed long long SInt64;
 #else
 #       ifndef SInt32_defined
 #           define SInt32_defined
+#ifndef UNITY_IOS
 typedef signed int SInt32;
+#endif
 #       endif
 #       ifndef UInt32_defined
 #           define UInt32_defined
+#ifndef UNITY_IOS
 typedef unsigned int UInt32;
+#endif
 #       endif
 #       ifndef UInt64_defined
 #           define UInt64_defined
