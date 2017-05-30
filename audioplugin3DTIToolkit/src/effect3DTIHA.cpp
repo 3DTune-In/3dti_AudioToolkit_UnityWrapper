@@ -524,7 +524,7 @@ namespace HASimulation3DTI
     UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectState* state)
     {
         EffectData* effectdata = new EffectData;
-        memset(effectdata, 0, sizeof(EffectData));
+        //memset(effectdata, 0, sizeof(EffectData));
         state->effectdata = effectdata;
         InitParametersFromDefinitions(InternalRegisterEffectDefinition, effectdata->parameters);
 		
@@ -551,15 +551,6 @@ namespace HASimulation3DTI
 		//WriteLog(state, "        HPF cutoff = ", DEFAULT_HPFCUTOFF);
 		
 		// Setup HA switches and default values
-		//effectdata->HA.deq.dynamicOn = DEFAULT_DYNAMICON;	// TO DO: writelog
-		//effectdata->HA.volL = FromDBToGain(DEFAULT_VOLDB);	// TO DO: writelog
-		//effectdata->HA.volR = FromDBToGain(DEFAULT_VOLDB);	// TO DO: writelog
-		//effectdata->HA.addNoiseBefore = FromFloatToBool(DEFAULT_NOISEBEFORE); // TO DO: writelog
-		//effectdata->HA.addNoiseAfter = FromFloatToBool(DEFAULT_NOISEAFTER); // TO DO: writelog
-		//effectdata->HA.noiseNumBits = DEFAULT_NOISENUMBITS;		// TO DO: writelog
-		//effectdata->HA.deq.levelsInterpolation = DEFAULT_LEVELSINTERPOLATION;	// TO DO: writelog
-		//effectdata->HA.deq.attackReleaseL_ms = DEFAULT_ATTACKRELEASE;	// TO DO: writelog
-		//effectdata->HA.deq.attackReleaseR_ms = DEFAULT_ATTACKRELEASE;	// TO DO: writelog					
 		effectdata->HA.volL = FromDBToGain(DEFAULT_VOLDB);	// TO DO: writelog
 		effectdata->HA.volR = FromDBToGain(DEFAULT_VOLDB);	// TO DO: writelog
 		effectdata->HA.addNoiseBefore = FromFloatToBool(DEFAULT_NOISEBEFORE); // TO DO: writelog
@@ -567,10 +558,6 @@ namespace HASimulation3DTI
 		effectdata->HA.noiseNumBits = DEFAULT_NOISENUMBITS;		// TO DO: writelog
 		effectdata->HA.GetLeftDynamicEqualizer()->SetLevelsInterpolation(DEFAULT_LEVELSINTERPOLATION);	// TO DO: writelog
 		effectdata->HA.GetRightDynamicEqualizer()->SetLevelsInterpolation(DEFAULT_LEVELSINTERPOLATION);	// TO DO: writelog
-		//effectdata->HA.GetDynamicEqualizer()->EnvL.SetAttackTime(DEFAULT_ATTACKRELEASE);	// TO DO: writelog
-		//effectdata->HA.GetDynamicEqualizer()->EnvL.SetReleaseTime(DEFAULT_ATTACKRELEASE);	// TO DO: writelog
-		//effectdata->HA.GetDynamicEqualizer()->EnvR.SetAttackTime(DEFAULT_ATTACKRELEASE);	// TO DO: writelog
-		//effectdata->HA.GetDynamicEqualizer()->EnvR.SetReleaseTime(DEFAULT_ATTACKRELEASE);	// TO DO: writelog
 		effectdata->HA.GetLeftDynamicEqualizer()->SetAttackRelease_ms(DEFAULT_ATTACKRELEASE);
 		effectdata->HA.GetRightDynamicEqualizer()->SetAttackRelease_ms(DEFAULT_ATTACKRELEASE);
 		effectdata->HA.GetLeftDynamicEqualizer()->SetCompressionPercentage(DEFAULT_COMPRESSION_PERCENTAGE);
@@ -601,13 +588,7 @@ namespace HASimulation3DTI
 		effectdata->HA.GetRightDynamicEqualizer()->SetMinGain_dB(MIN_BANDGAINDB);
 
 		// Setup limiter
-		// FIX THIS:
-		((CDynamicCompressorStereo)effectdata->limiter).Setup(state->samplerate, HA_LIMITER_RATIO, HA_LIMITER_THRESHOLD, HA_LIMITER_ATTACK, HA_LIMITER_RELEASE);
-		effectdata->limiterNotInitialized = true;
-		effectdata->limiter.SetRatio(HA_LIMITER_RATIO);
-		effectdata->limiter.SetThreshold(HA_LIMITER_THRESHOLD);
-		((CDynamicCompressorStereo)effectdata->limiter).SetAttack(HA_LIMITER_ATTACK);
-		((CDynamicCompressorStereo)effectdata->limiter).SetRelease(HA_LIMITER_RELEASE);
+		effectdata->limiter.Setup(state->samplerate, HA_LIMITER_RATIO, HA_LIMITER_THRESHOLD, HA_LIMITER_ATTACK, HA_LIMITER_RELEASE);		
 
 		// Setup normalization
 		effectdata->HA.DisableNormalization(BOTH);		
@@ -1029,7 +1010,7 @@ namespace HASimulation3DTI
 		if (data->parameters[PARAM_LIMITER_SET_ON] > 0.0f) 
 		{		
 			if ((bool)data->parameters[PARAM_PROCESS_LEFT_ON] || (bool)data->parameters[PARAM_PROCESS_RIGHT_ON])
-				((CDynamicCompressorStereo)data->limiter).Process(outStereoBuffer);
+				data->limiter.Process(outStereoBuffer);
 		}
 
 		// Transform output buffer			

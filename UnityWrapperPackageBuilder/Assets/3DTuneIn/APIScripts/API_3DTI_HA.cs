@@ -44,43 +44,73 @@ public class API_3DTI_HA : MonoBehaviour
     //public float [,] tone = new float[2, 3] { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } };    // Tone values for each EAR and each tone BAND
 
     // Internal parameters for consistency with GUI
+    [HideInInspector]
     public bool PARAM_PROCESS_LEFT_ON = false;
+    [HideInInspector]
     public bool PARAM_PROCESS_RIGHT_ON = false;
+    [HideInInspector]
     public float PARAM_VOLUME_L_DB = 0.0f;
+    [HideInInspector]
     public float PARAM_VOLUME_R_DB = 0.0f;
     // Common values for both ears in EQ		
+    [HideInInspector]
     public float PARAM_EQ_LPFCUTOFF_HZ = 0.0f;
+    [HideInInspector]
     public float PARAM_EQ_HPFCUTOFF_HZ = 0.0f;
     // Dynamic EQ
+    [HideInInspector]
     public bool PARAM_DYNAMICEQ_INTERPOLATION_ON = true;
+    [HideInInspector]
     public float [] PARAM_DYNAMICEQ_LEVELTHRESHOLDS_LEFT_DBFS = new float[3]  { 0.0f, 0.0f, 0.0f };
+    [HideInInspector]
     public float [] PARAM_DYNAMICEQ_LEVELTHRESHOLDS_RIGHT_DBFS = new float[3] { 0.0f, 0.0f, 0.0f };
+    [HideInInspector]
     public float [,] PARAM_DYNAMICEQ_GAINS_LEFT = new float[3, 7]  { { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f } };
+    [HideInInspector]
     public float [,] PARAM_DYNAMICEQ_GAINS_RIGHT = new float[3, 7] { { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f } };
+    [HideInInspector]
     public float PARAM_DYNAMICEQ_ATTACKRELEASE_LEFT_MS = 0.0f;
+    [HideInInspector]
     public float PARAM_DYNAMICEQ_ATTACKRELEASE_RIGHT_MS = 0.0f;
     // Quantization noise
+    [HideInInspector]
     public bool PARAM_NOISE_BEFORE_ON = false;
+    [HideInInspector]
     public bool PARAM_NOISE_AFTER_ON = false;
+    [HideInInspector]
     public int PARAM_NOISE_NUMBITS = 24;
     // Simplified controls
+    [HideInInspector]
     public float PARAM_COMPRESSION_PERCENTAGE_LEFT = 0.0f;
+    [HideInInspector]
     public float PARAM_COMPRESSION_PERCENTAGE_RIGHT = 0.0f;
     // Limiter
+    [HideInInspector]
     public bool PARAM_LIMITER_ON = false;
     // Normalization
+    [HideInInspector]
     public bool PARAM_NORMALIZATION_SET_ON_LEFT = false;
+    [HideInInspector]
     public float PARAM_NORMALIZATION_DBS_LEFT = 20.0f;
+    [HideInInspector]
     public bool PARAM_NORMALIZATION_SET_ON_RIGHT = false;
+    [HideInInspector]
     public float PARAM_NORMALIZATION_DBS_RIGHT = 20.0f;
     // Tone control
+    [HideInInspector]
     public float PARAM_TONE_LOW_LEFT = 0.0f;
+    [HideInInspector]
     public float PARAM_TONE_MID_LEFT = 0.0f;
+    [HideInInspector]
     public float PARAM_TONE_HIGH_LEFT = 0.0f;
+    [HideInInspector]
     public float PARAM_TONE_LOW_RIGHT = 0.0f;
+    [HideInInspector]
     public float PARAM_TONE_MID_RIGHT = 0.0f;
+    [HideInInspector]
     public float PARAM_TONE_HIGH_RIGHT = 0.0f;
     // Debug log
+    [HideInInspector]
     public bool PARAM_DEBUG_LOG = false;    
 
     //////////////////////////////////////////////////////////////

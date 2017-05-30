@@ -245,6 +245,7 @@ copy $(TargetPath) ..\..\Assets\Plugins\x86\$(TargetName).dll
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AdditionalIncludeDirectories>..\..\3DTI_Toolkit_Core;..\..\3DTI_Toolkit_Modules;..\..\3DTI_Toolkit_Modules\HRTF\cereal\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

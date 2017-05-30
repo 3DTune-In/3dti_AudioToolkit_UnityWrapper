@@ -40,22 +40,39 @@ public class API_3DTI_HL : MonoBehaviour
     public AudioMixer hlMixer;  // Drag&drop here the HAHL_3DTI_Mixer
 
     // Internal parameters for consistency with GUI
+    [HideInInspector]
     public bool GLOBAL_LEFT_ON = false;
+    [HideInInspector]
     public bool GLOBAL_RIGHT_ON = false;
+    [HideInInspector]
     public float [] PARAM_BANDS_DB_LEFT = new float[9] { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+    [HideInInspector]
     public float [] PARAM_BANDS_DB_RIGHT = new float[9] { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+    [HideInInspector]
     public bool PARAM_LEFT_EQ_ON = true;
-	public bool PARAM_RIGHT_EQ_ON = true;
+    [HideInInspector]
+    public bool PARAM_RIGHT_EQ_ON = true;
+    [HideInInspector]
     public bool PARAM_LEFT_COMPRESSOR_ON = false;
+    [HideInInspector]
     public bool PARAM_RIGHT_COMPRESSOR_ON = false;
+    [HideInInspector]
     public bool PARAM_COMPRESSOR_FIRST = true;
+    [HideInInspector]
     public float PARAM_COMP_LEFT_RATIO = DEFAULT_COMPRESSOR_RATIO;
-	public float PARAM_COMP_LEFT_THRESHOLD = DEFAULT_COMPRESSOR_THRESHOLD;
+    [HideInInspector]
+    public float PARAM_COMP_LEFT_THRESHOLD = DEFAULT_COMPRESSOR_THRESHOLD;
+    [HideInInspector]
     public float PARAM_COMP_RIGHT_RATIO = DEFAULT_COMPRESSOR_RATIO;
+    [HideInInspector]
     public float PARAM_COMP_RIGHT_THRESHOLD = DEFAULT_COMPRESSOR_THRESHOLD;
+    [HideInInspector]
     public float PARAM_COMP_LEFT_ATTACK = DEFAULT_COMPRESSOR_ATTACK;
-	public float PARAM_COMP_LEFT_RELEASE = DEFAULT_COMPRESSOR_RELEASE;
+    [HideInInspector]
+    public float PARAM_COMP_LEFT_RELEASE = DEFAULT_COMPRESSOR_RELEASE;
+    [HideInInspector]
     public float PARAM_COMP_RIGHT_ATTACK = DEFAULT_COMPRESSOR_ATTACK;
+    [HideInInspector]
     public float PARAM_COMP_RIGHT_RELEASE = DEFAULT_COMPRESSOR_RELEASE;		
 
     /// <summary>

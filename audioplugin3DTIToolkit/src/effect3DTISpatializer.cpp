@@ -803,11 +803,14 @@ namespace Spatializer3DTI
 		}
 
 		// Process!!
-		CStereoBuffer<float> outStereoBuffer(length * 2);
+		CMonoBuffer<float> outLeftBuffer(length);
+		CMonoBuffer<float> outRightBuffer(length);
 		data->audioSource->UpdateBuffer(inMonoBuffer);
-		data->audioSource->ProcessAnechoic(*data->listener, outStereoBuffer);
+		data->audioSource->ProcessAnechoic(*data->listener, outLeftBuffer, outRightBuffer);
 
 		// Limiter
+		CStereoBuffer<float> outStereoBuffer;
+		outStereoBuffer.Interlace(outLeftBuffer, outRightBuffer);
 		if (data->parameters[PARAM_LIMITER_SET_ON])
 		{
 			data->limiter.Process(outStereoBuffer);
