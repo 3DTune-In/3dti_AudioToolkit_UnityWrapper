@@ -15,35 +15,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     // Access to the HA API
     API_3DTI_HA HAAPI;
 
-    //// Constant definitions
-    //const int EAR_RIGHT = 0;
-    //const int EAR_LEFT = 1;
-
-    // Look and feel parameters
-    int logosize = 80;  // Size of 3DTI logo
-    int earsize = 60;   // Size of ear clipart
-    float spaceBetweenColumns = 5;
-    float spaceBetweenSections = 10;
-    Color baseColor = Color.white;
-
-    // Global variables 
-    //bool switchLeftEar = false;
-    //bool switchRightEar = false;
-    //bool noiseBefore = false;
-    //bool noiseAfter = false;
-    ////bool dynamicEq = true;
-    //bool interpolation = true;
-    //bool debugLogHA = false;
-
-    bool initDone = false;
-
-    // GUI Styles
-    GUIStyle leftAlign;
-    GUIStyle rightAlign;
-    GUIStyle leftColumnStyle;
-    GUIStyle rightColumnStyle;
-    GUIStyle titleBoxStyle;
-
+    //bool initDone = false;
 
     //The GUI name must be unique for each GUI, the one specified in PluginList.h
     public override string Name
@@ -70,72 +42,31 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     public override bool OnGUI(IAudioEffectPlugin plugin)
     {
         // Initialization (first run)
-        if (!initDone)
-        {
+        //if (!initDone)
+        //{
             // Get HA API instance (TO DO: Error check)
             HAAPI = GameObject.FindObjectOfType<API_3DTI_HA>();
 
-            // Send commands to plugin to set all parameters
-            //InitializePlugin(plugin);
-
             // Setup styles
-            leftAlign = EditorStyles.label;
-            leftAlign.alignment = TextAnchor.MiddleLeft;
-            rightAlign = EditorStyles.label;
-            rightAlign.alignment = TextAnchor.MiddleRight;
-            leftColumnStyle = EditorStyles.miniButton;
-            leftColumnStyle.alignment = TextAnchor.MiddleLeft;
-            rightColumnStyle = EditorStyles.miniButton;
-            rightColumnStyle.alignment = TextAnchor.MiddleRight;
-            if (titleBoxStyle == null)
-            {
-                titleBoxStyle = new GUIStyle(GUI.skin.box);
-                titleBoxStyle.normal.textColor = baseColor;
-            }
-        }
+            Common3DTIGUI.InitStyles();
+        //}                
+
+        //GUILayout.BeginArea(new Rect(10, 10, 100, 100));
 
         // DRAW CUSTOM GUI
-        DrawHeader(plugin);
+        Common3DTIGUI.Show3DTILogo();
         DrawEars(plugin);
         DrawDynamicEq(plugin);
         DrawNoiseGenerator(plugin);
         DrawLimiter(plugin);
         //DrawDebugLog(plugin);       
 
-        initDone = true;
+        //GUILayout.EndArea();
+
+        //initDone = true;
 
         //return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG)
         return false;     // DO NOT SHOW DEFAULT CONTROLS
-    }
-
-
-    public void InitializePlugin(IAudioEffectPlugin plugin)
-    {
-        //HAAPI.Initialize();        
-        //plugin.SetFloatParameter("HAL", Bool2Float(switchLeftEar));
-        //plugin.SetFloatParameter("HAR", Bool2Float(switchRightEar));
-        //plugin.SetFloatParameter("NOISEBEF", Bool2Float(noiseBefore));
-        //plugin.SetFloatParameter("NOISEAFT", Bool2Float(noiseAfter));        
-        //plugin.SetFloatParameter("EQINT", Bool2Float(interpolation));
-        
-        //initDone = true;
-    }
-
-    /// <summary>
-    /// Draw header (title and logo)
-    /// </summary>
-    /// <param name="plugin"></param>
-    public void DrawHeader (IAudioEffectPlugin plugin)
-    {
-        // Draw logo
-        Texture logo3DTI;
-        GUIStyle logoStyle = EditorStyles.label;
-        logoStyle.alignment = TextAnchor.MiddleCenter;
-        logo3DTI = Resources.Load("3D_tuneinNoAlpha") as Texture;
-        GUILayout.Box(logo3DTI, logoStyle, GUILayout.Width(logosize), GUILayout.Height(logosize), GUILayout.ExpandWidth(true));
-
-        // Add space below
-        GUILayout.Space(spaceBetweenSections);
     }
 
     /// <summary>
@@ -143,41 +74,30 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     /// </summary>
     /// <param name="plugin"></param>
     public void DrawEars(IAudioEffectPlugin plugin)
-    {        
-        BeginLeftColumn(plugin, ref HAAPI.PARAM_PROCESS_LEFT_ON, "Left ear", new List<string> { "HAL" });
+    {
+        Common3DTIGUI.BeginLeftColumn(plugin, ref HAAPI.PARAM_PROCESS_LEFT_ON, "Left ear", "Enable left ear hearing aid", new List<string> { "HAL" });
         {
             GUILayout.BeginHorizontal();
+            Common3DTIGUI.AddLabelToParameterGroup("Overall gain");
             {
-                // Draw ear icon
-                Texture LeftEarTexture;
-                GUIStyle LeftEarStyle = EditorStyles.label;
-                LeftEarStyle.alignment = TextAnchor.MiddleLeft;
-                LeftEarTexture = Resources.Load("LeftEarAlpha") as Texture;
-                GUILayout.Box(LeftEarTexture, LeftEarStyle, GUILayout.Width(earsize), GUILayout.Height(earsize), GUILayout.ExpandWidth(false));
-
-                //Parameters
-                CreateParameterSlider(plugin, ref HAAPI.PARAM_VOLUME_L_DB, "VOLL", "Overall gain (dB):", false, "");
+                Common3DTIGUI.DrawEar(T_ear.LEFT);
+                Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HAAPI.PARAM_VOLUME_L_DB, "VOLL", "Overall gain", false, "dB", "Set global volume for left ear");
             }
             GUILayout.EndHorizontal();
         }
-        EndLeftColumn();        
+        Common3DTIGUI.EndLeftColumn();
 
-        BeginRightColumn(plugin, ref HAAPI.PARAM_PROCESS_RIGHT_ON, "Right ear", new List<string> { "HAR" });        
+        Common3DTIGUI.BeginRightColumn(plugin, ref HAAPI.PARAM_PROCESS_RIGHT_ON, "Right ear", "Enable right ear hearing aid", new List<string> { "HAR" });        
         {
-            GUILayout.BeginHorizontal();
-            {
-                //Parameters
-                CreateParameterSlider(plugin, ref HAAPI.PARAM_VOLUME_R_DB, "VOLR", "Overall gain (dB):", false, "");
-                // Draw ear icon
-                Texture RightEarTexture;
-                GUIStyle RightEarStyle = EditorStyles.label;
-                RightEarStyle.alignment = TextAnchor.MiddleLeft;
-                RightEarTexture = Resources.Load("RightEarAlpha") as Texture;
-                GUILayout.Box(RightEarTexture, RightEarStyle, GUILayout.Width(earsize), GUILayout.Height(earsize), GUILayout.ExpandWidth(false));
+        GUILayout.BeginHorizontal();            
+            Common3DTIGUI.AddLabelToParameterGroup("Overall gain");
+            {                
+                Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HAAPI.PARAM_VOLUME_R_DB, "VOLR", "Overall gain", false, "dB", "Set global volume for right ear");                
+                Common3DTIGUI.DrawEar(T_ear.RIGHT);             
             }
             GUILayout.EndHorizontal();
         }
-        EndRightColumn();        
+        Common3DTIGUI.EndRightColumn();        
     }
 
     /// <summary>
@@ -186,201 +106,155 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     /// <param name="plugin"></param>
     public void DrawDynamicEq(IAudioEffectPlugin plugin)
     {
-        BeginCentralColumn("Equalizer");
+        //BeginCentralColumn("Equalizer");
+        Common3DTIGUI.BeginSection("DYNAMIC EQUALIZER");
+        Common3DTIGUI.AddLabelToParameterGroup("LPF Cutoff ");
+        Common3DTIGUI.AddLabelToParameterGroup("HPF Cutoff ");
         {
-            //CreateToggle(plugin, ref dynamicEq, "Dynamic Equalizer", "DYNEQ");
-            CreateParameterSlider(plugin, ref HAAPI.PARAM_EQ_LPFCUTOFF_HZ, "LPF", "LPF CutOff", false, "Hz");
-            CreateParameterSlider(plugin, ref HAAPI.PARAM_EQ_HPFCUTOFF_HZ, "HPF", "HPF CutOff", false, "Hz");
-            CreateToggle(plugin, ref HAAPI.PARAM_DYNAMICEQ_INTERPOLATION_ON, "Interpolation", "EQINT");
+            // Global EQ Controls
+            Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HAAPI.PARAM_EQ_LPFCUTOFF_HZ, "LPF", "LPF CutOff", false, "Hz", "Set cutoff frequency of global Low Pass Filter");
+            Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HAAPI.PARAM_EQ_HPFCUTOFF_HZ, "HPF", "HPF CutOff", false, "Hz", "Set cutoff frequency of global High Pass Filter");
+            Common3DTIGUI.CreatePluginToggle(plugin, ref HAAPI.PARAM_DYNAMICEQ_INTERPOLATION_ON, "Interpolation", "EQINT", "Enable interpolation of dynamic equalizer curves");
 
-            BeginLeftColumn();
+            // Left ear
+            Common3DTIGUI.BeginLeftColumn(HAAPI.PARAM_PROCESS_LEFT_ON);
             {
-                GUILayout.Label("LEFT EAR");
-
-                // Band gains
-                GUILayout.BeginHorizontal();
-                {
-                    BeginCentralColumn("Level 0");
-                    {
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 0], "DEQL0B0L", "125Hz:", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 1], "DEQL0B1L", "250Hz",false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 2], "DEQL0B2L", "500Hz",false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 3], "DEQL0B3L", "1kHz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 4], "DEQL0B4L", "2kHz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 5], "DEQL0B5L", "4kHz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[0, 6], "DEQL0B6L", "8kHz", false, "dB");
-                    } EndCentralColumn();
-                    
-                    BeginCentralColumn("Level 1");
-                    {
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 0], "DEQL1B0L", "125Hz:", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 1], "DEQL1B1L", "250Hz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 2], "DEQL1B2L", "500Hz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 3], "DEQL1B3L", "1kHz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 4], "DEQL1B4L", "2kHz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 5], "DEQL1B5L", "4kHz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[1, 6], "DEQL1B6L", "8kHz", false, "dB");
-                    } EndCentralColumn();
-
-                    BeginCentralColumn("Level 2");
-                    {
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 0], "DEQL2B0L", "125Hz:", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 1], "DEQL2B1L", "250Hz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 2], "DEQL2B2L", "500Hz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 3], "DEQL2B3L", "1kHz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 4], "DEQL2B4L", "2kHz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 5], "DEQL2B5L", "4kHz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[2, 6], "DEQL2B6L", "8kHz", false, "dB");
-                    } EndCentralColumn();
-
-                } GUILayout.EndHorizontal();
-                // End Band Gains
-                
-                BeginCentralColumn("Level Threshold");
-                {
-                    CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_LEVELTHRESHOLDS_LEFT_DBFS[0], "THRL0", "Threshold 1", false, "dBfs");
-                    CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_LEVELTHRESHOLDS_LEFT_DBFS[1], "THRL1", "Threshold 2 ", false, "dBfs");
-                    CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_LEVELTHRESHOLDS_LEFT_DBFS[2], "THRL2", "Threshold 3 ", false, "dBfs");
-                } EndCentralColumn();
-
-                BeginCentralColumn("Attack Release");
-                {                       
-                    CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_ATTACKRELEASE_LEFT_MS, "ATREL", "Atack Release", false, "ms");
-                } EndCentralColumn();
-
-                BeginCentralColumn("Tone Control");
-                {
-                    //float toneLow = HAAPI.tone[(int)T_ear.LEFT, (int)API_3DTI_HA.T_HAToneBand.LOW];
-                    //float toneMid = HAAPI.tone[(int)T_ear.LEFT, (int)API_3DTI_HA.T_HAToneBand.MID];
-                    //float toneHigh = HAAPI.tone[(int)T_ear.LEFT, (int)API_3DTI_HA.T_HAToneBand.HIGH];
-                    //if (CreateAPIParameterSlider(plugin, ref toneLow, "Low", false, "dB", -10.0f, 10.0f))
-                    //    HAAPI.SetTone(T_ear.LEFT, API_3DTI_HA.T_HAToneBand.LOW, toneLow);
-                    //if (CreateAPIParameterSlider(plugin, ref toneMid, "Mid", false, "dB", -10.0f, 10.0f))
-                    //    HAAPI.SetTone(T_ear.LEFT, API_3DTI_HA.T_HAToneBand.MID, toneMid);
-                    //if (CreateAPIParameterSlider(plugin, ref toneHigh, "High", false, "dB", -10.0f, 10.0f))
-                    //    HAAPI.SetTone(T_ear.LEFT, API_3DTI_HA.T_HAToneBand.HIGH, toneHigh);
-                    CreateParameterSlider(plugin, ref HAAPI.PARAM_TONE_LOW_LEFT, "TONLOL", "Low", false, "dB");
-                    CreateParameterSlider(plugin, ref HAAPI.PARAM_TONE_MID_LEFT, "TONMIL", "Mid", false, "dB");
-                    CreateParameterSlider(plugin, ref HAAPI.PARAM_TONE_HIGH_LEFT, "TONHIL", "High", false, "dB");
-                } EndCentralColumn();
-
-                BeginCentralColumn("Compression");
-                {                    
-                    CreateParameterSlider(plugin, ref HAAPI.PARAM_COMPRESSION_PERCENTAGE_LEFT, "COMPRL", "Compression Percentage", false, "%");
-                }
-                EndCentralColumn();
-
-                BeginCentralColumn("Normalization");
-                {
-                    GUILayout.BeginHorizontal();
-                        CreateToggle(plugin, ref HAAPI.PARAM_NORMALIZATION_SET_ON_LEFT, "Switch Normalization", "NORMONL");
-                        if (HAAPI.PARAM_NORMALIZATION_SET_ON_LEFT)
-                        {
-                            GUILayout.Label("Applied offset: ", GUILayout.ExpandWidth(false));
-                            float offsetL;
-                            HAAPI.GetNormalizationOffset(API_3DTI_Common.T_ear.LEFT, out offsetL);
-                            string offsetStrL = offsetL.ToString("F2");
-                            GUILayout.TextArea(offsetStrL, GUILayout.ExpandWidth(false));
-                            GUILayout.Label("dB", GUILayout.ExpandWidth(false));
-                        }
-                    GUILayout.EndHorizontal();
-                }
-                EndCentralColumn();
+                DrawEQBandGains(plugin, T_ear.LEFT, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT);
+                DrawEQLevelThresholds(plugin, T_ear.LEFT, ref HAAPI.PARAM_DYNAMICEQ_LEVELTHRESHOLDS_LEFT_DBFS);
+                DrawEQEnvelopeFollower(plugin, T_ear.LEFT, ref HAAPI.PARAM_DYNAMICEQ_ATTACKRELEASE_LEFT_MS);
+                DrawEQToneControl(plugin, T_ear.LEFT, ref HAAPI.PARAM_TONE_LOW_LEFT, ref HAAPI.PARAM_TONE_MID_LEFT, ref HAAPI.PARAM_TONE_HIGH_LEFT);
+                DrawEQCompression(plugin, T_ear.LEFT, ref HAAPI.PARAM_COMPRESSION_PERCENTAGE_LEFT);
+                DrawEQNormalization(plugin, T_ear.LEFT, ref HAAPI.PARAM_NORMALIZATION_SET_ON_LEFT);
             }
-            EndLeftColumn(false);
-
-            BeginRightColumn();
+            Common3DTIGUI.EndLeftColumn();
+                       
+            // Right ear
+            Common3DTIGUI.BeginRightColumn(HAAPI.PARAM_PROCESS_RIGHT_ON);
             {
-                GUILayout.Label("RIGHT EAR");
+                DrawEQBandGains(plugin, T_ear.RIGHT, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT);
+                DrawEQLevelThresholds(plugin, T_ear.RIGHT, ref HAAPI.PARAM_DYNAMICEQ_LEVELTHRESHOLDS_RIGHT_DBFS);
+                DrawEQEnvelopeFollower(plugin, T_ear.RIGHT, ref HAAPI.PARAM_DYNAMICEQ_ATTACKRELEASE_RIGHT_MS);
+                DrawEQToneControl(plugin, T_ear.RIGHT, ref HAAPI.PARAM_TONE_LOW_RIGHT, ref HAAPI.PARAM_TONE_MID_RIGHT, ref HAAPI.PARAM_TONE_HIGH_RIGHT);
+                DrawEQCompression(plugin, T_ear.RIGHT, ref HAAPI.PARAM_COMPRESSION_PERCENTAGE_RIGHT);
+                DrawEQNormalization(plugin, T_ear.RIGHT, ref HAAPI.PARAM_NORMALIZATION_SET_ON_RIGHT);
+            }
+            Common3DTIGUI.EndRightColumn();            
 
-                // Band Gains
-                GUILayout.BeginHorizontal();
+        }
+        Common3DTIGUI.EndSection();
+    }
+
+    /// <summary>
+    /// Draw dynamic EQ band gains
+    /// </summary>
+    /// <param name="plugin"></param>
+    public void DrawEQBandGains(IAudioEffectPlugin plugin, T_ear whichear, ref float [,] PARAM_ARRAY)
+    {
+        GUILayout.BeginHorizontal();        
+        {
+            for (int i = 0; i < API_3DTI_HA.NUM_EQ_CURVES; i++)
+            {
+                Common3DTIGUI.BeginSubColumn("Curve " + (i+1).ToString());
                 {
-                    BeginCentralColumn("Level 0");
-                    {
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 0], "DEQL0B0R", "125Hz:", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 1], "DEQL0B1R", "250Hz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 2], "DEQL0B2R", "500Hz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 3], "DEQL0B3R", "1kHz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 4], "DEQL0B4R", "2kHz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 5], "DEQL0B5R", "4kHz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[0, 6], "DEQL0B6R", "8kHz", false, "dB");
-                    } EndCentralColumn();
-
-                    BeginCentralColumn("Level 1");
-                    {
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 0], "DEQL1B0R", "125Hz:", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 1], "DEQL1B1R", "250Hz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 2], "DEQL1B2R", "500Hz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 3], "DEQL1B3R", "1kHz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 4], "DEQL1B4R", "2kHz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 5], "DEQL1B5R", "4kHz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[1, 6], "DEQL1B6R", "8kHz", false, "dB");
-                    } EndCentralColumn();
-
-                    BeginCentralColumn("Level 2");
-                    {
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 0], "DEQL2B0R", "125Hz:", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 1], "DEQL2B1R", "250Hz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 2], "DEQL2B2R", "500Hz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 3], "DEQL2B3R", "1kHz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 4], "DEQL2B4R", "2kHz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 5], "DEQL2B5R", "4kHz", false, "dB");
-                        CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[2, 6], "DEQL2B6R", "8kHz", false, "dB");
-                    } EndCentralColumn();
-
-                } GUILayout.EndHorizontal();
-                // End Band Gains
-
-                BeginCentralColumn("Level Threshold");
-                {
-                    CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_LEVELTHRESHOLDS_RIGHT_DBFS[0], "THRR0", "Threshold 1", false, "dBfs");
-                    CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_LEVELTHRESHOLDS_RIGHT_DBFS[1], "THRR1", "Threshold 2 ", false, "dBfs");
-                    CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_LEVELTHRESHOLDS_RIGHT_DBFS[2], "THRR2", "Threshold 3 ", false, "dBfs");
-                } EndCentralColumn();
-
-                BeginCentralColumn("Attack Release");
-                {
-                    CreateParameterSlider(plugin, ref HAAPI.PARAM_DYNAMICEQ_ATTACKRELEASE_RIGHT_MS, "ATRER", "Atack Release", false, "ms");
-                } EndCentralColumn();
-
-                BeginCentralColumn("Tone Control");
-                {
-                    //CreateAPIParameterSlider(plugin, ref HAAPI.tone[(int)API_3DTI_Common.T_ear.RIGHT, (int)API_3DTI_HA.T_HAToneBand.LOW], "Low", false, "dB", -10.0f, 10.0f);
-                    //CreateAPIParameterSlider(plugin, ref HAAPI.tone[(int)API_3DTI_Common.T_ear.RIGHT, (int)API_3DTI_HA.T_HAToneBand.MID], "Mid", false, "dB", -10.0f, 10.0f);
-                    //CreateAPIParameterSlider(plugin, ref HAAPI.tone[(int)API_3DTI_Common.T_ear.RIGHT, (int)API_3DTI_HA.T_HAToneBand.HIGH], "High", false, "dB", -10.0f, 10.0f);
-                    CreateParameterSlider(plugin, ref HAAPI.PARAM_TONE_LOW_RIGHT, "TONLOR", "Low", false, "dB");
-                    CreateParameterSlider(plugin, ref HAAPI.PARAM_TONE_MID_RIGHT, "TONMIR", "Mid", false, "dB");
-                    CreateParameterSlider(plugin, ref HAAPI.PARAM_TONE_HIGH_RIGHT, "TONHIR", "High", false, "dB");
+                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM_ARRAY[i, 0], "DEQL" + i.ToString() + "B0" + Common3DTIGUI.GetEarLetter(whichear), "125Hz", false, "dB", "Set gain for 125Hz band of EQ curve " + (i+1).ToString() + " in " + Common3DTIGUI.GetEarName(whichear) + " ear", true);
+                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM_ARRAY[i, 1], "DEQL" + i.ToString() + "B1" + Common3DTIGUI.GetEarLetter(whichear), "250Hz", false, "dB", "Set gain for 250Hz band of EQ curve " + (i+1).ToString() + " in " + Common3DTIGUI.GetEarName(whichear) + " ear", true);
+                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM_ARRAY[i, 2], "DEQL" + i.ToString() + "B2" + Common3DTIGUI.GetEarLetter(whichear), "500Hz", false, "dB", "Set gain for 500Hz band of EQ curve " + (i+1).ToString() + " in " + Common3DTIGUI.GetEarName(whichear) + " ear", true);
+                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM_ARRAY[i, 3], "DEQL" + i.ToString() + "B3" + Common3DTIGUI.GetEarLetter(whichear), "1kHz", false, "dB", "Set gain for 1KHz band of EQ curve " + (i+1).ToString() + " in " + Common3DTIGUI.GetEarName(whichear) + " ear", true);
+                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM_ARRAY[i, 4], "DEQL" + i.ToString() + "B4" + Common3DTIGUI.GetEarLetter(whichear), "2kHz", false, "dB", "Set gain for 2KHz band of EQ curve " + (i+1).ToString() + " in " + Common3DTIGUI.GetEarName(whichear) + " ear", true);
+                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM_ARRAY[i, 5], "DEQL" + i.ToString() + "B5" + Common3DTIGUI.GetEarLetter(whichear), "4kHz", false, "dB", "Set gain for 4KHz band of EQ curve " + (i+1).ToString() + " in " + Common3DTIGUI.GetEarName(whichear) + " ear", true);
+                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM_ARRAY[i, 6], "DEQL" + i.ToString() + "B6" + Common3DTIGUI.GetEarLetter(whichear), "8kHz", false, "dB", "Set gain for 8KHz band of EQ curve " + (i+1).ToString() + " in " + Common3DTIGUI.GetEarName(whichear) + " ear", true);
                 }
-                EndCentralColumn();
+                Common3DTIGUI.EndSubColumn();
+            }
+        }
+        GUILayout.EndHorizontal();        
+    }
 
-                BeginCentralColumn("Compression");
-                {
-                    CreateParameterSlider(plugin, ref HAAPI.PARAM_COMPRESSION_PERCENTAGE_RIGHT, "COMPRR", "Compression Percentage", false, "%");
-                }
-                EndCentralColumn();
+    /// <summary>
+    /// Draw EQ level thresholds
+    /// </summary>
+    /// <param name="plugin"></param>
+    /// <param name="whichear"></param>
+    public void DrawEQLevelThresholds(IAudioEffectPlugin plugin, T_ear whichear, ref float[] PARAM_ARRAY)
+    {
+        Common3DTIGUI.BeginSubColumn("Level Thresholds");        
+        {
+            for (int i = 0; i < API_3DTI_HA.NUM_EQ_CURVES; i++)
+            {
+                Common3DTIGUI.AddLabelToParameterGroup("Threshold " + (i + 1).ToString());
+            }
+            for (int i = 0; i < API_3DTI_HA.NUM_EQ_CURVES; i++)
+            {
+                Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM_ARRAY[i], "THR" + Common3DTIGUI.GetEarLetter(whichear) + i.ToString(), "Threshold " + (i + 1).ToString(), false, "dBfs", "Set level threshold for curve " + (i + 1).ToString() + " of the dynamic equalizer in " + Common3DTIGUI.GetEarName(whichear) + " ear");
+            }
+        }
+        Common3DTIGUI.EndSubColumn();
+    }
 
-                BeginCentralColumn("Normalization");
-                {
-                    GUILayout.BeginHorizontal();
-                    CreateToggle(plugin, ref HAAPI.PARAM_NORMALIZATION_SET_ON_RIGHT, "Switch Normalization", "NORMONR");
-                    if (HAAPI.PARAM_NORMALIZATION_SET_ON_RIGHT)
-                    {
-                        GUILayout.Label("Applied offset: ", GUILayout.ExpandWidth(false));
-                        float offsetR;
-                        HAAPI.GetNormalizationOffset(API_3DTI_Common.T_ear.RIGHT, out offsetR);
-                        string offsetStrR = offsetR.ToString();
-                        GUILayout.TextArea(offsetStrR, GUILayout.ExpandWidth(false));
-                        GUILayout.Label("dB", GUILayout.ExpandWidth(false));
-                    }
-                    GUILayout.EndHorizontal();                    
-                }
-                EndCentralColumn();
+    /// <summary>
+    /// Draw EQ envelope follower controls
+    /// </summary>
+    /// <param name="plugin"></param>
+    /// <param name="whichear"></param>
+    public void DrawEQEnvelopeFollower(IAudioEffectPlugin plugin, T_ear whichear, ref float PARAM)
+    {
+        Common3DTIGUI.BeginSubColumn("Envelope follower");
+        Common3DTIGUI.AddLabelToParameterGroup("Attack/Release");
+        {
+            Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM, "ATRE" + Common3DTIGUI.GetEarLetter(whichear), "Atack/Release", false, "ms", "Set Attack and Release time of envelope follower in " + Common3DTIGUI.GetEarName(whichear) + " ear");
+        }
+        Common3DTIGUI.EndSubColumn();
+    }
 
-            } EndRightColumn(false);            
+    public void DrawEQToneControl(IAudioEffectPlugin plugin, T_ear whichear, ref float PARAMLOW, ref float PARAMMID, ref float PARAMHIGH)
+    {
+        Common3DTIGUI.BeginSubColumn("Tone Control");
+        Common3DTIGUI.AddLabelToParameterGroup("Low");
+        Common3DTIGUI.AddLabelToParameterGroup("Mid");
+        Common3DTIGUI.AddLabelToParameterGroup("High");
+        {
+            Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HAAPI.PARAM_TONE_LOW_LEFT, "TONLO" + Common3DTIGUI.GetEarLetter(whichear), "Low", false, "dB", "Set tone for low frequencies in " + Common3DTIGUI.GetEarName(whichear) + " ear");
+            Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HAAPI.PARAM_TONE_MID_LEFT, "TONMI" + Common3DTIGUI.GetEarLetter(whichear), "Mid", false, "dB", "Set tone for medium frequencies in " + Common3DTIGUI.GetEarName(whichear) + " ear");
+            Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HAAPI.PARAM_TONE_HIGH_LEFT, "TONHI" + Common3DTIGUI.GetEarLetter(whichear), "High", false, "dB", "Set tone for high frequencies in " + Common3DTIGUI.GetEarName(whichear) + " ear");
+        }
+        Common3DTIGUI.EndSubColumn();
+    }
 
-        }   EndCentralColumn();
+    /// <summary>
+    /// Draw EQ compression controls
+    /// </summary>
+    /// <param name="plugin"></param>
+    /// <param name="whichear"></param>
+    public void DrawEQCompression(IAudioEffectPlugin plugin, T_ear whichear, ref float PARAM)
+    {
+        Common3DTIGUI.BeginSubColumn("Compression");
+        Common3DTIGUI.AddLabelToParameterGroup("Compression");
+        {
+            Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM, "COMPR" + Common3DTIGUI.GetEarLetter(whichear), "Compression", false, "%", "Set compression percentage of dynamic equalizer in " + Common3DTIGUI.GetEarName(whichear) + " ear");
+        }
+        Common3DTIGUI.EndSubColumn();
+    }
+
+    /// <summary>
+    /// Draw EQ normalization controls
+    /// </summary>
+    /// <param name="plugin"></param>
+    /// <param name="whichear"></param>
+    public void DrawEQNormalization(IAudioEffectPlugin plugin, T_ear whichear, ref bool PARAM)
+    {
+        Common3DTIGUI.BeginSubColumn("Normalization");
+        {            
+            GUILayout.BeginVertical();
+            Common3DTIGUI.CreatePluginToggle(plugin, ref PARAM, "Switch Normalization", "NORMON" + Common3DTIGUI.GetEarLetter(whichear), "Enable normalization of dynamic equalizer curves in " + Common3DTIGUI.GetEarName(whichear) + " ear");
+            if (PARAM)
+            {
+                float offset;
+                HAAPI.GetNormalizationOffset(whichear, out offset);
+                Common3DTIGUI.CreateReadonlyFloatText("Applied offset", "F2", "dB", "Show offset applied to dynamic equalizer curves after normalization in " + Common3DTIGUI.GetEarName(whichear)+ " ear", offset);
+            }
+            GUILayout.EndVertical();
+        }
+        Common3DTIGUI.EndSubColumn();
     }
 
     /// <summary>
@@ -389,16 +263,16 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     /// <param name="plugin"></param>
     public void DrawNoiseGenerator(IAudioEffectPlugin plugin)
     {
-        BeginCentralColumn("Quantization Noise Generator");
+        Common3DTIGUI.BeginSection("QUANTIZATION NOISE");
+        Common3DTIGUI.AddLabelToParameterGroup("Number of Bits");
         {
-            CreateToggle(plugin,ref HAAPI.PARAM_NOISE_BEFORE_ON, "Quantization Before", "NOISEBEF");
-            CreateToggle(plugin,ref HAAPI.PARAM_NOISE_AFTER_ON, "Quantization After", "NOISEAFT");
-
+            Common3DTIGUI.CreatePluginToggle(plugin, ref HAAPI.PARAM_NOISE_BEFORE_ON, "Quantization Before", "NOISEBEF", "Enable quantization noise before HA process");
+            Common3DTIGUI.CreatePluginToggle(plugin, ref HAAPI.PARAM_NOISE_AFTER_ON, "Quantization After", "NOISEAFT", "Enable quantization noise after HA process");
             float FloatNBits = (float)HAAPI.PARAM_NOISE_NUMBITS;
-            CreateParameterSlider(plugin, ref FloatNBits, "NOISEBITS", "Quantization Number of Bits:", false, "");
+            Common3DTIGUI.CreatePluginParameterSlider(plugin, ref FloatNBits, "NOISEBITS", "Number of Bits", false, "", "Set number of bits for quantization noise");
             HAAPI.PARAM_NOISE_NUMBITS = (int)FloatNBits;
         }
-        EndCentralColumn();
+        Common3DTIGUI.EndSection();
     }
 
     /// <summary>
@@ -407,205 +281,43 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     /// <param name="plugin"></param>
     public void DrawLimiter(IAudioEffectPlugin plugin)
     {
-        BeginCentralColumn("Limiter");
+        Common3DTIGUI.BeginSection("DYNAMIC LIMITER");
         {
-            CreateToggle(plugin, ref HAAPI.PARAM_LIMITER_ON, "Switch Limiter", "LIMITON");            
+            Common3DTIGUI.CreatePluginToggle(plugin, ref HAAPI.PARAM_LIMITER_ON, "Switch Limiter", "LIMITON", "Enable dynamic limiter after HA process");
         }
-        EndCentralColumn();
+        Common3DTIGUI.EndSection();
     }
 
-    /// <summary>
-    /// Draw debug log controls 
-    /// </summary>
-    /// <param name="plugin"></param>
-    public void DrawDebugLog(IAudioEffectPlugin plugin)
-    {
-        BeginCentralColumn("Debug Log File");
-        {
-            CreateToggle(plugin, ref HAAPI.PARAM_DEBUG_LOG, "Write Debug Log File", "DebugLogHA");
-        }
-        EndCentralColumn();
-    }
+    ///// <summary>
+    ///// Draw debug log controls 
+    ///// </summary>
+    ///// <param name="plugin"></param>
+    //public void DrawDebugLog(IAudioEffectPlugin plugin)
+    //{
+    //    BeginCentralColumn("Debug Log File");
+    //    {
+    //        CreateToggle(plugin, ref HAAPI.PARAM_DEBUG_LOG, "Write Debug Log File", "DebugLogHA");
+    //    }
+    //    EndCentralColumn();
+    //}
 
-    /// <summary>
-    ///  Auxiliary function for creating toogle input
-    /// </summary>    
-    public void CreateToggle(IAudioEffectPlugin plugin, ref bool boolvar, string toggleText, string switchParameter)
-    {
-        bool oldvar = boolvar;
-        boolvar = GUILayout.Toggle(boolvar, toggleText, GUILayout.ExpandWidth(false));
-        if (oldvar != boolvar) 
-        {
-            plugin.SetFloatParameter(switchParameter, CommonFunctions.Bool2Float(boolvar));
-        }
-    }
+    //public bool CreateAPIParameterSlider(IAudioEffectPlugin plugin, ref float APIparam, string parameterText, bool isFloat, string units, float minValue, float maxValue)
+    //{
+    //    // Set float resolution
+    //    string resolution;
+    //    if (isFloat)
+    //        resolution = "F2";
+    //    else
+    //        resolution = "F0";
 
-    /// <summary>
-    /// Auxiliary function for creating sliders for float variables with specific format
-    /// </summary>
-    /// <returns></returns>
-    public bool CreateFloatSlider(ref float variable, string name, string decimalDigits, string units, float minValue, float maxValue)
-    {
-        string valueString;
-        float previousVar;
-
-        GUILayout.BeginVertical(GUILayout.ExpandWidth(false));
-        {
-            GUILayout.BeginHorizontal();
-            {
-                GUILayout.Label(name);
-                valueString = variable.ToString(decimalDigits);
-                valueString = GUILayout.TextField(valueString, GUILayout.ExpandWidth(false));
-                GUILayout.Label(units, GUILayout.ExpandWidth(false));
-            }
-            GUILayout.EndHorizontal();
-
-            float newValue;
-            bool valid = float.TryParse(valueString, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out newValue);            
-            if (valid)
-                variable = newValue;
-
-            previousVar = variable;
-            variable = GUILayout.HorizontalSlider(variable, minValue, maxValue);
-        }
-        GUILayout.EndVertical();
-
-        return (variable != previousVar);            
-    }
-
-    /// <summary>
-    /// Create a slider associated to a parameter of the plugin
-    /// </summary>
-    /// <param name="plugin"></param>
-    /// <param name="parameterName"></param>
-    /// <param name="parameterText"></param>
-    /// <param name="isFloat"></param>
-    /// <param name="units"></param>
-    /// <returns>True if slider value has changed</returns>
-    public bool CreateParameterSlider(IAudioEffectPlugin plugin, ref float APIparam, string parameterName, string parameterText, bool isFloat, string units)
-    {
-        // Get parameter info
-        float newValue;
-        float minValue, maxValue;
-        plugin.GetFloatParameterInfo(parameterName, out minValue, out maxValue, out newValue);
-
-        // Set float resolution
-        string resolution;
-        if (isFloat)
-            resolution = "F2";
-        else
-            resolution = "F0";
-
-        // Create slider and set value
-        plugin.GetFloatParameter(parameterName, out newValue);
-        if (CreateFloatSlider(ref newValue, parameterText, resolution, units, minValue, maxValue))
-        {
-            plugin.SetFloatParameter(parameterName, newValue);
-            APIparam = newValue;
-            return true;
-        }
-
-        return false;
-    }
-
-    public bool CreateAPIParameterSlider(IAudioEffectPlugin plugin, ref float APIparam, string parameterText, bool isFloat, string units, float minValue, float maxValue)
-    {
-        // Set float resolution
-        string resolution;
-        if (isFloat)
-            resolution = "F2";
-        else
-            resolution = "F0";
-
-        // Create slider and set value    
-        float newValue = APIparam;
-        if (CreateFloatSlider(ref newValue, parameterText, resolution, units, minValue, maxValue))
-        {
-            APIparam = newValue;
-            return true;
-        }
-        else
-            return false;
-    }
-
-    public void BeginLeftColumn(IAudioEffectPlugin plugin, ref bool enable, string title, List<string> switchParameters)
-    {        
-        GUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));                    // Begin section             
-            GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(true));  // Begin column                
-                bool previousenable = enable;
-                enable = EditorGUILayout.BeginToggleGroup(title, enable);       // Begin toggle   
-                    if (previousenable != enable)
-                    {
-                        foreach (string switchParameter in switchParameters)
-                        {
-                            plugin.SetFloatParameter(switchParameter, CommonFunctions.Bool2Float(enable));
-                        }
-                    }
-                    EditorGUI.BeginDisabledGroup(!enable); // Begin DisabledGroup 
-    }
-
-    public void EndLeftColumn(bool endToogleGroup=true)
-    {
-                        if (endToogleGroup)
-                        {
-                            EditorGUILayout.EndToggleGroup();                               // End toggle
-                        }
-                    EditorGUI.EndDisabledGroup();                   // End DisabledGroup
-                GUILayout.EndVertical();                                                // End column
-            GUILayout.Space(spaceBetweenColumns);                                   // Space between columns        
-    }
-
-    public void BeginRightColumn(IAudioEffectPlugin plugin, ref bool enable, string title, List<string> switchParameters)
-    {        
-            GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(true));    // Begin column                
-                bool previousenable = enable;
-                enable = EditorGUILayout.BeginToggleGroup(title, enable);       // Begin toggle  
-                    if (previousenable != enable)
-                    {
-                        foreach (string switchParameter in switchParameters)
-                        {
-                            plugin.SetFloatParameter(switchParameter, CommonFunctions.Bool2Float(enable));
-                        }
-                    }
-                    EditorGUI.BeginDisabledGroup(!enable);      // Begin Disabled if right ear is switched off
-    }
-
-    public void EndRightColumn(bool endToogleGroup = true)
-    {
-                        if (endToogleGroup)
-                        {
-                            EditorGUILayout.EndToggleGroup();                               // End toggle
-                        }
-                    EditorGUI.EndDisabledGroup();                       // End disabled if right ear is switched off
-                GUILayout.EndVertical();                                                // End column
-            GUILayout.EndHorizontal();                                                  // End section                  
-        GUILayout.Space(spaceBetweenSections);                                      // Space between sections
-    }
-
-    public void BeginLeftColumn()
-    {
-        GUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));                    // Begin section             
-           GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(true));  // Begin column
-                EditorGUI.BeginDisabledGroup(!HAAPI.PARAM_PROCESS_LEFT_ON);       // Begin Disabled if left ear is switched off
-    }
-
-    public void BeginRightColumn()
-    {
-            GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(true));    // Begin column
-                EditorGUI.BeginDisabledGroup(!HAAPI.PARAM_PROCESS_RIGHT_ON);      // Begin Disabled if right ear is switched off
-    }
-
-    public void BeginCentralColumn(string title)
-    {
-        GUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));                      
-            GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(true));
-                GUILayout.Label(title);
-    }
-
-    public void EndCentralColumn()
-    {
-            GUILayout.EndVertical();                                               // End column
-        GUILayout.EndHorizontal();
-    }
-
+    //    // Create slider and set value    
+    //    float newValue = APIparam;
+    //    if (CreateFloatSlider(ref newValue, parameterText, resolution, units, minValue, maxValue))
+    //    {
+    //        APIparam = newValue;
+    //        return true;
+    //    }
+    //    else
+    //        return false;
+    //}
 }

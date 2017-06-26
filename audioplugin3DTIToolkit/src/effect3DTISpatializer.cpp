@@ -797,9 +797,19 @@ namespace Spatializer3DTI
 
 		// Transform input buffer
 		CMonoBuffer<float> inMonoBuffer(length);
-		for (int i = 0; i < length; i++)
+		//for (int i = 0; i < length; i++)
+		//{
+		//	inMonoBuffer[i] = inbuffer[i * 2]; // We take only the left channel
+		//}
+		//for (int i = 0; i < length; i++)
+		//{
+		//	inMonoBuffer[i] = inbuffer[(i*2)+1]; // We take only the right channel
+		//}
+		int j = 0;
+		for (int i = 0; i < length; i ++)
 		{
-			inMonoBuffer[i] = inbuffer[i * 2]; // We take only the left channel
+			inMonoBuffer[i] = (inbuffer[j] + inbuffer[j + 1]) / 2.0f;	// We take average of left and right channels
+			j+=2;
 		}
 
 		// Process!!

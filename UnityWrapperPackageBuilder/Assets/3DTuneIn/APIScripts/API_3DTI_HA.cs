@@ -69,9 +69,9 @@ public class API_3DTI_HA : MonoBehaviour
     [HideInInspector]
     public float [,] PARAM_DYNAMICEQ_GAINS_RIGHT = new float[3, 7] { { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f } };
     [HideInInspector]
-    public float PARAM_DYNAMICEQ_ATTACKRELEASE_LEFT_MS = 0.0f;
+    public float PARAM_DYNAMICEQ_ATTACKRELEASE_LEFT_MS = 1000.0f;
     [HideInInspector]
-    public float PARAM_DYNAMICEQ_ATTACKRELEASE_RIGHT_MS = 0.0f;
+    public float PARAM_DYNAMICEQ_ATTACKRELEASE_RIGHT_MS = 1000.0f;
     // Quantization noise
     [HideInInspector]
     public bool PARAM_NOISE_BEFORE_ON = false;

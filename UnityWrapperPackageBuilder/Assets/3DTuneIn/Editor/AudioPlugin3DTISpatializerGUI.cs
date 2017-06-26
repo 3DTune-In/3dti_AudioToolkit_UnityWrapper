@@ -24,6 +24,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     API_3DTI_Spatializer toolkit;
     bool advancedSetup = false;
     bool haSetup = false;
+    //bool initDone = false;
 
     // Limit possible values of sliders    
     float maxHeadRadius = 1.0f;
@@ -34,78 +35,36 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     float minHADB = 0.0f;
     float maxHADB = 30.0f;
     float maxSoundSpeed = 1000.0f;
-    //List<int> sampleRateValues = new List<int>() { 11025, 22050, 44100, 48000, 88200, 96000, 112000, 192000 };    
-    //List<int> bufferSizeValues = new List<int>() { 64, 128, 256, 512, 1024, 2048 };    
 
-    // Editor view look
-    int logosize = 80;
-    float spaceBetweenSections = 15.0f;
-    float singleSpace = 5.0f;
-    GUIStyle titleBoxStyle = null;
-    GUIStyle subtitleBoxStyle;
-    GUIStyle sectionStyle;
-    GUIStyle subsectionStyle;
-    GUIStyle dragdropStyle;
-    GUIStyle lampStyle = null;
-    bool initDone = false;
 
     //////////////////////////////////////////////////////////////////////////////
-
-    void InitGUI()
-    {
-        // Get access to API script
-        toolkit = (API_3DTI_Spatializer)target;
-        //toolkit.debugLog = false;
-
-        // Init styles
-        subtitleBoxStyle = EditorStyles.label;
-        sectionStyle = EditorStyles.miniButton;
-        subsectionStyle = EditorStyles.miniButton;
-        dragdropStyle = EditorStyles.textField;
-        if (titleBoxStyle == null)
-        {
-            titleBoxStyle = new GUIStyle(GUI.skin.box);
-            titleBoxStyle.normal.textColor = Color.white;
-        }
-        if (lampStyle == null)
-        {
-            lampStyle = new GUIStyle(GUI.skin.button);
-        }
-    }
 
     /// <summary>
     /// This is where we create the layout for the inspector
     /// </summary>
     public override void OnInspectorGUI()
     {
-        // Get access to API script
-        if (!initDone)
-        {
-            InitGUI();
-            //initDone = true;
-        }
+        // Init on first pass
+        //if (!initDone)
+        //{
+            toolkit = (API_3DTI_Spatializer)target; // Get access to API script       
+            Common3DTIGUI.InitStyles(); // Init styles
+            //GameObject go = Camera.main.gameObject;
+            //Common3DTIGUI.SetInspectorIcon(go);        
+        //initDone = true;
+        //}
 
         // Show 3D-Tune-In logo         
-        Texture logo3DTI;        
-        GUIStyle logoStyle = EditorStyles.label;
-        logoStyle.alignment = TextAnchor.MiddleCenter;
-        logo3DTI = Resources.Load("3D_tuneinNoAlpha") as Texture;        
-        GUILayout.Box(logo3DTI, logoStyle, GUILayout.Width(logosize), GUILayout.Height(logosize), GUILayout.ExpandWidth(true));
+        Common3DTIGUI.Show3DTILogo();
 
         ////// LISTENER                
         DrawListenerPanel();
-
-        ////// AUDIO    
-        //DrawAudioPanel();
 
         ////// ADVANCED SETUP
         DrawAdvancedPanel();
 
         ////// HEARING AID DIRECTIONALITY SETUP
         DrawHADirectionalityPanel();
-
-        ////// LIMITER SETUP
-        //DrawLimiterPanel();
     }
 
 
@@ -114,33 +73,13 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     ///////////////////////////////////////////////////////////
 
     /// <summary>
-    /// Action to do when a new file has been selected (either for HRTF or ILD, and either from button or drag&drop)
-    /// </summary>
-    public void ChangeFileName(ref string whichfilename, string newname)
-    {
-        // Set new name for toolkit API
-        whichfilename = newname;
-
-        // Check that Resources folder exists. Create it otherwise.
-        if (!Directory.Exists("Assets/Resources"))
-        {
-            Directory.CreateDirectory("Assets/Resources");
-        }
-
-        // Save it in resources as .byte                
-        string newnamewithpath = "Assets/Resources/" + Path.GetFileNameWithoutExtension(newname) + ".bytes";
-        if (!File.Exists(newnamewithpath)) 
-            FileUtil.CopyFileOrDirectory(whichfilename, newnamewithpath);    
-	}
-
-    /// <summary>
     /// Action for button Load HRTF
     /// </summary>
     public void ButtonLoadHRTF()
     {        
         string filePath = EditorUtility.OpenFilePanel("Select HRTF File", "", "3dti-hrtf");
         if (filePath.Length != 0)
-            ChangeFileName(ref toolkit.HRTFFileName, filePath);
+            Common3DTIGUI.ChangeFileName(ref toolkit.HRTFFileName, filePath);
     }
 
     /// <summary>
@@ -150,47 +89,30 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     {
         string filePath = EditorUtility.OpenFilePanel("Select ILD File", "", "3dti-ild");        
         if (filePath.Length != 0)
-            ChangeFileName(ref toolkit.ILDFileName, filePath);
+            Common3DTIGUI.ChangeFileName(ref toolkit.ILDFileName, filePath);
     }
 
     /// <summary>
-    /// Action for HRTF resampling step input
-    /// </summary>
-    public void InputResamplingStep()
-    {
-        //Debug.Log("HRTF resampling step changed");
-    }
-
-    /// <summary>
-    /// Action for slider Head Radius
+    /// Action for slider HeadRadius
     /// </summary>
     public void SliderHeadRadius()
     {
-        //Debug.Log("Slider head radius changed");
+        toolkit.SetHeadRadius(toolkit.listenerHeadRadius);
     }
 
     /// <summary>
-    /// Action for slider Sample Rate
+    /// Action for input ResamplingStep
     /// </summary>
-    public void SliderSampleRate()
+    public void InputResamplingStep()
     {
-        //Debug.Log("Slider sample rate changed");
-    }
-
-    /// <summary>
-    /// Action for slider Buffer Size
-    /// </summary>
-    public void SliderBufferSize()
-    {
-        //Debug.Log("Slider buffer size changed");
+        toolkit.SetHRTFResamplingStep(toolkit.HRTFstep);
     }
 
     /// <summary>
     /// Action for slider Scale
     /// </summary>
     public void SliderScale()
-    {
-        //Debug.Log("Slider scale changed");
+    {        
         toolkit.SetScaleFactor(toolkit.scaleFactor);
     }
 
@@ -226,6 +148,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
         toolkit.SetHADirectionalityExtend(T_ear.RIGHT, toolkit.HADirectionalityExtendRight);
     }
 
+
     ///////////////////////////////////////////////////////////
     // PANEL CONTENTS
     ///////////////////////////////////////////////////////////
@@ -235,101 +158,105 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     /// </summary>
     public void DrawListenerPanel()
     {
-        BeginSection("LISTENER SETUP:");
+        Common3DTIGUI.BeginSection("LISTENER SETUP");        
+        Common3DTIGUI.AddLabelToParameterGroup("HRTF");
+        Common3DTIGUI.AddLabelToParameterGroup("ILD Near Field Filter");
 
         // HRTF:
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Load HRTF", GUILayout.ExpandWidth(false), GUILayout.Height(40)))
-            ButtonLoadHRTF();
-        CreateDragDropBox(ref toolkit.HRTFFileName);
-        GUILayout.EndHorizontal();
+        Common3DTIGUI.CreateLoadButtonAndBox("HRTF", "Select the HRTF of the listener from a .3dti-hrtf file", ref toolkit.HRTFFileName, ButtonLoadHRTF);
 
         // ILD:
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Load ILD Near Field Filter", GUILayout.ExpandWidth(false), GUILayout.Height(40)))
-            ButtonLoadILD();
-        CreateDragDropBox(ref toolkit.ILDFileName);
-        GUILayout.EndHorizontal();
+        Common3DTIGUI.SingleSpace();
+        Common3DTIGUI.CreateLoadButtonAndBox("ILD Near Field Filter", "Select the ILD near field filter of the listener from a .3dti-ild file", ref toolkit.ILDFileName, ButtonLoadILD);
 
         // ITD:    
-        SingleSpace();
-        CreateToggle(ref toolkit.customITDEnabled, "Custom ITD");
+        Common3DTIGUI.ResetParameterGroup();
+        Common3DTIGUI.AddLabelToParameterGroup("Custom ITD");
+        Common3DTIGUI.AddLabelToParameterGroup("Head radius");
+        Common3DTIGUI.SingleSpace();
+        if (Common3DTIGUI.CreateToggle(ref toolkit.customITDEnabled, "Custom ITD", "Enable Interaural Time Difference customization"))
+            toolkit.SetCustomITD(toolkit.customITDEnabled);
         if (toolkit.customITDEnabled)
-            CreateFloatSlider(ref toolkit.listenerHeadRadius, "Head radius:", "F4", "meters", 0.0f, maxHeadRadius, SliderHeadRadius);        
+            Common3DTIGUI.CreateFloatSlider(ref toolkit.listenerHeadRadius, "Head radius", "F4", "meters", "Set listener head radius", 0.0f, maxHeadRadius, SliderHeadRadius);
 
-        EndSection();
+        Common3DTIGUI.EndSection();
     }
-
-    /// <summary>
-    /// Draw panel with audio configuration
-    /// </summary>
-    //public void DrawAudioPanel()
-    //{
-    //    BeginSection("AUDIO SETUP:");
-
-    //    // Sample rate slider
-    //    CreateSnapSlider(ref toolkit.audioSampleRate, "Sample rate:", new GUIContent(toolkit.audioSampleRate.ToString("F0") + " Hz"), sampleRateValues, SliderSampleRate);
-
-    //    // Buffer size slider
-    //    CreateSnapSlider(ref toolkit.audioBufferSize, "Buffer size:", new GUIContent(toolkit.audioBufferSize.ToString("F0") + " samples"), bufferSizeValues, SliderBufferSize);
-
-    //    EndSection();
-    //}
 
     /// <summary>
     /// Draw panel with advanced configuration
     /// </summary>
     public void DrawAdvancedPanel()
     {
-        BeginSection("ADVANCED SETUP:");
+        Common3DTIGUI.BeginSection("ADVANCED SETUP");
 
-        advancedSetup = GUILayout.Toggle(advancedSetup, "Show Advanced Setup", GUILayout.ExpandWidth(false));
+        advancedSetup = Common3DTIGUI.CreateFoldoutToggle(ref advancedSetup, "Advanced Setup");
         if (advancedSetup)
         {
             // Scale factor slider
-            SingleSpace();
-            CreateFloatSlider(ref toolkit.scaleFactor, "Scale factor:", "F2", " meters = 1.0 unit in Unity", minScale, maxScale, SliderScale);
+            Common3DTIGUI.AddLabelToParameterGroup("Scale factor");
+            Common3DTIGUI.SingleSpace();
+            Common3DTIGUI.CreateFloatSlider(ref toolkit.scaleFactor, "Scale factor", "F2", " meters = 1.0 unit in Unity", "Set the proportion between meters and Unity scale units", minScale, maxScale, SliderScale);
 
             // HRTF interpolation
-            BeginSubsection("HRTF Interpolation:");                        
-            GUILayout.BeginHorizontal();                                              
-            bool run = CreateToggle(ref toolkit.runtimeInterpolateHRTF, "Runtime interpolation");
-            if (run)
-                toolkit.SetSourceInterpolation(toolkit.runtimeInterpolateHRTF);
-            GUILayout.EndHorizontal();
-            CreateIntInput(ref toolkit.HRTFstep, "Resampling step", "º", InputResamplingStep);
-            EndSubsection();
+            Common3DTIGUI.BeginSubsection("HRTF Interpolation");
+            Common3DTIGUI.AddLabelToParameterGroup("Runtime interpolation");
+            Common3DTIGUI.AddLabelToParameterGroup("Resampling step");                                
+                GUILayout.BeginHorizontal();                                              
+                if (Common3DTIGUI.CreateToggle(ref toolkit.runtimeInterpolateHRTF, "Runtime interpolation", "Enable runtime interpolation of HRIRs, to allow for smoother transitions when moving listener and/or sources"))            
+                    toolkit.SetSourceInterpolation(toolkit.runtimeInterpolateHRTF);
+                GUILayout.EndHorizontal();
+                Common3DTIGUI.CreateIntInput(ref toolkit.HRTFstep, "Resampling step", "º", "HRTF resampling step; Lower values give better quality at the cost of more resources", 1, 45, InputResamplingStep);
+            Common3DTIGUI.EndSubsection();
 
             // Mod enabler
-            BeginSubsection("Modules enabler:");
-            if (CreateToggle(ref toolkit.modFarLPF, "Far distance LPF"))
-                toolkit.SetModFarLPF(toolkit.modFarLPF);
-            if (CreateToggle(ref toolkit.modDistAtt, "Distance attenuation"))
-                toolkit.SetModDistanceAttenuation(toolkit.modDistAtt);
-            if (CreateToggle(ref toolkit.modILD, "ILD Near Field Filter"))
-                toolkit.SetModILD(toolkit.modILD);
-            if (CreateToggle(ref toolkit.modHRTF, "HRTF convolution"))
-                toolkit.SetModHRTF(toolkit.modHRTF);
-            EndSubsection();
+            Common3DTIGUI.BeginSubsection("Switch Spatialization Effects");
+            Common3DTIGUI.AddLabelToParameterGroup("Far distance LPF");
+            Common3DTIGUI.AddLabelToParameterGroup("Distance attenuation");
+            Common3DTIGUI.AddLabelToParameterGroup("ILD NEar Field Filter");
+            Common3DTIGUI.AddLabelToParameterGroup("HRTF convolution");
+                if (Common3DTIGUI.CreateToggle(ref toolkit.modFarLPF, "Far distance LPF", "Enable low pass filter to simulate sound coming from far distances"))
+                    toolkit.SetModFarLPF(toolkit.modFarLPF);
+                if (Common3DTIGUI.CreateToggle(ref toolkit.modDistAtt, "Distance attenuation", "Enable attenuation of sound depending on distance to listener"))
+                    toolkit.SetModDistanceAttenuation(toolkit.modDistAtt);
+                if (Common3DTIGUI.CreateToggle(ref toolkit.modILD, "ILD Near Field Filter", "Enable near field filter for sources very close to the listener ears"))
+                    toolkit.SetModILD(toolkit.modILD);
+                if (Common3DTIGUI.CreateToggle(ref toolkit.modHRTF, "HRTF convolution", "Enable HRTF convolution, the core of binaural spatialization"))
+                    toolkit.SetModHRTF(toolkit.modHRTF);
+            Common3DTIGUI.EndSubsection();
 
             // Magnitudes
-            BeginSubsection("Physical magnitudes:");
-            CreateFloatSlider(ref toolkit.magAnechoicAttenuation, "Anechoic distance attenuation:", "F2", "dB", minDB, maxDB, SliderAnechoicAttenuation);
-            //CreateFloatSlider(ref toolkit.magReverbAttenuation, "Reverb distance attenuation:", "F2", "dB", minDB, maxDB, SliderReverbAttenuation);
-            CreateFloatSlider(ref toolkit.magSoundSpeed, "Sound speed:", "F0", "m/s", 0.0f, maxSoundSpeed, SliderSoundSpeed);
-            EndSubsection();
+            Common3DTIGUI.BeginSubsection("Physical magnitudes");
+            Common3DTIGUI.AddLabelToParameterGroup("Anechoic distance attenuation");
+            Common3DTIGUI.AddLabelToParameterGroup("Sound speed");
+                Common3DTIGUI.CreateFloatSlider(ref toolkit.magAnechoicAttenuation, "Anechoic distance attenuation", "F2", "dB", "Set attenuation in decibels for each double distance", minDB, maxDB, SliderAnechoicAttenuation);            
+                Common3DTIGUI.CreateFloatSlider(ref toolkit.magSoundSpeed, "Sound speed", "F0", "m/s", "Set sound speed, used for ITD computation", 0.0f, maxSoundSpeed, SliderSoundSpeed);
+            Common3DTIGUI.EndSubsection();
 
-            // Draw Limiter panel
-            DrawLimiterPanel();
+            // Limiter
+            Common3DTIGUI.BeginSubsection("Limiter");
+            Common3DTIGUI.AddLabelToParameterGroup("Switch Limiter");
+                //GUILayout.BeginHorizontal();
+                //SingleSpace();
+                if (Common3DTIGUI.CreateToggle(ref toolkit.doLimiter, "Switch Limiter", "Enable dynamics limiter after spatialization, to avoid potential saturation"))
+                    toolkit.SwitchOnOffLimiter(toolkit.doLimiter);
+                //if (toolkit.doLimiter)
+                //{
+                //    bool compressing;
+                //    toolkit.GetLimiterCompression(out compressing);
+                //    CreateLamp(compressing);
+                //}
+                //GUILayout.EndHorizontal();
+            Common3DTIGUI.EndSubsection();
 
             // Debug Log
-            BeginSubsection("Debug log:");
-            if (CreateToggle(ref toolkit.debugLog, "Write debug log file"))
-                toolkit.SendWriteDebugLog(toolkit.debugLog);
-            EndSubsection();
+            Common3DTIGUI.BeginSubsection("Debug log");
+            Common3DTIGUI.AddLabelToParameterGroup("Write debug log file");
+                if (Common3DTIGUI.CreateToggle(ref toolkit.debugLog, "Write debug log file", "Enable writing of 3DTi_BinauralSpatializer_DebugLog.txt file in your project root folder; This file can be sent to the 3DTi Toolkit developers for support"))
+                    toolkit.SendWriteDebugLog(toolkit.debugLog);
+            Common3DTIGUI.EndSubsection();
         }
 
-        EndSection();
+        Common3DTIGUI.EndSection();
     }
 
     /// <summary>
@@ -337,234 +264,32 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     /// </summary>
     public void DrawHADirectionalityPanel()
     {
-        BeginSection("HA DIRECTIONALITY:");
-
-        haSetup = GUILayout.Toggle(haSetup, "Show Hearing Aid Directionality Setup", GUILayout.ExpandWidth(false));
+        Common3DTIGUI.BeginSection("DIRECTIONALITY");
+        
+        haSetup = Common3DTIGUI.CreateFoldoutToggle(ref haSetup, "Directionality Setup");
         if (haSetup)
         {
-            SingleSpace();          
+            Common3DTIGUI.SingleSpace();          
 
             // Left ear
-            BeginSubsection("Left ear:");            
-            if (CreateToggle(ref toolkit.doHADirectionalityLeft, "Switch Directionality"))            
-                toolkit.SwitchOnOffHADirectionality(T_ear.LEFT, toolkit.doHADirectionalityLeft);
-            CreateFloatSlider(ref toolkit.HADirectionalityExtendLeft, "Directionality extend:", "F2", "dB", minHADB, maxHADB, SliderHADirectionalityLeft);            
-            EndSubsection();
+            Common3DTIGUI.BeginSubsection("Left ear");
+            Common3DTIGUI.AddLabelToParameterGroup("Switch Directionality");
+            Common3DTIGUI.AddLabelToParameterGroup("Directionality extend");
+                if (Common3DTIGUI.CreateToggle(ref toolkit.doHADirectionalityLeft, "Switch Directionality", "Enable directionality for left ear"))            
+                    toolkit.SwitchOnOffHADirectionality(T_ear.LEFT, toolkit.doHADirectionalityLeft);
+                Common3DTIGUI.CreateFloatSlider(ref toolkit.HADirectionalityExtendLeft, "Directionality extend", "F2", "dB", "Set directionality extend for left ear; The value is the attenuation in decibels applied to sources placed behind the listener", minHADB, maxHADB, SliderHADirectionalityLeft);            
+            Common3DTIGUI.EndSubsection();
 
             // Right ear
-            BeginSubsection("Right ear:");            
-            if (CreateToggle(ref toolkit.doHADirectionalityRight, "Switch Directionality"))
-                toolkit.SwitchOnOffHADirectionality(T_ear.RIGHT, toolkit.doHADirectionalityRight);
-            CreateFloatSlider(ref toolkit.HADirectionalityExtendRight, "Directionality extend:", "F2", "dB", minHADB, maxHADB, SliderHADirectionalityRight);            
-            EndSubsection();
+            Common3DTIGUI.BeginSubsection("Right ear");
+            Common3DTIGUI.AddLabelToParameterGroup("Switch Directionality");
+            Common3DTIGUI.AddLabelToParameterGroup("Directionality extend");
+                if (Common3DTIGUI.CreateToggle(ref toolkit.doHADirectionalityRight, "Switch Directionality", "Enable directionality for right ear"))
+                    toolkit.SwitchOnOffHADirectionality(T_ear.RIGHT, toolkit.doHADirectionalityRight);
+                Common3DTIGUI.CreateFloatSlider(ref toolkit.HADirectionalityExtendRight, "Directionality extend", "F2", "dB", "Set directionality extend for right ear; The value is the attenuation in decibels applied to sources placed behind the listener", minHADB, maxHADB, SliderHADirectionalityRight);            
+            Common3DTIGUI.EndSubsection();
         }
 
-        EndSection();
-    }
-
-    /// <summary>
-    /// Draw panel with Limiter configuration
-    /// </summary>
-    public void DrawLimiterPanel()
-    {
-        //BeginSection("LIMITER:");
-        BeginSubsection("Limiter:");
-        GUILayout.BeginHorizontal();
-            SingleSpace();
-            if (CreateToggle(ref toolkit.doLimiter, "Switch Limiter"))
-                toolkit.SwitchOnOffLimiter(toolkit.doLimiter);
-            if (toolkit.doLimiter)
-            {
-                bool compressing;
-                toolkit.GetLimiterCompression(out compressing);
-                CreateLamp(compressing);
-            }
-        GUILayout.EndHorizontal();
-        EndSection();
-    }
-
-    ///////////////////////////////////////////////////////////
-    // AUXILIARY FUNCTIONS FOR CREATING FORMATTED GUI ELEMENTS
-    ///////////////////////////////////////////////////////////
-
-    /// <summary>
-    /// Auxiliary function for creating sliders for float variables with specific format
-    /// </summary>
-    /// <returns></returns>
-    public void CreateFloatSlider(ref float variable, string name, string decimalDigits, string units, float minValue, float maxValue, System.Action action)
-    {
-        SingleSpace();
-
-        GUILayout.BeginHorizontal();
-        
-        GUILayout.Label(name);
-        string valueString = GUILayout.TextField(variable.ToString(decimalDigits), GUILayout.ExpandWidth(false));
-        GUILayout.Label(units, GUILayout.ExpandWidth(false));
-        
-        GUILayout.EndHorizontal();
-
-        float newValue;
-        bool valid = float.TryParse(valueString, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out newValue);
-        if (valid)
-            variable = newValue;
-
-        float previousVar = variable;
-        variable = GUILayout.HorizontalSlider(variable, minValue, maxValue);        
-        if (variable != previousVar)
-            action();
-    }
-
-    /// <summary>
-    /// Auxiliary function for creating sliders for int variables with predefined possible values with specific format
-    /// </summary>
-    public void CreateSnapSlider(ref int variable, string name, GUIContent content, List<int> values, System.Action action)
-    {
-        SingleSpace();
-
-        int minValue = values[0];
-        int maxValue = values[values.Count - 1];
-        GUILayout.BeginHorizontal();
-        GUILayout.Label(name);
-        GUILayout.Label(content, GUILayout.ExpandWidth(false));
-        GUILayout.EndHorizontal();
-        int previousVar = variable;
-        variable = (int)GUILayout.HorizontalSlider((float)variable, (float)minValue, (float)maxValue);
-
-        int possibleValue = minValue;
-        foreach (int snapValue in values)
-        {
-            if (variable < snapValue)
-            {
-                variable = possibleValue;
-                break;
-            }
-            else
-                possibleValue = snapValue;
-        }
-
-        if (variable != previousVar)
-            action();        
-    }
-
-    /// <summary>
-    /// Auxiliary function for creating a text input accepting integer variables with specific format
-    /// </summary>
-    /// <param name="variable"></param>
-    /// <param name="name"></param>
-    /// <param name="units"></param>
-    /// <param name="action"></param>
-    public void CreateIntInput(ref int variable, string name, string units, System.Action action)
-    {
-        SingleSpace();
-
-        GUILayout.BeginHorizontal();
-
-        GUILayout.Label(name);
-        string valueString = GUILayout.TextField(variable.ToString(), GUILayout.ExpandWidth(false));
-        GUILayout.Label(units, GUILayout.ExpandWidth(false));
-
-        GUILayout.EndHorizontal();
-
-        int newValue;
-        float previousVar = variable;
-        bool valid = int.TryParse(valueString, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out newValue);
-        if (valid)
-            variable = newValue;
-
-        if (variable != previousVar)
-            action();
-    }
-
-    /// <summary>
-    /// Auxiliary function for creating a new section with title for parameter groups
-    /// </summary>    
-    public void BeginSection(string titleText)
-    {
-        GUILayout.BeginVertical(sectionStyle);        
-        GUILayout.Box(titleText, titleBoxStyle, GUILayout.ExpandWidth(true));
-    }
-
-    /// <summary>
-    /// Auxiliary function for ending section of parameter group
-    /// </summary>
-    public void EndSection()
-    {
-        GUILayout.EndVertical();
-        //GUILayout.Label("");    // Line spacing        
-        GUILayout.Space(spaceBetweenSections);          // Line spacing        
-    }
-
-    /// <summary>
-    /// Auxiliary function for creating a new subsection with title for parameter groups within one section
-    /// </summary>    
-    public void BeginSubsection(string titleText)
-    {
-        GUILayout.BeginVertical(subsectionStyle);        
-        GUILayout.Box(titleText, subtitleBoxStyle, GUILayout.ExpandWidth(false));
-    }
-
-    /// <summary>
-    /// Auxiliary function for ending subsection for parameter groups within one section
-    /// </summary>
-    public void EndSubsection()
-    {
-        GUILayout.EndVertical();        
-        GUILayout.Space(singleSpace);          // Line spacing        
-    }
-
-    /// <summary>
-    /// Auxiliary function for creating a drag&drop text box
-    /// </summary>
-    public void CreateDragDropBox(ref string textvar)
-    {        
-        Event evt = Event.current;
-        Rect drop_area = GUILayoutUtility.GetRect(0.0f, 20.0f, GUILayout.ExpandWidth(true));
-        drop_area.y += 14.0f;
-        GUI.Box(drop_area, textvar, dragdropStyle);
-        
-        switch (evt.type)
-        {
-            case EventType.DragUpdated:
-            case EventType.DragPerform:
-                if (!drop_area.Contains(evt.mousePosition))
-                    return;
-
-                DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
-
-                if (evt.type == EventType.DragPerform)
-                {
-                    DragAndDrop.AcceptDrag();
-                    ChangeFileName(ref textvar, DragAndDrop.paths[0]); 
-                }
-                break;
-        }
-    }
-
-    /// <summary>
-    ///  Auxiliary function for creating toogle input
-    /// </summary>    
-    public bool CreateToggle(ref bool boolvar, string toggleText)
-    {
-        bool oldvar = boolvar;
-        boolvar = GUILayout.Toggle(boolvar, toggleText, GUILayout.ExpandWidth(false));
-        return (oldvar != boolvar);
-    }
-
-    /// <summary>
-    /// Auxiliary function for creating a led/lamp indicator
-    /// </summary>
-    /// <param name="lightOn"></param>
-    public void CreateLamp(bool lightOn)
-    {
-        //GUILayout.Button("", lampStyle, GUILayout.ExpandWidth(false));        
-        //GUILayout.Button("", GUILayout.ExpandWidth(false));
-    }
-
-    /// <summary>
-    /// Put a single horizontal space
-    /// </summary>
-    public void SingleSpace()
-    {
-        GUILayout.Space(singleSpace);
+        Common3DTIGUI.EndSection();
     }
 }
