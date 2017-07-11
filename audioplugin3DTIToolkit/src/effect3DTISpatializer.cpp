@@ -52,6 +52,10 @@ namespace Spatializer3DTI
 #define LIMITER_RELEASE		500.0f
 #define LIMITER_RATIO		6
 
+#define SPATIALIZATION_MODE_HIGH_QUALITY		0
+#define SPATIALIZATION_MODE_HIGH_PERFORMANCE	1
+#define SPATIALIZATION_MODE_NONE				2
+
     enum
     {
 		PARAM_HRTF_FILE_STRING,
@@ -62,11 +66,11 @@ namespace Spatializer3DTI
 		PARAM_HRTF_INTERPOLATION,
 		PARAM_MOD_FARLPF,
 		PARAM_MOD_DISTATT,
-		PARAM_MOD_ILD,
+		PARAM_MOD_NEAR_FIELD_ILD,
 		PARAM_MOD_HRTF,
 		PARAM_MAG_ANECHATT,
 		PARAM_MAG_SOUNDSPEED,
-		PARAM_ILD_FILE_STRING,		
+		PARAM_NEAR_FIELD_ILD_FILE_STRING,		
 		PARAM_DEBUG_LOG,
 		
 		// HA directionality
@@ -85,6 +89,10 @@ namespace Spatializer3DTI
 		// HRTF resampling step
 		PARAM_HRTF_STEP,
 
+		// High Performance and None modes
+		PARAM_HIGH_PERFORMANCE_ILD_FILE_STRING,
+		PARAM_SPATIALIZATION_MODE,
+
 		P_NUM
 	};
 
@@ -97,6 +105,10 @@ namespace Spatializer3DTI
 		std::shared_ptr<Binaural::CListener> listener;				
 		Binaural::CCore core;
 		bool coreReady;
+		bool loadedHRTF;				// New
+		bool loadedNearFieldILD;		// New
+		bool loadedHighPerformanceILD;	// New
+		int spatializationMode;			// New
 		float parameters[P_NUM];
 
 		// STRING SERIALIZER		
@@ -104,10 +116,14 @@ namespace Spatializer3DTI
 		bool strHRTFserializing;
 		int strHRTFcount;
 		int strHRTFlength;
-		char* strILDpath;
-		bool strILDserializing;
-		int strILDcount;
-		int strILDlength;
+		char* strNearFieldILDpath;
+		bool strNearFieldILDserializing;
+		int strNearFieldILDcount;
+		int strNearFieldILDlength;
+		char* strHighPerformanceILDpath;
+		bool strHighPerformanceILDserializing;
+		int strHighPerformanceILDcount;
+		int strHighPerformanceILDlength;
 
 		// Limiter
 		CDynamicCompressorStereo limiter;
@@ -169,11 +185,11 @@ namespace Spatializer3DTI
 		RegisterParameter(definition, "HRTFInterp", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_HRTF_INTERPOLATION, "HRTF Interpolation method");
 		RegisterParameter(definition, "MODfarLPF", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_FARLPF, "Far distance LPF module enabler");
 		RegisterParameter(definition, "MODDistAtt", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_DISTATT, "Distance attenuation module enabler");
-		RegisterParameter(definition, "MODILD", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_ILD, "Near distance ILD module enabler");
+		RegisterParameter(definition, "MODNFILD", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_NEAR_FIELD_ILD, "Near distance ILD module enabler");
 		RegisterParameter(definition, "MODHRTF", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_HRTF, "HRTF module enabler");
 		RegisterParameter(definition, "MAGAneAtt", "dB", -30.0f, 0.0f, -3.0f, 1.0f, 1.0f, PARAM_MAG_ANECHATT, "Anechoic distance attenuation");
 		RegisterParameter(definition, "MAGSounSpd", "m/s", 0.0f, 1000.0f, 343.0f, 1.0f, 1.0f, PARAM_MAG_SOUNDSPEED, "Sound speed");
-		RegisterParameter(definition, "ILDPath", "", 0.0f, 255.0f, 0.0f, 1.0f, 1.0f, PARAM_ILD_FILE_STRING, "String with path of ILD binary file");		
+		RegisterParameter(definition, "NFILDPath", "", 0.0f, 255.0f, 0.0f, 1.0f, 1.0f, PARAM_NEAR_FIELD_ILD_FILE_STRING, "String with path of ILD binary file for Near Field effect");		
 		RegisterParameter(definition, "DebugLog", "", 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, PARAM_DEBUG_LOG, "Generate debug log");
 		
 		// HA directionality
@@ -191,6 +207,10 @@ namespace Spatializer3DTI
 
 		// HRTF resampling step
 		RegisterParameter(definition, "HRTFstep", "deg", 1.0f, 90.0f, 15.0f, 1.0f, 1.0f, PARAM_HRTF_STEP, "HRTF resampling step (in degrees)");
+
+		// High performance mode
+		RegisterParameter(definition, "HPILDPath", "", 0.0f, 255.0f, 0.0f, 1.0f, 1.0f, PARAM_HIGH_PERFORMANCE_ILD_FILE_STRING, "String with path of ILD binary file for High Performance mode");
+		RegisterParameter(definition, "SpatMode", "", 0.0f, 2.0f, 0.0f, 1.0f, 1.0f, PARAM_SPATIALIZATION_MODE, "Spatialization mode (0=High quality, 1=High performance, 2=None)");
 
         definition.flags |= UnityAudioEffectDefinitionFlags_IsSpatializer;
         return numparams;
@@ -312,34 +332,72 @@ namespace Spatializer3DTI
 
 	/////////////////////////////////////////////////////////////////////
 
-	int LoadILDBinaryFile(UnityAudioEffectState* state)
+	int LoadHighPerformanceILDBinaryFile(UnityAudioEffectState* state)
 	{
 		EffectData* data = state->GetEffectData<EffectData>();
 
 		// Get ILD 
-		ILD_HashTable h;
-		h = ILD::CreateFrom3dti(data->strILDpath);	
+		//T_ILD_HashTable h;
+		//h = ILD::CreateFrom3dti(data->strHighPerformanceILDpath);	
+		bool boolResult = ILD::CreateFrom3dti_ILDSpatializationTable(data->strHighPerformanceILDpath, data->listener);		
 
 		// Check errors
 		TDebuggerResultStruct result = GET_LAST_RESULT_STRUCT();
 		if (result.id != RESULT_OK)
 		{			
-			WriteLog(state, "ERROR TRYING TO LOAD ILD!!! ", result.suggestion);
+			WriteLog(state, "ERROR TRYING TO LOAD HIGH PERFORMANCE ILD!!! ", result.suggestion);
 			return TLoadResult::RESULT_LOAD_ERROR;
 		}
 
-		if (h.size() > 0)		// TO DO: Improve this error check		
+		//if (h.size() > 0)		// TO DO: Improve this error check		
+		if (boolResult)
 		{
-			CILD::SetILD_HashTable(std::move(h));
-			WriteLog(state, "LOAD ILD: ILD loaded from binary 3DTI file: ", data->strILDpath);
-			WriteLog(state, "          Hash hable size is ", h.size());
-			free(data->strILDpath);
+			///Binaural::CILD::SetILD_HashTable(std::move(h));
+			WriteLog(state, "LOAD HIGH PERFORMANCE ILD: ILD loaded from binary 3DTI file: ", data->strHighPerformanceILDpath);
+			//WriteLog(state, "          Hash hable size is ", h.size());
+			free(data->strHighPerformanceILDpath);
 			return TLoadResult::RESULT_LOAD_OK;
 		}
 		else
 		{			
-			WriteLog(state, "LOAD ILD: ERROR!!! could not create ILD from path: ", data->strILDpath);
-			free(data->strILDpath);
+			WriteLog(state, "LOAD HIGH PERFORMANCE ILD: ERROR!!! could not create ILD from path: ", data->strHighPerformanceILDpath);
+			free(data->strHighPerformanceILDpath);
+			return TLoadResult::RESULT_LOAD_ERROR;
+		}
+	}
+
+	/////////////////////////////////////////////////////////////////////
+
+	int LoadNearFieldILDBinaryFile(UnityAudioEffectState* state)
+	{
+		EffectData* data = state->GetEffectData<EffectData>();
+
+		// Get ILD 
+		//T_ILD_HashTable h;
+		//h = ILD::CreateFrom3dti(data->strNearFieldILDpath);
+		bool boolResult = ILD::CreateFrom3dti_ILDNearFieldEffectTable(data->strNearFieldILDpath, data->listener);
+
+		// Check errors
+		TDebuggerResultStruct result = GET_LAST_RESULT_STRUCT();
+		if (result.id != RESULT_OK)
+		{
+			WriteLog(state, "ERROR TRYING TO LOAD NEAR FIELD ILD!!! ", result.suggestion);
+			return TLoadResult::RESULT_LOAD_ERROR;
+		}
+
+		//if (h.size() > 0)		// TO DO: Improve this error check		
+		if (boolResult)
+		{
+			//Binaural::CILD::SetILD_HashTable(std::move(h));
+			WriteLog(state, "LOAD NEAR FIELD ILD: ILD loaded from binary 3DTI file: ", data->strNearFieldILDpath);
+			//WriteLog(state, "          Hash hable size is ", h.size());
+			free(data->strNearFieldILDpath);
+			return TLoadResult::RESULT_LOAD_OK;
+		}
+		else
+		{
+			WriteLog(state, "LOAD NEAR FIELD ILD: ERROR!!! could not create ILD from path: ", data->strNearFieldILDpath);
+			free(data->strNearFieldILDpath);
 			return TLoadResult::RESULT_LOAD_ERROR;
 		}
 	}
@@ -387,6 +445,8 @@ namespace Spatializer3DTI
 	{		
 		EffectData* data = state->GetEffectData<EffectData>();
 		
+		// TO DO: Change this for high performance / high quality modes
+
 		// Audio state:		
 		Binaural::AudioStateBinaural_Struct audioState = data->core.GetAudioState();
 		WriteLog(state, "CREATE: Sample rate set to ", audioState.sampleRate);
@@ -453,18 +513,26 @@ namespace Spatializer3DTI
 		effectdata->audioSource = effectdata->core.CreateSingleSourceDSP();
 		if (effectdata->audioSource != nullptr)
 		{
-			effectdata->audioSource->SetInterpolation(true);
-			effectdata->audioSource->modEnabler.doILD = false;	// ILD disabled before loading ILD data				
+			effectdata->audioSource->EnableInterpolation();
+			effectdata->audioSource->DisableNearFieldEffect();	// ILD disabled before loading ILD data				
 		}
 
 		// STRING SERIALIZER
 		effectdata->strHRTFserializing = false;
 		effectdata->strHRTFcount = 0;
-		effectdata->strILDserializing = false;
-		effectdata->strILDcount = 0;
+		effectdata->strNearFieldILDserializing = false;
+		effectdata->strNearFieldILDcount = 0;
+		effectdata->strHighPerformanceILDserializing = false;
+		effectdata->strHighPerformanceILDcount = 0;
 
 		// Setup limiter
 		effectdata->limiter.Setup(state->samplerate, LIMITER_RATIO, LIMITER_THRESHOLD, LIMITER_ATTACK, LIMITER_RELEASE);
+
+		// Spatialization modes
+		effectdata->spatializationMode = SPATIALIZATION_MODE_NONE;	
+		effectdata->loadedHRTF = false;
+		effectdata->loadedNearFieldILD = false;
+		effectdata->loadedHighPerformanceILD = false;
 
 		WriteLog(state, "Core initialized. Waiting for configuration...", "");
 
@@ -483,6 +551,45 @@ namespace Spatializer3DTI
 
 	/////////////////////////////////////////////////////////////////////
 
+	void CheckCoreIsReady(UnityAudioEffectState* state)
+	{
+		EffectData* data = state->GetEffectData<EffectData>();
+
+		bool isReady = false;
+
+		if (data->spatializationMode == SPATIALIZATION_MODE_NONE)
+			isReady = true;
+
+		if (data->spatializationMode == SPATIALIZATION_MODE_HIGH_PERFORMANCE)
+		{
+			if (data->loadedHighPerformanceILD)
+				isReady = true;
+		}
+
+		if (data->spatializationMode == SPATIALIZATION_MODE_HIGH_QUALITY)
+		{
+			if (data->loadedHRTF)
+				isReady = true;
+			if ((!data->loadedNearFieldILD) && (data->audioSource->IsNearFieldEffectEnabled()))
+				isReady = false;
+		}
+
+		if (!data->coreReady && isReady)
+		{
+			data->coreReady = true;
+			WriteLog(state, "Core ready!!!!!", "");
+		}
+
+		if (data->coreReady && !isReady)
+		{
+			data->coreReady = false;
+			WriteLog(state, "Core stoped!!!!! Waiting for loading resources...", "");
+		}
+	}
+
+
+	/////////////////////////////////////////////////////////////////////
+
 
     UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAudioEffectState* state, int index, float value)
     {
@@ -491,7 +598,7 @@ namespace Spatializer3DTI
             return UNITY_AUDIODSP_ERR_UNSUPPORTED;
         data->parameters[index] = value;
 
-		CMagnitudes magnitudes;
+		Common::CMagnitudes magnitudes;
 		Binaural::AudioStateBinaural_Struct audioState;
 		int loadResult;		
 
@@ -505,24 +612,23 @@ namespace Spatializer3DTI
 					loadResult = LoadHRTFBinaryFile(state);
 					if (loadResult == TLoadResult::RESULT_LOAD_OK)
 					{
-						if (!data->coreReady)
-						{
-							data->coreReady = true;
-							WriteLog(state, "Core ready!!!!!", "");
-						}
+						data->loadedHRTF = true;
+						CheckCoreIsReady(state);
 					}
 				}
 				break;
 
-			case PARAM_ILD_FILE_STRING:	// Load ILD binary file (MANDATORY?)								
-				loadResult = BuildPathString(state, data->strILDpath, data->strILDserializing, data->strILDlength, data->strILDcount, value);
+			case PARAM_NEAR_FIELD_ILD_FILE_STRING:	// Load ILD binary file (MANDATORY?)								
+				loadResult = BuildPathString(state, data->strNearFieldILDpath, data->strNearFieldILDserializing, data->strNearFieldILDlength, data->strNearFieldILDcount, value);
 				if (loadResult == TLoadResult::RESULT_LOAD_END)
 				{
-					loadResult = LoadILDBinaryFile(state);
+					loadResult = LoadNearFieldILDBinaryFile(state);
 					if (loadResult == TLoadResult::RESULT_LOAD_OK)
 					{
-						data->audioSource->modEnabler.doILD = true;
-						WriteLog(state, "SET PARAMETER: ILD Enabled", "");
+						data->audioSource->EnableNearFieldEffect();
+						data->loadedNearFieldILD = true;
+						WriteLog(state, "SET PARAMETER: Near Field ILD Enabled", "");
+						CheckCoreIsReady(state);
 					}
 				}
 				break;
@@ -545,12 +651,12 @@ namespace Spatializer3DTI
 			case PARAM_CUSTOM_ITD:	// Enable custom ITD (OPTIONAL)
 				if (value > 0.0f)
 				{
-					data->listener->SetCustomizedITD(true);
+					data->listener->EnableCustomizedITD();
 					WriteLog(state, "SET PARAMETER: Custom ITD is ", "Enabled");
 				}
 				else
 				{
-					data->listener->SetCustomizedITD(false);
+					data->listener->DisableCustomizedITD();
 					WriteLog(state, "SET PARAMETER: Custom ITD is ", "Disabled");
 				}
 				break;
@@ -558,12 +664,12 @@ namespace Spatializer3DTI
 			case PARAM_HRTF_INTERPOLATION:	// Change interpolation method (OPTIONAL)
 				if (value != 0.0f)
 				{
-					data->audioSource->SetInterpolation(true);
+					data->audioSource->EnableInterpolation();
 					WriteLog(state, "SET PARAMETER: Run-time HRTF Interpolation switched ", "ON");
 				}
 				else
 				{
-					data->audioSource->SetInterpolation(false);
+					data->audioSource->DisableInterpolation();
 					WriteLog(state, "SET PARAMETER: Run-time HRTF Interpolation switched ", "OFF");
 				}				
 				break;
@@ -571,12 +677,12 @@ namespace Spatializer3DTI
 			case PARAM_MOD_FARLPF:
 				if (value > 0.0f)
 				{
-					data->audioSource->modEnabler.doFarDistance = true;
+					data->audioSource->EnableFarDistanceEffect();
 					WriteLog(state, "SET PARAMETER: Far distance LPF is ", "Enabled");
 				}
 				else
 				{
-					data->audioSource->modEnabler.doFarDistance = false;
+					data->audioSource->DisableFarDistanceEffect();
 					WriteLog(state, "SET PARAMETER: Far distance LPF is ", "Disabled");
 				}
 				break;
@@ -584,40 +690,42 @@ namespace Spatializer3DTI
 			case PARAM_MOD_DISTATT:
 				if (value > 0.0f)
 				{
-					data->audioSource->modEnabler.doDistanceAttenuation = true;
+					data->audioSource->EnableDistanceAttenuation();
 					WriteLog(state, "SET PARAMETER: Distance attenuation is ", "Enabled");
 				}
 				else
 				{
-					data->audioSource->modEnabler.doDistanceAttenuation = false;
+					data->audioSource->DisableDistanceAttenuation();
 					WriteLog(state, "SET PARAMETER: Distance attenuation is ", "Disabled");
 				}
 				break;
 
-			case PARAM_MOD_ILD:
+			case PARAM_MOD_NEAR_FIELD_ILD:
 				if (value > 0.0f)
 				{
-					data->audioSource->modEnabler.doILD = true;
-					WriteLog(state, "SET PARAMETER: Near distance ILD is ", "Enabled");
+					data->audioSource->EnableNearFieldEffect();
+					WriteLog(state, "SET PARAMETER: Near Field ILD is ", "Enabled");
 				}
 				else
 				{
-					data->audioSource->modEnabler.doILD = false;
-					WriteLog(state, "SET PARAMETER: Near distance ILD is ", "Disabled");
+					data->audioSource->DisableNearFieldEffect();
+					WriteLog(state, "SET PARAMETER: Near Field ILD is ", "Disabled");
 				}
 				break;
 
 			case PARAM_MOD_HRTF:
-				if (value > 0.0f)
-				{
-					data->audioSource->modEnabler.doHRTF = true;
-					WriteLog(state, "SET PARAMETER: HRTF convolution is ", "Enabled");
-				}
-				else
-				{
-					data->audioSource->modEnabler.doHRTF = false;
-					WriteLog(state, "SET PARAMETER: HRTF convolution is ", "Disabled");
-				}
+				// DEPRECATED. DO NOTHING
+				WriteLog(state, "SET PARAMETER: HRTF convolution on/off parameter is deprecated. There might be a mismatch between your 3DTI plugin and your 3DTI API.", "");
+				//if (value > 0.0f)
+				//{
+				//	data->audioSource->EnableHRTF();
+				//	WriteLog(state, "SET PARAMETER: HRTF convolution is ", "Enabled");
+				//}
+				//else
+				//{
+				//	data->audioSource->DisableHRTF();
+				//	WriteLog(state, "SET PARAMETER: HRTF convolution is ", "Disabled");
+				//}
 				break;
 
 			case PARAM_MAG_ANECHATT:
@@ -702,6 +810,45 @@ namespace Spatializer3DTI
 				WriteLog(state, "SET PARAMETER: HRTF resampling step set to (degrees) ", value);
 				break;
 
+			case PARAM_HIGH_PERFORMANCE_ILD_FILE_STRING:	// Load ILD binary file (MANDATORY?)								
+				loadResult = BuildPathString(state, data->strHighPerformanceILDpath, data->strHighPerformanceILDserializing, data->strHighPerformanceILDlength, data->strHighPerformanceILDcount, value);
+				if (loadResult == TLoadResult::RESULT_LOAD_END)
+				{
+					loadResult = LoadHighPerformanceILDBinaryFile(state);
+					if (loadResult == TLoadResult::RESULT_LOAD_OK)
+					{
+						data->loadedHighPerformanceILD = true;
+						CheckCoreIsReady(state);
+						//data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::HighPerformance);
+						//WriteLog(state, "SET PARAMETER: High Performance ILD Enabled", "");
+					}
+				}
+				break;
+
+			case PARAM_SPATIALIZATION_MODE:
+				if (value == 0.0f)
+				{
+					data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::HighQuality);
+					data->spatializationMode = SPATIALIZATION_MODE_HIGH_QUALITY;
+					WriteLog(state, "SET PARAMETER: High Quality spatialization mode is enabled", "");
+					CheckCoreIsReady(state);
+				}
+				if (value == 1.0f)
+				{
+					data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::HighPerformance);
+					data->spatializationMode = SPATIALIZATION_MODE_HIGH_PERFORMANCE;
+					WriteLog(state, "SET PARAMETER: High performance spatialization mode is enabled", "");
+					CheckCoreIsReady(state);
+				}
+				if (value == 2.0f)
+				{
+					data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::None);					
+					data->spatializationMode = SPATIALIZATION_MODE_NONE;
+					WriteLog(state, "SET PARAMETER: No spatialization mode is enabled", "");
+					data->coreReady = true;
+				}
+				break;
+
 			default:
 				WriteLog(state, "SET PARAMETER: ERROR!!!! Unknown float parameter received from API: ", index);
 				return UNITY_AUDIODSP_ERR_UNSUPPORTED;
@@ -726,7 +873,7 @@ namespace Spatializer3DTI
 			switch (index)
 			{
 				case PARAM_LIMITER_GET_COMPRESSION:
-					if (data->limiter.GetCompression())
+					if (data->limiter.IsDynamicProcessApplied())
 						*value = 1.0f;
 					else
 						*value = 0.0f;
@@ -815,8 +962,8 @@ namespace Spatializer3DTI
 		// Process!!
 		CMonoBuffer<float> outLeftBuffer(length);
 		CMonoBuffer<float> outRightBuffer(length);
-		data->audioSource->UpdateBuffer(inMonoBuffer);
-		data->audioSource->ProcessAnechoic(*data->listener, outLeftBuffer, outRightBuffer);
+		data->audioSource->SetBuffer(inMonoBuffer);
+		data->audioSource->ProcessAnechoic(outLeftBuffer, outRightBuffer);
 
 		// Limiter
 		CStereoBuffer<float> outStereoBuffer;

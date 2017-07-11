@@ -22,35 +22,47 @@ using API_3DTI_Common;
 public class API_3DTI_Spatializer : MonoBehaviour
 {
     // LISTENER:
-    public string HRTFFileName = "";            // Used by GUI
-    public string ILDFileName = "";             // Used by GUI
-    public bool customITDEnabled = false;       // Used by GUI
-    public float listenerHeadRadius = 0.0875f;  // Used by GUI    
+    //public enum TSpatializationMode
+    //{
+    //    HIGH_QUALITY = 0,
+    //    HIGH_PERFORMANCE = 1,
+    //    NONE = 2
+    //}
+    public const int SPATIALIZATION_MODE_HIGH_QUALITY = 0;
+    public const int SPATIALIZATION_MODE_HIGH_PERFORMANCE = 1;
+    public const int SPATIALIZATION_MODE_NONE = 2;
+    public string HRTFFileName = "";                // For internal use, DO NOT USE IT DIRECTLY
+    public string ILDNearFieldFileName = "";        // For internal use, DO NOT USE IT DIRECTLY
+    public string ILDHighPerformanceFileName = "";  // For internal use, DO NOT USE IT DIRECTLY
+    public bool customITDEnabled = false;           // For internal use, DO NOT USE IT DIRECTLY
+    public float listenerHeadRadius = 0.0875f;      // For internal use, DO NOT USE IT DIRECTLY    
+    //public TSpatializationMode spatializationMode = TSpatializationMode.HIGH_QUALITY;        // For internal use, DO NOT USE IT DIRECTLY
+    public int spatializationMode = SPATIALIZATION_MODE_HIGH_QUALITY;   // For internal use, DO NOT USE IT DIRECTLY
 
     // SOURCE:
-    int lastSourceID = 0;                       // Internal use for debug log
+    int lastSourceID = 0;                       // For internal use, DO NOT USE IT DIRECTLY
 
     // ADVANCED:
-    public float scaleFactor = 1.0f;            // Used by GUI
-    public bool runtimeInterpolateHRTF = true;  // Used by GUI
-    public int HRTFstep = 15;                   // Used by GUI
-    public bool modFarLPF = true;               // Used by GUI
-    public bool modDistAtt = true;              // Used by GUI
-    public bool modILD = true;                  // Used by GUI
-    public bool modHRTF = true;                 // Used by GUI
-    public float magAnechoicAttenuation = -3.0f;    // Used by GUI    
-    public float magSoundSpeed = 343.0f;            // Used by GUI
-    public bool debugLog = false;                   // Used by GUI
+    public float scaleFactor = 1.0f;            // For internal use, DO NOT USE IT DIRECTLY
+    public bool runtimeInterpolateHRTF = true;  // For internal use, DO NOT USE IT DIRECTLY
+    public int HRTFstep = 15;                   // For internal use, DO NOT USE IT DIRECTLY
+    public bool modFarLPF = true;               // For internal use, DO NOT USE IT DIRECTLY
+    public bool modDistAtt = true;              // For internal use, DO NOT USE IT DIRECTLY
+    public bool modILD = true;                  // For internal use, DO NOT USE IT DIRECTLY
+    public bool modHRTF = true;                 // For internal use, DO NOT USE IT DIRECTLY
+    public float magAnechoicAttenuation = -3.0f;    // For internal use, DO NOT USE IT DIRECTLY    
+    public float magSoundSpeed = 343.0f;            // For internal use, DO NOT USE IT DIRECTLY
+    public bool debugLog = false;                   // For internal use, DO NOT USE IT DIRECTLY    
 
     // HEARING AID DIRECTIONALITY:
     //public CEarAPIParameter<bool> doHADirectionality = new CEarAPIParameter<bool>(false);
-    public bool doHADirectionalityLeft = false;     // Used by GUI    
-    public bool doHADirectionalityRight = false;    // Used by GUI    
-    public float HADirectionalityExtendLeft = 15.0f;    // Used by GUI
-    public float HADirectionalityExtendRight = 15.0f;   // Used by GUI
+    public bool doHADirectionalityLeft = false;     // For internal use, DO NOT USE IT DIRECTLY    
+    public bool doHADirectionalityRight = false;    // For internal use, DO NOT USE IT DIRECTLY    
+    public float HADirectionalityExtendLeft = 15.0f;    // For internal use, DO NOT USE IT DIRECTLY
+    public float HADirectionalityExtendRight = 15.0f;   // For internal use, DO NOT USE IT DIRECTLY
 
     // LIMITER
-    public bool doLimiter = true;               // Used by GUI
+    public bool doLimiter = true;               // For internal use, DO NOT USE IT DIRECTLY
 
     // Definition of spatializer plugin commands
     int LOAD_3DTI_HRTF = 0;
@@ -62,10 +74,10 @@ public class API_3DTI_Spatializer : MonoBehaviour
     int SET_MOD_FARLPF = 6;
     int SET_MOD_DISTATT = 7;
     int SET_MOD_ILD = 8;
-    int SET_MOD_HRTF = 9;
+    int SET_MOD_HRTF = 9;   // DEPRECATED
     int SET_MAG_ANECHATT = 10;    
     int SET_MAG_SOUNDSPEED = 11;
-    int LOAD_3DTI_ILD = 12;    
+    int LOAD_3DTI_ILD_NEARFIELD = 12;    
     int SET_DEBUG_LOG = 13;
     int SET_HA_DIRECTIONALITY_EXTEND_LEFT = 14;
     int SET_HA_DIRECTIONALITY_EXTEND_RIGHT = 15;
@@ -75,10 +87,17 @@ public class API_3DTI_Spatializer : MonoBehaviour
     int GET_LIMITER_COMPRESSION = 19;
     int GET_IS_CORE_READY = 20;
     int SET_HRTF_STEP = 21;
+    int LOAD_3DTI_ILD_HIGHPERFORMANCE = 22; // NEW
+    int SET_SPATIALIZATION_MODE = 23;     // NEW
 
     // Hack for modifying one single AudioSource (TO DO: fix this)
     bool selectSource = false;
     AudioSource selectedSource;
+
+    // For high performance / High quality modes, variables to check which resources have been loaded
+    bool HighQualityModeHRTFLoaded = false;
+    bool HighQualityModeILDLoaded = false;
+    bool HighPerformanceModeILDLoaded = false;
 
     /////////////////////////////////////////////////////////////////////
 
@@ -158,7 +177,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
             selectedSource = source;
         }
 
-        if (!SetModHRTF(true)) return false;
+        //if (!SetModHRTF(true)) return false;
         if (!SetModILD(true)) return false;
         if (!SetModFarLPF(true)) return false;
         return SetModDistanceAttenuation(true);
@@ -177,7 +196,9 @@ public class API_3DTI_Spatializer : MonoBehaviour
             selectedSource = source;
         }
 
-        if (!SetModHRTF(false)) return false;
+        
+
+        //if (!SetModHRTF(false)) return false;
         if (!SetModILD(false)) return false;
         if (!SetModFarLPF(false)) return false;
         return SetModDistanceAttenuation(false);
@@ -195,20 +216,46 @@ public class API_3DTI_Spatializer : MonoBehaviour
         if (!SetHeadRadius(listenerHeadRadius)) return false;
         if (!SetCustomITD(customITDEnabled)) return false;
 
-        if (!ILDFileName.Equals(""))
-        {            
-            #if (!UNITY_EDITOR)
-            if (SaveResourceAsBinary(ILDFileName, ".3dti-ild", out ILDFileName) != 1) return false;
-            #endif
-            if (!LoadILDBinary(ILDFileName)) return false;
-        }        
-
-        if (!HRTFFileName.Equals(""))
+        // HIGH QUALITY MODE (default)
+        //if (spatializationMode == TSpatializationMode.HIGH_QUALITY)
+        if (spatializationMode == SPATIALIZATION_MODE_HIGH_QUALITY)
         {
-            #if (!UNITY_EDITOR)
-            if (SaveResourceAsBinary(HRTFFileName, ".3dti-hrtf", out HRTFFileName) != 1) return false; 
-            #endif
-            if (!LoadHRTFBinary(HRTFFileName)) return false;
+            if (!HighQualityModeILDLoaded)
+            {
+                if (!ILDNearFieldFileName.Equals(""))
+                {
+                    #if (!UNITY_EDITOR)
+                    if (SaveResourceAsBinary(ILDNearFieldFileName, ".3dti-ild", out ILDNearFieldFileName) != 1) return false;
+                    #endif
+                    if (!LoadILDNearFieldBinary(ILDNearFieldFileName)) return false;
+                }
+            }
+            if (!HighQualityModeHRTFLoaded)
+            { 
+                if (!HRTFFileName.Equals(""))
+                {
+                    #if (!UNITY_EDITOR)
+                    if (SaveResourceAsBinary(HRTFFileName, ".3dti-hrtf", out HRTFFileName) != 1) return false; 
+                    #endif
+                    if (!LoadHRTFBinary(HRTFFileName)) return false;
+                }              
+            }
+        }
+
+        // HIGH PERFORMANCE MODE
+        //if (spatializationMode == TSpatializationMode.HIGH_PERFORMANCE)
+        if (spatializationMode == SPATIALIZATION_MODE_HIGH_PERFORMANCE)
+        {
+            if (!HighPerformanceModeILDLoaded)
+            {
+                if (!ILDHighPerformanceFileName.Equals(""))
+                {
+                    #if (!UNITY_EDITOR)
+                    if (SaveResourceAsBinary(ILDHighPerformanceFileName, ".3dti-ild", out ILDHighPerformanceFileName) != 1) return false;
+                    #endif
+                    if (!LoadILDHighPerformanceBinary(ILDHighPerformanceFileName)) return false;
+                }                
+            }
         }
 
         return true;
@@ -298,17 +345,18 @@ public class API_3DTI_Spatializer : MonoBehaviour
             }
         }
 
+        HighQualityModeHRTFLoaded = true;
         return true;
     }
 
     /////////////////////////////////////////////////////////////////////
 
     /// <summary>
-    /// Load ILD from a binary .3dti file
+    /// Load ILD Near Field from a binary .3dti file
     /// </summary>
-    public bool LoadILDBinary(string filename)
+    public bool LoadILDNearFieldBinary(string filename)
     {
-        ILDFileName = filename;
+        ILDNearFieldFileName = filename;
 
         List<AudioSource> audioSources;
         if (selectSource)
@@ -323,15 +371,51 @@ public class API_3DTI_Spatializer : MonoBehaviour
 
         foreach (AudioSource source in audioSources)
         {
-            source.SetSpatializerFloat(LOAD_3DTI_ILD, (float)filename.Length);            
+            source.SetSpatializerFloat(LOAD_3DTI_ILD_NEARFIELD, (float)filename.Length);            
             for (int i = 0; i < filename.Length; i++)
             {
                 int chr2Int = (int)filename[i];
                 float chr2Float = (float)chr2Int;
-                if (!source.SetSpatializerFloat(LOAD_3DTI_ILD, chr2Float)) return false;
+                if (!source.SetSpatializerFloat(LOAD_3DTI_ILD_NEARFIELD, chr2Float)) return false;
             }            
         }
 
+        HighQualityModeILDLoaded = true;
+        return true;
+    }
+
+    /////////////////////////////////////////////////////////////////////
+
+    /// <summary>
+    /// Load ILD High Performance from a binary .3dti file
+    /// </summary>
+    public bool LoadILDHighPerformanceBinary(string filename)
+    {
+        ILDHighPerformanceFileName = filename;
+
+        List<AudioSource> audioSources;
+        if (selectSource)
+        {
+            audioSources = new List<AudioSource>();
+            audioSources.Add(selectedSource);
+        }
+        else
+        {
+            audioSources = GetAllSpatializedSources();
+        }
+
+        foreach (AudioSource source in audioSources)
+        {
+            source.SetSpatializerFloat(LOAD_3DTI_ILD_HIGHPERFORMANCE, (float)filename.Length);
+            for (int i = 0; i < filename.Length; i++)
+            {
+                int chr2Int = (int)filename[i];
+                float chr2Float = (float)chr2Int;
+                if (!source.SetSpatializerFloat(LOAD_3DTI_ILD_HIGHPERFORMANCE, chr2Float)) return false;
+            }
+        }
+
+        HighPerformanceModeILDLoaded = true;
         return true;
     }
 
@@ -412,7 +496,8 @@ public class API_3DTI_Spatializer : MonoBehaviour
         if (!SetModFarLPF(modFarLPF)) return false;
         if (!SetModDistanceAttenuation(modDistAtt)) return false;
         if (!SetModILD(modILD)) return false;
-        if (!SetModHRTF(modHRTF)) return false;
+        //if (!SetModHRTF(modHRTF)) return false;
+        if (!SetSpatializationMode(spatializationMode)) return false;      
         return true;
     }
 
@@ -452,13 +537,31 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /////////////////////////////////////////////////////////////////////
 
     /// <summary>
+    /// Set spatialization mode (high quality, high performance, or none)
+    /// </summary>
+    /// <param name="mode"></param>
+    /// <returns></returns>
+    public bool SetSpatializationMode(int mode)
+    {
+        spatializationMode = mode;
+
+        // Load resources
+        SetupListener();
+
+        // Send command to plugin
+        return SendCommandForAllSources(SET_SPATIALIZATION_MODE, (float)(mode));
+    }
+
+    /////////////////////////////////////////////////////////////////////
+
+    /// <summary>
     /// Switch on/off HRTF convolution
     /// </summary>        
-    public bool SetModHRTF(bool _enable)
-    {
-        modHRTF = _enable;
-        return SendCommandForAllSources(SET_MOD_HRTF, CommonFunctions.Bool2Float(_enable));
-    }
+    //public bool SetModHRTF(bool _enable)
+    //{
+    //    modHRTF = _enable;
+    //    return SendCommandForAllSources(SET_MOD_HRTF, CommonFunctions.Bool2Float(_enable));
+    //}
 
     /// <summary>
     /// Set magnitude Anechoic Attenuation

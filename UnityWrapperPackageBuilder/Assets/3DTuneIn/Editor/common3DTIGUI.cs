@@ -6,7 +6,7 @@ using UnityEngine;
 using System.Reflection;
 using API_3DTI_Common;
 
-public abstract class Common3DTIGUI
+public class Common3DTIGUI
 {
     static int logoheight = 59;
     static int earsize = 40;
@@ -24,6 +24,7 @@ public abstract class Common3DTIGUI
     static GUIStyle leftColumnStyle;
     static GUIStyle rightColumnStyle;
     static GUIStyle intFieldStyle;
+    static GUIStyle aboutButtonStyle;
 
     /// <summary>
     /// Init all styles
@@ -51,6 +52,9 @@ public abstract class Common3DTIGUI
         parameterLabelStyle.alignment = TextAnchor.MiddleRight;
         intFieldStyle = new GUIStyle(EditorStyles.textField);
         intFieldStyle.alignment = TextAnchor.MiddleLeft;
+
+        aboutButtonStyle = new GUIStyle(EditorStyles.toolbarButton);
+        aboutButtonStyle.alignment = TextAnchor.MiddleCenter;
     }
 
     public static void SetInspectorIcon(GameObject go)
@@ -74,9 +78,22 @@ public abstract class Common3DTIGUI
             logo3DTI = Resources.Load("logo3DTIDarkBackground") as Texture;
         else
             logo3DTI = Resources.Load("logo3DTILightBackground") as Texture;        
-        GUILayout.Box(logo3DTI, logoStyle, GUILayout.Height(logoheight), GUILayout.ExpandWidth(true));        
+        GUILayout.Box(logo3DTI, logoStyle, GUILayout.Height(logoheight), GUILayout.ExpandWidth(true));          
     }
-    
+
+    /// <summary>
+    /// Show button for opening About window
+    /// </summary>
+    public static void ShowAboutButton()
+    {
+        SingleSpace();
+        EditorGUILayout.BeginHorizontal();
+            //GUILayout.FlexibleSpace();
+            if (GUILayout.Button("About 3D-Tune-In Toolkit", aboutButtonStyle, GUILayout.ExpandWidth(true)))
+                About3DTI.ShowAboutWindow();
+        EditorGUILayout.EndHorizontal();  
+    }
+
     /// <summary>
     /// Create a toggle for folding out parameters
     /// </summary>
@@ -154,7 +171,7 @@ public abstract class Common3DTIGUI
         //if (valid)
         //    variable = newValue;
 
-        if (variable != previousVar)
+        if ((variable != previousVar) && (variable > minValue) && (variable < maxValue))
         {
             if (action != null)
                 action.Invoke();
@@ -337,6 +354,59 @@ public abstract class Common3DTIGUI
         bool oldvar = boolvar;
         boolvar = GUILayout.Toggle(boolvar, new GUIContent(toggleText, tooltip), GUILayout.ExpandWidth(false));
         return (oldvar != boolvar);
+    }
+
+    ///// <summary>
+    /////  Auxiliary function for creating radio buttons
+    ///// </summary>    
+    //public static bool CreateTwoChoiceRadioButton(ref bool boolvar, string choiceFalseText, string choiceFalseTooltip, string choiceTrueText, string choiceTrueTooltip, bool vertical=true)
+    //{
+    //    int choice;
+    //    bool oldvar = boolvar;
+    //    if (boolvar)
+    //        choice = 1;
+    //    else
+    //        choice = 0;
+
+    //    // xCount tells how many elements fit into one horizontal row
+    //    int xCount;
+    //    if (vertical)
+    //        xCount = 1;
+    //    else
+    //        xCount = 2;
+
+    //    GUIContent[] contents = { new GUIContent(choiceFalseText, choiceFalseTooltip), new GUIContent(choiceTrueText, choiceTrueTooltip) };
+    //    choice = GUILayout.SelectionGrid(choice, contents, xCount, EditorStyles.radioButton);
+    //    if (choice == 0)
+    //        boolvar = false;
+    //    else
+    //        boolvar = true;
+
+    //    return (oldvar != boolvar);
+    //}
+
+    /// <summary>
+    ///  Auxiliary function for creating radio buttons
+    /// </summary>    
+    public static bool CreateRadioButtons(ref int choice, List<string> choiceTexts, List<string> tooltips, bool vertical = true)
+    {        
+        int oldvar = choice;     
+
+        // xCount tells how many elements fit into one horizontal row
+        int xCount;
+        if (vertical)
+            xCount = 1;
+        else
+            xCount = choiceTexts.Count;
+
+        GUIContent[] contents = new GUIContent[choiceTexts.Count];        
+        for (int i = 0; i < choiceTexts.Count; i++)
+        {
+            contents[i] = new GUIContent(choiceTexts[i], tooltips[i]);
+        }
+        choice = GUILayout.SelectionGrid(choice, contents, xCount, EditorStyles.radioButton);
+
+        return (oldvar != choice);
     }
 
     /// <summary>

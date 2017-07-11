@@ -941,7 +941,7 @@ namespace HASimulation3DTI
 			switch (index)
 			{
 				case PARAM_LIMITER_GET_COMPRESSION:
-					if (data->limiter.GetCompression())
+					if (data->limiter.IsDynamicProcessApplied())
 						*value = 1.0f;
 					else
 						*value = 0.0f;					

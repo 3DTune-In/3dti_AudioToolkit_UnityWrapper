@@ -57,6 +57,9 @@ public class AudioPlugin3DTISpatializerGUI : Editor
         // Show 3D-Tune-In logo         
         Common3DTIGUI.Show3DTILogo();
 
+        // Show About button
+        Common3DTIGUI.ShowAboutButton();
+
         ////// LISTENER                
         DrawListenerPanel();
 
@@ -83,13 +86,23 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     }
 
     /// <summary>
-    /// Action for button Load ILD
+    /// Action for button Load ILD Near Field
     /// </summary>
-    public void ButtonLoadILD()
+    public void ButtonLoadILDNearField()
     {
         string filePath = EditorUtility.OpenFilePanel("Select ILD File", "", "3dti-ild");        
         if (filePath.Length != 0)
-            Common3DTIGUI.ChangeFileName(ref toolkit.ILDFileName, filePath);
+            Common3DTIGUI.ChangeFileName(ref toolkit.ILDNearFieldFileName, filePath);
+    }
+
+    /// <summary>
+    /// Action for button Load ILD HIgh Performance
+    /// </summary>
+    public void ButtonLoadILDHighPerformance()
+    {
+        string filePath = EditorUtility.OpenFilePanel("Select ILD File", "", "3dti-ild");
+        if (filePath.Length != 0)
+            Common3DTIGUI.ChangeFileName(ref toolkit.ILDHighPerformanceFileName, filePath);
     }
 
     /// <summary>
@@ -158,26 +171,52 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     /// </summary>
     public void DrawListenerPanel()
     {
-        Common3DTIGUI.BeginSection("LISTENER SETUP");        
-        Common3DTIGUI.AddLabelToParameterGroup("HRTF");
-        Common3DTIGUI.AddLabelToParameterGroup("ILD Near Field Filter");
+        Common3DTIGUI.BeginSection("LISTENER SETUP");
 
-        // HRTF:
-        Common3DTIGUI.CreateLoadButtonAndBox("HRTF", "Select the HRTF of the listener from a .3dti-hrtf file", ref toolkit.HRTFFileName, ButtonLoadHRTF);
+        // HIGH PERFORMANCE / HIGH QUALITY CHOICE:
+        //if (Common3DTIGUI.CreateRadioButtons(ref toolkit.highPerformanceMode, "High Quality mode", "Enable high quality (lower performance) mode",
+        //                                                                              "High Performance Mode", "Enable high performance (lower quality) mode"))
+        //    toolkit.SetHighPerformanceMode(toolkit.highPerformanceMode);
+        if (Common3DTIGUI.CreateRadioButtons(ref toolkit.spatializationMode, new List<string>(new string[] { "High Quality mode", "High Performance mode", "No spatialization" }),
+                new List<string>(new string[] { "Enable high quality (lower performance) mode", "Enable high performance (lower quality) mode", "Disable spatialization"})))                                                                              
+            toolkit.SetSpatializationMode(toolkit.spatializationMode);
 
-        // ILD:
         Common3DTIGUI.SingleSpace();
-        Common3DTIGUI.CreateLoadButtonAndBox("ILD Near Field Filter", "Select the ILD near field filter of the listener from a .3dti-ild file", ref toolkit.ILDFileName, ButtonLoadILD);
+
+        // HIGH PERFORMANCE MODE CONTROLS
+        if (toolkit.spatializationMode ==  API_3DTI_Spatializer.SPATIALIZATION_MODE_HIGH_PERFORMANCE)
+        {            
+            Common3DTIGUI.AddLabelToParameterGroup("High Performance ILD");            
+
+            Common3DTIGUI.CreateLoadButtonAndBox("High Performance ILD", "Select the high performance ILD filter of the listener from a .3dti-ild file", ref toolkit.ILDHighPerformanceFileName, ButtonLoadILDHighPerformance);
+        }
+
+        // HIGH QUALITY MODE CONTROLS
+        if (toolkit.spatializationMode == API_3DTI_Spatializer.SPATIALIZATION_MODE_HIGH_QUALITY)
+        {        
+            Common3DTIGUI.AddLabelToParameterGroup("HRTF");
+            Common3DTIGUI.AddLabelToParameterGroup("Near Field Filter ILD");
+
+            // HRTF:
+            Common3DTIGUI.CreateLoadButtonAndBox("HRTF", "Select the HRTF of the listener from a .3dti-hrtf file", ref toolkit.HRTFFileName, ButtonLoadHRTF);
+
+            // ILD:
+            Common3DTIGUI.SingleSpace();
+            Common3DTIGUI.CreateLoadButtonAndBox("Near Field Filter ILD", "Select the ILD near field filter of the listener from a .3dti-ild file", ref toolkit.ILDNearFieldFileName, ButtonLoadILDNearField);
+        }
 
         // ITD:    
-        Common3DTIGUI.ResetParameterGroup();
-        Common3DTIGUI.AddLabelToParameterGroup("Custom ITD");
-        Common3DTIGUI.AddLabelToParameterGroup("Head radius");
-        Common3DTIGUI.SingleSpace();
-        if (Common3DTIGUI.CreateToggle(ref toolkit.customITDEnabled, "Custom ITD", "Enable Interaural Time Difference customization"))
-            toolkit.SetCustomITD(toolkit.customITDEnabled);
-        if (toolkit.customITDEnabled)
-            Common3DTIGUI.CreateFloatSlider(ref toolkit.listenerHeadRadius, "Head radius", "F4", "meters", "Set listener head radius", 0.0f, maxHeadRadius, SliderHeadRadius);
+        if (!(toolkit.spatializationMode == API_3DTI_Spatializer.SPATIALIZATION_MODE_NONE))
+        {
+            Common3DTIGUI.ResetParameterGroup();
+            Common3DTIGUI.AddLabelToParameterGroup("Custom ITD");
+            Common3DTIGUI.AddLabelToParameterGroup("Head radius");
+            Common3DTIGUI.SingleSpace();
+            if (Common3DTIGUI.CreateToggle(ref toolkit.customITDEnabled, "Custom ITD", "Enable Interaural Time Difference customization"))
+                toolkit.SetCustomITD(toolkit.customITDEnabled);
+            if (toolkit.customITDEnabled)
+                Common3DTIGUI.CreateFloatSlider(ref toolkit.listenerHeadRadius, "Head radius", "F4", "meters", "Set listener head radius", 0.0f, maxHeadRadius, SliderHeadRadius);
+        }
 
         Common3DTIGUI.EndSection();
     }
@@ -198,30 +237,40 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             Common3DTIGUI.CreateFloatSlider(ref toolkit.scaleFactor, "Scale factor", "F2", " meters = 1.0 unit in Unity", "Set the proportion between meters and Unity scale units", minScale, maxScale, SliderScale);
 
             // HRTF interpolation
-            Common3DTIGUI.BeginSubsection("HRTF Interpolation");
-            Common3DTIGUI.AddLabelToParameterGroup("Runtime interpolation");
-            Common3DTIGUI.AddLabelToParameterGroup("Resampling step");                                
-                GUILayout.BeginHorizontal();                                              
-                if (Common3DTIGUI.CreateToggle(ref toolkit.runtimeInterpolateHRTF, "Runtime interpolation", "Enable runtime interpolation of HRIRs, to allow for smoother transitions when moving listener and/or sources"))            
-                    toolkit.SetSourceInterpolation(toolkit.runtimeInterpolateHRTF);
-                GUILayout.EndHorizontal();
-                Common3DTIGUI.CreateIntInput(ref toolkit.HRTFstep, "Resampling step", "º", "HRTF resampling step; Lower values give better quality at the cost of more resources", 1, 45, InputResamplingStep);
-            Common3DTIGUI.EndSubsection();
+            if (toolkit.spatializationMode == API_3DTI_Spatializer.SPATIALIZATION_MODE_HIGH_QUALITY)
+            {
+                Common3DTIGUI.BeginSubsection("HRTF Interpolation");
+                Common3DTIGUI.AddLabelToParameterGroup("Runtime interpolation");
+                Common3DTIGUI.AddLabelToParameterGroup("Resampling step");
+                    GUILayout.BeginHorizontal();
+                    if (Common3DTIGUI.CreateToggle(ref toolkit.runtimeInterpolateHRTF, "Runtime interpolation", "Enable runtime interpolation of HRIRs, to allow for smoother transitions when moving listener and/or sources"))
+                        toolkit.SetSourceInterpolation(toolkit.runtimeInterpolateHRTF);
+                    GUILayout.EndHorizontal();
+                    Common3DTIGUI.CreateIntInput(ref toolkit.HRTFstep, "Resampling step", "º", "HRTF resampling step; Lower values give better quality at the cost of more resources", 5, 45, InputResamplingStep);
+                Common3DTIGUI.EndSubsection();
+            }
 
             // Mod enabler
             Common3DTIGUI.BeginSubsection("Switch Spatialization Effects");
             Common3DTIGUI.AddLabelToParameterGroup("Far distance LPF");
             Common3DTIGUI.AddLabelToParameterGroup("Distance attenuation");
-            Common3DTIGUI.AddLabelToParameterGroup("ILD NEar Field Filter");
-            Common3DTIGUI.AddLabelToParameterGroup("HRTF convolution");
+            if (toolkit.spatializationMode == API_3DTI_Spatializer.SPATIALIZATION_MODE_HIGH_QUALITY)
+            {
+                Common3DTIGUI.AddLabelToParameterGroup("ILD Near Field Filter");
+                //Common3DTIGUI.AddLabelToParameterGroup("HRTF convolution");
+            }
                 if (Common3DTIGUI.CreateToggle(ref toolkit.modFarLPF, "Far distance LPF", "Enable low pass filter to simulate sound coming from far distances"))
                     toolkit.SetModFarLPF(toolkit.modFarLPF);
                 if (Common3DTIGUI.CreateToggle(ref toolkit.modDistAtt, "Distance attenuation", "Enable attenuation of sound depending on distance to listener"))
                     toolkit.SetModDistanceAttenuation(toolkit.modDistAtt);
-                if (Common3DTIGUI.CreateToggle(ref toolkit.modILD, "ILD Near Field Filter", "Enable near field filter for sources very close to the listener ears"))
-                    toolkit.SetModILD(toolkit.modILD);
-                if (Common3DTIGUI.CreateToggle(ref toolkit.modHRTF, "HRTF convolution", "Enable HRTF convolution, the core of binaural spatialization"))
-                    toolkit.SetModHRTF(toolkit.modHRTF);
+
+                if (toolkit.spatializationMode == API_3DTI_Spatializer.SPATIALIZATION_MODE_HIGH_QUALITY)
+                {
+                    if (Common3DTIGUI.CreateToggle(ref toolkit.modILD, "ILD Near Field Filter", "Enable near field filter for sources very close to the listener ears"))
+                        toolkit.SetModILD(toolkit.modILD);
+                    //if (Common3DTIGUI.CreateToggle(ref toolkit.modHRTF, "HRTF convolution", "Enable HRTF convolution, the core of binaural spatialization"))
+                    //    toolkit.SetModHRTF(toolkit.modHRTF);
+                }
             Common3DTIGUI.EndSubsection();
 
             // Magnitudes

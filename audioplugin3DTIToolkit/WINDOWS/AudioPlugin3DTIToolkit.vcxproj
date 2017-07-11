@@ -35,6 +35,7 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DistanceAttenuator.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorMono.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorStereo.cpp" />
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicExpanderMono.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\EnvelopeDetector.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Fconvolver.cpp" />
@@ -50,6 +51,7 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\FiltersBank.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingLossSim.cpp" />
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\MultibandExpander.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.cpp" />
     <ClCompile Include="..\src\effect3DTIHA.cpp" />
@@ -75,9 +77,10 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Conventions.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Debugger.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DistanceAttenuator.h" />
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressor.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorMono.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorStereo.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicExpanderMono.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicProcessor.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\EarPair.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\EnvelopeDetector.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.h" />
@@ -94,6 +97,7 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\FiltersBank.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingLossSim.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\MultibandExpander.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.h" />
     <ClInclude Include="..\src\AudioPluginInterface.h" />
@@ -187,7 +191,7 @@ copy $(TargetPath) ..\..\Assets\Plugins\x86\$(TargetName).dll
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;AudioPlugin3DTIToolkit_EXPORTS;_3DTI_AXIS_CONVENTION_UNITY;_3DTI_ANGLE_CONVENTION_LISTEN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;AudioPlugin3DTIToolkit_EXPORTS;_3DTI_AXIS_CONVENTION_UNITY;_3DTI_ANGLE_CONVENTION_LISTEN;SWITCH_ON_3DTI_DEBUGGER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>
@@ -237,7 +241,7 @@ copy $(TargetPath) ..\..\Assets\Plugins\x86\$(TargetName).dll
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;AudioPlugin3DTIToolkit_EXPORTS;_3DTI_AXIS_CONVENTION_UNITY;_3DTI_ANGLE_CONVENTION_LISTEN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;AudioPlugin3DTIToolkit_EXPORTS;_3DTI_AXIS_CONVENTION_UNITY;_3DTI_ANGLE_CONVENTION_LISTEN;SWITCH_ON_3DTI_DEBUGGER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>
