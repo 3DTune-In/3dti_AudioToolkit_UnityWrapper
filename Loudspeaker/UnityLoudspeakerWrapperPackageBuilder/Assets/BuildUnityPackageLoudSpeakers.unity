@@ -337,25 +337,135 @@ MonoBehaviour:
   magAnechoicAttenuation: -11.16
   magSoundSpeed: 343
   debugLog: 1
-  structureSide: 1.85
+  structureSide: 1.76
   structureYaw: 0
   structurePitch: 0
-  speaker1Position: {x: 0.92311025, y: 0.92311025, z: 0.92311025}
-  speaker2Position: {x: 0.92311025, y: -0.92311025, z: 0.92311025}
-  speaker3Position: {x: 0.92311025, y: 0.92311025, z: -0.92311025}
-  speaker4Position: {x: 0.92311025, y: -0.92311025, z: -0.92311025}
-  speaker5Position: {x: -0.92311025, y: 0.92311025, z: 0.92311025}
-  speaker6Position: {x: -0.92311025, y: -0.92311025, z: 0.92311025}
-  speaker7Position: {x: -0.92311025, y: 0.92311025, z: -0.92311025}
-  speaker8Position: {x: -0.92311025, y: -0.92311025, z: -0.92311025}
-  speaker1Offset: {x: 12.5, y: 12.5, z: 6}
-  speaker2Offset: {x: -12.5, y: 6.48, z: 4.7}
-  speaker3Offset: {x: 0.45, y: 0, z: 0}
-  speaker4Offset: {x: -12.5, y: 0, z: 0}
+  speaker1Position: {x: 0.88, y: 0.88, z: 0.88}
+  speaker2Position: {x: 0.88, y: -0.88, z: 0.88}
+  speaker3Position: {x: 0.88, y: 0.88, z: -0.88}
+  speaker4Position: {x: 0.88, y: -0.88, z: -0.88}
+  speaker5Position: {x: -0.88, y: 0.88, z: 0.88}
+  speaker6Position: {x: -0.88, y: -0.88, z: 0.88}
+  speaker7Position: {x: -0.88, y: 0.88, z: -0.88}
+  speaker8Position: {x: -0.88, y: -0.88, z: -0.88}
+  speaker1Offset: {x: 0, y: 0, z: 0}
+  speaker2Offset: {x: 0, y: 0, z: 0}
+  speaker3Offset: {x: 0, y: 0, z: 0}
+  speaker4Offset: {x: 0, y: 0, z: 0}
   speaker5Offset: {x: 0, y: 0, z: 0}
-  speaker6Offset: {x: 0, y: 0, z: 12.5}
+  speaker6Offset: {x: 0, y: 0, z: 0}
   speaker7Offset: {x: 0, y: 0, z: 0}
   speaker8Offset: {x: 0, y: 0, z: 0}
+--- !u!1 &729632804
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 729632806}
+  - component: {fileID: 729632805}
+  m_Layer: 0
+  m_Name: TestAudio Source Top
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!82 &729632805
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 729632804}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 24300001, guid: f13986cc3301ba344bab0941545606e9,
+    type: 2}
+  m_audioClip: {fileID: 8300000, guid: 34199fb0cfe54d943a5332cf2289ddd8, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 1
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+--- !u!4 &729632806
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 729632804}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1582799887
 GameObject:
   m_ObjectHideFlags: 0
@@ -371,7 +481,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!82 &1582799888
 AudioSource:
   m_ObjectHideFlags: 0

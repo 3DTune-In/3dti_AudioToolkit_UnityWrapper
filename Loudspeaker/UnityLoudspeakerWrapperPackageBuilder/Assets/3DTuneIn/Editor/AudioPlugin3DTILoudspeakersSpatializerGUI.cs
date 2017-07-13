@@ -176,81 +176,51 @@ public class AudioPlugin3DTILoudspeakerSpatializerGUI : Editor
     /// </summary>
     public void DrawSpeakersConfigurationPanel()
     {
-        Common3DTIGUI.BeginSection("SPEAKER POSITIONS CONFIGURATION");
-
-        // Magnitudes
-        Common3DTIGUI.BeginSubsection("Speakers cube structure");
-        //Common3DTIGUI.CreateFloatSlider(ref toolkit.structureSide, "Cube side size:", "F2", "meters", "", minStructSide, maxStructSide, SliderSpeakersConfiguration);        
-
-
-        float previousStructureSize = toolkit.structureSide;
-        float structureSide = EditorGUILayout.FloatField("Cube side size (m): ", toolkit.structureSide);
-        toolkit.structureSide = Mathf.Clamp(structureSide, minStructSide, maxStructSide);
-        if (previousStructureSize != toolkit.structureSide) { SliderSpeakersConfiguration(); }
-
-
-        //TODO: minDistance to the listener value should come from the toolkit. Due to the current GIU allows the user introduce just the speakers structure side, the minimun distance can be calculated from that size
-        float minDistanceToListener = Mathf.Sqrt(3) * 0.5f * toolkit.structureSide;
-        GUILayout.Label("Minimun distance between listener and source: " + minDistanceToListener + " m");
-
-
-        Common3DTIGUI.EndSubsection();
-
-        Common3DTIGUI.BeginSubsection("Speakers Fine Adjustment");
-        Common3DTIGUI.SingleSpace();
-
-        GUILayout.BeginHorizontal("");
-        GUILayout.BeginVertical("");
-        GUILayout.Label("Spk1 " + toolkit.speaker1Position.ToString("f2") + " m");
-        GUILayout.Label("Spk2 " + toolkit.speaker2Position.ToString("f2") + " m");
-        GUILayout.Label("Spk3 " + toolkit.speaker1Position.ToString("f2") + " m");
-        GUILayout.Label("Spk4 " + toolkit.speaker2Position.ToString("f2") + " m");
-        GUILayout.Label("Spk5 " + toolkit.speaker1Position.ToString("f2") + " m");
-        GUILayout.Label("Spk6 " + toolkit.speaker2Position.ToString("f2") + " m");
-        GUILayout.Label("Spk7 " + toolkit.speaker1Position.ToString("f2") + " m");
-        GUILayout.Label("Spk8 " + toolkit.speaker2Position.ToString("f2") + " m");
-        GUILayout.EndVertical();
-        GUILayout.BeginVertical("");
-        GUILayout.Label("Offset (cm):");
-        GUILayout.Label("Offset (cm):");
-        GUILayout.Label("Offset (cm):");
-        GUILayout.Label("Offset (cm):");
-        GUILayout.Label("Offset (cm):");
-        GUILayout.Label("Offset (cm):");
-        GUILayout.Label("Offset (cm):");
-        GUILayout.Label("Offset (cm):");
-        GUILayout.EndVertical();
-
-        GUILayout.BeginVertical("");
-
-        Vector3 temp = EditorGUILayout.Vector3Field("", toolkit.speaker1Offset);        
-        toolkit.speaker1Offset = CalculateSpeakerOffset(temp, toolkit.speaker1Position);
-        temp = EditorGUILayout.Vector3Field("", toolkit.speaker2Offset);
-        toolkit.speaker2Offset = CalculateSpeakerOffset(temp, toolkit.speaker2Position);
-
-        temp = EditorGUILayout.Vector3Field("", toolkit.speaker3Offset);
-        toolkit.speaker3Offset = CalculateSpeakerOffset(temp, toolkit.speaker3Position);
-
-        temp = EditorGUILayout.Vector3Field("", toolkit.speaker4Offset);
-        toolkit.speaker4Offset = CalculateSpeakerOffset(temp, toolkit.speaker4Position);
-
-        temp = EditorGUILayout.Vector3Field("", toolkit.speaker5Offset);
-        toolkit.speaker5Offset = CalculateSpeakerOffset(temp, toolkit.speaker5Position);
-
-        temp = EditorGUILayout.Vector3Field("", toolkit.speaker6Offset);
-        toolkit.speaker6Offset = CalculateSpeakerOffset(temp, toolkit.speaker6Position);
-
-        temp = EditorGUILayout.Vector3Field("", toolkit.speaker7Offset);
-        toolkit.speaker7Offset = CalculateSpeakerOffset(temp, toolkit.speaker7Position);
-
-        temp = EditorGUILayout.Vector3Field("", toolkit.speaker8Offset);
-        toolkit.speaker8Offset = CalculateSpeakerOffset(temp, toolkit.speaker8Position);
-        
-        GUILayout.EndVertical();
-        GUILayout.EndHorizontal();
-
-        Common3DTIGUI.EndSubsection();
-
+        Common3DTIGUI.BeginSection("SPEAKER POSITIONS CONFIGURATION");       
+            Common3DTIGUI.BeginSubsection("Speakers cube structure");        
+                float previousStructureSize = toolkit.structureSide;
+                float structureSide = EditorGUILayout.FloatField("Cube side size (m): ", toolkit.structureSide);
+                toolkit.structureSide = Mathf.Clamp(structureSide, minStructSide, maxStructSide);
+                if (previousStructureSize != toolkit.structureSide) { SliderSpeakersConfiguration(); }
+                //TODO: minDistance to the listener value should come from the toolkit. Due to the current GIU allows the user introduce just the speakers structure side, the minimun distance can be calculated from that size
+                float minDistanceToListener = Mathf.Sqrt(3) * 0.5f * toolkit.structureSide;
+                GUILayout.Label("Minimun distance between listener and source: " + minDistanceToListener + " m");
+            Common3DTIGUI.EndSubsection();
+            Common3DTIGUI.BeginSubsection("Speakers Fine Adjustment");
+                Common3DTIGUI.SingleSpace();
+                GUILayout.BeginHorizontal();
+                    GUILayout.BeginVertical();
+                        ShowSpeakerPosition("Spk1", toolkit.speaker1Offset, toolkit.speaker1Position);
+                        ShowSpeakerPosition("Spk2", toolkit.speaker2Offset, toolkit.speaker2Position);
+                        ShowSpeakerPosition("Spk3", toolkit.speaker3Offset, toolkit.speaker3Position);
+                        ShowSpeakerPosition("Spk4", toolkit.speaker4Offset, toolkit.speaker4Position);
+                        ShowSpeakerPosition("Spk5", toolkit.speaker5Offset, toolkit.speaker5Position);
+                        ShowSpeakerPosition("Spk6", toolkit.speaker6Offset, toolkit.speaker6Position);
+                        ShowSpeakerPosition("Spk7", toolkit.speaker7Offset, toolkit.speaker7Position);
+                        ShowSpeakerPosition("Spk8", toolkit.speaker8Offset, toolkit.speaker8Position);       
+                    GUILayout.EndVertical();
+                    GUILayout.BeginVertical();
+                        GUILayout.Label("Offset (cm):");
+                        GUILayout.Label("Offset (cm):");
+                        GUILayout.Label("Offset (cm):");
+                        GUILayout.Label("Offset (cm):");
+                        GUILayout.Label("Offset (cm):");
+                        GUILayout.Label("Offset (cm):");
+                        GUILayout.Label("Offset (cm):");
+                        GUILayout.Label("Offset (cm):");
+                    GUILayout.EndVertical();
+                    GUILayout.BeginVertical();
+                        ShowSpeakerOffsetControl(ref toolkit.speaker1Offset, toolkit.speaker1Position);
+                        ShowSpeakerOffsetControl(ref toolkit.speaker2Offset, toolkit.speaker2Position);
+                        ShowSpeakerOffsetControl(ref toolkit.speaker3Offset, toolkit.speaker3Position);
+                        ShowSpeakerOffsetControl(ref toolkit.speaker4Offset, toolkit.speaker4Position);
+                        ShowSpeakerOffsetControl(ref toolkit.speaker5Offset, toolkit.speaker5Position);
+                        ShowSpeakerOffsetControl(ref toolkit.speaker6Offset, toolkit.speaker6Position);
+                        ShowSpeakerOffsetControl(ref toolkit.speaker7Offset, toolkit.speaker7Position);
+                        ShowSpeakerOffsetControl(ref toolkit.speaker8Offset, toolkit.speaker8Position);
+                    GUILayout.EndVertical();
+                GUILayout.EndHorizontal();
+            Common3DTIGUI.EndSubsection();
         Common3DTIGUI.EndSection();
     }
 
@@ -300,164 +270,19 @@ public class AudioPlugin3DTILoudspeakerSpatializerGUI : Editor
     }
 
 
-    /////////////////////////////////////////////////////////////
-    //// AUXILIARY FUNCTIONS FOR CREATING FORMATTED GUI ELEMENTS
-    /////////////////////////////////////////////////////////////
+    void ShowSpeakerPosition(string label, Vector3 speakerOffset, Vector3 speakerPosition)
+    {
+        GUILayout.Label(label +" " + (speakerPosition + speakerOffset * 0.01f).ToString("f2") + " m");
+    }
 
-    ///// <summary>
-    ///// Auxiliary function for creating sliders for float variables with specific format
-    ///// </summary>
-    ///// <returns></returns>
-    //public void CreateFloatSlider(ref float variable, string name, string decimalDigits, string units, float minValue, float maxValue, System.Action action)
-    //{
-    //    SingleSpace();
-      
-    //    GUILayout.BeginHorizontal("");
-    //    GUILayout.Label(name);
-    //    //EditorGUILayout.FloatField();
-    //    //GUILayout.EndVertical();
-    //    //GUILayout.BeginVertical("");
-    //    string valueString = GUILayout.TextField(variable.ToString(decimalDigits), GUILayout.ExpandWidth(false));
-    //    //GUILayout.EndVertical();
-    //    //GUILayout.BeginVertical("");
-    //    GUILayout.Label(units, GUILayout.ExpandWidth(false));
-    //    GUILayout.EndHorizontal();
+    void ShowSpeakerOffsetControl(ref Vector3 speakerOffset, Vector3 speakerPosition)
+    {
+        Vector3 previousSpeakerOffset = speakerOffset;
+        Vector3 temp = EditorGUILayout.Vector3Field("", speakerOffset);
+        speakerOffset = CalculateSpeakerOffset(temp, speakerPosition);
+        if (previousSpeakerOffset != speakerOffset) { SliderSpeakersConfiguration(); }
+    }
 
-    //    //GUILayout.BeginVertical("");
-    //    //GUILayout.Label(name + " " + variable.ToString(decimalDigits) + " " +units);
-    //    //GUILayout.EndVertical();
-      
-    //    GUILayout.BeginVertical("");
-    //    float newValue;
-    //    bool valid = float.TryParse(valueString, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out newValue);
-    //    if (valid) { variable = newValue; }
-    //    float previousVar = variable;
-    //    variable = GUILayout.HorizontalSlider(variable, minValue, maxValue);
-    //    if (variable != previousVar) { action(); }
-
-    //    GUILayout.EndVertical();
-
-
-      
-    //}
-
-    
-    
-     
-    ///// <summary>
-    ///// Auxiliary function for creating sliders for int variables with predefined possible values with specific format
-    ///// </summary>
-    //public void CreateSnapSlider(ref int variable, string name, GUIContent content, List<int> values, System.Action action)
-    //{
-    //    SingleSpace();
-
-    //    int minValue = values[0];
-    //    int maxValue = values[values.Count - 1];
-    //    GUILayout.BeginHorizontal();
-    //    GUILayout.Label(name);
-    //    GUILayout.Label(content, GUILayout.ExpandWidth(false));
-    //    GUILayout.EndHorizontal();
-    //    int previousVar = variable;
-    //    variable = (int)GUILayout.HorizontalSlider((float)variable, (float)minValue, (float)maxValue);
-
-    //    int possibleValue = minValue;
-    //    foreach (int snapValue in values)
-    //    {
-    //        if (variable < snapValue)
-    //        {
-    //            variable = possibleValue;
-    //            break;
-    //        }
-    //        else
-    //            possibleValue = snapValue;
-    //    }
-
-    //    if (variable != previousVar)
-    //        action();        
-    //}
-
-    ///// <summary>
-    ///// Auxiliary function for creating a new section with title for parameter groups
-    ///// </summary>    
-    //public void BeginSection(string titleText)
-    //{
-    //    GUILayout.BeginVertical(sectionStyle);        
-    //    GUILayout.Box(titleText, titleBoxStyle, GUILayout.ExpandWidth(true));
-    //}
-
-    ///// <summary>
-    ///// Auxiliary function for ending section of parameter group
-    ///// </summary>
-    //public void EndSection()
-    //{
-    //    GUILayout.EndVertical();
-    //    //GUILayout.Label("");    // Line spacing        
-    //    GUILayout.Space(spaceBetweenSections);          // Line spacing        
-    //}
-
-    ///// <summary>
-    ///// Auxiliary function for creating a new subsection with title for parameter groups within one section
-    ///// </summary>    
-    //public void BeginSubsection(string titleText)
-    //{
-    //    GUILayout.BeginVertical(subsectionStyle);        
-    //    GUILayout.Box(titleText, subtitleBoxStyle, GUILayout.ExpandWidth(false));
-    //}
-
-    ///// <summary>
-    ///// Auxiliary function for ending subsection for parameter groups within one section
-    ///// </summary>
-    //public void EndSubsection()
-    //{
-    //    GUILayout.EndVertical();        
-    //    GUILayout.Space(singleSpace);          // Line spacing        
-    //}
-
-    ///// <summary>
-    ///// Auxiliary function for creating a drag&drop text box
-    ///// </summary>
-    //public void CreateDragDropBox(ref string textvar)
-    //{        
-    //    Event evt = Event.current;
-    //    Rect drop_area = GUILayoutUtility.GetRect(0.0f, 20.0f, GUILayout.ExpandWidth(true));
-    //    drop_area.y += 14.0f;
-    //    GUI.Box(drop_area, textvar, dragdropStyle);
-        
-    //    switch (evt.type)
-    //    {
-    //        case EventType.DragUpdated:
-    //        case EventType.DragPerform:
-    //            if (!drop_area.Contains(evt.mousePosition))
-    //                return;
-
-    //            DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
-
-    //            if (evt.type == EventType.DragPerform)
-    //            {
-    //                DragAndDrop.AcceptDrag();
-    //                ChangeFileName(ref textvar, DragAndDrop.paths[0]); 
-    //            }
-    //            break;
-    //    }
-    //}
-
-    ///// <summary>
-    /////  Auxiliary function for creating toogle input
-    ///// </summary>    
-    //public bool CreateToggle(ref bool boolvar, string toggleText)
-    //{
-    //    bool oldvar = boolvar;
-    //    boolvar = GUILayout.Toggle(boolvar, toggleText, GUILayout.ExpandWidth(false));
-    //    return (oldvar != boolvar);
-    //}
-
-    ///// <summary>
-    ///// Put a single horizontal space
-    ///// </summary>
-    //public void SingleSpace()
-    //{
-    //    GUILayout.Space(singleSpace);
-    //}
 
     Vector3 CalculateSpeakerOffset(Vector3 speakerOffset, Vector3 speakerPosition )
     {        
