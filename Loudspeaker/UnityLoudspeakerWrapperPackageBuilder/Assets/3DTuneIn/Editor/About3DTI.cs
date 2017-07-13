@@ -47,7 +47,7 @@ public class About3DTI : EditorWindow
             ShowParagraph("The Unity Wrapper of the 3DTi Toolkit (3DTi Unity Wrapper) allows integration of the different components of the Toolkit in any Unity Scene.These components are packed in the form of a Unity Package requiring Unity 5.2 or above. The current version of the package is built to support the following platforms:");
             BeginBulletList();
                 ShowBulletListItem("As Host: Microsoft Windows, Mac OS X.");
-                ShowBulletListItem("As Target: Microsoft Windows x64, Mac OS X, Android(4.4 or above), iOS.");
+                ShowBulletListItem("As Target: Microsoft Windows x64, Mac OS X.");
             EndBulletList();
             
 

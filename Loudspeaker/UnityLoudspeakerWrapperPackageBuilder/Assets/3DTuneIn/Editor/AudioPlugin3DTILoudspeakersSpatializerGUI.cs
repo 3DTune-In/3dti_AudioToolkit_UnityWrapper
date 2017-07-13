@@ -182,7 +182,7 @@ public class AudioPlugin3DTILoudspeakerSpatializerGUI : Editor
         Common3DTIGUI.BeginSubsection("Speakers cube structure");
         //Common3DTIGUI.CreateFloatSlider(ref toolkit.structureSide, "Cube side size:", "F2", "meters", "", minStructSide, maxStructSide, SliderSpeakersConfiguration);        
 
-        //GUILayout.BeginVertical("");
+
         float previousStructureSize = toolkit.structureSide;
         float structureSide = EditorGUILayout.FloatField("Cube side size (m): ", toolkit.structureSide);
         toolkit.structureSide = Mathf.Clamp(structureSide, minStructSide, maxStructSide);
@@ -192,7 +192,7 @@ public class AudioPlugin3DTILoudspeakerSpatializerGUI : Editor
         //TODO: minDistance to the listener value should come from the toolkit. Due to the current GIU allows the user introduce just the speakers structure side, the minimun distance can be calculated from that size
         float minDistanceToListener = Mathf.Sqrt(3) * 0.5f * toolkit.structureSide;
         GUILayout.Label("Minimun distance between listener and source: " + minDistanceToListener + " m");
-        //GUILayout.EndVertical();
+
 
         Common3DTIGUI.EndSubsection();
 
