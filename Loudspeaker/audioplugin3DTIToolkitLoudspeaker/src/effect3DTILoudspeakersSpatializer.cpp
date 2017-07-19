@@ -456,7 +456,7 @@ namespace LoudspeakersSpatializer3DTI
 			return UNITY_AUDIODSP_ERR_UNSUPPORTED;
 		data->parameters[index] = value;
 
-		CMagnitudes magnitudes;
+		Common::CMagnitudes magnitudes;
 		int loadResult;
 
 		// Process command sent by C# API
