@@ -45,73 +45,77 @@ public class API_3DTI_HA : MonoBehaviour
 
     // Internal parameters for consistency with GUI
     [HideInInspector]
-    public bool PARAM_PROCESS_LEFT_ON = false;
+    public bool PARAM_PROCESS_LEFT_ON = false;      // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public bool PARAM_PROCESS_RIGHT_ON = false;
+    public bool PARAM_PROCESS_RIGHT_ON = false;     // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public float PARAM_VOLUME_L_DB = 0.0f;
+    public float PARAM_VOLUME_L_DB = 0.0f;          // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public float PARAM_VOLUME_R_DB = 0.0f;
+    public float PARAM_VOLUME_R_DB = 0.0f;          // For internal use, DO NOT USE IT DIRECTLY
     // Common values for both ears in EQ		
     [HideInInspector]
-    public float PARAM_EQ_LPFCUTOFF_HZ = 0.0f;
+    public float PARAM_EQ_LPFCUTOFF_HZ = 0.0f;      // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public float PARAM_EQ_HPFCUTOFF_HZ = 0.0f;
+    public float PARAM_EQ_HPFCUTOFF_HZ = 0.0f;      // For internal use, DO NOT USE IT DIRECTLY
     // Dynamic EQ
     [HideInInspector]
-    public bool PARAM_DYNAMICEQ_INTERPOLATION_ON = true;
+    public bool PARAM_DYNAMICEQ_INTERPOLATION_ON = true;    // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public float [] PARAM_DYNAMICEQ_LEVELTHRESHOLDS_LEFT_DBFS = new float[3]  { 0.0f, 0.0f, 0.0f };
+    public float [] PARAM_DYNAMICEQ_LEVELTHRESHOLDS_LEFT_DBFS = new float[3]  { 0.0f, 0.0f, 0.0f }; // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public float [] PARAM_DYNAMICEQ_LEVELTHRESHOLDS_RIGHT_DBFS = new float[3] { 0.0f, 0.0f, 0.0f };
+    public float [] PARAM_DYNAMICEQ_LEVELTHRESHOLDS_RIGHT_DBFS = new float[3] { 0.0f, 0.0f, 0.0f }; // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public float [,] PARAM_DYNAMICEQ_GAINS_LEFT = new float[3, 7]  { { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f } };
+    public float [,] PARAM_DYNAMICEQ_GAINS_LEFT = new float[3, 7]  { { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }, 
+                                                                     { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }, 
+                                                                     { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f } };    // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public float [,] PARAM_DYNAMICEQ_GAINS_RIGHT = new float[3, 7] { { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f } };
+    public float [,] PARAM_DYNAMICEQ_GAINS_RIGHT = new float[3, 7] { { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }, 
+                                                                     { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }, 
+                                                                     { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f } };    // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public float PARAM_DYNAMICEQ_ATTACKRELEASE_LEFT_MS = 1000.0f;
+    public float PARAM_DYNAMICEQ_ATTACKRELEASE_LEFT_MS = 1000.0f;   // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public float PARAM_DYNAMICEQ_ATTACKRELEASE_RIGHT_MS = 1000.0f;
+    public float PARAM_DYNAMICEQ_ATTACKRELEASE_RIGHT_MS = 1000.0f;  // For internal use, DO NOT USE IT DIRECTLY
     // Quantization noise
     [HideInInspector]
-    public bool PARAM_NOISE_BEFORE_ON = false;
+    public bool PARAM_NOISE_BEFORE_ON = false;      // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public bool PARAM_NOISE_AFTER_ON = false;
+    public bool PARAM_NOISE_AFTER_ON = false;       // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public int PARAM_NOISE_NUMBITS = 24;
+    public int PARAM_NOISE_NUMBITS = 24;            // For internal use, DO NOT USE IT DIRECTLY
     // Simplified controls
     [HideInInspector]
-    public float PARAM_COMPRESSION_PERCENTAGE_LEFT = 0.0f;
+    public float PARAM_COMPRESSION_PERCENTAGE_LEFT = 0.0f;  // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public float PARAM_COMPRESSION_PERCENTAGE_RIGHT = 0.0f;
+    public float PARAM_COMPRESSION_PERCENTAGE_RIGHT = 0.0f; // For internal use, DO NOT USE IT DIRECTLY
     // Limiter
     [HideInInspector]
-    public bool PARAM_LIMITER_ON = false;
+    public bool PARAM_LIMITER_ON = false;                   // For internal use, DO NOT USE IT DIRECTLY
     // Normalization
     [HideInInspector]
-    public bool PARAM_NORMALIZATION_SET_ON_LEFT = false;
+    public bool PARAM_NORMALIZATION_SET_ON_LEFT = false;    // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public float PARAM_NORMALIZATION_DBS_LEFT = 20.0f;
+    public float PARAM_NORMALIZATION_DBS_LEFT = 20.0f;      // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public bool PARAM_NORMALIZATION_SET_ON_RIGHT = false;
+    public bool PARAM_NORMALIZATION_SET_ON_RIGHT = false;   // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public float PARAM_NORMALIZATION_DBS_RIGHT = 20.0f;
+    public float PARAM_NORMALIZATION_DBS_RIGHT = 20.0f;     // For internal use, DO NOT USE IT DIRECTLY
     // Tone control
     [HideInInspector]
-    public float PARAM_TONE_LOW_LEFT = 0.0f;
+    public float PARAM_TONE_LOW_LEFT = 0.0f;    // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public float PARAM_TONE_MID_LEFT = 0.0f;
+    public float PARAM_TONE_MID_LEFT = 0.0f;    // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public float PARAM_TONE_HIGH_LEFT = 0.0f;
+    public float PARAM_TONE_HIGH_LEFT = 0.0f;   // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public float PARAM_TONE_LOW_RIGHT = 0.0f;
+    public float PARAM_TONE_LOW_RIGHT = 0.0f;   // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public float PARAM_TONE_MID_RIGHT = 0.0f;
+    public float PARAM_TONE_MID_RIGHT = 0.0f;   // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public float PARAM_TONE_HIGH_RIGHT = 0.0f;
+    public float PARAM_TONE_HIGH_RIGHT = 0.0f;  // For internal use, DO NOT USE IT DIRECTLY
     // Debug log
     [HideInInspector]
-    public bool PARAM_DEBUG_LOG = false;    
+    public bool PARAM_DEBUG_LOG = false;        // For internal use, DO NOT USE IT DIRECTLY
 
     //////////////////////////////////////////////////////////////
     // INITIALIZATION

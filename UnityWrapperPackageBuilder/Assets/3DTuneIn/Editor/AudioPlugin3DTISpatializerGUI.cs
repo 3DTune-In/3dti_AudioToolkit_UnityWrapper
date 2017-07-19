@@ -246,7 +246,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
                     if (Common3DTIGUI.CreateToggle(ref toolkit.runtimeInterpolateHRTF, "Runtime interpolation", "Enable runtime interpolation of HRIRs, to allow for smoother transitions when moving listener and/or sources"))
                         toolkit.SetSourceInterpolation(toolkit.runtimeInterpolateHRTF);
                     GUILayout.EndHorizontal();
-                    Common3DTIGUI.CreateIntInput(ref toolkit.HRTFstep, "Resampling step", "º", "HRTF resampling step; Lower values give better quality at the cost of more resources", 5, 45, InputResamplingStep);
+                    Common3DTIGUI.CreateIntInput(ref toolkit.HRTFstep, "Resampling step", "º", "HRTF resampling step; Lower values give better quality at the cost of more memory usage", 5, 45, InputResamplingStep);
                 Common3DTIGUI.EndSubsection();
             }
 
@@ -266,8 +266,8 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
                 if (toolkit.spatializationMode == API_3DTI_Spatializer.SPATIALIZATION_MODE_HIGH_QUALITY)
                 {
-                    if (Common3DTIGUI.CreateToggle(ref toolkit.modILD, "ILD Near Field Filter", "Enable near field filter for sources very close to the listener ears"))
-                        toolkit.SetModILD(toolkit.modILD);
+                    if (Common3DTIGUI.CreateToggle(ref toolkit.modNearFieldILD, "ILD Near Field Filter", "Enable near field filter for sources very close to the listener"))
+                        toolkit.SetModNearFieldILD(toolkit.modNearFieldILD);
                     //if (Common3DTIGUI.CreateToggle(ref toolkit.modHRTF, "HRTF convolution", "Enable HRTF convolution, the core of binaural spatialization"))
                     //    toolkit.SetModHRTF(toolkit.modHRTF);
                 }
@@ -277,8 +277,8 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             Common3DTIGUI.BeginSubsection("Physical magnitudes");
             Common3DTIGUI.AddLabelToParameterGroup("Anechoic distance attenuation");
             Common3DTIGUI.AddLabelToParameterGroup("Sound speed");
-                Common3DTIGUI.CreateFloatSlider(ref toolkit.magAnechoicAttenuation, "Anechoic distance attenuation", "F2", "dB", "Set attenuation in decibels for each double distance", minDB, maxDB, SliderAnechoicAttenuation);            
-                Common3DTIGUI.CreateFloatSlider(ref toolkit.magSoundSpeed, "Sound speed", "F0", "m/s", "Set sound speed, used for ITD computation", 0.0f, maxSoundSpeed, SliderSoundSpeed);
+                Common3DTIGUI.CreateFloatSlider(ref toolkit.magAnechoicAttenuation, "Anechoic distance attenuation", "F2", "dB", "Set attenuation in dB for each double distance", minDB, maxDB, SliderAnechoicAttenuation);            
+                Common3DTIGUI.CreateFloatSlider(ref toolkit.magSoundSpeed, "Sound speed", "F0", "m/s", "Set sound speed, used for custom ITD computation", 0.0f, maxSoundSpeed, SliderSoundSpeed);
             Common3DTIGUI.EndSubsection();
 
             // Limiter

@@ -477,9 +477,8 @@ GameObject:
   - component: {fileID: 244518579}
   - component: {fileID: 244518578}
   - component: {fileID: 244518583}
-  - component: {fileID: 244518585}
   - component: {fileID: 244518584}
-  - component: {fileID: 244518586}
+  - component: {fileID: 244518585}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -551,7 +550,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 244518577}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.3, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -573,13 +572,13 @@ MonoBehaviour:
   ILDHighPerformanceFileName: Assets/3DTuneIn/Data/HighPerformance/ILD/HRTF_ILD_44100.3dti-ild
   customITDEnabled: 1
   listenerHeadRadius: 0.2414
-  spatializationMode: 1
+  spatializationMode: 0
   scaleFactor: 1
-  runtimeInterpolateHRTF: 1
+  runtimeInterpolateHRTF: 0
   HRTFstep: 45
   modFarLPF: 1
   modDistAtt: 1
-  modILD: 1
+  modNearFieldILD: 1
   modHRTF: 1
   magAnechoicAttenuation: -6
   magSoundSpeed: 343
@@ -588,7 +587,7 @@ MonoBehaviour:
   doHADirectionalityRight: 0
   HADirectionalityExtendLeft: 15
   HADirectionalityExtendRight: 15
-  doLimiter: 0
+  doLimiter: 1
 --- !u!114 &244518584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -607,7 +606,7 @@ MonoBehaviour:
   PARAM_VOLUME_R_DB: 0
   PARAM_EQ_LPFCUTOFF_HZ: 0
   PARAM_EQ_HPFCUTOFF_HZ: 5178.2188
-  PARAM_DYNAMICEQ_INTERPOLATION_ON: 0
+  PARAM_DYNAMICEQ_INTERPOLATION_ON: 1
   PARAM_DYNAMICEQ_LEVELTHRESHOLDS_LEFT_DBFS:
   - -79.90643
   - -80
@@ -621,14 +620,14 @@ MonoBehaviour:
   PARAM_NOISE_BEFORE_ON: 0
   PARAM_NOISE_AFTER_ON: 0
   PARAM_NOISE_NUMBITS: 24
-  PARAM_COMPRESSION_PERCENTAGE_LEFT: 0
+  PARAM_COMPRESSION_PERCENTAGE_LEFT: 99
   PARAM_COMPRESSION_PERCENTAGE_RIGHT: 0
-  PARAM_LIMITER_ON: 0
-  PARAM_NORMALIZATION_SET_ON_LEFT: 0
+  PARAM_LIMITER_ON: 1
+  PARAM_NORMALIZATION_SET_ON_LEFT: 1
   PARAM_NORMALIZATION_DBS_LEFT: 20
-  PARAM_NORMALIZATION_SET_ON_RIGHT: 0
+  PARAM_NORMALIZATION_SET_ON_RIGHT: 1
   PARAM_NORMALIZATION_DBS_RIGHT: 20
-  PARAM_TONE_LOW_LEFT: -0.11111131
+  PARAM_TONE_LOW_LEFT: 0
   PARAM_TONE_MID_LEFT: -0.16374265
   PARAM_TONE_HIGH_LEFT: 0.13450299
   PARAM_TONE_LOW_RIGHT: -0.081395656
@@ -648,52 +647,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hlMixer: {fileID: 24100000, guid: 02d04237d0308a14ea0c3b720849faae, type: 2}
   GLOBAL_LEFT_ON: 1
-  GLOBAL_RIGHT_ON: 0
-  PARAM_BANDS_DB_LEFT:
-  - -7
-  - -7
-  - -12
-  - -15
-  - -22
-  - -25
-  - -25
-  - -25
-  - -25
-  PARAM_BANDS_DB_RIGHT:
-  - -47
-  - -47
-  - -52
-  - -55
-  - -62
-  - -65
-  - -65
-  - -65
-  - -65
-  PARAM_LEFT_EQ_ON: 1
-  PARAM_RIGHT_EQ_ON: 1
-  PARAM_LEFT_COMPRESSOR_ON: 1
-  PARAM_RIGHT_COMPRESSOR_ON: 0
-  PARAM_COMPRESSOR_FIRST: 0
-  PARAM_COMP_LEFT_RATIO: 1
-  PARAM_COMP_LEFT_THRESHOLD: 0
-  PARAM_COMP_RIGHT_RATIO: 1
-  PARAM_COMP_RIGHT_THRESHOLD: 0
-  PARAM_COMP_LEFT_ATTACK: 20
-  PARAM_COMP_LEFT_RELEASE: 100
-  PARAM_COMP_RIGHT_ATTACK: 20
-  PARAM_COMP_RIGHT_RELEASE: 100
---- !u!114 &244518586
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 244518577}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f375fae467806c846a54d4ef189cecbc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  otherClip: {fileID: 0}
+  GLOBAL_RIGHT_ON: 1
+  PARAM_CALIBRATION: 90
+  PARAM_AUDIOMETRY_LEFT:
+  - 47
+  - 47
+  - 52
+  - 55
+  - 62
+  - 65
+  - 65
+  - 65
+  - 65
+  PARAM_AUDIOMETRY_RIGHT:
+  - 22
+  - 22
+  - 27
+  - 30
+  - 37
+  - 40
+  - 40
+  - 40
+  - 40
+  PARAM_LEFT_ATTACK: 960
+  PARAM_LEFT_RELEASE: 513
+  PARAM_RIGHT_ATTACK: 658
+  PARAM_RIGHT_RELEASE: 791
 --- !u!1 &585364504
 GameObject:
   m_ObjectHideFlags: 0
@@ -844,7 +823,8 @@ AudioSource:
   m_GameObject: {fileID: 1582799887}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300001, guid: 02d04237d0308a14ea0c3b720849faae,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: c5630708c841bac439c535c9acd1ec97, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -966,7 +946,8 @@ AudioSource:
   m_GameObject: {fileID: 1862500841}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300001, guid: 02d04237d0308a14ea0c3b720849faae,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: fc0274a44de36614ab5fac77873ce5e2, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1

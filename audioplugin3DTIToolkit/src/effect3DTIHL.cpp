@@ -1,550 +1,474 @@
-///**
-//*** 3D-Tune-In Toolkit Unity Wrapper for Hearing Loss Simulation***
-//*
-//* version 1.7
-//* Created on: February 2017
-//*
-//* Author: 3DI-DIANA Research Group / University of Malaga / Spain
-//* Contact: areyes@uma.es
-//*
-//* Project: 3DTI (3D-games for TUNing and lEarnINg about hearing aids)
-//* Module: 3DTI Toolkit Unity Wrapper
-//**/
-//
-//#include "AudioPluginUtil.h"
-//
-//#include <HAHLSimulation/HearingLossSim.h>
-//
-//// Includes for debug logging
-//#include <fstream>
-//#include <iostream>
-//#include <string>
-//using namespace std;
-//
-//// DEBUG LOG 
-//#ifdef UNITY_ANDROID
-//#define DEBUG_LOG_CAT
-//#else
-//#define DEBUG_LOG_FILE_HL
-//#endif
-//
-//#ifdef DEBUG_LOG_CAT
-//#include <android/log.h> 
-//#include <string>
-//#include <sstream>
-//#endif
-//
-///////////////////////////////////////////////////////////////////////
-//
-//namespace HLSimulation3DTI
-//{
-//
-////////////////////////////////////////////////////////
-//#define EAR_RIGHT 0
-//#define EAR_LEFT 1
-//
-//// Default values for parameters
-//#define DEFAULT_INIFREQ			62.5
-//#define DEFAULT_BANDSNUMBER		9
-//#define DEFAULT_OCTAVEBANDSTEP	1
-//#define DEFAULT_QBPF			1.4142
-//#define DEFAULT_KNEE			0
-//#define DEFAULT_RATIO			1
-//#define DEFAULT_THRESHOLD		0
-//#define DEFAULT_ATTACK			20
-//#define DEFAULT_RELEASE			100
-//#define DEFAULT_BAND_GAINS		{-7,  -7, -12, -15, -22, -25, -25, -25, -25}
-//
-//// Min/max values for parameters
-//#define MIN_INIFREQ			20	
-//#define MAX_INIFREQ			20000
-//#define MAX_BANDSNUMBER		31
-//#define MIN_OCTAVEBANDSTEP	0
-//#define MAX_OCTAVEBANDSTEP	FLT_MAX
-//#define MIN_QBPF			0
-//#define MAX_QBPF			FLT_MAX
-//#define MIN_BANDGAIN_DB		-75
-//#define MAX_BANDGAIN_DB		0
-//#define MIN_KNEE			0
-//#define MAX_KNEE			20
-//#define MAX_RATIO			50
-//#define MIN_THRESHOLD		-80
-//#define MAX_ATTACK			200
-//#define MAX_RELEASE			200
-////////////////////////////////////////////////////////
-//
-//	enum
-//	{
-//		// EQ Band gains
-//		PARAM_BAND_L_0_DB,
-//		PARAM_BAND_L_1_DB,
-//		PARAM_BAND_L_2_DB,
-//		PARAM_BAND_L_3_DB,
-//		PARAM_BAND_L_4_DB,
-//		PARAM_BAND_L_5_DB,
-//		PARAM_BAND_L_6_DB,
-//		PARAM_BAND_L_7_DB,
-//		PARAM_BAND_L_8_DB,
-//		PARAM_BAND_R_0_DB,
-//		PARAM_BAND_R_1_DB,
-//		PARAM_BAND_R_2_DB,
-//		PARAM_BAND_R_3_DB,
-//		PARAM_BAND_R_4_DB,
-//		PARAM_BAND_R_5_DB,
-//		PARAM_BAND_R_6_DB,
-//		PARAM_BAND_R_7_DB,
-//		PARAM_BAND_R_8_DB,
-//
-//		// Switch on/off processing for each ear and EQ-Compressor chain
-//		PARAM_LEFT_EQ_ON,
-//		PARAM_RIGHT_EQ_ON,
-//		PARAM_LEFT_COMPRESSOR_ON,
-//		PARAM_RIGHT_COMPRESSOR_ON,
-//		PARAM_COMPRESSOR_FIRST,
-//
-//		// Compressor	
-//		PARAM_COMP_LEFT_RATIO,
-//		PARAM_COMP_LEFT_THRESHOLD,		
-//		PARAM_COMP_RIGHT_RATIO,
-//		PARAM_COMP_RIGHT_THRESHOLD,
-//
-//		// Envelope detector
-//		PARAM_COMP_LEFT_ATTACK,
-//		PARAM_COMP_LEFT_RELEASE,
-//		PARAM_COMP_RIGHT_ATTACK,
-//		PARAM_COMP_RIGHT_RELEASE,		
-//
-//		// Debug log
-//		PARAM_DEBUG_LOG,
-//
-//		P_NUM
-//	};
-//
-//	/////////////////////////////////////////////////////////////////////
-//
-//    struct EffectData
-//    {
-//		CHearingLossSim HL;				
-//		float parameters[P_NUM];
-//
-//		// DEBUG LOG
-//		bool debugLog = false;
-//	};
-//
-//	/////////////////////////////////////////////////////////////////////
-//
-//	template <class T>
-//	void WriteLog(UnityAudioEffectState* state, string logtext, const T& value)
-//	{
-//		EffectData* data = state->GetEffectData<EffectData>();
-//		if (data->debugLog)
-//		{
-//			#ifdef DEBUG_LOG_FILE_HL
-//			ofstream logfile;
-//			logfile.open("3DTI_HearingLossSimulation_DebugLog.txt", ofstream::out | ofstream::app);
-//			logfile << logtext << value << endl;
-//			logfile.close();
-//			#endif
-//
-//			#ifdef DEBUG_LOG_CAT						
-//			std::ostringstream os;
-//			os << logtext << value;
-//			string fulltext = os.str();
-//			__android_log_print(ANDROID_LOG_DEBUG, "3DTIHLSIMULATION", fulltext.c_str());
-//			#endif
-//		}
-//	}
-//
-//	/////////////////////////////////////////////////////////////////////
-//
-//
-//    inline bool IsHostCompatible(UnityAudioEffectState* state)
-//    {
-//        // Somewhat convoluted error checking here because hostapiversion is only supported from SDK version 1.03 (i.e. Unity 5.2) and onwards.
-//        return
-//            state->structsize >= sizeof(UnityAudioEffectState) &&
-//            state->hostapiversion >= UNITY_AUDIO_PLUGIN_API_VERSION;
-//    }
-//
-//	/////////////////////////////////////////////////////////////////////
-//
-//    int InternalRegisterEffectDefinition(UnityAudioEffectDefinition& definition)
-//    {
-//        int numparams = P_NUM;
-//        definition.paramdefs = new UnityAudioParameterDefinition[numparams];
-//
-//		// EQ gain for each band
-//		RegisterParameter(definition, "EQL0", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_L_0_DB, "EQ Left 62.5 Hz band gain (dB)");
-//		RegisterParameter(definition, "EQL1", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_L_1_DB, "EQ Left 125 Hz band gain (dB)");
-//		RegisterParameter(definition, "EQL2", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_L_2_DB, "EQ Left 250 Hz band gain (dB)");
-//		RegisterParameter(definition, "EQL3", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_L_3_DB, "EQ Left 500 Hz band gain (dB)");
-//		RegisterParameter(definition, "EQL4", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_L_4_DB, "EQ Left 1 KHz band gain (dB)");
-//		RegisterParameter(definition, "EQL5", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_L_5_DB, "EQ Left 2 KHz band gain (dB)");
-//		RegisterParameter(definition, "EQL6", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_L_6_DB, "EQ Left 4 KHz band gain (dB)");
-//		RegisterParameter(definition, "EQL7", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_L_7_DB, "EQ Left 8 KHz band gain (dB)");
-//		RegisterParameter(definition, "EQL8", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_L_8_DB, "EQ Left 16 KHz band gain (dB)");
-//		RegisterParameter(definition, "EQR0", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_R_0_DB, "EQ Right 62.5 Hz band gain (dB)");
-//		RegisterParameter(definition, "EQR1", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_R_1_DB, "EQ Right 125 Hz band gain (dB)");
-//		RegisterParameter(definition, "EQR2", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_R_2_DB, "EQ Right 250 Hz band gain (dB)");
-//		RegisterParameter(definition, "EQR3", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_R_3_DB, "EQ Right 500 Hz band gain (dB)");
-//		RegisterParameter(definition, "EQR4", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_R_4_DB, "EQ Right 1 KHz band gain (dB)");
-//		RegisterParameter(definition, "EQR5", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_R_5_DB, "EQ Right 2 KHz band gain (dB)");
-//		RegisterParameter(definition, "EQR6", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_R_6_DB, "EQ Right 4 KHz band gain (dB)");
-//		RegisterParameter(definition, "EQR7", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_R_7_DB, "EQ Right 8 KHz band gain (dB)");
-//		RegisterParameter(definition, "EQR8", "", MIN_BANDGAIN_DB, MAX_BANDGAIN_DB, 0.0f, 1.0f, 1.0f, PARAM_BAND_R_8_DB, "EQ Right 16 KHz band gain (dB)");
-//		
-//		// Switch on/off process for each ear and EQ-compressor chain
-//		RegisterParameter(definition, "EQLeftOn", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_LEFT_EQ_ON, "Switch on EQ for left ear");							// Default: ON
-//		RegisterParameter(definition, "EQRightOn", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_RIGHT_EQ_ON, "Switch on EQ for right ear");						// Default: ON
-//		RegisterParameter(definition, "CompLeftOn", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_LEFT_COMPRESSOR_ON, "Switch on Compressor for left ear");		// Default: OFF
-//		RegisterParameter(definition, "CompRightOn", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_RIGHT_COMPRESSOR_ON, "Switch on Compressor for right ear");	// Default: OFF
-//		RegisterParameter(definition, "CompFirst", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_COMPRESSOR_FIRST, "Process Compressor before EQ");	// Default: Compressor First
-//
-//		// Compressor		
-//		RegisterParameter(definition, "LeftRatio", "", 1.0f, MAX_RATIO, DEFAULT_RATIO, 1.0f, 1.0f, PARAM_COMP_LEFT_RATIO, "Left compressor: Ratio");
-//		RegisterParameter(definition, "LeftThreshold", "dB", MIN_THRESHOLD, 0.0f, DEFAULT_THRESHOLD, 1.0f, 1.0f, PARAM_COMP_LEFT_THRESHOLD, "Left compressor: Threshold");		
-//		RegisterParameter(definition, "RightRatio", "", 1.0f, MAX_RATIO, DEFAULT_RATIO, 1.0f, 1.0f, PARAM_COMP_RIGHT_RATIO, "Right compressor: Ratio");
-//		RegisterParameter(definition, "RightThreshold", "dB", MIN_THRESHOLD, 0.0f, DEFAULT_THRESHOLD, 1.0f, 1.0f, PARAM_COMP_RIGHT_THRESHOLD, "Right compressor: Threshold");
-//
-//		// Envelope detector
-//		RegisterParameter(definition, "LeftAttack", "ms", 0.0f, MAX_ATTACK, DEFAULT_ATTACK, 1.0f, 1.0f, PARAM_COMP_LEFT_ATTACK, "Left compressor: Attack");
-//		RegisterParameter(definition, "LeftRelease", "ms", 0.0f, MAX_RELEASE, DEFAULT_RELEASE, 1.0f, 1.0f, PARAM_COMP_LEFT_RELEASE, "Left compressor: Release");
-//		RegisterParameter(definition, "RightAttack", "ms", 0.0f, MAX_ATTACK, DEFAULT_ATTACK, 1.0f, 1.0f, PARAM_COMP_RIGHT_ATTACK, "Right compressor: Attack");
-//		RegisterParameter(definition, "RightRelease", "ms", 0.0f, MAX_RELEASE, DEFAULT_RELEASE, 1.0f, 1.0f, PARAM_COMP_RIGHT_RELEASE, "Right compressor: Release");
-//		
-//		// Debug log
-//		RegisterParameter(definition, "DebugLogHL", "", 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, PARAM_DEBUG_LOG, "Generate debug log for HL");
-//
-//        return numparams;
-//    }
-//
-//
-//	/////////////////////////////////////////////////////////////////////
-//
-//	void WriteLogHeader(UnityAudioEffectState* state)
-//	{
-//		EffectData* data = state->GetEffectData<EffectData>();
-//
-//		// EQ:
-//		WriteLog(state, "CREATE: EQ setup:", "");
-//		WriteLog(state, "        Initial frequency = ", DEFAULT_INIFREQ);
-//		WriteLog(state, "        Number of bands = ", DEFAULT_BANDSNUMBER);
-//		WriteLog(state, "        Octave step = 1/", DEFAULT_OCTAVEBANDSTEP);
-//		WriteLog(state, "        Q factor of BPFs = ", DEFAULT_QBPF);
-//
-//		// Compressor:
-//		WriteLog(state, "CREATE: Compressor setup:", "");
-//		WriteLog(state, "        Sample rate = ", state->samplerate);
-//		WriteLog(state, "        Ratio = ", DEFAULT_RATIO);
-//		WriteLog(state, "        Threshold = ", DEFAULT_THRESHOLD);
-//		WriteLog(state, "        Attack time = ", DEFAULT_ATTACK);
-//		WriteLog(state, "        Release time = ", DEFAULT_RELEASE);
-//
-//		WriteLog(state, "--------------------------------------", "\n");
-//	}
-//
-//	/////////////////////////////////////////////////////////////////////	
-//
-//    UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectState* state)
-//    {
-//        EffectData* effectdata = new EffectData;
-//        memset(effectdata, 0, sizeof(EffectData));
-//        state->effectdata = effectdata;
-//        InitParametersFromDefinitions(InternalRegisterEffectDefinition, effectdata->parameters);
-//		
-//		// TO DO: check errors with debugger
-//
-//		// EQ Setup		
-//		effectdata->HL.Setup(DEFAULT_INIFREQ, DEFAULT_BANDSNUMBER, DEFAULT_OCTAVEBANDSTEP, DEFAULT_QBPF);
-//		//WriteLog(state, "CREATE: EQ setup:", "");
-//		//WriteLog(state, "        Initial frequency = ", DEFAULT_INIFREQ);
-//		//WriteLog(state, "        Number of bands = ", DEFAULT_BANDSNUMBER);
-//		//WriteLog(state, "        Octave step = 1/", DEFAULT_OCTAVEBANDSTEP);
-//		//WriteLog(state, "        Q factor of BPFs = ", DEFAULT_QBPF);
-//
-//		// Initial setup of band gains
-//		effectdata->HL.SetGains_dB(DEFAULT_BAND_GAINS, EAR_LEFT);
-//		effectdata->HL.SetGains_dB(DEFAULT_BAND_GAINS, EAR_RIGHT);
-//		
-//		// Setup of Compressor
-//		((CDynamicCompressorMono)effectdata->HL.Compr_L).Setup(state->samplerate,
-//									DEFAULT_RATIO, 
-//									DEFAULT_THRESHOLD,
-//									DEFAULT_ATTACK, 
-//									DEFAULT_RELEASE);
-//		((CDynamicCompressorMono)effectdata->HL.Compr_R).Setup(state->samplerate,
-//									DEFAULT_RATIO,
-//									DEFAULT_THRESHOLD,
-//									DEFAULT_ATTACK,
-//									DEFAULT_RELEASE);
-//		//WriteLog(state, "CREATE: Compressor setup:", "");
-//		//WriteLog(state, "        Sample rate = ", state->samplerate);
-//		//WriteLog(state, "        Ratio = ", DEFAULT_RATIO);
-//		//WriteLog(state, "        Threshold = ", DEFAULT_THRESHOLD);
-//		//WriteLog(state, "        Attack time = ", DEFAULT_ATTACK);
-//		//WriteLog(state, "        Release time = ", DEFAULT_RELEASE);
-//
-//		WriteLog(state, "CREATE: HL Simulation plugin created", "");		
-//
-//        return UNITY_AUDIODSP_OK;
-//    }
-//
-//	/////////////////////////////////////////////////////////////////////
-//
-//    UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ReleaseCallback(UnityAudioEffectState* state)
-//    {
-//        EffectData* data = state->GetEffectData<EffectData>();
-//        delete data;
-//        return UNITY_AUDIODSP_OK;
-//    }
-//
-//	/////////////////////////////////////////////////////////////////////
-//
-//	void SetOneBandGain(UnityAudioEffectState* state, bool ear, int bandIndex, float valueDB)
-//	{
-//		// Check errors
-//		if ((bandIndex > DEFAULT_BANDSNUMBER) || (bandIndex < 0))
-//		{
-//			WriteLog(state, "SET PARAMETER: ERROR!!!! Attempt to set gain for an incorrect band index: ", bandIndex);
-//			return;
-//		}
-//		if ((valueDB < MIN_BANDGAIN_DB) || (valueDB > MAX_BANDGAIN_DB))
-//		{
-//			WriteLog(state, "SET PARAMETER: ERROR!!!! Attempt to set a wrong dB value for band gain: ", valueDB);
-//			return;
-//		}
-//		
-//		// Set band gain
-//		CHearingLossSim HL = state->GetEffectData<EffectData>()->HL;
-//		HL.SetBandGain_dB(bandIndex, valueDB, ear);
-//					
-//		// Debug log output
-//		string earStr = "Unknown";
-//		if (ear == EAR_LEFT)
-//			earStr = "Left";
-//		else
-//			earStr = "Right";
-//#ifndef UNITY_ANDROID
-//		string logOutput = "SET PARAMETER: Gain of band " + std::to_string(bandIndex) + " for " + earStr + " ear set to " + std::to_string(valueDB) + " dB";
-//#else
-//		string logOutput = "SET PARAMETER: Gain of EQ band changed for" + earStr + " ear";
-//#endif
-//		WriteLog(state, logOutput, "");		
-//	}
-//
-//	/////////////////////////////////////////////////////////////////////
-//
-//    UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAudioEffectState* state, int index, float value)
-//    {
-//        EffectData* data = state->GetEffectData<EffectData>();
-//        if (index >= P_NUM)
-//            return UNITY_AUDIODSP_ERR_UNSUPPORTED;
-//        data->parameters[index] = value;
-//
-//		// Process command sent by C# API
-//		// TO DO: Check errors with debugger, incorrect values...
-//		switch (index)
-//		{		
-//			// SET EQ BAND GAIN:
-//
-//			case PARAM_BAND_L_0_DB:	SetOneBandGain(state, EAR_LEFT, 0, value);	break;
-//			case PARAM_BAND_L_1_DB:	SetOneBandGain(state, EAR_LEFT, 1, value);	break;
-//			case PARAM_BAND_L_2_DB:	SetOneBandGain(state, EAR_LEFT, 2, value);	break;
-//			case PARAM_BAND_L_3_DB:	SetOneBandGain(state, EAR_LEFT, 3, value);	break;
-//			case PARAM_BAND_L_4_DB:	SetOneBandGain(state, EAR_LEFT, 4, value);	break;
-//			case PARAM_BAND_L_5_DB:	SetOneBandGain(state, EAR_LEFT, 5, value);	break;
-//			case PARAM_BAND_L_6_DB:	SetOneBandGain(state, EAR_LEFT, 6, value);	break;
-//			case PARAM_BAND_L_7_DB:	SetOneBandGain(state, EAR_LEFT, 7, value);	break;
-//			case PARAM_BAND_L_8_DB:	SetOneBandGain(state, EAR_LEFT, 8, value);	break;
-//			case PARAM_BAND_R_0_DB:	SetOneBandGain(state, EAR_RIGHT, 0, value); break;
-//			case PARAM_BAND_R_1_DB:	SetOneBandGain(state, EAR_RIGHT, 1, value); break;
-//			case PARAM_BAND_R_2_DB:	SetOneBandGain(state, EAR_RIGHT, 2, value); break;
-//			case PARAM_BAND_R_3_DB:	SetOneBandGain(state, EAR_RIGHT, 3, value); break;
-//			case PARAM_BAND_R_4_DB:	SetOneBandGain(state, EAR_RIGHT, 4, value); break;
-//			case PARAM_BAND_R_5_DB:	SetOneBandGain(state, EAR_RIGHT, 5, value); break;
-//			case PARAM_BAND_R_6_DB:	SetOneBandGain(state, EAR_RIGHT, 6, value); break;
-//			case PARAM_BAND_R_7_DB:	SetOneBandGain(state, EAR_RIGHT, 7, value); break;
-//			case PARAM_BAND_R_8_DB:	SetOneBandGain(state, EAR_RIGHT, 8, value); break;
-//	
-//			// SWITCH ON/OFF PROCESS FOR EACH EAR:
-//
-//			case PARAM_LEFT_EQ_ON:
-//				if ((int)value == 0)
-//					WriteLog(state, "SET PARAMETER: Left ear EQ process switched OFF", "");
-//				if ((int)value == 1)
-//					WriteLog(state, "SET PARAMETER: Left ear EQ process switched ON", "");
-//				if (((int)value != 0) && ((int)value != 1))
-//					WriteLog(state, "SET PARAMETER: ERROR!!! Switching on/off left ear EQ with non boolean value ", value);
-//				break;
-//
-//			case PARAM_RIGHT_EQ_ON:
-//				if ((int)value == 0)
-//					WriteLog(state, "SET PARAMETER: Right ear EQ process switched OFF", "");
-//				if ((int)value == 1)
-//					WriteLog(state, "SET PARAMETER: Right ear EQ process switched ON", "");
-//				if (((int)value != 0) && ((int)value != 1))
-//					WriteLog(state, "SET PARAMETER: ERROR!!! Switching on/off right ear EQ with non boolean value ", value);
-//				break;
-//
-//			case PARAM_LEFT_COMPRESSOR_ON:
-//				if ((int)value == 0)
-//					WriteLog(state, "SET PARAMETER: Left ear Compression process switched OFF", "");
-//				if ((int)value == 1)
-//					WriteLog(state, "SET PARAMETER: Left ear Compression process switched ON", "");
-//				if (((int)value != 0) && ((int)value != 1))
-//					WriteLog(state, "SET PARAMETER: ERROR!!! Switching on/off left ear Compression with non boolean value ", value);
-//				break;
-//
-//			case PARAM_RIGHT_COMPRESSOR_ON:
-//				if ((int)value == 0)
-//					WriteLog(state, "SET PARAMETER: Right ear Compression process switched OFF", "");
-//				if ((int)value == 1)
-//					WriteLog(state, "SET PARAMETER: Right ear Compression process switched ON", "");
-//				if (((int)value != 0) && ((int)value != 1))
-//					WriteLog(state, "SET PARAMETER: ERROR!!! Switching on/off right ear Compression with non boolean value ", value);
-//				break;
-//
-//			// SET EQ-COMPRESSOR CHAIN:
-//
-//			case PARAM_COMPRESSOR_FIRST:
-//				if ((int)value == 0)
-//					WriteLog(state, "SET PARAMETER: Compressor will be processed AFTER EQ: ", "EQ->Compressor");
-//				if ((int)value == 1)
-//					WriteLog(state, "SET PARAMETER: Compressor will be processed BEFORE EQ: ", "Compressor->EQ");
-//				if (((int)value != 0) && ((int)value != 1))
-//					WriteLog(state, "SET PARAMETER: ERROR!!! Specifying Compressor-EQ chain with non boolean value ", value);
-//				break;
-//
-//			// COMPRESSOR:
-//
-//			case PARAM_COMP_LEFT_RATIO:
-//				WriteLog(state, "SET PARAMETER: Ratio for Left compressor set to: ", value);
-//				data->HL.Compr_L.SetRatio(value);
-//				break;
-//
-//			case PARAM_COMP_LEFT_THRESHOLD:
-//				WriteLog(state, "SET PARAMETER: Threshold for Left compressor set to: ", value);
-//				data->HL.Compr_L.SetThreshold(value);
-//				break;
-//
-//			case PARAM_COMP_RIGHT_RATIO:
-//				WriteLog(state, "SET PARAMETER: Ratio for Right compressor set to: ", value);
-//				data->HL.Compr_R.SetRatio(value);
-//				break;
-//
-//			case PARAM_COMP_RIGHT_THRESHOLD:
-//				WriteLog(state, "SET PARAMETER: Threshold for Right compressor set to: ", value);
-//				data->HL.Compr_R.SetThreshold(value);
-//				break;
-//
-//			// ENVELOPE DETECTOR:
-//
-//			case PARAM_COMP_LEFT_ATTACK:
-//				WriteLog(state, "SET PARAMETER: Attack for Left compressor set to: ", value);
-//				((CDynamicCompressorMono)data->HL.Compr_L).SetAttack(value);
-//				break;
-//
-//			case PARAM_COMP_LEFT_RELEASE:
-//				WriteLog(state, "SET PARAMETER: Release for Left compressor set to: ", value);
-//				((CDynamicCompressorMono)data->HL.Compr_L).SetRelease(value);
-//				break;
-//
-//			case PARAM_COMP_RIGHT_ATTACK:
-//				WriteLog(state, "SET PARAMETER: Attack for Right compressor set to: ", value);
-//				((CDynamicCompressorMono)data->HL.Compr_R).SetAttack(value);
-//				break;
-//
-//			case PARAM_COMP_RIGHT_RELEASE:
-//				WriteLog(state, "SET PARAMETER: Release for Right compressor set to: ", value);
-//				((CDynamicCompressorMono)data->HL.Compr_R).SetRelease(value);
-//				break;
-//
-//			case PARAM_DEBUG_LOG:
-//				if (value != 0.0f)
-//				{
-//					data->debugLog = true;
-//					WriteLogHeader(state);
-//				}
-//				else
-//					data->debugLog = false;
-//				break;
-//
-//			default:
-//				WriteLog(state, "SET PARAMETER: ERROR!!!! Unknown float parameter received from API: ", index);
-//				return UNITY_AUDIODSP_ERR_UNSUPPORTED;
-//				break;
-//		}
-//
-//        return UNITY_AUDIODSP_OK;
-//    }
-//
-//	/////////////////////////////////////////////////////////////////////
-//	
-//    UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK GetFloatParameterCallback(UnityAudioEffectState* state, int index, float* value, char *valuestr)
-//    {
-//        EffectData* data = state->GetEffectData<EffectData>();
-//        if (index >= P_NUM)
-//            return UNITY_AUDIODSP_ERR_UNSUPPORTED;
-//        if (value != NULL)
-//            *value = data->parameters[index];
-//        if (valuestr != NULL)
-//            valuestr[0] = 0;
-//        return UNITY_AUDIODSP_OK;
-//    }
-//
-//	/////////////////////////////////////////////////////////////////////
-//	
-//    int UNITY_AUDIODSP_CALLBACK GetFloatBufferCallback(UnityAudioEffectState* state, const char* name, float* buffer, int numsamples)
-//    {
-//        return UNITY_AUDIODSP_OK;
-//    }
-//
-//	/////////////////////////////////////////////////////////////////////
-//	
-//    UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectState* state, float* inbuffer, float* outbuffer, unsigned int length, int inchannels, int outchannels)
-//    {
-//        // Check that I/O formats are right and that the host API supports this feature
-//        if (inchannels != 2 || outchannels != 2 || !IsHostCompatible(state))
-//        {
-//			WriteLog(state, "PROCESS: ERROR!!!! Wrong number of channels or Host is not compatible:", "");
-//			WriteLog(state, "         Input channels = ", inchannels);
-//			WriteLog(state, "         Output channels = ", outchannels);
-//			WriteLog(state, "         Host compatible = ", IsHostCompatible(state));			
-//			WriteLog(state, "         Buffer length = ", length);
-//            memcpy(outbuffer, inbuffer, length * outchannels * sizeof(float));
-//            return UNITY_AUDIODSP_OK;
-//        }
-//
-//		EffectData* data = state->GetEffectData<EffectData>();
-//
-//		// Transform input buffer
-//		CStereoBuffer<float> inStereoBuffer(length * 2);		
-//		for (int i = 0; i < length*2; i++)
-//		{
-//			inStereoBuffer[i] = inbuffer[i]; 
-//		}
-//
-//		// Process!!
-//		CStereoBuffer<float> outStereoBuffer(length * 2);
-//		data->HL.Process(inStereoBuffer, outStereoBuffer, data->parameters[PARAM_LEFT_EQ_ON], data->parameters[PARAM_RIGHT_EQ_ON], 
-//						data->parameters[PARAM_COMPRESSOR_FIRST], data->parameters[PARAM_LEFT_COMPRESSOR_ON], data->parameters[PARAM_RIGHT_COMPRESSOR_ON]);
-//
-//		// Transform output buffer			
-//		int i = 0;
-//		for (auto it = outStereoBuffer.begin(); it != outStereoBuffer.end(); it++)
-//		{
-//			outbuffer[i++] = *it;
-//		}
-//
-//		//// DUMMY PROCESS (DEBUG):
-//		//for (unsigned int n = 0; n < length; n++)
-//		//{
-//		//	for (int i = 0; i < outchannels; i++)
-//		//	{
-//		//		outbuffer[n * outchannels + i] = inbuffer[n * outchannels + i];
-//		//	}
-//		//}
-//
-//        return UNITY_AUDIODSP_OK;
-//    }
-//}
+/**
+*** 3D-Tune-In Toolkit Unity Wrapper for Hearing Loss Simulation***
+*
+* version 1.9
+* Created on: July 2017
+*
+* Author: 3DI-DIANA Research Group / University of Malaga / Spain
+* Contact: areyes@uma.es
+*
+* Project: 3DTI (3D-games for TUNing and lEarnINg about hearing aids)
+* Module: 3DTI Toolkit Unity Wrapper
+**/
+
+#include "AudioPluginUtil.h"
+
+#include <HAHLSimulation/HearingLossSim.h>
+
+// Includes for debug logging
+#include <fstream>
+#include <iostream>
+#include <string>
+using namespace std;
+
+// DEBUG LOG 
+#ifdef UNITY_ANDROID
+#define DEBUG_LOG_CAT
+#else
+#define DEBUG_LOG_FILE_HL
+#endif
+
+#ifdef DEBUG_LOG_CAT
+#include <android/log.h> 
+#include <string>
+#include <sstream>
+#endif
+
+/////////////////////////////////////////////////////////////////////
+
+namespace HLSimulation3DTI
+{
+
+//////////////////////////////////////////////////////
+
+// Default values for parameters
+#define DEFAULT_INIFREQ				62.5
+#define DEFAULT_BANDSNUMBER			9
+#define DEFAULT_FILTERSPERBAND		3
+#define DEFAULT_CALIBRATION_DBSPL	100
+#define DEFAULT_RATIO				1
+#define DEFAULT_THRESHOLD			0
+#define DEFAULT_ATTACK				20
+#define DEFAULT_RELEASE				100
+#define DEFAULT_AUDIOMETRY			{0,  0, 0, 0, 0, 0, 0, 0, 0}
+
+// Min/max values for parameters
+#define MIN_INIFREQ				20	
+#define MAX_INIFREQ				20000
+#define MAX_BANDSNUMBER			31
+#define MAX_CALIBRATION_DBSPL	120
+#define MIN_FILTERSPERBAND		1
+#define MAX_FILTERSPERBAND		9
+#define MIN_HEARINGLOSS			0
+#define MAX_HEARINGLOSS			90
+#define MAX_RATIO				500
+#define MIN_THRESHOLD			-80
+#define MAX_ATTACK				2000
+#define MAX_RELEASE				2000
+//////////////////////////////////////////////////////
+
+	enum
+	{
+		// Hearing loss levels
+		PARAM_HL_0_LEFT,
+		PARAM_HL_1_LEFT,
+		PARAM_HL_2_LEFT,
+		PARAM_HL_3_LEFT,
+		PARAM_HL_4_LEFT,
+		PARAM_HL_5_LEFT,
+		PARAM_HL_6_LEFT,
+		PARAM_HL_7_LEFT,
+		PARAM_HL_8_LEFT,
+		PARAM_HL_0_RIGHT,
+		PARAM_HL_1_RIGHT,
+		PARAM_HL_2_RIGHT,
+		PARAM_HL_3_RIGHT,
+		PARAM_HL_4_RIGHT,
+		PARAM_HL_5_RIGHT,
+		PARAM_HL_6_RIGHT,
+		PARAM_HL_7_RIGHT,
+		PARAM_HL_8_RIGHT,
+
+		// Switch on/off processing for each ear 
+		PARAM_ON_LEFT,
+		PARAM_ON_RIGHT,
+
+		// Calibration
+		PARAM_CALIBRATION_DBSPL_FOR_0DBFS,
+
+		//// Multiband expander envelope detectors
+		PARAM_ATTACK_LEFT,
+		PARAM_RELEASE_LEFT,
+		PARAM_ATTACK_RIGHT,
+		PARAM_RELEASE_RIGHT,
+
+		//// Debug log
+		//PARAM_DEBUG_LOG,
+
+		P_NUM
+	};
+
+	/////////////////////////////////////////////////////////////////////
+
+    struct EffectData
+    {
+		CHearingLossSim HL;				
+		float parameters[P_NUM];
+
+		// DEBUG LOG
+		//bool debugLog = true;
+	};
+
+	/////////////////////////////////////////////////////////////////////
+
+	template <class T>
+	void WriteLog(UnityAudioEffectState* state, string logtext, const T& value)
+	{
+		EffectData* data = state->GetEffectData<EffectData>();
+		//if (data->debugLog)
+		{
+			#ifdef DEBUG_LOG_FILE_HL
+			ofstream logfile;
+			logfile.open("3DTI_HearingLossSimulation_DebugLog.txt", ofstream::out | ofstream::app);
+			logfile << logtext << value << endl;
+			logfile.close();
+			#endif
+
+			#ifdef DEBUG_LOG_CAT						
+			std::ostringstream os;
+			os << logtext << value;
+			string fulltext = os.str();
+			__android_log_print(ANDROID_LOG_DEBUG, "3DTIHLSIMULATION", fulltext.c_str());
+			#endif
+		}
+	}
+
+	/////////////////////////////////////////////////////////////////////
+
+
+    inline bool IsHostCompatible(UnityAudioEffectState* state)
+    {
+        // Somewhat convoluted error checking here because hostapiversion is only supported from SDK version 1.03 (i.e. Unity 5.2) and onwards.
+        return
+            state->structsize >= sizeof(UnityAudioEffectState) &&
+            state->hostapiversion >= UNITY_AUDIO_PLUGIN_API_VERSION;
+    }
+
+	/////////////////////////////////////////////////////////////////////
+
+    int InternalRegisterEffectDefinition(UnityAudioEffectDefinition& definition)
+    {
+        int numparams = P_NUM;
+        definition.paramdefs = new UnityAudioParameterDefinition[numparams];
+
+		// Hearing loss levels
+		RegisterParameter(definition, "HL0L", "dBHL", MIN_HEARINGLOSS, MAX_HEARINGLOSS, 0.0f, 1.0f, 1.0f, PARAM_HL_0_LEFT, "Hearing loss level for 62.5 Hz band in left ear (dB HL)");
+		RegisterParameter(definition, "HL1L", "dBHL", MIN_HEARINGLOSS, MAX_HEARINGLOSS, 0.0f, 1.0f, 1.0f, PARAM_HL_1_LEFT, "Hearing loss level for 125 Hz band in left ear (dB HL)");
+		RegisterParameter(definition, "HL2L", "dBHL", MIN_HEARINGLOSS, MAX_HEARINGLOSS, 0.0f, 1.0f, 1.0f, PARAM_HL_2_LEFT, "Hearing loss level for 250 Hz band in left ear (dB HL)");
+		RegisterParameter(definition, "HL3L", "dBHL", MIN_HEARINGLOSS, MAX_HEARINGLOSS, 0.0f, 1.0f, 1.0f, PARAM_HL_3_LEFT, "Hearing loss level for 500 Hz band in left ear (dB HL)");
+		RegisterParameter(definition, "HL4L", "dBHL", MIN_HEARINGLOSS, MAX_HEARINGLOSS, 0.0f, 1.0f, 1.0f, PARAM_HL_4_LEFT, "Hearing loss level for 1 KHz band in left ear (dB HL)");
+		RegisterParameter(definition, "HL5L", "dBHL", MIN_HEARINGLOSS, MAX_HEARINGLOSS, 0.0f, 1.0f, 1.0f, PARAM_HL_5_LEFT, "Hearing loss level for 2 KHz band in left ear (dB HL)");
+		RegisterParameter(definition, "HL6L", "dBHL", MIN_HEARINGLOSS, MAX_HEARINGLOSS, 0.0f, 1.0f, 1.0f, PARAM_HL_6_LEFT, "Hearing loss level for 4 KHz band in left ear (dB HL)");
+		RegisterParameter(definition, "HL7L", "dBHL", MIN_HEARINGLOSS, MAX_HEARINGLOSS, 0.0f, 1.0f, 1.0f, PARAM_HL_7_LEFT, "Hearing loss level for 8 KHz band in left ear (dB HL)");
+		RegisterParameter(definition, "HL8L", "dBHL", MIN_HEARINGLOSS, MAX_HEARINGLOSS, 0.0f, 1.0f, 1.0f, PARAM_HL_8_LEFT, "Hearing loss level for 16 KHz band in left ear (dB HL)");
+		RegisterParameter(definition, "HL0R", "dBHL", MIN_HEARINGLOSS, MAX_HEARINGLOSS, 0.0f, 1.0f, 1.0f, PARAM_HL_0_RIGHT, "Hearing loss level for 62.5 Hz band in right ear (dB HL)");
+		RegisterParameter(definition, "HL1R", "dBHL", MIN_HEARINGLOSS, MAX_HEARINGLOSS, 0.0f, 1.0f, 1.0f, PARAM_HL_1_RIGHT, "Hearing loss level for 125 Hz band in right ear (dB HL)");
+		RegisterParameter(definition, "HL2R", "dBHL", MIN_HEARINGLOSS, MAX_HEARINGLOSS, 0.0f, 1.0f, 1.0f, PARAM_HL_2_RIGHT, "Hearing loss level for 250 Hz band in right ear (dB HL)");
+		RegisterParameter(definition, "HL3R", "dBHL", MIN_HEARINGLOSS, MAX_HEARINGLOSS, 0.0f, 1.0f, 1.0f, PARAM_HL_3_RIGHT, "Hearing loss level for 500 Hz band in right ear (dB HL)");
+		RegisterParameter(definition, "HL4R", "dBHL", MIN_HEARINGLOSS, MAX_HEARINGLOSS, 0.0f, 1.0f, 1.0f, PARAM_HL_4_RIGHT, "Hearing loss level for 1 KHz band in right ear (dB HL)");
+		RegisterParameter(definition, "HL5R", "dBHL", MIN_HEARINGLOSS, MAX_HEARINGLOSS, 0.0f, 1.0f, 1.0f, PARAM_HL_5_RIGHT, "Hearing loss level for 2 KHz band in right ear (dB HL)");
+		RegisterParameter(definition, "HL6R", "dBHL", MIN_HEARINGLOSS, MAX_HEARINGLOSS, 0.0f, 1.0f, 1.0f, PARAM_HL_6_RIGHT, "Hearing loss level for 4 KHz band in right ear (dB HL)");
+		RegisterParameter(definition, "HL7R", "dBHL", MIN_HEARINGLOSS, MAX_HEARINGLOSS, 0.0f, 1.0f, 1.0f, PARAM_HL_7_RIGHT, "Hearing loss level for 8 KHz band in right ear (dB HL)");
+		RegisterParameter(definition, "HL8R", "dBHL", MIN_HEARINGLOSS, MAX_HEARINGLOSS, 0.0f, 1.0f, 1.0f, PARAM_HL_8_RIGHT, "Hearing loss level for 16 KHz band in right ear (dB HL)");
+		
+		// Switch on/off processing for each ear 
+		RegisterParameter(definition, "HLONL", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_ON_LEFT, "Switch on hearing loss simulation for left ear");	// Default: OFF
+		RegisterParameter(definition, "HLONR", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_ON_RIGHT, "Switch on hearing loss simulation for right ear");	// Default: OFF
+
+		// Calibration
+		RegisterParameter(definition, "HLCAL", "dBSPL", 0.0f, MAX_CALIBRATION_DBSPL, DEFAULT_CALIBRATION_DBSPL, 1.0f, 1.0f, PARAM_CALIBRATION_DBSPL_FOR_0DBFS, "Calibration: dBSPL equivalent to 0 dBFS");	
+
+		// Multiband expander envelope detectors
+		RegisterParameter(definition, "HLATKL", "ms", 0.0f, MAX_ATTACK, DEFAULT_ATTACK, 1.0f, 1.0f, PARAM_ATTACK_LEFT, "Attack time for left ear envelope detectors (ms)");
+		RegisterParameter(definition, "HLRELL", "ms", 0.0f, MAX_RELEASE, DEFAULT_RELEASE, 1.0f, 1.0f, PARAM_RELEASE_LEFT, "Release time for left ear envelope detectors (ms)");
+		RegisterParameter(definition, "HLATKR", "ms", 0.0f, MAX_ATTACK, DEFAULT_ATTACK, 1.0f, 1.0f, PARAM_ATTACK_RIGHT, "Attack time for right ear envelope detectors (ms)");
+		RegisterParameter(definition, "HLRELR", "ms", 0.0f, MAX_RELEASE, DEFAULT_RELEASE, 1.0f, 1.0f, PARAM_RELEASE_RIGHT, "Release time for right ear envelope detectors (ms)");
+				
+		// Debug log
+		//RegisterParameter(definition, "DebugLogHL", "", 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, PARAM_DEBUG_LOG, "Generate debug log for HL");
+
+        return numparams;
+    }
+	
+	/////////////////////////////////////////////////////////////////////
+
+	void WriteLogHeader(UnityAudioEffectState* state)
+	{
+		EffectData* data = state->GetEffectData<EffectData>();
+
+		// EQ:
+		WriteLog(state, "CREATE: Multiband expander setup:", "");
+		WriteLog(state, "        Initial frequency = ", DEFAULT_INIFREQ);
+		WriteLog(state, "        Number of bands = ", DEFAULT_BANDSNUMBER);
+		WriteLog(state, "        Filters per band = ", DEFAULT_FILTERSPERBAND);
+
+		// Compressor:
+		WriteLog(state, "CREATE: Envelope detectors setup:", "");
+		WriteLog(state, "        Sample rate = ", state->samplerate);
+		WriteLog(state, "        Attack time = ", DEFAULT_ATTACK);
+		WriteLog(state, "        Release time = ", DEFAULT_RELEASE);
+
+		WriteLog(state, "CREATE: Calibration setup:", "");
+		WriteLog(state, "        dBSPL for 0 dBFS = ", DEFAULT_CALIBRATION_DBSPL);
+
+		WriteLog(state, "--------------------------------------", "\n");
+	}
+
+	/////////////////////////////////////////////////////////////////////	
+
+    UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectState* state)
+    {
+        EffectData* effectdata = new EffectData;
+        //memset(effectdata, 0, sizeof(EffectData));
+        state->effectdata = effectdata;
+        InitParametersFromDefinitions(InternalRegisterEffectDefinition, effectdata->parameters);
+		
+		// TO DO: check errors with debugger
+
+		// Multiband expander Setup		
+		effectdata->HL.Setup(state->samplerate, DEFAULT_CALIBRATION_DBSPL, DEFAULT_INIFREQ, DEFAULT_BANDSNUMBER, DEFAULT_FILTERSPERBAND);		
+
+		// Initial setup of hearing loss levels
+		effectdata->HL.SetFromAudiometry_dBHL(T_ear::BOTH, DEFAULT_AUDIOMETRY);		
+
+		// Setup calibration
+		effectdata->HL.SetCalibration(DEFAULT_CALIBRATION_DBSPL);
+
+		// Setup of envelope detectors
+		effectdata->HL.SetAttackForAllBands(T_ear::BOTH, DEFAULT_ATTACK);
+		effectdata->HL.SetReleaseForAllBands(T_ear::BOTH, DEFAULT_RELEASE);
+
+		WriteLog(state, "CREATE: HL Simulation plugin created", "");		
+
+        return UNITY_AUDIODSP_OK;
+    }
+
+	/////////////////////////////////////////////////////////////////////
+
+    UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ReleaseCallback(UnityAudioEffectState* state)
+    {
+        EffectData* data = state->GetEffectData<EffectData>();
+        delete data;
+        return UNITY_AUDIODSP_OK;
+    }
+
+	/////////////////////////////////////////////////////////////////////
+
+	void SetOneHearingLossLevel(UnityAudioEffectState* state, T_ear ear, int bandIndex, float valueDBHL)
+	{
+		// Check errors
+		if ((bandIndex > DEFAULT_BANDSNUMBER) || (bandIndex < 0))
+		{
+			WriteLog(state, "SET PARAMETER: ERROR!!!! Attempt to set hearing level for an incorrect band index: ", bandIndex);
+			return;
+		}
+		if ((valueDBHL < MIN_HEARINGLOSS) || (valueDBHL > MAX_HEARINGLOSS))
+		{
+			WriteLog(state, "SET PARAMETER: ERROR!!!! Attempt to set a wrong dBHL value for hearing loss level: ", valueDBHL);
+			return;
+		}
+		
+		// Set hearing loss level
+		CHearingLossSim HL = state->GetEffectData<EffectData>()->HL;
+		HL.SetHearingLevel_dBHL(ear, bandIndex, valueDBHL);
+					
+		// Debug log output
+		string earStr = "Unknown";
+		if (ear == T_ear::LEFT)
+			earStr = "Left";
+		if (ear == T_ear::RIGHT)
+			earStr = "Right";
+		#ifndef UNITY_ANDROID
+		string logOutput = "SET PARAMETER: Hearing loss of band " + std::to_string(bandIndex) + " for " + earStr + " ear set to " + std::to_string(valueDBHL) + " dBHL";
+		#else
+		string logOutput = "SET PARAMETER: Hearing loss changed for" + earStr + " ear"; //???
+		#endif
+		WriteLog(state, logOutput, "");		
+	}
+
+	/////////////////////////////////////////////////////////////////////
+
+    UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAudioEffectState* state, int index, float value)
+    {
+        EffectData* data = state->GetEffectData<EffectData>();
+        if (index >= P_NUM)
+            return UNITY_AUDIODSP_ERR_UNSUPPORTED;
+        data->parameters[index] = value;
+
+		// Process command sent by C# API
+		// TO DO: Check errors with debugger, incorrect values...
+		switch (index)
+		{		
+			// SET HEARING LEVEL:
+			case PARAM_HL_0_LEFT:	SetOneHearingLossLevel(state, T_ear::LEFT, 0, value);	break;
+			case PARAM_HL_1_LEFT:	SetOneHearingLossLevel(state, T_ear::LEFT, 1, value);	break;
+			case PARAM_HL_2_LEFT:	SetOneHearingLossLevel(state, T_ear::LEFT, 2, value);	break;
+			case PARAM_HL_3_LEFT:	SetOneHearingLossLevel(state, T_ear::LEFT, 3, value);	break;
+			case PARAM_HL_4_LEFT:	SetOneHearingLossLevel(state, T_ear::LEFT, 4, value);	break;
+			case PARAM_HL_5_LEFT:	SetOneHearingLossLevel(state, T_ear::LEFT, 5, value);	break;
+			case PARAM_HL_6_LEFT:	SetOneHearingLossLevel(state, T_ear::LEFT, 6, value);	break;
+			case PARAM_HL_7_LEFT:	SetOneHearingLossLevel(state, T_ear::LEFT, 7, value);	break;
+			case PARAM_HL_8_LEFT:	SetOneHearingLossLevel(state, T_ear::LEFT, 8, value);	break;
+			case PARAM_HL_0_RIGHT:	SetOneHearingLossLevel(state, T_ear::RIGHT, 0, value);	break;
+			case PARAM_HL_1_RIGHT:	SetOneHearingLossLevel(state, T_ear::RIGHT, 1, value);	break;
+			case PARAM_HL_2_RIGHT:	SetOneHearingLossLevel(state, T_ear::RIGHT, 2, value);	break;
+			case PARAM_HL_3_RIGHT:	SetOneHearingLossLevel(state, T_ear::RIGHT, 3, value);	break;
+			case PARAM_HL_4_RIGHT:	SetOneHearingLossLevel(state, T_ear::RIGHT, 4, value);	break;
+			case PARAM_HL_5_RIGHT:	SetOneHearingLossLevel(state, T_ear::RIGHT, 5, value);	break;
+			case PARAM_HL_6_RIGHT:	SetOneHearingLossLevel(state, T_ear::RIGHT, 6, value);	break;
+			case PARAM_HL_7_RIGHT:	SetOneHearingLossLevel(state, T_ear::RIGHT, 7, value);	break;
+			case PARAM_HL_8_RIGHT:	SetOneHearingLossLevel(state, T_ear::RIGHT, 8, value);	break;
+
+			// SWITCH ON/OFF PROCESS FOR EACH EAR:
+			case PARAM_ON_LEFT:
+				if ((int)value == 0)
+					WriteLog(state, "SET PARAMETER: Left ear hearing loss simulation switched OFF", "");
+				if ((int)value == 1)
+					WriteLog(state, "SET PARAMETER: Left ear hearing loss simulation switched ON", "");
+				if (((int)value != 0) && ((int)value != 1))
+					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to switch on/off left ear hearing loss simulation with non boolean value ", value);
+				break;
+
+			case PARAM_ON_RIGHT:
+				if ((int)value == 0)
+					WriteLog(state, "SET PARAMETER: Right ear hearing loss simulation switched OFF", "");
+				if ((int)value == 1)
+					WriteLog(state, "SET PARAMETER: Right ear hearing loss simulation switched ON", "");
+				if (((int)value != 0) && ((int)value != 1))
+					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to switch on/off right ear hearing loss simulation with non boolean value ", value);
+				break;
+
+			// CALIBRATION:
+			case PARAM_CALIBRATION_DBSPL_FOR_0DBFS:
+				data->HL.SetCalibration(value);
+				WriteLog(state, "SET PARAMETER: Calibration (dBSPL for 0dBFS) set to: ", value);
+				break;
+
+			// ENVELOPE DETECTORS:
+			case PARAM_ATTACK_LEFT:
+				data->HL.SetAttackForAllBands(T_ear::LEFT, value);
+				WriteLog(state, "SET PARAMETER: Attack time (ms) for Left envelope detectors set to: ", value);				
+				break;
+
+			case PARAM_ATTACK_RIGHT:
+				data->HL.SetAttackForAllBands(T_ear::RIGHT, value);
+				WriteLog(state, "SET PARAMETER: Attack time (ms) for Right envelope detectors set to: ", value);
+				break;
+
+			case PARAM_RELEASE_LEFT:
+				data->HL.SetReleaseForAllBands(T_ear::LEFT, value);
+				WriteLog(state, "SET PARAMETER: Release time (ms) for Left envelope detectors set to: ", value);
+				break;
+
+			case PARAM_RELEASE_RIGHT:
+				data->HL.SetReleaseForAllBands(T_ear::RIGHT, value);
+				WriteLog(state, "SET PARAMETER: Release time (ms) for Right envelope detectors set to: ", value);
+				break;
+
+			//case PARAM_DEBUG_LOG:
+			//	if (value != 0.0f)
+			//	{
+			//		data->debugLog = true;
+			//		WriteLogHeader(state);
+			//	}
+			//	else
+			//		data->debugLog = false;
+			//	break;
+
+			default:
+				WriteLog(state, "SET PARAMETER: ERROR!!!! Unknown float parameter received from API: ", index);
+				return UNITY_AUDIODSP_ERR_UNSUPPORTED;
+				break;
+		}
+
+        return UNITY_AUDIODSP_OK;
+    }
+
+	/////////////////////////////////////////////////////////////////////
+	
+    UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK GetFloatParameterCallback(UnityAudioEffectState* state, int index, float* value, char *valuestr)
+    {
+        EffectData* data = state->GetEffectData<EffectData>();
+        if (index >= P_NUM)
+            return UNITY_AUDIODSP_ERR_UNSUPPORTED;
+        if (value != NULL)
+            *value = data->parameters[index];
+        if (valuestr != NULL)
+            valuestr[0] = 0;
+        return UNITY_AUDIODSP_OK;
+    }
+
+	/////////////////////////////////////////////////////////////////////
+	
+    int UNITY_AUDIODSP_CALLBACK GetFloatBufferCallback(UnityAudioEffectState* state, const char* name, float* buffer, int numsamples)
+    {
+        return UNITY_AUDIODSP_OK;
+    }
+
+	/////////////////////////////////////////////////////////////////////
+	
+    UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectState* state, float* inbuffer, float* outbuffer, unsigned int length, int inchannels, int outchannels)
+    {
+        // Check that I/O formats are right and that the host API supports this feature
+        if (inchannels != 2 || outchannels != 2 || !IsHostCompatible(state))
+        {
+			WriteLog(state, "PROCESS: ERROR!!!! Wrong number of channels or Host is not compatible:", "");
+			WriteLog(state, "         Input channels = ", inchannels);
+			WriteLog(state, "         Output channels = ", outchannels);
+			WriteLog(state, "         Host compatible = ", IsHostCompatible(state));			
+			WriteLog(state, "         Buffer length = ", length);
+            memcpy(outbuffer, inbuffer, length * outchannels * sizeof(float));
+            return UNITY_AUDIODSP_OK;
+        }
+
+		EffectData* data = state->GetEffectData<EffectData>();
+
+		// Transform input buffer into two Mono buffers
+		CMonoBuffer<float> leftInputBuffer(length);		
+		CMonoBuffer<float> rightInputBuffer(length);
+		int monoIndex = 0;
+		for (int i = 0; i < length*2; i+=2)
+		{
+			leftInputBuffer[monoIndex] = inbuffer[i]; 
+			rightInputBuffer[monoIndex] = inbuffer[i+1];
+			monoIndex++;
+		}
+
+		// Process!!
+		CMonoBuffer<float> leftOutputBuffer(length);
+		CMonoBuffer<float> rightOutputBuffer(length);
+
+		if (data->parameters[PARAM_ON_LEFT])
+			data->HL.Process(T_ear::LEFT, leftInputBuffer, leftOutputBuffer);
+		else
+			leftOutputBuffer = leftInputBuffer;
+
+		if (data->parameters[PARAM_ON_RIGHT])
+			data->HL.Process(T_ear::RIGHT, rightInputBuffer, rightOutputBuffer);
+		else
+			rightOutputBuffer = rightInputBuffer;
+
+
+		// Transform output buffers			
+		int stereoIndex = 0;
+		for (int i = 0; i < length; i++)
+		{
+			outbuffer[stereoIndex] = leftOutputBuffer[i];
+			stereoIndex++;
+			outbuffer[stereoIndex] = rightOutputBuffer[i];
+			stereoIndex++;
+		}		
+
+        return UNITY_AUDIODSP_OK;
+    }
+}

@@ -37,12 +37,12 @@ public class TestHAAPI : MonoBehaviour {
         //RunFig6Test();
         //RunFig6TestSevere();    
 
-        List<float> calculatedGains;
-        List<float> earLossList= new List<float>(API_3DTI_HL.EQ_PRESET_MODERATE);
-        earLossList.RemoveAt(API_3DTI_HL.NUM_EQ_BANDS-1);
-        earLossList.RemoveAt(0);
-        earLossList = earLossList.ConvertAll(g => -g);     
-        HAAPI.SetEQFromFig6(API_3DTI_Common.T_ear.BOTH, earLossList, out calculatedGains);
+        //List<float> calculatedGains;
+        //List<float> earLossList= new List<float>(API_3DTI_HL.EQ_PRESET_MODERATE);
+        //earLossList.RemoveAt(API_3DTI_HL.NUM_EQ_BANDS-1);
+        //earLossList.RemoveAt(0);
+        //earLossList = earLossList.ConvertAll(g => -g);     
+        //HAAPI.SetEQFromFig6(API_3DTI_Common.T_ear.BOTH, earLossList, out calculatedGains);
     }
 
     // Update is called once per frame

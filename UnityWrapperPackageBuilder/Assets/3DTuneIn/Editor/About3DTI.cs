@@ -4,7 +4,11 @@ using UnityEngine;
 public class About3DTI : EditorWindow
 {
     Vector2 scrollPos;
-    const float windowWidth = 600;    
+    const float windowWidth = 600;
+    const float windowHeight = 1000;
+    const float scrollMargin = 0;
+    const float textMargin = scrollMargin + 30;    
+    const float sectionMargin = scrollMargin + 30; 
     static GUIStyle aboutTextStyle;
     static GUIStyle aboutSectionStyle;
     static GUIStyle aboutTitleStyle;
@@ -13,9 +17,10 @@ public class About3DTI : EditorWindow
     public static void ShowAboutWindow()
     {
         // Setup styles
-        aboutTextStyle = new GUIStyle(EditorStyles.textArea);
+        aboutTextStyle = new GUIStyle(EditorStyles.label);
         aboutTextStyle.wordWrap = true;
         aboutTextStyle.richText = true;
+        aboutTextStyle.alignment = TextAnchor.MiddleLeft;
         aboutSectionStyle = new GUIStyle(GUI.skin.box);
         aboutTitleStyle = new GUIStyle(GUI.skin.box);
         aboutTitleStyle.normal.textColor = EditorStyles.label.normal.textColor;
@@ -29,7 +34,9 @@ public class About3DTI : EditorWindow
 
     void OnGUI()
     {
-        scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(windowWidth));
+        maxSize = new Vector2(windowWidth, windowHeight);
+
+        scrollPos = EditorGUILayout.BeginScrollView(scrollPos, false, false, GUILayout.Width(windowWidth - scrollMargin));
         
         BeginAboutSection("3D-TUNE-IN TOOLKIT UNITY WRAPPER");
 
@@ -82,7 +89,7 @@ public class About3DTI : EditorWindow
     /// <param name="urlText"></param>
     public static void ShowParagraph(string text, string urlText="")
     {                
-        GUILayout.Label(text, aboutTextStyle, GUILayout.Width(windowWidth));
+        GUILayout.Label(text, aboutTextStyle, GUILayout.Width(windowWidth - textMargin));
         if (urlText != "")
         {
             if (GUILayout.Button(urlText, urlStyle))
@@ -126,16 +133,16 @@ public class About3DTI : EditorWindow
     /// Begin a section containing many text paragraphs
     /// </summary>
     /// <param name="titleText"></param>
-    public static void BeginAboutSection(string titleText)
+    public void BeginAboutSection(string titleText)
     {
         GUILayout.BeginVertical(aboutSectionStyle);
-        GUILayout.Box(titleText, aboutTitleStyle, GUILayout.Width(windowWidth));
+        GUILayout.Box(titleText, aboutTitleStyle, GUILayout.Width(windowWidth - sectionMargin));
     }
 
     /// <summary>
     /// End section
     /// </summary>
-    public static void EndAboutSection()
+    public void EndAboutSection()
     {
         GUILayout.EndVertical();        
         //GUILayout.Space(spaceBetweenSections);          // Line spacing    
