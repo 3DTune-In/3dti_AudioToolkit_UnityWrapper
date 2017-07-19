@@ -45,6 +45,8 @@
 		AFD34E361E51D99A007810A6 /* AudioPluginUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD34E321E51D99A007810A6 /* AudioPluginUtil.cpp */; };
 		AFD3524A1E51DCF2007810A6 /* HRTFCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD34F971E51DCF0007810A6 /* HRTFCereal.cpp */; };
 		AFD353021E51DCF3007810A6 /* ILDCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD352181E51DCF2007810A6 /* ILDCereal.cpp */; };
+		AFE0E1891F1F8DED00695DDB /* DynamicExpanderMono.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE0E1861F1F8DED00695DDB /* DynamicExpanderMono.cpp */; };
+		AFE0E18C1F1F8DF700695DDB /* MultibandExpander.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE0E18A1F1F8DF700695DDB /* MultibandExpander.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -96,7 +98,6 @@
 		AFB9B2331EBC87BA00199425 /* Debugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Debugger.h; sourceTree = "<group>"; };
 		AFB9B2341EBC87BA00199425 /* DistanceAttenuator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DistanceAttenuator.cpp; sourceTree = "<group>"; };
 		AFB9B2351EBC87BA00199425 /* DistanceAttenuator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistanceAttenuator.h; sourceTree = "<group>"; };
-		AFB9B2361EBC87BA00199425 /* DynamicCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicCompressor.h; sourceTree = "<group>"; };
 		AFB9B2371EBC87BA00199425 /* DynamicCompressorMono.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DynamicCompressorMono.cpp; sourceTree = "<group>"; };
 		AFB9B2381EBC87BA00199425 /* DynamicCompressorMono.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicCompressorMono.h; sourceTree = "<group>"; };
 		AFB9B2391EBC87BA00199425 /* DynamicCompressorStereo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DynamicCompressorStereo.cpp; sourceTree = "<group>"; };
@@ -146,6 +147,11 @@
 		AFD34F981E51DCF0007810A6 /* HRTFCereal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRTFCereal.h; sourceTree = "<group>"; };
 		AFD352181E51DCF2007810A6 /* ILDCereal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ILDCereal.cpp; sourceTree = "<group>"; };
 		AFD352191E51DCF2007810A6 /* ILDCereal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILDCereal.h; sourceTree = "<group>"; };
+		AFE0E1861F1F8DED00695DDB /* DynamicExpanderMono.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DynamicExpanderMono.cpp; sourceTree = "<group>"; };
+		AFE0E1871F1F8DED00695DDB /* DynamicExpanderMono.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicExpanderMono.h; sourceTree = "<group>"; };
+		AFE0E1881F1F8DED00695DDB /* DynamicProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicProcessor.h; sourceTree = "<group>"; };
+		AFE0E18A1F1F8DF700695DDB /* MultibandExpander.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MultibandExpander.cpp; sourceTree = "<group>"; };
+		AFE0E18B1F1F8DF700695DDB /* MultibandExpander.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultibandExpander.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -220,6 +226,9 @@
 		AFB9B2291EBC87BA00199425 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				AFE0E1861F1F8DED00695DDB /* DynamicExpanderMono.cpp */,
+				AFE0E1871F1F8DED00695DDB /* DynamicExpanderMono.h */,
+				AFE0E1881F1F8DED00695DDB /* DynamicProcessor.h */,
 				AF9B83841EC9BD25002BD963 /* EarPair.h */,
 				AFB9B22A1EBC87BA00199425 /* AIR.cpp */,
 				AFB9B22B1EBC87BA00199425 /* AIR.h */,
@@ -233,7 +242,6 @@
 				AFB9B2331EBC87BA00199425 /* Debugger.h */,
 				AFB9B2341EBC87BA00199425 /* DistanceAttenuator.cpp */,
 				AFB9B2351EBC87BA00199425 /* DistanceAttenuator.h */,
-				AFB9B2361EBC87BA00199425 /* DynamicCompressor.h */,
 				AFB9B2371EBC87BA00199425 /* DynamicCompressorMono.cpp */,
 				AFB9B2381EBC87BA00199425 /* DynamicCompressorMono.h */,
 				AFB9B2391EBC87BA00199425 /* DynamicCompressorStereo.cpp */,
@@ -268,6 +276,8 @@
 		AFB9B2521EBC87BA00199425 /* HAHLSimulation */ = {
 			isa = PBXGroup;
 			children = (
+				AFE0E18A1F1F8DF700695DDB /* MultibandExpander.cpp */,
+				AFE0E18B1F1F8DF700695DDB /* MultibandExpander.h */,
 				AFB9B2531EBC87BA00199425 /* 3DTI_HAHLSimulator.h */,
 				AFB9B2541EBC87BA00199425 /* DynamicEqualizer.cpp */,
 				AFB9B2551EBC87BA00199425 /* DynamicEqualizer.h */,
@@ -397,12 +407,14 @@
 				AFB9B2791EBC87BA00199425 /* AIR.cpp in Sources */,
 				AFB9B27E1EBC87BA00199425 /* DynamicCompressorMono.cpp in Sources */,
 				AFB9B27D1EBC87BA00199425 /* DistanceAttenuator.cpp in Sources */,
+				AFE0E18C1F1F8DF700695DDB /* MultibandExpander.cpp in Sources */,
 				AFB9B28D1EBC87BA00199425 /* FiltersBank.cpp in Sources */,
 				AFD34E361E51D99A007810A6 /* AudioPluginUtil.cpp in Sources */,
 				AFB9B28E1EBC87BA00199425 /* HearingAidSim.cpp in Sources */,
 				AFB9B2851EBC87BA00199425 /* Magnitudes.cpp in Sources */,
 				AFB9B2881EBC87BA00199425 /* Transform.cpp in Sources */,
 				AFB9B28C1EBC87BA00199425 /* Fig6Algorithm.cpp in Sources */,
+				AFE0E1891F1F8DED00695DDB /* DynamicExpanderMono.cpp in Sources */,
 				AFD353021E51DCF3007810A6 /* ILDCereal.cpp in Sources */,
 				AFB9B27B1EBC87BA00199425 /* Buffer.cpp in Sources */,
 				AFB9B28B1EBC87BA00199425 /* DynamicEqualizer.cpp in Sources */,
