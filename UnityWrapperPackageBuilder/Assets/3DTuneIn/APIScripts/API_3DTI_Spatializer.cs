@@ -48,7 +48,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     public int HRTFstep = 15;                   // For internal use, DO NOT USE IT DIRECTLY
     public bool modFarLPF = true;               // For internal use, DO NOT USE IT DIRECTLY
     public bool modDistAtt = true;              // For internal use, DO NOT USE IT DIRECTLY
-    public bool modILD = true;                  // For internal use, DO NOT USE IT DIRECTLY
+    public bool modNearFieldILD = true;         // For internal use, DO NOT USE IT DIRECTLY
     public bool modHRTF = true;                 // For internal use, DO NOT USE IT DIRECTLY
     public float magAnechoicAttenuation = -3.0f;    // For internal use, DO NOT USE IT DIRECTLY    
     public float magSoundSpeed = 343.0f;            // For internal use, DO NOT USE IT DIRECTLY
@@ -73,8 +73,8 @@ public class API_3DTI_Spatializer : MonoBehaviour
     int SET_HRTF_INTERPOLATION = 5;
     int SET_MOD_FARLPF = 6;
     int SET_MOD_DISTATT = 7;
-    int SET_MOD_ILD = 8;
-    int SET_MOD_HRTF = 9;   // DEPRECATED
+    int SET_MOD_NEARFIELD_ILD = 8;
+    //int SET_MOD_HRTF = 9;   // DEPRECATED
     int SET_MAG_ANECHATT = 10;    
     int SET_MAG_SOUNDSPEED = 11;
     int LOAD_3DTI_ILD_NEARFIELD = 12;    
@@ -87,12 +87,8 @@ public class API_3DTI_Spatializer : MonoBehaviour
     int GET_LIMITER_COMPRESSION = 19;
     int GET_IS_CORE_READY = 20;
     int SET_HRTF_STEP = 21;
-    int LOAD_3DTI_ILD_HIGHPERFORMANCE = 22; // NEW
-    int SET_SPATIALIZATION_MODE = 23;     // NEW
-
-    // Hack for modifying one single AudioSource (TO DO: fix this)
-    bool selectSource = false;
-    AudioSource selectedSource;
+    int LOAD_3DTI_ILD_HIGHPERFORMANCE = 22; 
+    int SET_SPATIALIZATION_MODE = 23;     
 
     // For high performance / High quality modes, variables to check which resources have been loaded
     bool HighQualityModeHRTFLoaded = false;
@@ -119,12 +115,9 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>
     public bool StartBinauralSpatializer(AudioSource source=null)
     {
-        // Select only one AudioSource
+        // Select only one AudioSource        
         if (source != null)
-        {
-            selectSource = true;
-            selectedSource = source;
-
+        {                        
             // Check if core is already started
             bool isReady;
             if (!GetBoolParameter(GET_IS_CORE_READY, out isReady))
@@ -137,29 +130,26 @@ public class API_3DTI_Spatializer : MonoBehaviour
         }
 
         // Debug log:
-        if (!SendWriteDebugLog(debugLog))   return false;
+        if (!SendWriteDebugLog(debugLog, source))   return false;
 
         // Global setup:
-        if (!SetScaleFactor(scaleFactor))   return false;
-        if (!SendSourceIDs())               return false;
+        if (!SetScaleFactor(scaleFactor, source))   return false;
+        if (!SendSourceIDs(source))               return false;
 
         // Setup modules enabler:
-        if (!SetupModulesEnabler()) return false;
+        if (!SetupModulesEnabler(source)) return false;
 
         // Source setup:
-        if (!SetupSource()) return false;
+        if (!SetupSource(source)) return false;
 
         // Hearing Aid directionality setup:
-        if (!SetupHADirectionality()) return false;
+        if (!SetupHADirectionality(source)) return false;
 
         // Limiter setup:
-        if (!SetupLimiter()) return false;
+        if (!SetupLimiter(source)) return false;
 
         // Listener setup:
-        if (!SetupListener()) return false;
-
-        // Go back to default state, affecting all sources
-        selectSource = false;
+        if (!SetupListener(source)) return false;
 
         return true;
     }
@@ -171,16 +161,22 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <returns></returns>
     public bool EnableSpatialization(AudioSource source=null)
     {
-        if (source != null)
-        {
-            selectSource = true;
-            selectedSource = source;
-        }
-
-        //if (!SetModHRTF(true)) return false;
-        if (!SetModILD(true)) return false;
-        if (!SetModFarLPF(true)) return false;
-        return SetModDistanceAttenuation(true);
+        //if (spatializationMode == SPATIALIZATION_MODE_HIGH_QUALITY)
+        //{
+        //    //if (!SetModHRTF(true)) return false;
+        //    if (!SetModNearFieldILD(true, source)) return false;
+        //    if (!SetModFarLPF(true, source)) return false;
+        //    if (!SetModDistanceAttenuation(true, source)) return false;
+        //    return SendCommand(SET_SPATIALIZATION_MODE, (float)(spatializationMode), source);
+        //}
+        //if (spatializationMode == SPATIALIZATION_MODE_HIGH_PERFORMANCE)
+        //{
+        //    if (!SetModFarLPF(true, source)) return false;
+        //    if (!SetModDistanceAttenuation(true, source)) return false;
+        //    return SendCommand(SET_SPATIALIZATION_MODE, (float)(spatializationMode), source);
+        //}
+        //return false;
+        return SendCommand(SET_SPATIALIZATION_MODE, (float)(spatializationMode), source);
     }
 
     /// <summary>
@@ -190,18 +186,22 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <returns></returns>
     public bool DisableSpatialization(AudioSource source = null)
     {
-        if (source != null)
-        {
-            selectSource = true;
-            selectedSource = source;
-        }
-
-        
-
-        //if (!SetModHRTF(false)) return false;
-        if (!SetModILD(false)) return false;
-        if (!SetModFarLPF(false)) return false;
-        return SetModDistanceAttenuation(false);
+        //if (spatializationMode == SPATIALIZATION_MODE_HIGH_QUALITY)
+        //{
+        //    //if (!SetModHRTF(false, source)) return false;
+        //    if (!SetModNearFieldILD(false, source)) return false;
+        //    if (!SetModFarLPF(false, source)) return false;
+        //    if (!SetModDistanceAttenuation(false, source)) return false;
+        //    return SendCommand(SET_SPATIALIZATION_MODE, (float)(SPATIALIZATION_MODE_NONE), source);
+        //}
+        //if (spatializationMode == SPATIALIZATION_MODE_HIGH_PERFORMANCE)
+        //{
+        //    if (!SetModFarLPF(false, source)) return false;
+        //    if (!SetModDistanceAttenuation(false, source)) return false;
+        //    return SendCommand(SET_SPATIALIZATION_MODE, (float)(SPATIALIZATION_MODE_NONE), source);
+        //}
+        //return false;
+        return SendCommand(SET_SPATIALIZATION_MODE, (float)(SPATIALIZATION_MODE_NONE), source);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -211,10 +211,10 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Setup all listener parameters
     /// </summary>
-    public bool SetupListener()
+    public bool SetupListener(AudioSource source=null)
     {
-        if (!SetHeadRadius(listenerHeadRadius)) return false;
-        if (!SetCustomITD(customITDEnabled)) return false;
+        if (!SetHeadRadius(listenerHeadRadius, source)) return false;
+        if (!SetCustomITD(customITDEnabled, source)) return false;
 
         // HIGH QUALITY MODE (default)
         //if (spatializationMode == TSpatializationMode.HIGH_QUALITY)
@@ -227,7 +227,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
                     #if (!UNITY_EDITOR)
                     if (SaveResourceAsBinary(ILDNearFieldFileName, ".3dti-ild", out ILDNearFieldFileName) != 1) return false;
                     #endif
-                    if (!LoadILDNearFieldBinary(ILDNearFieldFileName)) return false;
+                    if (!LoadILDNearFieldBinary(ILDNearFieldFileName, source)) return false;
                 }
             }
             if (!HighQualityModeHRTFLoaded)
@@ -237,7 +237,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
                     #if (!UNITY_EDITOR)
                     if (SaveResourceAsBinary(HRTFFileName, ".3dti-hrtf", out HRTFFileName) != 1) return false; 
                     #endif
-                    if (!LoadHRTFBinary(HRTFFileName)) return false;
+                    if (!LoadHRTFBinary(HRTFFileName, source)) return false;
                 }              
             }
         }
@@ -253,7 +253,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
                     #if (!UNITY_EDITOR)
                     if (SaveResourceAsBinary(ILDHighPerformanceFileName, ".3dti-ild", out ILDHighPerformanceFileName) != 1) return false;
                     #endif
-                    if (!LoadILDHighPerformanceBinary(ILDHighPerformanceFileName)) return false;
+                    if (!LoadILDHighPerformanceBinary(ILDHighPerformanceFileName, source)) return false;
                 }                
             }
         }
@@ -297,10 +297,10 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Set listener head radius
     /// </summary>
-    public bool SetHeadRadius(float headRadius)
-    {
+    public bool SetHeadRadius(float headRadius, AudioSource source=null)
+    {        
         listenerHeadRadius = headRadius;
-        return SendCommandForAllSources(SET_HEAD_RADIUS, headRadius);
+        return SendCommand(SET_HEAD_RADIUS, headRadius, source);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -308,10 +308,10 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Set custom ITD enabled/disabled
     /// </summary>
-    public bool SetCustomITD(bool _enable)
-    {
+    public bool SetCustomITD(bool _enable, AudioSource source=null)
+    {        
         customITDEnabled = _enable;
-        return SendCommandForAllSources(SET_CUSTOM_ITD, CommonFunctions.Bool2Float(_enable));
+        return SendCommand(SET_CUSTOM_ITD, CommonFunctions.Bool2Float(_enable), source);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -319,29 +319,29 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Load HRTF from a binary .3dti file
     /// </summary>
-    public bool LoadHRTFBinary(string filename)
-    {
+    public bool LoadHRTFBinary(string filename, AudioSource source=null)
+    {        
         HRTFFileName = filename;
 
         List<AudioSource> audioSources;
-        if (selectSource)
+        if (source != null)
         {
             audioSources = new List<AudioSource>();
-            audioSources.Add(selectedSource);
+            audioSources.Add(source);
         }
         else
         {
             audioSources = GetAllSpatializedSources();
         }
 
-        foreach (AudioSource source in audioSources)
+        foreach (AudioSource s in audioSources)
         {
-            source.SetSpatializerFloat(LOAD_3DTI_HRTF, (float)filename.Length);
+            s.SetSpatializerFloat(LOAD_3DTI_HRTF, (float)filename.Length);
             for (int i = 0; i < filename.Length; i++)
             {
                 int chr2Int = (int)filename[i];
                 float chr2Float = (float)chr2Int;
-                if (!source.SetSpatializerFloat(LOAD_3DTI_HRTF, chr2Float)) return false;
+                if (!s.SetSpatializerFloat(LOAD_3DTI_HRTF, chr2Float)) return false;
             }
         }
 
@@ -354,29 +354,29 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Load ILD Near Field from a binary .3dti file
     /// </summary>
-    public bool LoadILDNearFieldBinary(string filename)
+    public bool LoadILDNearFieldBinary(string filename, AudioSource source=null)
     {
         ILDNearFieldFileName = filename;
 
         List<AudioSource> audioSources;
-        if (selectSource)
+        if (source != null)
         {
             audioSources = new List<AudioSource>();
-            audioSources.Add(selectedSource);
+            audioSources.Add(source);
         }
         else
         {
             audioSources = GetAllSpatializedSources();
         }
 
-        foreach (AudioSource source in audioSources)
+        foreach (AudioSource s in audioSources)
         {
-            source.SetSpatializerFloat(LOAD_3DTI_ILD_NEARFIELD, (float)filename.Length);            
+            s.SetSpatializerFloat(LOAD_3DTI_ILD_NEARFIELD, (float)filename.Length);            
             for (int i = 0; i < filename.Length; i++)
             {
                 int chr2Int = (int)filename[i];
                 float chr2Float = (float)chr2Int;
-                if (!source.SetSpatializerFloat(LOAD_3DTI_ILD_NEARFIELD, chr2Float)) return false;
+                if (!s.SetSpatializerFloat(LOAD_3DTI_ILD_NEARFIELD, chr2Float)) return false;
             }            
         }
 
@@ -389,29 +389,29 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Load ILD High Performance from a binary .3dti file
     /// </summary>
-    public bool LoadILDHighPerformanceBinary(string filename)
+    public bool LoadILDHighPerformanceBinary(string filename, AudioSource source=null)
     {
         ILDHighPerformanceFileName = filename;
 
         List<AudioSource> audioSources;
-        if (selectSource)
+        if (source != null)
         {
             audioSources = new List<AudioSource>();
-            audioSources.Add(selectedSource);
+            audioSources.Add(source);
         }
         else
         {
             audioSources = GetAllSpatializedSources();
         }
 
-        foreach (AudioSource source in audioSources)
+        foreach (AudioSource s in audioSources)
         {
-            source.SetSpatializerFloat(LOAD_3DTI_ILD_HIGHPERFORMANCE, (float)filename.Length);
+            s.SetSpatializerFloat(LOAD_3DTI_ILD_HIGHPERFORMANCE, (float)filename.Length);
             for (int i = 0; i < filename.Length; i++)
             {
                 int chr2Int = (int)filename[i];
                 float chr2Float = (float)chr2Int;
-                if (!source.SetSpatializerFloat(LOAD_3DTI_ILD_HIGHPERFORMANCE, chr2Float)) return false;
+                if (!s.SetSpatializerFloat(LOAD_3DTI_ILD_HIGHPERFORMANCE, chr2Float)) return false;
             }
         }
 
@@ -427,10 +427,10 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Setup all source parameters
     /// </summary>        
-    public bool SetupSource()
+    public bool SetupSource(AudioSource source=null)
     {
-        if (!SetSourceInterpolation(runtimeInterpolateHRTF)) return false;
-        return SetHRTFResamplingStep(HRTFstep);
+        if (!SetSourceInterpolation(runtimeInterpolateHRTF, source)) return false;
+        return SetHRTFResamplingStep(HRTFstep, source);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -438,10 +438,10 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Set source HRTF interpolation method
     /// </summary>
-    public bool SetSourceInterpolation(bool _run)
+    public bool SetSourceInterpolation(bool _run, AudioSource source=null)
     {
         runtimeInterpolateHRTF = _run;
-        return SendCommandForAllSources(SET_HRTF_INTERPOLATION, CommonFunctions.Bool2Float(_run));     
+        return SendCommand(SET_HRTF_INTERPOLATION, CommonFunctions.Bool2Float(_run), source);     
     }
 
     /// <summary>
@@ -449,10 +449,10 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>
     /// <param name="step"></param>
     /// <returns></returns>
-    public bool SetHRTFResamplingStep(int step)
+    public bool SetHRTFResamplingStep(int step, AudioSource source=null)
     {
         HRTFstep = step;
-        return SendCommandForAllSources(SET_HRTF_STEP, (float)step);
+        return SendCommand(SET_HRTF_STEP, (float)step, source);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -462,19 +462,19 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Set ID for all sources, for internal use of the wrapper
     /// </summary>
-    public bool SendSourceIDs()
+    public bool SendSourceIDs(AudioSource source=null)
     {
-        if (!selectSource)
+        if (source == null)
         {
             List<AudioSource> audioSources = GetAllSpatializedSources();
-            foreach (AudioSource source in audioSources)
+            foreach (AudioSource s in audioSources)
             {
-                if (!source.SetSpatializerFloat(SET_SOURCE_ID, (float)++lastSourceID)) return false;
+                if (!s.SetSpatializerFloat(SET_SOURCE_ID, (float)++lastSourceID)) return false;
             }
             return true;
         }
         else
-            return selectedSource.SetSpatializerFloat(SET_SOURCE_ID, (float)++lastSourceID);    
+            return source.SetSpatializerFloat(SET_SOURCE_ID, (float)++lastSourceID);    
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -482,20 +482,20 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Set scale factor. Allows the toolkit to work with big-scale or small-scale scenarios
     /// </summary>
-    public bool SetScaleFactor (float scale)
+    public bool SetScaleFactor (float scale, AudioSource source=null)
     {
         scaleFactor = scale;
-        return SendCommandForAllSources(SET_SCALE_FACTOR, scale);
+        return SendCommand(SET_SCALE_FACTOR, scale, source);
     }
 
     /// <summary>
     ///  Setup modules enabler, allowing to switch on/off core features
     /// </summary>
-    public bool SetupModulesEnabler()
+    public bool SetupModulesEnabler(AudioSource source=null)
     {
-        if (!SetModFarLPF(modFarLPF)) return false;
-        if (!SetModDistanceAttenuation(modDistAtt)) return false;
-        if (!SetModILD(modILD)) return false;
+        if (!SetModFarLPF(modFarLPF, source)) return false;
+        if (!SetModDistanceAttenuation(modDistAtt, source)) return false;
+        if (!SetModNearFieldILD(modNearFieldILD, source)) return false;
         //if (!SetModHRTF(modHRTF)) return false;
         if (!SetSpatializationMode(spatializationMode)) return false;      
         return true;
@@ -506,10 +506,10 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Switch on/off far distance LPF
     /// </summary>        
-    public bool SetModFarLPF(bool _enable)
+    public bool SetModFarLPF(bool _enable, AudioSource source=null)
     {
         modFarLPF = _enable;
-        return SendCommandForAllSources(SET_MOD_FARLPF, CommonFunctions.Bool2Float(_enable));
+        return SendCommand(SET_MOD_FARLPF, CommonFunctions.Bool2Float(_enable), source);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -517,21 +517,21 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Switch on/off distance attenuation
     /// </summary>        
-    public bool SetModDistanceAttenuation(bool _enable)
+    public bool SetModDistanceAttenuation(bool _enable, AudioSource source=null)
     {
         modDistAtt = _enable;
-        return SendCommandForAllSources(SET_MOD_DISTATT, CommonFunctions.Bool2Float(_enable));
+        return SendCommand(SET_MOD_DISTATT, CommonFunctions.Bool2Float(_enable), source);
     }
 
     /////////////////////////////////////////////////////////////////////
 
     /// <summary>
-    /// Switch on/off near distance ILD
+    /// Switch on/off near field ILD
     /// </summary>        
-    public bool SetModILD(bool _enable)
+    public bool SetModNearFieldILD(bool _enable, AudioSource source=null)
     {
-        modILD = _enable;
-        return SendCommandForAllSources(SET_MOD_ILD, CommonFunctions.Bool2Float(_enable));
+        modNearFieldILD = _enable;
+        return SendCommand(SET_MOD_NEARFIELD_ILD, CommonFunctions.Bool2Float(_enable), source);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -542,43 +542,36 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <param name="mode"></param>
     /// <returns></returns>
     public bool SetSpatializationMode(int mode)
-    {
+    {        
+        // SPATIALIZATION MODE IS COMMON FOR ALL SOURCES
+
         spatializationMode = mode;
 
-        // Load resources
-        SetupListener();
+        // Load resources        
+        SetupListener();    
 
-        // Send command to plugin
-        return SendCommandForAllSources(SET_SPATIALIZATION_MODE, (float)(mode));
+        // Send command to plugin        
+        return SendCommand(SET_SPATIALIZATION_MODE, (float)(mode), null);   
     }
 
     /////////////////////////////////////////////////////////////////////
 
     /// <summary>
-    /// Switch on/off HRTF convolution
-    /// </summary>        
-    //public bool SetModHRTF(bool _enable)
-    //{
-    //    modHRTF = _enable;
-    //    return SendCommandForAllSources(SET_MOD_HRTF, CommonFunctions.Bool2Float(_enable));
-    //}
-
-    /// <summary>
     /// Set magnitude Anechoic Attenuation
     /// </summary>    
-    public bool SetMagnitudeAnechoicAttenuation(float value)
+    public bool SetMagnitudeAnechoicAttenuation(float value, AudioSource source=null)
     {
         magAnechoicAttenuation = value;
-        return SendCommandForAllSources(SET_MAG_ANECHATT, value);
+        return SendCommand(SET_MAG_ANECHATT, value, source);
     }
 
     /// <summary>
     /// Set magnitude Sound Speed
     /// </summary>    
-    public bool SetMagnitudeSoundSpeed(float value)
+    public bool SetMagnitudeSoundSpeed(float value, AudioSource source=null)
     {
         magSoundSpeed = value;
-        return SendCommandForAllSources(SET_MAG_SOUNDSPEED, value);
+        return SendCommand(SET_MAG_SOUNDSPEED, value, source);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -588,14 +581,14 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     ///  Initial setup of HA directionality
     /// </summary>
-    public bool SetupHADirectionality()
+    public bool SetupHADirectionality(AudioSource source=null)
     {
         //if (!SwitchOnOffHADirectionality(T_ear.LEFT, doHADirectionality.Get(T_ear.LEFT))) return false;
         //if (!SwitchOnOffHADirectionality(T_ear.RIGHT, doHADirectionality.Get(T_ear.RIGHT))) return false;
-        if (!SwitchOnOffHADirectionality(T_ear.LEFT, doHADirectionalityLeft)) return false;
-        if (!SwitchOnOffHADirectionality(T_ear.RIGHT, doHADirectionalityRight)) return false;
-        if (!SetHADirectionalityExtend(T_ear.LEFT, HADirectionalityExtendLeft)) return false;
-        if (!SetHADirectionalityExtend(T_ear.RIGHT, HADirectionalityExtendRight)) return false;
+        if (!SwitchOnOffHADirectionality(T_ear.LEFT, doHADirectionalityLeft, source)) return false;
+        if (!SwitchOnOffHADirectionality(T_ear.RIGHT, doHADirectionalityRight, source)) return false;
+        if (!SetHADirectionalityExtend(T_ear.LEFT, HADirectionalityExtendLeft, source)) return false;
+        if (!SetHADirectionalityExtend(T_ear.RIGHT, HADirectionalityExtendRight, source)) return false;
         return true;
     }
 
@@ -604,25 +597,25 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>
     /// <param name="ear"></param>
     /// <param name="_enable"></param>
-    public bool SwitchOnOffHADirectionality(T_ear ear, bool _enable)
+    public bool SwitchOnOffHADirectionality(T_ear ear, bool _enable, AudioSource source=null)
     {
         if (ear == T_ear.BOTH)
         {
-            SwitchOnOffHADirectionality(T_ear.LEFT, _enable);
-            SwitchOnOffHADirectionality(T_ear.RIGHT, _enable);
+            SwitchOnOffHADirectionality(T_ear.LEFT, _enable, source);
+            SwitchOnOffHADirectionality(T_ear.RIGHT, _enable, source);
         }
 
         if (ear == T_ear.LEFT)
         {
             //doHADirectionality.Set(T_ear.LEFT, _enable);
             doHADirectionalityLeft = _enable;
-            return SendCommandForAllSources(SET_HA_DIRECTIONALITY_ON_LEFT, CommonFunctions.Bool2Float(_enable));
+            return SendCommand(SET_HA_DIRECTIONALITY_ON_LEFT, CommonFunctions.Bool2Float(_enable), source);
         }
         if (ear == T_ear.RIGHT)
         {
             //doHADirectionality.Set(T_ear.RIGHT, _enable);
             doHADirectionalityRight = _enable;
-            return SendCommandForAllSources(SET_HA_DIRECTIONALITY_ON_RIGHT, CommonFunctions.Bool2Float(_enable));
+            return SendCommand(SET_HA_DIRECTIONALITY_ON_RIGHT, CommonFunctions.Bool2Float(_enable), source);
         }
         return false;
     }
@@ -632,23 +625,23 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>
     /// <param name="ear"></param>
     /// <param name="extendDB"></param>
-    public bool SetHADirectionalityExtend(T_ear ear, float extendDB)
+    public bool SetHADirectionalityExtend(T_ear ear, float extendDB, AudioSource source=null)
     {
         if (ear == T_ear.BOTH)
         {
-            SetHADirectionalityExtend(T_ear.LEFT, extendDB);
-            SetHADirectionalityExtend(T_ear.RIGHT, extendDB);
+            SetHADirectionalityExtend(T_ear.LEFT, extendDB, source);
+            SetHADirectionalityExtend(T_ear.RIGHT, extendDB, source);
         }
 
         if (ear == T_ear.LEFT)
         {
             HADirectionalityExtendLeft = extendDB;
-            return SendCommandForAllSources(SET_HA_DIRECTIONALITY_EXTEND_LEFT, extendDB);
+            return SendCommand(SET_HA_DIRECTIONALITY_EXTEND_LEFT, extendDB, source);
         }
         if (ear == T_ear.RIGHT)
         {
             HADirectionalityExtendRight = extendDB;
-            return SendCommandForAllSources(SET_HA_DIRECTIONALITY_EXTEND_RIGHT, extendDB);
+            return SendCommand(SET_HA_DIRECTIONALITY_EXTEND_RIGHT, extendDB, source);
         }
         return false;
     }
@@ -660,9 +653,9 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     ///  Initial setup of limiter
     /// </summary>
-    public bool SetupLimiter()
+    public bool SetupLimiter(AudioSource source=null)
     {
-        if (!SwitchOnOffLimiter(doLimiter)) return false;
+        if (!SwitchOnOffLimiter(doLimiter, source)) return false;
         return true;
     }
 
@@ -671,10 +664,10 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
-    public bool SwitchOnOffLimiter(bool _enable)
+    public bool SwitchOnOffLimiter(bool _enable, AudioSource source=null)
     {
         doLimiter = _enable;
-        return SendCommandForAllSources(SET_LIMITER_ON, CommonFunctions.Bool2Float(_enable));
+        return SendCommand(SET_LIMITER_ON, CommonFunctions.Bool2Float(_enable), source);
     }
 
     /// <summary>
@@ -682,9 +675,9 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>
     /// <param name="_compressing"></param>
     /// <returns></returns>
-    public bool GetLimiterCompression(out bool _compressing)
+    public bool GetLimiterCompression(out bool _compressing, AudioSource source=null)
     {
-        return GetBoolParameter(GET_LIMITER_COMPRESSION, out _compressing);        
+        return GetBoolParameter(GET_LIMITER_COMPRESSION, out _compressing, source);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -697,11 +690,11 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <param name="parameter"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public bool GetBoolParameter(int parameter, out bool value)
+    public bool GetBoolParameter(int parameter, out bool value, AudioSource source=null)
     {
         value = false;
         float floatValue;
-        if (!GetFloatParameter(parameter, out floatValue)) return false;
+        if (!GetFloatParameter(parameter, out floatValue, source)) return false;
         value = CommonFunctions.Float2Bool(floatValue);
         return true;
     }
@@ -712,48 +705,52 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <param name="parameter"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public bool GetFloatParameter(int parameter, out float value)
+    public bool GetFloatParameter(int parameter, out float value, AudioSource source=null)
     {
         value = 0.0f;
 
-        // We will get value from the first spatialized source
-        AudioSource source;
-        List<AudioSource> sources = GetAllSpatializedSources();
-        if (sources.Count > 0)
-            source = sources[0];
-        else
-            return false;
+        AudioSource s = source;
+
+        // If no source is specified, we get value from the first spatialized source
+        if (source == null)
+        {
+            List<AudioSource> sources = GetAllSpatializedSources();
+            if (sources.Count > 0)
+                s = sources[0];
+            else
+                return false;
+        }
 
         // Send the command to get the value        
-        return (source.GetSpatializerFloat(parameter, out value));
+        return (s.GetSpatializerFloat(parameter, out value));
     }
 
     /// <summary>
     /// Send command to plugin to switch on/off write to Debug Log file
     /// </summary>
-    public bool SendWriteDebugLog(bool _enable)
+    public bool SendWriteDebugLog(bool _enable, AudioSource source=null)
     {
         debugLog = _enable;
-        return SendCommandForAllSources(SET_DEBUG_LOG, CommonFunctions.Bool2Float(_enable));
+        return SendCommand(SET_DEBUG_LOG, CommonFunctions.Bool2Float(_enable), source);
     }
 
     /// <summary>
-    /// Send command to the DLL, for each registered source
+    /// Send command to the DLL, for selected source or for all registered sources
     /// </summary>
-    public bool SendCommandForAllSources(int command, float value)
+    public bool SendCommand(int command, float value, AudioSource source)
     {
-        if (!selectSource)
+        if (source == null)
         {
             List<AudioSource> audioSources = GetAllSpatializedSources();
-            foreach (AudioSource source in audioSources)
+            foreach (AudioSource s in audioSources)
             {
-                if (!source.SetSpatializerFloat(command, value))
+                if (!s.SetSpatializerFloat(command, value))
                     return false;
             }
             return true;
         }
         else
-            return selectedSource.SetSpatializerFloat(command, value);
+            return source.SetSpatializerFloat(command, value);
     }
 
     /// <summary>

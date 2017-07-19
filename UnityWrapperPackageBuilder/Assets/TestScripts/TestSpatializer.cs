@@ -72,21 +72,25 @@ public class TestSpatializer : MonoBehaviour
             toggleSource = !toggleSource;
             if (toggleSource)
             {
-                Debug.Log("Enabling spatialization!");
-                SpatializerAPI.EnableSpatialization(testSource);
+                //Debug.Log("Enabling spatialization!");
+                //SpatializerAPI.EnableSpatialization(testSource);
+                Debug.Log("Enabling distance attenuation");
+                SpatializerAPI.SetModDistanceAttenuation(true, testSource);
             }
             else
             {
-                Debug.Log("Disabling spatialization!");
-                SpatializerAPI.DisableSpatialization(testSource);
+                //Debug.Log("Disabling spatialization!");
+                //SpatializerAPI.DisableSpatialization(testSource);
+                Debug.Log("Disabling distance attenuation");
+                SpatializerAPI.SetModDistanceAttenuation(false, testSource);
             }
         }        
 
-        if (Input.GetKeyDown("l"))
-        {
-            testSource.clip = otherClip;
-            testSource.Play();
-        }
+        //if (Input.GetKeyDown("l"))
+        //{
+        //    testSource.clip = otherClip;
+        //    testSource.Play();
+        //}
     }
 }
 

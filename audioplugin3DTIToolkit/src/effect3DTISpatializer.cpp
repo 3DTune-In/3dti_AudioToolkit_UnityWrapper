@@ -530,6 +530,7 @@ namespace Spatializer3DTI
 
 		// Spatialization modes
 		effectdata->spatializationMode = SPATIALIZATION_MODE_NONE;	
+		effectdata->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::None);
 		effectdata->loadedHRTF = false;
 		effectdata->loadedNearFieldILD = false;
 		effectdata->loadedHighPerformanceILD = false;
