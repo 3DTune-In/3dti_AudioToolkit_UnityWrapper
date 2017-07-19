@@ -104,6 +104,12 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorStereo.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\MultibandExpander.cpp">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicExpanderMono.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -219,6 +225,12 @@
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\EarPair.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\MultibandExpander.h">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicExpanderMono.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
   </ItemGroup>

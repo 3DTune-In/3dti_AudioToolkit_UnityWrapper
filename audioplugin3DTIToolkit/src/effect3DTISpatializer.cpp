@@ -535,6 +535,9 @@ namespace Spatializer3DTI
 		effectdata->loadedNearFieldILD = false;
 		effectdata->loadedHighPerformanceILD = false;
 
+		// 3DTI Debugger
+		CDebugger::Instance().SetAssertMode(ASSERT_MODE_CONTINUE);
+
 		WriteLog(state, "Core initialized. Waiting for configuration...", "");
 
 		return UNITY_AUDIODSP_OK;

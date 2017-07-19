@@ -185,6 +185,7 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressor.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorMono.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorStereo.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicExpanderMono.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\EarPair.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\EnvelopeDetector.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.h" />
@@ -201,6 +202,7 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\FiltersBank.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingLossSim.h" />
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\MultibandExpander.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.h" />
     <ClInclude Include="..\src\AudioPluginInterface.h" />
@@ -225,6 +227,7 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DistanceAttenuator.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorMono.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorStereo.cpp" />
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicExpanderMono.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\EnvelopeDetector.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Fconvolver.cpp" />
@@ -240,6 +243,7 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\FiltersBank.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingLossSim.cpp" />
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\MultibandExpander.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Modules\ILD\ILDCereal.cpp" />
     <ClCompile Include="..\src\AudioPluginUtil.cpp" />
