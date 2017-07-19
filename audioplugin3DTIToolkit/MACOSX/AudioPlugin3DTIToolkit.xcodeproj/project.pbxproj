@@ -42,6 +42,8 @@
 		AFD67D2A1E978F80000F4387 /* FiltersBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CF51E978F80000F4387 /* FiltersBank.cpp */; };
 		AFD67D2B1E978F80000F4387 /* HearingAidSim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CF71E978F80000F4387 /* HearingAidSim.cpp */; };
 		AFD67D2C1E978F80000F4387 /* HearingLossSim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CF91E978F80000F4387 /* HearingLossSim.cpp */; };
+		AFE0E1821F1F889B00695DDB /* DynamicExpanderMono.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE0E17F1F1F889B00695DDB /* DynamicExpanderMono.cpp */; };
+		AFE0E1851F1F88A900695DDB /* MultibandExpander.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE0E1831F1F88A900695DDB /* MultibandExpander.cpp */; };
 		AFE88E781DCCB226003505EF /* HRTFCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE88B001DCCB223003505EF /* HRTFCereal.cpp */; };
 		AFE890951DCCB226003505EF /* ILDCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE88E1A1DCCB226003505EF /* ILDCereal.cpp */; };
 		AFE890AC1DCCB3CF003505EF /* AudioPluginUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE890A81DCCB3CF003505EF /* AudioPluginUtil.cpp */; };
@@ -86,7 +88,6 @@
 		AFD67CD01E978F80000F4387 /* Debugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Debugger.h; sourceTree = "<group>"; };
 		AFD67CD11E978F80000F4387 /* DistanceAttenuator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DistanceAttenuator.cpp; sourceTree = "<group>"; };
 		AFD67CD21E978F80000F4387 /* DistanceAttenuator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistanceAttenuator.h; sourceTree = "<group>"; };
-		AFD67CD31E978F80000F4387 /* DynamicCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicCompressor.h; sourceTree = "<group>"; };
 		AFD67CD41E978F80000F4387 /* DynamicCompressorMono.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DynamicCompressorMono.cpp; sourceTree = "<group>"; };
 		AFD67CD51E978F80000F4387 /* DynamicCompressorMono.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicCompressorMono.h; sourceTree = "<group>"; };
 		AFD67CD61E978F80000F4387 /* DynamicCompressorStereo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DynamicCompressorStereo.cpp; sourceTree = "<group>"; };
@@ -122,6 +123,11 @@
 		AFD67CF81E978F80000F4387 /* HearingAidSim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HearingAidSim.h; sourceTree = "<group>"; };
 		AFD67CF91E978F80000F4387 /* HearingLossSim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HearingLossSim.cpp; sourceTree = "<group>"; };
 		AFD67CFA1E978F80000F4387 /* HearingLossSim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HearingLossSim.h; sourceTree = "<group>"; };
+		AFE0E17F1F1F889B00695DDB /* DynamicExpanderMono.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DynamicExpanderMono.cpp; sourceTree = "<group>"; };
+		AFE0E1801F1F889B00695DDB /* DynamicExpanderMono.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicExpanderMono.h; sourceTree = "<group>"; };
+		AFE0E1811F1F889B00695DDB /* DynamicProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicProcessor.h; sourceTree = "<group>"; };
+		AFE0E1831F1F88A900695DDB /* MultibandExpander.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MultibandExpander.cpp; sourceTree = "<group>"; };
+		AFE0E1841F1F88A900695DDB /* MultibandExpander.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultibandExpander.h; sourceTree = "<group>"; };
 		AFE8837F1DCCA8F6003505EF /* AudioPlugin3DTIToolkit.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AudioPlugin3DTIToolkit.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFE889EC1DCCAC7E003505EF /* Config.Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.Release.xcconfig; sourceTree = "<group>"; };
 		AFE88B001DCCB223003505EF /* HRTFCereal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HRTFCereal.cpp; sourceTree = "<group>"; };
@@ -207,6 +213,9 @@
 		AFD67CC61E978F80000F4387 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				AFE0E17F1F1F889B00695DDB /* DynamicExpanderMono.cpp */,
+				AFE0E1801F1F889B00695DDB /* DynamicExpanderMono.h */,
+				AFE0E1811F1F889B00695DDB /* DynamicProcessor.h */,
 				AF9B83831EC9B588002BD963 /* EarPair.h */,
 				AFD67CC71E978F80000F4387 /* AIR.cpp */,
 				AFD67CC81E978F80000F4387 /* AIR.h */,
@@ -220,7 +229,6 @@
 				AFD67CD01E978F80000F4387 /* Debugger.h */,
 				AFD67CD11E978F80000F4387 /* DistanceAttenuator.cpp */,
 				AFD67CD21E978F80000F4387 /* DistanceAttenuator.h */,
-				AFD67CD31E978F80000F4387 /* DynamicCompressor.h */,
 				AFD67CD41E978F80000F4387 /* DynamicCompressorMono.cpp */,
 				AFD67CD51E978F80000F4387 /* DynamicCompressorMono.h */,
 				AFD67CD61E978F80000F4387 /* DynamicCompressorStereo.cpp */,
@@ -252,6 +260,8 @@
 		AFD67CEF1E978F80000F4387 /* HAHLSimulation */ = {
 			isa = PBXGroup;
 			children = (
+				AFE0E1831F1F88A900695DDB /* MultibandExpander.cpp */,
+				AFE0E1841F1F88A900695DDB /* MultibandExpander.h */,
 				AFD67CF01E978F80000F4387 /* 3DTI_HAHLSimulator.h */,
 				AFD67CF11E978F80000F4387 /* DynamicEqualizer.cpp */,
 				AFD67CF21E978F80000F4387 /* DynamicEqualizer.h */,
@@ -393,6 +403,7 @@
 				AFD67D0D1E978F80000F4387 /* BRIR.cpp in Sources */,
 				AF391F8E1E55F14200EB4AC6 /* effect3DTIHA.cpp in Sources */,
 				AFD67D1D1E978F80000F4387 /* FarDistanceEffects.cpp in Sources */,
+				AFE0E1821F1F889B00695DDB /* DynamicExpanderMono.cpp in Sources */,
 				AFD67D1C1E978F80000F4387 /* EnvelopeDetector.cpp in Sources */,
 				AFD67D101E978F80000F4387 /* HRTF.cpp in Sources */,
 				AFD67D151E978F80000F4387 /* AIR.cpp in Sources */,
@@ -421,6 +432,7 @@
 				AFD67D2C1E978F80000F4387 /* HearingLossSim.cpp in Sources */,
 				AF391F901E55F14200EB4AC6 /* effect3DTISpatializer.cpp in Sources */,
 				AFD67D1E1E978F80000F4387 /* Fconvolver.cpp in Sources */,
+				AFE0E1851F1F88A900695DDB /* MultibandExpander.cpp in Sources */,
 				AFD67D181E978F80000F4387 /* Debugger.cpp in Sources */,
 				AFD67D121E978F80000F4387 /* Listener.cpp in Sources */,
 			);

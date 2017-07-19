@@ -304,8 +304,8 @@ namespace Spatializer3DTI
 		// Load HRTF		
 		if (!HRTF::CreateFrom3dti(data->strHRTFpath, data->listener))
 		{
-			TDebuggerResultStruct result = GET_LAST_RESULT_STRUCT();
-			WriteLog(state, "ERROR TRYING TO LOAD HRTF!!! ", result.suggestion);
+			//TDebuggerResultStruct result = GET_LAST_RESULT_STRUCT();
+			//WriteLog(state, "ERROR TRYING TO LOAD HRTF!!! ", result.suggestion);
 			return TLoadResult::RESULT_LOAD_ERROR;
 		}
 
@@ -342,12 +342,12 @@ namespace Spatializer3DTI
 		bool boolResult = ILD::CreateFrom3dti_ILDSpatializationTable(data->strHighPerformanceILDpath, data->listener);		
 
 		// Check errors
-		TDebuggerResultStruct result = GET_LAST_RESULT_STRUCT();
-		if (result.id != RESULT_OK)
-		{			
-			WriteLog(state, "ERROR TRYING TO LOAD HIGH PERFORMANCE ILD!!! ", result.suggestion);
-			return TLoadResult::RESULT_LOAD_ERROR;
-		}
+		//TDebuggerResultStruct result = GET_LAST_RESULT_STRUCT();
+		//if (result.id != RESULT_OK)
+		//{
+		//	WriteLog(state, "ERROR TRYING TO LOAD HIGH PERFORMANCE ILD!!! ", result.suggestion);
+		//	return TLoadResult::RESULT_LOAD_ERROR;
+		//}
 
 		//if (h.size() > 0)		// TO DO: Improve this error check		
 		if (boolResult)
@@ -378,12 +378,12 @@ namespace Spatializer3DTI
 		bool boolResult = ILD::CreateFrom3dti_ILDNearFieldEffectTable(data->strNearFieldILDpath, data->listener);
 
 		// Check errors
-		TDebuggerResultStruct result = GET_LAST_RESULT_STRUCT();
-		if (result.id != RESULT_OK)
-		{
-			WriteLog(state, "ERROR TRYING TO LOAD NEAR FIELD ILD!!! ", result.suggestion);
-			return TLoadResult::RESULT_LOAD_ERROR;
-		}
+		//TDebuggerResultStruct result = GET_LAST_RESULT_STRUCT();
+		//if (result.id != RESULT_OK)
+		//{
+		//	WriteLog(state, "ERROR TRYING TO LOAD NEAR FIELD ILD!!! ", result.suggestion);
+		//	return TLoadResult::RESULT_LOAD_ERROR;
+		//}
 
 		//if (h.size() > 0)		// TO DO: Improve this error check		
 		if (boolResult)
@@ -536,7 +536,9 @@ namespace Spatializer3DTI
 		effectdata->loadedHighPerformanceILD = false;
 
 		// 3DTI Debugger
+#if defined (SWITCH_ON_3DTI_DEBUGGER) || defined (_3DTI_ANDROID_DEBUGGER)
 		CDebugger::Instance().SetAssertMode(ASSERT_MODE_CONTINUE);
+#endif
 
 		WriteLog(state, "Core initialized. Waiting for configuration...", "");
 
