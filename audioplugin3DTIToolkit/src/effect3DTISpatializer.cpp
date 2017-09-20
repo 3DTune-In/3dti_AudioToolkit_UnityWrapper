@@ -448,10 +448,10 @@ namespace Spatializer3DTI
 		// TO DO: Change this for high performance / high quality modes
 
 		// Audio state:		
-		Binaural::AudioStateBinaural_Struct audioState = data->core.GetAudioState();
+		Common::AudioState_Struct audioState = data->core.GetAudioState();
 		WriteLog(state, "CREATE: Sample rate set to ", audioState.sampleRate);
 		WriteLog(state, "CREATE: Buffer size set to ", audioState.bufferSize);
-		WriteLog(state, "CREATE: HRTF resampling step set to ", audioState.HRTF_resamplingStep);
+		WriteLog(state, "CREATE: HRTF resampling step set to ", data->core.GetHRTFResamplingStep());
 
 		// Listener:		
 		if (data->listener != nullptr)
@@ -495,11 +495,13 @@ namespace Spatializer3DTI
 		WriteLog(state, "Creating audio plugin...", "");
 
 		// Set default audio state			
-		Binaural::AudioStateBinaural_Struct audioState;
+		Common::AudioState_Struct audioState;
 		audioState.sampleRate = (int)state->samplerate;
-		audioState.bufferSize = (int)state->dspbuffersize;
-		audioState.HRTF_resamplingStep = effectdata->parameters[PARAM_HRTF_STEP];
+		audioState.bufferSize = (int)state->dspbuffersize;		
 		effectdata->core.SetAudioState(audioState);
+
+		// Set default HRTF resampling step
+		effectdata->core.SetHRTFResamplingStep(effectdata->parameters[PARAM_HRTF_STEP]);
 
 		// Create listener
 		effectdata->listener = effectdata->core.CreateListener();
@@ -604,8 +606,7 @@ namespace Spatializer3DTI
             return UNITY_AUDIODSP_ERR_UNSUPPORTED;
         data->parameters[index] = value;
 
-		Common::CMagnitudes magnitudes;
-		Binaural::AudioStateBinaural_Struct audioState;
+		Common::CMagnitudes magnitudes;		
 		int loadResult;		
 
 		// Process command sent by C# API
@@ -696,12 +697,12 @@ namespace Spatializer3DTI
 			case PARAM_MOD_DISTATT:
 				if (value > 0.0f)
 				{
-					data->audioSource->EnableDistanceAttenuation();
+					data->audioSource->EnableDistanceAttenuationAnechoic();
 					WriteLog(state, "SET PARAMETER: Distance attenuation is ", "Enabled");
 				}
 				else
 				{
-					data->audioSource->DisableDistanceAttenuation();
+					data->audioSource->DisableDistanceAttenuationAnechoic();
 					WriteLog(state, "SET PARAMETER: Distance attenuation is ", "Disabled");
 				}
 				break;
@@ -759,24 +760,24 @@ namespace Spatializer3DTI
 				break;
 
 			case PARAM_HA_DIRECTIONALITY_EXTEND_LEFT:
-				data->listener->GetHA()->SetDirectionalityExtendL_dB(value);
+				data->listener->SetLeftDirectionalityAttenuation(value);
 				WriteLog(state, "SET PARAMETER: HA Directionality for Left ear set to (dB) ", value);
 				break;
 
 			case PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT:
-				data->listener->GetHA()->SetDirectionalityExtendR_dB(value);
+				data->listener->SetRightDirectionalityAttenuation(value);
 				WriteLog(state, "SET PARAMETER: HA Directionality for Right ear set to (dB) ", value);
 				break;
 
 			case PARAM_HA_DIRECTIONALITY_ON_LEFT:
 				if (value > 0.0f)
 				{
-					data->listener->GetHA()->doDirectionalityL = true;
+					data->listener->EnableLeftDirectionality();
 					WriteLog(state, "SET PARAMETER: HA Directionality switched ON for Left ear", "");
 				}
 				else
 				{
-					data->listener->GetHA()->doDirectionalityL = false;
+					data->listener->DisableLeftDirectionality();
 					WriteLog(state, "SET PARAMETER: HA Directionality switched OFF for Left ear", "");
 				}				
 				break;
@@ -784,12 +785,12 @@ namespace Spatializer3DTI
 			case PARAM_HA_DIRECTIONALITY_ON_RIGHT:
 				if (value > 0.0f)
 				{
-					data->listener->GetHA()->doDirectionalityR = true;
+					data->listener->EnableRightDirectionality();
 					WriteLog(state, "SET PARAMETER: HA Directionality switched ON for Right ear", "");
 				}
 				else
 				{
-					data->listener->GetHA()->doDirectionalityR = false;
+					data->listener->DisableRightDirectionality();
 					WriteLog(state, "SET PARAMETER: HA Directionality switched OFF for Right ear", "");
 				}
 				break;
@@ -810,9 +811,7 @@ namespace Spatializer3DTI
 				break;
 
 			case PARAM_HRTF_STEP:				
-				audioState = data->core.GetAudioState();
-				audioState.HRTF_resamplingStep = (int)value;
-				data->core.SetAudioState(audioState);
+				data->core.SetHRTFResamplingStep((int)value);
 				WriteLog(state, "SET PARAMETER: HRTF resampling step set to (degrees) ", value);
 				break;
 

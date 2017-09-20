@@ -558,8 +558,10 @@ namespace HASimulation3DTI
 		effectdata->HA.noiseNumBits = DEFAULT_NOISENUMBITS;		// TO DO: writelog
 		effectdata->HA.GetLeftDynamicEqualizer()->SetLevelsInterpolation(DEFAULT_LEVELSINTERPOLATION);	// TO DO: writelog
 		effectdata->HA.GetRightDynamicEqualizer()->SetLevelsInterpolation(DEFAULT_LEVELSINTERPOLATION);	// TO DO: writelog
-		effectdata->HA.GetLeftDynamicEqualizer()->SetAttackRelease_ms(DEFAULT_ATTACKRELEASE);
-		effectdata->HA.GetRightDynamicEqualizer()->SetAttackRelease_ms(DEFAULT_ATTACKRELEASE);
+		effectdata->HA.GetLeftDynamicEqualizer()->SetAttack_ms(DEFAULT_ATTACKRELEASE);
+		effectdata->HA.GetLeftDynamicEqualizer()->SetRelease_ms(DEFAULT_ATTACKRELEASE);
+		effectdata->HA.GetRightDynamicEqualizer()->SetAttack_ms(DEFAULT_ATTACKRELEASE);
+		effectdata->HA.GetRightDynamicEqualizer()->SetRelease_ms(DEFAULT_ATTACKRELEASE);
 		effectdata->HA.GetLeftDynamicEqualizer()->SetCompressionPercentage(DEFAULT_COMPRESSION_PERCENTAGE);
 		effectdata->HA.GetRightDynamicEqualizer()->SetCompressionPercentage(DEFAULT_COMPRESSION_PERCENTAGE);
 
@@ -737,15 +739,13 @@ namespace HASimulation3DTI
 			case PARAM_DYNAMICEQ_LEVEL_2_BAND_5_RIGHT_DB:		data->HA.SetLevelBandGain_dB(2, 5, value, EAR_RIGHT);	WriteLog(state, "SET PARAMETER: Gain for Level 2, Band 5, Right channel = ", value); break;
 			case PARAM_DYNAMICEQ_LEVEL_2_BAND_6_RIGHT_DB:		data->HA.SetLevelBandGain_dB(2, 6, value, EAR_RIGHT);	WriteLog(state, "SET PARAMETER: Gain for Level 2, Band 6, Right channel = ", value); break;
 			case PARAM_DYNAMICEQ_ATTACKRELEASE_LEFT_MS:			
-				//data->HA.GetDynamicEqualizer()->EnvL.SetAttackTime(value); 
-				//data->HA.GetDynamicEqualizer()->EnvL.SetReleaseTime(value);
-				data->HA.GetLeftDynamicEqualizer()->SetAttackRelease_ms(value);
+				data->HA.GetLeftDynamicEqualizer()->SetAttack_ms(value);
+				data->HA.GetLeftDynamicEqualizer()->SetRelease_ms(value);
 				WriteLog(state, "SET PARAMETER: Attack/Release time for Left channel = ", value);
 				break;
 			case PARAM_DYNAMICEQ_ATTACKRELEASE_RIGHT_MS:		
-				//data->HA.GetDynamicEqualizer()->EnvR.SetAttackTime(value);
-				//data->HA.GetDynamicEqualizer()->EnvR.SetReleaseTime(value);
-				data->HA.GetRightDynamicEqualizer()->SetAttackRelease_ms(value);
+				data->HA.GetRightDynamicEqualizer()->SetAttack_ms(value);
+				data->HA.GetRightDynamicEqualizer()->SetRelease_ms(value);
 				WriteLog(state, "SET PARAMETER: Attack/Release time for Right channel = ", value);
 				break;
 

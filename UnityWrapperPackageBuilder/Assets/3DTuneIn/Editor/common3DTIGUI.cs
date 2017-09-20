@@ -434,10 +434,11 @@ public class Common3DTIGUI
     /// <param name="enable"></param>
     /// <param name="title"></param>
     /// <param name="switchParameters"></param>
-    public static bool BeginLeftColumn(IAudioEffectPlugin plugin, ref bool enable, string title, string tooltip, List<string> switchParameters)
+    public static bool BeginLeftColumn(IAudioEffectPlugin plugin, ref bool enable, string title, string tooltip, List<string> switchParameters, bool doExpandWidth = false)
     {
-        GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));                     // Begin section (ear pair)             
-            GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(false));  // Begin column (left ear)                               
+        ResetParameterGroup();
+        GUILayout.BeginHorizontal(GUILayout.ExpandWidth(doExpandWidth));                     // Begin section (ear pair)             
+            GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(doExpandWidth));  // Begin column (left ear)                               
                 bool changed = CreateToggle(ref enable, title, tooltip);
                 if (changed)
                 { 
@@ -469,9 +470,10 @@ public class Common3DTIGUI
     /// <param name="enable"></param>
     /// <param name="title"></param>
     /// <param name="switchParameters"></param>
-    public static bool BeginRightColumn(IAudioEffectPlugin plugin, ref bool enable, string title, string tooltip, List<string> switchParameters)
+    public static bool BeginRightColumn(IAudioEffectPlugin plugin, ref bool enable, string title, string tooltip, List<string> switchParameters, bool doExpandWidth=false)
     {
-            GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(false)); // Begin column (right ear)               
+        ResetParameterGroup();
+            GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(doExpandWidth)); // Begin column (right ear)               
                 bool changed = CreateToggle(ref enable, title, tooltip);
                 if (changed)
                 {
@@ -609,6 +611,54 @@ public class Common3DTIGUI
     }
 
     /// <summary>
+    /// Create a slider associated to a parameter of an audio plugin, which accepts only a set of discrete values
+    /// </summary>
+    /// <param name="plugin"></param>
+    /// <param name="parameterName"></param>
+    /// <param name="parameterText"></param>
+    /// <param name="isFloat"></param>
+    /// <param name="units"></param>
+    /// <returns>True if slider value has changed</returns>
+    public static bool CreatePluginParameterDiscreteSlider(IAudioEffectPlugin plugin, ref float APIparam, string parameterName, string parameterText, string units, string tooltip, List<float> discreteValues)
+    {
+        // TO DO: print marks with discrete values
+
+        // Get parameter info
+        float newValue;
+        float minValue, maxValue;
+        plugin.GetFloatParameterInfo(parameterName, out minValue, out maxValue, out newValue);
+
+        // Create slider and set value
+        plugin.GetFloatParameter(parameterName, out newValue);
+        bool valueChanged;
+        valueChanged = CreateFloatSlider(ref newValue, parameterText, "F0", units, tooltip, minValue, maxValue);
+
+        if (valueChanged)
+        {
+            // Snap to closest discrete value            
+            float minDistance = Mathf.Abs(newValue - discreteValues[0]); // Warning! this does not work with negative valu
+            float closestValue = discreteValues[0];
+            foreach (int discreteValue in discreteValues)
+            {
+                float distance = Mathf.Abs(newValue - discreteValue);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    closestValue = discreteValue;
+                }
+            }
+            newValue = closestValue;
+
+            // Set value
+            plugin.SetFloatParameter(parameterName, newValue);
+            APIparam = newValue;
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// Auxiliary function for creating sliders for float variables with specific format
     /// </summary>
     /// <returns></returns>
@@ -647,7 +697,7 @@ public class Common3DTIGUI
     public static void CreatePluginToggle(IAudioEffectPlugin plugin, ref bool boolvar, string toggleText, string switchParameter, string tooltip)
     {        
         if (CreateToggle(ref boolvar, toggleText, tooltip))        
-        {
+        {            
             plugin.SetFloatParameter(switchParameter, CommonFunctions.Bool2Float(boolvar));
         }
     }

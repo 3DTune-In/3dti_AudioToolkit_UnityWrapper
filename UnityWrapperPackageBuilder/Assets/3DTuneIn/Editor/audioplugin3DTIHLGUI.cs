@@ -75,7 +75,8 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         {
             DrawCalibration(plugin);
             DrawAudiometry(plugin);
-            DrawEnvelopeDetector(plugin);            
+            DrawEnvelopeDetector(plugin);
+            DrawTemporalAsynchrony(plugin);      
         }
 
         //initDone = true;
@@ -223,7 +224,10 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         Common3DTIGUI.BeginSection("AUDIOMETRY");
         {
             // LEFT EAR
-            Common3DTIGUI.BeginLeftColumn(HLAPI.GLOBAL_LEFT_ON);
+            //Common3DTIGUI.BeginLeftColumn(HLAPI.GLOBAL_LEFT_ON);
+            EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_LEFT_ON);
+            Common3DTIGUI.BeginLeftColumn(plugin, ref HLAPI.MBE_LEFT_ON, "LEFT EAR", "Enable audiometry for left ear", new List<string> { "HLMBEONL" }, true);
+            if (HLAPI.MBE_LEFT_ON)
             {
                 Common3DTIGUI.AddLabelToParameterGroup("62.5 Hz");
                 Common3DTIGUI.AddLabelToParameterGroup("125 Hz");
@@ -245,9 +249,13 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 if (Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_AUDIOMETRY_LEFT[8], "HL8L", "16 KHz", false, "dB HL", "Set hearing level for 16 KHz band in left ear")) selectedPresetLeft = PRESET_CUSTOM;
             }
             Common3DTIGUI.EndLeftColumn();
+            EditorGUI.EndDisabledGroup();
 
             // RIGHT EAR
-            Common3DTIGUI.BeginRightColumn(HLAPI.GLOBAL_RIGHT_ON);
+            //Common3DTIGUI.BeginRightColumn(HLAPI.GLOBAL_RIGHT_ON);
+            EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_RIGHT_ON);
+            Common3DTIGUI.BeginRightColumn(plugin, ref HLAPI.MBE_RIGHT_ON, "RIGHT EAR", "Enable audiometry for right ear", new List<string> { "HLMBEONR" }, true);
+            if (HLAPI.MBE_RIGHT_ON)
             {
                 Common3DTIGUI.AddLabelToParameterGroup("62.5 Hz");
                 Common3DTIGUI.AddLabelToParameterGroup("125 Hz");
@@ -269,6 +277,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 if (Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_AUDIOMETRY_RIGHT[8], "HL8R", "16 KHz", false, "dB HL", "Set hearing level for 16 KHz band in right ear")) selectedPresetRight = PRESET_CUSTOM;
             }
             Common3DTIGUI.EndRightColumn();
+            EditorGUI.EndDisabledGroup();
         }
         Common3DTIGUI.EndSection();
     }
@@ -314,6 +323,105 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         {
             Common3DTIGUI.AddLabelToParameterGroup("dB SPL for 0 dB FS");                
             Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_CALIBRATION, "HLCAL", "dB SPL for 0 dB FS", false, "dB SPL", "Set how many dB SPL are assumed for 0 dB FS");
+        }
+        Common3DTIGUI.EndSection();
+    }
+
+    /// <summary>
+    /// Draw temporal asynchrony controls for both ears
+    /// </summary>
+    /// <param name="plugin"></param>
+    public void DrawTemporalAsynchrony(IAudioEffectPlugin plugin)
+    {
+        Common3DTIGUI.BeginSection("TEMPORAL ASYNCHRONY");
+        {
+            // LEFT EAR            
+            EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_LEFT_ON);
+            Common3DTIGUI.BeginLeftColumn(plugin, ref HLAPI.TA_LEFT_ON, "LEFT EAR", "Enable temporal asynchrony simulation for left ear", new List<string> { "HLTAONL" }, true);
+            {
+                //if (HLAPI.TA_LEFT_ON)
+                EditorGUI.BeginDisabledGroup(!HLAPI.TA_LEFT_ON);
+                {
+                    Common3DTIGUI.AddLabelToParameterGroup("Band upper limit");
+                    Common3DTIGUI.AddLabelToParameterGroup("White noise power");
+                    Common3DTIGUI.AddLabelToParameterGroup("Autocorrelation LPF cutoff");
+                    Common3DTIGUI.CreatePluginParameterDiscreteSlider(plugin, ref HLAPI.PARAM_LEFT_TA_BAND, "HLTABANDL", "Band upper limit", "Hz", "Set temporal asynchrony band upper limit in left ear", new List<float> { 1200 });
+                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_LEFT_TA_POWER, "HLTAPOWL", "White noise power", true, "ms", "Set temporal asynchrony white noise power in left ear");
+                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_LEFT_TA_CUTOFF, "HLTALPFL", "Autocorrelation LPF cutoff", true, "Hz", "Set temporal asynchrony autocorrelation low-pass filter cutoff frequency in left ear");
+
+                    // Copy left values to right if LRSync is on. It is done internally by the toolkit, but not shown in the GUI
+                    if (HLAPI.PARAM_TA_LRSYNC_ON)
+                    {
+                        plugin.SetFloatParameter("HLTABANDR", HLAPI.PARAM_LEFT_TA_BAND);
+                        plugin.SetFloatParameter("HLTAPOWR", HLAPI.PARAM_LEFT_TA_POWER);
+                        plugin.SetFloatParameter("HLTALPFR", HLAPI.PARAM_LEFT_TA_CUTOFF);
+                    }
+
+                    //float coeff0=0.0f;
+                    //float coeff1 = 0.0f;
+                    //HLAPI.GetAutocorrelationCoefficients(T_ear.LEFT, out coeff0, out coeff1);
+                    ////plugin.GetFloatParameter("HLTA0GL", out coeff0);
+                    ////plugin.GetFloatParameter("HLTA1GL", out coeff1);
+                    ////coeff1 = coeff1 / coeff0;
+                    //Common3DTIGUI.CreateReadonlyFloatText("Noise RMS", "F2", "ms", "RMS power of white noise for left ear temporal asynchrony", coeff0);
+                    //Common3DTIGUI.CreateReadonlyFloatText("Noise Autocorrelation", "F2", "", "First normalized autocorrelation coefficient of filtered noise for left ear temporal asynchrony", coeff1);
+                }
+                EditorGUI.EndDisabledGroup();
+            }
+            Common3DTIGUI.EndLeftColumn();
+            EditorGUI.EndDisabledGroup();
+
+            // RIGHT EAR            
+            EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_RIGHT_ON);
+            EditorGUI.BeginDisabledGroup(HLAPI.PARAM_TA_LRSYNC_ON);
+            if (Common3DTIGUI.BeginRightColumn(plugin, ref HLAPI.TA_RIGHT_ON, "RIGHT EAR", "Enable temporal asynchrony simulation for right ear", new List<string> { "HLTAONR" }, true))
+            {
+                // Copy left values to right when LRSync is switched on. It is done internally by the toolkit, but not shown in the GUI
+                if (HLAPI.PARAM_TA_LRSYNC_ON)
+                {
+                    plugin.SetFloatParameter("HLTABANDR", HLAPI.PARAM_LEFT_TA_BAND);
+                    plugin.SetFloatParameter("HLTAPOWR", HLAPI.PARAM_LEFT_TA_POWER);
+                    plugin.SetFloatParameter("HLTALPFR", HLAPI.PARAM_LEFT_TA_CUTOFF);
+                }
+            }
+            {
+                //if (HLAPI.TA_RIGHT_ON)                
+                    EditorGUI.BeginDisabledGroup(!HLAPI.TA_RIGHT_ON);
+                        Common3DTIGUI.AddLabelToParameterGroup("Band upper limit");
+                        Common3DTIGUI.AddLabelToParameterGroup("White noise power");
+                        Common3DTIGUI.AddLabelToParameterGroup("Autocorrelation LPF cutoff");
+                        Common3DTIGUI.CreatePluginParameterDiscreteSlider(plugin, ref HLAPI.PARAM_RIGHT_TA_BAND, "HLTABANDR", "Band upper limit", "Hz", "Set temporal asynchrony band upper limit in right ear", new List<float> { 1200 });
+                        Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_RIGHT_TA_POWER, "HLTAPOWR", "White noise power", true, "ms", "Set temporal asynchrony white noise power in right ear");
+                        Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_RIGHT_TA_CUTOFF, "HLTALPFR", "Autocorrelation LPF cutoff", true, "Hz", "Set temporal asynchrony autocorrelation low-pass filter cutoff frequency in right ear");
+
+                        //float coeff0 = 0.0f;
+                        //float coeff1 = 0.0f;
+                        //HLAPI.GetAutocorrelationCoefficients(T_ear.RIGHT, out coeff0, out coeff1);
+                        ////if (!plugin.GetFloatParameter("HLTA0GR", out coeff0)) coeff0 = -1.0f;
+                        ////if (!plugin.GetFloatParameter("HLTA1GR", out coeff1)) coeff1 = -1.0f;
+                        ////coeff1 = coeff1 / coeff0;
+                        //Common3DTIGUI.CreateReadonlyFloatText("Noise RMS", "F2", "ms", "RMS power of white noise for right ear temporal asynchrony", coeff0);
+                        //Common3DTIGUI.CreateReadonlyFloatText("Noise Autocorrelation", "F2", "", "First normalized autocorrelation coefficient of filtered noise for right ear temporal asynchrony", coeff1);                    
+                EditorGUI.EndDisabledGroup();
+            }            
+            Common3DTIGUI.EndRightColumn();
+            EditorGUI.EndDisabledGroup();
+            EditorGUI.EndDisabledGroup();
+
+            EditorGUI.BeginDisabledGroup((!HLAPI.GLOBAL_LEFT_ON && !HLAPI.GLOBAL_RIGHT_ON) || (!HLAPI.TA_LEFT_ON && !HLAPI.TA_RIGHT_ON));
+            {
+                // Post-jitter LPF
+                Common3DTIGUI.CreatePluginToggle(plugin, ref HLAPI.PARAM_TA_POSTLPF, "Post-jitter LPF", "HLTAPOSTON", "Enable post-jitter low-pass filter in temporal asynchrony");
+
+                // Left-right synchronicity
+                Common3DTIGUI.CreatePluginToggle(plugin, ref HLAPI.PARAM_TA_LRSYNC_ON, "Allow Left-Right synchronicity control", "HLTALRON", "Enable control for left-right synchronicity in temporal asynchrony");
+                if (HLAPI.PARAM_TA_LRSYNC_ON)
+                {
+                    Common3DTIGUI.AddLabelToParameterGroup("L-R Synchronicity amount");
+                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_TA_LRSYNC, "HLTALR", "L-R Synchronicity amount", true, "", "Set amount of synchronicity between left and right ears in temporal asynchrony simulation");
+                }
+            }
+            EditorGUI.EndDisabledGroup();
         }
         Common3DTIGUI.EndSection();
     }
