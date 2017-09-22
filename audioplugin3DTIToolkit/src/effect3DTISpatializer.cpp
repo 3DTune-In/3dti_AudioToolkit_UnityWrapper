@@ -126,7 +126,7 @@ namespace Spatializer3DTI
 		int strHighPerformanceILDlength;
 
 		// Limiter
-		CDynamicCompressorStereo limiter;
+		Common::CDynamicCompressorStereo limiter;
 
 		// DEBUG LOG
 		bool debugLog = false;
@@ -218,7 +218,7 @@ namespace Spatializer3DTI
 
 	/////////////////////////////////////////////////////////////////////
 
-	CTransform ComputeListenerTransformFromMatrix(float* listenerMatrix, float scale)
+	Common::CTransform ComputeListenerTransformFromMatrix(float* listenerMatrix, float scale)
 	{
 		// SET LISTENER POSITION
 
@@ -233,8 +233,8 @@ namespace Spatializer3DTI
 		//float listenerpos_x = -L[12] * scale;	// If listener is not rotated
 		//float listenerpos_y = -L[13] * scale;	// If listener is not rotated
 		//float listenerpos_z = -L[14] * scale;	// If listener is not rotated
-		CTransform listenerTransform;
-		listenerTransform.SetPosition(CVector3(listenerpos_x, listenerpos_y, listenerpos_z));		
+		Common::CTransform listenerTransform;
+		listenerTransform.SetPosition(Common::CVector3(listenerpos_x, listenerpos_y, listenerpos_z));		
 
 		// SET LISTENER ORIENTATION
 
@@ -280,18 +280,18 @@ namespace Spatializer3DTI
 			qz = 0.25f*w;
 		}
 
-		CQuaternion unityQuaternion = CQuaternion(qw, qx, qy, qz);
+		Common::CQuaternion unityQuaternion = Common::CQuaternion(qw, qx, qy, qz);
 		listenerTransform.SetOrientation(unityQuaternion.Inverse());
 		return listenerTransform;
 	}
 
 	/////////////////////////////////////////////////////////////////////
 
-	CTransform ComputeSourceTransformFromMatrix(float* sourceMatrix, float scale)
+	Common::CTransform ComputeSourceTransformFromMatrix(float* sourceMatrix, float scale)
 	{
 		// Orientation does not matters for audio sources
-		CTransform sourceTransform;
-		sourceTransform.SetPosition(CVector3(sourceMatrix[12] * scale, sourceMatrix[13] * scale, sourceMatrix[14] * scale));		
+		Common::CTransform sourceTransform;
+		sourceTransform.SetPosition(Common::CVector3(sourceMatrix[12] * scale, sourceMatrix[13] * scale, sourceMatrix[14] * scale));
 		return sourceTransform;
 	}
 
@@ -539,7 +539,7 @@ namespace Spatializer3DTI
 
 		// 3DTI Debugger
 #if defined (SWITCH_ON_3DTI_DEBUGGER) || defined (_3DTI_ANDROID_DEBUGGER)
-		CDebugger::Instance().SetAssertMode(ASSERT_MODE_CONTINUE);
+		Common::CDebugger::Instance().SetAssertMode(ASSERT_MODE_CONTINUE);
 #endif
 
 		WriteLog(state, "Core initialized. Waiting for configuration...", "");

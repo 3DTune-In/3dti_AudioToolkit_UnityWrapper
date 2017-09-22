@@ -228,10 +228,10 @@ namespace HASimulation3DTI
 
     struct EffectData
     {
-		CHearingAidSim HA;		
+		HAHLSimulation::CHearingAidSim HA;		
 
 		// Limiter
-		CDynamicCompressorStereo limiter;
+		Common::CDynamicCompressorStereo limiter;
 		bool limiterNotInitialized;
 
 		// Tone control
@@ -435,7 +435,7 @@ namespace HASimulation3DTI
 
 	/////////////////////////////////////////////////////////////////////
 
-	void AddToBand(UnityAudioEffectState* state, T_ear ear, int eqband, int toneband, float newIncrement)
+	void AddToBand(UnityAudioEffectState* state, Common::T_ear ear, int eqband, int toneband, float newIncrement)
 	{		
 		EffectData* data = state->GetEffectData<EffectData>();
 
@@ -445,7 +445,7 @@ namespace HASimulation3DTI
 			// Get old increment and current value
 			float currentValue;
 			float oldIncrement;
-			if (ear == T_ear::LEFT)
+			if (ear == Common::T_ear::LEFT)
 			{				
 				oldIncrement = data->toneLeft[toneband];
 				currentValue = data->HA.GetLeftDynamicEqualizer()->GetLevelBandGain_dB(level, eqband);
@@ -460,7 +460,7 @@ namespace HASimulation3DTI
 			currentValue = currentValue - oldIncrement;
 
 			// Set band gain with increment
-			if (ear == T_ear::LEFT)
+			if (ear == Common::T_ear::LEFT)
 				data->HA.GetLeftDynamicEqualizer()->SetLevelBandGain_dB(level, eqband, currentValue + newIncrement);
 			else
 				data->HA.GetRightDynamicEqualizer()->SetLevelBandGain_dB(level, eqband, currentValue + newIncrement);
@@ -469,7 +469,7 @@ namespace HASimulation3DTI
 
 	/////////////////////////////////////////////////////////////////////
 
-	void SetTone(UnityAudioEffectState* state, T_ear ear, int band, float value)
+	void SetTone(UnityAudioEffectState* state, Common::T_ear ear, int band, float value)
 	{
 		EffectData* data = state->GetEffectData<EffectData>();
 
@@ -490,7 +490,7 @@ namespace HASimulation3DTI
 				break;
 		}
 
-		if (ear == T_ear::LEFT)
+		if (ear == Common::T_ear::LEFT)
 			data->toneLeft[band] = value;
 		else
 			data->toneRight[band] = value;
@@ -593,7 +593,7 @@ namespace HASimulation3DTI
 		effectdata->limiter.Setup(state->samplerate, HA_LIMITER_RATIO, HA_LIMITER_THRESHOLD, HA_LIMITER_ATTACK, HA_LIMITER_RELEASE);		
 
 		// Setup normalization
-		effectdata->HA.DisableNormalization(BOTH);		
+		effectdata->HA.DisableNormalization(Common::T_ear::BOTH);
 
 		// Tone control
 		for (int i = 0; i < TONE_BANDS; i++)
@@ -792,14 +792,14 @@ namespace HASimulation3DTI
 
 			case PARAM_NORMALIZATION_LEFT_ON:
 				if (FromFloatToBool(value))
-					data->HA.EnableNormalization(LEFT);
+					data->HA.EnableNormalization(Common::T_ear::LEFT);
 				else
-					data->HA.DisableNormalization(LEFT);
+					data->HA.DisableNormalization(Common::T_ear::LEFT);
 				WriteLog(state, "SET PARAMETER: Normalization in Left ear switched ", FromBoolToOnOffStr(FromFloatToBool(value)));
 				break;
 
 			case PARAM_NORMALIZATION_LEFT_DBS:
-				data->HA.SetNormalizationLevel(LEFT, value);
+				data->HA.SetNormalizationLevel(Common::T_ear::LEFT, value);
 				WriteLog(state, "SET PARAMETER: Normalization in Left ear set to level: ", value);
 				break;
 
@@ -809,14 +809,14 @@ namespace HASimulation3DTI
 
 			case PARAM_NORMALIZATION_RIGHT_ON:
 				if (FromFloatToBool(value))
-					data->HA.EnableNormalization(RIGHT);
+					data->HA.EnableNormalization(Common::T_ear::RIGHT);
 				else
-					data->HA.DisableNormalization(RIGHT);
+					data->HA.DisableNormalization(Common::T_ear::RIGHT);
 				WriteLog(state, "SET PARAMETER: Normalization in Right ear switched ", FromBoolToOnOffStr(FromFloatToBool(value)));
 				break;
 
 			case PARAM_NORMALIZATION_RIGHT_DBS:
-				data->HA.SetNormalizationLevel(RIGHT, value);
+				data->HA.SetNormalizationLevel(Common::T_ear::RIGHT, value);
 				WriteLog(state, "SET PARAMETER: Normalization in Right ear set to level: ", value);
 				break;
 
@@ -825,32 +825,32 @@ namespace HASimulation3DTI
 				break;
 
 			case PARAM_TONE_LOW_LEFT:
-				SetTone(state, T_ear::LEFT, BAND_LOW, value);
+				SetTone(state, Common::T_ear::LEFT, BAND_LOW, value);
 				WriteLog(state, "SET PARAMETER: Low tone band Left set to (dB) ", value);
 				break;
 
 			case PARAM_TONE_MID_LEFT:
-				SetTone(state, T_ear::LEFT, BAND_MID, value);
+				SetTone(state, Common::T_ear::LEFT, BAND_MID, value);
 				WriteLog(state, "SET PARAMETER: Mid tone band Left set to (dB) ", value);
 				break;
 
 			case PARAM_TONE_HIGH_LEFT:
-				SetTone(state, T_ear::LEFT, BAND_HIGH, value);
+				SetTone(state, Common::T_ear::LEFT, BAND_HIGH, value);
 				WriteLog(state, "SET PARAMETER: HIgh tone band Left set to (dB) ", value);
 				break;
 
 			case PARAM_TONE_LOW_RIGHT:
-				SetTone(state, T_ear::RIGHT, BAND_LOW, value);
+				SetTone(state, Common::T_ear::RIGHT, BAND_LOW, value);
 				WriteLog(state, "SET PARAMETER: Low tone band Right set to (dB) ", value);
 				break;
 
 			case PARAM_TONE_MID_RIGHT:
-				SetTone(state, T_ear::RIGHT, BAND_MID, value);
+				SetTone(state, Common::T_ear::RIGHT, BAND_MID, value);
 				WriteLog(state, "SET PARAMETER: Mid tone band Right set to (dB) ", value);
 				break;
 
 			case PARAM_TONE_HIGH_RIGHT:
-				SetTone(state, T_ear::RIGHT, BAND_HIGH, value);
+				SetTone(state, Common::T_ear::RIGHT, BAND_HIGH, value);
 				WriteLog(state, "SET PARAMETER: High tone band Right set to (dB) ", value);
 				break;
 

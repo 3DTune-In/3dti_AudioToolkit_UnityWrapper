@@ -59,7 +59,7 @@ namespace HLSimulation3DTI
 #define DEFAULT_RELEASE				100
 #define DEFAULT_AUDIOMETRY			{0,  0, 0, 0, 0, 0, 0, 0, 0}
 // Temporal asynchrony simulator:
-#define DEFAULT_TABAND				1200
+#define DEFAULT_TABAND				1600
 #define DEFAULT_TANOISELPF			500
 #define DEFAULT_TANOISEPOWER		0.0
 #define DEFAULT_TALRSYNC_AMOUNT		0.0
@@ -81,8 +81,8 @@ namespace HLSimulation3DTI
 #define MAX_ATTACK				2000
 #define MAX_RELEASE				2000
 // Temporal asynchrony simulator:
-#define MIN_TABAND				1200
-#define MAX_TABAND				1200
+#define MIN_TABAND				200
+#define MAX_TABAND				6400
 #define MIN_TANOISELPF			1
 #define MAX_TANOISELPF			4000
 #define MIN_TANOISEPOWER		0.0
@@ -145,7 +145,8 @@ enum
 	PARAM_TA_NOISEPOWER_RIGHT,
 	PARAM_TA_LRSYNC_AMOUNT,
 	PARAM_TA_LRSYNC_ON,
-	PARAM_TA_POSTLPF_ON,
+	PARAM_TA_POSTLPF_ON_LEFT,
+	PARAM_TA_POSTLPF_ON_RIGHT,
 	PARAM_TA_AUTOCORR0_GET_LEFT,
 	PARAM_TA_AUTOCORR1_GET_LEFT,
 	PARAM_TA_AUTOCORR0_GET_RIGHT,
@@ -161,7 +162,7 @@ enum
 
     struct EffectData
     {
-		CHearingLossSim HL;				
+		HAHLSimulation::CHearingLossSim HL;				
 		float parameters[P_NUM];
 
 		// DEBUG LOG
@@ -258,7 +259,8 @@ enum
 		RegisterParameter(definition, "HLTAPOWR", "ms", MIN_TANOISEPOWER, MAX_TANOISEPOWER, DEFAULT_TANOISEPOWER, 1.0f, 1.0f, PARAM_TA_NOISEPOWER_RIGHT, "Power of temporal asynchrony jitter white noise in right ear (ms)");
 		RegisterParameter(definition, "HLTALR", "", MIN_TALRSYNC, MAX_TALRSYNC, DEFAULT_TALRSYNC_AMOUNT, 1.0f, 1.0f, PARAM_TA_LRSYNC_AMOUNT, "Synchronicity between left and right ears in temporal asyncrhony (0.0 to 1.0)");
 		RegisterParameter(definition, "HLTALRON", "", 0.0f, 1.0f, Bool2Float(DEFAULT_TALRSYNC_ON), 1.0f, 1.0f, PARAM_TA_LRSYNC_ON, "Switch on left-right synchronicity in temporal asynchrony simulation");
-		RegisterParameter(definition, "HLTAPOSTON", "", 0.0f, 1.0f, Bool2Float(DEFAULT_TAPOSTLPF_ON), 1.0f, 1.0f, PARAM_TA_POSTLPF_ON, "Switch on post-jitter LPF in temporal asynchrony simulation");
+		RegisterParameter(definition, "HLTAPOSTONL", "", 0.0f, 1.0f, Bool2Float(DEFAULT_TAPOSTLPF_ON), 1.0f, 1.0f, PARAM_TA_POSTLPF_ON_LEFT, "Switch on post-jitter LPF in temporal asynchrony simulation in left ear");
+		RegisterParameter(definition, "HLTAPOSTONR", "", 0.0f, 1.0f, Bool2Float(DEFAULT_TAPOSTLPF_ON), 1.0f, 1.0f, PARAM_TA_POSTLPF_ON_RIGHT, "Switch on post-jitter LPF in temporal asynchrony simulation in right ear");
 		RegisterParameter(definition, "HLTA0GL", "", MIN_TAAUTOCORRELATION, MAX_TAAUTOCORRELATION, 0.0f, 1.0f, 1.0f, PARAM_TA_AUTOCORR0_GET_LEFT, "Autocorrelation coefficient zero in left temporal asynchrony noise source?");
 		RegisterParameter(definition, "HLTA1GL", "", MIN_TAAUTOCORRELATION, MAX_TAAUTOCORRELATION, 0.0f, 1.0f, 1.0f, PARAM_TA_AUTOCORR1_GET_LEFT, "Autocorrelation coefficient one in left temporal asynchrony noise source?");
 		RegisterParameter(definition, "HLTA0GR", "", MIN_TAAUTOCORRELATION, MAX_TAAUTOCORRELATION, 0.0f, 1.0f, 1.0f, PARAM_TA_AUTOCORR0_GET_RIGHT, "Autocorrelation coefficient zero in right temporal asynchrony noise source?");
@@ -333,38 +335,38 @@ enum
 
 		// Module switches
 		if (DEFAULT_HL_ON)		
-			effectdata->HL.EnableHearingLossSimulation(T_ear::BOTH);
+			effectdata->HL.EnableHearingLossSimulation(Common::T_ear::BOTH);
 		if (DEFAULT_MULTIBANDEXPANDER_ON)
-			effectdata->HL.EnableMultibandExpander(T_ear::BOTH);
+			effectdata->HL.EnableMultibandExpander(Common::T_ear::BOTH);
 		if (DEFAULT_TEMPORALASYNCHRONY_ON)
-			effectdata->HL.EnableTemporalAsynchrony(T_ear::BOTH);
+			effectdata->HL.EnableTemporalAsynchrony(Common::T_ear::BOTH);
 
 		// Hearing loss simulator Setup		
 		effectdata->HL.Setup(state->samplerate, DEFAULT_CALIBRATION_DBSPL, DEFAULT_INIFREQ, DEFAULT_BANDSNUMBER, DEFAULT_FILTERSPERBAND, state->dspbuffersize);		
 
 		// Initial setup of hearing loss levels
-		effectdata->HL.SetFromAudiometry_dBHL(T_ear::BOTH, DEFAULT_AUDIOMETRY);		
+		effectdata->HL.SetFromAudiometry_dBHL(Common::T_ear::BOTH, DEFAULT_AUDIOMETRY);
 
 		// Setup calibration
 		effectdata->HL.SetCalibration(DEFAULT_CALIBRATION_DBSPL);
 
 		// Setup of envelope detectors
-		effectdata->HL.SetAttackForAllBands(T_ear::BOTH, DEFAULT_ATTACK);
-		effectdata->HL.SetReleaseForAllBands(T_ear::BOTH, DEFAULT_RELEASE);
+		effectdata->HL.SetAttackForAllBands(Common::T_ear::BOTH, DEFAULT_ATTACK);
+		effectdata->HL.SetReleaseForAllBands(Common::T_ear::BOTH, DEFAULT_RELEASE);
 
 		// Initial setup of temporal asynchrony simulator
-		effectdata->HL.GetTemporalAsynchronySimulator()->SetBandUpperLimit(T_ear::BOTH, DEFAULT_TABAND);
-		effectdata->HL.GetTemporalAsynchronySimulator()->SetNoiseAutocorrelationFilterCutoffFrequency(T_ear::BOTH, DEFAULT_TANOISELPF);
-		effectdata->HL.GetTemporalAsynchronySimulator()->SetWhiteNoisePower(T_ear::BOTH, DEFAULT_TANOISEPOWER);
+		effectdata->HL.GetTemporalAsynchronySimulator()->SetBandUpperLimit(Common::T_ear::BOTH, DEFAULT_TABAND);
+		effectdata->HL.GetTemporalAsynchronySimulator()->SetNoiseAutocorrelationFilterCutoffFrequency(Common::T_ear::BOTH, DEFAULT_TANOISELPF);
+		effectdata->HL.GetTemporalAsynchronySimulator()->SetWhiteNoisePower(Common::T_ear::BOTH, DEFAULT_TANOISEPOWER);
 		effectdata->HL.GetTemporalAsynchronySimulator()->SetLeftRightNoiseSynchronicity(DEFAULT_TALRSYNC_AMOUNT);
 		if (DEFAULT_TALRSYNC_ON)
 			effectdata->HL.GetTemporalAsynchronySimulator()->EnableLeftRightNoiseSynchronicity();
 		else
 			effectdata->HL.GetTemporalAsynchronySimulator()->DisableLeftRightNoiseSynchronicity();
-		if (DEFAULT_TAPOSTLPF_ON)
-			effectdata->HL.GetTemporalAsynchronySimulator()->EnablePostJitterLowPassFilter();
+		if (DEFAULT_TAPOSTLPF_ON)		
+			effectdata->HL.GetTemporalAsynchronySimulator()->EnablePostJitterLowPassFilter(Common::T_ear::BOTH);
 		else
-			effectdata->HL.GetTemporalAsynchronySimulator()->DisablePostJitterLowPassFilter();
+			effectdata->HL.GetTemporalAsynchronySimulator()->DisablePostJitterLowPassFilter(Common::T_ear::BOTH);
 
 		WriteLog(state, "CREATE: HL Simulation plugin created", "");		
 
@@ -382,7 +384,7 @@ enum
 
 	/////////////////////////////////////////////////////////////////////
 
-	void SetOneHearingLossLevel(UnityAudioEffectState* state, T_ear ear, int bandIndex, float valueDBHL)
+	void SetOneHearingLossLevel(UnityAudioEffectState* state, Common::T_ear ear, int bandIndex, float valueDBHL)
 	{
 		// Check errors
 		if ((bandIndex > DEFAULT_BANDSNUMBER) || (bandIndex < 0))
@@ -397,14 +399,14 @@ enum
 		}
 		
 		// Set hearing loss level
-		CHearingLossSim HL = state->GetEffectData<EffectData>()->HL;
+		HAHLSimulation::CHearingLossSim HL = state->GetEffectData<EffectData>()->HL;
 		HL.SetHearingLevel_dBHL(ear, bandIndex, valueDBHL);
 					
 		// Debug log output
 		string earStr = "Unknown";
-		if (ear == T_ear::LEFT)
+		if (ear == Common::T_ear::LEFT)
 			earStr = "Left";
-		if (ear == T_ear::RIGHT)
+		if (ear == Common::T_ear::RIGHT)
 			earStr = "Right";
 		#ifndef UNITY_ANDROID
 		string logOutput = "SET PARAMETER: Hearing loss of band " + std::to_string(bandIndex) + " for " + earStr + " ear set to " + std::to_string(valueDBHL) + " dBHL";
@@ -428,24 +430,24 @@ enum
 		switch (index)
 		{		
 			// SET HEARING LEVEL:
-			case PARAM_MBE_BAND_0_LEFT:	SetOneHearingLossLevel(state, T_ear::LEFT, 0, value);	break;
-			case PARAM_MBE_BAND_1_LEFT:	SetOneHearingLossLevel(state, T_ear::LEFT, 1, value);	break;
-			case PARAM_MBE_BAND_2_LEFT:	SetOneHearingLossLevel(state, T_ear::LEFT, 2, value);	break;
-			case PARAM_MBE_BAND_3_LEFT:	SetOneHearingLossLevel(state, T_ear::LEFT, 3, value);	break;
-			case PARAM_MBE_BAND_4_LEFT:	SetOneHearingLossLevel(state, T_ear::LEFT, 4, value);	break;
-			case PARAM_MBE_BAND_5_LEFT:	SetOneHearingLossLevel(state, T_ear::LEFT, 5, value);	break;
-			case PARAM_MBE_BAND_6_LEFT:	SetOneHearingLossLevel(state, T_ear::LEFT, 6, value);	break;
-			case PARAM_MBE_BAND_7_LEFT:	SetOneHearingLossLevel(state, T_ear::LEFT, 7, value);	break;
-			case PARAM_MBE_BAND_8_LEFT:	SetOneHearingLossLevel(state, T_ear::LEFT, 8, value);	break;
-			case PARAM_MBE_BAND_0_RIGHT:	SetOneHearingLossLevel(state, T_ear::RIGHT, 0, value);	break;
-			case PARAM_MBE_BAND_1_RIGHT:	SetOneHearingLossLevel(state, T_ear::RIGHT, 1, value);	break;
-			case PARAM_MBE_BAND_2_RIGHT:	SetOneHearingLossLevel(state, T_ear::RIGHT, 2, value);	break;
-			case PARAM_MBE_BAND_3_RIGHT:	SetOneHearingLossLevel(state, T_ear::RIGHT, 3, value);	break;
-			case PARAM_MBE_BAND_4_RIGHT:	SetOneHearingLossLevel(state, T_ear::RIGHT, 4, value);	break;
-			case PARAM_MBE_BAND_5_RIGHT:	SetOneHearingLossLevel(state, T_ear::RIGHT, 5, value);	break;
-			case PARAM_MBE_BAND_6_RIGHT:	SetOneHearingLossLevel(state, T_ear::RIGHT, 6, value);	break;
-			case PARAM_MBE_BAND_7_RIGHT:	SetOneHearingLossLevel(state, T_ear::RIGHT, 7, value);	break;
-			case PARAM_MBE_BAND_8_RIGHT:	SetOneHearingLossLevel(state, T_ear::RIGHT, 8, value);	break;
+		case PARAM_MBE_BAND_0_LEFT:	SetOneHearingLossLevel(state, Common::T_ear::LEFT, 0, value);	break;
+			case PARAM_MBE_BAND_1_LEFT:	SetOneHearingLossLevel(state, Common::T_ear::LEFT, 1, value);	break;
+			case PARAM_MBE_BAND_2_LEFT:	SetOneHearingLossLevel(state, Common::T_ear::LEFT, 2, value);	break;
+			case PARAM_MBE_BAND_3_LEFT:	SetOneHearingLossLevel(state, Common::T_ear::LEFT, 3, value);	break;
+			case PARAM_MBE_BAND_4_LEFT:	SetOneHearingLossLevel(state, Common::T_ear::LEFT, 4, value);	break;
+			case PARAM_MBE_BAND_5_LEFT:	SetOneHearingLossLevel(state, Common::T_ear::LEFT, 5, value);	break;
+			case PARAM_MBE_BAND_6_LEFT:	SetOneHearingLossLevel(state, Common::T_ear::LEFT, 6, value);	break;
+			case PARAM_MBE_BAND_7_LEFT:	SetOneHearingLossLevel(state, Common::T_ear::LEFT, 7, value);	break;
+			case PARAM_MBE_BAND_8_LEFT:	SetOneHearingLossLevel(state, Common::T_ear::LEFT, 8, value);	break;
+			case PARAM_MBE_BAND_0_RIGHT:	SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 0, value);	break;
+			case PARAM_MBE_BAND_1_RIGHT:	SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 1, value);	break;
+			case PARAM_MBE_BAND_2_RIGHT:	SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 2, value);	break;
+			case PARAM_MBE_BAND_3_RIGHT:	SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 3, value);	break;
+			case PARAM_MBE_BAND_4_RIGHT:	SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 4, value);	break;
+			case PARAM_MBE_BAND_5_RIGHT:	SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 5, value);	break;
+			case PARAM_MBE_BAND_6_RIGHT:	SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 6, value);	break;
+			case PARAM_MBE_BAND_7_RIGHT:	SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 7, value);	break;
+			case PARAM_MBE_BAND_8_RIGHT:	SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 8, value);	break;
 
 			// SWITCH ON/OFF MODULES FOR EACH EAR:
 			case PARAM_HL_ON_LEFT:
@@ -455,12 +457,12 @@ enum
 				{
 					if (!Float2Bool(value))
 					{
-						data->HL.DisableHearingLossSimulation(T_ear::LEFT);
+						data->HL.DisableHearingLossSimulation(Common::T_ear::LEFT);
 						WriteLog(state, "SET PARAMETER: Left ear hearing loss simulation switched OFF", "");
 					}
 					if (Float2Bool(value))
 					{
-						data->HL.EnableHearingLossSimulation(T_ear::LEFT);
+						data->HL.EnableHearingLossSimulation(Common::T_ear::LEFT);
 						WriteLog(state, "SET PARAMETER: Left ear hearing loss simulation switched ON", "");
 					}
 				}
@@ -473,12 +475,12 @@ enum
 				{
 					if (!Float2Bool(value))
 					{
-						data->HL.DisableHearingLossSimulation(T_ear::RIGHT);
+						data->HL.DisableHearingLossSimulation(Common::T_ear::RIGHT);
 						WriteLog(state, "SET PARAMETER: Right ear hearing loss simulation switched OFF", "");
 					}
 					if (Float2Bool(value))
 					{
-						data->HL.EnableHearingLossSimulation(T_ear::RIGHT);
+						data->HL.EnableHearingLossSimulation(Common::T_ear::RIGHT);
 						WriteLog(state, "SET PARAMETER: Right ear hearing loss simulation switched ON", "");
 					}
 				}
@@ -491,12 +493,12 @@ enum
 				{
 					if (!Float2Bool(value))
 					{
-						data->HL.DisableMultibandExpander(T_ear::LEFT);
+						data->HL.DisableMultibandExpander(Common::T_ear::LEFT);
 						WriteLog(state, "SET PARAMETER: Left ear multiband expander switched OFF", "");
 					}
 					if (Float2Bool(value))
 					{
-						data->HL.EnableMultibandExpander(T_ear::LEFT);
+						data->HL.EnableMultibandExpander(Common::T_ear::LEFT);
 						WriteLog(state, "SET PARAMETER: Left ear multiband expander switched ON", "");
 					}
 				}
@@ -509,12 +511,12 @@ enum
 				{
 					if (!Float2Bool(value))
 					{
-						data->HL.DisableMultibandExpander(T_ear::RIGHT);
+						data->HL.DisableMultibandExpander(Common::T_ear::RIGHT);
 						WriteLog(state, "SET PARAMETER: Right ear multiband expander switched OFF", "");
 					}
 					if (Float2Bool(value))
 					{
-						data->HL.EnableMultibandExpander(T_ear::RIGHT);
+						data->HL.EnableMultibandExpander(Common::T_ear::RIGHT);
 						WriteLog(state, "SET PARAMETER: Right ear multiband expander switched ON", "");
 					}
 				}
@@ -527,12 +529,12 @@ enum
 				{
 					if (!Float2Bool(value))
 					{
-						data->HL.DisableTemporalAsynchrony(T_ear::LEFT);
+						data->HL.DisableTemporalAsynchrony(Common::T_ear::LEFT);
 						WriteLog(state, "SET PARAMETER: Left ear temporal asynchrony simulation switched OFF", "");
 					}
 					if (Float2Bool(value))
 					{
-						data->HL.EnableTemporalAsynchrony(T_ear::LEFT);
+						data->HL.EnableTemporalAsynchrony(Common::T_ear::LEFT);
 						WriteLog(state, "SET PARAMETER: Left ear temporal asynchrony simulation switched ON", "");
 					}
 				}
@@ -545,12 +547,12 @@ enum
 				{
 					if (!Float2Bool(value))
 					{
-						data->HL.DisableTemporalAsynchrony(T_ear::RIGHT);
+						data->HL.DisableTemporalAsynchrony(Common::T_ear::RIGHT);
 						WriteLog(state, "SET PARAMETER: Right ear temporal asynchrony simulation switched OFF", "");
 					}
 					if (Float2Bool(value))
 					{
-						data->HL.EnableTemporalAsynchrony(T_ear::RIGHT);
+						data->HL.EnableTemporalAsynchrony(Common::T_ear::RIGHT);
 						WriteLog(state, "SET PARAMETER: Right ear temporal asynchrony simulation switched ON", "");
 					}
 				}
@@ -564,53 +566,53 @@ enum
 
 			// ENVELOPE DETECTORS:
 			case PARAM_MBE_ATTACK_LEFT:
-				data->HL.SetAttackForAllBands(T_ear::LEFT, value);
+				data->HL.SetAttackForAllBands(Common::T_ear::LEFT, value);
 				WriteLog(state, "SET PARAMETER: Attack time (ms) for Left envelope detectors set to: ", value);				
 				break;
 
 			case PARAM_MBE_ATTACK_RIGHT:
-				data->HL.SetAttackForAllBands(T_ear::RIGHT, value);
+				data->HL.SetAttackForAllBands(Common::T_ear::RIGHT, value);
 				WriteLog(state, "SET PARAMETER: Attack time (ms) for Right envelope detectors set to: ", value);
 				break;
 
 			case PARAM_MBE_RELEASE_LEFT:
-				data->HL.SetReleaseForAllBands(T_ear::LEFT, value);
+				data->HL.SetReleaseForAllBands(Common::T_ear::LEFT, value);
 				WriteLog(state, "SET PARAMETER: Release time (ms) for Left envelope detectors set to: ", value);
 				break;
 
 			case PARAM_MBE_RELEASE_RIGHT:
-				data->HL.SetReleaseForAllBands(T_ear::RIGHT, value);
+				data->HL.SetReleaseForAllBands(Common::T_ear::RIGHT, value);
 				WriteLog(state, "SET PARAMETER: Release time (ms) for Right envelope detectors set to: ", value);
 				break;
 
 			// TEMPORAL ASYNCHRONY SIMULATION:
 			case PARAM_TA_BAND_LEFT:
-				data->HL.GetTemporalAsynchronySimulator()->SetBandUpperLimit(T_ear::LEFT, value);
+				data->HL.GetTemporalAsynchronySimulator()->SetBandUpperLimit(Common::T_ear::LEFT, value);
 				WriteLog(state, "SET PARAMETER: Band upper limit (Hz) for Left temporal asynchrony simulator set to: ", value);
 				break;
 
 			case PARAM_TA_BAND_RIGHT:
-				data->HL.GetTemporalAsynchronySimulator()->SetBandUpperLimit(T_ear::RIGHT, value);
+				data->HL.GetTemporalAsynchronySimulator()->SetBandUpperLimit(Common::T_ear::RIGHT, value);
 				WriteLog(state, "SET PARAMETER: Band upper limit (Hz) for Right temporal asynchrony simulator set to: ", value);
 				break;
 
 			case PARAM_TA_NOISELPF_LEFT:
-				data->HL.GetTemporalAsynchronySimulator()->SetNoiseAutocorrelationFilterCutoffFrequency(T_ear::LEFT, value);
+				data->HL.GetTemporalAsynchronySimulator()->SetNoiseAutocorrelationFilterCutoffFrequency(Common::T_ear::LEFT, value);
 				WriteLog(state, "SET PARAMETER: Noise autocorrelation LPF cutoff (Hz) for Left temporal asynchrony simulator set to: ", value);
 				break;
 
 			case PARAM_TA_NOISELPF_RIGHT:
-				data->HL.GetTemporalAsynchronySimulator()->SetNoiseAutocorrelationFilterCutoffFrequency(T_ear::RIGHT, value);
+				data->HL.GetTemporalAsynchronySimulator()->SetNoiseAutocorrelationFilterCutoffFrequency(Common::T_ear::RIGHT, value);
 				WriteLog(state, "SET PARAMETER: Noise autocorrelation LPF cutoff (Hz) for Right temporal asynchrony simulator set to: ", value);
 				break;
 
 			case PARAM_TA_NOISEPOWER_LEFT:
-				data->HL.GetTemporalAsynchronySimulator()->SetWhiteNoisePower(T_ear::LEFT, value);
+				data->HL.GetTemporalAsynchronySimulator()->SetWhiteNoisePower(Common::T_ear::LEFT, value);
 				WriteLog(state, "SET PARAMETER: White noise power (ms) for Left temporal asynchrony simulator set to: ", value);
 				break;
 
 			case PARAM_TA_NOISEPOWER_RIGHT:
-				data->HL.GetTemporalAsynchronySimulator()->SetWhiteNoisePower(T_ear::RIGHT, value);
+				data->HL.GetTemporalAsynchronySimulator()->SetWhiteNoisePower(Common::T_ear::RIGHT, value);
 				WriteLog(state, "SET PARAMETER: White noise power (ms) for Right temporal asynchrony simulator set to: ", value);
 				break;
 
@@ -642,20 +644,38 @@ enum
 				}
 				break;
 
-			case PARAM_TA_POSTLPF_ON:
+			case PARAM_TA_POSTLPF_ON_LEFT:
 				if (((int)value != 0) && ((int)value != 1))
 					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to switch on/off post-jitter LPF in temporal asynchrony simulation with non boolean value ", value);
 				else
 				{
 					if (!Float2Bool(value))
 					{
-						data->HL.GetTemporalAsynchronySimulator()->DisableLeftRightNoiseSynchronicity();
-						WriteLog(state, "SET PARAMETER: Post-jitter LPF in temporal asynchrony simulator switched OFF", "");
+						data->HL.GetTemporalAsynchronySimulator()->DisablePostJitterLowPassFilter(Common::T_ear::LEFT);
+						WriteLog(state, "SET PARAMETER: Post-jitter LPF in temporal asynchrony simulator switched OFF for left ear", "");
 					}
 					if (Float2Bool(value))
 					{
-						data->HL.GetTemporalAsynchronySimulator()->EnablePostJitterLowPassFilter();
-						WriteLog(state, "SET PARAMETER: Post-jitter LPF in temporal asynchrony simulator switched ON", "");
+						data->HL.GetTemporalAsynchronySimulator()->EnablePostJitterLowPassFilter(Common::T_ear::LEFT);
+						WriteLog(state, "SET PARAMETER: Post-jitter LPF in temporal asynchrony simulator switched ON for left ear", "");
+					}
+				}
+				break;
+
+			case PARAM_TA_POSTLPF_ON_RIGHT:
+				if (((int)value != 0) && ((int)value != 1))
+					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to switch on/off post-jitter LPF in temporal asynchrony simulation with non boolean value ", value);
+				else
+				{
+					if (!Float2Bool(value))
+					{
+						data->HL.GetTemporalAsynchronySimulator()->DisablePostJitterLowPassFilter(Common::T_ear::RIGHT);
+						WriteLog(state, "SET PARAMETER: Post-jitter LPF in temporal asynchrony simulator switched OFF for right ear", "");
+					}
+					if (Float2Bool(value))
+					{
+						data->HL.GetTemporalAsynchronySimulator()->EnablePostJitterLowPassFilter(Common::T_ear::RIGHT);
+						WriteLog(state, "SET PARAMETER: Post-jitter LPF in temporal asynchrony simulator switched ON for right ear", "");
 					}
 				}
 				break;
@@ -707,19 +727,19 @@ enum
 			switch (index)
 			{
 				case PARAM_TA_AUTOCORR0_GET_LEFT:
-					*value = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient0(T_ear::LEFT);
+					*value = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient0(Common::T_ear::LEFT);
 					break;
 
 				case PARAM_TA_AUTOCORR1_GET_LEFT:
-					*value = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient1(T_ear::LEFT);
+					*value = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient1(Common::T_ear::LEFT);
 					break;
 
 				case PARAM_TA_AUTOCORR0_GET_RIGHT:
-					*value = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient0(T_ear::RIGHT);
+					*value = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient0(Common::T_ear::RIGHT);
 					break;
 
 				case PARAM_TA_AUTOCORR1_GET_RIGHT:
-					*value = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient1(T_ear::RIGHT);
+					*value = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient1(Common::T_ear::RIGHT);
 					break;
 
 				default:
@@ -768,10 +788,10 @@ enum
 		CStereoBuffer<float> outputBuffer(length*2);
 		data->HL.Process(inputBuffer, outputBuffer);		
 
-		data->parameters[PARAM_TA_AUTOCORR0_GET_LEFT] = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient0(T_ear::LEFT);
-		data->parameters[PARAM_TA_AUTOCORR1_GET_LEFT] = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient1(T_ear::LEFT);
-		data->parameters[PARAM_TA_AUTOCORR0_GET_RIGHT] = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient0(T_ear::RIGHT);
-		data->parameters[PARAM_TA_AUTOCORR1_GET_RIGHT] = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient1(T_ear::RIGHT);
+		data->parameters[PARAM_TA_AUTOCORR0_GET_LEFT] = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient0(Common::T_ear::LEFT);
+		data->parameters[PARAM_TA_AUTOCORR1_GET_LEFT] = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient1(Common::T_ear::LEFT);
+		data->parameters[PARAM_TA_AUTOCORR0_GET_RIGHT] = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient0(Common::T_ear::RIGHT);
+		data->parameters[PARAM_TA_AUTOCORR1_GET_RIGHT] = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient1(Common::T_ear::RIGHT);
 
 		// Transform output buffer					
 		for (int i = 0; i < length*2; i++)

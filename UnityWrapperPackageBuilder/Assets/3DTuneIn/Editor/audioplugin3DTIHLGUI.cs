@@ -75,8 +75,8 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         {
             DrawCalibration(plugin);
             DrawAudiometry(plugin);
-            DrawEnvelopeDetector(plugin);
-            DrawTemporalAsynchrony(plugin);      
+            DrawNonLinearAttenuation(plugin);
+            DrawTimeDistortion(plugin);      
         }
 
         //initDone = true;
@@ -173,7 +173,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     public void DrawEars(IAudioEffectPlugin plugin)
     {
         // LEFT EAR
-        if (Common3DTIGUI.BeginLeftColumn(plugin, ref HLAPI.GLOBAL_LEFT_ON, "Left ear", "Enable left ear hearing loss", new List<string> { "HLONL" }))
+        if (Common3DTIGUI.BeginLeftColumn(plugin, ref HLAPI.GLOBAL_LEFT_ON, "LEFT EAR", "Enable left ear hearing loss", new List<string> { "HLONL" }))
         {
             if (HLAPI.GLOBAL_LEFT_ON)
                 HLAPI.EnableHearingLoss(T_ear.LEFT);
@@ -194,7 +194,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         Common3DTIGUI.EndLeftColumn();
 
         // RIGHT EAR
-        if (Common3DTIGUI.BeginRightColumn(plugin, ref HLAPI.GLOBAL_RIGHT_ON, "Right ear", "Enable right ear hearing loss", new List<string> { "HLONR" }))
+        if (Common3DTIGUI.BeginRightColumn(plugin, ref HLAPI.GLOBAL_RIGHT_ON, "RIGHT EAR", "Enable right ear hearing loss", new List<string> { "HLONR" }))
         {
             if (HLAPI.GLOBAL_RIGHT_ON)
                 HLAPI.EnableHearingLoss(T_ear.RIGHT);
@@ -224,10 +224,10 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         Common3DTIGUI.BeginSection("AUDIOMETRY");
         {
             // LEFT EAR
-            //Common3DTIGUI.BeginLeftColumn(HLAPI.GLOBAL_LEFT_ON);
-            EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_LEFT_ON);
-            Common3DTIGUI.BeginLeftColumn(plugin, ref HLAPI.MBE_LEFT_ON, "LEFT EAR", "Enable audiometry for left ear", new List<string> { "HLMBEONL" }, true);
-            if (HLAPI.MBE_LEFT_ON)
+            Common3DTIGUI.BeginLeftColumn(HLAPI.GLOBAL_LEFT_ON);
+            //EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_LEFT_ON);
+            //Common3DTIGUI.BeginLeftColumn(plugin, ref HLAPI.MBE_LEFT_ON, "LEFT EAR", "Enable audiometry for left ear", new List<string> { "HLMBEONL" }, true);
+            //if (HLAPI.MBE_LEFT_ON)
             {
                 Common3DTIGUI.AddLabelToParameterGroup("62.5 Hz");
                 Common3DTIGUI.AddLabelToParameterGroup("125 Hz");
@@ -249,13 +249,13 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 if (Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_AUDIOMETRY_LEFT[8], "HL8L", "16 KHz", false, "dB HL", "Set hearing level for 16 KHz band in left ear")) selectedPresetLeft = PRESET_CUSTOM;
             }
             Common3DTIGUI.EndLeftColumn();
-            EditorGUI.EndDisabledGroup();
+            //EditorGUI.EndDisabledGroup();
 
             // RIGHT EAR
-            //Common3DTIGUI.BeginRightColumn(HLAPI.GLOBAL_RIGHT_ON);
-            EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_RIGHT_ON);
-            Common3DTIGUI.BeginRightColumn(plugin, ref HLAPI.MBE_RIGHT_ON, "RIGHT EAR", "Enable audiometry for right ear", new List<string> { "HLMBEONR" }, true);
-            if (HLAPI.MBE_RIGHT_ON)
+            Common3DTIGUI.BeginRightColumn(HLAPI.GLOBAL_RIGHT_ON);
+            //EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_RIGHT_ON);
+            //Common3DTIGUI.BeginRightColumn(plugin, ref HLAPI.MBE_RIGHT_ON, "RIGHT EAR", "Enable audiometry for right ear", new List<string> { "HLMBEONR" }, true);
+            //if (HLAPI.MBE_RIGHT_ON)
             {
                 Common3DTIGUI.AddLabelToParameterGroup("62.5 Hz");
                 Common3DTIGUI.AddLabelToParameterGroup("125 Hz");
@@ -277,21 +277,24 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 if (Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_AUDIOMETRY_RIGHT[8], "HL8R", "16 KHz", false, "dB HL", "Set hearing level for 16 KHz band in right ear")) selectedPresetRight = PRESET_CUSTOM;
             }
             Common3DTIGUI.EndRightColumn();
-            EditorGUI.EndDisabledGroup();
+            //EditorGUI.EndDisabledGroup();
         }
         Common3DTIGUI.EndSection();
     }
 
     /// <summary>
-    /// Draw envelope detector controls for both ears
+    /// Draw non-linear attenuation controls for both ears
     /// </summary>
     /// <param name="plugin"></param>
-    public void DrawEnvelopeDetector(IAudioEffectPlugin plugin)
+    public void DrawNonLinearAttenuation(IAudioEffectPlugin plugin)
     {
-        Common3DTIGUI.BeginSection("ENVELOPE DETECTORS");
+        Common3DTIGUI.BeginSection("3DTUNE-IN NON-LINEAR ATTENUATION");
         {
             // LEFT EAR
-            Common3DTIGUI.BeginLeftColumn(HLAPI.GLOBAL_LEFT_ON);
+            //Common3DTIGUI.BeginLeftColumn(HLAPI.GLOBAL_LEFT_ON);
+            EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_LEFT_ON);
+            Common3DTIGUI.BeginLeftColumn(plugin, ref HLAPI.MBE_LEFT_ON, "LEFT EAR", "Enable non-linear attenuation for left ear", new List<string> { "HLMBEONL" }, true);
+            if (HLAPI.MBE_LEFT_ON)            
             {
                 Common3DTIGUI.AddLabelToParameterGroup("Attack");
                 Common3DTIGUI.AddLabelToParameterGroup("Release");
@@ -299,9 +302,13 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_LEFT_RELEASE, "HLRELL", "Release", false, "ms", "Set release time of envelope detectors in left ear");
             }
             Common3DTIGUI.EndLeftColumn();
+            EditorGUI.EndDisabledGroup();
 
             // RIGHT EAR
-            Common3DTIGUI.BeginRightColumn(HLAPI.GLOBAL_RIGHT_ON);
+            //Common3DTIGUI.BeginRightColumn(HLAPI.GLOBAL_RIGHT_ON);
+            EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_RIGHT_ON);
+            Common3DTIGUI.BeginRightColumn(plugin, ref HLAPI.MBE_RIGHT_ON, "RIGHT EAR", "Enable non-linear attenuation for right ear", new List<string> { "HLMBEONR" }, true);
+            if (HLAPI.MBE_RIGHT_ON)
             {
                 Common3DTIGUI.AddLabelToParameterGroup("Attack");
                 Common3DTIGUI.AddLabelToParameterGroup("Release");
@@ -309,6 +316,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_RIGHT_RELEASE, "HLRELR", "Release", false, "ms", "Set release time of envelope detectors in right ear");
             }
             Common3DTIGUI.EndRightColumn();
+            EditorGUI.EndDisabledGroup();
         }
         Common3DTIGUI.EndSection();
     }
@@ -331,9 +339,9 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     /// Draw temporal asynchrony controls for both ears
     /// </summary>
     /// <param name="plugin"></param>
-    public void DrawTemporalAsynchrony(IAudioEffectPlugin plugin)
+    public void DrawTimeDistortion(IAudioEffectPlugin plugin)
     {
-        Common3DTIGUI.BeginSection("TEMPORAL ASYNCHRONY");
+        Common3DTIGUI.BeginSection("3DTUNE-IN TIME DISTORTION");
         {
             // LEFT EAR            
             EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_LEFT_ON);
@@ -345,9 +353,11 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                     Common3DTIGUI.AddLabelToParameterGroup("Band upper limit");
                     Common3DTIGUI.AddLabelToParameterGroup("White noise power");
                     Common3DTIGUI.AddLabelToParameterGroup("Autocorrelation LPF cutoff");
-                    Common3DTIGUI.CreatePluginParameterDiscreteSlider(plugin, ref HLAPI.PARAM_LEFT_TA_BAND, "HLTABANDL", "Band upper limit", "Hz", "Set temporal asynchrony band upper limit in left ear", new List<float> { 1200 });
+                    Common3DTIGUI.AddLabelToParameterGroup("Post - jitter LPF");
+                    Common3DTIGUI.CreatePluginParameterDiscreteSlider(plugin, ref HLAPI.PARAM_LEFT_TA_BAND, "HLTABANDL", "Band upper limit", "Hz", "Set temporal asynchrony band upper limit in left ear", new List<float> { 200, 400, 800, 1600, 3200, 6400 });
                     Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_LEFT_TA_POWER, "HLTAPOWL", "White noise power", true, "ms", "Set temporal asynchrony white noise power in left ear");
-                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_LEFT_TA_CUTOFF, "HLTALPFL", "Autocorrelation LPF cutoff", true, "Hz", "Set temporal asynchrony autocorrelation low-pass filter cutoff frequency in left ear");
+                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_LEFT_TA_CUTOFF, "HLTALPFL", "Autocorrelation LPF cutoff", true, "Hz", "Set temporal asynchrony autocorrelation low-pass filter cutoff frequency in left ear");                    
+                    Common3DTIGUI.CreatePluginToggle(plugin, ref HLAPI.PARAM_LEFT_TA_POSTLPF, "Post-jitter LPF", "HLTAPOSTONL", "Enable post-jitter low-pass filter in temporal asynchrony in left ear");
 
                     // Copy left values to right if LRSync is on. It is done internally by the toolkit, but not shown in the GUI
                     if (HLAPI.PARAM_TA_LRSYNC_ON)
@@ -355,6 +365,14 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                         plugin.SetFloatParameter("HLTABANDR", HLAPI.PARAM_LEFT_TA_BAND);
                         plugin.SetFloatParameter("HLTAPOWR", HLAPI.PARAM_LEFT_TA_POWER);
                         plugin.SetFloatParameter("HLTALPFR", HLAPI.PARAM_LEFT_TA_CUTOFF);
+                        //plugin.SetFloatParameter("HLTAPOSTONR", CommonFunctions.Bool2Float(HLAPI.PARAM_LEFT_TA_POSTLPF));
+                        HLAPI.SetTimeDistortionBandUpperLimit(T_ear.RIGHT, HLAPI.FromFloatToBandUpperLimitEnum(HLAPI.PARAM_LEFT_TA_BAND));
+                        HLAPI.SetTimeDistortionWhiteNoisePower(T_ear.RIGHT, HLAPI.PARAM_LEFT_TA_POWER);
+                        HLAPI.SetTimeDistortionAutocorrelationFilterCutoff(T_ear.RIGHT, HLAPI.PARAM_LEFT_TA_CUTOFF);
+                        if (HLAPI.PARAM_LEFT_TA_POSTLPF)
+                            HLAPI.EnableTimeDistortionPostJitterLPF(T_ear.RIGHT);
+                        else
+                            HLAPI.DisableTimeDistortionPostJitterLPF(T_ear.RIGHT);
                     }
 
                     //float coeff0=0.0f;
@@ -372,8 +390,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             EditorGUI.EndDisabledGroup();
 
             // RIGHT EAR            
-            EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_RIGHT_ON);
-            EditorGUI.BeginDisabledGroup(HLAPI.PARAM_TA_LRSYNC_ON);
+            EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_RIGHT_ON);            
             if (Common3DTIGUI.BeginRightColumn(plugin, ref HLAPI.TA_RIGHT_ON, "RIGHT EAR", "Enable temporal asynchrony simulation for right ear", new List<string> { "HLTAONR" }, true))
             {
                 // Copy left values to right when LRSync is switched on. It is done internally by the toolkit, but not shown in the GUI
@@ -382,38 +399,46 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                     plugin.SetFloatParameter("HLTABANDR", HLAPI.PARAM_LEFT_TA_BAND);
                     plugin.SetFloatParameter("HLTAPOWR", HLAPI.PARAM_LEFT_TA_POWER);
                     plugin.SetFloatParameter("HLTALPFR", HLAPI.PARAM_LEFT_TA_CUTOFF);
+                    //plugin.SetFloatParameter("HLTAPOSTONR", CommonFunctions.Bool2Float(HLAPI.PARAM_LEFT_TA_POSTLPF));                    
+                    HLAPI.SetTimeDistortionBandUpperLimit(T_ear.RIGHT, HLAPI.FromFloatToBandUpperLimitEnum(HLAPI.PARAM_LEFT_TA_BAND));
+                    HLAPI.SetTimeDistortionWhiteNoisePower(T_ear.RIGHT, HLAPI.PARAM_LEFT_TA_POWER);
+                    HLAPI.SetTimeDistortionAutocorrelationFilterCutoff(T_ear.RIGHT, HLAPI.PARAM_LEFT_TA_CUTOFF);
+                    if (HLAPI.PARAM_LEFT_TA_POSTLPF)
+                        HLAPI.EnableTimeDistortionPostJitterLPF(T_ear.RIGHT);
+                    else
+                        HLAPI.DisableTimeDistortionPostJitterLPF(T_ear.RIGHT);                    
                 }
             }
             {
                 //if (HLAPI.TA_RIGHT_ON)                
-                    EditorGUI.BeginDisabledGroup(!HLAPI.TA_RIGHT_ON);
-                        Common3DTIGUI.AddLabelToParameterGroup("Band upper limit");
-                        Common3DTIGUI.AddLabelToParameterGroup("White noise power");
-                        Common3DTIGUI.AddLabelToParameterGroup("Autocorrelation LPF cutoff");
-                        Common3DTIGUI.CreatePluginParameterDiscreteSlider(plugin, ref HLAPI.PARAM_RIGHT_TA_BAND, "HLTABANDR", "Band upper limit", "Hz", "Set temporal asynchrony band upper limit in right ear", new List<float> { 1200 });
-                        Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_RIGHT_TA_POWER, "HLTAPOWR", "White noise power", true, "ms", "Set temporal asynchrony white noise power in right ear");
-                        Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_RIGHT_TA_CUTOFF, "HLTALPFR", "Autocorrelation LPF cutoff", true, "Hz", "Set temporal asynchrony autocorrelation low-pass filter cutoff frequency in right ear");
+                EditorGUI.BeginDisabledGroup(HLAPI.PARAM_TA_LRSYNC_ON);
+                EditorGUI.BeginDisabledGroup(!HLAPI.TA_RIGHT_ON);
+                    Common3DTIGUI.AddLabelToParameterGroup("Band upper limit");
+                    Common3DTIGUI.AddLabelToParameterGroup("White noise power");
+                    Common3DTIGUI.AddLabelToParameterGroup("Autocorrelation LPF cutoff");
+                    Common3DTIGUI.AddLabelToParameterGroup("Post-jitter LPF");
+                    Common3DTIGUI.CreatePluginParameterDiscreteSlider(plugin, ref HLAPI.PARAM_RIGHT_TA_BAND, "HLTABANDR", "Band upper limit", "Hz", "Set temporal asynchrony band upper limit in right ear", new List<float> { 200, 400, 800, 1600, 3200, 6400 });
+                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_RIGHT_TA_POWER, "HLTAPOWR", "White noise power", true, "ms", "Set temporal asynchrony white noise power in right ear");
+                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_RIGHT_TA_CUTOFF, "HLTALPFR", "Autocorrelation LPF cutoff", true, "Hz", "Set temporal asynchrony autocorrelation low-pass filter cutoff frequency in right ear");
+                    Common3DTIGUI.CreatePluginToggle(plugin, ref HLAPI.PARAM_RIGHT_TA_POSTLPF, "Post-jitter LPF", "HLTAPOSTONR", "Enable post-jitter low-pass filter in temporal asynchrony in right ear");
 
-                        //float coeff0 = 0.0f;
-                        //float coeff1 = 0.0f;
-                        //HLAPI.GetAutocorrelationCoefficients(T_ear.RIGHT, out coeff0, out coeff1);
-                        ////if (!plugin.GetFloatParameter("HLTA0GR", out coeff0)) coeff0 = -1.0f;
-                        ////if (!plugin.GetFloatParameter("HLTA1GR", out coeff1)) coeff1 = -1.0f;
-                        ////coeff1 = coeff1 / coeff0;
-                        //Common3DTIGUI.CreateReadonlyFloatText("Noise RMS", "F2", "ms", "RMS power of white noise for right ear temporal asynchrony", coeff0);
-                        //Common3DTIGUI.CreateReadonlyFloatText("Noise Autocorrelation", "F2", "", "First normalized autocorrelation coefficient of filtered noise for right ear temporal asynchrony", coeff1);                    
+                //float coeff0 = 0.0f;
+                //float coeff1 = 0.0f;
+                //HLAPI.GetAutocorrelationCoefficients(T_ear.RIGHT, out coeff0, out coeff1);
+                ////if (!plugin.GetFloatParameter("HLTA0GR", out coeff0)) coeff0 = -1.0f;
+                ////if (!plugin.GetFloatParameter("HLTA1GR", out coeff1)) coeff1 = -1.0f;
+                ////coeff1 = coeff1 / coeff0;
+                //Common3DTIGUI.CreateReadonlyFloatText("Noise RMS", "F2", "ms", "RMS power of white noise for right ear temporal asynchrony", coeff0);
+                //Common3DTIGUI.CreateReadonlyFloatText("Noise Autocorrelation", "F2", "", "First normalized autocorrelation coefficient of filtered noise for right ear temporal asynchrony", coeff1);                    
                 EditorGUI.EndDisabledGroup();
             }            
             Common3DTIGUI.EndRightColumn();
             EditorGUI.EndDisabledGroup();
             EditorGUI.EndDisabledGroup();
 
+            // Left-right synchronicity
             EditorGUI.BeginDisabledGroup((!HLAPI.GLOBAL_LEFT_ON && !HLAPI.GLOBAL_RIGHT_ON) || (!HLAPI.TA_LEFT_ON && !HLAPI.TA_RIGHT_ON));
-            {
-                // Post-jitter LPF
-                Common3DTIGUI.CreatePluginToggle(plugin, ref HLAPI.PARAM_TA_POSTLPF, "Post-jitter LPF", "HLTAPOSTON", "Enable post-jitter low-pass filter in temporal asynchrony");
-
-                // Left-right synchronicity
+            {                
                 Common3DTIGUI.CreatePluginToggle(plugin, ref HLAPI.PARAM_TA_LRSYNC_ON, "Allow Left-Right synchronicity control", "HLTALRON", "Enable control for left-right synchronicity in temporal asynchrony");
                 if (HLAPI.PARAM_TA_LRSYNC_ON)
                 {
