@@ -760,24 +760,24 @@ namespace Spatializer3DTI
 				break;
 
 			case PARAM_HA_DIRECTIONALITY_EXTEND_LEFT:
-				data->listener->SetLeftDirectionalityAttenuation(value);
+				data->listener->SetDirectionality_dB(Common::T_ear::LEFT, value);
 				WriteLog(state, "SET PARAMETER: HA Directionality for Left ear set to (dB) ", value);
 				break;
 
 			case PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT:
-				data->listener->SetRightDirectionalityAttenuation(value);
+				data->listener->SetDirectionality_dB(Common::T_ear::RIGHT, value);
 				WriteLog(state, "SET PARAMETER: HA Directionality for Right ear set to (dB) ", value);
 				break;
 
 			case PARAM_HA_DIRECTIONALITY_ON_LEFT:
 				if (value > 0.0f)
 				{
-					data->listener->EnableLeftDirectionality();
+					data->listener->EnableDirectionality(Common::T_ear::LEFT);
 					WriteLog(state, "SET PARAMETER: HA Directionality switched ON for Left ear", "");
 				}
 				else
 				{
-					data->listener->DisableLeftDirectionality();
+					data->listener->DisableDirectionality(Common::T_ear::LEFT);
 					WriteLog(state, "SET PARAMETER: HA Directionality switched OFF for Left ear", "");
 				}				
 				break;
@@ -785,12 +785,12 @@ namespace Spatializer3DTI
 			case PARAM_HA_DIRECTIONALITY_ON_RIGHT:
 				if (value > 0.0f)
 				{
-					data->listener->EnableRightDirectionality();
+					data->listener->EnableDirectionality(Common::T_ear::RIGHT);
 					WriteLog(state, "SET PARAMETER: HA Directionality switched ON for Right ear", "");
 				}
 				else
 				{
-					data->listener->DisableRightDirectionality();
+					data->listener->DisableDirectionality(Common::T_ear::RIGHT);
 					WriteLog(state, "SET PARAMETER: HA Directionality switched OFF for Right ear", "");
 				}
 				break;
