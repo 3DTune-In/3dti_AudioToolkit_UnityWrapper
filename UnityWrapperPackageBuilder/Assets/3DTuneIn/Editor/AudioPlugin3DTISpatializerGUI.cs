@@ -278,7 +278,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             Common3DTIGUI.AddLabelToParameterGroup("Anechoic distance attenuation");
             Common3DTIGUI.AddLabelToParameterGroup("Sound speed");
                 Common3DTIGUI.CreateFloatSlider(ref toolkit.magAnechoicAttenuation, "Anechoic distance attenuation", "F2", "dB", "Set attenuation in dB for each double distance", minDB, maxDB, SliderAnechoicAttenuation);            
-                Common3DTIGUI.CreateFloatSlider(ref toolkit.magSoundSpeed, "Sound speed", "F0", "m/s", "Set sound speed, used for custom ITD computation", 0.0f, maxSoundSpeed, SliderSoundSpeed);
+                Common3DTIGUI.CreateFloatSlider(ref toolkit.magSoundSpeed, "Sound speed", "F0", "m/s", "Set sound speed, used for custom ITD computation", 10.0f, maxSoundSpeed, SliderSoundSpeed);
             Common3DTIGUI.EndSubsection();
 
             // Limiter

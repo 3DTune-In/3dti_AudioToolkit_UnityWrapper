@@ -727,19 +727,19 @@ enum
 			switch (index)
 			{
 				case PARAM_TA_AUTOCORR0_GET_LEFT:
-					*value = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient0(Common::T_ear::LEFT);
+					*value = data->HL.GetTemporalAsynchronySimulator()->GetPower(Common::T_ear::LEFT);
 					break;
 
 				case PARAM_TA_AUTOCORR1_GET_LEFT:
-					*value = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient1(Common::T_ear::LEFT);
+					*value = data->HL.GetTemporalAsynchronySimulator()->GetNormalizedAutocorrelation(Common::T_ear::LEFT);
 					break;
 
 				case PARAM_TA_AUTOCORR0_GET_RIGHT:
-					*value = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient0(Common::T_ear::RIGHT);
+					*value = data->HL.GetTemporalAsynchronySimulator()->GetPower(Common::T_ear::RIGHT);
 					break;
 
 				case PARAM_TA_AUTOCORR1_GET_RIGHT:
-					*value = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient1(Common::T_ear::RIGHT);
+					*value = data->HL.GetTemporalAsynchronySimulator()->GetNormalizedAutocorrelation(Common::T_ear::RIGHT);
 					break;
 
 				default:
@@ -801,10 +801,10 @@ enum
 		outBufferPair.right.Fill(length, 0.0f);
 		data->HL.Process(inBufferPair, outBufferPair);		
 
-		data->parameters[PARAM_TA_AUTOCORR0_GET_LEFT] = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient0(Common::T_ear::LEFT);
-		data->parameters[PARAM_TA_AUTOCORR1_GET_LEFT] = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient1(Common::T_ear::LEFT);
-		data->parameters[PARAM_TA_AUTOCORR0_GET_RIGHT] = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient0(Common::T_ear::RIGHT);
-		data->parameters[PARAM_TA_AUTOCORR1_GET_RIGHT] = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient1(Common::T_ear::RIGHT);
+		data->parameters[PARAM_TA_AUTOCORR0_GET_LEFT] = data->HL.GetTemporalAsynchronySimulator()->GetPower(Common::T_ear::LEFT);
+		data->parameters[PARAM_TA_AUTOCORR1_GET_LEFT] = data->HL.GetTemporalAsynchronySimulator()->GetNormalizedAutocorrelation(Common::T_ear::LEFT);
+		data->parameters[PARAM_TA_AUTOCORR0_GET_RIGHT] = data->HL.GetTemporalAsynchronySimulator()->GetPower(Common::T_ear::RIGHT);
+		data->parameters[PARAM_TA_AUTOCORR1_GET_RIGHT] = data->HL.GetTemporalAsynchronySimulator()->GetNormalizedAutocorrelation(Common::T_ear::RIGHT);
 
 		// Transform output buffer					
 		//for (int i = 0; i < length*2; i++)
