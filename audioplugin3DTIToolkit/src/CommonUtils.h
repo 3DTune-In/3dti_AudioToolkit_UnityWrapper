@@ -32,7 +32,7 @@ bool Float2Bool(float f)
 {
 	if (f > 0.0f)
 		return true;
-	if (f <= 0.0f)
+	else
 		return false;
 }
 
