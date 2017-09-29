@@ -350,13 +350,15 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 //if (HLAPI.TA_LEFT_ON)
                 EditorGUI.BeginDisabledGroup(!HLAPI.TA_LEFT_ON);
                 {
-                    Common3DTIGUI.AddLabelToParameterGroup("Band upper limit");
-                    Common3DTIGUI.AddLabelToParameterGroup("White noise power");
-                    Common3DTIGUI.AddLabelToParameterGroup("Autocorrelation LPF cutoff");
-                    Common3DTIGUI.AddLabelToParameterGroup("Post - jitter LPF");
+                    Common3DTIGUI.AddLabelToParameterGroup("Band upper limit");                    
                     Common3DTIGUI.CreatePluginParameterDiscreteSlider(plugin, ref HLAPI.PARAM_LEFT_TA_BAND, "HLTABANDL", "Band upper limit", "Hz", "Set temporal asynchrony band upper limit in left ear", new List<float> { 200, 400, 800, 1600, 3200, 6400 });
-                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_LEFT_TA_POWER, "HLTAPOWL", "White noise power", true, "ms", "Set temporal asynchrony white noise power in left ear");
-                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_LEFT_TA_CUTOFF, "HLTALPFL", "Autocorrelation LPF cutoff", true, "Hz", "Set temporal asynchrony autocorrelation low-pass filter cutoff frequency in left ear");                    
+                    Common3DTIGUI.BeginSubsection("Jitter generator");
+                        Common3DTIGUI.AddLabelToParameterGroup("White noise power");
+                        Common3DTIGUI.AddLabelToParameterGroup("Band width");
+                        Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_LEFT_TA_POWER, "HLTAPOWL", "White noise power", true, "ms", "Set temporal asynchrony white noise power in left ear");
+                        Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_LEFT_TA_CUTOFF, "HLTALPFL", "Band width", true, "Hz", "Set temporal asynchrony autocorrelation low-pass filter cutoff frequency in left ear");
+                    Common3DTIGUI.EndSubsection();
+                    Common3DTIGUI.AddLabelToParameterGroup("Post - jitter LPF");
                     Common3DTIGUI.CreatePluginToggle(plugin, ref HLAPI.PARAM_LEFT_TA_POSTLPF, "Post-jitter LPF", "HLTAPOSTONL", "Enable post-jitter low-pass filter in temporal asynchrony in left ear");
 
                     // Copy left values to right if LRSync is on. It is done internally by the toolkit, but not shown in the GUI
@@ -413,13 +415,15 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 //if (HLAPI.TA_RIGHT_ON)                
                 EditorGUI.BeginDisabledGroup(HLAPI.PARAM_TA_LRSYNC_ON);
                 EditorGUI.BeginDisabledGroup(!HLAPI.TA_RIGHT_ON);
-                    Common3DTIGUI.AddLabelToParameterGroup("Band upper limit");
-                    Common3DTIGUI.AddLabelToParameterGroup("White noise power");
-                    Common3DTIGUI.AddLabelToParameterGroup("Autocorrelation LPF cutoff");
-                    Common3DTIGUI.AddLabelToParameterGroup("Post-jitter LPF");
+                    Common3DTIGUI.AddLabelToParameterGroup("Band upper limit");                    
                     Common3DTIGUI.CreatePluginParameterDiscreteSlider(plugin, ref HLAPI.PARAM_RIGHT_TA_BAND, "HLTABANDR", "Band upper limit", "Hz", "Set temporal asynchrony band upper limit in right ear", new List<float> { 200, 400, 800, 1600, 3200, 6400 });
-                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_RIGHT_TA_POWER, "HLTAPOWR", "White noise power", true, "ms", "Set temporal asynchrony white noise power in right ear");
-                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_RIGHT_TA_CUTOFF, "HLTALPFR", "Autocorrelation LPF cutoff", true, "Hz", "Set temporal asynchrony autocorrelation low-pass filter cutoff frequency in right ear");
+                    Common3DTIGUI.BeginSubsection("Jitter generator");
+                        Common3DTIGUI.AddLabelToParameterGroup("White noise power");
+                        Common3DTIGUI.AddLabelToParameterGroup("Band width");
+                        Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_RIGHT_TA_POWER, "HLTAPOWR", "White noise power", true, "ms", "Set temporal asynchrony white noise power in right ear");
+                        Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_RIGHT_TA_CUTOFF, "HLTALPFR", "Band width", true, "Hz", "Set temporal asynchrony autocorrelation low-pass filter cutoff frequency in right ear");
+                    Common3DTIGUI.EndSubsection();
+                    Common3DTIGUI.AddLabelToParameterGroup("Post-jitter LPF");
                     Common3DTIGUI.CreatePluginToggle(plugin, ref HLAPI.PARAM_RIGHT_TA_POSTLPF, "Post-jitter LPF", "HLTAPOSTONR", "Enable post-jitter low-pass filter in temporal asynchrony in right ear");
 
                 //float coeff0 = 0.0f;

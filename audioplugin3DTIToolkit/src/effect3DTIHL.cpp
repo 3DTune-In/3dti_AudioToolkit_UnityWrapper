@@ -84,7 +84,7 @@ namespace HLSimulation3DTI
 #define MIN_TABAND				200
 #define MAX_TABAND				6400
 #define MIN_TANOISELPF			1
-#define MAX_TANOISELPF			4000
+#define MAX_TANOISELPF			1000
 #define MIN_TANOISEPOWER		0.0
 #define MAX_TANOISEPOWER		1.0
 #define MIN_TALRSYNC			0.0
@@ -727,19 +727,19 @@ enum
 			switch (index)
 			{
 				case PARAM_TA_AUTOCORR0_GET_LEFT:
-					*value = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient0(Common::T_ear::LEFT);
+					*value = data->HL.GetTemporalAsynchronySimulator()->GetPower(Common::T_ear::LEFT);
 					break;
 
 				case PARAM_TA_AUTOCORR1_GET_LEFT:
-					*value = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient1(Common::T_ear::LEFT);
+					*value = data->HL.GetTemporalAsynchronySimulator()->GetNormalizedAutocorrelation(Common::T_ear::LEFT);
 					break;
 
 				case PARAM_TA_AUTOCORR0_GET_RIGHT:
-					*value = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient0(Common::T_ear::RIGHT);
+					*value = data->HL.GetTemporalAsynchronySimulator()->GetPower(Common::T_ear::RIGHT);
 					break;
 
 				case PARAM_TA_AUTOCORR1_GET_RIGHT:
-					*value = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient1(Common::T_ear::RIGHT);
+					*value = data->HL.GetTemporalAsynchronySimulator()->GetNormalizedAutocorrelation(Common::T_ear::RIGHT);
 					break;
 
 				default:
@@ -778,26 +778,46 @@ enum
 		EffectData* data = state->GetEffectData<EffectData>();
 
 		// Transform input buffer 
-		CStereoBuffer<float> inputBuffer(length*2);						
-		for (int i = 0; i < length*2; i++)
+		//CStereoBuffer<float> inputBuffer(length*2);						
+		//for (int i = 0; i < length*2; i++)
+		//{
+		//	inputBuffer[i] = inbuffer[i]; 
+		//}
+		Common::CEarPair<CMonoBuffer<float>> inBufferPair;
+		inBufferPair.left.Fill(length, 0.0f);
+		inBufferPair.right.Fill(length, 0.0f);
+		int monoIndex = 0;
+		for (int stereoIndex = 0; stereoIndex < length*outchannels; stereoIndex += 2)
 		{
-			inputBuffer[i] = inbuffer[i]; 
+			inBufferPair.left[monoIndex] = inbuffer[stereoIndex];
+			inBufferPair.right[monoIndex] = inbuffer[stereoIndex + 1];
+			monoIndex++;
 		}
 
 		// Process!!
-		CStereoBuffer<float> outputBuffer(length*2);
-		data->HL.Process(inputBuffer, outputBuffer);		
+		//CStereoBuffer<float> outputBuffer(length*2);
+		Common::CEarPair<CMonoBuffer<float>> outBufferPair;
+		outBufferPair.left.Fill(length, 0.0f);
+		outBufferPair.right.Fill(length, 0.0f);
+		data->HL.Process(inBufferPair, outBufferPair);		
 
-		data->parameters[PARAM_TA_AUTOCORR0_GET_LEFT] = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient0(Common::T_ear::LEFT);
-		data->parameters[PARAM_TA_AUTOCORR1_GET_LEFT] = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient1(Common::T_ear::LEFT);
-		data->parameters[PARAM_TA_AUTOCORR0_GET_RIGHT] = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient0(Common::T_ear::RIGHT);
-		data->parameters[PARAM_TA_AUTOCORR1_GET_RIGHT] = data->HL.GetTemporalAsynchronySimulator()->GetAutocorrelationCoefficient1(Common::T_ear::RIGHT);
+		data->parameters[PARAM_TA_AUTOCORR0_GET_LEFT] = data->HL.GetTemporalAsynchronySimulator()->GetPower(Common::T_ear::LEFT);
+		data->parameters[PARAM_TA_AUTOCORR1_GET_LEFT] = data->HL.GetTemporalAsynchronySimulator()->GetNormalizedAutocorrelation(Common::T_ear::LEFT);
+		data->parameters[PARAM_TA_AUTOCORR0_GET_RIGHT] = data->HL.GetTemporalAsynchronySimulator()->GetPower(Common::T_ear::RIGHT);
+		data->parameters[PARAM_TA_AUTOCORR1_GET_RIGHT] = data->HL.GetTemporalAsynchronySimulator()->GetNormalizedAutocorrelation(Common::T_ear::RIGHT);
 
 		// Transform output buffer					
-		for (int i = 0; i < length*2; i++)
+		//for (int i = 0; i < length*2; i++)
+		//{
+		//	outbuffer[i] = outputBuffer[i];
+		//}		
+		monoIndex = 0;
+		for (int stereoIndex = 0; stereoIndex < length * outchannels; stereoIndex += 2)
 		{
-			outbuffer[i] = outputBuffer[i];
-		}		
+			outbuffer[stereoIndex] = outBufferPair.left[monoIndex];
+			outbuffer[stereoIndex + 1] = outBufferPair.right[monoIndex];
+			monoIndex++;
+		}
 
         return UNITY_AUDIODSP_OK;
     }

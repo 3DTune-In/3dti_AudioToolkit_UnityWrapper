@@ -15,12 +15,13 @@
 //#include <BinauralSpatializer\3DTI_BinauralSpatializer.h>
 #include <Common/DynamicCompressorStereo.h>
 #include <BinauralSpatializer/Core.h>
-//#include <Common/Debugger.h>
-
+#include <Common/Debugger.h>
 
 // Includes for debug logging
 #include <fstream>
 #include <iostream>
+
+#include <mutex>
 
 #include <HRTF/HRTFCereal.h>
 #include <ILD/ILDCereal.h>
@@ -130,6 +131,9 @@ namespace Spatializer3DTI
 
 		// DEBUG LOG
 		bool debugLog = false;
+
+		// MUTEX
+		std::mutex spatializerMutex;
 	};
 
 	/////////////////////////////////////////////////////////////////////
@@ -188,7 +192,7 @@ namespace Spatializer3DTI
 		RegisterParameter(definition, "MODNFILD", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_NEAR_FIELD_ILD, "Near distance ILD module enabler");
 		RegisterParameter(definition, "MODHRTF", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_HRTF, "HRTF module enabler");
 		RegisterParameter(definition, "MAGAneAtt", "dB", -30.0f, 0.0f, -3.0f, 1.0f, 1.0f, PARAM_MAG_ANECHATT, "Anechoic distance attenuation");
-		RegisterParameter(definition, "MAGSounSpd", "m/s", 0.0f, 1000.0f, 343.0f, 1.0f, 1.0f, PARAM_MAG_SOUNDSPEED, "Sound speed");
+		RegisterParameter(definition, "MAGSounSpd", "m/s", 10.0f, 1000.0f, 343.0f, 1.0f, 1.0f, PARAM_MAG_SOUNDSPEED, "Sound speed");
 		RegisterParameter(definition, "NFILDPath", "", 0.0f, 255.0f, 0.0f, 1.0f, 1.0f, PARAM_NEAR_FIELD_ILD_FILE_STRING, "String with path of ILD binary file for Near Field effect");		
 		RegisterParameter(definition, "DebugLog", "", 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, PARAM_DEBUG_LOG, "Generate debug log");
 		
@@ -500,11 +504,11 @@ namespace Spatializer3DTI
 		audioState.bufferSize = (int)state->dspbuffersize;		
 		effectdata->core.SetAudioState(audioState);
 
-		// Set default HRTF resampling step
-		effectdata->core.SetHRTFResamplingStep(effectdata->parameters[PARAM_HRTF_STEP]);
-
 		// Create listener
 		effectdata->listener = effectdata->core.CreateListener();
+
+		// Set default HRTF resampling step
+		effectdata->core.SetHRTFResamplingStep(effectdata->parameters[PARAM_HRTF_STEP]);
 
 		// Init parameters. Core is not ready until we load the HRTF. ILD will be disabled, so we don't need to worry yet
 		effectdata->coreReady = false;
@@ -559,7 +563,7 @@ namespace Spatializer3DTI
 
 	/////////////////////////////////////////////////////////////////////
 
-	void CheckCoreIsReady(UnityAudioEffectState* state)
+	bool IsCoreReady(UnityAudioEffectState* state)
 	{
 		EffectData* data = state->GetEffectData<EffectData>();
 
@@ -581,6 +585,17 @@ namespace Spatializer3DTI
 			if ((!data->loadedNearFieldILD) && (data->audioSource->IsNearFieldEffectEnabled()))
 				isReady = false;
 		}
+
+		return isReady;
+	}
+
+	/////////////////////////////////////////////////////////////////////
+
+	void UpdateCoreIsReady(UnityAudioEffectState* state)
+	{
+		EffectData* data = state->GetEffectData<EffectData>();
+
+		bool isReady = IsCoreReady(state);
 
 		if (!data->coreReady && isReady)
 		{
@@ -609,6 +624,8 @@ namespace Spatializer3DTI
 		Common::CMagnitudes magnitudes;		
 		int loadResult;		
 
+		data->spatializerMutex.lock();
+
 		// Process command sent by C# API
 		switch (index)
 		{
@@ -620,7 +637,7 @@ namespace Spatializer3DTI
 					if (loadResult == TLoadResult::RESULT_LOAD_OK)
 					{
 						data->loadedHRTF = true;
-						CheckCoreIsReady(state);
+						UpdateCoreIsReady(state);
 					}
 				}
 				break;
@@ -635,7 +652,7 @@ namespace Spatializer3DTI
 						data->audioSource->EnableNearFieldEffect();
 						data->loadedNearFieldILD = true;
 						WriteLog(state, "SET PARAMETER: Near Field ILD Enabled", "");
-						CheckCoreIsReady(state);
+						UpdateCoreIsReady(state);
 					}
 				}
 				break;
@@ -754,30 +771,33 @@ namespace Spatializer3DTI
 				{
 					data->debugLog = true;
 					WriteLogHeader(state);
+					Common::CDebugger::Instance().SetErrorLogFile("3DTi_ErrorLog.txt");
+					Common::CDebugger::Instance().SetVerbosityMode(VERBOSITY_MODE_ONLYERRORS);
+					Common::CDebugger::Instance().SetAssertMode(ASSERT_MODE_CONTINUE);
 				}
 				else
 					data->debugLog = false;
 				break;
 
 			case PARAM_HA_DIRECTIONALITY_EXTEND_LEFT:
-				data->listener->SetLeftDirectionalityAttenuation(value);
+				data->listener->SetDirectionality_dB(Common::T_ear::LEFT, value);
 				WriteLog(state, "SET PARAMETER: HA Directionality for Left ear set to (dB) ", value);
 				break;
 
 			case PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT:
-				data->listener->SetRightDirectionalityAttenuation(value);
+				data->listener->SetDirectionality_dB(Common::T_ear::RIGHT, value);
 				WriteLog(state, "SET PARAMETER: HA Directionality for Right ear set to (dB) ", value);
 				break;
 
 			case PARAM_HA_DIRECTIONALITY_ON_LEFT:
 				if (value > 0.0f)
 				{
-					data->listener->EnableLeftDirectionality();
+					data->listener->EnableDirectionality(Common::T_ear::LEFT);
 					WriteLog(state, "SET PARAMETER: HA Directionality switched ON for Left ear", "");
 				}
 				else
 				{
-					data->listener->DisableLeftDirectionality();
+					data->listener->DisableDirectionality(Common::T_ear::LEFT);
 					WriteLog(state, "SET PARAMETER: HA Directionality switched OFF for Left ear", "");
 				}				
 				break;
@@ -785,12 +805,12 @@ namespace Spatializer3DTI
 			case PARAM_HA_DIRECTIONALITY_ON_RIGHT:
 				if (value > 0.0f)
 				{
-					data->listener->EnableRightDirectionality();
+					data->listener->EnableDirectionality(Common::T_ear::RIGHT);
 					WriteLog(state, "SET PARAMETER: HA Directionality switched ON for Right ear", "");
 				}
 				else
 				{
-					data->listener->DisableRightDirectionality();
+					data->listener->DisableDirectionality(Common::T_ear::RIGHT);
 					WriteLog(state, "SET PARAMETER: HA Directionality switched OFF for Right ear", "");
 				}
 				break;
@@ -823,7 +843,7 @@ namespace Spatializer3DTI
 					if (loadResult == TLoadResult::RESULT_LOAD_OK)
 					{
 						data->loadedHighPerformanceILD = true;
-						CheckCoreIsReady(state);
+						UpdateCoreIsReady(state);
 						//data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::HighPerformance);
 						//WriteLog(state, "SET PARAMETER: High Performance ILD Enabled", "");
 					}
@@ -836,21 +856,21 @@ namespace Spatializer3DTI
 					data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::HighQuality);
 					data->spatializationMode = SPATIALIZATION_MODE_HIGH_QUALITY;
 					WriteLog(state, "SET PARAMETER: High Quality spatialization mode is enabled", "");
-					CheckCoreIsReady(state);
+					UpdateCoreIsReady(state);
 				}
 				if (value == 1.0f)
 				{
 					data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::HighPerformance);
 					data->spatializationMode = SPATIALIZATION_MODE_HIGH_PERFORMANCE;
 					WriteLog(state, "SET PARAMETER: High performance spatialization mode is enabled", "");
-					CheckCoreIsReady(state);
+					UpdateCoreIsReady(state);
 				}
 				if (value == 2.0f)
 				{
 					data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::None);					
 					data->spatializationMode = SPATIALIZATION_MODE_NONE;
 					WriteLog(state, "SET PARAMETER: No spatialization mode is enabled", "");
-					data->coreReady = true;
+					UpdateCoreIsReady(state);
 				}
 				break;
 
@@ -859,6 +879,8 @@ namespace Spatializer3DTI
 				return UNITY_AUDIODSP_ERR_UNSUPPORTED;
 				break;
 		}
+
+		data->spatializerMutex.unlock();
 
         return UNITY_AUDIODSP_OK;
     }
@@ -926,8 +948,11 @@ namespace Spatializer3DTI
 
 		EffectData* data = state->GetEffectData<EffectData>();
 
+		data->spatializerMutex.lock();
+
 		// Before doing anything, check that the core is ready
-		if (!data->coreReady)
+		//if (!data->coreReady)
+		if (!IsCoreReady(state))
 		{
 			// Put silence in outbuffer
 			//WriteLog(state, "PROCESS: Core is not ready yet...", "");
@@ -984,6 +1009,8 @@ namespace Spatializer3DTI
 		{
 			outbuffer[i++] = *it;
 		}
+
+		data->spatializerMutex.unlock();
 
         return UNITY_AUDIODSP_OK;
     }
