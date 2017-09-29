@@ -771,9 +771,11 @@ namespace Spatializer3DTI
 				{
 					data->debugLog = true;
 					WriteLogHeader(state);
-					Common::CDebugger::Instance().SetErrorLogFile("3DTi_ErrorLog.txt");
+#if defined (SWITCH_ON_3DTI_DEBUGGER) || defined (_3DTI_ANDROID_DEBUGGER)
+                    Common::CDebugger::Instance().SetErrorLogFile("3DTi_ErrorLog.txt");
 					Common::CDebugger::Instance().SetVerbosityMode(VERBOSITY_MODE_ONLYERRORS);
 					Common::CDebugger::Instance().SetAssertMode(ASSERT_MODE_CONTINUE);
+#endif
 				}
 				else
 					data->debugLog = false;
