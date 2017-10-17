@@ -11,7 +11,6 @@
 		AF391F8E1E55F14200EB4AC6 /* effect3DTIHA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF391F8B1E55F14200EB4AC6 /* effect3DTIHA.cpp */; };
 		AF391F8F1E55F14200EB4AC6 /* effect3DTIHL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF391F8C1E55F14200EB4AC6 /* effect3DTIHL.cpp */; };
 		AF391F901E55F14200EB4AC6 /* effect3DTISpatializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF391F8D1E55F14200EB4AC6 /* effect3DTISpatializer.cpp */; };
-		AFD67D0C1E978F80000F4387 /* AudioStateBinaural.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CB41E978F80000F4387 /* AudioStateBinaural.cpp */; };
 		AFD67D0D1E978F80000F4387 /* BRIR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CB61E978F80000F4387 /* BRIR.cpp */; };
 		AFD67D0E1E978F80000F4387 /* Core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CB81E978F80000F4387 /* Core.cpp */; };
 		AFD67D0F1E978F80000F4387 /* Environment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CBA1E978F80000F4387 /* Environment.cpp */; };
@@ -20,9 +19,7 @@
 		AFD67D121E978F80000F4387 /* Listener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CC01E978F80000F4387 /* Listener.cpp */; };
 		AFD67D131E978F80000F4387 /* SingleSourceDSP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CC21E978F80000F4387 /* SingleSourceDSP.cpp */; };
 		AFD67D141E978F80000F4387 /* UPCAnechoic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CC41E978F80000F4387 /* UPCAnechoic.cpp */; };
-		AFD67D151E978F80000F4387 /* AIR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CC71E978F80000F4387 /* AIR.cpp */; };
 		AFD67D161E978F80000F4387 /* BiquadFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CC91E978F80000F4387 /* BiquadFilter.cpp */; };
-		AFD67D171E978F80000F4387 /* Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CCB1E978F80000F4387 /* Buffer.cpp */; };
 		AFD67D181E978F80000F4387 /* Debugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CCF1E978F80000F4387 /* Debugger.cpp */; };
 		AFD67D191E978F80000F4387 /* DistanceAttenuator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CD11E978F80000F4387 /* DistanceAttenuator.cpp */; };
 		AFD67D1A1E978F80000F4387 /* DynamicCompressorMono.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CD41E978F80000F4387 /* DynamicCompressorMono.cpp */; };
@@ -39,7 +36,6 @@
 		AFD67D271E978F80000F4387 /* Vector3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CED1E978F80000F4387 /* Vector3.cpp */; };
 		AFD67D281E978F80000F4387 /* DynamicEqualizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CF11E978F80000F4387 /* DynamicEqualizer.cpp */; };
 		AFD67D291E978F80000F4387 /* Fig6Algorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CF31E978F80000F4387 /* Fig6Algorithm.cpp */; };
-		AFD67D2A1E978F80000F4387 /* FiltersBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CF51E978F80000F4387 /* FiltersBank.cpp */; };
 		AFD67D2B1E978F80000F4387 /* HearingAidSim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CF71E978F80000F4387 /* HearingAidSim.cpp */; };
 		AFD67D2C1E978F80000F4387 /* HearingLossSim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CF91E978F80000F4387 /* HearingLossSim.cpp */; };
 		AFE0E1821F1F889B00695DDB /* DynamicExpanderMono.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE0E17F1F1F889B00695DDB /* DynamicExpanderMono.cpp */; };
@@ -47,6 +43,11 @@
 		AFE88E781DCCB226003505EF /* HRTFCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE88B001DCCB223003505EF /* HRTFCereal.cpp */; };
 		AFE890951DCCB226003505EF /* ILDCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE88E1A1DCCB226003505EF /* ILDCereal.cpp */; };
 		AFE890AC1DCCB3CF003505EF /* AudioPluginUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE890A81DCCB3CF003505EF /* AudioPluginUtil.cpp */; };
+		AFF42CAD1F791E5100A430DE /* Delay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFF42CA71F791E5100A430DE /* Delay.cpp */; };
+		AFF42CAE1F791E5100A430DE /* FiltersBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFF42CA91F791E5100A430DE /* FiltersBank.cpp */; };
+		AFF42CAF1F791E5100A430DE /* NoiseGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFF42CAB1F791E5100A430DE /* NoiseGenerator.cpp */; };
+		AFF42CB41F791E6300A430DE /* LowHighSplitFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFF42CB01F791E6300A430DE /* LowHighSplitFilter.cpp */; };
+		AFF42CB51F791E6300A430DE /* TemporalAsynchronySimulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFF42CB21F791E6300A430DE /* TemporalAsynchronySimulator.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,10 +57,7 @@
 		AF391F8D1E55F14200EB4AC6 /* effect3DTISpatializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = effect3DTISpatializer.cpp; path = ../src/effect3DTISpatializer.cpp; sourceTree = "<group>"; };
 		AF766FED1DE9F8690003ED20 /* Config.Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.Common.xcconfig; sourceTree = "<group>"; };
 		AF766FEE1DE9F99C0003ED20 /* Config.Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.Debug.xcconfig; sourceTree = "<group>"; };
-		AF9B83831EC9B588002BD963 /* EarPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EarPair.h; sourceTree = "<group>"; };
 		AFD67CB31E978F80000F4387 /* 3DTI_BinauralSpatializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 3DTI_BinauralSpatializer.h; sourceTree = "<group>"; };
-		AFD67CB41E978F80000F4387 /* AudioStateBinaural.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioStateBinaural.cpp; sourceTree = "<group>"; };
-		AFD67CB51E978F80000F4387 /* AudioStateBinaural.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioStateBinaural.h; sourceTree = "<group>"; };
 		AFD67CB61E978F80000F4387 /* BRIR.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BRIR.cpp; sourceTree = "<group>"; };
 		AFD67CB71E978F80000F4387 /* BRIR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRIR.h; sourceTree = "<group>"; };
 		AFD67CB81E978F80000F4387 /* Core.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Core.cpp; sourceTree = "<group>"; };
@@ -76,11 +74,9 @@
 		AFD67CC31E978F80000F4387 /* SingleSourceDSP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleSourceDSP.h; sourceTree = "<group>"; };
 		AFD67CC41E978F80000F4387 /* UPCAnechoic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UPCAnechoic.cpp; sourceTree = "<group>"; };
 		AFD67CC51E978F80000F4387 /* UPCAnechoic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPCAnechoic.h; sourceTree = "<group>"; };
-		AFD67CC71E978F80000F4387 /* AIR.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AIR.cpp; sourceTree = "<group>"; };
 		AFD67CC81E978F80000F4387 /* AIR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIR.h; sourceTree = "<group>"; };
 		AFD67CC91E978F80000F4387 /* BiquadFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BiquadFilter.cpp; sourceTree = "<group>"; };
 		AFD67CCA1E978F80000F4387 /* BiquadFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BiquadFilter.h; sourceTree = "<group>"; };
-		AFD67CCB1E978F80000F4387 /* Buffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Buffer.cpp; sourceTree = "<group>"; };
 		AFD67CCC1E978F80000F4387 /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Buffer.h; sourceTree = "<group>"; };
 		AFD67CCD1E978F80000F4387 /* CommonDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonDefinitions.h; sourceTree = "<group>"; };
 		AFD67CCE1E978F80000F4387 /* Conventions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Conventions.h; sourceTree = "<group>"; };
@@ -117,8 +113,6 @@
 		AFD67CF21E978F80000F4387 /* DynamicEqualizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicEqualizer.h; sourceTree = "<group>"; };
 		AFD67CF31E978F80000F4387 /* Fig6Algorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Fig6Algorithm.cpp; sourceTree = "<group>"; };
 		AFD67CF41E978F80000F4387 /* Fig6Algorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fig6Algorithm.h; sourceTree = "<group>"; };
-		AFD67CF51E978F80000F4387 /* FiltersBank.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FiltersBank.cpp; sourceTree = "<group>"; };
-		AFD67CF61E978F80000F4387 /* FiltersBank.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FiltersBank.h; sourceTree = "<group>"; };
 		AFD67CF71E978F80000F4387 /* HearingAidSim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HearingAidSim.cpp; sourceTree = "<group>"; };
 		AFD67CF81E978F80000F4387 /* HearingAidSim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HearingAidSim.h; sourceTree = "<group>"; };
 		AFD67CF91E978F80000F4387 /* HearingLossSim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HearingLossSim.cpp; sourceTree = "<group>"; };
@@ -138,6 +132,17 @@
 		AFE890A81DCCB3CF003505EF /* AudioPluginUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AudioPluginUtil.cpp; path = ../src/AudioPluginUtil.cpp; sourceTree = "<group>"; };
 		AFE890A91DCCB3CF003505EF /* AudioPluginUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioPluginUtil.h; path = ../src/AudioPluginUtil.h; sourceTree = "<group>"; };
 		AFE890AA1DCCB3CF003505EF /* PluginList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginList.h; path = ../src/PluginList.h; sourceTree = "<group>"; };
+		AFF42CA71F791E5100A430DE /* Delay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Delay.cpp; sourceTree = "<group>"; };
+		AFF42CA81F791E5100A430DE /* Delay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Delay.h; sourceTree = "<group>"; };
+		AFF42CA91F791E5100A430DE /* FiltersBank.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FiltersBank.cpp; sourceTree = "<group>"; };
+		AFF42CAA1F791E5100A430DE /* FiltersBank.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FiltersBank.h; sourceTree = "<group>"; };
+		AFF42CAB1F791E5100A430DE /* NoiseGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NoiseGenerator.cpp; sourceTree = "<group>"; };
+		AFF42CAC1F791E5100A430DE /* NoiseGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoiseGenerator.h; sourceTree = "<group>"; };
+		AFF42CB01F791E6300A430DE /* LowHighSplitFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LowHighSplitFilter.cpp; sourceTree = "<group>"; };
+		AFF42CB11F791E6300A430DE /* LowHighSplitFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LowHighSplitFilter.h; sourceTree = "<group>"; };
+		AFF42CB21F791E6300A430DE /* TemporalAsynchronySimulator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TemporalAsynchronySimulator.cpp; sourceTree = "<group>"; };
+		AFF42CB31F791E6300A430DE /* TemporalAsynchronySimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemporalAsynchronySimulator.h; sourceTree = "<group>"; };
+		AFF42CB61F7920CF00A430DE /* AudioState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioState.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,8 +193,6 @@
 			isa = PBXGroup;
 			children = (
 				AFD67CB31E978F80000F4387 /* 3DTI_BinauralSpatializer.h */,
-				AFD67CB41E978F80000F4387 /* AudioStateBinaural.cpp */,
-				AFD67CB51E978F80000F4387 /* AudioStateBinaural.h */,
 				AFD67CB61E978F80000F4387 /* BRIR.cpp */,
 				AFD67CB71E978F80000F4387 /* BRIR.h */,
 				AFD67CB81E978F80000F4387 /* Core.cpp */,
@@ -213,15 +216,19 @@
 		AFD67CC61E978F80000F4387 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				AFF42CB61F7920CF00A430DE /* AudioState.h */,
+				AFF42CA71F791E5100A430DE /* Delay.cpp */,
+				AFF42CA81F791E5100A430DE /* Delay.h */,
+				AFF42CA91F791E5100A430DE /* FiltersBank.cpp */,
+				AFF42CAA1F791E5100A430DE /* FiltersBank.h */,
+				AFF42CAB1F791E5100A430DE /* NoiseGenerator.cpp */,
+				AFF42CAC1F791E5100A430DE /* NoiseGenerator.h */,
 				AFE0E17F1F1F889B00695DDB /* DynamicExpanderMono.cpp */,
 				AFE0E1801F1F889B00695DDB /* DynamicExpanderMono.h */,
 				AFE0E1811F1F889B00695DDB /* DynamicProcessor.h */,
-				AF9B83831EC9B588002BD963 /* EarPair.h */,
-				AFD67CC71E978F80000F4387 /* AIR.cpp */,
 				AFD67CC81E978F80000F4387 /* AIR.h */,
 				AFD67CC91E978F80000F4387 /* BiquadFilter.cpp */,
 				AFD67CCA1E978F80000F4387 /* BiquadFilter.h */,
-				AFD67CCB1E978F80000F4387 /* Buffer.cpp */,
 				AFD67CCC1E978F80000F4387 /* Buffer.h */,
 				AFD67CCD1E978F80000F4387 /* CommonDefinitions.h */,
 				AFD67CCE1E978F80000F4387 /* Conventions.h */,
@@ -260,6 +267,10 @@
 		AFD67CEF1E978F80000F4387 /* HAHLSimulation */ = {
 			isa = PBXGroup;
 			children = (
+				AFF42CB01F791E6300A430DE /* LowHighSplitFilter.cpp */,
+				AFF42CB11F791E6300A430DE /* LowHighSplitFilter.h */,
+				AFF42CB21F791E6300A430DE /* TemporalAsynchronySimulator.cpp */,
+				AFF42CB31F791E6300A430DE /* TemporalAsynchronySimulator.h */,
 				AFE0E1831F1F88A900695DDB /* MultibandExpander.cpp */,
 				AFE0E1841F1F88A900695DDB /* MultibandExpander.h */,
 				AFD67CF01E978F80000F4387 /* 3DTI_HAHLSimulator.h */,
@@ -267,8 +278,6 @@
 				AFD67CF21E978F80000F4387 /* DynamicEqualizer.h */,
 				AFD67CF31E978F80000F4387 /* Fig6Algorithm.cpp */,
 				AFD67CF41E978F80000F4387 /* Fig6Algorithm.h */,
-				AFD67CF51E978F80000F4387 /* FiltersBank.cpp */,
-				AFD67CF61E978F80000F4387 /* FiltersBank.h */,
 				AFD67CF71E978F80000F4387 /* HearingAidSim.cpp */,
 				AFD67CF81E978F80000F4387 /* HearingAidSim.h */,
 				AFD67CF91E978F80000F4387 /* HearingLossSim.cpp */,
@@ -400,27 +409,27 @@
 				AFD67D1F1E978F80000F4387 /* fftsg.cpp in Sources */,
 				AFD67D201E978F80000F4387 /* FiltersChain.cpp in Sources */,
 				AFD67D0E1E978F80000F4387 /* Core.cpp in Sources */,
+				AFF42CAD1F791E5100A430DE /* Delay.cpp in Sources */,
 				AFD67D0D1E978F80000F4387 /* BRIR.cpp in Sources */,
 				AF391F8E1E55F14200EB4AC6 /* effect3DTIHA.cpp in Sources */,
 				AFD67D1D1E978F80000F4387 /* FarDistanceEffects.cpp in Sources */,
 				AFE0E1821F1F889B00695DDB /* DynamicExpanderMono.cpp in Sources */,
+				AFF42CB51F791E6300A430DE /* TemporalAsynchronySimulator.cpp in Sources */,
 				AFD67D1C1E978F80000F4387 /* EnvelopeDetector.cpp in Sources */,
 				AFD67D101E978F80000F4387 /* HRTF.cpp in Sources */,
-				AFD67D151E978F80000F4387 /* AIR.cpp in Sources */,
+				AFF42CB41F791E6300A430DE /* LowHighSplitFilter.cpp in Sources */,
 				AFD67D1A1E978F80000F4387 /* DynamicCompressorMono.cpp in Sources */,
 				AFD67D191E978F80000F4387 /* DistanceAttenuator.cpp in Sources */,
-				AFD67D2A1E978F80000F4387 /* FiltersBank.cpp in Sources */,
 				AFE890951DCCB226003505EF /* ILDCereal.cpp in Sources */,
 				AFD67D2B1E978F80000F4387 /* HearingAidSim.cpp in Sources */,
 				AFD67D211E978F80000F4387 /* Magnitudes.cpp in Sources */,
 				AFD67D251E978F80000F4387 /* Transform.cpp in Sources */,
 				AFD67D291E978F80000F4387 /* Fig6Algorithm.cpp in Sources */,
 				AFE890AC1DCCB3CF003505EF /* AudioPluginUtil.cpp in Sources */,
-				AFD67D171E978F80000F4387 /* Buffer.cpp in Sources */,
 				AFD67D281E978F80000F4387 /* DynamicEqualizer.cpp in Sources */,
 				AFE88E781DCCB226003505EF /* HRTFCereal.cpp in Sources */,
 				AFD67D161E978F80000F4387 /* BiquadFilter.cpp in Sources */,
-				AFD67D0C1E978F80000F4387 /* AudioStateBinaural.cpp in Sources */,
+				AFF42CAE1F791E5100A430DE /* FiltersBank.cpp in Sources */,
 				AFD67D141E978F80000F4387 /* UPCAnechoic.cpp in Sources */,
 				AFD67D271E978F80000F4387 /* Vector3.cpp in Sources */,
 				AFD67D1B1E978F80000F4387 /* DynamicCompressorStereo.cpp in Sources */,
@@ -428,6 +437,7 @@
 				AFD67D0F1E978F80000F4387 /* Environment.cpp in Sources */,
 				AFD67D231E978F80000F4387 /* Quaternion.cpp in Sources */,
 				AFD67D111E978F80000F4387 /* ILD.cpp in Sources */,
+				AFF42CAF1F791E5100A430DE /* NoiseGenerator.cpp in Sources */,
 				AF391F8F1E55F14200EB4AC6 /* effect3DTIHL.cpp in Sources */,
 				AFD67D2C1E978F80000F4387 /* HearingLossSim.cpp in Sources */,
 				AF391F901E55F14200EB4AC6 /* effect3DTISpatializer.cpp in Sources */,
