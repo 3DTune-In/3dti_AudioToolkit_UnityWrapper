@@ -50,9 +50,6 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Fconvolver.cpp">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\fftsg.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
@@ -98,12 +95,6 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicExpanderMono.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\LowHighSplitFilter.cpp">
-      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\TemporalAsynchronySimulator.cpp">
-      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Delay.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
@@ -112,6 +103,18 @@
     </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\FiltersBank.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Fprocessor.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\FrequencySmearing.cpp">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HighOrderButteworthFilter.cpp">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\TemporalDistortionSimulator.cpp">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -175,9 +178,6 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Fconvolver.h">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\fftsg.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
@@ -229,12 +229,6 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicExpanderMono.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\LowHighSplitFilter.h">
-      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\TemporalAsynchronySimulator.h">
-      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Delay.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
@@ -247,6 +241,18 @@
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\FiltersBank.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Fprocessor.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\FrequencySmearing.h">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HighOrderButterworthFilter.h">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\TemporalDistortionSimulator.h">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -19,6 +19,16 @@ public class TestHLAPI : MonoBehaviour
             Debug.Log("Hearing loss enabled");
         else
             Debug.Log("ERROR!!! Could not enable Hearing Loss");
+
+        // Disable temporal distortion and frequency smearing in both ears   
+        if (HLAPI.DisableTemporalDistortionSimulation(T_ear.BOTH))
+            Debug.Log("Temporal distortion disabled");
+        else
+            Debug.Log("ERROR!!! Could not disable temporal distortion");
+        if (HLAPI.DisableFrequencySmearingSimulation(T_ear.BOTH))
+            Debug.Log("Frequency smearing disabled");
+        else
+            Debug.Log("ERROR!!! Could not disable frequency smearing");         
     }
 
     // Update is called once per frame
@@ -30,6 +40,28 @@ public class TestHLAPI : MonoBehaviour
                 Debug.Log("Moderate HL Preset set");
             else
                 Debug.Log("ERROR!!!! Could not set Moderate HL Preset");
+        }
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            if (HLAPI.EnableTemporalDistortionSimulation(T_ear.BOTH))
+                Debug.Log("Temporal distortion simulation enabled");
+            else
+                Debug.Log("ERROR!!!! Could not enable temporal distortion simulation");
+            HLAPI.SetTemporalDistortionWhiteNoisePower(T_ear.BOTH, 1.0f);
+            HLAPI.SetTemporalDistortionAutocorrelationFilterCutoff(T_ear.BOTH, 500.0f);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            if (HLAPI.EnableFrequencySmearingSimulation(T_ear.BOTH))
+                Debug.Log("Frequency smearing simulation enabled");
+            else
+                Debug.Log("ERROR!!!! Could not enable frequency smearing simulation");
+            HLAPI.SetFrequencySmearingDownwardBufferSize(T_ear.BOTH, 20);
+            HLAPI.SetFrequencySmearingUpwardBufferSize(T_ear.BOTH, 20);
+            HLAPI.SetFrequencySmearingDownwardAmount_Hz(T_ear.BOTH, 200.0f); 
+            HLAPI.SetFrequencySmearingUpwardAmount_Hz(T_ear.BOTH, 200.0f);
         }
     }
 }

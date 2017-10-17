@@ -30,7 +30,7 @@ public class API_3DTI_HL : MonoBehaviour
     public static readonly ReadOnlyCollection<float> AUDIOMETRY_PRESET_NORMAL = new ReadOnlyCollection<float>(new[] { 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f });        
     public enum T_HLBand { HZ_62 =0, HZ_125 =1, HZ_250 =2, HZ_500 = 3, HZ_1K = 4, HZ_2K = 5, HZ_4K = 6, HZ_8K =7, HZ_16K =8 };
     public const int NUM_HL_BANDS = 9;
-    public enum T_HLTimeDistortionBandUpperLimit { HZ_UL_200 =0, HZ_UL_400 =1, HZ_UL_800 =2, HZ_UL_1600 =3, HZ_UL_3200 =4, HZ_UL_6400 =5, HZ_UL_WRONG =-1 };
+    public enum T_HLTemporalDistortionBandUpperLimit { HZ_UL_200 =0, HZ_UL_400 =1, HZ_UL_800 =2, HZ_UL_1600 =3, HZ_UL_3200 =4, HZ_UL_6400 =5, HZ_UL_WRONG =-1 };
 
     // Internal constants
     const float DEFAULT_CALIBRATION = 100.0f;
@@ -39,6 +39,8 @@ public class API_3DTI_HL : MonoBehaviour
     const float DEFAULT_TA_BAND = 1600.0f;
     const float DEFAULT_TA_POWER = 0.0f;
     const float DEFAULT_TA_CUTOFF = 500.0f;
+    const int DEFAULT_FS_SIZE = 1;
+    const float DEFAULT_FS_HZ = 0.0f;
 
     // Internal parameters for consistency with GUI
     [HideInInspector]
@@ -88,7 +90,31 @@ public class API_3DTI_HL : MonoBehaviour
     public bool PARAM_LEFT_TA_POSTLPF = true;                    // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
     public bool PARAM_RIGHT_TA_POSTLPF = true;                    // For internal use, DO NOT USE IT DIRECTLY
+    [HideInInspector]
+    public bool FS_LEFT_ON = false;                         // For internal use, DO NOT USE IT DIRECTLY
+    [HideInInspector]
+    public bool FS_RIGHT_ON = false;                        // For internal use, DO NOT USE IT DIRECTLY
+    [HideInInspector]
+    public int PARAM_LEFT_FS_DOWN_SIZE = DEFAULT_FS_SIZE;      // For internal use, DO NOT USE IT DIRECTLY
+    [HideInInspector]
+    public int PARAM_LEFT_FS_UP_SIZE = DEFAULT_FS_SIZE;      // For internal use, DO NOT USE IT DIRECTLY
+    [HideInInspector]
+    public int PARAM_RIGHT_FS_DOWN_SIZE = DEFAULT_FS_SIZE;      // For internal use, DO NOT USE IT DIRECTLY
+    [HideInInspector]
+    public int PARAM_RIGHT_FS_UP_SIZE = DEFAULT_FS_SIZE;      // For internal use, DO NOT USE IT DIRECTLY
+    [HideInInspector]
+    public float PARAM_LEFT_FS_DOWN_HZ = DEFAULT_FS_HZ;      // For internal use, DO NOT USE IT DIRECTLY
+    [HideInInspector]
+    public float PARAM_LEFT_FS_UP_HZ = DEFAULT_FS_HZ;      // For internal use, DO NOT USE IT DIRECTLY
+    [HideInInspector]
+    public float PARAM_RIGHT_FS_DOWN_HZ = DEFAULT_FS_HZ;      // For internal use, DO NOT USE IT DIRECTLY
+    [HideInInspector]
+    public float PARAM_RIGHT_FS_UP_HZ = DEFAULT_FS_HZ;      // For internal use, DO NOT USE IT DIRECTLY
 
+    ///////////////////////////////////////
+    // BASIC API
+    ///////////////////////////////////////
+    
     /// <summary>
     /// Set audiometry preset for one ear
     /// </summary>
@@ -169,6 +195,10 @@ public class API_3DTI_HL : MonoBehaviour
         // Send command
         return hlMixer.SetFloat(paramName, CommonFunctions.Bool2Float(false));
     }
+
+    ///////////////////////////////////////
+    // NON-LINEAR ATTENUATION (MULTIBAND EXPANDER)
+    ///////////////////////////////////////
 
     /// <summary>
     /// Set all hearing loss levels (full audiometry) for one ear
@@ -350,21 +380,21 @@ public class API_3DTI_HL : MonoBehaviour
     }
 
     ///////////////////////////////////////
-    // TIME DISTORTION SIMULATION
+    // TEMPORAL DISTORTION (ASYNCHRONY) SIMULATION
     ///////////////////////////////////////
 
     /// <summary>
-    /// Enable time distortion simulation for one ear
+    /// Enable Temporal distortion simulation for one ear
     /// </summary>
     /// <param name="ear"></param>
     /// <returns></returns>
-    public bool EnableTimeDistortionSimulation(T_ear ear)
+    public bool EnableTemporalDistortionSimulation(T_ear ear)
     {
         // Both ears
         if (ear == T_ear.BOTH)
         {
-            if (!EnableTimeDistortionSimulation(T_ear.LEFT)) return false;
-            return EnableTimeDistortionSimulation(T_ear.RIGHT);
+            if (!EnableTemporalDistortionSimulation(T_ear.LEFT)) return false;
+            return EnableTemporalDistortionSimulation(T_ear.RIGHT);
         }
 
         // Set internal variables and build parameter string
@@ -385,17 +415,17 @@ public class API_3DTI_HL : MonoBehaviour
     }
 
     /// <summary>
-    /// Disable time distortion simulation for one ear
+    /// Disable Temporal distortion simulation for one ear
     /// </summary>
     /// <param name="ear"></param>
     /// <returns></returns>
-    public bool DisableTimeDistortionSimulation(T_ear ear)
+    public bool DisableTemporalDistortionSimulation(T_ear ear)
     {
         // Both ears
         if (ear == T_ear.BOTH)
         {
-            if (!DisableTimeDistortionSimulation(T_ear.LEFT)) return false;
-            return DisableTimeDistortionSimulation(T_ear.RIGHT);
+            if (!DisableTemporalDistortionSimulation(T_ear.LEFT)) return false;
+            return DisableTemporalDistortionSimulation(T_ear.RIGHT);
         }
 
         // Set internal variables and build parameter string
@@ -416,80 +446,20 @@ public class API_3DTI_HL : MonoBehaviour
     }
 
     /// <summary>
-    /// Enable post-jitter LPF in time distortion simulation
+    /// Disable left-right synchronicity in Temporal distortion simulation
     /// </summary>    
     /// <returns></returns>
-    public bool EnableTimeDistortionPostJitterLPF(T_ear ear)
-    {
-        // Both ears
-        if (ear == T_ear.BOTH)
-        {
-            if (!EnableTimeDistortionPostJitterLPF(T_ear.LEFT)) return false;
-            return EnableTimeDistortionPostJitterLPF(T_ear.RIGHT);
-        }
-
-        // Set internal variables and build parameter string
-        string paramName = "HL3DTI_TA_Post_LPF_";
-        if (ear == T_ear.LEFT)
-        {
-            PARAM_LEFT_TA_POSTLPF = true;
-            paramName += "LeftOn";
-        }
-        else
-        {
-            PARAM_RIGHT_TA_POSTLPF = true;
-            paramName += "RightOn";
-        }
-
-        // Send command
-        return hlMixer.SetFloat(paramName, CommonFunctions.Bool2Float(true));
-    }
-
-    /// <summary>
-    /// Disable post-jitter LPF in time distortion simulation
-    /// </summary>    
-    /// <returns></returns>
-    public bool DisableTimeDistortionPostJitterLPF(T_ear ear)
-    {
-        // Both ears
-        if (ear == T_ear.BOTH)
-        {
-            if (!DisableTimeDistortionPostJitterLPF(T_ear.LEFT)) return false;
-            return DisableTimeDistortionPostJitterLPF(T_ear.RIGHT);
-        }
-
-        // Set internal variables and build parameter string
-        string paramName = "HL3DTI_TA_Post_LPF_";
-        if (ear == T_ear.LEFT)
-        {
-            PARAM_LEFT_TA_POSTLPF = false;
-            paramName += "LeftOn";
-        }
-        else
-        {
-            PARAM_RIGHT_TA_POSTLPF = false;
-            paramName += "RightOn";
-        }
-
-        // Send command
-        return hlMixer.SetFloat(paramName, CommonFunctions.Bool2Float(false));
-    }
-
-    /// <summary>
-    /// Disable left-right synchronicity in time distortion simulation
-    /// </summary>    
-    /// <returns></returns>
-    public bool EnableTimeDistortionLeftRightSynchronicity()
+    public bool EnableTemporalDistortionLeftRightSynchronicity()
     {
         PARAM_TA_LRSYNC_ON = true;
         return hlMixer.SetFloat("HL3DTI_TA_LRSync_On", CommonFunctions.Bool2Float(true));
     }
 
     /// <summary>
-    /// Disable left-right synchronicity in time distortion simulation
+    /// Disable left-right synchronicity in Temporal distortion simulation
     /// </summary>    
     /// <returns></returns>
-    public bool DisableTimeDistortionLeftRightSynchronicity()
+    public bool DisableTemporalDistortionLeftRightSynchronicity()
     {
         PARAM_TA_LRSYNC_ON = false;
         return hlMixer.SetFloat("HL3DTI_TA_LRSync_On", CommonFunctions.Bool2Float(false));
@@ -500,7 +470,7 @@ public class API_3DTI_HL : MonoBehaviour
     /// </summary>
     /// <param name="leftRightSynchronicity"></param>
     /// <returns></returns>
-    public bool SetTimeDistortionLeftRightSynchronicity(float leftRightSynchronicity)
+    public bool SetTemporalDistortionLeftRightSynchronicity(float leftRightSynchronicity)
     {        
         if ((leftRightSynchronicity < 0.0f) || (leftRightSynchronicity > 1.0f))
             return false;
@@ -510,17 +480,17 @@ public class API_3DTI_HL : MonoBehaviour
     }
 
     /// <summary>
-    /// Set band upper limit for one ear in time distortion simulator
+    /// Set band upper limit for one ear in Temporal distortion simulator
     /// </summary>
     /// <param name="ear"></param>
     /// <param name="bandUpperLimit (Hz)"></param>
     /// <returns></returns>
-    public bool SetTimeDistortionBandUpperLimit(T_ear ear, T_HLTimeDistortionBandUpperLimit bandUpperLimit)
+    public bool SetTemporalDistortionBandUpperLimit(T_ear ear, T_HLTemporalDistortionBandUpperLimit bandUpperLimit)
     {
         if (ear == T_ear.BOTH)
         {
-            if (!SetTimeDistortionBandUpperLimit(T_ear.LEFT, bandUpperLimit)) return false;
-            return SetTimeDistortionBandUpperLimit(T_ear.RIGHT, bandUpperLimit);
+            if (!SetTemporalDistortionBandUpperLimit(T_ear.LEFT, bandUpperLimit)) return false;
+            return SetTemporalDistortionBandUpperLimit(T_ear.RIGHT, bandUpperLimit);
         }
 
         // Get actual value of band upper limit in Hz
@@ -544,17 +514,17 @@ public class API_3DTI_HL : MonoBehaviour
     }
 
     /// <summary>
-    /// Set white noise power for one ear in time distortion simulator
+    /// Set white noise power for one ear in Temporal distortion simulator
     /// </summary>
     /// <param name="ear"></param>
     /// <param name="whiteNoisePower (ms)"></param>
     /// <returns></returns>
-    public bool SetTimeDistortionWhiteNoisePower(T_ear ear, float whiteNoisePower)
+    public bool SetTemporalDistortionWhiteNoisePower(T_ear ear, float whiteNoisePower)
     {
         if (ear == T_ear.BOTH)
         {
-            if (!SetTimeDistortionWhiteNoisePower(T_ear.LEFT, whiteNoisePower)) return false;
-            return SetTimeDistortionWhiteNoisePower(T_ear.RIGHT, whiteNoisePower);
+            if (!SetTemporalDistortionWhiteNoisePower(T_ear.LEFT, whiteNoisePower)) return false;
+            return SetTemporalDistortionWhiteNoisePower(T_ear.RIGHT, whiteNoisePower);
         }
 
         if (ear == T_ear.LEFT)
@@ -571,17 +541,17 @@ public class API_3DTI_HL : MonoBehaviour
     }
 
     /// <summary>
-    /// Set autocorrelation filter cutoff frequency for one ear in time distortion simulator
+    /// Set autocorrelation filter cutoff frequency for one ear in Temporal distortion simulator
     /// </summary>
     /// <param name="ear"></param>
     /// <param name="cutoff (Hz)"></param>
     /// <returns></returns>
-    public bool SetTimeDistortionAutocorrelationFilterCutoff(T_ear ear, float cutoff)
+    public bool SetTemporalDistortionAutocorrelationFilterCutoff(T_ear ear, float cutoff)
     {
         if (ear == T_ear.BOTH)
         {
-            if (!SetTimeDistortionAutocorrelationFilterCutoff(T_ear.LEFT, cutoff)) return false;
-            return SetTimeDistortionAutocorrelationFilterCutoff(T_ear.RIGHT, cutoff);
+            if (!SetTemporalDistortionAutocorrelationFilterCutoff(T_ear.LEFT, cutoff)) return false;
+            return SetTemporalDistortionAutocorrelationFilterCutoff(T_ear.RIGHT, cutoff);
         }
 
         if (ear == T_ear.LEFT)
@@ -598,25 +568,25 @@ public class API_3DTI_HL : MonoBehaviour
     }
 
     /// <summary>
-    /// Get one float value of Hz from a T_HLTimeDistortionBandUpperLimit enum value
+    /// Get one float value of Hz from a T_HLTemporalDistortionBandUpperLimit enum value
     /// </summary>
     /// <param name="bandLimit"></param>
     /// <returns></returns>
-    public float FromBandUpperLimitEnumToFloat(T_HLTimeDistortionBandUpperLimit bandLimit)
+    public float FromBandUpperLimitEnumToFloat(T_HLTemporalDistortionBandUpperLimit bandLimit)
     {        
         switch (bandLimit)
         {
-            case T_HLTimeDistortionBandUpperLimit.HZ_UL_200:
+            case T_HLTemporalDistortionBandUpperLimit.HZ_UL_200:
                 return 200.0f;                
-            case T_HLTimeDistortionBandUpperLimit.HZ_UL_400:
+            case T_HLTemporalDistortionBandUpperLimit.HZ_UL_400:
                 return 400.0f;                
-            case T_HLTimeDistortionBandUpperLimit.HZ_UL_800:
+            case T_HLTemporalDistortionBandUpperLimit.HZ_UL_800:
                 return 800.0f;                
-            case T_HLTimeDistortionBandUpperLimit.HZ_UL_1600:
+            case T_HLTemporalDistortionBandUpperLimit.HZ_UL_1600:
                 return 1600.0f;              
-            case T_HLTimeDistortionBandUpperLimit.HZ_UL_3200:
+            case T_HLTemporalDistortionBandUpperLimit.HZ_UL_3200:
                 return 3200.0f;                
-            case T_HLTimeDistortionBandUpperLimit.HZ_UL_6400:
+            case T_HLTemporalDistortionBandUpperLimit.HZ_UL_6400:
                 return 6400.0f;                
             default:
                 return 0.0f;
@@ -624,30 +594,30 @@ public class API_3DTI_HL : MonoBehaviour
     }
 
     /// <summary>
-    /// Get one T_HLTimeDistortionBandUpperLimit enum value from a float value in Hz
+    /// Get one T_HLTemporalDistortionBandUpperLimit enum value from a float value in Hz
     /// </summary>
     /// <param name="bandLimitHz"></param>
     /// <returns></returns>
-    public T_HLTimeDistortionBandUpperLimit FromFloatToBandUpperLimitEnum(float bandLimitHz)
+    public T_HLTemporalDistortionBandUpperLimit FromFloatToBandUpperLimitEnum(float bandLimitHz)
     {
         if (Mathf.Abs(bandLimitHz - 200.0f) < 0.01)
-            return T_HLTimeDistortionBandUpperLimit.HZ_UL_200;
+            return T_HLTemporalDistortionBandUpperLimit.HZ_UL_200;
         if (Mathf.Abs(bandLimitHz - 400.0f) < 0.01)
-            return T_HLTimeDistortionBandUpperLimit.HZ_UL_400;
+            return T_HLTemporalDistortionBandUpperLimit.HZ_UL_400;
         if (Mathf.Abs(bandLimitHz - 800.0f) < 0.01)
-            return T_HLTimeDistortionBandUpperLimit.HZ_UL_800;
+            return T_HLTemporalDistortionBandUpperLimit.HZ_UL_800;
         if (Mathf.Abs(bandLimitHz - 1600.0f) < 0.01)
-            return T_HLTimeDistortionBandUpperLimit.HZ_UL_1600;
+            return T_HLTemporalDistortionBandUpperLimit.HZ_UL_1600;
         if (Mathf.Abs(bandLimitHz - 3200.0f) < 0.01)
-            return T_HLTimeDistortionBandUpperLimit.HZ_UL_3200;
+            return T_HLTemporalDistortionBandUpperLimit.HZ_UL_3200;
         if (Mathf.Abs(bandLimitHz - 6400.0f) < 0.01)
-            return T_HLTimeDistortionBandUpperLimit.HZ_UL_6400;
+            return T_HLTemporalDistortionBandUpperLimit.HZ_UL_6400;
 
-        return T_HLTimeDistortionBandUpperLimit.HZ_UL_WRONG;
+        return T_HLTemporalDistortionBandUpperLimit.HZ_UL_WRONG;
     }
 
     ///// <summary>
-    ///// Get the zero and one autocorrelation coefficients of the jitter noise source for time distortion in one ear.
+    ///// Get the zero and one autocorrelation coefficients of the jitter noise source for Temporal distortion in one ear.
     ///// The coefficient one is normalized with respect to coefficient zero.
     ///// </summary>
     ///// <param name="ear"></param>
@@ -674,4 +644,198 @@ public class API_3DTI_HL : MonoBehaviour
     //    }
     //    return false;
     //}
+
+    ///////////////////////////////////////
+    // FREQUENCY SMEARING SIMULATION
+    ///////////////////////////////////////
+
+    /// <summary>
+    /// Enable frequency smearing simulation for one or both ears
+    /// </summary>
+    /// <param name="ear"></param>
+    /// <returns></returns>
+    public bool EnableFrequencySmearingSimulation(T_ear ear)
+    {
+        // Both ears
+        if (ear == T_ear.BOTH)
+        {
+            if (!EnableFrequencySmearingSimulation(T_ear.LEFT)) return false;
+            return EnableFrequencySmearingSimulation(T_ear.RIGHT);
+        }
+
+        // Set internal variables and build parameter string
+        string paramName = "HL3DTI_";
+        if (ear == T_ear.LEFT)
+        {
+            TA_LEFT_ON = true;
+            paramName += "FS_LeftOn";
+        }
+        else
+        {
+            TA_RIGHT_ON = true;
+            paramName += "FS_RightOn";
+        }
+
+        // Send command
+        return hlMixer.SetFloat(paramName, CommonFunctions.Bool2Float(true));
+    }
+
+    /// <summary>
+    /// Disable frequency smearing simulation for one or both ears
+    /// </summary>
+    /// <param name="ear"></param>
+    /// <returns></returns>
+    public bool DisableFrequencySmearingSimulation(T_ear ear)
+    {
+        // Both ears
+        if (ear == T_ear.BOTH)
+        {
+            if (!DisableFrequencySmearingSimulation(T_ear.LEFT)) return false;
+            return DisableFrequencySmearingSimulation(T_ear.RIGHT);
+        }
+
+        // Set internal variables and build parameter string
+        string paramName = "HL3DTI_";
+        if (ear == T_ear.LEFT)
+        {
+            TA_LEFT_ON = false;
+            paramName += "FS_LeftOn";
+        }
+        else
+        {
+            TA_RIGHT_ON = false;
+            paramName += "FS_RightOn";
+        }
+
+        // Send command
+        return hlMixer.SetFloat(paramName, CommonFunctions.Bool2Float(false));
+    }
+
+    /// <summary>
+    /// Set buffer size for downward section of smearing window
+    /// </summary>    
+    /// <param name="ear"></param>
+    /// <param name="downSize"></param>
+    /// <returns></returns>
+    public bool SetFrequencySmearingDownwardBufferSize(T_ear ear, int downSize)
+    {
+        // Both ears
+        if (ear == T_ear.BOTH)
+        {
+            if (!SetFrequencySmearingDownwardBufferSize(T_ear.LEFT, downSize)) return false;
+            return SetFrequencySmearingDownwardBufferSize(T_ear.RIGHT, downSize);
+        }
+
+        // Set internal variables and build parameter string
+        string paramName = "HL3DTI_FS_Size_Down_";
+        if (ear == T_ear.LEFT)
+        {
+            PARAM_LEFT_FS_DOWN_SIZE = downSize;
+            paramName += "Left";
+        }
+        if (ear == T_ear.RIGHT)
+        {
+            PARAM_RIGHT_FS_DOWN_SIZE = downSize;
+            paramName += "Right";
+        }
+
+        // Send command
+        return hlMixer.SetFloat(paramName, (float)downSize);
+    }
+
+    /// <summary>
+    /// Set buffer size for upward section of smearing window
+    /// </summary>    
+    /// <param name="ear"></param>
+    /// <param name="upSize"></param>
+    /// <returns></returns>
+    public bool SetFrequencySmearingUpwardBufferSize(T_ear ear, int upSize)
+    {
+        // Both ears
+        if (ear == T_ear.BOTH)
+        {
+            if (!SetFrequencySmearingUpwardBufferSize(T_ear.LEFT, upSize)) return false;
+            return SetFrequencySmearingUpwardBufferSize(T_ear.RIGHT, upSize);
+        }
+
+        // Set internal variables and build parameter string
+        string paramName = "HL3DTI_FS_Size_Up_";
+        if (ear == T_ear.LEFT)
+        {
+            PARAM_LEFT_FS_UP_SIZE = upSize;
+            paramName += "Left";
+        }
+        if (ear == T_ear.RIGHT)
+        {
+            PARAM_RIGHT_FS_UP_SIZE = upSize;
+            paramName += "Right";
+        }
+
+        // Send command
+        return hlMixer.SetFloat(paramName, (float)upSize);
+    }
+
+    /// <summary>
+    /// Set smearing amount (in Hz) for downward section of smearing window
+    /// </summary>    
+    /// <param name="ear"></param>
+    /// <param name="amount"></param>
+    /// <returns></returns>
+    public bool SetFrequencySmearingDownwardAmount_Hz(T_ear ear, float amount)
+    {
+        // Both ears
+        if (ear == T_ear.BOTH)
+        {
+            if (!SetFrequencySmearingDownwardAmount_Hz(T_ear.LEFT, amount)) return false;
+            return SetFrequencySmearingDownwardAmount_Hz(T_ear.RIGHT, amount);
+        }
+
+        // Set internal variables and build parameter string
+        string paramName = "HL3DTI_FS_Hz_Down_";
+        if (ear == T_ear.LEFT)
+        {
+            PARAM_LEFT_FS_DOWN_HZ = amount;
+            paramName += "Left";
+        }
+        if (ear == T_ear.RIGHT)
+        {
+            PARAM_RIGHT_FS_DOWN_HZ = amount;
+            paramName += "Right";
+        }
+
+        // Send command
+        return hlMixer.SetFloat(paramName, amount);
+    }
+
+    /// <summary>
+    /// Set smearing amount (in Hz) for upward section of smearing window
+    /// </summary>    
+    /// <param name="ear"></param>
+    /// <param name="amount"></param>
+    /// <returns></returns>
+    public bool SetFrequencySmearingUpwardAmount_Hz(T_ear ear, float amount)
+    {
+        // Both ears
+        if (ear == T_ear.BOTH)
+        {
+            if (!SetFrequencySmearingUpwardAmount_Hz(T_ear.LEFT, amount)) return false;
+            return SetFrequencySmearingUpwardAmount_Hz(T_ear.RIGHT, amount);
+        }
+
+        // Set internal variables and build parameter string
+        string paramName = "HL3DTI_FS_Hz_Up_";
+        if (ear == T_ear.LEFT)
+        {
+            PARAM_LEFT_FS_UP_HZ = amount;
+            paramName += "Left";
+        }
+        if (ear == T_ear.RIGHT)
+        {
+            PARAM_RIGHT_FS_UP_HZ = amount;
+            paramName += "Right";
+        }
+
+        // Send command
+        return hlMixer.SetFloat(paramName, amount);
+    }
 }

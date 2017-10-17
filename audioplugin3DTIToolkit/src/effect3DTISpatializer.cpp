@@ -957,6 +957,7 @@ namespace Spatializer3DTI
 			// Put silence in outbuffer
 			//WriteLog(state, "PROCESS: Core is not ready yet...", "");
 			memset(outbuffer, 0.0f, length * outchannels * sizeof(float));
+			data->spatializerMutex.unlock();
 			return UNITY_AUDIODSP_OK;
 		}
 
@@ -969,6 +970,7 @@ namespace Spatializer3DTI
 		if (data->listener->GetListenerTransform().GetVectorTo(data->audioSource->GetSourceTransform()).GetSqrDistance() < 0.0001f)
 		{
 			WriteLog(state, "WARNING during Process! AudioSource and Listener positions are the same (do you have a source with no clip?)", "");
+			data->spatializerMutex.unlock();
 			return UNITY_AUDIODSP_OK;
 		}
 

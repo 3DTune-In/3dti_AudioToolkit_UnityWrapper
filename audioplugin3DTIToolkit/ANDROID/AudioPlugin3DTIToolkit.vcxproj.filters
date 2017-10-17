@@ -20,22 +20,13 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\SingleSourceDSP.cpp">
       <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\AIR.cpp">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\BiquadFilter.cpp">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Buffer.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Debugger.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DistanceAttenuator.cpp">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Fconvolver.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\fftsg.cpp">
@@ -80,9 +71,6 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\DynamicEqualizer.cpp">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\FiltersBank.cpp">
-      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.cpp">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClCompile>
@@ -98,9 +86,6 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorMono.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\AudioStateBinaural.cpp">
-      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorStereo.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
@@ -108,6 +93,27 @@
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicExpanderMono.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\FrequencySmearing.cpp">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HighOrderButteworthFilter.cpp">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\TemporalDistortionSimulator.cpp">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Delay.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Fprocessor.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\NoiseGenerator.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\FiltersBank.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
   </ItemGroup>
@@ -152,9 +158,6 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DistanceAttenuator.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Fconvolver.h">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\fftsg.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
@@ -194,9 +197,6 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\DynamicEqualizer.h">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\FiltersBank.h">
-      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.h">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClInclude>
@@ -215,22 +215,40 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorMono.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\AudioStateBinaural.h">
-      <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressor.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicCompressorStereo.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\EarPair.h">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\MultibandExpander.h">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicExpanderMono.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\AudioState.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\FrequencySmearing.h">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HighOrderButterworthFilter.h">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\TemporalDistortionSimulator.h">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Delay.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Fprocessor.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\NoiseGenerator.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\FiltersBank.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
   </ItemGroup>

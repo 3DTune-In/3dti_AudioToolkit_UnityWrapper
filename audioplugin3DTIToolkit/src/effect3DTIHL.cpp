@@ -47,7 +47,8 @@ namespace HLSimulation3DTI
 #define DEFAULT_HL_ON				false
 #define DEFAULT_HL_ON				false
 #define DEFAULT_MULTIBANDEXPANDER_ON	true
-#define DEFAULT_TEMPORALASYNCHRONY_ON	false
+#define DEFAULT_TEMPORALDISTORTION_ON	false
+#define DEFAULT_FREQUENCYSMEARING_ON	false
 // Multiband expander:
 #define DEFAULT_INIFREQ				62.5
 #define DEFAULT_BANDSNUMBER			9
@@ -58,13 +59,15 @@ namespace HLSimulation3DTI
 #define DEFAULT_ATTACK				20
 #define DEFAULT_RELEASE				100
 #define DEFAULT_AUDIOMETRY			{0,  0, 0, 0, 0, 0, 0, 0, 0}
-// Temporal asynchrony simulator:
+// Temporal distortion simulator:
 #define DEFAULT_TABAND				1600
 #define DEFAULT_TANOISELPF			500
 #define DEFAULT_TANOISEPOWER		0.0
 #define DEFAULT_TALRSYNC_AMOUNT		0.0
 #define DEFAULT_TALRSYNC_ON			false
-#define DEFAULT_TAPOSTLPF_ON		true
+// Frequency smearing:
+#define DEFAULT_FSSIZE				1
+#define DEFAULT_FSHZ				0.0
 
 // Min/max values for parameters
 // Multiband expander::
@@ -80,7 +83,7 @@ namespace HLSimulation3DTI
 #define MIN_THRESHOLD			-80
 #define MAX_ATTACK				2000
 #define MAX_RELEASE				2000
-// Temporal asynchrony simulator:
+// Temporal Distortion simulator:
 #define MIN_TABAND				200
 #define MAX_TABAND				6400
 #define MIN_TANOISELPF			1
@@ -91,6 +94,11 @@ namespace HLSimulation3DTI
 #define MAX_TALRSYNC			1.0
 #define MIN_TAAUTOCORRELATION	-1000
 #define MAX_TAAUTOCORRELATION	1000
+// Frequency smearing:
+#define MIN_FSSIZE				1
+#define MAX_FSSIZE				255
+#define MIN_FSHZ				0.0
+#define MAX_FSHZ				1000.0
 
 //////////////////////////////////////////////////////
 
@@ -128,15 +136,14 @@ enum
 	PARAM_MBE_RELEASE_LEFT,
 	PARAM_MBE_ATTACK_RIGHT,
 	PARAM_MBE_RELEASE_RIGHT,
-
-	////////////////////////////////// NEW
+	
 	// Switch on/off multiband expander for each ear
 	PARAM_MULTIBANDEXPANDER_ON_LEFT,
 	PARAM_MULTIBANDEXPANDER_ON_RIGHT,
 
-	// Temporal asynchrony
-	PARAM_TEMPORALASYNCHRONY_ON_LEFT,
-	PARAM_TEMPORALASYNCHRONY_ON_RIGHT,
+	// Temporal Distortion
+	PARAM_TEMPORALDISTORTION_ON_LEFT,
+	PARAM_TEMPORALDISTORTION_ON_RIGHT,
 	PARAM_TA_BAND_LEFT,
 	PARAM_TA_BAND_RIGHT,
 	PARAM_TA_NOISELPF_LEFT,
@@ -145,12 +152,22 @@ enum
 	PARAM_TA_NOISEPOWER_RIGHT,
 	PARAM_TA_LRSYNC_AMOUNT,
 	PARAM_TA_LRSYNC_ON,
-	PARAM_TA_POSTLPF_ON_LEFT,
-	PARAM_TA_POSTLPF_ON_RIGHT,
 	PARAM_TA_AUTOCORR0_GET_LEFT,
 	PARAM_TA_AUTOCORR1_GET_LEFT,
 	PARAM_TA_AUTOCORR0_GET_RIGHT,
 	PARAM_TA_AUTOCORR1_GET_RIGHT,
+
+	// Frequency smearing
+	PARAM_FREQUENCYSMEARING_ON_LEFT,
+	PARAM_FREQUENCYSMEARING_ON_RIGHT,
+	PARAM_FS_DOWN_SIZE_LEFT,
+	PARAM_FS_DOWN_SIZE_RIGHT,
+	PARAM_FS_UP_SIZE_LEFT,
+	PARAM_FS_UP_SIZE_RIGHT,
+	PARAM_FS_DOWN_HZ_LEFT,
+	PARAM_FS_DOWN_HZ_RIGHT,
+	PARAM_FS_UP_HZ_LEFT,
+	PARAM_FS_UP_HZ_RIGHT,
 
 		//// Debug log
 		//PARAM_DEBUG_LOG,
@@ -248,23 +265,33 @@ enum
 		RegisterParameter(definition, "HLMBEONL", "", 0.0f, 1.0f, Bool2Float(DEFAULT_MULTIBANDEXPANDER_ON), 1.0f, 1.0f, PARAM_MULTIBANDEXPANDER_ON_LEFT, "Switch on multiband expander for left ear");	
 		RegisterParameter(definition, "HLMBEONR", "", 0.0f, 1.0f, Bool2Float(DEFAULT_MULTIBANDEXPANDER_ON), 1.0f, 1.0f, PARAM_MULTIBANDEXPANDER_ON_RIGHT, "Switch on multiband expander for right ear");
 		
-		// Temporal asynchrony
-		RegisterParameter(definition, "HLTAONL", "", 0.0f, 1.0f, Bool2Float(DEFAULT_TEMPORALASYNCHRONY_ON), 1.0f, 1.0f, PARAM_TEMPORALASYNCHRONY_ON_LEFT, "Switch on temporal asynchrony simulation for left ear");
-		RegisterParameter(definition, "HLTAONR", "", 0.0f, 1.0f, Bool2Float(DEFAULT_TEMPORALASYNCHRONY_ON), 1.0f, 1.0f, PARAM_TEMPORALASYNCHRONY_ON_RIGHT, "Switch on temporal asynchrony simulation for right ear");
-		RegisterParameter(definition, "HLTABANDL", "Hz", MIN_TABAND, MAX_TABAND, DEFAULT_TABAND, 1.0f, 1.0f, PARAM_TA_BAND_LEFT, "Upper band limit for temporal asynchrony simulation in left ear (Hz)");
-		RegisterParameter(definition, "HLTABANDR", "Hz", MIN_TABAND, MAX_TABAND, DEFAULT_TABAND, 1.0f, 1.0f, PARAM_TA_BAND_RIGHT, "Upper band limit for temporal asynchrony simulation in right ear (Hz)");
-		RegisterParameter(definition, "HLTALPFL", "Hz", MIN_TANOISELPF, MAX_TANOISELPF, DEFAULT_TANOISELPF, 1.0f, 1.0f, PARAM_TA_NOISELPF_LEFT, "Cutoff frequency of temporal asynchrony jitter noise autocorrelation LPF in left ear (Hz)");
-		RegisterParameter(definition, "HLTALPFR", "Hz", MIN_TANOISELPF, MAX_TANOISELPF, DEFAULT_TANOISELPF, 1.0f, 1.0f, PARAM_TA_NOISELPF_RIGHT, "Cutoff frequency of temporal asynchrony jitter noise autocorrelation LPF in right ear (Hz)");
-		RegisterParameter(definition, "HLTAPOWL", "ms", MIN_TANOISEPOWER, MAX_TANOISEPOWER, DEFAULT_TANOISEPOWER, 1.0f, 1.0f, PARAM_TA_NOISEPOWER_LEFT, "Power of temporal asynchrony jitter white noise in left ear (ms)");
-		RegisterParameter(definition, "HLTAPOWR", "ms", MIN_TANOISEPOWER, MAX_TANOISEPOWER, DEFAULT_TANOISEPOWER, 1.0f, 1.0f, PARAM_TA_NOISEPOWER_RIGHT, "Power of temporal asynchrony jitter white noise in right ear (ms)");
+		// Temporal Distortion
+		RegisterParameter(definition, "HLTAONL", "", 0.0f, 1.0f, Bool2Float(DEFAULT_TEMPORALDISTORTION_ON), 1.0f, 1.0f, PARAM_TEMPORALDISTORTION_ON_LEFT, "Switch on temporal distortion simulation for left ear");
+		RegisterParameter(definition, "HLTAONR", "", 0.0f, 1.0f, Bool2Float(DEFAULT_TEMPORALDISTORTION_ON), 1.0f, 1.0f, PARAM_TEMPORALDISTORTION_ON_RIGHT, "Switch on temporal distortion simulation for right ear");
+		RegisterParameter(definition, "HLTABANDL", "Hz", MIN_TABAND, MAX_TABAND, DEFAULT_TABAND, 1.0f, 1.0f, PARAM_TA_BAND_LEFT, "Upper band limit for temporal distortion simulation in left ear (Hz)");
+		RegisterParameter(definition, "HLTABANDR", "Hz", MIN_TABAND, MAX_TABAND, DEFAULT_TABAND, 1.0f, 1.0f, PARAM_TA_BAND_RIGHT, "Upper band limit for temporal distortion simulation in right ear (Hz)");
+		RegisterParameter(definition, "HLTALPFL", "Hz", MIN_TANOISELPF, MAX_TANOISELPF, DEFAULT_TANOISELPF, 1.0f, 1.0f, PARAM_TA_NOISELPF_LEFT, "Cutoff frequency of temporal distortion jitter noise autocorrelation LPF in left ear (Hz)");
+		RegisterParameter(definition, "HLTALPFR", "Hz", MIN_TANOISELPF, MAX_TANOISELPF, DEFAULT_TANOISELPF, 1.0f, 1.0f, PARAM_TA_NOISELPF_RIGHT, "Cutoff frequency of temporal distortion jitter noise autocorrelation LPF in right ear (Hz)");
+		RegisterParameter(definition, "HLTAPOWL", "ms", MIN_TANOISEPOWER, MAX_TANOISEPOWER, DEFAULT_TANOISEPOWER, 1.0f, 1.0f, PARAM_TA_NOISEPOWER_LEFT, "Power of temporal distortion jitter white noise in left ear (ms)");
+		RegisterParameter(definition, "HLTAPOWR", "ms", MIN_TANOISEPOWER, MAX_TANOISEPOWER, DEFAULT_TANOISEPOWER, 1.0f, 1.0f, PARAM_TA_NOISEPOWER_RIGHT, "Power of temporal distortion jitter white noise in right ear (ms)");
 		RegisterParameter(definition, "HLTALR", "", MIN_TALRSYNC, MAX_TALRSYNC, DEFAULT_TALRSYNC_AMOUNT, 1.0f, 1.0f, PARAM_TA_LRSYNC_AMOUNT, "Synchronicity between left and right ears in temporal asyncrhony (0.0 to 1.0)");
-		RegisterParameter(definition, "HLTALRON", "", 0.0f, 1.0f, Bool2Float(DEFAULT_TALRSYNC_ON), 1.0f, 1.0f, PARAM_TA_LRSYNC_ON, "Switch on left-right synchronicity in temporal asynchrony simulation");
-		RegisterParameter(definition, "HLTAPOSTONL", "", 0.0f, 1.0f, Bool2Float(DEFAULT_TAPOSTLPF_ON), 1.0f, 1.0f, PARAM_TA_POSTLPF_ON_LEFT, "Switch on post-jitter LPF in temporal asynchrony simulation in left ear");
-		RegisterParameter(definition, "HLTAPOSTONR", "", 0.0f, 1.0f, Bool2Float(DEFAULT_TAPOSTLPF_ON), 1.0f, 1.0f, PARAM_TA_POSTLPF_ON_RIGHT, "Switch on post-jitter LPF in temporal asynchrony simulation in right ear");
-		RegisterParameter(definition, "HLTA0GL", "", MIN_TAAUTOCORRELATION, MAX_TAAUTOCORRELATION, 0.0f, 1.0f, 1.0f, PARAM_TA_AUTOCORR0_GET_LEFT, "Autocorrelation coefficient zero in left temporal asynchrony noise source?");
-		RegisterParameter(definition, "HLTA1GL", "", MIN_TAAUTOCORRELATION, MAX_TAAUTOCORRELATION, 0.0f, 1.0f, 1.0f, PARAM_TA_AUTOCORR1_GET_LEFT, "Autocorrelation coefficient one in left temporal asynchrony noise source?");
-		RegisterParameter(definition, "HLTA0GR", "", MIN_TAAUTOCORRELATION, MAX_TAAUTOCORRELATION, 0.0f, 1.0f, 1.0f, PARAM_TA_AUTOCORR0_GET_RIGHT, "Autocorrelation coefficient zero in right temporal asynchrony noise source?");
-		RegisterParameter(definition, "HLTA1GR", "", MIN_TAAUTOCORRELATION, MAX_TAAUTOCORRELATION, 0.0f, 1.0f, 1.0f, PARAM_TA_AUTOCORR1_GET_RIGHT, "Autocorrelation coefficient one in right temporal asynchrony noise source?");
+		RegisterParameter(definition, "HLTALRON", "", 0.0f, 1.0f, Bool2Float(DEFAULT_TALRSYNC_ON), 1.0f, 1.0f, PARAM_TA_LRSYNC_ON, "Switch on left-right synchronicity in temporal distortion simulation");
+		RegisterParameter(definition, "HLTA0GL", "", MIN_TAAUTOCORRELATION, MAX_TAAUTOCORRELATION, 0.0f, 1.0f, 1.0f, PARAM_TA_AUTOCORR0_GET_LEFT, "Autocorrelation coefficient zero in left temporal distortion noise source?");
+		RegisterParameter(definition, "HLTA1GL", "", MIN_TAAUTOCORRELATION, MAX_TAAUTOCORRELATION, 0.0f, 1.0f, 1.0f, PARAM_TA_AUTOCORR1_GET_LEFT, "Autocorrelation coefficient one in left temporal distortion noise source?");
+		RegisterParameter(definition, "HLTA0GR", "", MIN_TAAUTOCORRELATION, MAX_TAAUTOCORRELATION, 0.0f, 1.0f, 1.0f, PARAM_TA_AUTOCORR0_GET_RIGHT, "Autocorrelation coefficient zero in right temporal distortion noise source?");
+		RegisterParameter(definition, "HLTA1GR", "", MIN_TAAUTOCORRELATION, MAX_TAAUTOCORRELATION, 0.0f, 1.0f, 1.0f, PARAM_TA_AUTOCORR1_GET_RIGHT, "Autocorrelation coefficient one in right temporal distortion noise source?");
+
+		// Frequency smearing
+		RegisterParameter(definition, "HLFSONL", "", 0.0f, 1.0f, Bool2Float(DEFAULT_FREQUENCYSMEARING_ON), 1.0f, 1.0f, PARAM_FREQUENCYSMEARING_ON_LEFT, "Switch on frequency smearing simulation for left ear");
+		RegisterParameter(definition, "HLFSONR", "", 0.0f, 1.0f, Bool2Float(DEFAULT_FREQUENCYSMEARING_ON), 1.0f, 1.0f, PARAM_FREQUENCYSMEARING_ON_RIGHT, "Switch on frequency smearing simulation for right ear");
+		RegisterParameter(definition, "HLFSDOWNSZL", "", MIN_FSSIZE, MAX_FSSIZE, DEFAULT_FSSIZE, 1.0f, 1.0f, PARAM_FS_DOWN_SIZE_LEFT, "Size of downward section of smearing window for left ear");
+		RegisterParameter(definition, "HLFSDOWNSZR", "", MIN_FSSIZE, MAX_FSSIZE, DEFAULT_FSSIZE, 1.0f, 1.0f, PARAM_FS_DOWN_SIZE_RIGHT, "Size of downward section of smearing window for right ear");
+		RegisterParameter(definition, "HLFSUPSZL", "", MIN_FSSIZE, MAX_FSSIZE, DEFAULT_FSSIZE, 1.0f, 1.0f, PARAM_FS_UP_SIZE_LEFT, "Size of upward section of smearing window for left ear");
+		RegisterParameter(definition, "HLFSUPSZR", "", MIN_FSSIZE, MAX_FSSIZE, DEFAULT_FSSIZE, 1.0f, 1.0f, PARAM_FS_UP_SIZE_RIGHT, "Size of upward section of smearing window for right ear");
+		RegisterParameter(definition, "HLFSDOWNHZL", "Hz", MIN_FSHZ, MAX_FSHZ, DEFAULT_FSHZ, 1.0f, 1.0f, PARAM_FS_DOWN_HZ_LEFT, "Amount of downward smearing effect (in Hz) in left ear");
+		RegisterParameter(definition, "HLFSDOWNHZR", "Hz", MIN_FSHZ, MAX_FSHZ, DEFAULT_FSHZ, 1.0f, 1.0f, PARAM_FS_DOWN_HZ_RIGHT, "Amount of downward smearing effect (in Hz) in right ear");
+		RegisterParameter(definition, "HLFSUPHZL", "Hz", MIN_FSHZ, MAX_FSHZ, DEFAULT_FSHZ, 1.0f, 1.0f, PARAM_FS_UP_HZ_LEFT, "Amount of upward smearing effect (in Hz) in left ear");
+		RegisterParameter(definition, "HLFSUPHZR", "Hz", MIN_FSHZ, MAX_FSHZ, DEFAULT_FSHZ, 1.0f, 1.0f, PARAM_FS_UP_HZ_RIGHT, "Amount of upward smearing effect (in Hz) in right ear");
 
 		// Debug log
 		//RegisterParameter(definition, "DebugLogHL", "", 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, PARAM_DEBUG_LOG, "Generate debug log for HL");
@@ -284,8 +311,10 @@ enum
 		WriteLog(state, "        HL Right = ", DEFAULT_HL_ON);
 		WriteLog(state, "        Multiband Expander Left = ", DEFAULT_MULTIBANDEXPANDER_ON);
 		WriteLog(state, "        Multiband Expander Right = ", DEFAULT_MULTIBANDEXPANDER_ON);
-		WriteLog(state, "        Temporal Asynchrony Left = ", DEFAULT_TEMPORALASYNCHRONY_ON);
-		WriteLog(state, "        Temporal Asynchrony Right = ", DEFAULT_TEMPORALASYNCHRONY_ON);
+		WriteLog(state, "        Temporal Asynchrony Left = ", DEFAULT_TEMPORALDISTORTION_ON);
+		WriteLog(state, "        Temporal Asynchrony Right = ", DEFAULT_TEMPORALDISTORTION_ON);
+		WriteLog(state, "        Frequency Smearing Left = ",  DEFAULT_FREQUENCYSMEARING_ON);
+		WriteLog(state, "        Frequency Smearing Right = ", DEFAULT_FREQUENCYSMEARING_ON);
 		
 		// Multiband expander EQ:
 		WriteLog(state, "CREATE: Multiband expander setup:", "");
@@ -303,21 +332,37 @@ enum
 		WriteLog(state, "CREATE: Calibration setup:", "");
 		WriteLog(state, "        dBSPL for 0 dBFS = ", DEFAULT_CALIBRATION_DBSPL);
 
-		// Temporal asynchrony:
+		// Temporal Distortion:
+#ifndef UNITY_ANDROID
 		string lrsync = "";
 		if (DEFAULT_TALRSYNC_ON)
 			lrsync = std::to_string(DEFAULT_TALRSYNC_AMOUNT) + " (ON)";
 		else
 			lrsync = "OFF";
-		WriteLog(state, "CREATE: Temporal asynchrony setup:", "");
+#else
+		float lrsync = -1;
+		if (DEFAULT_TALRSYNC_ON)
+			lrsync = DEFAULT_TALRSYNC_AMOUNT;		
+#endif
+		WriteLog(state, "CREATE: Temporal distortion setup:", "");
 		WriteLog(state, "        Left-Right synchronicity = ", lrsync);
 		WriteLog(state, "        Left band upper limit = ", DEFAULT_TABAND);
 		WriteLog(state, "        Left autocorrelation LPF cutoff = ", DEFAULT_TANOISELPF);
 		WriteLog(state, "        Left white noise power = ", DEFAULT_TANOISEPOWER);
 		WriteLog(state, "        Right band upper limit = ", DEFAULT_TABAND);
 		WriteLog(state, "        Right autocorrelation LPF cutoff = ", DEFAULT_TANOISELPF);
-		WriteLog(state, "        Right white noise power = ", DEFAULT_TANOISEPOWER);
-		WriteLog(state, "        Post-jitter LPF = ", Bool2String(DEFAULT_TAPOSTLPF_ON));
+		WriteLog(state, "        Right white noise power = ", DEFAULT_TANOISEPOWER);		
+
+		// Frequency smearing:
+		WriteLog(state, "CREATE: Frequency smearing setup:", "");		
+		WriteLog(state, "        Left ear downward size = ", DEFAULT_FSSIZE);
+		WriteLog(state, "        Left ear upward size = ", DEFAULT_FSSIZE);
+		WriteLog(state, "        Right ear downward size = ", DEFAULT_FSSIZE);
+		WriteLog(state, "        Right ear upward size = ", DEFAULT_FSSIZE);
+		WriteLog(state, "        Left ear downward amount = ", DEFAULT_FSHZ);
+		WriteLog(state, "        Left ear upward amount = ", DEFAULT_FSHZ);
+		WriteLog(state, "        Right ear downward amount = ", DEFAULT_FSHZ);
+		WriteLog(state, "        Right ear upward amount = ", DEFAULT_FSHZ);
 
 		WriteLog(state, "--------------------------------------", "\n");
 	}
@@ -336,10 +381,20 @@ enum
 		// Module switches
 		if (DEFAULT_HL_ON)		
 			effectdata->HL.EnableHearingLossSimulation(Common::T_ear::BOTH);
+		else
+			effectdata->HL.DisableHearingLossSimulation(Common::T_ear::BOTH);
 		if (DEFAULT_MULTIBANDEXPANDER_ON)
 			effectdata->HL.EnableMultibandExpander(Common::T_ear::BOTH);
-		if (DEFAULT_TEMPORALASYNCHRONY_ON)
-			effectdata->HL.EnableTemporalAsynchrony(Common::T_ear::BOTH);
+		else
+			effectdata->HL.DisableMultibandExpander(Common::T_ear::BOTH);
+		if (DEFAULT_TEMPORALDISTORTION_ON)
+			effectdata->HL.EnableTemporalDistortion(Common::T_ear::BOTH);
+		else
+			effectdata->HL.DisableTemporalDistortion(Common::T_ear::BOTH);
+		if (DEFAULT_FREQUENCYSMEARING_ON)
+			effectdata->HL.EnableFrequencySmearing(Common::T_ear::BOTH);
+		else
+			effectdata->HL.DisableFrequencySmearing(Common::T_ear::BOTH);
 
 		// Hearing loss simulator Setup		
 		effectdata->HL.Setup(state->samplerate, DEFAULT_CALIBRATION_DBSPL, DEFAULT_INIFREQ, DEFAULT_BANDSNUMBER, DEFAULT_FILTERSPERBAND, state->dspbuffersize);		
@@ -354,19 +409,18 @@ enum
 		effectdata->HL.SetAttackForAllBands(Common::T_ear::BOTH, DEFAULT_ATTACK);
 		effectdata->HL.SetReleaseForAllBands(Common::T_ear::BOTH, DEFAULT_RELEASE);
 
-		// Initial setup of temporal asynchrony simulator
-		effectdata->HL.GetTemporalAsynchronySimulator()->SetBandUpperLimit(Common::T_ear::BOTH, DEFAULT_TABAND);
-		effectdata->HL.GetTemporalAsynchronySimulator()->SetNoiseAutocorrelationFilterCutoffFrequency(Common::T_ear::BOTH, DEFAULT_TANOISELPF);
-		effectdata->HL.GetTemporalAsynchronySimulator()->SetWhiteNoisePower(Common::T_ear::BOTH, DEFAULT_TANOISEPOWER);
-		effectdata->HL.GetTemporalAsynchronySimulator()->SetLeftRightNoiseSynchronicity(DEFAULT_TALRSYNC_AMOUNT);
+		// Initial setup of temporal distortion simulator
+		effectdata->HL.GetTemporalDistortionSimulator()->SetBandUpperLimit(Common::T_ear::BOTH, DEFAULT_TABAND);
+		effectdata->HL.GetTemporalDistortionSimulator()->SetNoiseAutocorrelationFilterCutoffFrequency(Common::T_ear::BOTH, DEFAULT_TANOISELPF);
+		effectdata->HL.GetTemporalDistortionSimulator()->SetWhiteNoisePower(Common::T_ear::BOTH, DEFAULT_TANOISEPOWER);
+		effectdata->HL.GetTemporalDistortionSimulator()->SetLeftRightNoiseSynchronicity(DEFAULT_TALRSYNC_AMOUNT);
 		if (DEFAULT_TALRSYNC_ON)
-			effectdata->HL.GetTemporalAsynchronySimulator()->EnableLeftRightNoiseSynchronicity();
+			effectdata->HL.GetTemporalDistortionSimulator()->EnableLeftRightNoiseSynchronicity();
 		else
-			effectdata->HL.GetTemporalAsynchronySimulator()->DisableLeftRightNoiseSynchronicity();
-		if (DEFAULT_TAPOSTLPF_ON)		
-			effectdata->HL.GetTemporalAsynchronySimulator()->EnablePostJitterLowPassFilter(Common::T_ear::BOTH);
-		else
-			effectdata->HL.GetTemporalAsynchronySimulator()->DisablePostJitterLowPassFilter(Common::T_ear::BOTH);
+			effectdata->HL.GetTemporalDistortionSimulator()->DisableLeftRightNoiseSynchronicity();
+
+		// Initial setup of frequency smearing
+		//effectdata->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->...
 
 		WriteLog(state, "CREATE: HL Simulation plugin created", "");		
 
@@ -522,38 +576,38 @@ enum
 				}
 				break;
 
-			case PARAM_TEMPORALASYNCHRONY_ON_LEFT:
+			case PARAM_TEMPORALDISTORTION_ON_LEFT:
 				if (((int)value != 0) && ((int)value != 1))
-					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to switch on/off left temporal asynchrony simulation with non boolean value ", value);
+					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to switch on/off left temporal distortion simulation with non boolean value ", value);
 				else
 				{
 					if (!Float2Bool(value))
 					{
-						data->HL.DisableTemporalAsynchrony(Common::T_ear::LEFT);
-						WriteLog(state, "SET PARAMETER: Left ear temporal asynchrony simulation switched OFF", "");
+						data->HL.DisableTemporalDistortion(Common::T_ear::LEFT);
+						WriteLog(state, "SET PARAMETER: Left ear temporal distortion simulation switched OFF", "");
 					}
 					if (Float2Bool(value))
 					{
-						data->HL.EnableTemporalAsynchrony(Common::T_ear::LEFT);
-						WriteLog(state, "SET PARAMETER: Left ear temporal asynchrony simulation switched ON", "");
+						data->HL.EnableTemporalDistortion(Common::T_ear::LEFT);
+						WriteLog(state, "SET PARAMETER: Left ear temporal distortion simulation switched ON", "");
 					}
 				}
 				break;
 
-			case PARAM_TEMPORALASYNCHRONY_ON_RIGHT:
+			case PARAM_TEMPORALDISTORTION_ON_RIGHT:
 				if (((int)value != 0) && ((int)value != 1))
-					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to switch on/off right temporal asynchrony simulation with non boolean value ", value);
+					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to switch on/off right temporal distortion simulation with non boolean value ", value);
 				else
 				{
 					if (!Float2Bool(value))
 					{
-						data->HL.DisableTemporalAsynchrony(Common::T_ear::RIGHT);
-						WriteLog(state, "SET PARAMETER: Right ear temporal asynchrony simulation switched OFF", "");
+						data->HL.DisableTemporalDistortion(Common::T_ear::RIGHT);
+						WriteLog(state, "SET PARAMETER: Right ear temporal distortion simulation switched OFF", "");
 					}
 					if (Float2Bool(value))
 					{
-						data->HL.EnableTemporalAsynchrony(Common::T_ear::RIGHT);
-						WriteLog(state, "SET PARAMETER: Right ear temporal asynchrony simulation switched ON", "");
+						data->HL.EnableTemporalDistortion(Common::T_ear::RIGHT);
+						WriteLog(state, "SET PARAMETER: Right ear temporal distortion simulation switched ON", "");
 					}
 				}
 				break;
@@ -585,97 +639,61 @@ enum
 				WriteLog(state, "SET PARAMETER: Release time (ms) for Right envelope detectors set to: ", value);
 				break;
 
-			// TEMPORAL ASYNCHRONY SIMULATION:
+			// TEMPORAL DISTORTION SIMULATION:
 			case PARAM_TA_BAND_LEFT:
-				data->HL.GetTemporalAsynchronySimulator()->SetBandUpperLimit(Common::T_ear::LEFT, value);
-				WriteLog(state, "SET PARAMETER: Band upper limit (Hz) for Left temporal asynchrony simulator set to: ", value);
+				data->HL.GetTemporalDistortionSimulator()->SetBandUpperLimit(Common::T_ear::LEFT, value);
+				WriteLog(state, "SET PARAMETER: Band upper limit (Hz) for Left temporal distortion simulator set to: ", value);
 				break;
 
 			case PARAM_TA_BAND_RIGHT:
-				data->HL.GetTemporalAsynchronySimulator()->SetBandUpperLimit(Common::T_ear::RIGHT, value);
-				WriteLog(state, "SET PARAMETER: Band upper limit (Hz) for Right temporal asynchrony simulator set to: ", value);
+				data->HL.GetTemporalDistortionSimulator()->SetBandUpperLimit(Common::T_ear::RIGHT, value);
+				WriteLog(state, "SET PARAMETER: Band upper limit (Hz) for Right temporal distortion simulator set to: ", value);
 				break;
 
 			case PARAM_TA_NOISELPF_LEFT:
-				data->HL.GetTemporalAsynchronySimulator()->SetNoiseAutocorrelationFilterCutoffFrequency(Common::T_ear::LEFT, value);
-				WriteLog(state, "SET PARAMETER: Noise autocorrelation LPF cutoff (Hz) for Left temporal asynchrony simulator set to: ", value);
+				data->HL.GetTemporalDistortionSimulator()->SetNoiseAutocorrelationFilterCutoffFrequency(Common::T_ear::LEFT, value);
+				WriteLog(state, "SET PARAMETER: Noise autocorrelation LPF cutoff (Hz) for Left temporal distortion simulator set to: ", value);
 				break;
 
 			case PARAM_TA_NOISELPF_RIGHT:
-				data->HL.GetTemporalAsynchronySimulator()->SetNoiseAutocorrelationFilterCutoffFrequency(Common::T_ear::RIGHT, value);
-				WriteLog(state, "SET PARAMETER: Noise autocorrelation LPF cutoff (Hz) for Right temporal asynchrony simulator set to: ", value);
+				data->HL.GetTemporalDistortionSimulator()->SetNoiseAutocorrelationFilterCutoffFrequency(Common::T_ear::RIGHT, value);
+				WriteLog(state, "SET PARAMETER: Noise autocorrelation LPF cutoff (Hz) for Right temporal Distortion simulator set to: ", value);
 				break;
 
 			case PARAM_TA_NOISEPOWER_LEFT:
-				data->HL.GetTemporalAsynchronySimulator()->SetWhiteNoisePower(Common::T_ear::LEFT, value);
-				WriteLog(state, "SET PARAMETER: White noise power (ms) for Left temporal asynchrony simulator set to: ", value);
+				data->HL.GetTemporalDistortionSimulator()->SetWhiteNoisePower(Common::T_ear::LEFT, value);
+				WriteLog(state, "SET PARAMETER: White noise power (ms) for Left temporal Distortion simulator set to: ", value);
 				break;
 
 			case PARAM_TA_NOISEPOWER_RIGHT:
-				data->HL.GetTemporalAsynchronySimulator()->SetWhiteNoisePower(Common::T_ear::RIGHT, value);
-				WriteLog(state, "SET PARAMETER: White noise power (ms) for Right temporal asynchrony simulator set to: ", value);
+				data->HL.GetTemporalDistortionSimulator()->SetWhiteNoisePower(Common::T_ear::RIGHT, value);
+				WriteLog(state, "SET PARAMETER: White noise power (ms) for Right temporal distortion simulator set to: ", value);
 				break;
 
 			case PARAM_TA_LRSYNC_AMOUNT:
 				if ((value >= 0.0f) && (value <= 1.0f))
 				{
-					data->HL.GetTemporalAsynchronySimulator()->SetLeftRightNoiseSynchronicity(value);
-					WriteLog(state, "SET PARAMETER: Left-Right synchronicity for temporal asynchrony simulator set to: ", value);
+					data->HL.GetTemporalDistortionSimulator()->SetLeftRightNoiseSynchronicity(value);
+					WriteLog(state, "SET PARAMETER: Left-Right synchronicity for temporal distortion simulator set to: ", value);
 				}
 				else
-					WriteLog(state, "SET PARAMETER: ERROR!!! Bad value for Left-Right synchronicity of temporal asynchrony (needs to be between 0.0f and 1.0f): ", value);
+					WriteLog(state, "SET PARAMETER: ERROR!!! Bad value for Left-Right synchronicity of temporal distortion (needs to be between 0.0f and 1.0f): ", value);
 				break;
 
 			case PARAM_TA_LRSYNC_ON:
 				if (((int)value != 0) && ((int)value != 1))
-					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to switch on/off left-right synchronicity in temporal asynchrony simulation with non boolean value ", value);
+					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to switch on/off left-right synchronicity in temporal distortion simulation with non boolean value ", value);
 				else
 				{
 					if (!Float2Bool(value))
 					{
-						data->HL.GetTemporalAsynchronySimulator()->DisableLeftRightNoiseSynchronicity();
-						WriteLog(state, "SET PARAMETER: Left-right ear synchronicity in temporal asynchrony simulator switched OFF", "");
+						data->HL.GetTemporalDistortionSimulator()->DisableLeftRightNoiseSynchronicity();
+						WriteLog(state, "SET PARAMETER: Left-right ear synchronicity in temporal distortion simulator switched OFF", "");
 					}
 					if (Float2Bool(value))
 					{
-						data->HL.GetTemporalAsynchronySimulator()->EnableLeftRightNoiseSynchronicity();
-						WriteLog(state, "SET PARAMETER: Left-right ear synchronicity in temporal asynchrony simulator switched ON", "");
-					}
-				}
-				break;
-
-			case PARAM_TA_POSTLPF_ON_LEFT:
-				if (((int)value != 0) && ((int)value != 1))
-					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to switch on/off post-jitter LPF in temporal asynchrony simulation with non boolean value ", value);
-				else
-				{
-					if (!Float2Bool(value))
-					{
-						data->HL.GetTemporalAsynchronySimulator()->DisablePostJitterLowPassFilter(Common::T_ear::LEFT);
-						WriteLog(state, "SET PARAMETER: Post-jitter LPF in temporal asynchrony simulator switched OFF for left ear", "");
-					}
-					if (Float2Bool(value))
-					{
-						data->HL.GetTemporalAsynchronySimulator()->EnablePostJitterLowPassFilter(Common::T_ear::LEFT);
-						WriteLog(state, "SET PARAMETER: Post-jitter LPF in temporal asynchrony simulator switched ON for left ear", "");
-					}
-				}
-				break;
-
-			case PARAM_TA_POSTLPF_ON_RIGHT:
-				if (((int)value != 0) && ((int)value != 1))
-					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to switch on/off post-jitter LPF in temporal asynchrony simulation with non boolean value ", value);
-				else
-				{
-					if (!Float2Bool(value))
-					{
-						data->HL.GetTemporalAsynchronySimulator()->DisablePostJitterLowPassFilter(Common::T_ear::RIGHT);
-						WriteLog(state, "SET PARAMETER: Post-jitter LPF in temporal asynchrony simulator switched OFF for right ear", "");
-					}
-					if (Float2Bool(value))
-					{
-						data->HL.GetTemporalAsynchronySimulator()->EnablePostJitterLowPassFilter(Common::T_ear::RIGHT);
-						WriteLog(state, "SET PARAMETER: Post-jitter LPF in temporal asynchrony simulator switched ON for right ear", "");
+						data->HL.GetTemporalDistortionSimulator()->EnableLeftRightNoiseSynchronicity();
+						WriteLog(state, "SET PARAMETER: Left-right ear synchronicity in temporal distortion simulator switched ON", "");
 					}
 				}
 				break;
@@ -691,6 +709,123 @@ enum
 				break;
 			case PARAM_TA_AUTOCORR1_GET_RIGHT:
 				WriteLog(state, "SET PARAMETER: WARNING! PARAM_TA_AUTOCORR1_GET_RIGHT is read only", "");
+				break;
+
+			// FREQUENCY SMEARING:
+			case PARAM_FREQUENCYSMEARING_ON_LEFT:
+				if (((int)value != 0) && ((int)value != 1))
+					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to switch on/off frequency smearing in left ear with non boolean value ", value);
+				else
+				{
+					if (!Float2Bool(value))
+					{
+						data->HL.DisableFrequencySmearing(Common::T_ear::LEFT);
+						WriteLog(state, "SET PARAMETER: Frequency smearing in left ear switched OFF", "");
+					}
+					if (Float2Bool(value))
+					{
+						data->HL.EnableFrequencySmearing(Common::T_ear::LEFT);
+						WriteLog(state, "SET PARAMETER: Frequency smearing in left ear switched ON", "");
+					}
+				}
+				break;
+
+			case PARAM_FREQUENCYSMEARING_ON_RIGHT:
+				if (((int)value != 0) && ((int)value != 1))
+					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to switch on/off frequency smearing in right ear with non boolean value ", value);
+				else
+				{
+					if (!Float2Bool(value))
+					{
+						data->HL.DisableFrequencySmearing(Common::T_ear::RIGHT);
+						WriteLog(state, "SET PARAMETER: Frequency smearing in right ear switched OFF", "");
+					}
+					if (Float2Bool(value))
+					{
+						data->HL.EnableFrequencySmearing(Common::T_ear::RIGHT);
+						WriteLog(state, "SET PARAMETER: Frequency smearing in right ear switched ON", "");
+					}
+				}
+				break;
+
+			case PARAM_FS_DOWN_SIZE_LEFT:
+				if ((int)value > 0)
+				{
+					data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetDownwardSmearingBufferSize((int)value);
+					WriteLog(state, "SET PARAMETER: Downward smearing buffer size for left ear = ", (int)value);
+				}
+				else
+					WriteLog(state, "SET PARAMETER: ERROR!!! Wrong size for downward smearing buffer in left ear = ", (int)value);
+				break;
+
+			case PARAM_FS_DOWN_SIZE_RIGHT:
+				if ((int)value > 0)
+				{
+					data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetDownwardSmearingBufferSize((int)value);
+					WriteLog(state, "SET PARAMETER: Downward smearing buffer size for right ear = ", (int)value);
+				}
+				else
+					WriteLog(state, "SET PARAMETER: ERROR!!! Wrong size for downward smearing buffer in right ear = ", (int)value);
+				break;
+
+			case PARAM_FS_UP_SIZE_LEFT:
+				if ((int)value > 0)
+				{
+					data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetUpwardSmearingBufferSize((int)value);
+					WriteLog(state, "SET PARAMETER: Upward smearing buffer size for left ear = ", (int)value);
+				}
+				else
+					WriteLog(state, "SET PARAMETER: ERROR!!! Wrong size for upward smearing buffer in left ear = ", (int)value);
+				break;
+
+			case PARAM_FS_UP_SIZE_RIGHT:
+				if ((int)value > 0)
+				{
+					data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetUpwardSmearingBufferSize((int)value);
+					WriteLog(state, "SET PARAMETER: Upward smearing buffer size for right ear = ", (int)value);
+				}
+				else
+					WriteLog(state, "SET PARAMETER: ERROR!!! Wrong size for upward smearing buffer in right ear = ", (int)value);
+				break;
+
+			case PARAM_FS_DOWN_HZ_LEFT:
+				if (value >= 0.0f)
+				{
+					data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetDownwardSmearing_Hz(value);
+					WriteLog(state, "SET PARAMETER: Downward smearing amount (in Hz) for left ear = ", value);
+				}
+				else
+					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to set a negative downward smearing amount (in Hz) for left ear = ", value);
+				break;
+
+			case PARAM_FS_DOWN_HZ_RIGHT:
+				if (value >= 0.0f)
+				{
+					data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetDownwardSmearing_Hz(value);
+					WriteLog(state, "SET PARAMETER: Downward smearing amount (in Hz) for right ear = ", value);
+				}
+				else
+					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to set a negative downward smearing amount (in Hz) for right ear = ", value);
+				break;
+
+			case PARAM_FS_UP_HZ_LEFT:
+				if (value >= 0.0f)
+				{
+					data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetUpwardSmearing_Hz(value);
+					WriteLog(state, "SET PARAMETER: Upward smearing amount (in Hz) for left ear = ", value);
+				}
+				else
+					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to set a negative upward smearing amount (in Hz) for left ear = ", value);
+				break;
+
+			case PARAM_FS_UP_HZ_RIGHT:
+				if (value >= 0.0f)
+				{
+					data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetUpwardSmearing_Hz(value);
+					WriteLog(state, "SET PARAMETER: Upward smearing amount (in Hz) for right ear = ", value);
+				}
+				else
+					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to set a negative upward smearing amount (in Hz) for right ear = ", value);
 				break;
 
 			//case PARAM_DEBUG_LOG:
@@ -727,19 +862,19 @@ enum
 			switch (index)
 			{
 				case PARAM_TA_AUTOCORR0_GET_LEFT:
-					*value = data->HL.GetTemporalAsynchronySimulator()->GetPower(Common::T_ear::LEFT);
+					*value = data->HL.GetTemporalDistortionSimulator()->GetPower(Common::T_ear::LEFT);
 					break;
 
 				case PARAM_TA_AUTOCORR1_GET_LEFT:
-					*value = data->HL.GetTemporalAsynchronySimulator()->GetNormalizedAutocorrelation(Common::T_ear::LEFT);
+					*value = data->HL.GetTemporalDistortionSimulator()->GetNormalizedAutocorrelation(Common::T_ear::LEFT);
 					break;
 
 				case PARAM_TA_AUTOCORR0_GET_RIGHT:
-					*value = data->HL.GetTemporalAsynchronySimulator()->GetPower(Common::T_ear::RIGHT);
+					*value = data->HL.GetTemporalDistortionSimulator()->GetPower(Common::T_ear::RIGHT);
 					break;
 
 				case PARAM_TA_AUTOCORR1_GET_RIGHT:
-					*value = data->HL.GetTemporalAsynchronySimulator()->GetNormalizedAutocorrelation(Common::T_ear::RIGHT);
+					*value = data->HL.GetTemporalDistortionSimulator()->GetNormalizedAutocorrelation(Common::T_ear::RIGHT);
 					break;
 
 				default:
@@ -801,10 +936,10 @@ enum
 		outBufferPair.right.Fill(length, 0.0f);
 		data->HL.Process(inBufferPair, outBufferPair);		
 
-		data->parameters[PARAM_TA_AUTOCORR0_GET_LEFT] = data->HL.GetTemporalAsynchronySimulator()->GetPower(Common::T_ear::LEFT);
-		data->parameters[PARAM_TA_AUTOCORR1_GET_LEFT] = data->HL.GetTemporalAsynchronySimulator()->GetNormalizedAutocorrelation(Common::T_ear::LEFT);
-		data->parameters[PARAM_TA_AUTOCORR0_GET_RIGHT] = data->HL.GetTemporalAsynchronySimulator()->GetPower(Common::T_ear::RIGHT);
-		data->parameters[PARAM_TA_AUTOCORR1_GET_RIGHT] = data->HL.GetTemporalAsynchronySimulator()->GetNormalizedAutocorrelation(Common::T_ear::RIGHT);
+		data->parameters[PARAM_TA_AUTOCORR0_GET_LEFT] = data->HL.GetTemporalDistortionSimulator()->GetPower(Common::T_ear::LEFT);
+		data->parameters[PARAM_TA_AUTOCORR1_GET_LEFT] = data->HL.GetTemporalDistortionSimulator()->GetNormalizedAutocorrelation(Common::T_ear::LEFT);
+		data->parameters[PARAM_TA_AUTOCORR0_GET_RIGHT] = data->HL.GetTemporalDistortionSimulator()->GetPower(Common::T_ear::RIGHT);
+		data->parameters[PARAM_TA_AUTOCORR1_GET_RIGHT] = data->HL.GetTemporalDistortionSimulator()->GetNormalizedAutocorrelation(Common::T_ear::RIGHT);
 
 		// Transform output buffer					
 		//for (int i = 0; i < length*2; i++)

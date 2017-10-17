@@ -42,7 +42,7 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 9
+  serializedVersion: 11
   m_GIWorkflowMode: 0
   m_GISettings:
     serializedVersion: 2
@@ -54,7 +54,7 @@ LightmapSettings:
     m_EnableBakedLightmaps: 1
     m_EnableRealtimeLightmaps: 1
   m_LightmapEditorSettings:
-    serializedVersion: 8
+    serializedVersion: 9
     m_Resolution: 2
     m_BakeResolution: 40
     m_TextureWidth: 1024
@@ -87,7 +87,7 @@ LightmapSettings:
     m_PVRFilteringAtrousNormalSigma: 1
     m_PVRFilteringAtrousPositionSigma: 1
   m_LightingDataAsset: {fileID: 0}
-  m_ShadowMaskMode: 2
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -673,6 +673,30 @@ MonoBehaviour:
   PARAM_LEFT_RELEASE: 513
   PARAM_RIGHT_ATTACK: 658
   PARAM_RIGHT_RELEASE: 791
+  MBE_LEFT_ON: 1
+  MBE_RIGHT_ON: 1
+  TA_LEFT_ON: 1
+  TA_RIGHT_ON: 1
+  PARAM_LEFT_TA_BAND: 1600
+  PARAM_RIGHT_TA_BAND: 1600
+  PARAM_LEFT_TA_POWER: 1
+  PARAM_RIGHT_TA_POWER: 1
+  PARAM_LEFT_TA_CUTOFF: 500
+  PARAM_RIGHT_TA_CUTOFF: 500
+  PARAM_TA_LRSYNC: 0
+  PARAM_TA_LRSYNC_ON: 1
+  PARAM_LEFT_TA_POSTLPF: 1
+  PARAM_RIGHT_TA_POSTLPF: 1
+  FS_LEFT_ON: 1
+  FS_RIGHT_ON: 1
+  PARAM_LEFT_FS_DOWN_SIZE: 144
+  PARAM_LEFT_FS_UP_SIZE: 141
+  PARAM_RIGHT_FS_DOWN_SIZE: 190
+  PARAM_RIGHT_FS_UP_SIZE: 95
+  PARAM_LEFT_FS_DOWN_HZ: 423.08
+  PARAM_LEFT_FS_UP_HZ: 528.85
+  PARAM_RIGHT_FS_DOWN_HZ: 298.97
+  PARAM_RIGHT_FS_UP_HZ: 319.59
 --- !u!1 &585364504
 GameObject:
   m_ObjectHideFlags: 0

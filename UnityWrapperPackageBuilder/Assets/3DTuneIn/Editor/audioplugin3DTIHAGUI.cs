@@ -66,7 +66,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
 
         //initDone = true;
 
-        //return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG)
+        //return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG AND EXPOSING PARAMETERS)
         return false;     // DO NOT SHOW DEFAULT CONTROLS
     }
 
