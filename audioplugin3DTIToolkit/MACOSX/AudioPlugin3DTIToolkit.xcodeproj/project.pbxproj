@@ -11,6 +11,10 @@
 		AF391F8E1E55F14200EB4AC6 /* effect3DTIHA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF391F8B1E55F14200EB4AC6 /* effect3DTIHA.cpp */; };
 		AF391F8F1E55F14200EB4AC6 /* effect3DTIHL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF391F8C1E55F14200EB4AC6 /* effect3DTIHL.cpp */; };
 		AF391F901E55F14200EB4AC6 /* effect3DTISpatializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF391F8D1E55F14200EB4AC6 /* effect3DTISpatializer.cpp */; };
+		AF5A97A71F965150005EF9B7 /* FrequencySmearing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF5A97A11F965150005EF9B7 /* FrequencySmearing.cpp */; };
+		AF5A97A81F965150005EF9B7 /* HighOrderButteworthFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF5A97A41F965150005EF9B7 /* HighOrderButteworthFilter.cpp */; };
+		AF5A97A91F965150005EF9B7 /* TemporalDistortionSimulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF5A97A51F965150005EF9B7 /* TemporalDistortionSimulator.cpp */; };
+		AF5A97AC1F965167005EF9B7 /* Fprocessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF5A97AA1F965167005EF9B7 /* Fprocessor.cpp */; };
 		AFD67D0D1E978F80000F4387 /* BRIR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CB61E978F80000F4387 /* BRIR.cpp */; };
 		AFD67D0E1E978F80000F4387 /* Core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CB81E978F80000F4387 /* Core.cpp */; };
 		AFD67D0F1E978F80000F4387 /* Environment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CBA1E978F80000F4387 /* Environment.cpp */; };
@@ -26,7 +30,6 @@
 		AFD67D1B1E978F80000F4387 /* DynamicCompressorStereo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CD61E978F80000F4387 /* DynamicCompressorStereo.cpp */; };
 		AFD67D1C1E978F80000F4387 /* EnvelopeDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CD81E978F80000F4387 /* EnvelopeDetector.cpp */; };
 		AFD67D1D1E978F80000F4387 /* FarDistanceEffects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CDA1E978F80000F4387 /* FarDistanceEffects.cpp */; };
-		AFD67D1E1E978F80000F4387 /* Fconvolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CDC1E978F80000F4387 /* Fconvolver.cpp */; };
 		AFD67D1F1E978F80000F4387 /* fftsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CDE1E978F80000F4387 /* fftsg.cpp */; };
 		AFD67D201E978F80000F4387 /* FiltersChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CE01E978F80000F4387 /* FiltersChain.cpp */; };
 		AFD67D211E978F80000F4387 /* Magnitudes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CE21E978F80000F4387 /* Magnitudes.cpp */; };
@@ -46,8 +49,6 @@
 		AFF42CAD1F791E5100A430DE /* Delay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFF42CA71F791E5100A430DE /* Delay.cpp */; };
 		AFF42CAE1F791E5100A430DE /* FiltersBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFF42CA91F791E5100A430DE /* FiltersBank.cpp */; };
 		AFF42CAF1F791E5100A430DE /* NoiseGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFF42CAB1F791E5100A430DE /* NoiseGenerator.cpp */; };
-		AFF42CB41F791E6300A430DE /* LowHighSplitFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFF42CB01F791E6300A430DE /* LowHighSplitFilter.cpp */; };
-		AFF42CB51F791E6300A430DE /* TemporalAsynchronySimulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFF42CB21F791E6300A430DE /* TemporalAsynchronySimulator.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +56,14 @@
 		AF391F8B1E55F14200EB4AC6 /* effect3DTIHA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = effect3DTIHA.cpp; path = ../src/effect3DTIHA.cpp; sourceTree = "<group>"; };
 		AF391F8C1E55F14200EB4AC6 /* effect3DTIHL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = effect3DTIHL.cpp; path = ../src/effect3DTIHL.cpp; sourceTree = "<group>"; };
 		AF391F8D1E55F14200EB4AC6 /* effect3DTISpatializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = effect3DTISpatializer.cpp; path = ../src/effect3DTISpatializer.cpp; sourceTree = "<group>"; };
+		AF5A97A11F965150005EF9B7 /* FrequencySmearing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrequencySmearing.cpp; sourceTree = "<group>"; };
+		AF5A97A21F965150005EF9B7 /* FrequencySmearing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrequencySmearing.h; sourceTree = "<group>"; };
+		AF5A97A31F965150005EF9B7 /* HighOrderButterworthFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HighOrderButterworthFilter.h; sourceTree = "<group>"; };
+		AF5A97A41F965150005EF9B7 /* HighOrderButteworthFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HighOrderButteworthFilter.cpp; sourceTree = "<group>"; };
+		AF5A97A51F965150005EF9B7 /* TemporalDistortionSimulator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TemporalDistortionSimulator.cpp; sourceTree = "<group>"; };
+		AF5A97A61F965150005EF9B7 /* TemporalDistortionSimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemporalDistortionSimulator.h; sourceTree = "<group>"; };
+		AF5A97AA1F965167005EF9B7 /* Fprocessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Fprocessor.cpp; sourceTree = "<group>"; };
+		AF5A97AB1F965167005EF9B7 /* Fprocessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fprocessor.h; sourceTree = "<group>"; };
 		AF766FED1DE9F8690003ED20 /* Config.Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.Common.xcconfig; sourceTree = "<group>"; };
 		AF766FEE1DE9F99C0003ED20 /* Config.Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.Debug.xcconfig; sourceTree = "<group>"; };
 		AFD67CB31E978F80000F4387 /* 3DTI_BinauralSpatializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 3DTI_BinauralSpatializer.h; sourceTree = "<group>"; };
@@ -92,8 +101,6 @@
 		AFD67CD91E978F80000F4387 /* EnvelopeDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnvelopeDetector.h; sourceTree = "<group>"; };
 		AFD67CDA1E978F80000F4387 /* FarDistanceEffects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FarDistanceEffects.cpp; sourceTree = "<group>"; };
 		AFD67CDB1E978F80000F4387 /* FarDistanceEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FarDistanceEffects.h; sourceTree = "<group>"; };
-		AFD67CDC1E978F80000F4387 /* Fconvolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Fconvolver.cpp; sourceTree = "<group>"; };
-		AFD67CDD1E978F80000F4387 /* Fconvolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fconvolver.h; sourceTree = "<group>"; };
 		AFD67CDE1E978F80000F4387 /* fftsg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fftsg.cpp; sourceTree = "<group>"; };
 		AFD67CDF1E978F80000F4387 /* fftsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fftsg.h; sourceTree = "<group>"; };
 		AFD67CE01E978F80000F4387 /* FiltersChain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FiltersChain.cpp; sourceTree = "<group>"; };
@@ -138,10 +145,6 @@
 		AFF42CAA1F791E5100A430DE /* FiltersBank.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FiltersBank.h; sourceTree = "<group>"; };
 		AFF42CAB1F791E5100A430DE /* NoiseGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NoiseGenerator.cpp; sourceTree = "<group>"; };
 		AFF42CAC1F791E5100A430DE /* NoiseGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoiseGenerator.h; sourceTree = "<group>"; };
-		AFF42CB01F791E6300A430DE /* LowHighSplitFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LowHighSplitFilter.cpp; sourceTree = "<group>"; };
-		AFF42CB11F791E6300A430DE /* LowHighSplitFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LowHighSplitFilter.h; sourceTree = "<group>"; };
-		AFF42CB21F791E6300A430DE /* TemporalAsynchronySimulator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TemporalAsynchronySimulator.cpp; sourceTree = "<group>"; };
-		AFF42CB31F791E6300A430DE /* TemporalAsynchronySimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemporalAsynchronySimulator.h; sourceTree = "<group>"; };
 		AFF42CB61F7920CF00A430DE /* AudioState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioState.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -216,6 +219,8 @@
 		AFD67CC61E978F80000F4387 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				AF5A97AA1F965167005EF9B7 /* Fprocessor.cpp */,
+				AF5A97AB1F965167005EF9B7 /* Fprocessor.h */,
 				AFF42CB61F7920CF00A430DE /* AudioState.h */,
 				AFF42CA71F791E5100A430DE /* Delay.cpp */,
 				AFF42CA81F791E5100A430DE /* Delay.h */,
@@ -244,8 +249,6 @@
 				AFD67CD91E978F80000F4387 /* EnvelopeDetector.h */,
 				AFD67CDA1E978F80000F4387 /* FarDistanceEffects.cpp */,
 				AFD67CDB1E978F80000F4387 /* FarDistanceEffects.h */,
-				AFD67CDC1E978F80000F4387 /* Fconvolver.cpp */,
-				AFD67CDD1E978F80000F4387 /* Fconvolver.h */,
 				AFD67CDE1E978F80000F4387 /* fftsg.cpp */,
 				AFD67CDF1E978F80000F4387 /* fftsg.h */,
 				AFD67CE01E978F80000F4387 /* FiltersChain.cpp */,
@@ -267,10 +270,12 @@
 		AFD67CEF1E978F80000F4387 /* HAHLSimulation */ = {
 			isa = PBXGroup;
 			children = (
-				AFF42CB01F791E6300A430DE /* LowHighSplitFilter.cpp */,
-				AFF42CB11F791E6300A430DE /* LowHighSplitFilter.h */,
-				AFF42CB21F791E6300A430DE /* TemporalAsynchronySimulator.cpp */,
-				AFF42CB31F791E6300A430DE /* TemporalAsynchronySimulator.h */,
+				AF5A97A11F965150005EF9B7 /* FrequencySmearing.cpp */,
+				AF5A97A21F965150005EF9B7 /* FrequencySmearing.h */,
+				AF5A97A31F965150005EF9B7 /* HighOrderButterworthFilter.h */,
+				AF5A97A41F965150005EF9B7 /* HighOrderButteworthFilter.cpp */,
+				AF5A97A51F965150005EF9B7 /* TemporalDistortionSimulator.cpp */,
+				AF5A97A61F965150005EF9B7 /* TemporalDistortionSimulator.h */,
 				AFE0E1831F1F88A900695DDB /* MultibandExpander.cpp */,
 				AFE0E1841F1F88A900695DDB /* MultibandExpander.h */,
 				AFD67CF01E978F80000F4387 /* 3DTI_HAHLSimulator.h */,
@@ -409,19 +414,21 @@
 				AFD67D1F1E978F80000F4387 /* fftsg.cpp in Sources */,
 				AFD67D201E978F80000F4387 /* FiltersChain.cpp in Sources */,
 				AFD67D0E1E978F80000F4387 /* Core.cpp in Sources */,
+				AF5A97A91F965150005EF9B7 /* TemporalDistortionSimulator.cpp in Sources */,
 				AFF42CAD1F791E5100A430DE /* Delay.cpp in Sources */,
 				AFD67D0D1E978F80000F4387 /* BRIR.cpp in Sources */,
+				AF5A97AC1F965167005EF9B7 /* Fprocessor.cpp in Sources */,
+				AF5A97A71F965150005EF9B7 /* FrequencySmearing.cpp in Sources */,
 				AF391F8E1E55F14200EB4AC6 /* effect3DTIHA.cpp in Sources */,
 				AFD67D1D1E978F80000F4387 /* FarDistanceEffects.cpp in Sources */,
 				AFE0E1821F1F889B00695DDB /* DynamicExpanderMono.cpp in Sources */,
-				AFF42CB51F791E6300A430DE /* TemporalAsynchronySimulator.cpp in Sources */,
 				AFD67D1C1E978F80000F4387 /* EnvelopeDetector.cpp in Sources */,
 				AFD67D101E978F80000F4387 /* HRTF.cpp in Sources */,
-				AFF42CB41F791E6300A430DE /* LowHighSplitFilter.cpp in Sources */,
 				AFD67D1A1E978F80000F4387 /* DynamicCompressorMono.cpp in Sources */,
 				AFD67D191E978F80000F4387 /* DistanceAttenuator.cpp in Sources */,
 				AFE890951DCCB226003505EF /* ILDCereal.cpp in Sources */,
 				AFD67D2B1E978F80000F4387 /* HearingAidSim.cpp in Sources */,
+				AF5A97A81F965150005EF9B7 /* HighOrderButteworthFilter.cpp in Sources */,
 				AFD67D211E978F80000F4387 /* Magnitudes.cpp in Sources */,
 				AFD67D251E978F80000F4387 /* Transform.cpp in Sources */,
 				AFD67D291E978F80000F4387 /* Fig6Algorithm.cpp in Sources */,
@@ -441,7 +448,6 @@
 				AF391F8F1E55F14200EB4AC6 /* effect3DTIHL.cpp in Sources */,
 				AFD67D2C1E978F80000F4387 /* HearingLossSim.cpp in Sources */,
 				AF391F901E55F14200EB4AC6 /* effect3DTISpatializer.cpp in Sources */,
-				AFD67D1E1E978F80000F4387 /* Fconvolver.cpp in Sources */,
 				AFE0E1851F1F88A900695DDB /* MultibandExpander.cpp in Sources */,
 				AFD67D181E978F80000F4387 /* Debugger.cpp in Sources */,
 				AFD67D121E978F80000F4387 /* Listener.cpp in Sources */,
