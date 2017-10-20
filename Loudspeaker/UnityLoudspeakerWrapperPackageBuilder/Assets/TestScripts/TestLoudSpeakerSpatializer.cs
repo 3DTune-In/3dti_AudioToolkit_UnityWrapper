@@ -27,7 +27,7 @@ public class TestLoudSpeakerSpatializer : MonoBehaviour {
                 //testSource.spatialize = true;
                 //testSource.gameObject.SetActive(true);
                 testSource.Play();
-                SpatializerAPI.StartLoadSpeakersSpatializer(testSource);
+                SpatializerAPI.StartLoudSpeakersSpatializer(testSource);
             }
             else
             {

@@ -6,9 +6,6 @@
     <ClCompile Include="..\..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\ARIRRaw.cpp">
       <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\AudioState_LS.cpp">
-      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\Core_LS.cpp">
       <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
     </ClCompile>
@@ -24,13 +21,7 @@
     <ClCompile Include="..\..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SpeakerSetConfiguration.cpp">
       <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\AIR.cpp">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\BiquadFilter.cpp">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\Buffer.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\Debugger.cpp">
@@ -49,9 +40,6 @@
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.cpp">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\Fconvolver.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\fftsg.cpp">
@@ -78,6 +66,9 @@
     <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\Vector3.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\Fprocessor.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\AudioPluginInterface.h" />
@@ -87,9 +78,6 @@
       <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\ARIRRaw.h">
-      <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\AudioState_LS.h">
       <Filter>3DTI_Toolkit_Core\LoudspeakersSpatializer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\Core_LS.h">
@@ -143,9 +131,6 @@
     <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\Fconvolver.h">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\fftsg.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
@@ -168,6 +153,12 @@
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\Vector3.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\AudioState.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\Fprocessor.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
   </ItemGroup>

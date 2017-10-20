@@ -43,6 +43,8 @@ enum TLoadResult { RESULT_LOAD_WAITING = 0, RESULT_LOAD_CONTINUE = 1, RESULT_LOA
 
 namespace LoudspeakersSpatializer3DTI
 {
+#define MAX_NUMBER_OF_SPEAKERS 8
+
 	enum
 	{		
 		PARAM_SCALE_FACTOR,
@@ -78,6 +80,15 @@ namespace LoudspeakersSpatializer3DTI
 		PARAM_SPEAKER_6_Z,
 		PARAM_SPEAKER_7_Z,
 		PARAM_SPEAKER_8_Z,
+		PARAM_SPEAKER_1_W,
+		PARAM_SPEAKER_2_W,
+		PARAM_SPEAKER_3_W,
+		PARAM_SPEAKER_4_W,
+		PARAM_SPEAKER_5_W,
+		PARAM_SPEAKER_6_W,
+		PARAM_SPEAKER_7_W,
+		PARAM_SPEAKER_8_W,
+		PARAM_GET_MINDISTANCE,
 
 		P_NUM
 	};
@@ -93,15 +104,9 @@ namespace LoudspeakersSpatializer3DTI
 		std::shared_ptr<Loudspeaker::CSpeakerSet> speakers;						//Speakers configuration
 		Loudspeaker::CSpeakerSetConfiguration loudSpeakersConf;
 
-		//Speakers - store geometric position of each speaker	//FIXME use a vector
-		CVector3 speaker1_Position;
-		CVector3 speaker2_Position;
-		CVector3 speaker3_Position;
-		CVector3 speaker4_Position;
-		CVector3 speaker5_Position;
-		CVector3 speaker6_Position;
-		CVector3 speaker7_Position;
-		CVector3 speaker8_Position;
+		//Speakers - store geometric position of each speaker	
+		std::vector<Common::CVector3> speakerPositions;
+		std::vector<bool> configuringSpeakers;		
 
 		bool coreReady;
 		float parameters[P_NUM];
@@ -160,23 +165,17 @@ namespace LoudspeakersSpatializer3DTI
 		definition.paramdefs = new UnityAudioParameterDefinition[numparams];
 		
 		///WARNING param names size is limited.
-		
-		//RegisterParameter(definition, "HRTFPath", "", 0.0f, 255.0f, 0.0f, 1.0f, 1.0f, PARAM_HRTF_FILE_STRING, "String with path of HRTF binary file");
-		//RegisterParameter(definition, "HeadRadius", "m", 0.0f, FLT_MAX, 0.0875f, 1.0f, 1.0f, PARAM_HEAD_RADIUS, "Listener head radius");
+	
+		// ADVANCED CONFIGURATION
 		RegisterParameter(definition, "ScaleFactor", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 1.0f, PARAM_SCALE_FACTOR, "Scale factor for over/under sized scenes");
 		RegisterParameter(definition, "SourceID", "", -1.0f, FLT_MAX, -1.0f, 1.0f, 1.0f, PARAM_SOURCE_ID, "Source ID for debug");
-		//RegisterParameter(definition, "CustomITD", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_CUSTOM_ITD, "Enabled custom ITD");
-		//RegisterParameter(definition, "HRTFInterp", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_HRTF_INTERPOLATION, "HRTF Interpolation method");
 		RegisterParameter(definition, "MODfarLPF", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_FARLPF, "Far distance LPF module enabler");
 		RegisterParameter(definition, "MODDistAtt", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_DISTATT, "Distance attenuation module enabler");
-		//RegisterParameter(definition, "MODILD", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_ILD, "Near distance ILD module enabler");
-		//RegisterParameter(definition, "MODHRTF", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_HRTF, "HRTF module enabler");
 		RegisterParameter(definition, "MAGAneAtt", "dB", -30.0f, 0.0f, -6.0f, 1.0f, 1.0f, PARAM_MAG_ANECHATT, "Anechoic distance attenuation");
 		RegisterParameter(definition, "MAGSounSpd", "m/s", 0.0f, 1000.0f, 343.0f, 1.0f, 1.0f, PARAM_MAG_SOUNDSPEED, "Sound speed");
-		//RegisterParameter(definition, "ILDPath", "", 0.0f, 255.0f, 0.0f, 1.0f, 1.0f, PARAM_ILD_FILE_STRING, "String with path of ILD binary file");		
 		RegisterParameter(definition, "DebugLog", "", 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, PARAM_DEBUG_LOG, "Generate debug log");
 
-		//SPEAKERS
+		// SPEAKERS CONFIGURATION
 		RegisterParameter(definition, "SetSpeakers", "m", 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, PARAM_SAVE_SPEAKERS_CONFIG, "Set Speakers configuration");
 		RegisterParameter(definition, "speaker1_x", "m", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_1_X, "Speaker 1 position, x coordinate");
 		RegisterParameter(definition, "speaker1_y", "m", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_1_Y, "Speaker 1 position, y coordinate");
@@ -202,6 +201,15 @@ namespace LoudspeakersSpatializer3DTI
 		RegisterParameter(definition, "speaker8_x", "m", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_8_X, "Speaker 8 position, x coordinate");
 		RegisterParameter(definition, "speaker8_y", "m", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_8_Y, "Speaker 8 position, y coordinate");
 		RegisterParameter(definition, "speaker8_z", "m", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_8_Z, "Speaker 8 position, z coordinate");
+		RegisterParameter(definition, "speaker1_w", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 0.0f, PARAM_SPEAKER_1_W, "Speaker 1 gain");
+		RegisterParameter(definition, "speaker2_w", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 0.0f, PARAM_SPEAKER_2_W, "Speaker 2 gain");
+		RegisterParameter(definition, "speaker3_w", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 0.0f, PARAM_SPEAKER_3_W, "Speaker 3 gain");
+		RegisterParameter(definition, "speaker4_w", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 0.0f, PARAM_SPEAKER_4_W, "Speaker 4 gain");
+		RegisterParameter(definition, "speaker5_w", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 0.0f, PARAM_SPEAKER_5_W, "Speaker 5 gain");
+		RegisterParameter(definition, "speaker6_w", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 0.0f, PARAM_SPEAKER_6_W, "Speaker 6 gain");
+		RegisterParameter(definition, "speaker7_w", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 0.0f, PARAM_SPEAKER_7_W, "Speaker 7 gain");
+		RegisterParameter(definition, "speaker8_w", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 0.0f, PARAM_SPEAKER_8_W, "Speaker 8 gain");
+		RegisterParameter(definition, "getmindist", "m", 0.0f, FLT_MAX, 1.0f, 1.0f, 0.0f, PARAM_GET_MINDISTANCE, "Get minimum distance from sources to listener");
 
 		definition.flags |= UnityAudioEffectDefinitionFlags_IsSpatializer;
 		return numparams;
@@ -209,7 +217,7 @@ namespace LoudspeakersSpatializer3DTI
 
 	/////////////////////////////////////////////////////////////////////
 
-	CTransform ComputeListenerTransformFromMatrix(float* listenerMatrix, float scale)
+	Common::CTransform ComputeListenerTransformFromMatrix(float* listenerMatrix, float scale)
 	{
 		// SET LISTENER POSITION
 
@@ -224,8 +232,8 @@ namespace LoudspeakersSpatializer3DTI
 																						//float listenerpos_x = -L[12] * scale;	// If listener is not rotated
 																						//float listenerpos_y = -L[13] * scale;	// If listener is not rotated
 																						//float listenerpos_z = -L[14] * scale;	// If listener is not rotated
-		CTransform listenerTransform;
-		listenerTransform.SetPosition(CVector3(listenerpos_x, listenerpos_y, listenerpos_z));
+		Common::CTransform listenerTransform;
+		listenerTransform.SetPosition(Common::CVector3(listenerpos_x, listenerpos_y, listenerpos_z));
 
 		// SET LISTENER ORIENTATION
 
@@ -271,68 +279,30 @@ namespace LoudspeakersSpatializer3DTI
 			qz = 0.25f*w;
 		}
 
-		CQuaternion unityQuaternion = CQuaternion(qw, qx, qy, qz);
+		Common::CQuaternion unityQuaternion = Common::CQuaternion(qw, qx, qy, qz);
 		listenerTransform.SetOrientation(unityQuaternion.Inverse());
 		return listenerTransform;
 	}
 
 	/////////////////////////////////////////////////////////////////////
 
-	CTransform ComputeSourceTransformFromMatrix(float* sourceMatrix, float scale)
+	Common::CTransform ComputeSourceTransformFromMatrix(float* sourceMatrix, float scale)
 	{
 		// Orientation does not matters for audio sources
-		CTransform sourceTransform;
-		sourceTransform.SetPosition(CVector3(sourceMatrix[12] * scale, sourceMatrix[13] * scale, sourceMatrix[14] * scale));
+		Common::CTransform sourceTransform;
+		sourceTransform.SetPosition(Common::CVector3(sourceMatrix[12] * scale, sourceMatrix[13] * scale, sourceMatrix[14] * scale));
 		return sourceTransform;
 	}
 
 	/////////////////////////////////////////////////////////////////////
 
 
-
-	int BuildPathString(UnityAudioEffectState* state, char*& path, bool &serializing, int &length, int &count, float value)
-	{
-		// Check if serialization was not started
-		if (!serializing)
-		{
-			// Receive string length
-
-			length = static_cast<int>(value);
-			path = (char*)malloc((length + 1) * sizeof(char));
-			count = 0;
-			serializing = true;
-			return RESULT_LOAD_WAITING;  // TODO: @cgarre please check!!
-		}
-		else
-		{
-			// Receive next character
-
-			// Concatenate char to string				
-			int valueInt = static_cast<int>(value);
-			char valueChr = static_cast<char>(valueInt);
-			path[count] = valueChr;
-			++count;
-
-			// Check if string has ended			
-			if (count == length)
-			{
-				path[count] = 0;	// End character
-				serializing = false;
-				return RESULT_LOAD_END;
-			}
-			else
-				return RESULT_LOAD_CONTINUE;
-		}
-	}
-
-	/////////////////////////////////////////////////////////////////////
-
 	void WriteLogHeader(UnityAudioEffectState* state)
 	{
 		EffectData* data = state->GetEffectData<EffectData>();
 
 		// Audio state:
-		Loudspeaker::AudioStateLoudSpeakers_Struct audioState = data->core.GetAudioState();
+		Common::AudioState_Struct audioState = data->core.GetAudioState();
 		WriteLog(state, "CREATE: Sample rate set to ", audioState.sampleRate);
 		WriteLog(state, "CREATE: Buffer size set to ", audioState.bufferSize);
 
@@ -360,19 +330,20 @@ namespace LoudspeakersSpatializer3DTI
 		
 		data->loudSpeakersConf.BeginSetup();
 
-		data->loudSpeakersConf.AddLoudspeaker(data->speaker1_Position);
-		data->loudSpeakersConf.AddLoudspeaker(data->speaker2_Position);
-		data->loudSpeakersConf.AddLoudspeaker(data->speaker3_Position);
-		data->loudSpeakersConf.AddLoudspeaker(data->speaker4_Position);
-		data->loudSpeakersConf.AddLoudspeaker(data->speaker5_Position);
-		data->loudSpeakersConf.AddLoudspeaker(data->speaker6_Position);
-		data->loudSpeakersConf.AddLoudspeaker(data->speaker7_Position);
-		data->loudSpeakersConf.AddLoudspeaker(data->speaker8_Position);
+		for (int i = 0; i < data->speakerPositions.size(); i++)
+		{
+			if (data->configuringSpeakers[i])
+				data->loudSpeakersConf.AddLoudspeaker(data->speakerPositions[i]);
+		}
 
 		data->loudSpeakersConf.EndSetup();
 
 		//Set Speakers Configuration
 		data->speakers->LoadSpeakerConfiguration(std::move(data->loudSpeakersConf));
+
+		// Clear set of configuring speakers to allow new configurations
+		data->configuringSpeakers.clear();
+		data->configuringSpeakers.assign(MAX_NUMBER_OF_SPEAKERS, false);
 	}
 	/////////////////////////////////////////////////////////////////////
 	// AUDIO PLUGIN SDK FUNCTIONS
@@ -401,7 +372,7 @@ namespace LoudspeakersSpatializer3DTI
 		WriteLog(state, "Creating audio plugin...", "");
 
 		// Set default audio state			
-		Loudspeaker::AudioStateLoudSpeakers_Struct audioState;
+		Common::AudioState_Struct audioState;
 		audioState.sampleRate = (int)state->samplerate;
 		audioState.bufferSize = (int)state->dspbuffersize;		
 		effectdata->core.SetAudioState(audioState);
@@ -414,22 +385,13 @@ namespace LoudspeakersSpatializer3DTI
 		effectdata->parameters[PARAM_SCALE_FACTOR] = 1.0f;
 		effectdata->sourceID = -1;
 
-		// Create source and set default interpolation method		
+		// Create source 
 		effectdata->audioSource = effectdata->core.CreateSingleSourceDSP();
-		if (effectdata->audioSource != nullptr)
-		{
-			//effectdata->audioSource->SetInterpolation(true);
-			//effectdata->audioSource->modEnabler.doILD = false;	// ILD disabled before loading ILD data				
-		}
 
 		//Create Speakers Configuration
 		effectdata->speakers = effectdata->core.CreateSpeakers();
-
-		// STRING SERIALIZER
-		//effectdata->strHRTFserializing = false;
-		//effectdata->strHRTFcount = 0;
-		//effectdata->strILDserializing = false;
-		//effectdata->strILDcount = 0;
+		effectdata->speakerPositions.assign(MAX_NUMBER_OF_SPEAKERS, Common::CVector3::ZERO);
+		effectdata->configuringSpeakers.assign(MAX_NUMBER_OF_SPEAKERS, false);	// Initially set all speakers as not configured yet
 
 		WriteLog(state, "Core initialized. Waiting for configuration...", "");
 
@@ -514,7 +476,7 @@ namespace LoudspeakersSpatializer3DTI
 				WriteLog(state, "SET PARAMETER: Save Speakers Config :", value);
 
 				SaveSpeakersConfiguration(state);
-				data->coreReady = true;
+				data->coreReady = true;				
 				WriteLog(state, "Core ready!!!!!", "");
 			}
 			else
@@ -524,123 +486,191 @@ namespace LoudspeakersSpatializer3DTI
 			break;
 			
 		case PARAM_SPEAKER_1_X:
-			data->speaker1_Position.x = value;
-			WriteLog(state, "SET PARAMETER: Speaker 1 position, x coordinate, set to ", data->speaker1_Position.x);
+			data->speakerPositions[0].x = value;
+			data->configuringSpeakers[0] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 1 position, x coordinate, set to ", value);
 			break;
 
 		case PARAM_SPEAKER_1_Y:
-			data->speaker1_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 1 position, y coordinate, set to ", data->speaker1_Position.y);
+			data->speakerPositions[0].y = value;
+			data->configuringSpeakers[0] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 1 position, y coordinate, set to ", value);
 			break;
 
 		case PARAM_SPEAKER_1_Z:
-			data->speaker1_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 1 position, z coordinate, set to ", data->speaker1_Position.z);
+			data->speakerPositions[0].z = value;
+			data->configuringSpeakers[0] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 1 position, z coordinate, set to ", value);
 			break;
 
 		case PARAM_SPEAKER_2_X:
-			data->speaker2_Position.x = value;
-			WriteLog(state, "SET PARAMETER: Speaker 2 position, x coordinate, set to ", data->speaker2_Position.x);
+			data->speakerPositions[1].x = value;
+			data->configuringSpeakers[1] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 2 position, x coordinate, set to ", value);
 			break;
 
 		case PARAM_SPEAKER_2_Y:
-			data->speaker2_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 2 position, y coordinate, set to ", data->speaker2_Position.y);
+			data->speakerPositions[1].y = value;
+			data->configuringSpeakers[1] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 2 position, y coordinate, set to ", value);
 			break;
 
 		case PARAM_SPEAKER_2_Z:
-			data->speaker2_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 2 position, z coordinate, set to ", data->speaker2_Position.z);
+			data->speakerPositions[1].z = value;
+			data->configuringSpeakers[1] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 2 position, z coordinate, set to ", value);
 			break;
 
 		case PARAM_SPEAKER_3_X:
-			data->speaker3_Position.x = value;
-			WriteLog(state, "SET PARAMETER: Speaker 3 position, x coordinate, set to ", data->speaker3_Position.x);
+			data->speakerPositions[2].x = value;
+			data->configuringSpeakers[2] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 3 position, x coordinate, set to ", value);
 			break;
 
 		case PARAM_SPEAKER_3_Y:
-			data->speaker3_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 3 position, y coordinate, set to ", data->speaker3_Position.y);
+			data->speakerPositions[2].y = value;
+			data->configuringSpeakers[2] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 3 position, y coordinate, set to ", value);
 			break;
 
 		case PARAM_SPEAKER_3_Z:
-			data->speaker3_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 3 position, z coordinate, set to ", data->speaker3_Position.z);
+			data->speakerPositions[2].z = value;
+			data->configuringSpeakers[2] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 3 position, z coordinate, set to ", value);
 			break;
 
 		case PARAM_SPEAKER_4_X:
-			data->speaker4_Position.x = value;
-			WriteLog(state, "SET PARAMETER: Speaker 4 position, x coordinate, set to ", data->speaker4_Position.x);
+			data->speakerPositions[3].x = value;
+			data->configuringSpeakers[3] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 4 position, x coordinate, set to ", value);
 			break;
 
 		case PARAM_SPEAKER_4_Y:
-			data->speaker4_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 4 position, y coordinate, set to ", data->speaker4_Position.y);
+			data->speakerPositions[3].y = value;
+			data->configuringSpeakers[3] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 4 position, y coordinate, set to ", value);
 			break;
 
 		case PARAM_SPEAKER_4_Z:
-			data->speaker4_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 4 position, z coordinate, set to ", data->speaker4_Position.z);
+			data->speakerPositions[3].z = value;
+			data->configuringSpeakers[3] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 4 position, z coordinate, set to ", value);
 			break;
 
 		case PARAM_SPEAKER_5_X:
-			data->speaker5_Position.x = value;
-			WriteLog(state, "SET PARAMETER: Speaker 5 position, x coordinate, set to ", data->speaker5_Position.x);
+			data->speakerPositions[4].x = value;
+			data->configuringSpeakers[4] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 5 position, x coordinate, set to ", value);
 			break;
 
 		case PARAM_SPEAKER_5_Y:
-			data->speaker5_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 5 position, y coordinate, set to ", data->speaker5_Position.y);
+			data->speakerPositions[4].y = value;
+			data->configuringSpeakers[4] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 5 position, y coordinate, set to ", value);
 			break;
 
 		case PARAM_SPEAKER_5_Z:
-			data->speaker5_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 5 position, z coordinate, set to ", data->speaker5_Position.z);
+			data->speakerPositions[4].z = value;
+			data->configuringSpeakers[4] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 5 position, z coordinate, set to ", value);
 			break;
 
 		case PARAM_SPEAKER_6_X:
-			data->speaker6_Position.x = value;
-			WriteLog(state, "SET PARAMETER: Speaker 6 position, x coordinate, set to ", data->speaker6_Position.x);
+			data->speakerPositions[5].x = value;
+			data->configuringSpeakers[5] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 6 position, x coordinate, set to ", value);
 			break;
 
 		case PARAM_SPEAKER_6_Y:
-			data->speaker6_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 6 position, y coordinate, set to ", data->speaker6_Position.y);
+			data->speakerPositions[5].y = value;
+			data->configuringSpeakers[5] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 6 position, y coordinate, set to ", value);
 			break;
 
 		case PARAM_SPEAKER_6_Z:
-			data->speaker6_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 6 position, z coordinate, set to ", data->speaker6_Position.z);
+			data->speakerPositions[5].z = value;
+			data->configuringSpeakers[5] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 6 position, z coordinate, set to ", value);
 			break;
 
 		case PARAM_SPEAKER_7_X:
-			data->speaker7_Position.x = value;
-			WriteLog(state, "SET PARAMETER: Speaker 7 position, x coordinate, set to ", data->speaker7_Position.x);
+			data->speakerPositions[6].x = value;
+			data->configuringSpeakers[6] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 7 position, x coordinate, set to ", value);
 			break;
 
 		case PARAM_SPEAKER_7_Y:
-			data->speaker7_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 7 position, y coordinate, set to ", data->speaker7_Position.y);
+			data->speakerPositions[6].y = value;
+			data->configuringSpeakers[6] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 7 position, y coordinate, set to ", value);
 			break;
 
 		case PARAM_SPEAKER_7_Z:
-			data->speaker7_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 7 position, z coordinate, set to ", data->speaker7_Position.z);
+			data->speakerPositions[6].z = value;
+			data->configuringSpeakers[6] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 7 position, z coordinate, set to ", value);
 			break;
 
 		case PARAM_SPEAKER_8_X:
-			data->speaker8_Position.x = value;
-			WriteLog(state, "SET PARAMETER: Speaker 8 position, x coordinate, set to ", data->speaker8_Position.x);
+			data->speakerPositions[7].x = value;
+			data->configuringSpeakers[7] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 8 position, x coordinate, set to ", value);
 			break;
 
 		case PARAM_SPEAKER_8_Y:
-			data->speaker8_Position.y = value;
-			WriteLog(state, "SET PARAMETER: Speaker 8 position, y coordinate, set to ", data->speaker8_Position.y);
+			data->speakerPositions[7].y = value;
+			data->configuringSpeakers[7] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 8 position, y coordinate, set to ", value);
 			break;
 
 		case PARAM_SPEAKER_8_Z:
-			data->speaker8_Position.z = value;
-			WriteLog(state, "SET PARAMETER: Speaker 8 position, z coordinate, set to ", data->speaker8_Position.z);
+			data->speakerPositions[7].z = value;
+			data->configuringSpeakers[7] = true;
+			WriteLog(state, "SET PARAMETER: Speaker 8 position, z coordinate, set to ", value);
+			break;
+
+		case PARAM_SPEAKER_1_W:			
+			data->speakers->GetSpeakerConfiguration().SetLoudspeakerGain(0, value);
+			WriteLog(state, "SET PARAMETER: Speaker 1 gain set to ", value);
+			break;
+
+		case PARAM_SPEAKER_2_W:
+			data->speakers->GetSpeakerConfiguration().SetLoudspeakerGain(1, value);
+			WriteLog(state, "SET PARAMETER: Speaker 2 gain set to ", value);
+			break;
+
+		case PARAM_SPEAKER_3_W:
+			data->speakers->GetSpeakerConfiguration().SetLoudspeakerGain(2, value);
+			WriteLog(state, "SET PARAMETER: Speaker 3 gain set to ", value);
+			break;
+
+		case PARAM_SPEAKER_4_W:
+			data->speakers->GetSpeakerConfiguration().SetLoudspeakerGain(3, value);
+			WriteLog(state, "SET PARAMETER: Speaker 4 gain set to ", value);
+			break;
+
+		case PARAM_SPEAKER_5_W:
+			data->speakers->GetSpeakerConfiguration().SetLoudspeakerGain(4, value);
+			WriteLog(state, "SET PARAMETER: Speaker 5 gain set to ", value);
+			break;
+
+		case PARAM_SPEAKER_6_W:
+			data->speakers->GetSpeakerConfiguration().SetLoudspeakerGain(5, value);
+			WriteLog(state, "SET PARAMETER: Speaker 6 gain set to ", value);
+			break;
+
+		case PARAM_SPEAKER_7_W:
+			data->speakers->GetSpeakerConfiguration().SetLoudspeakerGain(6, value);
+			WriteLog(state, "SET PARAMETER: Speaker 7 gain set to ", value);
+			break;
+
+		case PARAM_SPEAKER_8_W:
+			data->speakers->GetSpeakerConfiguration().SetLoudspeakerGain(7, value);
+			WriteLog(state, "SET PARAMETER: Speaker 8 gain set to ", value);
+			break;
+
+		case PARAM_GET_MINDISTANCE:			
+			WriteLog(state, "SET PARAMETER: WARNING! Attempt to set PARAM_GET_MINDISTANCE, which is a read-only parameter: ", value);
 			break;
 
 		default:
@@ -663,6 +693,10 @@ namespace LoudspeakersSpatializer3DTI
 			*value = data->parameters[index];
 		if (valuestr != NULL)
 			valuestr[0] = 0;
+
+		if (index == PARAM_GET_MINDISTANCE)
+			*value = data->speakers->GetSpeakerSetMaximumDistance();
+
 		return UNITY_AUDIODSP_OK;
 	}
 
@@ -719,12 +753,26 @@ namespace LoudspeakersSpatializer3DTI
 		data->audioSource->UpdateBuffer(inMonoBuffer);
 		data->core.ProcessLoudspeakerAnechoic(outMultiChannelBuffer);		
 		
-		// Transform output buffer			
-		int i = 0;
+		// Transform output buffer, adding zeroed channels if necessary		
+		//int i = 0;
 		//bool temp = false;
-		for (auto it = outMultiChannelBuffer.begin(); it != outMultiChannelBuffer.end(); it++)
+		//for (auto it = outMultiChannelBuffer.begin(); it != outMultiChannelBuffer.end(); it++)
+		//{
+		//	outbuffer[i++] = *it;		
+		//}
+		size_t outBufferIndex = 0;
+		size_t coreOutIndex = 0;
+		for (int s = 0; s < length; s++)
 		{
-			outbuffer[i++] = *it;		
+			for (int c = 0; c < outchannels; c++)
+			{
+				if (data->loudSpeakersConf.GetSpeakersConfiguration().size() >= c)
+				{
+					outbuffer[outBufferIndex++] = outMultiChannelBuffer[coreOutIndex++];
+				}
+				else
+					outbuffer[outBufferIndex++] = 0.0f;
+			}
 		}
 
 		if (data->firstTime) {
