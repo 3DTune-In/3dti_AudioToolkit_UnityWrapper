@@ -95,6 +95,9 @@ public class API_3DTI_Spatializer : MonoBehaviour
     bool HighQualityModeILDLoaded = false;
     bool HighPerformanceModeILDLoaded = false;
 
+    // This is needed from Unity 2017
+    bool isInitialized = false;
+
     /////////////////////////////////////////////////////////////////////
 
     /// <summary>
@@ -102,7 +105,16 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>
     void Start ()
     {        
-        StartBinauralSpatializer();
+        //StartBinauralSpatializer();
+    }
+
+    void Update()
+    {
+        if (!isInitialized)
+        {
+            if (StartBinauralSpatializer())
+                isInitialized = true;
+        }
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -130,11 +142,11 @@ public class API_3DTI_Spatializer : MonoBehaviour
         }
 
         // Debug log:
-        if (!SendWriteDebugLog(debugLog, source))   return false;
+        if (!SendWriteDebugLog(debugLog, source)) return false;
 
         // Global setup:
-        if (!SetScaleFactor(scaleFactor, source))   return false;
-        if (!SendSourceIDs(source))               return false;
+        if (!SetScaleFactor(scaleFactor, source)) return false;
+        if (!SendSourceIDs(source)) return false;
 
         // Setup modules enabler:
         if (!SetupModulesEnabler(source)) return false;

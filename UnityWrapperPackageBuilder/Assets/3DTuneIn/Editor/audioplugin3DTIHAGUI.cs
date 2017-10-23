@@ -44,8 +44,10 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         // Initialization (first run)
         //if (!initDone)
         //{
-            // Get HA API instance (TO DO: Error check)
+            // Get HA API instance (TO DO: Error check)            
             HAAPI = GameObject.FindObjectOfType<API_3DTI_HA>();
+            if (HAAPI == null)
+                return false;
 
             // Setup styles
             Common3DTIGUI.InitStyles();

@@ -59,6 +59,8 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         //{
             // Get HL API instance (TO DO: Error check)
             HLAPI = GameObject.FindObjectOfType<API_3DTI_HL>();
+            if (HLAPI == null)
+                return false;
 
         // Send commands to plugin to set all parameters
         //InitializePlugin(plugin);
