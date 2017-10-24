@@ -62,6 +62,9 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             if (HLAPI == null)
                 return false;
 
+		// Setup styles
+        Common3DTIGUI.InitStyles();
+			
         // Send commands to plugin to set all parameters
         //InitializePlugin(plugin);
         //}
