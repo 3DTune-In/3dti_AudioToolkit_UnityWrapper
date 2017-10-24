@@ -74,6 +74,9 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     bool selectSource = false;
     AudioSource selectedSource;
 
+    // This is needed from Unity 2017
+    bool isInitialized = false;
+
     /////////////////////////////////////////////////////////////////////
 
     /// <summary>
@@ -81,7 +84,16 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     /// </summary>
     void Start()
     {
-        StartLoudSpeakersSpatializer();
+        //StartLoudSpeakersSpatializer();
+    }
+
+    void Update()
+    {
+        if (!isInitialized)
+        {
+            if (StartLoudSpeakersSpatializer())
+                isInitialized = true;
+        }
     }
 
     /////////////////////////////////////////////////////////////////////
