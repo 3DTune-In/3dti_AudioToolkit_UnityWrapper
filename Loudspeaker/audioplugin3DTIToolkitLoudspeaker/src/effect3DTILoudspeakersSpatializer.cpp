@@ -749,7 +749,8 @@ namespace LoudspeakersSpatializer3DTI
 
 		// Process!!
 		//CMultiChannelBuffer<float> outMultiChannelBuffer;
-		CMultiChannelBuffer<float> outMultiChannelBuffer(length * outchannels);		
+		//CMultiChannelBuffer<float> outMultiChannelBuffer(length * outchannels);		
+		CMultiChannelBuffer<float> outMultiChannelBuffer(length * data->loudSpeakersConf.GetSpeakersConfiguration().size());
 		data->audioSource->UpdateBuffer(inMonoBuffer);
 		data->core.ProcessLoudspeakerAnechoic(outMultiChannelBuffer);		
 		
@@ -766,7 +767,7 @@ namespace LoudspeakersSpatializer3DTI
 		{
 			for (int c = 0; c < outchannels; c++)
 			{
-				if (data->loudSpeakersConf.GetSpeakersConfiguration().size() >= c)
+				if (data->loudSpeakersConf.GetSpeakersConfiguration().size() > c)
 				{
 					outbuffer[outBufferIndex++] = outMultiChannelBuffer[coreOutIndex++];
 				}

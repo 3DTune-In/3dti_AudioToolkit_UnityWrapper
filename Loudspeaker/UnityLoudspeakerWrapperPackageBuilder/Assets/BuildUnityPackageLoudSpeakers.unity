@@ -38,11 +38,11 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641252, b: 0.574817, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.5748171, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 11
+  serializedVersion: 9
   m_GIWorkflowMode: 0
   m_GISettings:
     serializedVersion: 2
@@ -54,7 +54,7 @@ LightmapSettings:
     m_EnableBakedLightmaps: 1
     m_EnableRealtimeLightmaps: 1
   m_LightmapEditorSettings:
-    serializedVersion: 9
+    serializedVersion: 8
     m_Resolution: 2
     m_BakeResolution: 40
     m_TextureWidth: 1024
@@ -87,7 +87,7 @@ LightmapSettings:
     m_PVRFilteringAtrousNormalSigma: 1
     m_PVRFilteringAtrousPositionSigma: 1
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_ShadowMaskMode: 2
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -132,7 +132,7 @@ AudioSource:
   m_GameObject: {fileID: 73463297}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 24300001, guid: 02d04237d0308a14ea0c3b720849faae,
+  OutputAudioMixerGroup: {fileID: 24300001, guid: f13986cc3301ba344bab0941545606e9,
     type: 2}
   m_audioClip: {fileID: 8300000, guid: c5630708c841bac439c535c9acd1ec97, type: 3}
   m_PlayOnAwake: 1
@@ -303,7 +303,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 244518577}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.3, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -331,11 +331,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ae86054c4c60f64499f90860468396a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speakersConfigurationPreset: 2
-  scaleFactor: 3.7
-  modFarLPF: 0
-  modDistAtt: 0
-  magAnechoicAttenuation: -11.16
+  speakersConfigurationPreset: 1
+  scaleFactor: 1
+  modFarLPF: 1
+  modDistAtt: 1
+  magAnechoicAttenuation: -3
   magSoundSpeed: 343
   debugLog: 1
   structureSide: 1.48
@@ -354,12 +354,12 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
   speakerWeights:
-  - -1
-  - -1
-  - -1
-  - -1
-  - -1
-  - -1
+  - 0.16666667
+  - 0.16666667
+  - 0.16666667
+  - 0.16666667
+  - 0.16666667
+  - 0.16666667
 --- !u!1 &729632804
 GameObject:
   m_ObjectHideFlags: 0
@@ -386,7 +386,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 24300001, guid: f13986cc3301ba344bab0941545606e9,
     type: 2}
-  m_audioClip: {fileID: 8300000, guid: 34199fb0cfe54d943a5332cf2289ddd8, type: 3}
+  m_audioClip: {fileID: 8300000, guid: c5630708c841bac439c535c9acd1ec97, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
