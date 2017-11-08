@@ -13,9 +13,11 @@ using API_3DTI_Common;
 public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
 {
     // Access to the HA API
-    API_3DTI_HA HAAPI;
+    API_3DTI_HA HAAPI;    
 
-    //bool initDone = false;
+    // Start Play control
+    bool isStartingPlay = false;
+    bool playWasStarted = false;
 
     //The GUI name must be unique for each GUI, the one specified in PluginList.h
     public override string Name
@@ -55,6 +57,17 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
 
         //GUILayout.BeginArea(new Rect(10, 10, 100, 100));
 
+        // Check starting play
+        if (EditorApplication.isPlaying && !playWasStarted)
+        {
+            isStartingPlay = true;
+            playWasStarted = true;
+        }
+        if (!EditorApplication.isPlaying && playWasStarted)
+        {
+            playWasStarted = false;
+        }
+
         // DRAW CUSTOM GUI
         Common3DTIGUI.Show3DTILogo();
         Common3DTIGUI.ShowAboutButton();
@@ -66,7 +79,8 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
 
         //GUILayout.EndArea();
 
-        //initDone = true;
+        // End starting play
+        isStartingPlay = false;
 
         //return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG AND EXPOSING PARAMETERS)
         return false;     // DO NOT SHOW DEFAULT CONTROLS
@@ -78,7 +92,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     /// <param name="plugin"></param>
     public void DrawEars(IAudioEffectPlugin plugin)
     {
-        Common3DTIGUI.BeginLeftColumn(plugin, ref HAAPI.PARAM_PROCESS_LEFT_ON, "Left ear", "Enable left ear hearing aid", new List<string> { "HAL" });
+        Common3DTIGUI.BeginLeftColumn(plugin, ref HAAPI.PARAM_PROCESS_LEFT_ON, "Left ear", "Enable left ear hearing aid", new List<string> { "HAL" }, isStartingPlay);
         {
             GUILayout.BeginHorizontal();
             Common3DTIGUI.AddLabelToParameterGroup("Overall gain");
@@ -90,7 +104,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         }
         Common3DTIGUI.EndLeftColumn();
 
-        Common3DTIGUI.BeginRightColumn(plugin, ref HAAPI.PARAM_PROCESS_RIGHT_ON, "Right ear", "Enable right ear hearing aid", new List<string> { "HAR" });        
+        Common3DTIGUI.BeginRightColumn(plugin, ref HAAPI.PARAM_PROCESS_RIGHT_ON, "Right ear", "Enable right ear hearing aid", new List<string> { "HAR" }, isStartingPlay);        
         {
         GUILayout.BeginHorizontal();            
             Common3DTIGUI.AddLabelToParameterGroup("Overall gain");
@@ -117,7 +131,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
             // Global EQ Controls
             Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HAAPI.PARAM_EQ_LPFCUTOFF_HZ, "LPF", "LPF CutOff", false, "Hz", "Set cutoff frequency of global Low Pass Filter");
             Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HAAPI.PARAM_EQ_HPFCUTOFF_HZ, "HPF", "HPF CutOff", false, "Hz", "Set cutoff frequency of global High Pass Filter");
-            Common3DTIGUI.CreatePluginToggle(plugin, ref HAAPI.PARAM_DYNAMICEQ_INTERPOLATION_ON, "Interpolation", "EQINT", "Enable interpolation of dynamic equalizer curves");
+            Common3DTIGUI.CreatePluginToggle(plugin, ref HAAPI.PARAM_DYNAMICEQ_INTERPOLATION_ON, "Interpolation", "EQINT", "Enable interpolation of dynamic equalizer curves", isStartingPlay);
 
             // Left ear
             Common3DTIGUI.BeginLeftColumn(HAAPI.PARAM_PROCESS_LEFT_ON);
@@ -160,12 +174,12 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
                 Common3DTIGUI.BeginSubColumn("Curve " + (i+1).ToString());
                 {
                     Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM_ARRAY[i, 0], "DEQL" + i.ToString() + "B0" + Common3DTIGUI.GetEarLetter(whichear), "125Hz", false, "dB", "Set gain for 125Hz band of EQ curve " + (i+1).ToString() + " in " + Common3DTIGUI.GetEarName(whichear) + " ear", true);
-                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM_ARRAY[i, 1], "DEQL" + i.ToString() + "B1" + Common3DTIGUI.GetEarLetter(whichear), "250Hz", false, "dB", "Set gain for 250Hz band of EQ curve " + (i+1).ToString() + " in " + Common3DTIGUI.GetEarName(whichear) + " ear", true);
-                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM_ARRAY[i, 2], "DEQL" + i.ToString() + "B2" + Common3DTIGUI.GetEarLetter(whichear), "500Hz", false, "dB", "Set gain for 500Hz band of EQ curve " + (i+1).ToString() + " in " + Common3DTIGUI.GetEarName(whichear) + " ear", true);
-                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM_ARRAY[i, 3], "DEQL" + i.ToString() + "B3" + Common3DTIGUI.GetEarLetter(whichear), "1kHz", false, "dB", "Set gain for 1KHz band of EQ curve " + (i+1).ToString() + " in " + Common3DTIGUI.GetEarName(whichear) + " ear", true);
-                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM_ARRAY[i, 4], "DEQL" + i.ToString() + "B4" + Common3DTIGUI.GetEarLetter(whichear), "2kHz", false, "dB", "Set gain for 2KHz band of EQ curve " + (i+1).ToString() + " in " + Common3DTIGUI.GetEarName(whichear) + " ear", true);
-                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM_ARRAY[i, 5], "DEQL" + i.ToString() + "B5" + Common3DTIGUI.GetEarLetter(whichear), "4kHz", false, "dB", "Set gain for 4KHz band of EQ curve " + (i+1).ToString() + " in " + Common3DTIGUI.GetEarName(whichear) + " ear", true);
-                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM_ARRAY[i, 6], "DEQL" + i.ToString() + "B6" + Common3DTIGUI.GetEarLetter(whichear), "8kHz", false, "dB", "Set gain for 8KHz band of EQ curve " + (i+1).ToString() + " in " + Common3DTIGUI.GetEarName(whichear) + " ear", true);
+                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM_ARRAY[i, 1], "DEQL" + i.ToString() + "B1" + Common3DTIGUI.GetEarLetter(whichear), "250Hz", false, "dB", "Set gain for 250Hz band of EQ curve " + (i + 1).ToString() + " in " + Common3DTIGUI.GetEarName(whichear) + " ear", true);
+                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM_ARRAY[i, 2], "DEQL" + i.ToString() + "B2" + Common3DTIGUI.GetEarLetter(whichear), "500Hz", false, "dB", "Set gain for 500Hz band of EQ curve " + (i + 1).ToString() + " in " + Common3DTIGUI.GetEarName(whichear) + " ear", true);
+                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM_ARRAY[i, 3], "DEQL" + i.ToString() + "B3" + Common3DTIGUI.GetEarLetter(whichear), "1kHz", false, "dB", "Set gain for 1KHz band of EQ curve " + (i + 1).ToString() + " in " + Common3DTIGUI.GetEarName(whichear) + " ear", true);
+                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM_ARRAY[i, 4], "DEQL" + i.ToString() + "B4" + Common3DTIGUI.GetEarLetter(whichear), "2kHz", false, "dB", "Set gain for 2KHz band of EQ curve " + (i + 1).ToString() + " in " + Common3DTIGUI.GetEarName(whichear) + " ear", true);
+                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM_ARRAY[i, 5], "DEQL" + i.ToString() + "B5" + Common3DTIGUI.GetEarLetter(whichear), "4kHz", false, "dB", "Set gain for 4KHz band of EQ curve " + (i + 1).ToString() + " in " + Common3DTIGUI.GetEarName(whichear) + " ear", true);
+                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM_ARRAY[i, 6], "DEQL" + i.ToString() + "B6" + Common3DTIGUI.GetEarLetter(whichear), "8kHz", false, "dB", "Set gain for 8KHz band of EQ curve " + (i + 1).ToString() + " in " + Common3DTIGUI.GetEarName(whichear) + " ear", true);
                 }
                 Common3DTIGUI.EndSubColumn();
             }
@@ -216,9 +230,9 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         Common3DTIGUI.AddLabelToParameterGroup("Mid");
         Common3DTIGUI.AddLabelToParameterGroup("High");
         {
-            Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HAAPI.PARAM_TONE_LOW_LEFT, "TONLO" + Common3DTIGUI.GetEarLetter(whichear), "Low", false, "dB", "Set additional gain for low frequencies (125Hz, 250Hz and 500Hz) in " + Common3DTIGUI.GetEarName(whichear) + " ear");
-            Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HAAPI.PARAM_TONE_MID_LEFT, "TONMI" + Common3DTIGUI.GetEarLetter(whichear), "Mid", false, "dB", "Set additional gain for medium frequencies (1KHz and 2KHz) in " + Common3DTIGUI.GetEarName(whichear) + " ear");
-            Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HAAPI.PARAM_TONE_HIGH_LEFT, "TONHI" + Common3DTIGUI.GetEarLetter(whichear), "High", false, "dB", "Set additional gain for high frequencies (4Khz and 8KHz) in " + Common3DTIGUI.GetEarName(whichear) + " ear");
+            Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAMLOW, "TONLO" + Common3DTIGUI.GetEarLetter(whichear), "Low", false, "dB", "Set additional gain for low frequencies (125Hz, 250Hz and 500Hz) in " + Common3DTIGUI.GetEarName(whichear) + " ear");
+            Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAMMID, "TONMI" + Common3DTIGUI.GetEarLetter(whichear), "Mid", false, "dB", "Set additional gain for medium frequencies (1KHz and 2KHz) in " + Common3DTIGUI.GetEarName(whichear) + " ear");
+            Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAMHIGH, "TONHI" + Common3DTIGUI.GetEarLetter(whichear), "High", false, "dB", "Set additional gain for high frequencies (4Khz and 8KHz) in " + Common3DTIGUI.GetEarName(whichear) + " ear");
         }
         Common3DTIGUI.EndSubColumn();
     }
@@ -248,7 +262,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         Common3DTIGUI.BeginSubColumn("Normalization");
         {            
             GUILayout.BeginVertical();
-            Common3DTIGUI.CreatePluginToggle(plugin, ref PARAM, "Switch Normalization", "NORMON" + Common3DTIGUI.GetEarLetter(whichear), "Enable normalization of dynamic equalizer curves in " + Common3DTIGUI.GetEarName(whichear) + " ear, limiting the maximum gain to 20dB");
+            Common3DTIGUI.CreatePluginToggle(plugin, ref PARAM, "Switch Normalization", "NORMON" + Common3DTIGUI.GetEarLetter(whichear), "Enable normalization of dynamic equalizer curves in " + Common3DTIGUI.GetEarName(whichear) + " ear, limiting the maximum gain to 20dB", isStartingPlay);
             if (PARAM)
             {
                 float offset;
@@ -269,8 +283,8 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         Common3DTIGUI.BeginSection("QUANTIZATION NOISE");
         Common3DTIGUI.AddLabelToParameterGroup("Number of Bits");
         {
-            Common3DTIGUI.CreatePluginToggle(plugin, ref HAAPI.PARAM_NOISE_BEFORE_ON, "Quantization Before", "NOISEBEF", "Enable quantization noise before HA process");
-            Common3DTIGUI.CreatePluginToggle(plugin, ref HAAPI.PARAM_NOISE_AFTER_ON, "Quantization After", "NOISEAFT", "Enable quantization noise after HA process");
+            Common3DTIGUI.CreatePluginToggle(plugin, ref HAAPI.PARAM_NOISE_BEFORE_ON, "Quantization Before", "NOISEBEF", "Enable quantization noise before HA process", isStartingPlay);
+            Common3DTIGUI.CreatePluginToggle(plugin, ref HAAPI.PARAM_NOISE_AFTER_ON, "Quantization After", "NOISEAFT", "Enable quantization noise after HA process", isStartingPlay);
             float FloatNBits = (float)HAAPI.PARAM_NOISE_NUMBITS;
             Common3DTIGUI.CreatePluginParameterSlider(plugin, ref FloatNBits, "NOISEBITS", "Number of Bits", false, "", "Set number of bits for quantization noise");
             HAAPI.PARAM_NOISE_NUMBITS = (int)FloatNBits;
@@ -286,7 +300,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     {
         Common3DTIGUI.BeginSection("DYNAMIC LIMITER");
         {
-            Common3DTIGUI.CreatePluginToggle(plugin, ref HAAPI.PARAM_LIMITER_ON, "Switch Limiter", "LIMITON", "Enable dynamic limiter after HA process");
+            Common3DTIGUI.CreatePluginToggle(plugin, ref HAAPI.PARAM_LIMITER_ON, "Switch Limiter", "LIMITON", "Enable dynamic limiter after HA process", isStartingPlay);
         }
         Common3DTIGUI.EndSection();
     }
