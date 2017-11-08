@@ -74,6 +74,9 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     bool selectSource = false;
     AudioSource selectedSource;
 
+    // This is needed from Unity 2017
+    bool isInitialized = false;
+
     /////////////////////////////////////////////////////////////////////
 
     /// <summary>
@@ -81,7 +84,16 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     /// </summary>
     void Start()
     {
-        StartLoudSpeakersSpatializer();
+        //StartLoudSpeakersSpatializer();
+    }
+
+    void Update()
+    {
+        if (!isInitialized)
+        {
+            if (StartLoudSpeakersSpatializer())
+                isInitialized = true;
+        }
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -346,28 +358,28 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
             case T_LoudSpeakerConfigurationPreset.LS_PRESET_CUBE:
 
                 // Front Left Down speaker                
-                speakerPositions[0] = new Vector3(-0.5f * structureSide, -0.5f * structureSide, 0.5f * structureSide) + speakerOffsets[0];
+                speakerPositions[2] = new Vector3(-0.5f * structureSide, -0.5f * structureSide, 0.5f * structureSide) + speakerOffsets[0];
 
                 // Front Right Down speaker
-                speakerPositions[1] = new Vector3(0.5f * structureSide, -0.5f * structureSide, 0.5f * structureSide) + speakerOffsets[1];
+                speakerPositions[3] = new Vector3(0.5f * structureSide, -0.5f * structureSide, 0.5f * structureSide) + speakerOffsets[1];
 
                 // Rear Left Down speaker
-                speakerPositions[2] = new Vector3(-0.5f * structureSide, -0.5f * structureSide, -0.5f * structureSide) + speakerOffsets[2];
+                speakerPositions[6] = new Vector3(-0.5f * structureSide, -0.5f * structureSide, -0.5f * structureSide) + speakerOffsets[2];
 
                 // Rear Right Down speaker
-                speakerPositions[3] = new Vector3(0.5f * structureSide, -0.5f * structureSide, -0.5f * structureSide) + speakerOffsets[3];
+                speakerPositions[7] = new Vector3(0.5f * structureSide, -0.5f * structureSide, -0.5f * structureSide) + speakerOffsets[3];
 
                 // Front Left Up speaker
-                speakerPositions[4] = new Vector3(-0.5f * structureSide, 0.5f * structureSide, 0.5f * structureSide) + speakerOffsets[4];
+                speakerPositions[0] = new Vector3(-0.5f * structureSide, 0.5f * structureSide, 0.5f * structureSide) + speakerOffsets[4];
 
                 // Front Right Up speaker
-                speakerPositions[5] = new Vector3(0.5f * structureSide, 0.5f * structureSide, 0.5f * structureSide) + speakerOffsets[5];
+                speakerPositions[1] = new Vector3(0.5f * structureSide, 0.5f * structureSide, 0.5f * structureSide) + speakerOffsets[5];
 
                 // Rear Left Up speaker
-                speakerPositions[6] = new Vector3(-0.5f * structureSide, 0.5f * structureSide, -0.5f * structureSide) + speakerOffsets[6];
+                speakerPositions[4] = new Vector3(-0.5f * structureSide, 0.5f * structureSide, -0.5f * structureSide) + speakerOffsets[6];
 
                 // Rear Right Up speaker
-                speakerPositions[7] = new Vector3(0.5f * structureSide, 0.5f * structureSide, -0.5f * structureSide) + speakerOffsets[7];
+                speakerPositions[5] = new Vector3(0.5f * structureSide, 0.5f * structureSide, -0.5f * structureSide) + speakerOffsets[7];
 
                 break;
 

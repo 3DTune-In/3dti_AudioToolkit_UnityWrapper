@@ -133,7 +133,7 @@ public class Common3DTIGUI
             if (action != null)
                 action.Invoke();
         }
-
+        
         // Text field with units
         string valueString = GUILayout.TextField(variable.ToString(decimalDigits), GUILayout.ExpandWidth(false));
         GUILayout.Label(units, GUILayout.ExpandWidth(false));
@@ -349,11 +349,11 @@ public class Common3DTIGUI
     /// <summary>
     ///  Auxiliary function for creating toogle input
     /// </summary>    
-    public static bool CreateToggle(ref bool boolvar, string toggleText, string tooltip)
+    public static bool CreateToggle(ref bool boolvar, string toggleText, string tooltip, bool forceChange)
     {
         bool oldvar = boolvar;
         boolvar = GUILayout.Toggle(boolvar, new GUIContent(toggleText, tooltip), GUILayout.ExpandWidth(false));
-        return (oldvar != boolvar);
+        return (oldvar != boolvar) || forceChange;
     }
 
     ///// <summary>
@@ -434,12 +434,12 @@ public class Common3DTIGUI
     /// <param name="enable"></param>
     /// <param name="title"></param>
     /// <param name="switchParameters"></param>
-    public static bool BeginLeftColumn(IAudioEffectPlugin plugin, ref bool enable, string title, string tooltip, List<string> switchParameters, bool doExpandWidth = false)
+    public static bool BeginLeftColumn(IAudioEffectPlugin plugin, ref bool enable, string title, string tooltip, List<string> switchParameters, bool forceChange, bool doExpandWidth = false)
     {
         ResetParameterGroup();
         GUILayout.BeginHorizontal(GUILayout.ExpandWidth(doExpandWidth));                     // Begin section (ear pair)             
             GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(doExpandWidth));  // Begin column (left ear)                               
-                bool changed = CreateToggle(ref enable, title, tooltip);
+                bool changed = CreateToggle(ref enable, title, tooltip, forceChange);
                 if (changed)
                 { 
                     foreach (string switchParameter in switchParameters)
@@ -470,11 +470,11 @@ public class Common3DTIGUI
     /// <param name="enable"></param>
     /// <param name="title"></param>
     /// <param name="switchParameters"></param>
-    public static bool BeginRightColumn(IAudioEffectPlugin plugin, ref bool enable, string title, string tooltip, List<string> switchParameters, bool doExpandWidth=false)
+    public static bool BeginRightColumn(IAudioEffectPlugin plugin, ref bool enable, string title, string tooltip, List<string> switchParameters, bool forceChange, bool doExpandWidth=false)
     {
         ResetParameterGroup();
             GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(doExpandWidth)); // Begin column (right ear)               
-                bool changed = CreateToggle(ref enable, title, tooltip);
+                bool changed = CreateToggle(ref enable, title, tooltip, forceChange);
                 if (changed)
                 {
                     foreach (string switchParameter in switchParameters)
@@ -665,25 +665,23 @@ public class Common3DTIGUI
     public static bool CreateCompactFloatSlider(ref float variable, string name, string decimalDigits, string units, string tooltip, float minValue, float maxValue)
     {
         string valueString;
-        float previousVar;
+        float previousVar = variable;
 
         GUILayout.BeginVertical(GUILayout.ExpandWidth(false));
         {
             GUILayout.BeginHorizontal();
             {
                 GUILayout.Label(new GUIContent(name, tooltip));
-                valueString = variable.ToString(decimalDigits);
-                valueString = GUILayout.TextField(valueString, GUILayout.ExpandWidth(false));
+                valueString = GUILayout.TextField(variable.ToString(decimalDigits), GUILayout.ExpandWidth(false));
                 GUILayout.Label(units, GUILayout.ExpandWidth(false));
+
+                float newValue;
+                bool valid = float.TryParse(valueString, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out newValue);
+                if (valid)
+                    variable = newValue;
             }
             GUILayout.EndHorizontal();
-
-            float newValue;
-            bool valid = float.TryParse(valueString, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out newValue);
-            if (valid)
-                variable = newValue;
-
-            previousVar = variable;
+            
             variable = GUILayout.HorizontalSlider(variable, minValue, maxValue);
         }
         GUILayout.EndVertical();
@@ -694,9 +692,9 @@ public class Common3DTIGUI
     /// <summary>
     ///  Auxiliary function for creating toogle input
     /// </summary>    
-    public static void CreatePluginToggle(IAudioEffectPlugin plugin, ref bool boolvar, string toggleText, string switchParameter, string tooltip)
+    public static void CreatePluginToggle(IAudioEffectPlugin plugin, ref bool boolvar, string toggleText, string switchParameter, string tooltip, bool forceChange)
     {        
-        if (CreateToggle(ref boolvar, toggleText, tooltip))        
+        if (CreateToggle(ref boolvar, toggleText, tooltip, forceChange))        
         {            
             plugin.SetFloatParameter(switchParameter, CommonFunctions.Bool2Float(boolvar));
         }
