@@ -70,7 +70,11 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
 
         // DRAW CUSTOM GUI
         Common3DTIGUI.Show3DTILogo();
+        Common3DTIGUI.ShowGUITitle("HEARING AID SIMULATION");
+        Common3DTIGUI.SingleSpace();
         Common3DTIGUI.ShowAboutButton();
+        Common3DTIGUI.SingleSpace();        
+
         DrawEars(plugin);
         DrawDynamicEq(plugin);
         DrawNoiseGenerator(plugin);
@@ -92,7 +96,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     /// <param name="plugin"></param>
     public void DrawEars(IAudioEffectPlugin plugin)
     {
-        Common3DTIGUI.BeginLeftColumn(plugin, ref HAAPI.PARAM_PROCESS_LEFT_ON, "Left ear", "Enable left ear hearing aid", new List<string> { "HAL" }, isStartingPlay);
+        Common3DTIGUI.BeginLeftColumn(plugin, ref HAAPI.PARAM_PROCESS_LEFT_ON, "LEFT EAR", "Enable left ear hearing aid", new List<string> { "HAL" }, isStartingPlay);
         {
             GUILayout.BeginHorizontal();
             Common3DTIGUI.AddLabelToParameterGroup("Overall gain");
@@ -104,7 +108,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         }
         Common3DTIGUI.EndLeftColumn();
 
-        Common3DTIGUI.BeginRightColumn(plugin, ref HAAPI.PARAM_PROCESS_RIGHT_ON, "Right ear", "Enable right ear hearing aid", new List<string> { "HAR" }, isStartingPlay);        
+        Common3DTIGUI.BeginRightColumn(plugin, ref HAAPI.PARAM_PROCESS_RIGHT_ON, "RIGHT EAR", "Enable right ear hearing aid", new List<string> { "HAR" }, isStartingPlay);        
         {
         GUILayout.BeginHorizontal();            
             Common3DTIGUI.AddLabelToParameterGroup("Overall gain");

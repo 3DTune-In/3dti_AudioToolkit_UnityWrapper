@@ -10,6 +10,7 @@ public class Common3DTIGUI
 {
     static int logoheight = 59;
     static int earsize = 40;
+    static int mainTitleSize = 14;
     static float singleSpace = 5.0f;
     static float spaceBetweenSections = 5.0f;
     static float spaceBetweenColumns = 5.0f;
@@ -25,6 +26,7 @@ public class Common3DTIGUI
     static GUIStyle rightColumnStyle;
     static GUIStyle intFieldStyle;
     static GUIStyle aboutButtonStyle;
+    static GUIStyle bigTitleStyle;
 
     /// <summary>
     /// Init all styles
@@ -34,6 +36,11 @@ public class Common3DTIGUI
         titleBoxStyle = new GUIStyle(GUI.skin.box);
         titleBoxStyle.normal.textColor = EditorStyles.label.normal.textColor;
         titleBoxStyle.fontStyle = FontStyle.Bold;
+
+        bigTitleStyle = new GUIStyle(GUI.skin.box);
+        bigTitleStyle.normal.textColor = EditorStyles.label.normal.textColor;
+        bigTitleStyle.fontStyle = FontStyle.Bold;
+        bigTitleStyle.fontSize = mainTitleSize;
 
         subtitleBoxStyle = new GUIStyle(EditorStyles.label);
         subtitleBoxStyle.fontStyle = FontStyle.Bold;
@@ -92,6 +99,11 @@ public class Common3DTIGUI
             if (GUILayout.Button("About 3D-Tune-In Toolkit", aboutButtonStyle, GUILayout.ExpandWidth(true)))
                 About3DTI.ShowAboutWindow();
         EditorGUILayout.EndHorizontal();  
+    }
+
+    public static void ShowGUITitle(string title)
+    {        
+        GUILayout.Label(title, bigTitleStyle, GUILayout.ExpandWidth(true));
     }
 
     /// <summary>
@@ -347,6 +359,17 @@ public class Common3DTIGUI
     }
 
     /// <summary>
+    /// Draw one button 
+    /// </summary>
+    /// <param name="titleText"></param>
+    /// <param name="tooltip"></param>
+    /// <returns>true when clicked</returns>
+    public static bool CreateButton(string titleText, string tooltip)
+    {
+        return GUILayout.Button(new GUIContent(titleText, tooltip), GUI.skin.button, GUILayout.ExpandWidth(false));            
+    }
+
+    /// <summary>
     ///  Auxiliary function for creating toogle input
     /// </summary>    
     public static bool CreateToggle(ref bool boolvar, string toggleText, string tooltip, bool forceChange)
@@ -567,6 +590,18 @@ public class Common3DTIGUI
                 earTexture = Resources.Load("RightEarLightAlpha") as Texture;
         }
         GUILayout.Box(earTexture, earStyle, GUILayout.Width(earsize), GUILayout.Height(earsize), GUILayout.ExpandWidth(false));        
+    }
+
+    /// <summary>
+    /// Draw an image from 3DTuneIn/Resouces folder
+    /// </summary>
+    /// <param name="imageFileName"></param>
+    public static void DrawImage(string imageFileName, float width, float height)
+    {
+        Texture imageTexture;
+        GUIStyle imageStyle = new GUIStyle(EditorStyles.label);            
+        imageTexture = Resources.Load(imageFileName) as Texture;              
+        GUILayout.Box(imageTexture, imageStyle, GUILayout.Width(width), GUILayout.Height(height), GUILayout.ExpandWidth(false));
     }
 
     /// <summary>

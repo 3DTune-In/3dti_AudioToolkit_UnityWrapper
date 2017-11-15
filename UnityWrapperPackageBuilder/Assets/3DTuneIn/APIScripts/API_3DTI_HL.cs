@@ -24,21 +24,24 @@ public class API_3DTI_HL : MonoBehaviour
     public AudioMixer hlMixer;  // Drag&drop here the HAHL_3DTI_Mixer
 
     // Public constant and type definitions 
-    public static readonly ReadOnlyCollection<float> AUDIOMETRY_PRESET_MILD = new ReadOnlyCollection<float>(new[] { 7f, 7f, 12f, 15f, 22f, 25f, 25f, 25f, 25f });
-    public static readonly ReadOnlyCollection<float> AUDIOMETRY_PRESET_MODERATE = new ReadOnlyCollection<float>(new[] { 22f, 22f, 27f, 30f, 37f, 40f, 40f, 40f, 40f });
-    public static readonly ReadOnlyCollection<float> AUDIOMETRY_PRESET_SEVERE = new ReadOnlyCollection<float>(new[] { 47f, 47f, 52f, 55f, 62f, 65f, 65f, 65f, 65f });
-    public static readonly ReadOnlyCollection<float> AUDIOMETRY_PRESET_NORMAL = new ReadOnlyCollection<float>(new[] { 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f });        
+    public static readonly ReadOnlyCollection<float> AUDIOMETRY_TEMPLATE_MILD = new ReadOnlyCollection<float>(new[] { 7f, 7f, 12f, 15f, 22f, 25f, 25f, 25f, 25f });
+    public static readonly ReadOnlyCollection<float> AUDIOMETRY_TEMPLATE_MODERATE = new ReadOnlyCollection<float>(new[] { 22f, 22f, 27f, 30f, 37f, 40f, 40f, 40f, 40f });
+    public static readonly ReadOnlyCollection<float> AUDIOMETRY_TEMPLATE_SEVERE = new ReadOnlyCollection<float>(new[] { 47f, 47f, 52f, 55f, 62f, 65f, 65f, 65f, 65f });
+    public static readonly ReadOnlyCollection<float> AUDIOMETRY_TEMPLATE_NORMAL = new ReadOnlyCollection<float>(new[] { 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f });        
     public enum T_HLBand { HZ_62 =0, HZ_125 =1, HZ_250 =2, HZ_500 = 3, HZ_1K = 4, HZ_2K = 5, HZ_4K = 6, HZ_8K =7, HZ_16K =8 };
     public const int NUM_HL_BANDS = 9;
-    public enum T_HLTemporalDistortionBandUpperLimit { HZ_UL_200 =0, HZ_UL_400 =1, HZ_UL_800 =2, HZ_UL_1600 =3, HZ_UL_3200 =4, HZ_UL_6400 =5, HZ_UL_WRONG =-1 };
+    public enum T_HLTemporalDistortionBandUpperLimit { HZ_UL_200 =0, HZ_UL_400 =1, HZ_UL_800 =2, HZ_UL_1600 =3, HZ_UL_3200 =4, HZ_UL_6400 =5, HZ_UL_12800 =6, HZ_UL_WRONG =-1 };
+    public enum T_HLClassificationScaleCurve {HL_CS_UNDEFINED = -1, HL_CS_NOLOSS = 0, HL_CS_A = 1, HL_CS_B = 2, HL_CS_C = 3, HL_CS_D = 4, HL_CS_E = 5, HL_CS_F = 6,
+                                              HL_CS_G = 7, HL_CS_H = 8, HL_CS_I = 9, HL_CS_J = 10, HL_CS_K = 11};  
+    public enum T_HLTemplate { HL_TEMPLATE_NORMAL =0, HL_TEMPLATE_MILD =1, HL_TEMPLATE_MODERATE =2, HL_TEMPLATE_SEVERE =3, HL_TEMPLATE_CUSTOM =-1};  
 
     // Internal constants
     const float DEFAULT_CALIBRATION = 100.0f;
     const float DEFAULT_ATTACK = 20.0f;
     const float DEFAULT_RELEASE = 100.0f;
-    const float DEFAULT_TA_BAND = 1600.0f;
-    const float DEFAULT_TA_POWER = 0.0f;
-    const float DEFAULT_TA_CUTOFF = 500.0f;
+    const T_HLTemporalDistortionBandUpperLimit DEFAULT_TA_BANDUPPERLIMIT = T_HLTemporalDistortionBandUpperLimit.HZ_UL_1600;
+    const float DEFAULT_TA_WHITENOISEPOWER = 0.0f;
+    const float DEFAULT_TA_BANDWIDTH = 500.0f;
     const int DEFAULT_FS_SIZE = 1;
     const float DEFAULT_FS_HZ = 0.0f;
 
@@ -71,17 +74,17 @@ public class API_3DTI_HL : MonoBehaviour
     [HideInInspector]
     public bool TA_RIGHT_ON = false;                        // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public float PARAM_LEFT_TA_BAND = DEFAULT_TA_BAND;      // For internal use, DO NOT USE IT DIRECTLY
+    public T_HLTemporalDistortionBandUpperLimit PARAM_LEFT_TA_BANDUPPERLIMIT = DEFAULT_TA_BANDUPPERLIMIT;      // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public float PARAM_RIGHT_TA_BAND = DEFAULT_TA_BAND;     // For internal use, DO NOT USE IT DIRECTLY
+    public T_HLTemporalDistortionBandUpperLimit PARAM_RIGHT_TA_BANDUPPERLIMIT = DEFAULT_TA_BANDUPPERLIMIT;     // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public float PARAM_LEFT_TA_POWER = DEFAULT_TA_POWER;    // For internal use, DO NOT USE IT DIRECTLY
+    public float PARAM_LEFT_TA_WHITENOISEPOWER = DEFAULT_TA_WHITENOISEPOWER;    // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public float PARAM_RIGHT_TA_POWER = DEFAULT_TA_POWER;   // For internal use, DO NOT USE IT DIRECTLY
+    public float PARAM_RIGHT_TA_WHITENOISEPOWER = DEFAULT_TA_WHITENOISEPOWER;   // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public float PARAM_LEFT_TA_CUTOFF = DEFAULT_TA_CUTOFF;  // For internal use, DO NOT USE IT DIRECTLY
+    public float PARAM_LEFT_TA_BANDWIDTH = DEFAULT_TA_BANDWIDTH;  // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
-    public float PARAM_RIGHT_TA_CUTOFF = DEFAULT_TA_CUTOFF; // For internal use, DO NOT USE IT DIRECTLY
+    public float PARAM_RIGHT_TA_BANDWIDTH = DEFAULT_TA_BANDWIDTH; // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
     public float PARAM_TA_LRSYNC = 0.0f;                    // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
@@ -110,30 +113,19 @@ public class API_3DTI_HL : MonoBehaviour
     public float PARAM_RIGHT_FS_DOWN_HZ = DEFAULT_FS_HZ;      // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
     public float PARAM_RIGHT_FS_UP_HZ = DEFAULT_FS_HZ;      // For internal use, DO NOT USE IT DIRECTLY
+    [HideInInspector]
+    public T_HLClassificationScaleCurve PARAM_CLASSIFICATION_CURVE_LEFT = T_HLClassificationScaleCurve.HL_CS_NOLOSS;      // For internal use, DO NOT USE IT DIRECTLY
+    [HideInInspector]
+    public int PARAM_CLASSIFICATION_SEVERITY_LEFT = 0;      // For internal use, DO NOT USE IT DIRECTLY
+    [HideInInspector]
+    public T_HLClassificationScaleCurve PARAM_CLASSIFICATION_CURVE_RIGHT = T_HLClassificationScaleCurve.HL_CS_NOLOSS;     // For internal use, DO NOT USE IT DIRECTLY
+    [HideInInspector]       
+    public int PARAM_CLASSIFICATION_SEVERITY_RIGHT = 0;     // For internal use, DO NOT USE IT DIRECTLY
 
     ///////////////////////////////////////
-    // BASIC API
+    // GLOBAL SWITCH
     ///////////////////////////////////////
     
-    /// <summary>
-    /// Set audiometry preset for one ear
-    /// </summary>
-    /// <param name="ear"></param>
-    /// <param name="preset ({AUDIOGRAM_PRESET_MILD, AUDIOGRAM_PRESET_MODERATE, AUDIOGRAM_PRESET_SEVERE, AUDIOGRAM_PRESET_NORMAL})"></param>
-    /// <returns></returns>    
-    public bool SetAudiometryPreset(T_ear ear, ReadOnlyCollection<float> presetAudiometry)
-    {
-        // Both ears
-        if (ear == T_ear.BOTH)
-        {
-            if (!SetAudiometryPreset(T_ear.LEFT, presetAudiometry)) return false;
-            return SetAudiometryPreset(T_ear.RIGHT, presetAudiometry);
-        }
-
-        List<float> hearingLevels = new List<float>(presetAudiometry); 
-        return SetAudiometry(ear, hearingLevels);
-    }
-
     /// <summary>
     /// Enable hearing loss for one ear
     /// </summary>
@@ -197,8 +189,48 @@ public class API_3DTI_HL : MonoBehaviour
     }
 
     ///////////////////////////////////////
-    // NON-LINEAR ATTENUATION (MULTIBAND EXPANDER)
+    // AUDIOMETRY 
     ///////////////////////////////////////
+
+    /// <summary>
+    /// Set audiometry template for one ear
+    /// </summary>
+    /// <param name="ear"></param>
+    /// <param name="template ({HL_TEMPLATE_NORMAL, HL_TEMPLATE_MILD, HL_TEMPLATE_MODERATE, HL_TEMPLATE_SEVERE})"></param>
+    /// <returns></returns>        
+    public bool SetAudiometryFromTemplate(T_ear ear, T_HLTemplate template)
+    {
+        // Both ears
+        if (ear == T_ear.BOTH)
+        {
+            if (!SetAudiometryFromTemplate(T_ear.LEFT, template)) return false;
+            return SetAudiometryFromTemplate(T_ear.RIGHT, template);
+        }
+
+        // Get template data from hardcoded ready only collections
+        ReadOnlyCollection<float> templateCollection;
+        switch (template)
+        {
+            case T_HLTemplate.HL_TEMPLATE_NORMAL:
+                templateCollection = AUDIOMETRY_TEMPLATE_NORMAL;
+                break;
+            case T_HLTemplate.HL_TEMPLATE_MILD:
+                templateCollection = AUDIOMETRY_TEMPLATE_MILD;
+                break;
+            case T_HLTemplate.HL_TEMPLATE_MODERATE:
+                templateCollection = AUDIOMETRY_TEMPLATE_MODERATE;
+                break;
+            case T_HLTemplate.HL_TEMPLATE_SEVERE:
+                templateCollection = AUDIOMETRY_TEMPLATE_SEVERE;
+                break;
+            default:
+                return false;
+        }
+
+        // Set audiometry from read only collection data
+        List<float> hearingLevels = new List<float>(templateCollection); 
+        return SetAudiometry(ear, hearingLevels);
+    }
 
     /// <summary>
     /// Set all hearing loss levels (full audiometry) for one ear
@@ -208,7 +240,7 @@ public class API_3DTI_HL : MonoBehaviour
     /// <returns></returns>
     public bool SetAudiometry(T_ear ear, List<float> hearingLevels)
     {
-        for (int b=0; b < hearingLevels.Count; b++)
+        for (int b = 0; b < hearingLevels.Count; b++)
         {
             if (!SetHearingLevel(ear, b, hearingLevels[b])) return false;
         }
@@ -235,7 +267,7 @@ public class API_3DTI_HL : MonoBehaviour
             if (!SetHearingLevel(T_ear.LEFT, band, hearingLevel)) return false;
             return SetHearingLevel(T_ear.RIGHT, band, hearingLevel);
         }
-        
+
         // Set internal variables and build parameter string
         string paramName = "HL3DTI_HL_Band_" + band.ToString() + "_";
         if (ear == T_ear.LEFT)
@@ -252,6 +284,65 @@ public class API_3DTI_HL : MonoBehaviour
         // Send command
         return hlMixer.SetFloat(paramName, hearingLevel);
     }
+
+    /// <summary>
+    /// Set audiometry from a curve and severity level using HL Classification Scale
+    /// </summary>
+    /// <param name="ear"></param>
+    /// <param name="curve"></param>
+    /// <param name="severity"></param>
+    /// <returns></returns>
+    public bool SetAudiometryFromClassificationScale(T_ear ear, T_HLClassificationScaleCurve curve, int severity)
+    {
+        // TO DO: Range check (anyway, it is done inside the plugin)        
+        if (ear == T_ear.BOTH)
+        {
+            if (!SetAudiometryFromClassificationScale(T_ear.LEFT, curve, severity)) return false;
+            return SetAudiometryFromClassificationScale(T_ear.RIGHT, curve, severity);
+        }
+
+        if (ear == T_ear.LEFT)
+        {
+            PARAM_CLASSIFICATION_CURVE_LEFT = curve;
+            PARAM_CLASSIFICATION_SEVERITY_LEFT = severity;
+            //if (!hlMixer.SetFloat("HL3DTI_CS_Curve_Left", FromClassificationScaleCurveToFloat(curve))) return false;
+            //return hlMixer.SetFloat("HL3DTI_CS_Severity_Left", (float)severity);
+            List<float> hl;
+            GetClassificationScaleHL(curve, severity, out hl);
+            if (!hlMixer.SetFloat("HL3DTI_HL_Band_0_Left", hl[0])) return false;
+            if (!hlMixer.SetFloat("HL3DTI_HL_Band_1_Left", hl[0])) return false;
+            if (!hlMixer.SetFloat("HL3DTI_HL_Band_2_Left", hl[1])) return false;
+            if (!hlMixer.SetFloat("HL3DTI_HL_Band_3_Left", hl[2])) return false;
+            if (!hlMixer.SetFloat("HL3DTI_HL_Band_4_Left", hl[3])) return false;
+            if (!hlMixer.SetFloat("HL3DTI_HL_Band_5_Left", hl[4])) return false;
+            if (!hlMixer.SetFloat("HL3DTI_HL_Band_6_Left", hl[5])) return false;
+            if (!hlMixer.SetFloat("HL3DTI_HL_Band_7_Left", hl[6])) return false;
+            if (!hlMixer.SetFloat("HL3DTI_HL_Band_8_Left", hl[6])) return false;
+        }
+        if (ear == T_ear.RIGHT)
+        {
+            PARAM_CLASSIFICATION_CURVE_RIGHT = curve;
+            PARAM_CLASSIFICATION_SEVERITY_RIGHT = severity;
+            //if (!hlMixer.SetFloat("HL3DTI_CS_Curve_Right", FromClassificationScaleCurveToFloat(curve))) return false;
+            //return hlMixer.SetFloat("HL3DTI_CS_Severity_Right", (float)severity);
+            List<float> hl;
+            GetClassificationScaleHL(curve, severity, out hl);
+            if (!hlMixer.SetFloat("HL3DTI_HL_Band_0_Right", hl[0])) return false;
+            if (!hlMixer.SetFloat("HL3DTI_HL_Band_1_Right", hl[0])) return false;
+            if (!hlMixer.SetFloat("HL3DTI_HL_Band_2_Right", hl[1])) return false;
+            if (!hlMixer.SetFloat("HL3DTI_HL_Band_3_Right", hl[2])) return false;
+            if (!hlMixer.SetFloat("HL3DTI_HL_Band_4_Right", hl[3])) return false;
+            if (!hlMixer.SetFloat("HL3DTI_HL_Band_5_Right", hl[4])) return false;
+            if (!hlMixer.SetFloat("HL3DTI_HL_Band_6_Right", hl[5])) return false;
+            if (!hlMixer.SetFloat("HL3DTI_HL_Band_7_Right", hl[6])) return false;
+            if (!hlMixer.SetFloat("HL3DTI_HL_Band_8_Right", hl[6])) return false;
+        }
+        return true;
+    }
+
+    ///////////////////////////////////////
+    // NON-LINEAR ATTENUATION (MULTIBAND EXPANDER)
+    ///////////////////////////////////////
 
     /// <summary>
     /// Set attack of all bands envelope detectors for one ear
@@ -380,7 +471,7 @@ public class API_3DTI_HL : MonoBehaviour
     }
 
     ///////////////////////////////////////
-    // TEMPORAL DISTORTION (ASYNCHRONY) SIMULATION
+    // TEMPORAL DISTORTION SIMULATION
     ///////////////////////////////////////
 
     /// <summary>
@@ -501,12 +592,12 @@ public class API_3DTI_HL : MonoBehaviour
         {
             if (ear == T_ear.LEFT)
             {
-                PARAM_LEFT_TA_BAND = bandUpperLimitHz;
+                PARAM_LEFT_TA_BANDUPPERLIMIT = bandUpperLimit;
                 return hlMixer.SetFloat("HL3DTI_TA_Band_Left", bandUpperLimitHz);
             }
             if (ear == T_ear.RIGHT)
             {
-                PARAM_RIGHT_TA_BAND = bandUpperLimitHz;
+                PARAM_RIGHT_TA_BANDUPPERLIMIT = bandUpperLimit;
                 return hlMixer.SetFloat("HL3DTI_TA_Band_Right", bandUpperLimitHz);
             }
         }        
@@ -529,40 +620,40 @@ public class API_3DTI_HL : MonoBehaviour
 
         if (ear == T_ear.LEFT)
         {
-            PARAM_LEFT_TA_POWER = whiteNoisePower;
+            PARAM_LEFT_TA_WHITENOISEPOWER = whiteNoisePower;
             return hlMixer.SetFloat("HL3DTI_TA_Noise_Power_Left", whiteNoisePower);
         }
         if (ear == T_ear.RIGHT)
         {
-            PARAM_RIGHT_TA_POWER = whiteNoisePower;
+            PARAM_RIGHT_TA_WHITENOISEPOWER = whiteNoisePower;
             return hlMixer.SetFloat("HL3DTI_TA_Noise_Power_Right", whiteNoisePower);
         }
         return false;
     }
 
     /// <summary>
-    /// Set autocorrelation filter cutoff frequency for one ear in Temporal distortion simulator
+    /// Set temporal distortion bandwidth (autocorrelation filter cutoff frequency) for one ear in Temporal distortion simulator
     /// </summary>
     /// <param name="ear"></param>
-    /// <param name="cutoff (Hz)"></param>
+    /// <param name="bandwidth (Hz)"></param>
     /// <returns></returns>
-    public bool SetTemporalDistortionAutocorrelationFilterCutoff(T_ear ear, float cutoff)
+    public bool SetTemporalDistortionBandwidth(T_ear ear, float bandwidth)
     {
         if (ear == T_ear.BOTH)
         {
-            if (!SetTemporalDistortionAutocorrelationFilterCutoff(T_ear.LEFT, cutoff)) return false;
-            return SetTemporalDistortionAutocorrelationFilterCutoff(T_ear.RIGHT, cutoff);
+            if (!SetTemporalDistortionBandwidth(T_ear.LEFT, bandwidth)) return false;
+            return SetTemporalDistortionBandwidth(T_ear.RIGHT, bandwidth);
         }
 
         if (ear == T_ear.LEFT)
         {
-            PARAM_LEFT_TA_CUTOFF = cutoff;
-            return hlMixer.SetFloat("HL3DTI_TA_Noise_LPF_Left", cutoff);
+            PARAM_LEFT_TA_BANDWIDTH = bandwidth;
+            return hlMixer.SetFloat("HL3DTI_TA_Noise_LPF_Left", bandwidth);
         }
         if (ear == T_ear.RIGHT)
         {
-            PARAM_RIGHT_TA_CUTOFF = cutoff;
-            return hlMixer.SetFloat("HL3DTI_TA_Noise_LPF_Right", cutoff);
+            PARAM_RIGHT_TA_BANDWIDTH = bandwidth;
+            return hlMixer.SetFloat("HL3DTI_TA_Noise_LPF_Right", bandwidth);
         }
         return false;
     }
@@ -587,7 +678,9 @@ public class API_3DTI_HL : MonoBehaviour
             case T_HLTemporalDistortionBandUpperLimit.HZ_UL_3200:
                 return 3200.0f;                
             case T_HLTemporalDistortionBandUpperLimit.HZ_UL_6400:
-                return 6400.0f;                
+                return 6400.0f;
+            case T_HLTemporalDistortionBandUpperLimit.HZ_UL_12800:
+                return 12800.0f;
             default:
                 return 0.0f;
         }
@@ -612,6 +705,8 @@ public class API_3DTI_HL : MonoBehaviour
             return T_HLTemporalDistortionBandUpperLimit.HZ_UL_3200;
         if (Mathf.Abs(bandLimitHz - 6400.0f) < 0.01)
             return T_HLTemporalDistortionBandUpperLimit.HZ_UL_6400;
+        if (Mathf.Abs(bandLimitHz - 12800.0f) < 0.01)
+            return T_HLTemporalDistortionBandUpperLimit.HZ_UL_12800;
 
         return T_HLTemporalDistortionBandUpperLimit.HZ_UL_WRONG;
     }
@@ -644,6 +739,75 @@ public class API_3DTI_HL : MonoBehaviour
     //    }
     //    return false;
     //}
+
+    /// <summary>
+    /// Set all parameters of temporal distortion module from one of the hardcoded templates
+    /// </summary>
+    /// <param name="ear"></param>
+    /// <param name="template"></param>
+    /// <returns></returns>
+    public bool SetTemporalDistortionFromTemplate(T_ear ear, T_HLTemplate template)
+    {
+        if (ear == T_ear.BOTH)
+        {
+            if (!SetTemporalDistortionFromTemplate(T_ear.LEFT, template)) return false;
+            return SetTemporalDistortionFromTemplate(T_ear.RIGHT, template);
+        }
+
+        T_HLTemporalDistortionBandUpperLimit bandUpperLimit;
+        float whiteNoisePower;
+        float bandWidth;
+        float LRSync;
+        GetTemporalDistortionTemplateValues(template, out bandUpperLimit, out whiteNoisePower, out bandWidth, out LRSync);
+
+        if (!SetTemporalDistortionBandUpperLimit(ear, bandUpperLimit)) return false;
+        if (!SetTemporalDistortionWhiteNoisePower(ear, whiteNoisePower)) return false;
+        if (!SetTemporalDistortionBandwidth(ear, bandWidth)) return false;
+        return SetTemporalDistortionLeftRightSynchronicity(LRSync);
+    }
+
+    /// <summary>
+    /// Get all parameter values from one of the hardcoded templates for temporal distortion
+    /// </summary>
+    /// <param name="template"></param>
+    /// <param name="bandUpperLimit"></param>
+    /// <param name="whiteNoisePower"></param>
+    /// <param name="bandWidth"></param>
+    /// <param name="LRSync"></param>
+    public void GetTemporalDistortionTemplateValues(T_HLTemplate template, out T_HLTemporalDistortionBandUpperLimit bandUpperLimit, out float whiteNoisePower, out float bandWidth, out float LRSync)
+    {
+        switch (template)
+        {
+            case T_HLTemplate.HL_TEMPLATE_MILD:
+                bandUpperLimit = T_HLTemporalDistortionBandUpperLimit.HZ_UL_1600;
+                whiteNoisePower = 0.4f;
+                bandWidth = 700.0f;
+                LRSync = 0.0f; 
+                break;
+
+            case T_HLTemplate.HL_TEMPLATE_MODERATE:
+                bandUpperLimit = T_HLTemporalDistortionBandUpperLimit.HZ_UL_3200;
+                whiteNoisePower = 0.8f;
+                bandWidth = 850.0f;
+                LRSync = 0.0f;
+                break;
+
+            case T_HLTemplate.HL_TEMPLATE_SEVERE:
+                bandUpperLimit = T_HLTemporalDistortionBandUpperLimit.HZ_UL_12800;
+                whiteNoisePower = 1.0f;
+                bandWidth = 1000.0f;
+                LRSync = 0.0f;
+                break;
+
+            case T_HLTemplate.HL_TEMPLATE_NORMAL:
+            default:
+                bandUpperLimit = T_HLTemporalDistortionBandUpperLimit.HZ_UL_1600;
+                whiteNoisePower = 0.0f;
+                bandWidth = 500.0f;
+                LRSync = 0.0f;
+                break;
+        }
+    }
 
     ///////////////////////////////////////
     // FREQUENCY SMEARING SIMULATION
@@ -838,4 +1002,273 @@ public class API_3DTI_HL : MonoBehaviour
         // Send command
         return hlMixer.SetFloat(paramName, amount);
     }
+
+    /// <summary>
+    /// Set all parameters of frequency smearing module from one of the hardcoded templates
+    /// </summary>
+    /// <param name="ear"></param>
+    /// <param name="template"></param>
+    /// <returns></returns>
+    public bool SetFrequencySmearingFromTemplate(T_ear ear, T_HLTemplate template)
+    {
+        if (ear == T_ear.BOTH)
+        {
+            if (!SetFrequencySmearingFromTemplate(T_ear.LEFT, template)) return false;
+            return SetFrequencySmearingFromTemplate(T_ear.RIGHT, template);
+        }
+
+        int downSize, upSize;
+        float downHz, upHz;
+        GetFrequencySmearingTemplateValues(template, out downSize, out upSize, out downHz, out upHz);
+
+        if (!SetFrequencySmearingDownwardBufferSize(ear, downSize)) return false;
+        if (!SetFrequencySmearingUpwardBufferSize(ear, upSize)) return false;
+        if (!SetFrequencySmearingDownwardAmount_Hz(ear, downHz)) return false;
+        return SetFrequencySmearingUpwardAmount_Hz(ear, upHz);
+    }
+
+    /// <summary>
+    /// Get all parameter values from one of the hardcoded templates for frequency smearing
+    /// </summary>
+    /// <param name="template"></param>
+    /// <param name="bandUpperLimit"></param>
+    /// <param name="whiteNoisePower"></param>
+    /// <param name="bandWidth"></param>
+    /// <param name="LRSync"></param>
+    public void GetFrequencySmearingTemplateValues(T_HLTemplate template, out int downSize, out int upSize, out float downHz, out float upHz)
+    {
+        switch (template)
+        {
+            case T_HLTemplate.HL_TEMPLATE_MILD:
+                downSize = 15;
+                upSize = 15;
+                downHz = 35.0f;
+                upHz = 35.0f;
+                break;
+
+            case T_HLTemplate.HL_TEMPLATE_MODERATE:
+                downSize = 100;
+                upSize = 100;
+                downHz = 150.0f;
+                upHz = 150.0f;
+                break;
+
+            case T_HLTemplate.HL_TEMPLATE_SEVERE:
+                downSize = 150;
+                upSize = 150;
+                downHz = 650.0f;
+                upHz = 650.0f;
+                break;
+
+            case T_HLTemplate.HL_TEMPLATE_NORMAL:
+            default:
+                downSize = 15;
+                upSize = 15;
+                downHz = 0.0f;
+                upHz = 0.0f;
+                break;
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // AUXILIARY FUNCTIONS
+    /////////////////////////////////////////////////////////////////////
+
+    /// <summary>
+    /// Get char with the letter corresponding to one curve of HL Classification Scale
+    /// </summary>
+    /// <param name="curve"></param>
+    /// <returns></returns>
+    public char FromClassificationScaleCurveToChar (T_HLClassificationScaleCurve curve)
+    {
+        char result = ' ';
+        switch (curve)
+        {
+            case T_HLClassificationScaleCurve.HL_CS_A:
+                result = 'A';
+                break;
+            case T_HLClassificationScaleCurve.HL_CS_B:
+                result = 'B';
+                break;
+            case T_HLClassificationScaleCurve.HL_CS_C:
+                result = 'C';
+                break;
+            case T_HLClassificationScaleCurve.HL_CS_D:
+                result = 'D';
+                break;
+            case T_HLClassificationScaleCurve.HL_CS_E:
+                result = 'E';
+                break;
+            case T_HLClassificationScaleCurve.HL_CS_F:
+                result = 'F';
+                break;
+            case T_HLClassificationScaleCurve.HL_CS_G:
+                result = 'G';
+                break;
+            case T_HLClassificationScaleCurve. HL_CS_H:
+                result = 'H';
+                break;
+            case T_HLClassificationScaleCurve.HL_CS_I:
+                result = 'I';
+                break;
+            case T_HLClassificationScaleCurve.HL_CS_J:
+                result = 'J';
+                break;
+            case T_HLClassificationScaleCurve.HL_CS_K:
+                result = 'K';
+                break;
+            default:
+                result = ' ';
+                break;
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Get string with the letter and description of one curve of HL Classification Scale
+    /// </summary>
+    /// <param name="curve"></param>
+    /// <returns></returns>
+    public string FromClassificationScaleCurveToString(T_HLClassificationScaleCurve curve)
+    {
+        string result = "";
+        switch (curve)
+        {
+            case T_HLClassificationScaleCurve.HL_CS_NOLOSS:
+                result = "No hearing loss";
+                break;
+            case T_HLClassificationScaleCurve.HL_CS_A:
+                result = "A (Loss only on frequencies starting from 4000Hz and above)";
+                break;
+            case T_HLClassificationScaleCurve.HL_CS_B:
+                result = "B (Loss only on frequencies starting from 2000Hz and above)";
+                break;
+            case T_HLClassificationScaleCurve.HL_CS_C:
+                result = "C (Loss only on frequencies starting from 1000Hz and above)";
+                break;
+            case T_HLClassificationScaleCurve.HL_CS_D:
+                result = "D (Loss only on frequencies starting from 500Hz and above)";
+                break;
+            case T_HLClassificationScaleCurve.HL_CS_E:
+                result = "E (Loss only on frequencies starting from 250Hz and above)";
+                break;
+            case T_HLClassificationScaleCurve.HL_CS_F:
+                result = "F (Peak loss at 250Hz)";
+                break;
+            case T_HLClassificationScaleCurve.HL_CS_G:
+                result = "G (Peak loss at 500Hz)";
+                break;
+            case T_HLClassificationScaleCurve.HL_CS_H:
+                result = "H (Peak loss at 1000Hz)";
+                break;
+            case T_HLClassificationScaleCurve.HL_CS_I:
+                result = "I (Peak loss at 2000Hz)";
+                break;
+            case T_HLClassificationScaleCurve.HL_CS_J:
+                result = "J (Peak loss at 4000Hz)";
+                break;
+            case T_HLClassificationScaleCurve.HL_CS_K:
+                result = "K (Constant Slope)";
+                break;
+            default:
+                result = "Unknown curve!";
+                break;
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Get string with the name of one severity level of HL Classification Scale
+    /// </summary>
+    /// <param name="severity"></param>
+    /// <returns></returns>
+    public string FromClassificationScaleSeverityToString(int severity)
+    {
+        string result = "";
+        switch (severity)
+        {
+            case 0:
+                result = "Normal";
+                break;
+            case 1:
+                result = "Slight";
+                break;
+            case 2:
+                result = "Mild";
+                break;
+            case 3:
+                result = "Moderate";
+                break;
+            case 4:
+                result = "Moderately severe";
+                break;
+            case 5:
+                result = "Severe";
+                break;
+            case 6:
+                result = "Profound";
+                break;
+            default:
+                result = "Unknown severity!";
+                break;
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Get float value which codes one curve of the HL Classification Scale
+    /// </summary>
+    /// <param name="curve"></param>
+    /// <returns></returns>
+    public float FromClassificationScaleCurveToFloat(T_HLClassificationScaleCurve curve)
+    {
+        float result = (float)(int)curve;
+        return result;
+    }
+
+    float GetHLForScale(int severity)
+    {
+        switch (severity)
+        {
+            case 0: return 10; 
+            case 1: return 21; 
+            case 2: return 33; 
+            case 3: return 48; 
+            case 4: return 63; 
+            case 5: return 81; 
+            case 6: return 91; 
+        }
+        return 0;
+    }
+
+    public void GetClassificationScaleHL(T_HLClassificationScaleCurve curve, int severity, out List<float> hl)
+    {
+        float x = GetHLForScale(severity);
+        hl = new List<float>();
+
+        switch (curve)
+        {
+            case T_HLClassificationScaleCurve.HL_CS_A: hl.Add(0); hl.Add(0);     hl.Add(0);         hl.Add(0);          hl.Add(0);          hl.Add(x / 2);      hl.Add(x); break;
+            case T_HLClassificationScaleCurve.HL_CS_B: hl.Add(0); hl.Add(0);     hl.Add(0);         hl.Add(0);          hl.Add(x / 2);      hl.Add(x);          hl.Add(x); break;
+            case T_HLClassificationScaleCurve.HL_CS_C: hl.Add(0); hl.Add(0);     hl.Add(0);         hl.Add(x / 2);      hl.Add(x);          hl.Add(x);          hl.Add(x); break;
+            case T_HLClassificationScaleCurve.HL_CS_D: hl.Add(0); hl.Add(0);     hl.Add(x / 2);     hl.Add(x);          hl.Add(x);          hl.Add(x);          hl.Add(x); break;
+            case T_HLClassificationScaleCurve.HL_CS_E: hl.Add(0); hl.Add(x / 2); hl.Add(x);         hl.Add(x);          hl.Add(x);          hl.Add(x);          hl.Add(x); break;
+            case T_HLClassificationScaleCurve.HL_CS_F: hl.Add(0); hl.Add(x);     hl.Add(x / 2);     hl.Add(x / 2);      hl.Add(x / 2);      hl.Add(x / 2);      hl.Add(x / 2); break;
+            case T_HLClassificationScaleCurve.HL_CS_G: hl.Add(0); hl.Add(x / 2); hl.Add(x);         hl.Add(x / 2);      hl.Add(x / 2);      hl.Add(x / 2);      hl.Add(x / 2); break;
+            case T_HLClassificationScaleCurve.HL_CS_H: hl.Add(0); hl.Add(0);     hl.Add(x / 2);     hl.Add(x);          hl.Add(x / 2);      hl.Add(x / 2);      hl.Add(x / 2); break;
+            case T_HLClassificationScaleCurve.HL_CS_I: hl.Add(0); hl.Add(0);     hl.Add(0);         hl.Add(x / 2);      hl.Add(x);          hl.Add(x / 2);      hl.Add(x / 2); break;
+            case T_HLClassificationScaleCurve.HL_CS_J: hl.Add(0); hl.Add(0);     hl.Add(0);         hl.Add(0);          hl.Add(x / 2);      hl.Add(x);          hl.Add(x / 2); break;
+            case T_HLClassificationScaleCurve.HL_CS_K: hl.Add(0); hl.Add(x / 6); hl.Add(2 * x / 6); hl.Add(3 * x / 6);  hl.Add(4 * x / 6);  hl.Add(5 * x / 6);  hl.Add(x); break;
+            default: hl.Add(0); hl.Add(0); hl.Add(0); hl.Add(0); hl.Add(0); hl.Add(0); hl.Add(0); break;
+        }
+    }
+
+    //public float GetSomething(string what)
+    //{
+    //    float value;
+    //    if (!hlMixer.GetFloat(what, out value))
+    //        return -1.0f;
+    //    else
+    //        return value;
+    //}
 }
