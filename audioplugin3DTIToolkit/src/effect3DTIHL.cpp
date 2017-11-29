@@ -15,7 +15,7 @@
 #include "CommonUtils.h"
 
 #include <HAHLSimulation/HearingLossSim.h>
-#include <HAHLSimulation/ClassificationScaleHL.h>
+//#include <HAHLSimulation/ClassificationScaleHL.h>
 
 // Includes for debug logging
 #include <fstream>
@@ -36,10 +36,10 @@ using namespace std;
 #include <sstream>
 #endif
 
-enum THLClassificationScaleCurve { HL_CS_ERROR =-1, HL_CS_NOLOSS =0, 
-								   HL_CS_A =1, HL_CS_B =2, HL_CS_C =3, HL_CS_D =4, HL_CS_E =5, HL_CS_F =6,
-								   HL_CS_G =7, HL_CS_H =8, HL_CS_I =9, HL_CS_J =10, HL_CS_K=11, 
-								   HL_CS_NOMORECURVES=12};
+//enum THLClassificationScaleCurve { HL_CS_ERROR =-1, HL_CS_NOLOSS =0, 
+//								   HL_CS_A =1, HL_CS_B =2, HL_CS_C =3, HL_CS_D =4, HL_CS_E =5, HL_CS_F =6,
+//								   HL_CS_G =7, HL_CS_H =8, HL_CS_I =9, HL_CS_J =10, HL_CS_K=11, 
+//								   HL_CS_NOMORECURVES=12};
 
 /////////////////////////////////////////////////////////////////////
 
@@ -75,8 +75,8 @@ namespace HLSimulation3DTI
 #define DEFAULT_FSSIZE				1
 #define DEFAULT_FSHZ				0.0
 // Classification scale:
-#define DEFAULT_CS_CURVE		THLClassificationScaleCurve::HL_CS_NOLOSS
-#define DEFAULT_CS_SEVERITY		0
+//#define DEFAULT_CS_CURVE		THLClassificationScaleCurve::HL_CS_NOLOSS
+//#define DEFAULT_CS_SEVERITY		0
 
 // Min/max values for parameters
 // Multiband expander::
@@ -87,7 +87,7 @@ namespace HLSimulation3DTI
 #define MIN_FILTERSPERBAND		1
 #define MAX_FILTERSPERBAND		9
 #define MIN_HEARINGLOSS			0
-#define MAX_HEARINGLOSS			90
+#define MAX_HEARINGLOSS			160
 #define MAX_RATIO				500
 #define MIN_THRESHOLD			-80
 #define MAX_ATTACK				2000
@@ -109,7 +109,7 @@ namespace HLSimulation3DTI
 #define MIN_FSHZ				0.0
 #define MAX_FSHZ				1000.0
 // Classification scale:
-#define MAX_CS_SEVERITY			6
+//#define MAX_CS_SEVERITY			6
 
 //////////////////////////////////////////////////////
 
@@ -181,10 +181,10 @@ enum
 	PARAM_FS_UP_HZ_RIGHT,
 
 	// Classification scale
-	PARAM_CLASSIFICATION_CURVE_LEFT,
-	PARAM_CLASSIFICATION_SEVERITY_LEFT,
-	PARAM_CLASSIFICATION_CURVE_RIGHT,
-	PARAM_CLASSIFICATION_SEVERITY_RIGHT,
+	//PARAM_CLASSIFICATION_CURVE_LEFT,
+	//PARAM_CLASSIFICATION_SEVERITY_LEFT,
+	//PARAM_CLASSIFICATION_CURVE_RIGHT,
+	//PARAM_CLASSIFICATION_SEVERITY_RIGHT,
 
 		//// Debug log
 		//PARAM_DEBUG_LOG,
@@ -200,8 +200,8 @@ enum
 		float parameters[P_NUM];
 
 		// Classification scale
-		Common::CEarPair<THLClassificationScaleCurve> csCurve;
-		Common::CEarPair<int> csSeverity;
+		//Common::CEarPair<THLClassificationScaleCurve> csCurve;
+		//Common::CEarPair<int> csSeverity;
 
 		// DEBUG LOG
 		//bool debugLog = true;
@@ -233,159 +233,159 @@ enum
 
 	/////////////////////////////////////////////////////////////////////
 
-	//bool IsValidClassificationScaleCurveLetter(char letter)
-	//{
-	//	if (letter == CS_CURVE_NOLOSS)
-	//		return true;
-	//	if (letter == RETURN_ERROR_CS_CURVE)
-	//		return false;
-	//	if ((int)letter > (int)MAX_CS_CURVE || (int)letter < (int)'A')
-	//		return false;
+	////bool IsValidClassificationScaleCurveLetter(char letter)
+	////{
+	////	if (letter == CS_CURVE_NOLOSS)
+	////		return true;
+	////	if (letter == RETURN_ERROR_CS_CURVE)
+	////		return false;
+	////	if ((int)letter > (int)MAX_CS_CURVE || (int)letter < (int)'A')
+	////		return false;
 
-	//	return true;
+	////	return true;
+	////}
+
+	///////////////////////////////////////////////////////////////////////
+
+	////float FromClassificationScaleCurveLetterToFloat(char letter)
+	////{
+	////	// NOTE: we can compare with == since small integers have full precission representation in IEEE754 floating point. 
+
+	////	if (letter == CS_CURVE_NOLOSS)
+	////		return -1.0f;
+
+	////	if ((int)letter <= (int)MAX_CS_CURVE && (int)letter >= (int)'A')
+	////	{
+	////		return (float)((int)letter - (int)'A');
+	////	}
+	////	else
+	////		return RETURN_ERROR_CS_CURVE;	// ERROR: Unknown letter
+	////}
+
+	//float FromClassificationScaleCurveToFloat(THLClassificationScaleCurve curve)
+	//{		
+	//	return (float)(int)curve;
 	//}
 
-	/////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 
-	//float FromClassificationScaleCurveLetterToFloat(char letter)
+	////char FromFloatToClassificationScaleCurveLetter(float fletter)
+	////{
+	////	// NOTE: we can compare with == since small integers have full precission representation in IEEE754 floating point. 
+
+	////	if (fletter == -1.0f)
+	////		return CS_CURVE_NOLOSS;
+
+	////	if (fletter >= 0.0f && fletter <= (float)(int)MAX_CS_CURVE)
+	////		return (char((int)fletter));
+	////	else
+	////		return char(RETURN_ERROR_CS_CURVE);	// ERROR: Unknown float code for letter
+	////}
+
+	//THLClassificationScaleCurve FromFloatToClassificationScaleCurve (float fvalue)
+	//{		
+	//	if (fvalue >= -0.1f && fvalue < (float)(int)THLClassificationScaleCurve::HL_CS_NOMORECURVES)
+	//		return (THLClassificationScaleCurve)(int)fvalue;
+	//	else
+	//		return THLClassificationScaleCurve::HL_CS_ERROR;
+	//}
+
+	///////////////////////////////////////////////////////////////////////
+
+	//string FromClassificationScaleCurveToString(THLClassificationScaleCurve curve)
 	//{
-	//	// NOTE: we can compare with == since small integers have full precission representation in IEEE754 floating point. 
-
-	//	if (letter == CS_CURVE_NOLOSS)
-	//		return -1.0f;
-
-	//	if ((int)letter <= (int)MAX_CS_CURVE && (int)letter >= (int)'A')
+	//	string result = "";
+	//	switch (curve)
 	//	{
-	//		return (float)((int)letter - (int)'A');
+	//		case HL_CS_NOLOSS:
+	//			result = "No hearing loss";
+	//			break;
+	//		case HL_CS_A:
+	//			result = "A (Loss only on frequencies starting from 4000Hz and above)";
+	//			break;
+	//		case HL_CS_B:
+	//			result = "B (Loss only on frequencies starting from 2000Hz and above)";
+	//			break;
+	//		case HL_CS_C:
+	//			result = "C (Loss only on frequencies starting from 1000Hz and above)";
+	//			break;
+	//		case HL_CS_D:
+	//			result = "D (Loss only on frequencies starting from 500Hz and above)";
+	//			break;
+	//		case HL_CS_E:
+	//			result = "E (Loss only on frequencies starting from 250Hz and above)";
+	//			break;
+	//		case HL_CS_F:
+	//			result = "F (Peak loss at 250Hz)";
+	//			break;
+	//		case HL_CS_G:
+	//			result = "G (Peak loss at 500Hz)";
+	//			break;
+	//		case HL_CS_H:
+	//			result = "H (Peak loss at 1000Hz)";
+	//			break;
+	//		case HL_CS_I:
+	//			result = "I (Peak loss at 2000Hz)";
+	//			break;
+	//		case HL_CS_J:
+	//			result = "J (Peak loss at 4000Hz)";
+	//			break;
+	//		case HL_CS_K:
+	//			result = "K (Constant Slope)";
+	//			break;
+	//		default:					
+	//			result = "Unknown curve!";
+	//			break;
 	//	}
-	//	else
-	//		return RETURN_ERROR_CS_CURVE;	// ERROR: Unknown letter
+	//	return result;
 	//}
 
-	float FromClassificationScaleCurveToFloat(THLClassificationScaleCurve curve)
-	{		
-		return (float)(int)curve;
-	}
+	///////////////////////////////////////////////////////////////////////
 
-	/////////////////////////////////////////////////////////////////////
-
-	//char FromFloatToClassificationScaleCurveLetter(float fletter)
+	//char FromClassificationScaleCurveToChar(THLClassificationScaleCurve curve)
 	//{
-	//	// NOTE: we can compare with == since small integers have full precission representation in IEEE754 floating point. 
-
-	//	if (fletter == -1.0f)
-	//		return CS_CURVE_NOLOSS;
-
-	//	if (fletter >= 0.0f && fletter <= (float)(int)MAX_CS_CURVE)
-	//		return (char((int)fletter));
-	//	else
-	//		return char(RETURN_ERROR_CS_CURVE);	// ERROR: Unknown float code for letter
+	//	char result = ' ';
+	//	switch (curve)
+	//	{
+	//		case HL_CS_A:
+	//			result = 'A';
+	//			break;
+	//		case HL_CS_B:
+	//			result = 'B';
+	//			break;
+	//		case HL_CS_C:
+	//			result = 'C';
+	//			break;
+	//		case HL_CS_D:
+	//			result = 'D';
+	//			break;
+	//		case HL_CS_E:
+	//			result = 'E';
+	//			break;
+	//		case HL_CS_F:
+	//			result = 'F';
+	//			break;
+	//		case HL_CS_G:
+	//			result = 'G';
+	//			break;
+	//		case HL_CS_H:
+	//			result = 'H';
+	//			break;
+	//		case HL_CS_I:
+	//			result = 'I';
+	//			break;
+	//		case HL_CS_J:
+	//			result = 'J';
+	//			break;
+	//		case HL_CS_K:
+	//			result = 'K';
+	//			break;
+	//		default:
+	//			result = ' ';
+	//			break;
+	//	}
+	//	return result;
 	//}
-
-	THLClassificationScaleCurve FromFloatToClassificationScaleCurve (float fvalue)
-	{		
-		if (fvalue >= -0.1f && fvalue < (float)(int)THLClassificationScaleCurve::HL_CS_NOMORECURVES)
-			return (THLClassificationScaleCurve)(int)fvalue;
-		else
-			return THLClassificationScaleCurve::HL_CS_ERROR;
-	}
-
-	/////////////////////////////////////////////////////////////////////
-
-	string FromClassificationScaleCurveToString(THLClassificationScaleCurve curve)
-	{
-		string result = "";
-		switch (curve)
-		{
-			case HL_CS_NOLOSS:
-				result = "No hearing loss";
-				break;
-			case HL_CS_A:
-				result = "A (Loss only on frequencies starting from 4000Hz and above)";
-				break;
-			case HL_CS_B:
-				result = "B (Loss only on frequencies starting from 2000Hz and above)";
-				break;
-			case HL_CS_C:
-				result = "C (Loss only on frequencies starting from 1000Hz and above)";
-				break;
-			case HL_CS_D:
-				result = "D (Loss only on frequencies starting from 500Hz and above)";
-				break;
-			case HL_CS_E:
-				result = "E (Loss only on frequencies starting from 250Hz and above)";
-				break;
-			case HL_CS_F:
-				result = "F (Peak loss at 250Hz)";
-				break;
-			case HL_CS_G:
-				result = "G (Peak loss at 500Hz)";
-				break;
-			case HL_CS_H:
-				result = "H (Peak loss at 1000Hz)";
-				break;
-			case HL_CS_I:
-				result = "I (Peak loss at 2000Hz)";
-				break;
-			case HL_CS_J:
-				result = "J (Peak loss at 4000Hz)";
-				break;
-			case HL_CS_K:
-				result = "K (Constant Slope)";
-				break;
-			default:					
-				result = "Unknown curve!";
-				break;
-		}
-		return result;
-	}
-
-	/////////////////////////////////////////////////////////////////////
-
-	char FromClassificationScaleCurveToChar(THLClassificationScaleCurve curve)
-	{
-		char result = ' ';
-		switch (curve)
-		{
-			case HL_CS_A:
-				result = 'A';
-				break;
-			case HL_CS_B:
-				result = 'B';
-				break;
-			case HL_CS_C:
-				result = 'C';
-				break;
-			case HL_CS_D:
-				result = 'D';
-				break;
-			case HL_CS_E:
-				result = 'E';
-				break;
-			case HL_CS_F:
-				result = 'F';
-				break;
-			case HL_CS_G:
-				result = 'G';
-				break;
-			case HL_CS_H:
-				result = 'H';
-				break;
-			case HL_CS_I:
-				result = 'I';
-				break;
-			case HL_CS_J:
-				result = 'J';
-				break;
-			case HL_CS_K:
-				result = 'K';
-				break;
-			default:
-				result = ' ';
-				break;
-		}
-		return result;
-	}
 
 	void SetNewAudiometry(UnityAudioEffectState* state, Common::T_ear ear, TAudiometry& audiometry)
 	{
@@ -511,10 +511,10 @@ enum
 		RegisterParameter(definition, "HLFSUPHZR", "Hz", MIN_FSHZ, MAX_FSHZ, DEFAULT_FSHZ, 1.0f, 1.0f, PARAM_FS_UP_HZ_RIGHT, "Amount of upward smearing effect (in Hz) in right ear");
 
 		// Classification scale
-		RegisterParameter(definition, "HLCSCURL", "", -1.0f, FromClassificationScaleCurveToFloat(THLClassificationScaleCurve::HL_CS_NOMORECURVES), FromClassificationScaleCurveToFloat(DEFAULT_CS_CURVE), 1.0f, 1.0f, PARAM_CLASSIFICATION_CURVE_LEFT, "Curve for classification scale in left ear");
-		RegisterParameter(definition, "HLCSCURR", "", -1.0f, FromClassificationScaleCurveToFloat(THLClassificationScaleCurve::HL_CS_NOMORECURVES), FromClassificationScaleCurveToFloat(DEFAULT_CS_CURVE), 1.0f, 1.0f, PARAM_CLASSIFICATION_CURVE_RIGHT, "Curve for classification scale in right ear");		
-		RegisterParameter(definition, "HLCSSEVL", "", 0.0f, (float)MAX_CS_SEVERITY, DEFAULT_CS_SEVERITY, 1.0f, 1.0f, PARAM_CLASSIFICATION_SEVERITY_LEFT, "Severity for classification scale in left ear");
-		RegisterParameter(definition, "HLCSSEVR", "", 0.0f, (float)MAX_CS_SEVERITY, DEFAULT_CS_SEVERITY, 1.0f, 1.0f, PARAM_CLASSIFICATION_SEVERITY_RIGHT, "Severity for classification scale in right ear");
+		//RegisterParameter(definition, "HLCSCURL", "", -1.0f, FromClassificationScaleCurveToFloat(THLClassificationScaleCurve::HL_CS_NOMORECURVES), FromClassificationScaleCurveToFloat(DEFAULT_CS_CURVE), 1.0f, 1.0f, PARAM_CLASSIFICATION_CURVE_LEFT, "Curve for classification scale in left ear");
+		//RegisterParameter(definition, "HLCSCURR", "", -1.0f, FromClassificationScaleCurveToFloat(THLClassificationScaleCurve::HL_CS_NOMORECURVES), FromClassificationScaleCurveToFloat(DEFAULT_CS_CURVE), 1.0f, 1.0f, PARAM_CLASSIFICATION_CURVE_RIGHT, "Curve for classification scale in right ear");		
+		//RegisterParameter(definition, "HLCSSEVL", "", 0.0f, (float)MAX_CS_SEVERITY, DEFAULT_CS_SEVERITY, 1.0f, 1.0f, PARAM_CLASSIFICATION_SEVERITY_LEFT, "Severity for classification scale in left ear");
+		//RegisterParameter(definition, "HLCSSEVR", "", 0.0f, (float)MAX_CS_SEVERITY, DEFAULT_CS_SEVERITY, 1.0f, 1.0f, PARAM_CLASSIFICATION_SEVERITY_RIGHT, "Severity for classification scale in right ear");
 
 		// Debug log
 		//RegisterParameter(definition, "DebugLogHL", "", 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, PARAM_DEBUG_LOG, "Generate debug log for HL");
@@ -538,8 +538,8 @@ enum
 		WriteLog(state, "        Temporal Distortion Right = ", DEFAULT_TEMPORALDISTORTION_ON);
 		WriteLog(state, "        Frequency Smearing Left = ",  DEFAULT_FREQUENCYSMEARING_ON);
 		WriteLog(state, "        Frequency Smearing Right = ", DEFAULT_FREQUENCYSMEARING_ON);
-		WriteLog(state, "        HL Classification scale curve (might by overriden) = ", FromClassificationScaleCurveToString(DEFAULT_CS_CURVE));
-		WriteLog(state, "        HL Classification scale severity (might by overriden) = ", DEFAULT_CS_SEVERITY);
+		//WriteLog(state, "        HL Classification scale curve (might by overriden) = ", FromClassificationScaleCurveToString(DEFAULT_CS_CURVE));
+		//WriteLog(state, "        HL Classification scale severity (might by overriden) = ", DEFAULT_CS_SEVERITY);
 
 		// Non-linear attenuation:
 		WriteLog(state, "CREATE: Non-linear attenuation setup:", "");
@@ -645,16 +645,16 @@ enum
 			effectdata->HL.GetTemporalDistortionSimulator()->DisableLeftRightNoiseSynchronicity();
 
 		// Setup audiometry from classification scale
-		effectdata->csCurve.left = DEFAULT_CS_CURVE;
-		effectdata->csCurve.right = DEFAULT_CS_CURVE;
-		effectdata->csSeverity.left = DEFAULT_CS_SEVERITY;
-		effectdata->csSeverity.right = DEFAULT_CS_SEVERITY;
-		if (DEFAULT_CS_CURVE != THLClassificationScaleCurve::HL_CS_NOLOSS)
-		{
-			TAudiometry csAudiometry;
-			HAHLSimulation::GetClassificationScaleHL(FromClassificationScaleCurveToChar(DEFAULT_CS_CURVE), DEFAULT_CS_SEVERITY, csAudiometry);
-			effectdata->HL.SetFromAudiometry_dBHL(Common::T_ear::BOTH, csAudiometry);
-		}
+		//effectdata->csCurve.left = DEFAULT_CS_CURVE;
+		//effectdata->csCurve.right = DEFAULT_CS_CURVE;
+		//effectdata->csSeverity.left = DEFAULT_CS_SEVERITY;
+		//effectdata->csSeverity.right = DEFAULT_CS_SEVERITY;
+		//if (DEFAULT_CS_CURVE != THLClassificationScaleCurve::HL_CS_NOLOSS)
+		//{
+		//	TAudiometry csAudiometry;
+		//	HAHLSimulation::GetClassificationScaleHL(FromClassificationScaleCurveToChar(DEFAULT_CS_CURVE), DEFAULT_CS_SEVERITY, csAudiometry);
+		//	effectdata->HL.SetFromAudiometry_dBHL(Common::T_ear::BOTH, csAudiometry);
+		//}
 
 		// Initial setup of frequency smearing
 		//effectdata->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->...
@@ -716,8 +716,8 @@ enum
             return UNITY_AUDIODSP_ERR_UNSUPPORTED;
         data->parameters[index] = value;
 
-		THLClassificationScaleCurve curve;
-		int severity;		
+		//THLClassificationScaleCurve curve;
+		//int severity;		
 
 		// Process command sent by C# API
 		// TO DO: Check errors with debugger, incorrect values...
@@ -1070,109 +1070,109 @@ enum
 
 			// CLASSIFICATION SCALE:
 
-			case PARAM_CLASSIFICATION_CURVE_LEFT:
-				curve = FromFloatToClassificationScaleCurve(value);
-				
-				if (curve == THLClassificationScaleCurve::HL_CS_ERROR)
-				{
-					WriteLog(state, "SET PARAMETER: ERROR!!! Unknown curve in HL classification scale for left ear = ", value);
-					break;
-				}
+			//case PARAM_CLASSIFICATION_CURVE_LEFT:
+			//	curve = FromFloatToClassificationScaleCurve(value);
+			//	
+			//	if (curve == THLClassificationScaleCurve::HL_CS_ERROR)
+			//	{
+			//		WriteLog(state, "SET PARAMETER: ERROR!!! Unknown curve in HL classification scale for left ear = ", value);
+			//		break;
+			//	}
 
-				data->csCurve.left = curve;
+			//	data->csCurve.left = curve;
 
-				if (curve == THLClassificationScaleCurve::HL_CS_NOLOSS)
-				{
-					TAudiometry flatAudiometry;
-					flatAudiometry.assign(data->HL.GetNumberOfBands(), 0.0f);
-					SetNewAudiometry(state, Common::T_ear::LEFT, flatAudiometry);					
-					WriteLog(state, "SET PARAMETER: HL classification scale set to No Hearing Loss in left ear ", "");
-					break;
-				}
-				else
-				{
-					TAudiometry csAudiometry;
-					HAHLSimulation::GetClassificationScaleHL(FromClassificationScaleCurveToChar(data->csCurve.left), data->csSeverity.left, csAudiometry);
-					SetNewAudiometry(state, Common::T_ear::LEFT, csAudiometry);
-					WriteLog(state, "SET PARAMETER: HL classification scale curve in left ear set to: ", FromClassificationScaleCurveToString(curve));
-				}
-				break;
+			//	if (curve == THLClassificationScaleCurve::HL_CS_NOLOSS)
+			//	{
+			//		TAudiometry flatAudiometry;
+			//		flatAudiometry.assign(data->HL.GetNumberOfBands(), 0.0f);
+			//		SetNewAudiometry(state, Common::T_ear::LEFT, flatAudiometry);					
+			//		WriteLog(state, "SET PARAMETER: HL classification scale set to No Hearing Loss in left ear ", "");
+			//		break;
+			//	}
+			//	else
+			//	{
+			//		TAudiometry csAudiometry;
+			//		HAHLSimulation::GetClassificationScaleHL(FromClassificationScaleCurveToChar(data->csCurve.left), data->csSeverity.left, csAudiometry);
+			//		SetNewAudiometry(state, Common::T_ear::LEFT, csAudiometry);
+			//		WriteLog(state, "SET PARAMETER: HL classification scale curve in left ear set to: ", FromClassificationScaleCurveToString(curve));
+			//	}
+			//	break;
 
-			case PARAM_CLASSIFICATION_CURVE_RIGHT:
-				curve = FromFloatToClassificationScaleCurve(value);
+			//case PARAM_CLASSIFICATION_CURVE_RIGHT:
+			//	curve = FromFloatToClassificationScaleCurve(value);
 
-				if (curve == THLClassificationScaleCurve::HL_CS_ERROR)
-				{
-					WriteLog(state, "SET PARAMETER: ERROR!!! Unknown curve in HL classification scale for right ear = ", value);
-					break;
-				}
+			//	if (curve == THLClassificationScaleCurve::HL_CS_ERROR)
+			//	{
+			//		WriteLog(state, "SET PARAMETER: ERROR!!! Unknown curve in HL classification scale for right ear = ", value);
+			//		break;
+			//	}
 
-				data->csCurve.right = curve;
+			//	data->csCurve.right = curve;
 
-				if (curve == THLClassificationScaleCurve::HL_CS_NOLOSS)
-				{
-					TAudiometry flatAudiometry;
-					flatAudiometry.assign(data->HL.GetNumberOfBands(), 0.0f);
-					SetNewAudiometry(state, Common::T_ear::RIGHT, flatAudiometry);
-					WriteLog(state, "SET PARAMETER: HL classification scale set to No Hearing Loss in right ear ", "");
-					break;
-				}
-				else
-				{
-					TAudiometry csAudiometry;
-					HAHLSimulation::GetClassificationScaleHL(FromClassificationScaleCurveToChar(data->csCurve.right), data->csSeverity.right, csAudiometry);
-					SetNewAudiometry(state, Common::T_ear::RIGHT, csAudiometry);
-					WriteLog(state, "SET PARAMETER: HL classification scale curve in right ear set to: ", FromClassificationScaleCurveToString(curve));
-				}
-				break;
+			//	if (curve == THLClassificationScaleCurve::HL_CS_NOLOSS)
+			//	{
+			//		TAudiometry flatAudiometry;
+			//		flatAudiometry.assign(data->HL.GetNumberOfBands(), 0.0f);
+			//		SetNewAudiometry(state, Common::T_ear::RIGHT, flatAudiometry);
+			//		WriteLog(state, "SET PARAMETER: HL classification scale set to No Hearing Loss in right ear ", "");
+			//		break;
+			//	}
+			//	else
+			//	{
+			//		TAudiometry csAudiometry;
+			//		HAHLSimulation::GetClassificationScaleHL(FromClassificationScaleCurveToChar(data->csCurve.right), data->csSeverity.right, csAudiometry);
+			//		SetNewAudiometry(state, Common::T_ear::RIGHT, csAudiometry);
+			//		WriteLog(state, "SET PARAMETER: HL classification scale curve in right ear set to: ", FromClassificationScaleCurveToString(curve));
+			//	}
+			//	break;
 
-			case PARAM_CLASSIFICATION_SEVERITY_LEFT:
-				severity = (int)value;
+			//case PARAM_CLASSIFICATION_SEVERITY_LEFT:
+			//	severity = (int)value;
 
-				if (severity < 0 || severity > MAX_CS_SEVERITY)
-				{
-					WriteLog(state, "SET PARAMETER: ERROR!!! Wrong severity value in HL classification scale for left ear = ", (int)value);				
-				}
-				else
-				{
-					data->csSeverity.left = severity;
-					if (data->csCurve.left == THLClassificationScaleCurve::HL_CS_NOLOSS)
-					{
-						WriteLog(state, "SET PARAMETER: WARNING! Changing severity of HL classification scale with No Hearing Loss curve will have no immediate effect in left ear: ", severity);
-					}					
-					else
-					{
-						TAudiometry csAudiometry;
-						HAHLSimulation::GetClassificationScaleHL(FromClassificationScaleCurveToChar(data->csCurve.left), data->csSeverity.left, csAudiometry);
-						SetNewAudiometry(state, Common::T_ear::LEFT, csAudiometry);
-						WriteLog(state, "SET PARAMETER: HL classification scale severity in left ear set to ", severity);
-					}
-				}
-				break;
+			//	if (severity < 0 || severity > MAX_CS_SEVERITY)
+			//	{
+			//		WriteLog(state, "SET PARAMETER: ERROR!!! Wrong severity value in HL classification scale for left ear = ", (int)value);				
+			//	}
+			//	else
+			//	{
+			//		data->csSeverity.left = severity;
+			//		if (data->csCurve.left == THLClassificationScaleCurve::HL_CS_NOLOSS)
+			//		{
+			//			WriteLog(state, "SET PARAMETER: WARNING! Changing severity of HL classification scale with No Hearing Loss curve will have no immediate effect in left ear: ", severity);
+			//		}					
+			//		else
+			//		{
+			//			TAudiometry csAudiometry;
+			//			HAHLSimulation::GetClassificationScaleHL(FromClassificationScaleCurveToChar(data->csCurve.left), data->csSeverity.left, csAudiometry);
+			//			SetNewAudiometry(state, Common::T_ear::LEFT, csAudiometry);
+			//			WriteLog(state, "SET PARAMETER: HL classification scale severity in left ear set to ", severity);
+			//		}
+			//	}
+			//	break;
 
-			case PARAM_CLASSIFICATION_SEVERITY_RIGHT:
-				severity = (int)value;
+			//case PARAM_CLASSIFICATION_SEVERITY_RIGHT:
+			//	severity = (int)value;
 
-				if (severity < 0 || severity > MAX_CS_SEVERITY)
-				{
-					WriteLog(state, "SET PARAMETER: ERROR!!! Wrong severity value in HL classification scale for right ear = ", (int)value);
-				}
-				else
-				{
-					data->csSeverity.right = severity;
-					if (data->csCurve.right == THLClassificationScaleCurve::HL_CS_NOLOSS)
-					{
-						WriteLog(state, "SET PARAMETER: WARNING! Changing severity of HL classification scale with No Hearing Loss curve will have no immediate effect in right ear: ", severity);
-					}
-					else
-					{
-						TAudiometry csAudiometry;
-						HAHLSimulation::GetClassificationScaleHL(FromClassificationScaleCurveToChar(data->csCurve.right), data->csSeverity.right, csAudiometry);
-						SetNewAudiometry(state, Common::T_ear::RIGHT, csAudiometry);
-						WriteLog(state, "SET PARAMETER: HL classification scale severity in right ear set to ", severity);
-					}
-				}
-				break;
+			//	if (severity < 0 || severity > MAX_CS_SEVERITY)
+			//	{
+			//		WriteLog(state, "SET PARAMETER: ERROR!!! Wrong severity value in HL classification scale for right ear = ", (int)value);
+			//	}
+			//	else
+			//	{
+			//		data->csSeverity.right = severity;
+			//		if (data->csCurve.right == THLClassificationScaleCurve::HL_CS_NOLOSS)
+			//		{
+			//			WriteLog(state, "SET PARAMETER: WARNING! Changing severity of HL classification scale with No Hearing Loss curve will have no immediate effect in right ear: ", severity);
+			//		}
+			//		else
+			//		{
+			//			TAudiometry csAudiometry;
+			//			HAHLSimulation::GetClassificationScaleHL(FromClassificationScaleCurveToChar(data->csCurve.right), data->csSeverity.right, csAudiometry);
+			//			SetNewAudiometry(state, Common::T_ear::RIGHT, csAudiometry);
+			//			WriteLog(state, "SET PARAMETER: HL classification scale severity in right ear set to ", severity);
+			//		}
+			//	}
+			//	break;
 
 			//case PARAM_DEBUG_LOG:
 			//	if (value != 0.0f)
@@ -1197,15 +1197,11 @@ enum
 	
     UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK GetFloatParameterCallback(UnityAudioEffectState* state, int index, float* value, char *valuestr)
     {
-		WriteLog(state, "We are getting index ", index);
-
         EffectData* data = state->GetEffectData<EffectData>();
         if (index >= P_NUM)
             return UNITY_AUDIODSP_ERR_UNSUPPORTED;
         if (valuestr != NULL)
             valuestr[0] = 0;
-
-		WriteLog(state, "We are selecting value... ", "");
 
 		if (value != NULL)
 		{
@@ -1231,9 +1227,7 @@ enum
 					*value = data->parameters[index];
 					break;
 			}
-		}
-
-		WriteLog(state, "Value selected = ", value);
+		}		
 
         return UNITY_AUDIODSP_OK;
     }

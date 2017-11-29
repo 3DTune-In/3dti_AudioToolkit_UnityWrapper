@@ -479,6 +479,7 @@ GameObject:
   - component: {fileID: 244518583}
   - component: {fileID: 244518584}
   - component: {fileID: 244518585}
+  - component: {fileID: 244518586}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -650,25 +651,25 @@ MonoBehaviour:
   GLOBAL_RIGHT_ON: 1
   PARAM_CALIBRATION: 90
   PARAM_AUDIOMETRY_LEFT:
-  - 45.5
-  - 44
-  - 27
-  - 30
-  - 46
-  - 40
-  - 46
-  - 46
-  - 46
+  - 48
+  - 48
+  - 48
+  - 48
+  - 63
+  - 78
+  - 78
+  - 78
+  - 78
   PARAM_AUDIOMETRY_RIGHT:
-  - 40.5
-  - 22
-  - 27
-  - 30
-  - 41
-  - 40
-  - 41
-  - 41
-  - 41
+  - 21
+  - 21
+  - 21
+  - 21
+  - 36
+  - 51
+  - 51
+  - 51
+  - 51
   PARAM_LEFT_ATTACK: 960
   PARAM_LEFT_RELEASE: 513
   PARAM_RIGHT_ATTACK: 658
@@ -697,10 +698,23 @@ MonoBehaviour:
   PARAM_LEFT_FS_UP_HZ: 528.85
   PARAM_RIGHT_FS_DOWN_HZ: 298.97
   PARAM_RIGHT_FS_UP_HZ: 319.59
-  PARAM_CLASSIFICATION_CURVE_LEFT: 9
-  PARAM_CLASSIFICATION_SEVERITY_LEFT: 6
-  PARAM_CLASSIFICATION_CURVE_RIGHT: 9
-  PARAM_CLASSIFICATION_SEVERITY_RIGHT: 5
+  PARAM_CLASSIFICATION_CURVE_LEFT: 3
+  PARAM_CLASSIFICATION_SLOPE_LEFT: 3
+  PARAM_CLASSIFICATION_SEVERITY_LEFT: 3
+  PARAM_CLASSIFICATION_CURVE_RIGHT: 3
+  PARAM_CLASSIFICATION_SLOPE_RIGHT: 3
+  PARAM_CLASSIFICATION_SEVERITY_RIGHT: 1
+--- !u!114 &244518586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 244518577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac9e5f7aa166b914189c8b0796e04128, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &585364504
 GameObject:
   m_ObjectHideFlags: 0

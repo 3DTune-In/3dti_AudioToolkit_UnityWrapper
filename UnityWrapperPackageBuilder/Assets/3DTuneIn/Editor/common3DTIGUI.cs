@@ -605,6 +605,15 @@ public class Common3DTIGUI
     }
 
     /// <summary>
+    /// Draw an blank space with given dimensions
+    /// </summary>    
+    public static void DrawBlank(float width, float height)
+    {
+        GUIStyle blankStyle = new GUIStyle(EditorStyles.label);
+        GUILayout.Box("", blankStyle, GUILayout.Width(width), GUILayout.Height(height), GUILayout.ExpandWidth(false));
+    }
+
+    /// <summary>
     /// Create a slider associated to a parameter of an audio plugin
     /// </summary>
     /// <param name="plugin"></param>

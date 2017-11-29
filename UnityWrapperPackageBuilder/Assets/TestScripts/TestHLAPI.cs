@@ -33,13 +33,13 @@ public class TestHLAPI : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {        
+    {
         if (Input.GetKeyDown("space"))
         {
-            if (HLAPI.SetAudiometryFromTemplate(T_ear.BOTH, API_3DTI_HL.T_HLTemplate.HL_TEMPLATE_MODERATE))
-                Debug.Log("Moderate HL Preset set");
+            if (HLAPI.SetAudiometryFromClassificationScale(T_ear.BOTH, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_K, 1, API_3DTI_HL.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_MILD))
+                Debug.Log("Audiometry set from curve K with slope 3 and severity " + HLAPI.FromClassificationScaleSeverityToString(API_3DTI_HL.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_MILD));
             else
-                Debug.Log("ERROR!!!! Could not set Moderate HL Preset");
+                Debug.Log("ERROR!!!! Could not set HL from classification scale");
         }
 
         if (Input.GetKeyDown(KeyCode.T))
@@ -62,14 +62,6 @@ public class TestHLAPI : MonoBehaviour
             HLAPI.SetFrequencySmearingUpwardBufferSize(T_ear.BOTH, 20);
             HLAPI.SetFrequencySmearingDownwardAmount_Hz(T_ear.BOTH, 200.0f); 
             HLAPI.SetFrequencySmearingUpwardAmount_Hz(T_ear.BOTH, 200.0f);
-        }
-
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            if (!HLAPI.SetAudiometryFromClassificationScale(T_ear.BOTH, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_K, 6))
-                Debug.Log("ERROR!!! Could not set HL Classification scale");
-            else
-                Debug.Log("HL Classification scale successfully set");
         }
     }
 }
