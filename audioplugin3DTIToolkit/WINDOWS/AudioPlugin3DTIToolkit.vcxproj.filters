@@ -68,15 +68,6 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Vector3.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\DynamicEqualizer.cpp">
-      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.cpp">
-      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingLossSim.cpp">
-      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\Environment.cpp">
       <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
     </ClCompile>
@@ -85,12 +76,6 @@
     </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\BRIR.cpp">
       <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\Fig6Algorithm.cpp">
-      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\MultibandExpander.cpp">
-      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DynamicExpanderMono.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
@@ -107,16 +92,28 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Fprocessor.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\DynamicEqualizer.cpp">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\FrequencySmearing.cpp">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.cpp">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingLossSim.cpp">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HighOrderButteworthFilter.cpp">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\MultibandExpander.cpp">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\TemporalDistortionSimulator.cpp">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\ClassificationScaleHL.cpp">
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\Fig6Algorithm.cpp">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClCompile>
   </ItemGroup>
@@ -199,15 +196,6 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Vector3.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\DynamicEqualizer.h">
-      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.h">
-      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingLossSim.h">
-      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\Environment.h">
       <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
     </ClInclude>
@@ -217,17 +205,11 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\BRIR.h">
       <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\Fig6Algorithm.h">
-      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\BinauralSpatializer\3DTI_BinauralSpatializer.h">
       <Filter>3DTI_Toolkit_Core\BinauralSpatializer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicProcessor.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\MultibandExpander.h">
-      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DynamicExpanderMono.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
@@ -248,16 +230,28 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Fprocessor.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\DynamicEqualizer.h">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\FrequencySmearing.h">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingAidSim.h">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HearingLossSim.h">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\HighOrderButterworthFilter.h">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\MultibandExpander.h">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\TemporalDistortionSimulator.h">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\ClassificationScaleHL.h">
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\Fig6Algorithm.h">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClInclude>
   </ItemGroup>
@@ -281,7 +275,7 @@
       <UniqueIdentifier>{026a501b-3278-4d0c-9d4c-37830cc6ad24}</UniqueIdentifier>
     </Filter>
     <Filter Include="3DTI_Toolkit_Core\HAHLSimulation">
-      <UniqueIdentifier>{c6e5ec50-7043-4a1b-a99c-3ddd8e84e90a}</UniqueIdentifier>
+      <UniqueIdentifier>{5b827a41-e5fc-4120-bafb-65695d9dd341}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

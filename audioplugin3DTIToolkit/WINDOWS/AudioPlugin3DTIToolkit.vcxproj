@@ -46,7 +46,6 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Transform.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\UPCEnvironment.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Vector3.cpp" />
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\ClassificationScaleHL.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\DynamicEqualizer.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\Fig6Algorithm.cpp" />
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\FrequencySmearing.cpp" />
@@ -97,7 +96,6 @@
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Transform.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\UPCEnvironment.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Vector3.h" />
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\ClassificationScaleHL.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\DynamicEqualizer.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\Fig6Algorithm.h" />
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\FrequencySmearing.h" />
