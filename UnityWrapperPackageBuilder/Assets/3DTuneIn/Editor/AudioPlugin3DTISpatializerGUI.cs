@@ -36,6 +36,9 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     float maxHADB = 30.0f;
     float maxSoundSpeed = 1000.0f;
 
+    // Start Play control
+    bool isStartingPlay = false;
+    bool playWasStarted = false;
 
     //////////////////////////////////////////////////////////////////////////////
 
@@ -49,10 +52,17 @@ public class AudioPlugin3DTISpatializerGUI : Editor
         //{
             toolkit = (API_3DTI_Spatializer)target; // Get access to API script       
             Common3DTIGUI.InitStyles(); // Init styles
-            //GameObject go = Camera.main.gameObject;
-            //Common3DTIGUI.SetInspectorIcon(go);        
-        //initDone = true;
-        //}
+         
+        // Check starting play
+        if (EditorApplication.isPlaying && !playWasStarted)
+        {
+            isStartingPlay = true;
+            playWasStarted = true;
+        }
+        if (!EditorApplication.isPlaying && playWasStarted)
+        {
+            playWasStarted = false;
+        }
 
         // Show 3D-Tune-In logo         
         Common3DTIGUI.Show3DTILogo();
@@ -68,6 +78,9 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
         ////// HEARING AID DIRECTIONALITY SETUP
         DrawHADirectionalityPanel();
+
+        // End starting play
+        isStartingPlay = false;
     }
 
 
@@ -212,7 +225,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             Common3DTIGUI.AddLabelToParameterGroup("Custom ITD");
             Common3DTIGUI.AddLabelToParameterGroup("Head radius");
             Common3DTIGUI.SingleSpace();
-            if (Common3DTIGUI.CreateToggle(ref toolkit.customITDEnabled, "Custom ITD", "Enable Interaural Time Difference customization"))
+            if (Common3DTIGUI.CreateToggle(ref toolkit.customITDEnabled, "Custom ITD", "Enable Interaural Time Difference customization", isStartingPlay))
                 toolkit.SetCustomITD(toolkit.customITDEnabled);
             if (toolkit.customITDEnabled)
                 Common3DTIGUI.CreateFloatSlider(ref toolkit.listenerHeadRadius, "Head radius", "F4", "meters", "Set listener head radius", 0.0f, maxHeadRadius, SliderHeadRadius);
@@ -243,7 +256,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
                 Common3DTIGUI.AddLabelToParameterGroup("Runtime interpolation");
                 Common3DTIGUI.AddLabelToParameterGroup("Resampling step");
                     GUILayout.BeginHorizontal();
-                    if (Common3DTIGUI.CreateToggle(ref toolkit.runtimeInterpolateHRTF, "Runtime interpolation", "Enable runtime interpolation of HRIRs, to allow for smoother transitions when moving listener and/or sources"))
+                    if (Common3DTIGUI.CreateToggle(ref toolkit.runtimeInterpolateHRTF, "Runtime interpolation", "Enable runtime interpolation of HRIRs, to allow for smoother transitions when moving listener and/or sources", isStartingPlay))
                         toolkit.SetSourceInterpolation(toolkit.runtimeInterpolateHRTF);
                     GUILayout.EndHorizontal();
                     Common3DTIGUI.CreateIntInput(ref toolkit.HRTFstep, "Resampling step", "º", "HRTF resampling step; Lower values give better quality at the cost of more memory usage", 5, 45, InputResamplingStep);
@@ -259,14 +272,14 @@ public class AudioPlugin3DTISpatializerGUI : Editor
                 Common3DTIGUI.AddLabelToParameterGroup("ILD Near Field Filter");
                 //Common3DTIGUI.AddLabelToParameterGroup("HRTF convolution");
             }
-                if (Common3DTIGUI.CreateToggle(ref toolkit.modFarLPF, "Far distance LPF", "Enable low pass filter to simulate sound coming from far distances"))
+                if (Common3DTIGUI.CreateToggle(ref toolkit.modFarLPF, "Far distance LPF", "Enable low pass filter to simulate sound coming from far distances", isStartingPlay))
                     toolkit.SetModFarLPF(toolkit.modFarLPF);
-                if (Common3DTIGUI.CreateToggle(ref toolkit.modDistAtt, "Distance attenuation", "Enable attenuation of sound depending on distance to listener"))
+                if (Common3DTIGUI.CreateToggle(ref toolkit.modDistAtt, "Distance attenuation", "Enable attenuation of sound depending on distance to listener", isStartingPlay))
                     toolkit.SetModDistanceAttenuation(toolkit.modDistAtt);
 
                 if (toolkit.spatializationMode == API_3DTI_Spatializer.SPATIALIZATION_MODE_HIGH_QUALITY)
                 {
-                    if (Common3DTIGUI.CreateToggle(ref toolkit.modNearFieldILD, "ILD Near Field Filter", "Enable near field filter for sources very close to the listener"))
+                    if (Common3DTIGUI.CreateToggle(ref toolkit.modNearFieldILD, "ILD Near Field Filter", "Enable near field filter for sources very close to the listener", isStartingPlay))
                         toolkit.SetModNearFieldILD(toolkit.modNearFieldILD);
                     //if (Common3DTIGUI.CreateToggle(ref toolkit.modHRTF, "HRTF convolution", "Enable HRTF convolution, the core of binaural spatialization"))
                     //    toolkit.SetModHRTF(toolkit.modHRTF);
@@ -286,7 +299,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             Common3DTIGUI.AddLabelToParameterGroup("Switch Limiter");
                 //GUILayout.BeginHorizontal();
                 //SingleSpace();
-                if (Common3DTIGUI.CreateToggle(ref toolkit.doLimiter, "Switch Limiter", "Enable dynamics limiter after spatialization, to avoid potential saturation"))
+                if (Common3DTIGUI.CreateToggle(ref toolkit.doLimiter, "Switch Limiter", "Enable dynamics limiter after spatialization, to avoid potential saturation", isStartingPlay))
                     toolkit.SwitchOnOffLimiter(toolkit.doLimiter);
                 //if (toolkit.doLimiter)
                 //{
@@ -300,7 +313,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             // Debug Log
             Common3DTIGUI.BeginSubsection("Debug log");
             Common3DTIGUI.AddLabelToParameterGroup("Write debug log file");
-                if (Common3DTIGUI.CreateToggle(ref toolkit.debugLog, "Write debug log file", "Enable writing of 3DTi_BinauralSpatializer_DebugLog.txt file in your project root folder; This file can be sent to the 3DTi Toolkit developers for support"))
+                if (Common3DTIGUI.CreateToggle(ref toolkit.debugLog, "Write debug log file", "Enable writing of 3DTi_BinauralSpatializer_DebugLog.txt file in your project root folder; This file can be sent to the 3DTi Toolkit developers for support", isStartingPlay))
                     toolkit.SendWriteDebugLog(toolkit.debugLog);
             Common3DTIGUI.EndSubsection();
         }
@@ -324,7 +337,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             Common3DTIGUI.BeginSubsection("Left ear");
             Common3DTIGUI.AddLabelToParameterGroup("Switch Directionality");
             Common3DTIGUI.AddLabelToParameterGroup("Directionality extend");
-                if (Common3DTIGUI.CreateToggle(ref toolkit.doHADirectionalityLeft, "Switch Directionality", "Enable directionality for left ear"))            
+                if (Common3DTIGUI.CreateToggle(ref toolkit.doHADirectionalityLeft, "Switch Directionality", "Enable directionality for left ear", isStartingPlay))            
                     toolkit.SwitchOnOffHADirectionality(T_ear.LEFT, toolkit.doHADirectionalityLeft);
                 Common3DTIGUI.CreateFloatSlider(ref toolkit.HADirectionalityExtendLeft, "Directionality extend", "F2", "dB", "Set directionality extend for left ear; The value is the attenuation in decibels applied to sources placed behind the listener", minHADB, maxHADB, SliderHADirectionalityLeft);            
             Common3DTIGUI.EndSubsection();
@@ -333,7 +346,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             Common3DTIGUI.BeginSubsection("Right ear");
             Common3DTIGUI.AddLabelToParameterGroup("Switch Directionality");
             Common3DTIGUI.AddLabelToParameterGroup("Directionality extend");
-                if (Common3DTIGUI.CreateToggle(ref toolkit.doHADirectionalityRight, "Switch Directionality", "Enable directionality for right ear"))
+                if (Common3DTIGUI.CreateToggle(ref toolkit.doHADirectionalityRight, "Switch Directionality", "Enable directionality for right ear", isStartingPlay))
                     toolkit.SwitchOnOffHADirectionality(T_ear.RIGHT, toolkit.doHADirectionalityRight);
                 Common3DTIGUI.CreateFloatSlider(ref toolkit.HADirectionalityExtendRight, "Directionality extend", "F2", "dB", "Set directionality extend for right ear; The value is the attenuation in decibels applied to sources placed behind the listener", minHADB, maxHADB, SliderHADirectionalityRight);            
             Common3DTIGUI.EndSubsection();

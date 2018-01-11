@@ -116,6 +116,9 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\TemporalDistortionSimulator.cpp">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\ClassificationScaleHL.cpp">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\3DTI_Toolkit_Modules\HRTF\HRTFCereal.h">
@@ -252,6 +255,9 @@
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\TemporalDistortionSimulator.h">
+      <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\HAHLSimulation\ClassificationScaleHL.h">
       <Filter>3DTI_Toolkit_Core\HAHLSimulation</Filter>
     </ClInclude>
   </ItemGroup>

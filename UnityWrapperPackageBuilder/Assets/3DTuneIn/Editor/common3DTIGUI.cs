@@ -10,6 +10,7 @@ public class Common3DTIGUI
 {
     static int logoheight = 59;
     static int earsize = 40;
+    static int mainTitleSize = 14;
     static float singleSpace = 5.0f;
     static float spaceBetweenSections = 5.0f;
     static float spaceBetweenColumns = 5.0f;
@@ -25,6 +26,7 @@ public class Common3DTIGUI
     static GUIStyle rightColumnStyle;
     static GUIStyle intFieldStyle;
     static GUIStyle aboutButtonStyle;
+    static GUIStyle bigTitleStyle;
 
     /// <summary>
     /// Init all styles
@@ -34,6 +36,11 @@ public class Common3DTIGUI
         titleBoxStyle = new GUIStyle(GUI.skin.box);
         titleBoxStyle.normal.textColor = EditorStyles.label.normal.textColor;
         titleBoxStyle.fontStyle = FontStyle.Bold;
+
+        bigTitleStyle = new GUIStyle(GUI.skin.box);
+        bigTitleStyle.normal.textColor = EditorStyles.label.normal.textColor;
+        bigTitleStyle.fontStyle = FontStyle.Bold;
+        bigTitleStyle.fontSize = mainTitleSize;
 
         subtitleBoxStyle = new GUIStyle(EditorStyles.label);
         subtitleBoxStyle.fontStyle = FontStyle.Bold;
@@ -94,6 +101,11 @@ public class Common3DTIGUI
         EditorGUILayout.EndHorizontal();  
     }
 
+    public static void ShowGUITitle(string title)
+    {        
+        GUILayout.Label(title, bigTitleStyle, GUILayout.ExpandWidth(true));
+    }
+
     /// <summary>
     /// Create a toggle for folding out parameters
     /// </summary>
@@ -133,7 +145,7 @@ public class Common3DTIGUI
             if (action != null)
                 action.Invoke();
         }
-
+        
         // Text field with units
         string valueString = GUILayout.TextField(variable.ToString(decimalDigits), GUILayout.ExpandWidth(false));
         GUILayout.Label(units, GUILayout.ExpandWidth(false));
@@ -347,13 +359,24 @@ public class Common3DTIGUI
     }
 
     /// <summary>
+    /// Draw one button 
+    /// </summary>
+    /// <param name="titleText"></param>
+    /// <param name="tooltip"></param>
+    /// <returns>true when clicked</returns>
+    public static bool CreateButton(string titleText, string tooltip)
+    {
+        return GUILayout.Button(new GUIContent(titleText, tooltip), GUI.skin.button, GUILayout.ExpandWidth(false));            
+    }
+
+    /// <summary>
     ///  Auxiliary function for creating toogle input
     /// </summary>    
-    public static bool CreateToggle(ref bool boolvar, string toggleText, string tooltip)
+    public static bool CreateToggle(ref bool boolvar, string toggleText, string tooltip, bool forceChange)
     {
         bool oldvar = boolvar;
         boolvar = GUILayout.Toggle(boolvar, new GUIContent(toggleText, tooltip), GUILayout.ExpandWidth(false));
-        return (oldvar != boolvar);
+        return (oldvar != boolvar) || forceChange;
     }
 
     ///// <summary>
@@ -434,12 +457,12 @@ public class Common3DTIGUI
     /// <param name="enable"></param>
     /// <param name="title"></param>
     /// <param name="switchParameters"></param>
-    public static bool BeginLeftColumn(IAudioEffectPlugin plugin, ref bool enable, string title, string tooltip, List<string> switchParameters, bool doExpandWidth = false)
+    public static bool BeginLeftColumn(IAudioEffectPlugin plugin, ref bool enable, string title, string tooltip, List<string> switchParameters, bool forceChange, bool doExpandWidth = false)
     {
         ResetParameterGroup();
         GUILayout.BeginHorizontal(GUILayout.ExpandWidth(doExpandWidth));                     // Begin section (ear pair)             
             GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(doExpandWidth));  // Begin column (left ear)                               
-                bool changed = CreateToggle(ref enable, title, tooltip);
+                bool changed = CreateToggle(ref enable, title, tooltip, forceChange);
                 if (changed)
                 { 
                     foreach (string switchParameter in switchParameters)
@@ -470,11 +493,11 @@ public class Common3DTIGUI
     /// <param name="enable"></param>
     /// <param name="title"></param>
     /// <param name="switchParameters"></param>
-    public static bool BeginRightColumn(IAudioEffectPlugin plugin, ref bool enable, string title, string tooltip, List<string> switchParameters, bool doExpandWidth=false)
+    public static bool BeginRightColumn(IAudioEffectPlugin plugin, ref bool enable, string title, string tooltip, List<string> switchParameters, bool forceChange, bool doExpandWidth=false)
     {
         ResetParameterGroup();
             GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(doExpandWidth)); // Begin column (right ear)               
-                bool changed = CreateToggle(ref enable, title, tooltip);
+                bool changed = CreateToggle(ref enable, title, tooltip, forceChange);
                 if (changed)
                 {
                     foreach (string switchParameter in switchParameters)
@@ -567,6 +590,27 @@ public class Common3DTIGUI
                 earTexture = Resources.Load("RightEarLightAlpha") as Texture;
         }
         GUILayout.Box(earTexture, earStyle, GUILayout.Width(earsize), GUILayout.Height(earsize), GUILayout.ExpandWidth(false));        
+    }
+
+    /// <summary>
+    /// Draw an image from 3DTuneIn/Resouces folder
+    /// </summary>
+    /// <param name="imageFileName"></param>
+    public static void DrawImage(string imageFileName, float width, float height)
+    {
+        Texture imageTexture;
+        GUIStyle imageStyle = new GUIStyle(EditorStyles.label);            
+        imageTexture = Resources.Load(imageFileName) as Texture;              
+        GUILayout.Box(imageTexture, imageStyle, GUILayout.Width(width), GUILayout.Height(height), GUILayout.ExpandWidth(false));
+    }
+
+    /// <summary>
+    /// Draw an blank space with given dimensions
+    /// </summary>    
+    public static void DrawBlank(float width, float height)
+    {
+        GUIStyle blankStyle = new GUIStyle(EditorStyles.label);
+        GUILayout.Box("", blankStyle, GUILayout.Width(width), GUILayout.Height(height), GUILayout.ExpandWidth(false));
     }
 
     /// <summary>
@@ -665,25 +709,23 @@ public class Common3DTIGUI
     public static bool CreateCompactFloatSlider(ref float variable, string name, string decimalDigits, string units, string tooltip, float minValue, float maxValue)
     {
         string valueString;
-        float previousVar;
+        float previousVar = variable;
 
         GUILayout.BeginVertical(GUILayout.ExpandWidth(false));
         {
             GUILayout.BeginHorizontal();
             {
                 GUILayout.Label(new GUIContent(name, tooltip));
-                valueString = variable.ToString(decimalDigits);
-                valueString = GUILayout.TextField(valueString, GUILayout.ExpandWidth(false));
+                valueString = GUILayout.TextField(variable.ToString(decimalDigits), GUILayout.ExpandWidth(false));
                 GUILayout.Label(units, GUILayout.ExpandWidth(false));
+
+                float newValue;
+                bool valid = float.TryParse(valueString, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out newValue);
+                if (valid)
+                    variable = newValue;
             }
             GUILayout.EndHorizontal();
-
-            float newValue;
-            bool valid = float.TryParse(valueString, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out newValue);
-            if (valid)
-                variable = newValue;
-
-            previousVar = variable;
+            
             variable = GUILayout.HorizontalSlider(variable, minValue, maxValue);
         }
         GUILayout.EndVertical();
@@ -694,9 +736,9 @@ public class Common3DTIGUI
     /// <summary>
     ///  Auxiliary function for creating toogle input
     /// </summary>    
-    public static void CreatePluginToggle(IAudioEffectPlugin plugin, ref bool boolvar, string toggleText, string switchParameter, string tooltip)
+    public static void CreatePluginToggle(IAudioEffectPlugin plugin, ref bool boolvar, string toggleText, string switchParameter, string tooltip, bool forceChange)
     {        
-        if (CreateToggle(ref boolvar, toggleText, tooltip))        
+        if (CreateToggle(ref boolvar, toggleText, tooltip, forceChange))        
         {            
             plugin.SetFloatParameter(switchParameter, CommonFunctions.Bool2Float(boolvar));
         }

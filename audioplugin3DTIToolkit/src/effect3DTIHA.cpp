@@ -551,11 +551,19 @@ namespace HASimulation3DTI
 		// Setup HA switches and default values
 		effectdata->HA.SetOverallGain(Common::T_ear::LEFT, FromDBToGain(DEFAULT_VOLDB));	// TO DO: writelog
 		effectdata->HA.SetOverallGain(Common::T_ear::RIGHT, FromDBToGain(DEFAULT_VOLDB));	// TO DO: writelog
-		effectdata->HA.DisableQuantizationNoiseBeforeEqualizer();	// TO DO: writelog (WARNING: this might not coincide with DEFAULT_NOISEBEFORE)
-		effectdata->HA.DisableQuantizationNoiseAfterEqualizer(); // TO DO: writelog (WARNING: this might not coincide with DEFAULT_NOISEAFTER)
-		effectdata->HA.SetQuantizationNoiseBits(DEFAULT_NOISENUMBITS);		// TO DO: writelog
-		effectdata->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->SetLevelsInterpolation(DEFAULT_LEVELSINTERPOLATION);	// TO DO: writelog
-		effectdata->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->SetLevelsInterpolation(DEFAULT_LEVELSINTERPOLATION);	// TO DO: writelog
+		effectdata->HA.DisableQuantizationBeforeEqualizer();	// TO DO: writelog (WARNING: this might not coincide with DEFAULT_NOISEBEFORE)
+		effectdata->HA.DisableQuantizationAfterEqualizer(); // TO DO: writelog (WARNING: this might not coincide with DEFAULT_NOISEAFTER)
+		effectdata->HA.SetQuantizationBits(DEFAULT_NOISENUMBITS);		// TO DO: writelog
+		if (DEFAULT_LEVELSINTERPOLATION)
+		{
+			effectdata->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->EnableLevelsInterpolation();	// TO DO: writelog 
+			effectdata->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->EnableLevelsInterpolation();	// TO DO: writelog 
+		}
+		else
+		{
+			effectdata->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->DisableLevelsInterpolation();	// TO DO: writelog 
+			effectdata->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->DisableLevelsInterpolation();	// TO DO: writelog 
+		}		
 		effectdata->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->SetAttack_ms(DEFAULT_ATTACKRELEASE);
 		effectdata->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->SetRelease_ms(DEFAULT_ATTACKRELEASE);
 		effectdata->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->SetAttack_ms(DEFAULT_ATTACKRELEASE);
@@ -673,9 +681,17 @@ namespace HASimulation3DTI
 				break;
 
 			// Dynamic EQ
-			case PARAM_DYNAMICEQ_INTERPOLATION_ON:				
-				data->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->SetLevelsInterpolation(FromFloatToBool(value));	
-				data->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->SetLevelsInterpolation(FromFloatToBool(value));
+			case PARAM_DYNAMICEQ_INTERPOLATION_ON:		
+				if (FromFloatToBool(value))
+				{
+					data->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->EnableLevelsInterpolation();
+					data->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->EnableLevelsInterpolation();
+				}
+				else
+				{
+					data->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->DisableLevelsInterpolation();
+					data->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->DisableLevelsInterpolation();
+				}
 				WriteLog(state, "SET PARAMETER: Levels interpolation in dynamic equalizer set to ", FromBoolToOnOffStr(FromFloatToBool(value)));
 				break;
 			case PARAM_DYNAMICEQ_LEVELTHRESHOLD_0_LEFT_DBFS:	
@@ -758,21 +774,21 @@ namespace HASimulation3DTI
 			// Quantization noise
 			case PARAM_NOISE_BEFORE_ON:	
 				if (FromFloatToBool(value))
-					data->HA.EnableQuantizationNoiseBeforeEqualizer();
+					data->HA.EnableQuantizationBeforeEqualizer();
 				else
-					data->HA.DisableQuantizationNoiseBeforeEqualizer();				
-				WriteLog(state, "SET PARAMETER: Quantization noise Before EQ is ", FromBoolToOnOffStr(FromFloatToBool(value)));
+					data->HA.DisableQuantizationBeforeEqualizer();				
+				WriteLog(state, "SET PARAMETER: Quantization Before EQ is ", FromBoolToOnOffStr(FromFloatToBool(value)));
 				break;
 			case PARAM_NOISE_AFTER_ON:	
 				if (FromFloatToBool(value))
-					data->HA.EnableQuantizationNoiseAfterEqualizer();
+					data->HA.EnableQuantizationAfterEqualizer();
 				else
-					data->HA.DisableQuantizationNoiseAfterEqualizer();				
-				WriteLog(state, "SET PARAMETER: Quantization noise After EQ is ", FromBoolToOnOffStr(FromFloatToBool(value)));
+					data->HA.DisableQuantizationAfterEqualizer();				
+				WriteLog(state, "SET PARAMETER: Quantization After EQ is ", FromBoolToOnOffStr(FromFloatToBool(value)));
 				break;
 			case PARAM_NOISE_NUMBITS:	
-				data->HA.SetQuantizationNoiseBits((int)value); 
-				WriteLog(state, "SET PARAMETER: Quantization noise number of bits = ", (int)value);
+				data->HA.SetQuantizationBits((int)value); 
+				WriteLog(state, "SET PARAMETER: Quantization number of bits = ", (int)value);
 				break;	
 
 			// Simplified controls

@@ -28,7 +28,7 @@ public class TestHLAPI : MonoBehaviour
         if (HLAPI.DisableFrequencySmearingSimulation(T_ear.BOTH))
             Debug.Log("Frequency smearing disabled");
         else
-            Debug.Log("ERROR!!! Could not disable frequency smearing");         
+            Debug.Log("ERROR!!! Could not disable frequency smearing");
     }
 
     // Update is called once per frame
@@ -36,10 +36,10 @@ public class TestHLAPI : MonoBehaviour
     {
         if (Input.GetKeyDown("space"))
         {
-            if (HLAPI.SetAudiometryPreset(T_ear.BOTH, API_3DTI_HL.AUDIOMETRY_PRESET_MODERATE))
-                Debug.Log("Moderate HL Preset set");
+            if (HLAPI.SetAudiometryFromClassificationScale(T_ear.BOTH, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_K, 1, API_3DTI_HL.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_MILD))
+                Debug.Log("Audiometry set from curve K with slope 3 and severity " + HLAPI.FromClassificationScaleSeverityToString(API_3DTI_HL.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_MILD));
             else
-                Debug.Log("ERROR!!!! Could not set Moderate HL Preset");
+                Debug.Log("ERROR!!!! Could not set HL from classification scale");
         }
 
         if (Input.GetKeyDown(KeyCode.T))
@@ -49,7 +49,7 @@ public class TestHLAPI : MonoBehaviour
             else
                 Debug.Log("ERROR!!!! Could not enable temporal distortion simulation");
             HLAPI.SetTemporalDistortionWhiteNoisePower(T_ear.BOTH, 1.0f);
-            HLAPI.SetTemporalDistortionAutocorrelationFilterCutoff(T_ear.BOTH, 500.0f);
+            HLAPI.SetTemporalDistortionBandwidth(T_ear.BOTH, 500.0f);
         }
 
         if (Input.GetKeyDown(KeyCode.F))
