@@ -460,6 +460,19 @@ namespace LoudspeakersSpatializer3DTI
 			}
 			break;
 
+		case PARAM_MAG_ANECHATT:
+			magnitudes = data->core.GetMagnitudes();
+			magnitudes.SetAnechoicDistanceAttenuation(value);
+			data->core.SetMagnitudes(magnitudes);			
+			WriteLog(state, "SET PARAMETER: Anechoic distance attenuation set to (dB) ", value);
+			break;
+
+		case PARAM_MAG_SOUNDSPEED:
+			magnitudes = data->core.GetMagnitudes();
+			magnitudes.SetSoundSpeed(value);
+			data->core.SetMagnitudes(magnitudes);
+			WriteLog(state, "SET PARAMETER: Sound speed set to (m/s) ", value);
+			break;
 
 		case PARAM_DEBUG_LOG:
 			if (value != 0.0f)
