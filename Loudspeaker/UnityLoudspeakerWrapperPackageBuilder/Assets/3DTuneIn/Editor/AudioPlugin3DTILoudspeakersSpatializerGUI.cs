@@ -173,12 +173,18 @@ public class AudioPlugin3DTILoudspeakerSpatializerGUI : Editor
         {
             // Radio buttons
             int presetInt = (int)toolkit.speakersConfigurationPreset;
-            if (Common3DTIGUI.CreateRadioButtons(ref presetInt, new List<string>(new string[] { "Cube", "Octahedron", "2D Square" }),
-                 new List<string>(new string[] { "Set cube configuration preset", "Set octahedron configuration preset", "Set 2D square configuration preset" })))
+            if (Common3DTIGUI.CreateRadioButtons(ref presetInt, 
+                                                 new List<string>(new string[] { "Cube", "Octahedron", "2D Square" }),
+                                                 new List<string>(new string[] { "Set cube configuration preset", "Set octahedron configuration preset", "Set 2D square configuration preset" })))
+            {
                 toolkit.SetSpeakersConfigurationPreset((API_3DTI_LoudSpeakersSpatializer.T_LoudSpeakerConfigurationPreset)presetInt);
-
-            // Show number of speakers 
-            Common3DTIGUI.CreateReadonlyFloatText("Number of speakers", "", "", "Number of speakers of selected speakers configuration preset", toolkit.GetNumberOfSpeakers());
+            }                
+            // First time the number of speakers has been init to 0, we have to update it
+            if (toolkit.GetNumberOfSpeakers() == 0)
+            {
+                toolkit.SetSpeakersConfigurationPreset((API_3DTI_LoudSpeakersSpatializer.T_LoudSpeakerConfigurationPreset)presetInt);
+            }
+            Common3DTIGUI.CreateReadonlyFloatText("Number of speakers", "", "", "Number of speakers of selected speakers configuration preset", toolkit.GetNumberOfSpeakers());     // Show number of speakers 
             Common3DTIGUI.SingleSpace();
 
             // Structure side         
@@ -278,13 +284,62 @@ public class AudioPlugin3DTILoudspeakerSpatializerGUI : Editor
     {
         Vector3 previousSpeakerOffset = speakerOffset;
         Vector3 temp = EditorGUILayout.Vector3Field("", speakerOffset);
-        speakerOffset = CalculateSpeakerOffset(temp, speakerPosition);
+        speakerOffset = CalculateSpeakerOffsetBounded(temp, speakerPosition);
         return (previousSpeakerOffset != speakerOffset);            
     }
 
 
-    Vector3 CalculateSpeakerOffset(Vector3 speakerOffset, Vector3 speakerPosition )
-    {        
-        return new Vector3(Mathf.Clamp(speakerOffset.x, Mathf.Abs(speakerPosition.x) * -0.2f * 100.0f, Mathf.Abs(speakerPosition.x) * 0.2f * 100.0f), Mathf.Clamp(speakerOffset.y, Mathf.Abs(speakerPosition.y) * -0.2f * 100.0f, Mathf.Abs(speakerPosition.y) * 0.2f * 100.0f), Mathf.Clamp(speakerOffset.z, Mathf.Abs(speakerPosition.z) * -0.2f * 100.0f, Mathf.Abs(speakerPosition.z) * 0.2f * 100.0f));       
+    Vector3 CalculateSpeakerOffsetBounded(Vector3 speakerOffset, Vector3 speakerPosition )
+    {
+        //Calculation of the maximum and minimum dimensions of the three coordinates
+
+        float percentageOfChange = 10f;        //We only allow a change of +-10%        
+
+        float minimum = toolkit.GetStructureSide() * percentageOfChange *-1.0f;
+        float maximum = toolkit.GetStructureSide() * percentageOfChange;
+
+        ////X
+        //float x_minimum;
+        //float x_maximum;
+        //if (speakerPosition.x != 0.0f)
+        //{
+        //    x_minimum = Mathf.Abs(speakerPosition.x) * -percentageOfChange * 100.0f;
+        //    x_maximum = Mathf.Abs(speakerPosition.x) * percentageOfChange * 100.0f;
+        //}
+        //else
+        //{
+        //    x_minimum = -percentageOfChange * 100.0f;
+        //    x_maximum = percentageOfChange * 100.0f;
+        //}
+        ////Y
+        //float y_minimum;
+        //float y_maximum;
+        //if (speakerPosition.y != 0.0f)
+        //{
+        //    y_minimum = Mathf.Abs(speakerPosition.y) * -percentageOfChange * 100.0f;
+        //    y_maximum = Mathf.Abs(speakerPosition.y) * percentageOfChange * 100.0f;
+        //}
+        //else
+        //{
+        //    y_minimum = -percentageOfChange * 100.0f;
+        //    y_maximum = percentageOfChange * 100.0f;
+        //}
+        ////Z
+        //float z_minimum;
+        //float z_maximum;
+        //if (speakerPosition.z != 0.0f)
+        //{
+        //    z_minimum = Mathf.Abs(speakerPosition.z) * -percentageOfChange * 100.0f;
+        //    z_maximum = Mathf.Abs(speakerPosition.z) * percentageOfChange * 100.0f;
+        //}
+        //else
+        //{
+        //    z_minimum = -percentageOfChange * 100.0f;
+        //    z_maximum = percentageOfChange * 100.0f;
+        //}
+
+
+        //Calculate new vector
+        return new Vector3(Mathf.Clamp(speakerOffset.x, minimum, maximum), Mathf.Clamp(speakerOffset.y, minimum, maximum), Mathf.Clamp(speakerOffset.z, minimum, maximum));       
     }
 }

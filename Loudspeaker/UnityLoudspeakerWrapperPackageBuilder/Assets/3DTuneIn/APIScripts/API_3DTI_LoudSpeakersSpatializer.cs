@@ -25,7 +25,7 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     public List<Vector3> speakerPositions;  // Used by Inspector
     public List<Vector3> speakerOffsets;    // Used by Inspector
     public List<float> speakerWeights;      // Used by Inspector
-    int numberOfSpeakers = 0;    
+    int numberOfSpeakers;    
 
     // Definition of spatializer plugin commands   
     int SET_SCALE_FACTOR    = 0;
@@ -213,6 +213,15 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     }
 
     /// <summary>
+    /// Get size of one side of the speakers configuration structure, in meters
+    /// </summary>
+    /// <returns>side in meters</returns>
+    public float GetStructureSide()
+    {
+        return structureSide;
+    }
+
+    /// <summary>
     /// Get minimum distance from any source to listener (maximum distance of all speakers in the configuration)
     /// </summary>
     /// <returns></returns>
@@ -237,9 +246,10 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     /// <returns></returns>
     public Vector3 GetSpeakerPosition(int speakerID)
     {
-        return new Vector3(speakerPositions[speakerID].x + speakerOffsets[speakerID].x,
-                            speakerPositions[speakerID].y + speakerOffsets[speakerID].y,
-                            speakerPositions[speakerID].z + speakerOffsets[speakerID].z);
+        //Offset is in cm
+        return new Vector3( speakerPositions[speakerID].x + speakerOffsets[speakerID].x * 0.01f,
+                            speakerPositions[speakerID].y + speakerOffsets[speakerID].y * 0.01f,
+                            speakerPositions[speakerID].z + speakerOffsets[speakerID].z * 0.01f);
     }
 
     /// <summary>
@@ -249,7 +259,7 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     /// <param name="offset"></param>
     /// <returns></returns>
     public bool SetSpeakerOffset(int speakerID, Vector3 offset)
-    {
+    {        
         if ((speakerID < numberOfSpeakers) && (speakerID >= 0))
         {
             speakerOffsets[speakerID] = offset;
@@ -413,39 +423,23 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
 
             case T_LoudSpeakerConfigurationPreset.LS_PRESET_OCTAHEDRON:
 
-                // Front speaker
-                speakerPositions[0] = new Vector3(0.0f, 0.0f, structureSide) + speakerOffsets[0];
-
-                // Left speaker
-                speakerPositions[1] = new Vector3(-structureSide, 0.0f, 0.0f) + speakerOffsets[1];
-
-                // Rear speaker
-                speakerPositions[2] = new Vector3(0.0f, 0.0f, -structureSide) + speakerOffsets[2];
-
-                // Right speaker
-                speakerPositions[3] = new Vector3(structureSide, 0.0f, 0.0f) + speakerOffsets[3];
-
-                // Zenith speaker
-                speakerPositions[4] = new Vector3(0.0f, structureSide, 0.0f) + speakerOffsets[4];
-
-                // Nadir speaker
-                speakerPositions[5] = new Vector3(0.0f, -structureSide, 0.0f) + speakerOffsets[5];
+                float octahedronSide = structureSide / Mathf.Sqrt(2);
+                speakerPositions[0] = new Vector3(0.0f, 0.0f, octahedronSide) + speakerOffsets[0];   //Front speaker         
+                speakerPositions[1] = new Vector3(-octahedronSide, 0.0f, 0.0f) + speakerOffsets[1];  //Left speaker
+                speakerPositions[2] = new Vector3(0.0f, 0.0f, -octahedronSide) + speakerOffsets[2];  //Rear speaker               
+                speakerPositions[3] = new Vector3(octahedronSide, 0.0f, 0.0f) + speakerOffsets[3];   //Right speaker                
+                speakerPositions[4] = new Vector3(0.0f, octahedronSide, 0.0f) + speakerOffsets[4];   // Zenith speaker
+                speakerPositions[5] = new Vector3(0.0f, -octahedronSide, 0.0f) + speakerOffsets[5];  // Nadir speaker
 
                 break;
 
             case T_LoudSpeakerConfigurationPreset.LS_PRESET_2DSQUARE:
 
-                // Front speaker
-                speakerPositions[0] = new Vector3(0.0f, 0.0f, structureSide) + speakerOffsets[0];
-
-                // Left speaker
-                speakerPositions[1] = new Vector3(-structureSide, 0.0f, 0.0f) + speakerOffsets[1];
-
-                // Rear speaker
-                speakerPositions[2] = new Vector3(0.0f, 0.0f, -structureSide) + speakerOffsets[2];
-
-                // Right speaker
-                speakerPositions[3] = new Vector3(structureSide, 0.0f, 0.0f) + speakerOffsets[3];
+                float _2DSquareSide = structureSide / Mathf.Sqrt(2);
+                speakerPositions[0] = new Vector3(0.0f, 0.0f, _2DSquareSide) + speakerOffsets[0];   // Front speaker
+                speakerPositions[1] = new Vector3(-_2DSquareSide, 0.0f, 0.0f) + speakerOffsets[1];  // Left speaker
+                speakerPositions[2] = new Vector3(0.0f, 0.0f, -_2DSquareSide) + speakerOffsets[2];  // Rear speaker
+                speakerPositions[3] = new Vector3(_2DSquareSide, 0.0f, 0.0f) + speakerOffsets[3];   // Right speaker
 
                 break;
 
