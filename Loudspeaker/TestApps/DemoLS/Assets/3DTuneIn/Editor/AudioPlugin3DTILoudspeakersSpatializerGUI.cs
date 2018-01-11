@@ -35,24 +35,7 @@ public class AudioPlugin3DTILoudspeakerSpatializerGUI : Editor
     float maxDB = 0.0f;
     float maxSoundSpeed = 1000.0f;
     
-
-    // Editor view look
-    //float spaceBetweenSections = 15.0f;
-    //float singleSpace = 5.0f;
-    //GUIStyle titleBoxStyle = null;
-    //GUIStyle subtitleBoxStyle;
-    //GUIStyle sectionStyle;
-    //GUIStyle subsectionStyle;
-    //GUIStyle dragdropStyle;
-
     //////////////////////////////////////////////////////////////////////////////
-
-    void Start()
-    {
-        // Get access to API script
-        //toolkit = (API_3DTI_LoudSpeakersSpatializer)target;
-        //toolkit.debugLog = false;
-    }
 
     /// <summary>
     /// This is where we create the layout for the inspector
@@ -64,24 +47,6 @@ public class AudioPlugin3DTILoudspeakerSpatializerGUI : Editor
 
         // Init styles
         Common3DTIGUI.InitStyles();
-
-        //// Init styles
-        //if (titleBoxStyle == null)
-        //{
-        //    titleBoxStyle = new GUIStyle(GUI.skin.box);
-        //    titleBoxStyle.normal.textColor = Color.white;
-        //}
-        //subtitleBoxStyle = EditorStyles.label;
-        //sectionStyle = EditorStyles.miniButton;
-        //subsectionStyle = EditorStyles.miniButton;
-        //dragdropStyle = EditorStyles.textField;
-
-        //// Show 3D-Tune-In logo         
-        //Texture logo3DTI;
-        //GUIStyle logoStyle = EditorStyles.largeLabel;
-        //logoStyle.alignment = TextAnchor.MiddleCenter;
-        //logo3DTI = Resources.Load("logo3DTI_") as Texture;
-        //GUILayout.Box(logo3DTI, logoStyle, GUILayout.ExpandWidth(true));
 
         // Show 3D-Tune-In logo         
         Common3DTIGUI.Show3DTILogo();
@@ -103,44 +68,10 @@ public class AudioPlugin3DTILoudspeakerSpatializerGUI : Editor
     ///////////////////////////////////////////////////////////
 
     /// <summary>
-    /// Action to do when a new file has been selected (either for HRTF or ILD, and either from button or drag&drop)
-    /// </summary>
-    public void ChangeFileName(ref string whichfilename, string newname)
-    {
-        // Set new name for toolkit API
-        whichfilename = newname;
-
-    //#if UNITY_ANDROID
-        // Save it in resources as .byte                
-        string newnamewithpath = "Assets/Resources/" + Path.GetFileNameWithoutExtension(newname) + ".bytes";
-        if (!File.Exists(newnamewithpath)) 
-            FileUtil.CopyFileOrDirectory(whichfilename, newnamewithpath);
-    //#endif        
-	}
-
-
-    /// <summary>
-    /// Action for slider Sample Rate
-    /// </summary>
-    public void SliderSampleRate()
-    {
-        //Debug.Log("Slider sample rate changed");
-    }
-
-    /// <summary>
-    /// Action for slider Buffer Size
-    /// </summary>
-    public void SliderBufferSize()
-    {
-        //Debug.Log("Slider buffer size changed");
-    }
-
-    /// <summary>
     /// Action for slider Scale
     /// </summary>
     public void SliderScale()
     {
-        //Debug.Log("Slider scale changed");
         toolkit.SetScaleFactor(toolkit.scaleFactor);
     }
 
@@ -150,6 +81,7 @@ public class AudioPlugin3DTILoudspeakerSpatializerGUI : Editor
     public void SliderAnechoicAttenuation()
     {
         toolkit.SetMagnitudeAnechoicAttenuation(toolkit.magAnechoicAttenuation);
+        Debug.Log("magAnechoicAttenuation: " + toolkit.magAnechoicAttenuation);
     }
 
     /// <summary>
@@ -161,69 +93,136 @@ public class AudioPlugin3DTILoudspeakerSpatializerGUI : Editor
     }
 
     /// <summary>
-    /// Action for slider Anechoic Attenuation
+    /// Action for slider Structure side
     /// </summary>
-    public void SliderSpeakersConfiguration()
+    public void SliderStructureSide()
     {
-        toolkit.SetupSpeakersConfiguration(toolkit.structureSide);
+        toolkit.SetStructureSide(toolkit.structureSide);
     }
+
+    ///// <summary>
+    ///// Action for slider Anechoic Attenuation
+    ///// </summary>
+    //public void SliderSpeakersConfiguration()
+    //{
+    //    toolkit.SetupSpeakersConfiguration(toolkit.structureSide);
+    //}
 
     ///////////////////////////////////////////////////////////
     // PANEL CONTENTS
     ///////////////////////////////////////////////////////////
+
+    ///// <summary>
+    ///// Draw panel for choosing speakers configuration preset
+    ///// </summary>
+    //public void DrawSpeakersConfigurationPanel()
+    //{
+    //    Common3DTIGUI.BeginSection("SPEAKER POSITIONS CONFIGURATION");       
+    //        Common3DTIGUI.BeginSubsection("Speakers cube structure");        
+    //            float previousStructureSize = toolkit.structureSide;
+    //            float structureSide = EditorGUILayout.FloatField("Cube side size (m): ", toolkit.structureSide);
+    //            toolkit.structureSide = Mathf.Clamp(structureSide, minStructSide, maxStructSide);
+    //            if (previousStructureSize != toolkit.structureSide) { SliderSpeakersConfiguration(); }
+    //            //TODO: minDistance to the listener value should come from the toolkit. Due to the current GIU allows the user introduce just the speakers structure side, the minimun distance can be calculated from that size
+    //            float minDistanceToListener = Mathf.Sqrt(3) * 0.5f * toolkit.structureSide;
+    //            GUILayout.Label("Minimun distance between listener and source: " + minDistanceToListener + " m");
+    //        Common3DTIGUI.EndSubsection();
+    //        Common3DTIGUI.BeginSubsection("Speakers Fine Adjustment");
+    //            Common3DTIGUI.SingleSpace();
+    //            GUILayout.BeginHorizontal();
+    //                GUILayout.BeginVertical();
+    //                    ShowSpeakerPosition("Spk1", toolkit.speaker1Offset, toolkit.speaker1Position);
+    //                    ShowSpeakerPosition("Spk2", toolkit.speaker2Offset, toolkit.speaker2Position);
+    //                    ShowSpeakerPosition("Spk3", toolkit.speaker3Offset, toolkit.speaker3Position);
+    //                    ShowSpeakerPosition("Spk4", toolkit.speaker4Offset, toolkit.speaker4Position);
+    //                    ShowSpeakerPosition("Spk5", toolkit.speaker5Offset, toolkit.speaker5Position);
+    //                    ShowSpeakerPosition("Spk6", toolkit.speaker6Offset, toolkit.speaker6Position);
+    //                    ShowSpeakerPosition("Spk7", toolkit.speaker7Offset, toolkit.speaker7Position);
+    //                    ShowSpeakerPosition("Spk8", toolkit.speaker8Offset, toolkit.speaker8Position);       
+    //                GUILayout.EndVertical();
+    //                GUILayout.BeginVertical();
+    //                    GUILayout.Label("Offset (cm):");
+    //                    GUILayout.Label("Offset (cm):");
+    //                    GUILayout.Label("Offset (cm):");
+    //                    GUILayout.Label("Offset (cm):");
+    //                    GUILayout.Label("Offset (cm):");
+    //                    GUILayout.Label("Offset (cm):");
+    //                    GUILayout.Label("Offset (cm):");
+    //                    GUILayout.Label("Offset (cm):");
+    //                GUILayout.EndVertical();
+    //                GUILayout.BeginVertical();
+    //                    ShowSpeakerOffsetControl(ref toolkit.speaker1Offset, toolkit.speaker1Position);
+    //                    ShowSpeakerOffsetControl(ref toolkit.speaker2Offset, toolkit.speaker2Position);
+    //                    ShowSpeakerOffsetControl(ref toolkit.speaker3Offset, toolkit.speaker3Position);
+    //                    ShowSpeakerOffsetControl(ref toolkit.speaker4Offset, toolkit.speaker4Position);
+    //                    ShowSpeakerOffsetControl(ref toolkit.speaker5Offset, toolkit.speaker5Position);
+    //                    ShowSpeakerOffsetControl(ref toolkit.speaker6Offset, toolkit.speaker6Position);
+    //                    ShowSpeakerOffsetControl(ref toolkit.speaker7Offset, toolkit.speaker7Position);
+    //                    ShowSpeakerOffsetControl(ref toolkit.speaker8Offset, toolkit.speaker8Position);
+    //                GUILayout.EndVertical();
+    //            GUILayout.EndHorizontal();
+    //        Common3DTIGUI.EndSubsection();
+    //    Common3DTIGUI.EndSection();
+    //}
+
     /// <summary>
-    /// Draw panel with advanced configuration
+    /// Draw panel for choosing speakers configuration preset
     /// </summary>
     public void DrawSpeakersConfigurationPanel()
     {
-        Common3DTIGUI.BeginSection("SPEAKER POSITIONS CONFIGURATION");       
-            Common3DTIGUI.BeginSubsection("Speakers cube structure");        
-                float previousStructureSize = toolkit.structureSide;
-                float structureSide = EditorGUILayout.FloatField("Cube side size (m): ", toolkit.structureSide);
-                toolkit.structureSide = Mathf.Clamp(structureSide, minStructSide, maxStructSide);
-                if (previousStructureSize != toolkit.structureSide) { SliderSpeakersConfiguration(); }
-                //TODO: minDistance to the listener value should come from the toolkit. Due to the current GIU allows the user introduce just the speakers structure side, the minimun distance can be calculated from that size
-                float minDistanceToListener = Mathf.Sqrt(3) * 0.5f * toolkit.structureSide;
-                GUILayout.Label("Minimun distance between listener and source: " + minDistanceToListener + " m");
-            Common3DTIGUI.EndSubsection();
+        Common3DTIGUI.BeginSection("SPEAKER CONFIGURATION PRESETS");
+        {
+            // Radio buttons
+            int presetInt = (int)toolkit.speakersConfigurationPreset;
+            if (Common3DTIGUI.CreateRadioButtons(ref presetInt, new List<string>(new string[] { "Cube", "Octahedron", "2D Square" }),
+                 new List<string>(new string[] { "Set cube configuration preset", "Set octahedron configuration preset", "Set 2D square configuration preset" })))
+                toolkit.SetSpeakersConfigurationPreset((API_3DTI_LoudSpeakersSpatializer.T_LoudSpeakerConfigurationPreset)presetInt);
+
+            // Show number of speakers 
+            Common3DTIGUI.CreateReadonlyFloatText("Number of speakers", "", "", "Number of speakers of selected speakers configuration preset", toolkit.GetNumberOfSpeakers());
+            Common3DTIGUI.SingleSpace();
+
+            // Structure side         
+            Common3DTIGUI.AddLabelToParameterGroup("Structure side");   
+            Common3DTIGUI.CreateFloatSlider(ref toolkit.structureSide, "Structure side", "F2", "m", "Set one side of the speakers configuration structure, in meters", minStructSide, maxStructSide, SliderStructureSide);
+            //Common3DTIGUI.CreateReadonlyFloatText("Minimum distance to listener", "F2", "m", "Minimum distance from any source to listener, in meters", toolkit.GetMinimumDistanceToListener());
+
             Common3DTIGUI.BeginSubsection("Speakers Fine Adjustment");
+            {
                 Common3DTIGUI.SingleSpace();
                 GUILayout.BeginHorizontal();
+                {
                     GUILayout.BeginVertical();
-                        ShowSpeakerPosition("Spk1", toolkit.speaker1Offset, toolkit.speaker1Position);
-                        ShowSpeakerPosition("Spk2", toolkit.speaker2Offset, toolkit.speaker2Position);
-                        ShowSpeakerPosition("Spk3", toolkit.speaker3Offset, toolkit.speaker3Position);
-                        ShowSpeakerPosition("Spk4", toolkit.speaker4Offset, toolkit.speaker4Position);
-                        ShowSpeakerPosition("Spk5", toolkit.speaker5Offset, toolkit.speaker5Position);
-                        ShowSpeakerPosition("Spk6", toolkit.speaker6Offset, toolkit.speaker6Position);
-                        ShowSpeakerPosition("Spk7", toolkit.speaker7Offset, toolkit.speaker7Position);
-                        ShowSpeakerPosition("Spk8", toolkit.speaker8Offset, toolkit.speaker8Position);       
+                    {
+                        for (int i = 0; i < toolkit.GetNumberOfSpeakers(); i++)                        
+                            ShowSpeakerPosition("Spk" + i.ToString(), toolkit.GetSpeakerPosition(i));                        
+                    }
                     GUILayout.EndVertical();
+
                     GUILayout.BeginVertical();
-                        GUILayout.Label("Offset (cm):");
-                        GUILayout.Label("Offset (cm):");
-                        GUILayout.Label("Offset (cm):");
-                        GUILayout.Label("Offset (cm):");
-                        GUILayout.Label("Offset (cm):");
-                        GUILayout.Label("Offset (cm):");
-                        GUILayout.Label("Offset (cm):");
-                        GUILayout.Label("Offset (cm):");
+                    {
+                        for (int i = 0; i < toolkit.GetNumberOfSpeakers(); i++)
+                            GUILayout.Label("Offset (cm):");
+                    }
                     GUILayout.EndVertical();
+
                     GUILayout.BeginVertical();
-                        ShowSpeakerOffsetControl(ref toolkit.speaker1Offset, toolkit.speaker1Position);
-                        ShowSpeakerOffsetControl(ref toolkit.speaker2Offset, toolkit.speaker2Position);
-                        ShowSpeakerOffsetControl(ref toolkit.speaker3Offset, toolkit.speaker3Position);
-                        ShowSpeakerOffsetControl(ref toolkit.speaker4Offset, toolkit.speaker4Position);
-                        ShowSpeakerOffsetControl(ref toolkit.speaker5Offset, toolkit.speaker5Position);
-                        ShowSpeakerOffsetControl(ref toolkit.speaker6Offset, toolkit.speaker6Position);
-                        ShowSpeakerOffsetControl(ref toolkit.speaker7Offset, toolkit.speaker7Position);
-                        ShowSpeakerOffsetControl(ref toolkit.speaker8Offset, toolkit.speaker8Position);
+                    {
+                        for (int i = 0; i < toolkit.GetNumberOfSpeakers(); i++)
+                        {
+                            Vector3 speakerOffset = toolkit.speakerOffsets[i];
+                            if (ShowSpeakerOffsetControl(ref speakerOffset, toolkit.speakerPositions[i]))                            
+                                toolkit.SetSpeakerOffset(i, speakerOffset);
+                        }
+                    }
                     GUILayout.EndVertical();
+                }
                 GUILayout.EndHorizontal();
+            }
             Common3DTIGUI.EndSubsection();
+        }
         Common3DTIGUI.EndSection();
     }
-
 
     /// <summary>
     /// Draw panel with advanced configuration
@@ -270,17 +269,18 @@ public class AudioPlugin3DTILoudspeakerSpatializerGUI : Editor
     }
 
 
-    void ShowSpeakerPosition(string label, Vector3 speakerOffset, Vector3 speakerPosition)
+    void ShowSpeakerPosition(string label, Vector3 speakerPosition)
     {
-        GUILayout.Label(label +" " + (speakerPosition + speakerOffset * 0.01f).ToString("f2") + " m");
+        //GUILayout.Label(label +" " + (speakerPosition + speakerOffset * 0.01f).ToString("f2") + " m");
+        GUILayout.Label(label + " " + (speakerPosition).ToString("f2") + " m");
     }
 
-    void ShowSpeakerOffsetControl(ref Vector3 speakerOffset, Vector3 speakerPosition)
+    bool ShowSpeakerOffsetControl(ref Vector3 speakerOffset, Vector3 speakerPosition)
     {
         Vector3 previousSpeakerOffset = speakerOffset;
         Vector3 temp = EditorGUILayout.Vector3Field("", speakerOffset);
         speakerOffset = CalculateSpeakerOffset(temp, speakerPosition);
-        if (previousSpeakerOffset != speakerOffset) { SliderSpeakersConfiguration(); }
+        return (previousSpeakerOffset != speakerOffset);            
     }
 
 
