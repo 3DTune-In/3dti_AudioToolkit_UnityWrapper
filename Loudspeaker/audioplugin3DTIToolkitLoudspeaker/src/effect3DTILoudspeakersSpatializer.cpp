@@ -15,7 +15,7 @@
 
 //#include <LoudspeakersSpatializer/Core_LS.h>
 #include <LoudspeakersSpatializer/3DTI_LoudspeakersSpatializer.h>
-#include <Common/Debugger.h>
+#include <Common/ErrorHandler.h>
 
 // Includes for debug logging
 #include <fstream>
