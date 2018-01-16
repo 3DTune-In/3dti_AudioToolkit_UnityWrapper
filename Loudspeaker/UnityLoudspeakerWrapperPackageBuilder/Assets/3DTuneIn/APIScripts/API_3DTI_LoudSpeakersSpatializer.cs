@@ -129,9 +129,10 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     /////////////////////////////////////////////////////////////////////
 
     /// <summary>
-    /// Set one speakers configuration preset 
+    ///  Set one speakers configuration preset and initialize the sperkers positions
     /// </summary>
-    /// <returns></returns>
+    /// <param name="preset"> Speakers setup configuration. Param type: T_LoudSpeakerConfigurationPreset</param>
+    /// <returns>return false if the preset is not valid</returns>
     public bool SetSpeakersConfigurationPreset(T_LoudSpeakerConfigurationPreset preset)
     {
         if ((preset != T_LoudSpeakerConfigurationPreset.LS_PRESET_2DSQUARE) &&
@@ -172,7 +173,7 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     }
 
     /// <summary>
-    /// Get number of speakers of currently set speakers configuration preset
+    /// Get number of speakers according to the currently set speakers configuration preset
     /// </summary>
     /// <returns></returns>
     public int GetNumberOfSpeakers()
@@ -181,9 +182,9 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     }    
 
     /// <summary>
-    /// Set size of one side of the speakers configuration structure, in meters
+    /// Set size of one side of the speakers configuration preset, in meters
     /// </summary>
-    /// <param name="side"></param>
+    /// <param name="side"> Indicate in meter the side of the speakers structure</param>
     /// <returns></returns>
     public bool SetStructureSide(float side)
     {
@@ -193,7 +194,7 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     }
 
     /// <summary>
-    /// Get size of one side of the speakers configuration structure, in meters
+    /// Get size of one side of the speakers configuration preset, in meters
     /// </summary>
     /// <returns>side in meters</returns>
     public float GetStructureSide()
@@ -202,7 +203,7 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     }
 
     /// <summary>
-    /// Get minimum distance from any source to listener (maximum distance of all speakers in the configuration)
+    /// Get minimum distance from any source to listener according to the speakers setup)
     /// </summary>
     /// <returns></returns>
     public float GetMinimumDistanceToListener()
@@ -220,10 +221,10 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     }
 
     /// <summary>
-    /// Get position of one speaker, including offset
+    /// Get position of one speaker
     /// </summary>
     /// <param name="speakerID"></param>
-    /// <returns></returns>
+    /// <returns> speakers position in m (x,y,z) inclusing offset</returns>
     public Vector3 GetSpeakerPosition(int speakerID)
     {
         //Offset is in cm
@@ -248,10 +249,6 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         else
             return false;
     }
-
-    /////////////////////////////////////////////////////////////////////
-    // ADVANCED API METHODS
-    /////////////////////////////////////////////////////////////////////
 
     /// <summary>
     /// Send configuration of all speakers
@@ -384,9 +381,8 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     }
 
     
-
-    /// <summary>
-    /// Set scale factor. Allows the toolkit to work with big-scale or small-scale scenarios
+        /// <summary>
+    /// Set scale factor. Allows the toolkit to work with different scaled scenarios
     /// </summary>
     /// <param name="scale"></param>
     /// <returns></returns>
@@ -397,8 +393,9 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     }
 
     /// <summary>
-    ///  Setup modules enabler, allowing to switch on/off core features
+    /// Setup the diantance attenuation and far distance simulation according to the API_3DTI_LoudSpeakersSpatializer variables modDistAtt and modFarLPF respectively 
     /// </summary>
+    /// <returns>true if the setup has been done correctly</returns>
     public bool SetupModulesEnabler()
     {
         if (!SetModFarLPF(modFarLPF)) return false;
@@ -408,10 +405,10 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     
 
     /// <summary>
-    /// Switch on/off far distance LPF
+    /// Switch on/off far distance simulation (LPF)
     /// </summary>
-    /// <param name="_enable"></param>
-    /// <returns></returns>
+    /// <param name="_enable"> true to activate far away distance attenuation</param>
+    /// <returns>true if the data has been sent correctly</returns>
     public bool SetModFarLPF(bool _enable)
     {
         modFarLPF = _enable;        
@@ -421,8 +418,10 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     /////////////////////////////////////////////////////////////////////
 
     /// <summary>
-    /// Switch on/off distance attenuation
-    /// </summary>        
+    ///  Switch on/off global distance attenuation
+    /// </summary>
+    /// <param name="_enable"> true to activate distance attenuation</param>
+    /// <returns>true if the data has been sent correctly</returns>
     public bool SetModDistanceAttenuation(bool _enable)
     {
         modDistAtt = _enable;
@@ -430,10 +429,12 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     }
 
     /////////////////////////////////////////////////////////////////////
-  
+
     /// <summary>
-    /// Set magnitude Anechoic Attenuation
-    /// </summary>    
+    ///  Set attenuation value (dB) for distance attenuation Attenuation
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns>true if the data has been sent correctly</returns>
     public bool SetMagnitudeAnechoicAttenuation(float value)
     {
         magAnechoicAttenuation = value;
@@ -441,15 +442,16 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     }
 
     /// <summary>
-    /// Set magnitude Sound Speed
-    /// </summary>    
+    ///  Set value for  Sound Speed (m/s)
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns>true if the data has been sent correctly</returns>
     public bool SetMagnitudeSoundSpeed(float value)
     {
         magSoundSpeed = value;
         return SendCommandForAllSources(SET_MAG_SOUNDSPEED, value);
     }
 
-    /////////////////////////////////////////////////////////////////////
 
     /////////////////////////////////////////////////////////////////////
     // AUXILIARY FUNCTIONS
@@ -458,7 +460,7 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     /// <summary>
     /// Send command to plugin to switch on/off write to Debug Log file
     /// </summary>
-    /// <param name="_enable"></param>
+    /// <param name="_enable">true to activate wrinting in the file </param>
     /// <returns></returns>
     public bool SendWriteDebugLog(bool _enable)
     {
@@ -466,9 +468,7 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         return SendCommandForAllSources(SET_DEBUG_LOG, Bool2Float(_enable));
     }
 
-    /// <summary>
-    /// Send command to the DLL, for each registered source
-    /// </summary>
+    // Send command to the DLL, for each registered source
     private bool SendCommandForAllSources(int command, float value)
     {
         if (!selectSource)
@@ -485,9 +485,8 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
             return selectedSource.SetSpatializerFloat(command, value);
     }
 
-    /// <summary>
-    /// Returns a list with all audio sources with the Spatialized toggle checked
-    /// </summary>
+
+    // Returns a list with all audio sources with the Spatialized toggle checked
     private List<AudioSource> GetAllSpatializedSources()
     {
         //GameObject[] audioSources = GameObject.FindGameObjectsWithTag("AudioSource");
@@ -504,11 +503,6 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         return spatializedSources;
     }
 
-    /// <summary>
-    /// Auxiliary function
-    /// </summary>
-    /// <param name="v"></param>
-    /// <returns></returns>
     private float Bool2Float(bool v)
     {
         if (v)
