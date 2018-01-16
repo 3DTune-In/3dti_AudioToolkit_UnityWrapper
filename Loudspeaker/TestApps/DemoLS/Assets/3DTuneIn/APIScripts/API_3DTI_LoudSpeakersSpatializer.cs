@@ -20,12 +20,9 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     public bool debugLog = false;                   // Used by Inspector
     public float structureSide = 1.0f;  // Used by Inspector    
 
-    //public float structureYaw   = 0.0f;
-    //public float structurePitch = 0.0f;
     public List<Vector3> speakerPositions;  // Used by Inspector
     public List<Vector3> speakerOffsets;    // Used by Inspector
-    public List<float> speakerWeights;      // Used by Inspector
-    int numberOfSpeakers = 0;    
+    int numberOfSpeakers;    
 
     // Definition of spatializer plugin commands   
     int SET_SCALE_FACTOR    = 0;
@@ -60,15 +57,7 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     int SET_SPEAKER_6_Z = 29;
     int SET_SPEAKER_7_Z = 30;
     int SET_SPEAKER_8_Z = 31;
-    int SET_SPEAKER_1_W = 32;
-    int SET_SPEAKER_2_W = 33;
-    int SET_SPEAKER_3_W = 34;
-    int SET_SPEAKER_4_W = 35;
-    int SET_SPEAKER_5_W = 36;
-    int SET_SPEAKER_6_W = 37;
-    int SET_SPEAKER_7_W = 38;
-    int SET_SPEAKER_8_W = 39;
-    int GET_MINIMUM_DISTANCE = 40;
+    int GET_MINIMUM_DISTANCE = 32;
 
     // Hack for modifying one single AudioSource (TO DO: fix this)
     bool selectSource = false;
@@ -104,6 +93,8 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     /// Sends all configuration to all spatialized sources. 
     /// Use it each time you activate an audio source or activate its "spatialize" attribute. 
     /// </summary>
+    /// <param name="source"></param>
+    /// <returns></returns>    
     public bool StartLoudSpeakersSpatializer(AudioSource source = null)
     {
         // Select only one AudioSource
@@ -124,7 +115,6 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         if (!SetupModulesEnabler()) return false;
 
         // Setup speakers configuration (position)
-        //if (!SetupSpeakersConfiguration(structureSide)) return false;
         if (!SetSpeakersConfigurationPreset(speakersConfigurationPreset)) return false;
 
         // Go back to default state, affecting all sources
@@ -139,9 +129,10 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     /////////////////////////////////////////////////////////////////////
 
     /// <summary>
-    /// Set one speakers configuration preset 
+    ///  Set one speakers configuration preset and initialize the sperkers positions
     /// </summary>
-    /// <returns></returns>
+    /// <param name="preset"> Speakers setup configuration. Param type: T_LoudSpeakerConfigurationPreset</param>
+    /// <returns>return false if the preset is not valid</returns>
     public bool SetSpeakersConfigurationPreset(T_LoudSpeakerConfigurationPreset preset)
     {
         if ((preset != T_LoudSpeakerConfigurationPreset.LS_PRESET_2DSQUARE) &&
@@ -152,26 +143,18 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         speakersConfigurationPreset = preset;
         speakerPositions.Clear();
         speakerOffsets.Clear();
-        speakerWeights.Clear();
         
         switch (preset)
         {
             case T_LoudSpeakerConfigurationPreset.LS_PRESET_CUBE:
                 numberOfSpeakers = 8;
-                break;
-
-            //case T_LoudSpeakerConfigurationPreset.LS_PRESET_DOME:
-            //    numberOfSpeakers = 8;
-            //    break;
-
+                break;            
             case T_LoudSpeakerConfigurationPreset.LS_PRESET_OCTAHEDRON:
                 numberOfSpeakers = 6;
                 break;
-
             case T_LoudSpeakerConfigurationPreset.LS_PRESET_2DSQUARE:
                 numberOfSpeakers = 4;
                 break;
-
             default:
                 return false;                
         }        
@@ -181,18 +164,16 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         {
             speakerPositions.Add(Vector3.zero);
             speakerOffsets.Add(Vector3.zero);
-            speakerWeights.Add(0.0f);
         }
 
         // Calculate speaker positions and weights and send configuration to toolkit
         CalculateSpeakerPositions();
-        CalculateSpeakerWeights();
         if (!SendLoudSpeakersConfiguration()) return false;
         return true;
     }
 
     /// <summary>
-    /// Get number of speakers of currently set speakers configuration preset
+    /// Get number of speakers according to the currently set speakers configuration preset
     /// </summary>
     /// <returns></returns>
     public int GetNumberOfSpeakers()
@@ -201,9 +182,9 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     }    
 
     /// <summary>
-    /// Set size of one side of the speakers configuration structure, in meters
+    /// Set size of one side of the speakers configuration preset, in meters
     /// </summary>
-    /// <param name="side"></param>
+    /// <param name="side"> Indicate in meter the side of the speakers structure</param>
     /// <returns></returns>
     public bool SetStructureSide(float side)
     {
@@ -213,7 +194,16 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     }
 
     /// <summary>
-    /// Get minimum distance from any source to listener (maximum distance of all speakers in the configuration)
+    /// Get size of one side of the speakers configuration preset, in meters
+    /// </summary>
+    /// <returns>side in meters</returns>
+    public float GetStructureSide()
+    {
+        return structureSide;
+    }
+
+    /// <summary>
+    /// Get minimum distance from any source to listener according to the speakers setup)
     /// </summary>
     /// <returns></returns>
     public float GetMinimumDistanceToListener()
@@ -231,15 +221,16 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     }
 
     /// <summary>
-    /// Get position of one speaker, including offset
+    /// Get position of one speaker
     /// </summary>
     /// <param name="speakerID"></param>
-    /// <returns></returns>
+    /// <returns> speakers position in m (x,y,z) inclusing offset</returns>
     public Vector3 GetSpeakerPosition(int speakerID)
     {
-        return new Vector3(speakerPositions[speakerID].x + speakerOffsets[speakerID].x,
-                            speakerPositions[speakerID].y + speakerOffsets[speakerID].y,
-                            speakerPositions[speakerID].z + speakerOffsets[speakerID].z);
+        //Offset is in cm
+        return new Vector3( speakerPositions[speakerID].x + speakerOffsets[speakerID].x * 0.01f,
+                            speakerPositions[speakerID].y + speakerOffsets[speakerID].y * 0.01f,
+                            speakerPositions[speakerID].z + speakerOffsets[speakerID].z * 0.01f);
     }
 
     /// <summary>
@@ -249,7 +240,7 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     /// <param name="offset"></param>
     /// <returns></returns>
     public bool SetSpeakerOffset(int speakerID, Vector3 offset)
-    {
+    {        
         if ((speakerID < numberOfSpeakers) && (speakerID >= 0))
         {
             speakerOffsets[speakerID] = offset;
@@ -258,10 +249,6 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         else
             return false;
     }
-
-    /////////////////////////////////////////////////////////////////////
-    // ADVANCED API METHODS
-    /////////////////////////////////////////////////////////////////////
 
     /// <summary>
     /// Send configuration of all speakers
@@ -335,16 +322,6 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         // Send command for ending setup
         if (!SendCommandForAllSources(SET_SAVE_SPEAKERS_CONFIG, 1.0f)) return false;
 
-        // Send weights 
-        if (numberOfSpeakers > 0) if (!SendCommandForAllSources(SET_SPEAKER_1_W, speakerWeights[0])) return false;
-        if (numberOfSpeakers > 1) if (!SendCommandForAllSources(SET_SPEAKER_2_W, speakerWeights[1])) return false;
-        if (numberOfSpeakers > 2) if (!SendCommandForAllSources(SET_SPEAKER_3_W, speakerWeights[2])) return false;
-        if (numberOfSpeakers > 3) if (!SendCommandForAllSources(SET_SPEAKER_4_W, speakerWeights[3])) return false;
-        if (numberOfSpeakers > 4) if (!SendCommandForAllSources(SET_SPEAKER_5_W, speakerWeights[4])) return false;
-        if (numberOfSpeakers > 5) if (!SendCommandForAllSources(SET_SPEAKER_6_W, speakerWeights[5])) return false;
-        if (numberOfSpeakers > 6) if (!SendCommandForAllSources(SET_SPEAKER_7_W, speakerWeights[6])) return false;
-        if (numberOfSpeakers > 7) if (!SendCommandForAllSources(SET_SPEAKER_8_W, speakerWeights[7])) return false;
-        
         return true;
     }
 
@@ -356,111 +333,32 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         switch (speakersConfigurationPreset)
         {
             case T_LoudSpeakerConfigurationPreset.LS_PRESET_CUBE:
-
-                // Front Left Down speaker                
-                speakerPositions[2] = new Vector3(-0.5f * structureSide, -0.5f * structureSide, 0.5f * structureSide) + speakerOffsets[0];
-
-                // Front Right Down speaker
-                speakerPositions[3] = new Vector3(0.5f * structureSide, -0.5f * structureSide, 0.5f * structureSide) + speakerOffsets[1];
-
-                // Rear Left Down speaker
-                speakerPositions[6] = new Vector3(-0.5f * structureSide, -0.5f * structureSide, -0.5f * structureSide) + speakerOffsets[2];
-
-                // Rear Right Down speaker
-                speakerPositions[7] = new Vector3(0.5f * structureSide, -0.5f * structureSide, -0.5f * structureSide) + speakerOffsets[3];
-
-                // Front Left Up speaker
-                speakerPositions[0] = new Vector3(-0.5f * structureSide, 0.5f * structureSide, 0.5f * structureSide) + speakerOffsets[4];
-
-                // Front Right Up speaker
-                speakerPositions[1] = new Vector3(0.5f * structureSide, 0.5f * structureSide, 0.5f * structureSide) + speakerOffsets[5];
-
-                // Rear Left Up speaker
-                speakerPositions[4] = new Vector3(-0.5f * structureSide, 0.5f * structureSide, -0.5f * structureSide) + speakerOffsets[6];
-
-                // Rear Right Up speaker
-                speakerPositions[5] = new Vector3(0.5f * structureSide, 0.5f * structureSide, -0.5f * structureSide) + speakerOffsets[7];
-
+                float cubeSide = 0.5f * structureSide;
+                speakerPositions[2] = new Vector3(-cubeSide, -cubeSide, cubeSide) + speakerOffsets[0];  // Front Left Down speaker                     
+                speakerPositions[3] = new Vector3(cubeSide, -cubeSide, cubeSide) + speakerOffsets[1];   // Front Right Down speaker
+                speakerPositions[6] = new Vector3(-cubeSide, -cubeSide, -cubeSide) + speakerOffsets[2]; // Rear Left Down speaker                    
+                speakerPositions[7] = new Vector3(cubeSide, -cubeSide, -cubeSide) + speakerOffsets[3];  // Rear Right Down speaker                
+                speakerPositions[0] = new Vector3(-cubeSide, cubeSide, cubeSide) + speakerOffsets[4];   // Front Left Up speaker
+                speakerPositions[1] = new Vector3(cubeSide, cubeSide, cubeSide) + speakerOffsets[5];    // Front Right Up speaker
+                speakerPositions[4] = new Vector3(-cubeSide, cubeSide, -cubeSide) + speakerOffsets[6];  // Rear Left Up speaker
+                speakerPositions[5] = new Vector3(cubeSide, cubeSide, -cubeSide) + speakerOffsets[7];   // Rear Right Up speaker
                 break;
-
-            //case T_LoudSpeakerConfigurationPreset.LS_PRESET_DOME:                
-
-            //    // Front speaker
-            //    speakerPositions[0] =  new Vector3(0.0f, 0.0f, structureSide) + speakerOffsets[0];
-
-            //    // Left speaker
-            //    speakerPositions[1] = new Vector3(-structureSide, 0.0f, 0.0f) + speakerOffsets[1];
-
-            //    // Rear speaker
-            //    speakerPositions[2] =  new Vector3(0.0f, 0.0f, -structureSide) + speakerOffsets[2];
-
-            //    // Right speaker
-            //    speakerPositions[3] =  new Vector3(structureSide, 0.0f, 0.0f) + speakerOffsets[3];
-
-            //    // Front Left Up speaker
-            //    speakerPositions[4] =  new Vector3(-0.5f * structureSide, 0.5f * structureSide, 0.5f * structureSide) + speakerOffsets[4];
-
-            //    // Front Right Up speaker
-            //    speakerPositions[5] =  new Vector3(0.5f * structureSide, 0.5f * structureSide, 0.5f * structureSide) + speakerOffsets[5];
-
-            //    // Rear Left Up speaker
-            //    speakerPositions[6] =  new Vector3(-0.5f * structureSide, 0.5f * structureSide, -0.5f * structureSide) + speakerOffsets[6];
-
-            //    // Rear Right Up speaker
-            //    speakerPositions[7] =  new Vector3(0.5f * structureSide, 0.5f * structureSide, -0.5f * structureSide) + speakerOffsets[7];
-
-            //    break;
-
             case T_LoudSpeakerConfigurationPreset.LS_PRESET_OCTAHEDRON:
-
-                // Front speaker
-                speakerPositions[0] = new Vector3(0.0f, 0.0f, structureSide) + speakerOffsets[0];
-
-                // Left speaker
-                speakerPositions[1] = new Vector3(-structureSide, 0.0f, 0.0f) + speakerOffsets[1];
-
-                // Rear speaker
-                speakerPositions[2] = new Vector3(0.0f, 0.0f, -structureSide) + speakerOffsets[2];
-
-                // Right speaker
-                speakerPositions[3] = new Vector3(structureSide, 0.0f, 0.0f) + speakerOffsets[3];
-
-                // Zenith speaker
-                speakerPositions[4] = new Vector3(0.0f, structureSide, 0.0f) + speakerOffsets[4];
-
-                // Nadir speaker
-                speakerPositions[5] = new Vector3(0.0f, -structureSide, 0.0f) + speakerOffsets[5];
-
+                float octahedronSide = structureSide / Mathf.Sqrt(2);
+                speakerPositions[0] = new Vector3(0.0f, 0.0f, octahedronSide) + speakerOffsets[0];   //Front speaker         
+                speakerPositions[1] = new Vector3(-octahedronSide, 0.0f, 0.0f) + speakerOffsets[1];  //Left speaker
+                speakerPositions[2] = new Vector3(0.0f, 0.0f, -octahedronSide) + speakerOffsets[2];  //Rear speaker               
+                speakerPositions[3] = new Vector3(octahedronSide, 0.0f, 0.0f) + speakerOffsets[3];   //Right speaker                
+                speakerPositions[4] = new Vector3(0.0f, octahedronSide, 0.0f) + speakerOffsets[4];   // Zenith speaker
+                speakerPositions[5] = new Vector3(0.0f, -octahedronSide, 0.0f) + speakerOffsets[5];  // Nadir speaker
                 break;
-
             case T_LoudSpeakerConfigurationPreset.LS_PRESET_2DSQUARE:
-
-                // Front speaker
-                speakerPositions[0] = new Vector3(0.0f, 0.0f, structureSide) + speakerOffsets[0];
-
-                // Left speaker
-                speakerPositions[1] = new Vector3(-structureSide, 0.0f, 0.0f) + speakerOffsets[1];
-
-                // Rear speaker
-                speakerPositions[2] = new Vector3(0.0f, 0.0f, -structureSide) + speakerOffsets[2];
-
-                // Right speaker
-                speakerPositions[3] = new Vector3(structureSide, 0.0f, 0.0f) + speakerOffsets[3];
-
+                float _2DSquareSide = structureSide / Mathf.Sqrt(2);
+                speakerPositions[0] = new Vector3(0.0f, 0.0f, _2DSquareSide) + speakerOffsets[0];   // Front speaker
+                speakerPositions[1] = new Vector3(-_2DSquareSide, 0.0f, 0.0f) + speakerOffsets[1];  // Left speaker
+                speakerPositions[2] = new Vector3(0.0f, 0.0f, -_2DSquareSide) + speakerOffsets[2];  // Rear speaker
+                speakerPositions[3] = new Vector3(_2DSquareSide, 0.0f, 0.0f) + speakerOffsets[3];   // Right speaker
                 break;
-
-        }
-    }
-
-    /// <summary>
-    /// Calculate weights for all speakers, but do not send them to the plugin yet
-    /// </summary>
-    public void CalculateSpeakerWeights()
-    {
-        // First approach; regular configurations only
-        for (int i = 0; i < numberOfSpeakers; i++)
-        {
-            speakerWeights[i] = 1.0f / numberOfSpeakers;
         }
     }
 
@@ -482,11 +380,12 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
             return selectedSource.SetSpatializerFloat(SET_SOURCE_ID, (float)++lastSourceID);
     }
 
-    /////////////////////////////////////////////////////////////////////
-
-    /// <summary>
-    /// Set scale factor. Allows the toolkit to work with big-scale or small-scale scenarios
+    
+        /// <summary>
+    /// Set scale factor. Allows the toolkit to work with different scaled scenarios
     /// </summary>
+    /// <param name="scale"></param>
+    /// <returns></returns>
     public bool SetScaleFactor(float scale)
     {
         scaleFactor = scale;
@@ -494,20 +393,22 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     }
 
     /// <summary>
-    ///  Setup modules enabler, allowing to switch on/off core features
+    /// Setup the diantance attenuation and far distance simulation according to the API_3DTI_LoudSpeakersSpatializer variables modDistAtt and modFarLPF respectively 
     /// </summary>
+    /// <returns>true if the setup has been done correctly</returns>
     public bool SetupModulesEnabler()
     {
         if (!SetModFarLPF(modFarLPF)) return false;
         if (!SetModDistanceAttenuation(modDistAtt)) return false;       
         return true;
     }
-
-    /////////////////////////////////////////////////////////////////////
+    
 
     /// <summary>
-    /// Switch on/off far distance LPF
-    /// </summary>        
+    /// Switch on/off far distance simulation (LPF)
+    /// </summary>
+    /// <param name="_enable"> true to activate far away distance attenuation</param>
+    /// <returns>true if the data has been sent correctly</returns>
     public bool SetModFarLPF(bool _enable)
     {
         modFarLPF = _enable;        
@@ -517,8 +418,10 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     /////////////////////////////////////////////////////////////////////
 
     /// <summary>
-    /// Switch on/off distance attenuation
-    /// </summary>        
+    ///  Switch on/off global distance attenuation
+    /// </summary>
+    /// <param name="_enable"> true to activate distance attenuation</param>
+    /// <returns>true if the data has been sent correctly</returns>
     public bool SetModDistanceAttenuation(bool _enable)
     {
         modDistAtt = _enable;
@@ -526,10 +429,12 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     }
 
     /////////////////////////////////////////////////////////////////////
-  
+
     /// <summary>
-    /// Set magnitude Anechoic Attenuation
-    /// </summary>    
+    ///  Set attenuation value (dB) for distance attenuation Attenuation
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns>true if the data has been sent correctly</returns>
     public bool SetMagnitudeAnechoicAttenuation(float value)
     {
         magAnechoicAttenuation = value;
@@ -537,15 +442,16 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     }
 
     /// <summary>
-    /// Set magnitude Sound Speed
-    /// </summary>    
+    ///  Set value for  Sound Speed (m/s)
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns>true if the data has been sent correctly</returns>
     public bool SetMagnitudeSoundSpeed(float value)
     {
         magSoundSpeed = value;
         return SendCommandForAllSources(SET_MAG_SOUNDSPEED, value);
     }
 
-    /////////////////////////////////////////////////////////////////////
 
     /////////////////////////////////////////////////////////////////////
     // AUXILIARY FUNCTIONS
@@ -554,16 +460,16 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     /// <summary>
     /// Send command to plugin to switch on/off write to Debug Log file
     /// </summary>
+    /// <param name="_enable">true to activate wrinting in the file </param>
+    /// <returns></returns>
     public bool SendWriteDebugLog(bool _enable)
     {
         debugLog = _enable;
         return SendCommandForAllSources(SET_DEBUG_LOG, Bool2Float(_enable));
     }
 
-    /// <summary>
-    /// Send command to the DLL, for each registered source
-    /// </summary>
-    public bool SendCommandForAllSources(int command, float value)
+    // Send command to the DLL, for each registered source
+    private bool SendCommandForAllSources(int command, float value)
     {
         if (!selectSource)
         {
@@ -579,10 +485,9 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
             return selectedSource.SetSpatializerFloat(command, value);
     }
 
-    /// <summary>
-    /// Returns a list with all audio sources with the Spatialized toggle checked
-    /// </summary>
-    public List<AudioSource> GetAllSpatializedSources()
+
+    // Returns a list with all audio sources with the Spatialized toggle checked
+    private List<AudioSource> GetAllSpatializedSources()
     {
         //GameObject[] audioSources = GameObject.FindGameObjectsWithTag("AudioSource");
 
@@ -598,12 +503,7 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         return spatializedSources;
     }
 
-    /// <summary>
-    /// Auxiliary function
-    /// </summary>
-    /// <param name="v"></param>
-    /// <returns></returns>
-    float Bool2Float(bool v)
+    private float Bool2Float(bool v)
     {
         if (v)
             return 1.0f;
