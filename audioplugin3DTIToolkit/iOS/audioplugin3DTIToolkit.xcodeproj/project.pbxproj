@@ -19,7 +19,6 @@
 		AFB9B2771EBC87BA00199425 /* SingleSourceDSP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFB9B2251EBC87BA00199425 /* SingleSourceDSP.cpp */; };
 		AFB9B2781EBC87BA00199425 /* UPCAnechoic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFB9B2271EBC87BA00199425 /* UPCAnechoic.cpp */; };
 		AFB9B27A1EBC87BA00199425 /* BiquadFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFB9B22C1EBC87BA00199425 /* BiquadFilter.cpp */; };
-		AFB9B27C1EBC87BA00199425 /* Debugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFB9B2321EBC87BA00199425 /* Debugger.cpp */; };
 		AFB9B27D1EBC87BA00199425 /* DistanceAttenuator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFB9B2341EBC87BA00199425 /* DistanceAttenuator.cpp */; };
 		AFB9B27E1EBC87BA00199425 /* DynamicCompressorMono.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFB9B2371EBC87BA00199425 /* DynamicCompressorMono.cpp */; };
 		AFB9B27F1EBC87BA00199425 /* DynamicCompressorStereo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFB9B2391EBC87BA00199425 /* DynamicCompressorStereo.cpp */; };
@@ -40,6 +39,7 @@
 		AFD34E361E51D99A007810A6 /* AudioPluginUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD34E321E51D99A007810A6 /* AudioPluginUtil.cpp */; };
 		AFD3524A1E51DCF2007810A6 /* HRTFCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD34F971E51DCF0007810A6 /* HRTFCereal.cpp */; };
 		AFD353021E51DCF3007810A6 /* ILDCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD352181E51DCF2007810A6 /* ILDCereal.cpp */; };
+		AFD410852020D92A00E5BC29 /* ErrorHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD410832020D92A00E5BC29 /* ErrorHandler.cpp */; };
 		AFE0E1891F1F8DED00695DDB /* DynamicExpanderMono.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE0E1861F1F8DED00695DDB /* DynamicExpanderMono.cpp */; };
 		AFE0E18C1F1F8DF700695DDB /* MultibandExpander.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE0E18A1F1F8DF700695DDB /* MultibandExpander.cpp */; };
 		AFEC510F1F965C2800188B93 /* FrequencySmearing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFEC51091F965C2800188B93 /* FrequencySmearing.cpp */; };
@@ -91,8 +91,6 @@
 		AFB9B22F1EBC87BA00199425 /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Buffer.h; sourceTree = "<group>"; };
 		AFB9B2301EBC87BA00199425 /* CommonDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonDefinitions.h; sourceTree = "<group>"; };
 		AFB9B2311EBC87BA00199425 /* Conventions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Conventions.h; sourceTree = "<group>"; };
-		AFB9B2321EBC87BA00199425 /* Debugger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Debugger.cpp; sourceTree = "<group>"; };
-		AFB9B2331EBC87BA00199425 /* Debugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Debugger.h; sourceTree = "<group>"; };
 		AFB9B2341EBC87BA00199425 /* DistanceAttenuator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DistanceAttenuator.cpp; sourceTree = "<group>"; };
 		AFB9B2351EBC87BA00199425 /* DistanceAttenuator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistanceAttenuator.h; sourceTree = "<group>"; };
 		AFB9B2371EBC87BA00199425 /* DynamicCompressorMono.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DynamicCompressorMono.cpp; sourceTree = "<group>"; };
@@ -140,6 +138,8 @@
 		AFD34F981E51DCF0007810A6 /* HRTFCereal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRTFCereal.h; sourceTree = "<group>"; };
 		AFD352181E51DCF2007810A6 /* ILDCereal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ILDCereal.cpp; sourceTree = "<group>"; };
 		AFD352191E51DCF2007810A6 /* ILDCereal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILDCereal.h; sourceTree = "<group>"; };
+		AFD410832020D92A00E5BC29 /* ErrorHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ErrorHandler.cpp; sourceTree = "<group>"; };
+		AFD410842020D92A00E5BC29 /* ErrorHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorHandler.h; sourceTree = "<group>"; };
 		AFE0E1861F1F8DED00695DDB /* DynamicExpanderMono.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DynamicExpanderMono.cpp; sourceTree = "<group>"; };
 		AFE0E1871F1F8DED00695DDB /* DynamicExpanderMono.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicExpanderMono.h; sourceTree = "<group>"; };
 		AFE0E1881F1F8DED00695DDB /* DynamicProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicProcessor.h; sourceTree = "<group>"; };
@@ -232,6 +232,8 @@
 		AFB9B2291EBC87BA00199425 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				AFD410832020D92A00E5BC29 /* ErrorHandler.cpp */,
+				AFD410842020D92A00E5BC29 /* ErrorHandler.h */,
 				AFEC51151F9661A800188B93 /* Delay.h */,
 				AFEC51161F9661A800188B93 /* FiltersBank.cpp */,
 				AFEC51171F9661A800188B93 /* FiltersBank.h */,
@@ -250,8 +252,6 @@
 				AFB9B22F1EBC87BA00199425 /* Buffer.h */,
 				AFB9B2301EBC87BA00199425 /* CommonDefinitions.h */,
 				AFB9B2311EBC87BA00199425 /* Conventions.h */,
-				AFB9B2321EBC87BA00199425 /* Debugger.cpp */,
-				AFB9B2331EBC87BA00199425 /* Debugger.h */,
 				AFB9B2341EBC87BA00199425 /* DistanceAttenuator.cpp */,
 				AFB9B2351EBC87BA00199425 /* DistanceAttenuator.h */,
 				AFB9B2371EBC87BA00199425 /* DynamicCompressorMono.cpp */,
@@ -417,6 +417,7 @@
 				AFB9B2711EBC87BA00199425 /* BRIR.cpp in Sources */,
 				AFEC511D1F9661A800188B93 /* Fprocessor.cpp in Sources */,
 				AFA2D2D61E570B480078DEEF /* effect3DTIHA.cpp in Sources */,
+				AFD410852020D92A00E5BC29 /* ErrorHandler.cpp in Sources */,
 				AFB9B2811EBC87BA00199425 /* FarDistanceEffects.cpp in Sources */,
 				AFB9B2801EBC87BA00199425 /* EnvelopeDetector.cpp in Sources */,
 				AFB9B2741EBC87BA00199425 /* HRTF.cpp in Sources */,
@@ -446,7 +447,6 @@
 				AFB9B28F1EBC87BA00199425 /* HearingLossSim.cpp in Sources */,
 				AFEC51101F965C2800188B93 /* HighOrderButteworthFilter.cpp in Sources */,
 				AFD3524A1E51DCF2007810A6 /* HRTFCereal.cpp in Sources */,
-				AFB9B27C1EBC87BA00199425 /* Debugger.cpp in Sources */,
 				AFEC510F1F965C2800188B93 /* FrequencySmearing.cpp in Sources */,
 				AFEC511E1F9661A800188B93 /* NoiseGenerator.cpp in Sources */,
 				AFB9B2761EBC87BA00199425 /* Listener.cpp in Sources */,

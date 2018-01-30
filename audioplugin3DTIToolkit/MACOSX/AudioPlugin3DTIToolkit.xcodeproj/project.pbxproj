@@ -15,6 +15,7 @@
 		AF5A97A81F965150005EF9B7 /* HighOrderButteworthFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF5A97A41F965150005EF9B7 /* HighOrderButteworthFilter.cpp */; };
 		AF5A97A91F965150005EF9B7 /* TemporalDistortionSimulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF5A97A51F965150005EF9B7 /* TemporalDistortionSimulator.cpp */; };
 		AF5A97AC1F965167005EF9B7 /* Fprocessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF5A97AA1F965167005EF9B7 /* Fprocessor.cpp */; };
+		AFBD85E22020CA9A00816FCD /* ErrorHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFBD85E02020CA9A00816FCD /* ErrorHandler.cpp */; };
 		AFD67D0D1E978F80000F4387 /* BRIR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CB61E978F80000F4387 /* BRIR.cpp */; };
 		AFD67D0E1E978F80000F4387 /* Core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CB81E978F80000F4387 /* Core.cpp */; };
 		AFD67D0F1E978F80000F4387 /* Environment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CBA1E978F80000F4387 /* Environment.cpp */; };
@@ -24,7 +25,6 @@
 		AFD67D131E978F80000F4387 /* SingleSourceDSP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CC21E978F80000F4387 /* SingleSourceDSP.cpp */; };
 		AFD67D141E978F80000F4387 /* UPCAnechoic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CC41E978F80000F4387 /* UPCAnechoic.cpp */; };
 		AFD67D161E978F80000F4387 /* BiquadFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CC91E978F80000F4387 /* BiquadFilter.cpp */; };
-		AFD67D181E978F80000F4387 /* Debugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CCF1E978F80000F4387 /* Debugger.cpp */; };
 		AFD67D191E978F80000F4387 /* DistanceAttenuator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CD11E978F80000F4387 /* DistanceAttenuator.cpp */; };
 		AFD67D1A1E978F80000F4387 /* DynamicCompressorMono.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CD41E978F80000F4387 /* DynamicCompressorMono.cpp */; };
 		AFD67D1B1E978F80000F4387 /* DynamicCompressorStereo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CD61E978F80000F4387 /* DynamicCompressorStereo.cpp */; };
@@ -66,6 +66,8 @@
 		AF5A97AB1F965167005EF9B7 /* Fprocessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fprocessor.h; sourceTree = "<group>"; };
 		AF766FED1DE9F8690003ED20 /* Config.Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.Common.xcconfig; sourceTree = "<group>"; };
 		AF766FEE1DE9F99C0003ED20 /* Config.Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.Debug.xcconfig; sourceTree = "<group>"; };
+		AFBD85E02020CA9A00816FCD /* ErrorHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ErrorHandler.cpp; sourceTree = "<group>"; };
+		AFBD85E12020CA9A00816FCD /* ErrorHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorHandler.h; sourceTree = "<group>"; };
 		AFD67CB31E978F80000F4387 /* 3DTI_BinauralSpatializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 3DTI_BinauralSpatializer.h; sourceTree = "<group>"; };
 		AFD67CB61E978F80000F4387 /* BRIR.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BRIR.cpp; sourceTree = "<group>"; };
 		AFD67CB71E978F80000F4387 /* BRIR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRIR.h; sourceTree = "<group>"; };
@@ -89,8 +91,6 @@
 		AFD67CCC1E978F80000F4387 /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Buffer.h; sourceTree = "<group>"; };
 		AFD67CCD1E978F80000F4387 /* CommonDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonDefinitions.h; sourceTree = "<group>"; };
 		AFD67CCE1E978F80000F4387 /* Conventions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Conventions.h; sourceTree = "<group>"; };
-		AFD67CCF1E978F80000F4387 /* Debugger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Debugger.cpp; sourceTree = "<group>"; };
-		AFD67CD01E978F80000F4387 /* Debugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Debugger.h; sourceTree = "<group>"; };
 		AFD67CD11E978F80000F4387 /* DistanceAttenuator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DistanceAttenuator.cpp; sourceTree = "<group>"; };
 		AFD67CD21E978F80000F4387 /* DistanceAttenuator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistanceAttenuator.h; sourceTree = "<group>"; };
 		AFD67CD41E978F80000F4387 /* DynamicCompressorMono.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DynamicCompressorMono.cpp; sourceTree = "<group>"; };
@@ -219,6 +219,8 @@
 		AFD67CC61E978F80000F4387 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				AFBD85E02020CA9A00816FCD /* ErrorHandler.cpp */,
+				AFBD85E12020CA9A00816FCD /* ErrorHandler.h */,
 				AF5A97AA1F965167005EF9B7 /* Fprocessor.cpp */,
 				AF5A97AB1F965167005EF9B7 /* Fprocessor.h */,
 				AFF42CB61F7920CF00A430DE /* AudioState.h */,
@@ -237,8 +239,6 @@
 				AFD67CCC1E978F80000F4387 /* Buffer.h */,
 				AFD67CCD1E978F80000F4387 /* CommonDefinitions.h */,
 				AFD67CCE1E978F80000F4387 /* Conventions.h */,
-				AFD67CCF1E978F80000F4387 /* Debugger.cpp */,
-				AFD67CD01E978F80000F4387 /* Debugger.h */,
 				AFD67CD11E978F80000F4387 /* DistanceAttenuator.cpp */,
 				AFD67CD21E978F80000F4387 /* DistanceAttenuator.h */,
 				AFD67CD41E978F80000F4387 /* DynamicCompressorMono.cpp */,
@@ -372,7 +372,7 @@
 				TargetAttributes = {
 					AFE8837E1DCCA8F6003505EF = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 4QC5SRCTN7;
+						DevelopmentTeam = RG4JDLGJ63;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -446,10 +446,10 @@
 				AFD67D111E978F80000F4387 /* ILD.cpp in Sources */,
 				AFF42CAF1F791E5100A430DE /* NoiseGenerator.cpp in Sources */,
 				AF391F8F1E55F14200EB4AC6 /* effect3DTIHL.cpp in Sources */,
+				AFBD85E22020CA9A00816FCD /* ErrorHandler.cpp in Sources */,
 				AFD67D2C1E978F80000F4387 /* HearingLossSim.cpp in Sources */,
 				AF391F901E55F14200EB4AC6 /* effect3DTISpatializer.cpp in Sources */,
 				AFE0E1851F1F88A900695DDB /* MultibandExpander.cpp in Sources */,
-				AFD67D181E978F80000F4387 /* Debugger.cpp in Sources */,
 				AFD67D121E978F80000F4387 /* Listener.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -545,7 +545,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 4QC5SRCTN7;
+				DEVELOPMENT_TEAM = RG4JDLGJ63;
 				INFOPLIST_FILE = "$(SRCROOT)/AudioPlugin3DTIToolkit/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				PRODUCT_BUNDLE_IDENTIFIER = es.uma.diana.AudioPlugin3DTIWrapper;
@@ -562,7 +562,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 4QC5SRCTN7;
+				DEVELOPMENT_TEAM = RG4JDLGJ63;
 				INFOPLIST_FILE = "$(SRCROOT)/AudioPlugin3DTIToolkit/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				PRODUCT_BUNDLE_IDENTIFIER = es.uma.diana.AudioPlugin3DTIWrapper;
