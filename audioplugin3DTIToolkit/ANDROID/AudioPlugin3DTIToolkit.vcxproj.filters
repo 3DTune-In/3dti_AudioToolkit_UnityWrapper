@@ -23,9 +23,6 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\BiquadFilter.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\Debugger.cpp">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\DistanceAttenuator.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
@@ -116,6 +113,9 @@
     <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\FiltersBank.cpp">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\3DTI_Toolkit_Core\Common\ErrorHandler.cpp">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -150,9 +150,6 @@
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Conventions.h">
-      <Filter>3DTI_Toolkit_Core\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\Debugger.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\DistanceAttenuator.h">
@@ -249,6 +246,9 @@
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\FiltersBank.h">
+      <Filter>3DTI_Toolkit_Core\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3DTI_Toolkit_Core\Common\ErrorHandler.h">
       <Filter>3DTI_Toolkit_Core\Common</Filter>
     </ClInclude>
   </ItemGroup>
