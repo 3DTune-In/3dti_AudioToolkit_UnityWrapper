@@ -164,7 +164,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PreprocessorDefinitions>NDEBUG;AudioPlugin3DTIToolkit_EXPORTS;_3DTI_AXIS_CONVENTION_UNITY;_3DTI_ANGLE_CONVENTION_LISTEN;UNITY_ANDROID;_3DTI_ANDROID_ERRORHANDLER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\3DTI_Toolkit_Core;..\..\3DTI_Toolkit_Modules;..\..\3DTI_Toolkit_Modules\HRTF\cereal\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\3DTI_Toolkit_Core;..\..\3DTI_Toolkit_Modules;..\..\3DTI_Toolkit_Modules\HRTF\cereal\include;..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CppLanguageStandard>c++1y</CppLanguageStandard>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <ExceptionHandling>Enabled</ExceptionHandling>
@@ -220,6 +220,7 @@
     <ClInclude Include="..\src\AudioPluginInterface.h" />
     <ClInclude Include="..\src\AudioPluginUtil.h" />
     <ClInclude Include="..\src\PluginList.h" />
+    <ClInclude Include="..\src\to_string.hpp" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
