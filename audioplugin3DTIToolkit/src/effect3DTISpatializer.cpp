@@ -15,7 +15,7 @@
 //#include <BinauralSpatializer\3DTI_BinauralSpatializer.h>
 #include <Common/DynamicCompressorStereo.h>
 #include <BinauralSpatializer/Core.h>
-#include <Common/Debugger.h>
+#include <Common/ErrorHandler.h>
 
 // Includes for debug logging
 #include <fstream>
