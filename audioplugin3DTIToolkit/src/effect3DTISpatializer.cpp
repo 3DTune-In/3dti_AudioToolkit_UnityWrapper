@@ -542,8 +542,8 @@ namespace Spatializer3DTI
 		effectdata->loadedHighPerformanceILD = false;
 
 		// 3DTI Debugger
-#if defined (SWITCH_ON_3DTI_DEBUGGER) || defined (_3DTI_ANDROID_DEBUGGER)
-		Common::CDebugger::Instance().SetAssertMode(ASSERT_MODE_CONTINUE);
+#if defined (SWITCH_ON_3DTI_ERRORHANDLER) || defined (_3DTI_ANDROID_ERRORHANDLER)
+		Common::CErrorHandler::Instance().SetAssertMode(ASSERT_MODE_CONTINUE);
 #endif
 
 		WriteLog(state, "Core initialized. Waiting for configuration...", "");
@@ -771,10 +771,10 @@ namespace Spatializer3DTI
 				{
 					data->debugLog = true;
 					WriteLogHeader(state);
-#if defined (SWITCH_ON_3DTI_DEBUGGER) || defined (_3DTI_ANDROID_DEBUGGER)
-                    Common::CDebugger::Instance().SetErrorLogFile("3DTi_ErrorLog.txt");
-					Common::CDebugger::Instance().SetVerbosityMode(VERBOSITY_MODE_ONLYERRORS);
-					Common::CDebugger::Instance().SetAssertMode(ASSERT_MODE_CONTINUE);
+#if defined (SWITCH_ON_3DTI_ERRORHANDLER) || defined (_3DTI_ANDROID_ERRORHANDLER)
+                    Common::CErrorHandler::Instance().SetErrorLogFile("3DTi_ErrorLog.txt");
+					Common::CErrorHandler::Instance().SetVerbosityMode(VERBOSITY_MODE_ONLYERRORS);
+					Common::CErrorHandler::Instance().SetAssertMode(ASSERT_MODE_CONTINUE);
 #endif
 				}
 				else
