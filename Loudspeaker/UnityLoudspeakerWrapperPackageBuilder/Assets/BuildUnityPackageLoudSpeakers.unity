@@ -331,7 +331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ae86054c4c60f64499f90860468396a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speakersConfigurationPreset: 1
+  speakersConfigurationPreset: 0
   scaleFactor: 1
   modFarLPF: 1
   modDistAtt: 1
@@ -340,12 +340,14 @@ MonoBehaviour:
   debugLog: 1
   structureSide: 1.48
   speakerPositions:
-  - {x: 0, y: 0, z: 1.48}
-  - {x: -1.48, y: 0, z: 0}
-  - {x: 0, y: 0, z: -1.48}
-  - {x: 1.48, y: 0, z: 0}
-  - {x: 0, y: 1.48, z: 0}
-  - {x: 0, y: -1.48, z: 0}
+  - {x: -0.74, y: 0.74, z: 0.74}
+  - {x: 0.74, y: 0.74, z: 0.74}
+  - {x: -0.74, y: -0.74, z: 0.74}
+  - {x: 0.74, y: -0.74, z: 0.74}
+  - {x: -0.74, y: 0.74, z: -0.74}
+  - {x: 0.74, y: 0.74, z: -0.74}
+  - {x: -0.74, y: -0.74, z: -0.74}
+  - {x: 0.74, y: -0.74, z: -0.74}
   speakerOffsets:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
@@ -353,13 +355,17 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
   speakerWeights:
-  - 0.16666667
-  - 0.16666667
-  - 0.16666667
-  - 0.16666667
-  - 0.16666667
-  - 0.16666667
+  - 0.125
+  - 0.125
+  - 0.125
+  - 0.125
+  - 0.125
+  - 0.125
+  - 0.125
+  - 0.125
 --- !u!1 &729632804
 GameObject:
   m_ObjectHideFlags: 0
@@ -375,7 +381,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!82 &729632805
 AudioSource:
   m_ObjectHideFlags: 0
@@ -485,7 +491,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!82 &1582799888
 AudioSource:
   m_ObjectHideFlags: 0

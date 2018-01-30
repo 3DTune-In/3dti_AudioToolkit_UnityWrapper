@@ -15,11 +15,13 @@
 
 //#include <LoudspeakersSpatializer/Core_LS.h>
 #include <LoudspeakersSpatializer/3DTI_LoudspeakersSpatializer.h>
-#include <Common/Debugger.h>
+#include <Common/ErrorHandler.h>
 
 // Includes for debug logging
 #include <fstream>
 #include <iostream>
+
+#include <mutex>
 
 
 enum TLoadResult { RESULT_LOAD_WAITING = 0, RESULT_LOAD_CONTINUE = 1, RESULT_LOAD_END = 2, RESULT_LOAD_OK = 3, RESULT_LOAD_ERROR = -1 };
@@ -80,14 +82,14 @@ namespace LoudspeakersSpatializer3DTI
 		PARAM_SPEAKER_6_Z,
 		PARAM_SPEAKER_7_Z,
 		PARAM_SPEAKER_8_Z,
-		PARAM_SPEAKER_1_W,
+		/*PARAM_SPEAKER_1_W,
 		PARAM_SPEAKER_2_W,
 		PARAM_SPEAKER_3_W,
 		PARAM_SPEAKER_4_W,
 		PARAM_SPEAKER_5_W,
 		PARAM_SPEAKER_6_W,
 		PARAM_SPEAKER_7_W,
-		PARAM_SPEAKER_8_W,
+		PARAM_SPEAKER_8_W,*/
 		PARAM_GET_MINDISTANCE,
 
 		P_NUM
@@ -116,6 +118,9 @@ namespace LoudspeakersSpatializer3DTI
 
 		// DEBUG LOG
 		bool debugLog = false;
+
+		// MUTEX
+		std::mutex spatializerMutex;
 	};
 
 	/////////////////////////////////////////////////////////////////////
@@ -201,14 +206,14 @@ namespace LoudspeakersSpatializer3DTI
 		RegisterParameter(definition, "speaker8_x", "m", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_8_X, "Speaker 8 position, x coordinate");
 		RegisterParameter(definition, "speaker8_y", "m", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_8_Y, "Speaker 8 position, y coordinate");
 		RegisterParameter(definition, "speaker8_z", "m", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_8_Z, "Speaker 8 position, z coordinate");
-		RegisterParameter(definition, "speaker1_w", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 0.0f, PARAM_SPEAKER_1_W, "Speaker 1 gain");
+		/*RegisterParameter(definition, "speaker1_w", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 0.0f, PARAM_SPEAKER_1_W, "Speaker 1 gain");
 		RegisterParameter(definition, "speaker2_w", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 0.0f, PARAM_SPEAKER_2_W, "Speaker 2 gain");
 		RegisterParameter(definition, "speaker3_w", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 0.0f, PARAM_SPEAKER_3_W, "Speaker 3 gain");
 		RegisterParameter(definition, "speaker4_w", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 0.0f, PARAM_SPEAKER_4_W, "Speaker 4 gain");
 		RegisterParameter(definition, "speaker5_w", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 0.0f, PARAM_SPEAKER_5_W, "Speaker 5 gain");
 		RegisterParameter(definition, "speaker6_w", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 0.0f, PARAM_SPEAKER_6_W, "Speaker 6 gain");
 		RegisterParameter(definition, "speaker7_w", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 0.0f, PARAM_SPEAKER_7_W, "Speaker 7 gain");
-		RegisterParameter(definition, "speaker8_w", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 0.0f, PARAM_SPEAKER_8_W, "Speaker 8 gain");
+		RegisterParameter(definition, "speaker8_w", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 0.0f, PARAM_SPEAKER_8_W, "Speaker 8 gain");*/
 		RegisterParameter(definition, "getmindist", "m", 0.0f, FLT_MAX, 1.0f, 1.0f, 0.0f, PARAM_GET_MINDISTANCE, "Get minimum distance from sources to listener");
 
 		definition.flags |= UnityAudioEffectDefinitionFlags_IsSpatializer;
@@ -421,6 +426,8 @@ namespace LoudspeakersSpatializer3DTI
 		Common::CMagnitudes magnitudes;
 		int loadResult;
 
+		data->spatializerMutex.lock();	//Mutex
+
 		// Process command sent by C# API
 		switch (index)
 		{		
@@ -460,6 +467,19 @@ namespace LoudspeakersSpatializer3DTI
 			}
 			break;
 
+		case PARAM_MAG_ANECHATT:
+			magnitudes = data->core.GetMagnitudes();
+			magnitudes.SetAnechoicDistanceAttenuation(value);
+			data->core.SetMagnitudes(magnitudes);			
+			WriteLog(state, "SET PARAMETER: Anechoic distance attenuation set to (dB) ", value);
+			break;
+
+		case PARAM_MAG_SOUNDSPEED:
+			magnitudes = data->core.GetMagnitudes();
+			magnitudes.SetSoundSpeed(value);
+			data->core.SetMagnitudes(magnitudes);
+			WriteLog(state, "SET PARAMETER: Sound speed set to (m/s) ", value);
+			break;
 
 		case PARAM_DEBUG_LOG:
 			if (value != 0.0f)
@@ -474,7 +494,7 @@ namespace LoudspeakersSpatializer3DTI
 		case PARAM_SAVE_SPEAKERS_CONFIG:	// Save Speakers Configuration (MANDATORY)											
 			if (value > 0.0f) {
 				WriteLog(state, "SET PARAMETER: Save Speakers Config :", value);
-
+				data->coreReady = false;
 				SaveSpeakersConfiguration(state);
 				data->coreReady = true;				
 				WriteLog(state, "Core ready!!!!!", "");
@@ -629,7 +649,7 @@ namespace LoudspeakersSpatializer3DTI
 			WriteLog(state, "SET PARAMETER: Speaker 8 position, z coordinate, set to ", value);
 			break;
 
-		case PARAM_SPEAKER_1_W:			
+		/*case PARAM_SPEAKER_1_W:			
 			data->speakers->GetSpeakerConfiguration().SetLoudspeakerGain(0, value);
 			WriteLog(state, "SET PARAMETER: Speaker 1 gain set to ", value);
 			break;
@@ -667,7 +687,7 @@ namespace LoudspeakersSpatializer3DTI
 		case PARAM_SPEAKER_8_W:
 			data->speakers->GetSpeakerConfiguration().SetLoudspeakerGain(7, value);
 			WriteLog(state, "SET PARAMETER: Speaker 8 gain set to ", value);
-			break;
+			break;*/
 
 		case PARAM_GET_MINDISTANCE:			
 			WriteLog(state, "SET PARAMETER: WARNING! Attempt to set PARAM_GET_MINDISTANCE, which is a read-only parameter: ", value);
@@ -678,6 +698,8 @@ namespace LoudspeakersSpatializer3DTI
 			return UNITY_AUDIODSP_ERR_UNSUPPORTED;
 			break;
 		}
+
+		data->spatializerMutex.unlock();
 
 		return UNITY_AUDIODSP_OK;
 	}
@@ -727,12 +749,15 @@ namespace LoudspeakersSpatializer3DTI
 
 		EffectData* data = state->GetEffectData<EffectData>();
 
+		data->spatializerMutex.lock();
+
 		// Before doing anything, check that the core is ready
 		if (!data->coreReady)
 		{
 			// Put silence in outbuffer
 			//WriteLog(state, "PROCESS: Core is not ready yet...", "");
 			memset(outbuffer, 0.0f, length * outchannels * sizeof(float));
+			data->spatializerMutex.unlock();
 			return UNITY_AUDIODSP_OK;
 		}
 
@@ -783,6 +808,8 @@ namespace LoudspeakersSpatializer3DTI
 			data->firstTime = false;
 		}
 		
+		data->spatializerMutex.unlock();
+
 		return UNITY_AUDIODSP_OK;
 	}
 }

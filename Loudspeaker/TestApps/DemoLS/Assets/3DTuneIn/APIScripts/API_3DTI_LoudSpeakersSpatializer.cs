@@ -4,45 +4,25 @@ using UnityEngine;
 
 public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
 
-    // LISTENER:
-    //public string HRTFFileName = "";            // Used by Inspector
-    //public string ILDFileName = "";             // Used by Inspector
-    //public bool customITDEnabled = false;       // Used by Inspector
-    //public float listenerHeadRadius = 0.0875f;  // Used by Inspector    
-
     // SOURCE:
-    //public bool runtimeInterpolateHRTF = true;  // Used by Inspector
     int lastSourceID = 0;                       // Internal use for debug log
+
+    // CONFIGURATION PRESETS:
+    public enum T_LoudSpeakerConfigurationPreset { LS_PRESET_CUBE=0, LS_PRESET_OCTAHEDRON=1, LS_PRESET_2DSQUARE=2 };
+    public T_LoudSpeakerConfigurationPreset  speakersConfigurationPreset = T_LoudSpeakerConfigurationPreset.LS_PRESET_CUBE;
 
     // ADVANCED:
     public float scaleFactor = 1.0f;            // Used by Inspector
     public bool modFarLPF = true;               // Used by Inspector
     public bool modDistAtt = true;              // Used by Inspector
-    //public bool modILD = true;                  // Used by Inspector
-    //public bool modHRTF = true;                 // Used by Inspector
     public float magAnechoicAttenuation = -6.0f;    // Used by Inspector    
     public float magSoundSpeed = 343.0f;            // Used by Inspector
     public bool debugLog = false;                   // Used by Inspector
+    public float structureSide = 1.0f;  // Used by Inspector    
 
-    public float structureSide  = 1.70f;
-    public float structureYaw   = 0.0f;
-    public float structurePitch = 0.0f;
-    public Vector3 speaker1Position = new Vector3(0.0f, 0.0f, 0.0f);    
-    public Vector3 speaker2Position = new Vector3(0.0f, 0.0f, 0.0f);
-    public Vector3 speaker3Position = new Vector3(0.0f, 0.0f, 0.0f);
-    public Vector3 speaker4Position = new Vector3(0.0f, 0.0f, 0.0f);
-    public Vector3 speaker5Position = new Vector3(0.0f, 0.0f, 0.0f);
-    public Vector3 speaker6Position = new Vector3(0.0f, 0.0f, 0.0f);
-    public Vector3 speaker7Position = new Vector3(0.0f, 0.0f, 0.0f);
-    public Vector3 speaker8Position = new Vector3(0.0f, 0.0f, 0.0f);
-    public Vector3 speaker1Offset = new Vector3(0.0f, 0.0f, 0.0f);
-    public Vector3 speaker2Offset = new Vector3(0.0f, 0.0f, 0.0f);
-    public Vector3 speaker3Offset = new Vector3(0.0f, 0.0f, 0.0f);
-    public Vector3 speaker4Offset = new Vector3(0.0f, 0.0f, 0.0f);
-    public Vector3 speaker5Offset = new Vector3(0.0f, 0.0f, 0.0f);
-    public Vector3 speaker6Offset = new Vector3(0.0f, 0.0f, 0.0f);
-    public Vector3 speaker7Offset = new Vector3(0.0f, 0.0f, 0.0f);
-    public Vector3 speaker8Offset = new Vector3(0.0f, 0.0f, 0.0f);
+    public List<Vector3> speakerPositions;  // Used by Inspector
+    public List<Vector3> speakerOffsets;    // Used by Inspector
+    int numberOfSpeakers;    
 
     // Definition of spatializer plugin commands   
     int SET_SCALE_FACTOR    = 0;
@@ -54,33 +34,37 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     int SET_DEBUG_LOG       = 6;
     int SET_SAVE_SPEAKERS_CONFIG = 7;
     int SET_SPEAKER_1_X =8;
-	int SET_SPEAKER_2_X =9;
-	int SET_SPEAKER_3_X =10;
-	int SET_SPEAKER_4_X =11;
-	int SET_SPEAKER_5_X =12;
-	int SET_SPEAKER_6_X =13;
-	int SET_SPEAKER_7_X =14;
-	int SET_SPEAKER_8_X =15;
-	int SET_SPEAKER_1_Y =16;
-	int SET_SPEAKER_2_Y =17;
-	int SET_SPEAKER_3_Y =18;
-	int SET_SPEAKER_4_Y =19;
-	int SET_SPEAKER_5_Y =20;
-	int SET_SPEAKER_6_Y =21;
-	int SET_SPEAKER_7_Y =22;
-	int SET_SPEAKER_8_Y =23;
-	int SET_SPEAKER_1_Z =24;
-	int SET_SPEAKER_2_Z =25;
-	int SET_SPEAKER_3_Z =26;
-	int SET_SPEAKER_4_Z =27;
-	int SET_SPEAKER_5_Z =28;
-	int SET_SPEAKER_6_Z =29;
-	int SET_SPEAKER_7_Z =30;
-	int SET_SPEAKER_8_Z =31;
+    int SET_SPEAKER_2_X = 9;
+    int SET_SPEAKER_3_X = 10;
+    int SET_SPEAKER_4_X = 11;
+    int SET_SPEAKER_5_X = 12;
+    int SET_SPEAKER_6_X = 13;
+    int SET_SPEAKER_7_X = 14;
+    int SET_SPEAKER_8_X = 15;
+    int SET_SPEAKER_1_Y = 16;
+    int SET_SPEAKER_2_Y = 17;
+    int SET_SPEAKER_3_Y = 18;
+    int SET_SPEAKER_4_Y = 19;
+    int SET_SPEAKER_5_Y = 20;
+    int SET_SPEAKER_6_Y = 21;
+    int SET_SPEAKER_7_Y = 22;
+    int SET_SPEAKER_8_Y = 23;
+    int SET_SPEAKER_1_Z = 24;
+    int SET_SPEAKER_2_Z = 25;
+    int SET_SPEAKER_3_Z = 26;
+    int SET_SPEAKER_4_Z = 27;
+    int SET_SPEAKER_5_Z = 28;
+    int SET_SPEAKER_6_Z = 29;
+    int SET_SPEAKER_7_Z = 30;
+    int SET_SPEAKER_8_Z = 31;
+    int GET_MINIMUM_DISTANCE = 32;
 
     // Hack for modifying one single AudioSource (TO DO: fix this)
     bool selectSource = false;
     AudioSource selectedSource;
+
+    // This is needed from Unity 2017
+    bool isInitialized = false;
 
     /////////////////////////////////////////////////////////////////////
 
@@ -89,7 +73,16 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     /// </summary>
     void Start()
     {
-        StartLoadSpeakersSpatializer();
+        //StartLoudSpeakersSpatializer();
+    }
+
+    void Update()
+    {
+        if (!isInitialized)
+        {
+            if (StartLoudSpeakersSpatializer())
+                isInitialized = true;
+        }
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -98,9 +91,11 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
 
     /// <summary>
     /// Sends all configuration to all spatialized sources. 
-    /// Use it each time you reactive an audio source or reactive its "spatialize" attribute. 
+    /// Use it each time you activate an audio source or activate its "spatialize" attribute. 
     /// </summary>
-    public bool StartLoadSpeakersSpatializer(AudioSource source = null)
+    /// <param name="source"></param>
+    /// <returns></returns>    
+    public bool StartLoudSpeakersSpatializer(AudioSource source = null)
     {
         // Select only one AudioSource
         if (source != null)
@@ -120,7 +115,7 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         if (!SetupModulesEnabler()) return false;
 
         // Setup speakers configuration (position)
-        if (!SetupSpeakersConfiguration(structureSide)) return false;
+        if (!SetSpeakersConfigurationPreset(speakersConfigurationPreset)) return false;
 
         // Go back to default state, affecting all sources
         selectSource = false;
@@ -134,107 +129,238 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     /////////////////////////////////////////////////////////////////////
 
     /// <summary>
-    /// Set scale factor. Allows the toolkit to work with big-scale or small-scale scenarios
+    ///  Set one speakers configuration preset and initialize the sperkers positions
     /// </summary>
-    public bool SetSpeaker(int speakerID, Vector3 speakerPosition)
+    /// <param name="preset"> Speakers setup configuration. Param type: T_LoudSpeakerConfigurationPreset</param>
+    /// <returns>return false if the preset is not valid</returns>
+    public bool SetSpeakersConfigurationPreset(T_LoudSpeakerConfigurationPreset preset)
     {
-        if (speakerID == 1)
-        {
-            if (!SendCommandForAllSources(SET_SPEAKER_1_X, speakerPosition.x)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_1_Y, speakerPosition.y)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_1_Z, speakerPosition.z)) return false;            
-        }else if (speakerID == 2)
-        {
-            if (!SendCommandForAllSources(SET_SPEAKER_2_X, speakerPosition.x)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_2_Y, speakerPosition.y)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_2_Z, speakerPosition.z)) return false;
-        }
-        else if (speakerID == 3)
-        {
-            if (!SendCommandForAllSources(SET_SPEAKER_3_X, speakerPosition.x)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_3_Y, speakerPosition.y)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_3_Z, speakerPosition.z)) return false;
-        }
-        else if (speakerID == 4)
-        {
-            if (!SendCommandForAllSources(SET_SPEAKER_4_X, speakerPosition.x)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_4_Y, speakerPosition.y)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_4_Z, speakerPosition.z)) return false;
-        }
-        else if (speakerID == 5)
-        {
-            if (!SendCommandForAllSources(SET_SPEAKER_5_X, speakerPosition.x)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_5_Y, speakerPosition.y)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_5_Z, speakerPosition.z)) return false;
-        }
-        else if (speakerID == 6)
-        {
-            if (!SendCommandForAllSources(SET_SPEAKER_6_X, speakerPosition.x)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_6_Y, speakerPosition.y)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_6_Z, speakerPosition.z)) return false;
-        }
-        else if (speakerID == 7)
-        {
-            if (!SendCommandForAllSources(SET_SPEAKER_7_X, speakerPosition.x)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_7_Y, speakerPosition.y)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_7_Z, speakerPosition.z)) return false;
-        }
-        else if (speakerID == 8)
-        {
-            if (!SendCommandForAllSources(SET_SPEAKER_8_X, speakerPosition.x)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_8_Y, speakerPosition.y)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_8_Z, speakerPosition.z)) return false;
-        }
-        else
-        {
+        if ((preset != T_LoudSpeakerConfigurationPreset.LS_PRESET_2DSQUARE) &&
+            (preset != T_LoudSpeakerConfigurationPreset.LS_PRESET_CUBE) &&
+            (preset != T_LoudSpeakerConfigurationPreset.LS_PRESET_OCTAHEDRON))
             return false;
-        }
-        return true;
-    }
 
-    public bool SendLoadSpeakerConfiguration()
-    {        
-        return SendCommandForAllSources(SET_SAVE_SPEAKERS_CONFIG, 1.0f);     
+        speakersConfigurationPreset = preset;
+        speakerPositions.Clear();
+        speakerOffsets.Clear();
+        
+        switch (preset)
+        {
+            case T_LoudSpeakerConfigurationPreset.LS_PRESET_CUBE:
+                numberOfSpeakers = 8;
+                break;            
+            case T_LoudSpeakerConfigurationPreset.LS_PRESET_OCTAHEDRON:
+                numberOfSpeakers = 6;
+                break;
+            case T_LoudSpeakerConfigurationPreset.LS_PRESET_2DSQUARE:
+                numberOfSpeakers = 4;
+                break;
+            default:
+                return false;                
+        }        
+
+        // Create positions, offsets and weights for each speaker
+        for (int i=0; i < numberOfSpeakers; i++)
+        {
+            speakerPositions.Add(Vector3.zero);
+            speakerOffsets.Add(Vector3.zero);
+        }
+
+        // Calculate speaker positions and weights and send configuration to toolkit
+        CalculateSpeakerPositions();
+        if (!SendLoudSpeakersConfiguration()) return false;
+        return true;
     }
 
     /// <summary>
-    ///  Setup speakers configuration
+    /// Get number of speakers according to the currently set speakers configuration preset
     /// </summary>
-    public bool SetupSpeakersConfiguration(float _structureSide/*, float _structureYaw, float structurePitch*/)
+    /// <returns></returns>
+    public int GetNumberOfSpeakers()
     {
-        //Calculate Speakers Positions
-       // Debug.Log("_structureSide: " + _structureSide);
-        float halfSize = 0.5f * _structureSide;
-        
-        speaker1Position = new Vector3(halfSize, halfSize, halfSize);
-        speaker2Position = new Vector3(halfSize, -halfSize, halfSize);
-        speaker3Position = new Vector3(halfSize, halfSize, -halfSize);
-        speaker4Position = new Vector3(halfSize, -halfSize, -halfSize);
-        speaker5Position = new Vector3(-halfSize, halfSize, halfSize);
-        speaker6Position = new Vector3(-halfSize, -halfSize, halfSize);
-        speaker7Position = new Vector3(-halfSize, halfSize, -halfSize);
-        speaker8Position = new Vector3(-halfSize, -halfSize, -halfSize);
+        return numberOfSpeakers;
+    }    
 
+    /// <summary>
+    /// Set size of one side of the speakers configuration preset, in meters
+    /// </summary>
+    /// <param name="side"> Indicate in meter the side of the speakers structure</param>
+    /// <returns></returns>
+    public bool SetStructureSide(float side)
+    {
+        structureSide = side;
+        CalculateSpeakerPositions();
+        return SendLoudSpeakersConfiguration();
+    }
 
-        if (!SetSpeaker(1, speaker1Position + speaker1Offset * 0.01f)) return false;
-        if (!SetSpeaker(2, speaker2Position + speaker2Offset * 0.01f)) return false;
-        if (!SetSpeaker(3, speaker3Position + speaker3Offset * 0.01f)) return false;
-        if (!SetSpeaker(4, speaker4Position + speaker4Offset * 0.01f)) return false;
-        if (!SetSpeaker(5, speaker5Position + speaker5Offset * 0.01f)) return false;
-        if (!SetSpeaker(6, speaker6Position + speaker6Offset * 0.01f)) return false;
-        if (!SetSpeaker(7, speaker7Position + speaker7Offset * 0.01f)) return false;
-        if (!SetSpeaker(8, speaker8Position + speaker8Offset * 0.01f)) return false;
+    /// <summary>
+    /// Get size of one side of the speakers configuration preset, in meters
+    /// </summary>
+    /// <returns>side in meters</returns>
+    public float GetStructureSide()
+    {
+        return structureSide;
+    }
 
-        //Once the configuration is ready, load it into the core
-        if (!SendLoadSpeakerConfiguration()) return false;
+    /// <summary>
+    /// Get minimum distance from any source to listener according to the speakers setup)
+    /// </summary>
+    /// <returns></returns>
+    public float GetMinimumDistanceToListener()
+    {
+        float returnValue;
+
+        List<AudioSource> sources = GetAllSpatializedSources();
+        if (sources.Count == 0)
+            return -1.0f;
+
+        if (!sources[0].GetSpatializerFloat(GET_MINIMUM_DISTANCE, out returnValue))
+            return -1.0f;
+        else
+            return returnValue;
+    }
+
+    /// <summary>
+    /// Get position of one speaker
+    /// </summary>
+    /// <param name="speakerID"></param>
+    /// <returns> speakers position in m (x,y,z) inclusing offset</returns>
+    public Vector3 GetSpeakerPosition(int speakerID)
+    {
+        //Offset is in cm
+        return new Vector3( speakerPositions[speakerID].x + speakerOffsets[speakerID].x * 0.01f,
+                            speakerPositions[speakerID].y + speakerOffsets[speakerID].y * 0.01f,
+                            speakerPositions[speakerID].z + speakerOffsets[speakerID].z * 0.01f);
+    }
+
+    /// <summary>
+    /// Set offset for one speaker
+    /// </summary>
+    /// <param name="speakerID"></param>
+    /// <param name="offset"></param>
+    /// <returns></returns>
+    public bool SetSpeakerOffset(int speakerID, Vector3 offset)
+    {        
+        if ((speakerID < numberOfSpeakers) && (speakerID >= 0))
+        {
+            speakerOffsets[speakerID] = offset;
+            return SendLoudSpeakersConfiguration();
+        }
+        else
+            return false;
+    }
+
+    /// <summary>
+    /// Send configuration of all speakers
+    /// </summary>
+    public bool SendLoudSpeakersConfiguration()
+    {
+        // Speaker 1     
+        if (numberOfSpeakers > 0)
+        {
+            if (!SendCommandForAllSources(SET_SPEAKER_1_X, GetSpeakerPosition(0).x)) return false;
+            if (!SendCommandForAllSources(SET_SPEAKER_1_Y, GetSpeakerPosition(0).y)) return false;
+            if (!SendCommandForAllSources(SET_SPEAKER_1_Z, GetSpeakerPosition(0).z)) return false;            
+        }
+
+        // Speaker 2
+        if (numberOfSpeakers > 1)
+        {
+            if (!SendCommandForAllSources(SET_SPEAKER_2_X, GetSpeakerPosition(1).x)) return false;
+            if (!SendCommandForAllSources(SET_SPEAKER_2_Y, GetSpeakerPosition(1).y)) return false;
+            if (!SendCommandForAllSources(SET_SPEAKER_2_Z, GetSpeakerPosition(1).z)) return false;            
+        }
+
+        // Speaker 3
+        if (numberOfSpeakers > 2)
+        {
+            if (!SendCommandForAllSources(SET_SPEAKER_3_X, GetSpeakerPosition(2).x)) return false;
+            if (!SendCommandForAllSources(SET_SPEAKER_3_Y, GetSpeakerPosition(2).y)) return false;
+            if (!SendCommandForAllSources(SET_SPEAKER_3_Z, GetSpeakerPosition(2).z)) return false;            
+        }
+
+        // Speaker 4
+        if (numberOfSpeakers > 3)
+        {
+            if (!SendCommandForAllSources(SET_SPEAKER_4_X, GetSpeakerPosition(3).x)) return false;
+            if (!SendCommandForAllSources(SET_SPEAKER_4_Y, GetSpeakerPosition(3).y)) return false;
+            if (!SendCommandForAllSources(SET_SPEAKER_4_Z, GetSpeakerPosition(3).z)) return false;            
+        }
+
+        // Speaker 5
+        if (numberOfSpeakers > 4)
+        {
+            if (!SendCommandForAllSources(SET_SPEAKER_5_X, GetSpeakerPosition(4).x)) return false;
+            if (!SendCommandForAllSources(SET_SPEAKER_5_Y, GetSpeakerPosition(4).y)) return false;
+            if (!SendCommandForAllSources(SET_SPEAKER_5_Z, GetSpeakerPosition(4).z)) return false;            
+        }
+
+        // Speaker 6
+        if (numberOfSpeakers > 5)
+        {
+            if (!SendCommandForAllSources(SET_SPEAKER_6_X, GetSpeakerPosition(5).x)) return false;
+            if (!SendCommandForAllSources(SET_SPEAKER_6_Y, GetSpeakerPosition(5).y)) return false;
+            if (!SendCommandForAllSources(SET_SPEAKER_6_Z, GetSpeakerPosition(5).z)) return false;            
+        }
+
+        // Speaker 7
+        if (numberOfSpeakers > 6)
+        {
+            if (!SendCommandForAllSources(SET_SPEAKER_7_X, GetSpeakerPosition(6).x)) return false;
+            if (!SendCommandForAllSources(SET_SPEAKER_7_Y, GetSpeakerPosition(6).y)) return false;
+            if (!SendCommandForAllSources(SET_SPEAKER_7_Z, GetSpeakerPosition(6).z)) return false;            
+        }
+
+        // Speaker 8
+        if (numberOfSpeakers > 7)
+        {
+            if (!SendCommandForAllSources(SET_SPEAKER_8_X, GetSpeakerPosition(7).x)) return false;
+            if (!SendCommandForAllSources(SET_SPEAKER_8_Y, GetSpeakerPosition(7).y)) return false;
+            if (!SendCommandForAllSources(SET_SPEAKER_8_Z, GetSpeakerPosition(7).z)) return false;            
+        }
+
+        // Send command for ending setup
+        if (!SendCommandForAllSources(SET_SAVE_SPEAKERS_CONFIG, 1.0f)) return false;
 
         return true;
     }
 
-
-    /////////////////////////////////////////////////////////////////////
-    // ADVANCED API METHODS
-    /////////////////////////////////////////////////////////////////////
+    /// <summary>
+    /// Calculate positions for all speakers, but do not send them to the plugin yet
+    /// </summary>
+    public void CalculateSpeakerPositions()
+    {
+        switch (speakersConfigurationPreset)
+        {
+            case T_LoudSpeakerConfigurationPreset.LS_PRESET_CUBE:
+                float cubeSide = 0.5f * structureSide;
+                speakerPositions[2] = new Vector3(-cubeSide, -cubeSide, cubeSide) + speakerOffsets[0];  // Front Left Down speaker                     
+                speakerPositions[3] = new Vector3(cubeSide, -cubeSide, cubeSide) + speakerOffsets[1];   // Front Right Down speaker
+                speakerPositions[6] = new Vector3(-cubeSide, -cubeSide, -cubeSide) + speakerOffsets[2]; // Rear Left Down speaker                    
+                speakerPositions[7] = new Vector3(cubeSide, -cubeSide, -cubeSide) + speakerOffsets[3];  // Rear Right Down speaker                
+                speakerPositions[0] = new Vector3(-cubeSide, cubeSide, cubeSide) + speakerOffsets[4];   // Front Left Up speaker
+                speakerPositions[1] = new Vector3(cubeSide, cubeSide, cubeSide) + speakerOffsets[5];    // Front Right Up speaker
+                speakerPositions[4] = new Vector3(-cubeSide, cubeSide, -cubeSide) + speakerOffsets[6];  // Rear Left Up speaker
+                speakerPositions[5] = new Vector3(cubeSide, cubeSide, -cubeSide) + speakerOffsets[7];   // Rear Right Up speaker
+                break;
+            case T_LoudSpeakerConfigurationPreset.LS_PRESET_OCTAHEDRON:
+                float octahedronSide = structureSide / Mathf.Sqrt(2);
+                speakerPositions[0] = new Vector3(0.0f, 0.0f, octahedronSide) + speakerOffsets[0];   //Front speaker         
+                speakerPositions[1] = new Vector3(-octahedronSide, 0.0f, 0.0f) + speakerOffsets[1];  //Left speaker
+                speakerPositions[2] = new Vector3(0.0f, 0.0f, -octahedronSide) + speakerOffsets[2];  //Rear speaker               
+                speakerPositions[3] = new Vector3(octahedronSide, 0.0f, 0.0f) + speakerOffsets[3];   //Right speaker                
+                speakerPositions[4] = new Vector3(0.0f, octahedronSide, 0.0f) + speakerOffsets[4];   // Zenith speaker
+                speakerPositions[5] = new Vector3(0.0f, -octahedronSide, 0.0f) + speakerOffsets[5];  // Nadir speaker
+                break;
+            case T_LoudSpeakerConfigurationPreset.LS_PRESET_2DSQUARE:
+                float _2DSquareSide = structureSide / Mathf.Sqrt(2);
+                speakerPositions[0] = new Vector3(0.0f, 0.0f, _2DSquareSide) + speakerOffsets[0];   // Front speaker
+                speakerPositions[1] = new Vector3(-_2DSquareSide, 0.0f, 0.0f) + speakerOffsets[1];  // Left speaker
+                speakerPositions[2] = new Vector3(0.0f, 0.0f, -_2DSquareSide) + speakerOffsets[2];  // Rear speaker
+                speakerPositions[3] = new Vector3(_2DSquareSide, 0.0f, 0.0f) + speakerOffsets[3];   // Right speaker
+                break;
+        }
+    }
 
     /// <summary>
     /// Set ID for all sources, for internal use of the wrapper
@@ -254,11 +380,12 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
             return selectedSource.SetSpatializerFloat(SET_SOURCE_ID, (float)++lastSourceID);
     }
 
-    /////////////////////////////////////////////////////////////////////
-
-    /// <summary>
-    /// Set scale factor. Allows the toolkit to work with big-scale or small-scale scenarios
+    
+        /// <summary>
+    /// Set scale factor. Allows the toolkit to work with different scaled scenarios
     /// </summary>
+    /// <param name="scale"></param>
+    /// <returns></returns>
     public bool SetScaleFactor(float scale)
     {
         scaleFactor = scale;
@@ -266,49 +393,48 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     }
 
     /// <summary>
-    ///  Setup modules enabler, allowing to switch on/off core features
+    /// Setup the diantance attenuation and far distance simulation according to the API_3DTI_LoudSpeakersSpatializer variables modDistAtt and modFarLPF respectively 
     /// </summary>
+    /// <returns>true if the setup has been done correctly</returns>
     public bool SetupModulesEnabler()
     {
         if (!SetModFarLPF(modFarLPF)) return false;
         if (!SetModDistanceAttenuation(modDistAtt)) return false;       
         return true;
     }
-
-    /////////////////////////////////////////////////////////////////////
+    
 
     /// <summary>
-    /// Switch on/off far distance LPF
-    /// </summary>        
+    /// Switch on/off far distance simulation (LPF)
+    /// </summary>
+    /// <param name="_enable"> true to activate far away distance attenuation</param>
+    /// <returns>true if the data has been sent correctly</returns>
     public bool SetModFarLPF(bool _enable)
     {
-        modFarLPF = _enable;
-        if (_enable)
-            return SendCommandForAllSources(SET_MOD_FARLPF, 1.0f);
-        else
-            return SendCommandForAllSources(SET_MOD_FARLPF, 0.0f);
+        modFarLPF = _enable;        
+        return SendCommandForAllSources(SET_MOD_FARLPF, Bool2Float(_enable));
     }
 
     /////////////////////////////////////////////////////////////////////
 
     /// <summary>
-    /// Switch on/off distance attenuation
-    /// </summary>        
+    ///  Switch on/off global distance attenuation
+    /// </summary>
+    /// <param name="_enable"> true to activate distance attenuation</param>
+    /// <returns>true if the data has been sent correctly</returns>
     public bool SetModDistanceAttenuation(bool _enable)
     {
         modDistAtt = _enable;
-        if (_enable)
-            return SendCommandForAllSources(SET_MOD_DISTATT, 1.0f);
-        else
-            return SendCommandForAllSources(SET_MOD_DISTATT, 0.0f);
+        return SendCommandForAllSources(SET_MOD_DISTATT, Bool2Float(_enable));
     }
 
     /////////////////////////////////////////////////////////////////////
-  
 
     /// <summary>
-    /// Set magnitude Anechoic Attenuation
-    /// </summary>    
+    ///  Set attenuation value (dB) for distance attenuation Attenuation
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns>true if the data has been sent correctly</returns>
     public bool SetMagnitudeAnechoicAttenuation(float value)
     {
         magAnechoicAttenuation = value;
@@ -316,19 +442,17 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     }
 
     /// <summary>
-    /// Set magnitude Sound Speed
-    /// </summary>    
+    ///  Set value for  Sound Speed (m/s)
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns>true if the data has been sent correctly</returns>
     public bool SetMagnitudeSoundSpeed(float value)
     {
         magSoundSpeed = value;
         return SendCommandForAllSources(SET_MAG_SOUNDSPEED, value);
     }
 
-    /////////////////////////////////////////////////////////////////////
-    // SOURCE API METHODS
-    /////////////////////////////////////////////////////////////////////
 
-    
     /////////////////////////////////////////////////////////////////////
     // AUXILIARY FUNCTIONS
     /////////////////////////////////////////////////////////////////////
@@ -336,19 +460,16 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     /// <summary>
     /// Send command to plugin to switch on/off write to Debug Log file
     /// </summary>
+    /// <param name="_enable">true to activate wrinting in the file </param>
+    /// <returns></returns>
     public bool SendWriteDebugLog(bool _enable)
     {
         debugLog = _enable;
-        if (_enable)
-            return SendCommandForAllSources(SET_DEBUG_LOG, 1.0f);
-        else
-            return SendCommandForAllSources(SET_DEBUG_LOG, 0.0f);
+        return SendCommandForAllSources(SET_DEBUG_LOG, Bool2Float(_enable));
     }
 
-    /// <summary>
-    /// Send command to the DLL, for each registered source
-    /// </summary>
-    public bool SendCommandForAllSources(int command, float value)
+    // Send command to the DLL, for each registered source
+    private bool SendCommandForAllSources(int command, float value)
     {
         if (!selectSource)
         {
@@ -364,10 +485,9 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
             return selectedSource.SetSpatializerFloat(command, value);
     }
 
-    /// <summary>
-    /// Returns a list with all audio sources with the Spatialized toggle checked
-    /// </summary>
-    public List<AudioSource> GetAllSpatializedSources()
+
+    // Returns a list with all audio sources with the Spatialized toggle checked
+    private List<AudioSource> GetAllSpatializedSources()
     {
         //GameObject[] audioSources = GameObject.FindGameObjectsWithTag("AudioSource");
 
@@ -383,12 +503,7 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         return spatializedSources;
     }
 
-    /// <summary>
-    /// Auxiliary function
-    /// </summary>
-    /// <param name="v"></param>
-    /// <returns></returns>
-    float Bool2Float(bool v)
+    private float Bool2Float(bool v)
     {
         if (v)
             return 1.0f;
