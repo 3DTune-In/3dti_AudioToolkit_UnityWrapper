@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 19a9b2c82d95a6d4fb39b732a3c974f1
-timeCreated: 1512992995
+guid: 113cba513830b954bbff113512e07212
+timeCreated: 1517394024
 licenseType: Pro
 PluginImporter:
   serializedVersion: 2
@@ -11,6 +11,31 @@ PluginImporter:
   platformData:
     data:
       first:
+        '': Any
+      second:
+        enabled: 0
+        settings:
+          Exclude Android: 1
+          Exclude Editor: 0
+          Exclude Linux: 0
+          Exclude Linux64: 0
+          Exclude LinuxUniversal: 0
+          Exclude OSXIntel: 0
+          Exclude OSXIntel64: 0
+          Exclude OSXUniversal: 0
+          Exclude WebGL: 0
+          Exclude Win: 0
+          Exclude Win64: 1
+          Exclude iOS: 0
+    data:
+      first:
+        Android: Android
+      second:
+        enabled: 0
+        settings:
+          CPU: ARMv7
+    data:
+      first:
         Any: 
       second:
         enabled: 1
@@ -19,10 +44,11 @@ PluginImporter:
       first:
         Editor: Editor
       second:
-        enabled: 0
+        enabled: 1
         settings:
           CPU: x86
           DefaultValueInitialized: true
+          OS: Windows
     data:
       first:
         Facebook: Win
@@ -48,7 +74,7 @@ PluginImporter:
       first:
         Standalone: Linux64
       second:
-        enabled: 0
+        enabled: 1
         settings:
           CPU: None
     data:
@@ -57,7 +83,7 @@ PluginImporter:
       second:
         enabled: 1
         settings:
-          CPU: x86
+          CPU: AnyCPU
     data:
       first:
         Standalone: OSXIntel
@@ -69,16 +95,16 @@ PluginImporter:
       first:
         Standalone: OSXIntel64
       second:
-        enabled: 0
+        enabled: 1
         settings:
           CPU: None
     data:
       first:
         Standalone: OSXUniversal
       second:
-        enabled: 0
+        enabled: 1
         settings:
-          CPU: x86
+          CPU: AnyCPU
     data:
       first:
         Standalone: Win
@@ -93,6 +119,20 @@ PluginImporter:
         enabled: 0
         settings:
           CPU: None
+    data:
+      first:
+        WebGL: WebGL
+      second:
+        enabled: 1
+        settings: {}
+    data:
+      first:
+        iPhone: iOS
+      second:
+        enabled: 1
+        settings:
+          CompileFlags: 
+          FrameworkDependencies: 
   userData: 
   assetBundleName: 
   assetBundleVariant: 
