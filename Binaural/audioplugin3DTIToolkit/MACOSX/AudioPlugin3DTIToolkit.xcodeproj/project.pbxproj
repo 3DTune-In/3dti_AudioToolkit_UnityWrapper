@@ -7,145 +7,151 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AF156F9E2033472800D93A9F /* BRIR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156F8E2033472800D93A9F /* BRIR.cpp */; };
+		AF156F9F2033472800D93A9F /* Core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156F902033472800D93A9F /* Core.cpp */; };
+		AF156FA02033472800D93A9F /* Environment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156F922033472800D93A9F /* Environment.cpp */; };
+		AF156FA12033472800D93A9F /* HRTF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156F942033472800D93A9F /* HRTF.cpp */; };
+		AF156FA22033472800D93A9F /* ILD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156F962033472800D93A9F /* ILD.cpp */; };
+		AF156FA32033472800D93A9F /* Listener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156F982033472800D93A9F /* Listener.cpp */; };
+		AF156FA42033472800D93A9F /* SingleSourceDSP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156F9A2033472800D93A9F /* SingleSourceDSP.cpp */; };
+		AF156FA52033472800D93A9F /* UPCAnechoic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156F9C2033472800D93A9F /* UPCAnechoic.cpp */; };
+		AF156FD42033479A00D93A9F /* BiquadFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FA82033479A00D93A9F /* BiquadFilter.cpp */; };
+		AF156FD52033479A00D93A9F /* Delay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FAD2033479A00D93A9F /* Delay.cpp */; };
+		AF156FD62033479A00D93A9F /* DistanceAttenuator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FAF2033479A00D93A9F /* DistanceAttenuator.cpp */; };
+		AF156FD72033479A00D93A9F /* DynamicCompressorMono.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FB12033479A00D93A9F /* DynamicCompressorMono.cpp */; };
+		AF156FD82033479A00D93A9F /* DynamicCompressorStereo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FB32033479A00D93A9F /* DynamicCompressorStereo.cpp */; };
+		AF156FD92033479A00D93A9F /* DynamicExpanderMono.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FB52033479A00D93A9F /* DynamicExpanderMono.cpp */; };
+		AF156FDA2033479A00D93A9F /* EnvelopeDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FB82033479A00D93A9F /* EnvelopeDetector.cpp */; };
+		AF156FDB2033479A00D93A9F /* ErrorHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FBA2033479A00D93A9F /* ErrorHandler.cpp */; };
+		AF156FDC2033479A00D93A9F /* FarDistanceEffects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FBC2033479A00D93A9F /* FarDistanceEffects.cpp */; };
+		AF156FDD2033479A00D93A9F /* fftsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FBE2033479A00D93A9F /* fftsg.cpp */; };
+		AF156FDE2033479A00D93A9F /* FiltersBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FC02033479A00D93A9F /* FiltersBank.cpp */; };
+		AF156FDF2033479A00D93A9F /* FiltersChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FC22033479A00D93A9F /* FiltersChain.cpp */; };
+		AF156FE02033479A00D93A9F /* Fprocessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FC42033479A00D93A9F /* Fprocessor.cpp */; };
+		AF156FE12033479A00D93A9F /* Magnitudes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FC62033479A00D93A9F /* Magnitudes.cpp */; };
+		AF156FE22033479A00D93A9F /* NoiseGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FC82033479A00D93A9F /* NoiseGenerator.cpp */; };
+		AF156FE32033479A00D93A9F /* Profiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FCA2033479A00D93A9F /* Profiler.cpp */; };
+		AF156FE42033479A00D93A9F /* Quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FCC2033479A00D93A9F /* Quaternion.cpp */; };
+		AF156FE52033479A00D93A9F /* Transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FCE2033479A00D93A9F /* Transform.cpp */; };
+		AF156FE62033479A00D93A9F /* UPCEnvironment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FD02033479A00D93A9F /* UPCEnvironment.cpp */; };
+		AF156FE72033479A00D93A9F /* Vector3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FD22033479A00D93A9F /* Vector3.cpp */; };
+		AF156FFB203347B600D93A9F /* ClassificationScaleHL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FE9203347B600D93A9F /* ClassificationScaleHL.cpp */; };
+		AF156FFC203347B600D93A9F /* DynamicEqualizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FEB203347B600D93A9F /* DynamicEqualizer.cpp */; };
+		AF156FFD203347B600D93A9F /* Fig6Algorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FED203347B600D93A9F /* Fig6Algorithm.cpp */; };
+		AF156FFE203347B600D93A9F /* FrequencySmearing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FEF203347B600D93A9F /* FrequencySmearing.cpp */; };
+		AF156FFF203347B600D93A9F /* HearingAidSim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FF1203347B600D93A9F /* HearingAidSim.cpp */; };
+		AF157000203347B600D93A9F /* HearingLossSim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FF3203347B600D93A9F /* HearingLossSim.cpp */; };
+		AF157001203347B600D93A9F /* HighOrderButteworthFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FF6203347B600D93A9F /* HighOrderButteworthFilter.cpp */; };
+		AF157002203347B600D93A9F /* MultibandExpander.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FF7203347B600D93A9F /* MultibandExpander.cpp */; };
+		AF157003203347B600D93A9F /* TemporalDistortionSimulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FF9203347B600D93A9F /* TemporalDistortionSimulator.cpp */; };
+		AF157008203347DC00D93A9F /* HRTFCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF157004203347DC00D93A9F /* HRTFCereal.cpp */; };
+		AF15700C203347F800D93A9F /* ILDCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF15700A203347F800D93A9F /* ILDCereal.cpp */; };
 		AF391F8A1E55F12800EB4AC6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AF391F891E55F12800EB4AC6 /* Info.plist */; };
 		AF391F8E1E55F14200EB4AC6 /* effect3DTIHA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF391F8B1E55F14200EB4AC6 /* effect3DTIHA.cpp */; };
 		AF391F8F1E55F14200EB4AC6 /* effect3DTIHL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF391F8C1E55F14200EB4AC6 /* effect3DTIHL.cpp */; };
 		AF391F901E55F14200EB4AC6 /* effect3DTISpatializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF391F8D1E55F14200EB4AC6 /* effect3DTISpatializer.cpp */; };
-		AF5A97A71F965150005EF9B7 /* FrequencySmearing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF5A97A11F965150005EF9B7 /* FrequencySmearing.cpp */; };
-		AF5A97A81F965150005EF9B7 /* HighOrderButteworthFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF5A97A41F965150005EF9B7 /* HighOrderButteworthFilter.cpp */; };
-		AF5A97A91F965150005EF9B7 /* TemporalDistortionSimulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF5A97A51F965150005EF9B7 /* TemporalDistortionSimulator.cpp */; };
-		AF5A97AC1F965167005EF9B7 /* Fprocessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF5A97AA1F965167005EF9B7 /* Fprocessor.cpp */; };
-		AFBD85E22020CA9A00816FCD /* ErrorHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFBD85E02020CA9A00816FCD /* ErrorHandler.cpp */; };
-		AFD67D0D1E978F80000F4387 /* BRIR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CB61E978F80000F4387 /* BRIR.cpp */; };
-		AFD67D0E1E978F80000F4387 /* Core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CB81E978F80000F4387 /* Core.cpp */; };
-		AFD67D0F1E978F80000F4387 /* Environment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CBA1E978F80000F4387 /* Environment.cpp */; };
-		AFD67D101E978F80000F4387 /* HRTF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CBC1E978F80000F4387 /* HRTF.cpp */; };
-		AFD67D111E978F80000F4387 /* ILD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CBE1E978F80000F4387 /* ILD.cpp */; };
-		AFD67D121E978F80000F4387 /* Listener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CC01E978F80000F4387 /* Listener.cpp */; };
-		AFD67D131E978F80000F4387 /* SingleSourceDSP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CC21E978F80000F4387 /* SingleSourceDSP.cpp */; };
-		AFD67D141E978F80000F4387 /* UPCAnechoic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CC41E978F80000F4387 /* UPCAnechoic.cpp */; };
-		AFD67D161E978F80000F4387 /* BiquadFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CC91E978F80000F4387 /* BiquadFilter.cpp */; };
-		AFD67D191E978F80000F4387 /* DistanceAttenuator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CD11E978F80000F4387 /* DistanceAttenuator.cpp */; };
-		AFD67D1A1E978F80000F4387 /* DynamicCompressorMono.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CD41E978F80000F4387 /* DynamicCompressorMono.cpp */; };
-		AFD67D1B1E978F80000F4387 /* DynamicCompressorStereo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CD61E978F80000F4387 /* DynamicCompressorStereo.cpp */; };
-		AFD67D1C1E978F80000F4387 /* EnvelopeDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CD81E978F80000F4387 /* EnvelopeDetector.cpp */; };
-		AFD67D1D1E978F80000F4387 /* FarDistanceEffects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CDA1E978F80000F4387 /* FarDistanceEffects.cpp */; };
-		AFD67D1F1E978F80000F4387 /* fftsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CDE1E978F80000F4387 /* fftsg.cpp */; };
-		AFD67D201E978F80000F4387 /* FiltersChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CE01E978F80000F4387 /* FiltersChain.cpp */; };
-		AFD67D211E978F80000F4387 /* Magnitudes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CE21E978F80000F4387 /* Magnitudes.cpp */; };
-		AFD67D231E978F80000F4387 /* Quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CE61E978F80000F4387 /* Quaternion.cpp */; };
-		AFD67D251E978F80000F4387 /* Transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CE91E978F80000F4387 /* Transform.cpp */; };
-		AFD67D261E978F80000F4387 /* UPCEnvironment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CEB1E978F80000F4387 /* UPCEnvironment.cpp */; };
-		AFD67D271E978F80000F4387 /* Vector3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CED1E978F80000F4387 /* Vector3.cpp */; };
-		AFD67D281E978F80000F4387 /* DynamicEqualizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CF11E978F80000F4387 /* DynamicEqualizer.cpp */; };
-		AFD67D291E978F80000F4387 /* Fig6Algorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CF31E978F80000F4387 /* Fig6Algorithm.cpp */; };
-		AFD67D2B1E978F80000F4387 /* HearingAidSim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CF71E978F80000F4387 /* HearingAidSim.cpp */; };
-		AFD67D2C1E978F80000F4387 /* HearingLossSim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD67CF91E978F80000F4387 /* HearingLossSim.cpp */; };
-		AFE0E1821F1F889B00695DDB /* DynamicExpanderMono.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE0E17F1F1F889B00695DDB /* DynamicExpanderMono.cpp */; };
-		AFE0E1851F1F88A900695DDB /* MultibandExpander.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE0E1831F1F88A900695DDB /* MultibandExpander.cpp */; };
-		AFE88E781DCCB226003505EF /* HRTFCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE88B001DCCB223003505EF /* HRTFCereal.cpp */; };
-		AFE890951DCCB226003505EF /* ILDCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE88E1A1DCCB226003505EF /* ILDCereal.cpp */; };
 		AFE890AC1DCCB3CF003505EF /* AudioPluginUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE890A81DCCB3CF003505EF /* AudioPluginUtil.cpp */; };
-		AFF42CAD1F791E5100A430DE /* Delay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFF42CA71F791E5100A430DE /* Delay.cpp */; };
-		AFF42CAE1F791E5100A430DE /* FiltersBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFF42CA91F791E5100A430DE /* FiltersBank.cpp */; };
-		AFF42CAF1F791E5100A430DE /* NoiseGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFF42CAB1F791E5100A430DE /* NoiseGenerator.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AF156F8D2033472800D93A9F /* 3DTI_BinauralSpatializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = 3DTI_BinauralSpatializer.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/3DTI_BinauralSpatializer.h; sourceTree = "<group>"; };
+		AF156F8E2033472800D93A9F /* BRIR.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BRIR.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/BRIR.cpp; sourceTree = "<group>"; };
+		AF156F8F2033472800D93A9F /* BRIR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRIR.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/BRIR.h; sourceTree = "<group>"; };
+		AF156F902033472800D93A9F /* Core.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Core.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/Core.cpp; sourceTree = "<group>"; };
+		AF156F912033472800D93A9F /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Core.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/Core.h; sourceTree = "<group>"; };
+		AF156F922033472800D93A9F /* Environment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Environment.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/Environment.cpp; sourceTree = "<group>"; };
+		AF156F932033472800D93A9F /* Environment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Environment.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/Environment.h; sourceTree = "<group>"; };
+		AF156F942033472800D93A9F /* HRTF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HRTF.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/HRTF.cpp; sourceTree = "<group>"; };
+		AF156F952033472800D93A9F /* HRTF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HRTF.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/HRTF.h; sourceTree = "<group>"; };
+		AF156F962033472800D93A9F /* ILD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ILD.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/ILD.cpp; sourceTree = "<group>"; };
+		AF156F972033472800D93A9F /* ILD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ILD.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/ILD.h; sourceTree = "<group>"; };
+		AF156F982033472800D93A9F /* Listener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Listener.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/Listener.cpp; sourceTree = "<group>"; };
+		AF156F992033472800D93A9F /* Listener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Listener.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/Listener.h; sourceTree = "<group>"; };
+		AF156F9A2033472800D93A9F /* SingleSourceDSP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SingleSourceDSP.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/SingleSourceDSP.cpp; sourceTree = "<group>"; };
+		AF156F9B2033472800D93A9F /* SingleSourceDSP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SingleSourceDSP.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/SingleSourceDSP.h; sourceTree = "<group>"; };
+		AF156F9C2033472800D93A9F /* UPCAnechoic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UPCAnechoic.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/UPCAnechoic.cpp; sourceTree = "<group>"; };
+		AF156F9D2033472800D93A9F /* UPCAnechoic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPCAnechoic.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/UPCAnechoic.h; sourceTree = "<group>"; };
+		AF156FA62033479A00D93A9F /* AIR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AIR.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/AIR.h; sourceTree = "<group>"; };
+		AF156FA72033479A00D93A9F /* AudioState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioState.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/AudioState.h; sourceTree = "<group>"; };
+		AF156FA82033479A00D93A9F /* BiquadFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BiquadFilter.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/BiquadFilter.cpp; sourceTree = "<group>"; };
+		AF156FA92033479A00D93A9F /* BiquadFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BiquadFilter.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/BiquadFilter.h; sourceTree = "<group>"; };
+		AF156FAA2033479A00D93A9F /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Buffer.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Buffer.h; sourceTree = "<group>"; };
+		AF156FAB2033479A00D93A9F /* CommonDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommonDefinitions.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/CommonDefinitions.h; sourceTree = "<group>"; };
+		AF156FAC2033479A00D93A9F /* Conventions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Conventions.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Conventions.h; sourceTree = "<group>"; };
+		AF156FAD2033479A00D93A9F /* Delay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Delay.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Delay.cpp; sourceTree = "<group>"; };
+		AF156FAE2033479A00D93A9F /* Delay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Delay.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Delay.h; sourceTree = "<group>"; };
+		AF156FAF2033479A00D93A9F /* DistanceAttenuator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DistanceAttenuator.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DistanceAttenuator.cpp; sourceTree = "<group>"; };
+		AF156FB02033479A00D93A9F /* DistanceAttenuator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DistanceAttenuator.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DistanceAttenuator.h; sourceTree = "<group>"; };
+		AF156FB12033479A00D93A9F /* DynamicCompressorMono.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DynamicCompressorMono.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DynamicCompressorMono.cpp; sourceTree = "<group>"; };
+		AF156FB22033479A00D93A9F /* DynamicCompressorMono.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DynamicCompressorMono.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DynamicCompressorMono.h; sourceTree = "<group>"; };
+		AF156FB32033479A00D93A9F /* DynamicCompressorStereo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DynamicCompressorStereo.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DynamicCompressorStereo.cpp; sourceTree = "<group>"; };
+		AF156FB42033479A00D93A9F /* DynamicCompressorStereo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DynamicCompressorStereo.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DynamicCompressorStereo.h; sourceTree = "<group>"; };
+		AF156FB52033479A00D93A9F /* DynamicExpanderMono.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DynamicExpanderMono.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DynamicExpanderMono.cpp; sourceTree = "<group>"; };
+		AF156FB62033479A00D93A9F /* DynamicExpanderMono.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DynamicExpanderMono.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DynamicExpanderMono.h; sourceTree = "<group>"; };
+		AF156FB72033479A00D93A9F /* DynamicProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DynamicProcessor.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DynamicProcessor.h; sourceTree = "<group>"; };
+		AF156FB82033479A00D93A9F /* EnvelopeDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EnvelopeDetector.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/EnvelopeDetector.cpp; sourceTree = "<group>"; };
+		AF156FB92033479A00D93A9F /* EnvelopeDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EnvelopeDetector.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/EnvelopeDetector.h; sourceTree = "<group>"; };
+		AF156FBA2033479A00D93A9F /* ErrorHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ErrorHandler.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/ErrorHandler.cpp; sourceTree = "<group>"; };
+		AF156FBB2033479A00D93A9F /* ErrorHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ErrorHandler.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/ErrorHandler.h; sourceTree = "<group>"; };
+		AF156FBC2033479A00D93A9F /* FarDistanceEffects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FarDistanceEffects.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/FarDistanceEffects.cpp; sourceTree = "<group>"; };
+		AF156FBD2033479A00D93A9F /* FarDistanceEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FarDistanceEffects.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/FarDistanceEffects.h; sourceTree = "<group>"; };
+		AF156FBE2033479A00D93A9F /* fftsg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fftsg.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/fftsg.cpp; sourceTree = "<group>"; };
+		AF156FBF2033479A00D93A9F /* fftsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fftsg.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/fftsg.h; sourceTree = "<group>"; };
+		AF156FC02033479A00D93A9F /* FiltersBank.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FiltersBank.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/FiltersBank.cpp; sourceTree = "<group>"; };
+		AF156FC12033479A00D93A9F /* FiltersBank.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FiltersBank.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/FiltersBank.h; sourceTree = "<group>"; };
+		AF156FC22033479A00D93A9F /* FiltersChain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FiltersChain.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/FiltersChain.cpp; sourceTree = "<group>"; };
+		AF156FC32033479A00D93A9F /* FiltersChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FiltersChain.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/FiltersChain.h; sourceTree = "<group>"; };
+		AF156FC42033479A00D93A9F /* Fprocessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fprocessor.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Fprocessor.cpp; sourceTree = "<group>"; };
+		AF156FC52033479A00D93A9F /* Fprocessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Fprocessor.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Fprocessor.h; sourceTree = "<group>"; };
+		AF156FC62033479A00D93A9F /* Magnitudes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Magnitudes.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Magnitudes.cpp; sourceTree = "<group>"; };
+		AF156FC72033479A00D93A9F /* Magnitudes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Magnitudes.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Magnitudes.h; sourceTree = "<group>"; };
+		AF156FC82033479A00D93A9F /* NoiseGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NoiseGenerator.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/NoiseGenerator.cpp; sourceTree = "<group>"; };
+		AF156FC92033479A00D93A9F /* NoiseGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NoiseGenerator.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/NoiseGenerator.h; sourceTree = "<group>"; };
+		AF156FCA2033479A00D93A9F /* Profiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Profiler.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Profiler.cpp; sourceTree = "<group>"; };
+		AF156FCB2033479A00D93A9F /* Profiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Profiler.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Profiler.h; sourceTree = "<group>"; };
+		AF156FCC2033479A00D93A9F /* Quaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Quaternion.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Quaternion.cpp; sourceTree = "<group>"; };
+		AF156FCD2033479A00D93A9F /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quaternion.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Quaternion.h; sourceTree = "<group>"; };
+		AF156FCE2033479A00D93A9F /* Transform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Transform.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Transform.cpp; sourceTree = "<group>"; };
+		AF156FCF2033479A00D93A9F /* Transform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Transform.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Transform.h; sourceTree = "<group>"; };
+		AF156FD02033479A00D93A9F /* UPCEnvironment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UPCEnvironment.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/UPCEnvironment.cpp; sourceTree = "<group>"; };
+		AF156FD12033479A00D93A9F /* UPCEnvironment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPCEnvironment.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/UPCEnvironment.h; sourceTree = "<group>"; };
+		AF156FD22033479A00D93A9F /* Vector3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vector3.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Vector3.cpp; sourceTree = "<group>"; };
+		AF156FD32033479A00D93A9F /* Vector3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector3.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Vector3.h; sourceTree = "<group>"; };
+		AF156FE8203347B600D93A9F /* 3DTI_HAHLSimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = 3DTI_HAHLSimulator.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/3DTI_HAHLSimulator.h; sourceTree = "<group>"; };
+		AF156FE9203347B600D93A9F /* ClassificationScaleHL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ClassificationScaleHL.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/ClassificationScaleHL.cpp; sourceTree = "<group>"; };
+		AF156FEA203347B600D93A9F /* ClassificationScaleHL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ClassificationScaleHL.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/ClassificationScaleHL.h; sourceTree = "<group>"; };
+		AF156FEB203347B600D93A9F /* DynamicEqualizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DynamicEqualizer.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/DynamicEqualizer.cpp; sourceTree = "<group>"; };
+		AF156FEC203347B600D93A9F /* DynamicEqualizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DynamicEqualizer.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/DynamicEqualizer.h; sourceTree = "<group>"; };
+		AF156FED203347B600D93A9F /* Fig6Algorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fig6Algorithm.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/Fig6Algorithm.cpp; sourceTree = "<group>"; };
+		AF156FEE203347B600D93A9F /* Fig6Algorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Fig6Algorithm.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/Fig6Algorithm.h; sourceTree = "<group>"; };
+		AF156FEF203347B600D93A9F /* FrequencySmearing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FrequencySmearing.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/FrequencySmearing.cpp; sourceTree = "<group>"; };
+		AF156FF0203347B600D93A9F /* FrequencySmearing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FrequencySmearing.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/FrequencySmearing.h; sourceTree = "<group>"; };
+		AF156FF1203347B600D93A9F /* HearingAidSim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HearingAidSim.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/HearingAidSim.cpp; sourceTree = "<group>"; };
+		AF156FF2203347B600D93A9F /* HearingAidSim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HearingAidSim.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/HearingAidSim.h; sourceTree = "<group>"; };
+		AF156FF3203347B600D93A9F /* HearingLossSim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HearingLossSim.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/HearingLossSim.cpp; sourceTree = "<group>"; };
+		AF156FF4203347B600D93A9F /* HearingLossSim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HearingLossSim.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/HearingLossSim.h; sourceTree = "<group>"; };
+		AF156FF5203347B600D93A9F /* HighOrderButterworthFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HighOrderButterworthFilter.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/HighOrderButterworthFilter.h; sourceTree = "<group>"; };
+		AF156FF6203347B600D93A9F /* HighOrderButteworthFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HighOrderButteworthFilter.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/HighOrderButteworthFilter.cpp; sourceTree = "<group>"; };
+		AF156FF7203347B600D93A9F /* MultibandExpander.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MultibandExpander.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/MultibandExpander.cpp; sourceTree = "<group>"; };
+		AF156FF8203347B600D93A9F /* MultibandExpander.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MultibandExpander.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/MultibandExpander.h; sourceTree = "<group>"; };
+		AF156FF9203347B600D93A9F /* TemporalDistortionSimulator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TemporalDistortionSimulator.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/TemporalDistortionSimulator.cpp; sourceTree = "<group>"; };
+		AF156FFA203347B600D93A9F /* TemporalDistortionSimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TemporalDistortionSimulator.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/TemporalDistortionSimulator.h; sourceTree = "<group>"; };
+		AF157004203347DC00D93A9F /* HRTFCereal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HRTFCereal.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/HRTF/HRTFCereal.cpp; sourceTree = "<group>"; };
+		AF157005203347DC00D93A9F /* HRTFCereal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HRTFCereal.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/HRTF/HRTFCereal.h; sourceTree = "<group>"; };
+		AF15700A203347F800D93A9F /* ILDCereal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ILDCereal.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/ILD/ILDCereal.cpp; sourceTree = "<group>"; };
+		AF15700B203347F800D93A9F /* ILDCereal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ILDCereal.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/ILD/ILDCereal.h; sourceTree = "<group>"; };
 		AF391F891E55F12800EB4AC6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AF391F8B1E55F14200EB4AC6 /* effect3DTIHA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = effect3DTIHA.cpp; path = ../src/effect3DTIHA.cpp; sourceTree = "<group>"; };
 		AF391F8C1E55F14200EB4AC6 /* effect3DTIHL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = effect3DTIHL.cpp; path = ../src/effect3DTIHL.cpp; sourceTree = "<group>"; };
 		AF391F8D1E55F14200EB4AC6 /* effect3DTISpatializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = effect3DTISpatializer.cpp; path = ../src/effect3DTISpatializer.cpp; sourceTree = "<group>"; };
-		AF5A97A11F965150005EF9B7 /* FrequencySmearing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrequencySmearing.cpp; sourceTree = "<group>"; };
-		AF5A97A21F965150005EF9B7 /* FrequencySmearing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrequencySmearing.h; sourceTree = "<group>"; };
-		AF5A97A31F965150005EF9B7 /* HighOrderButterworthFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HighOrderButterworthFilter.h; sourceTree = "<group>"; };
-		AF5A97A41F965150005EF9B7 /* HighOrderButteworthFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HighOrderButteworthFilter.cpp; sourceTree = "<group>"; };
-		AF5A97A51F965150005EF9B7 /* TemporalDistortionSimulator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TemporalDistortionSimulator.cpp; sourceTree = "<group>"; };
-		AF5A97A61F965150005EF9B7 /* TemporalDistortionSimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemporalDistortionSimulator.h; sourceTree = "<group>"; };
-		AF5A97AA1F965167005EF9B7 /* Fprocessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Fprocessor.cpp; sourceTree = "<group>"; };
-		AF5A97AB1F965167005EF9B7 /* Fprocessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fprocessor.h; sourceTree = "<group>"; };
 		AF766FED1DE9F8690003ED20 /* Config.Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.Common.xcconfig; sourceTree = "<group>"; };
 		AF766FEE1DE9F99C0003ED20 /* Config.Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.Debug.xcconfig; sourceTree = "<group>"; };
-		AFBD85E02020CA9A00816FCD /* ErrorHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ErrorHandler.cpp; sourceTree = "<group>"; };
-		AFBD85E12020CA9A00816FCD /* ErrorHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorHandler.h; sourceTree = "<group>"; };
-		AFD67CB31E978F80000F4387 /* 3DTI_BinauralSpatializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 3DTI_BinauralSpatializer.h; sourceTree = "<group>"; };
-		AFD67CB61E978F80000F4387 /* BRIR.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BRIR.cpp; sourceTree = "<group>"; };
-		AFD67CB71E978F80000F4387 /* BRIR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRIR.h; sourceTree = "<group>"; };
-		AFD67CB81E978F80000F4387 /* Core.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Core.cpp; sourceTree = "<group>"; };
-		AFD67CB91E978F80000F4387 /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
-		AFD67CBA1E978F80000F4387 /* Environment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Environment.cpp; sourceTree = "<group>"; };
-		AFD67CBB1E978F80000F4387 /* Environment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Environment.h; sourceTree = "<group>"; };
-		AFD67CBC1E978F80000F4387 /* HRTF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HRTF.cpp; sourceTree = "<group>"; };
-		AFD67CBD1E978F80000F4387 /* HRTF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRTF.h; sourceTree = "<group>"; };
-		AFD67CBE1E978F80000F4387 /* ILD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ILD.cpp; sourceTree = "<group>"; };
-		AFD67CBF1E978F80000F4387 /* ILD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILD.h; sourceTree = "<group>"; };
-		AFD67CC01E978F80000F4387 /* Listener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Listener.cpp; sourceTree = "<group>"; };
-		AFD67CC11E978F80000F4387 /* Listener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Listener.h; sourceTree = "<group>"; };
-		AFD67CC21E978F80000F4387 /* SingleSourceDSP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SingleSourceDSP.cpp; sourceTree = "<group>"; };
-		AFD67CC31E978F80000F4387 /* SingleSourceDSP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleSourceDSP.h; sourceTree = "<group>"; };
-		AFD67CC41E978F80000F4387 /* UPCAnechoic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UPCAnechoic.cpp; sourceTree = "<group>"; };
-		AFD67CC51E978F80000F4387 /* UPCAnechoic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPCAnechoic.h; sourceTree = "<group>"; };
-		AFD67CC81E978F80000F4387 /* AIR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIR.h; sourceTree = "<group>"; };
-		AFD67CC91E978F80000F4387 /* BiquadFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BiquadFilter.cpp; sourceTree = "<group>"; };
-		AFD67CCA1E978F80000F4387 /* BiquadFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BiquadFilter.h; sourceTree = "<group>"; };
-		AFD67CCC1E978F80000F4387 /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Buffer.h; sourceTree = "<group>"; };
-		AFD67CCD1E978F80000F4387 /* CommonDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonDefinitions.h; sourceTree = "<group>"; };
-		AFD67CCE1E978F80000F4387 /* Conventions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Conventions.h; sourceTree = "<group>"; };
-		AFD67CD11E978F80000F4387 /* DistanceAttenuator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DistanceAttenuator.cpp; sourceTree = "<group>"; };
-		AFD67CD21E978F80000F4387 /* DistanceAttenuator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistanceAttenuator.h; sourceTree = "<group>"; };
-		AFD67CD41E978F80000F4387 /* DynamicCompressorMono.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DynamicCompressorMono.cpp; sourceTree = "<group>"; };
-		AFD67CD51E978F80000F4387 /* DynamicCompressorMono.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicCompressorMono.h; sourceTree = "<group>"; };
-		AFD67CD61E978F80000F4387 /* DynamicCompressorStereo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DynamicCompressorStereo.cpp; sourceTree = "<group>"; };
-		AFD67CD71E978F80000F4387 /* DynamicCompressorStereo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicCompressorStereo.h; sourceTree = "<group>"; };
-		AFD67CD81E978F80000F4387 /* EnvelopeDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EnvelopeDetector.cpp; sourceTree = "<group>"; };
-		AFD67CD91E978F80000F4387 /* EnvelopeDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnvelopeDetector.h; sourceTree = "<group>"; };
-		AFD67CDA1E978F80000F4387 /* FarDistanceEffects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FarDistanceEffects.cpp; sourceTree = "<group>"; };
-		AFD67CDB1E978F80000F4387 /* FarDistanceEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FarDistanceEffects.h; sourceTree = "<group>"; };
-		AFD67CDE1E978F80000F4387 /* fftsg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fftsg.cpp; sourceTree = "<group>"; };
-		AFD67CDF1E978F80000F4387 /* fftsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fftsg.h; sourceTree = "<group>"; };
-		AFD67CE01E978F80000F4387 /* FiltersChain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FiltersChain.cpp; sourceTree = "<group>"; };
-		AFD67CE11E978F80000F4387 /* FiltersChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FiltersChain.h; sourceTree = "<group>"; };
-		AFD67CE21E978F80000F4387 /* Magnitudes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Magnitudes.cpp; sourceTree = "<group>"; };
-		AFD67CE31E978F80000F4387 /* Magnitudes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Magnitudes.h; sourceTree = "<group>"; };
-		AFD67CE61E978F80000F4387 /* Quaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Quaternion.cpp; sourceTree = "<group>"; };
-		AFD67CE71E978F80000F4387 /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Quaternion.h; sourceTree = "<group>"; };
-		AFD67CE91E978F80000F4387 /* Transform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Transform.cpp; sourceTree = "<group>"; };
-		AFD67CEA1E978F80000F4387 /* Transform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Transform.h; sourceTree = "<group>"; };
-		AFD67CEB1E978F80000F4387 /* UPCEnvironment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UPCEnvironment.cpp; sourceTree = "<group>"; };
-		AFD67CEC1E978F80000F4387 /* UPCEnvironment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPCEnvironment.h; sourceTree = "<group>"; };
-		AFD67CED1E978F80000F4387 /* Vector3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector3.cpp; sourceTree = "<group>"; };
-		AFD67CEE1E978F80000F4387 /* Vector3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector3.h; sourceTree = "<group>"; };
-		AFD67CF01E978F80000F4387 /* 3DTI_HAHLSimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 3DTI_HAHLSimulator.h; sourceTree = "<group>"; };
-		AFD67CF11E978F80000F4387 /* DynamicEqualizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DynamicEqualizer.cpp; sourceTree = "<group>"; };
-		AFD67CF21E978F80000F4387 /* DynamicEqualizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicEqualizer.h; sourceTree = "<group>"; };
-		AFD67CF31E978F80000F4387 /* Fig6Algorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Fig6Algorithm.cpp; sourceTree = "<group>"; };
-		AFD67CF41E978F80000F4387 /* Fig6Algorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fig6Algorithm.h; sourceTree = "<group>"; };
-		AFD67CF71E978F80000F4387 /* HearingAidSim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HearingAidSim.cpp; sourceTree = "<group>"; };
-		AFD67CF81E978F80000F4387 /* HearingAidSim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HearingAidSim.h; sourceTree = "<group>"; };
-		AFD67CF91E978F80000F4387 /* HearingLossSim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HearingLossSim.cpp; sourceTree = "<group>"; };
-		AFD67CFA1E978F80000F4387 /* HearingLossSim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HearingLossSim.h; sourceTree = "<group>"; };
-		AFE0E17F1F1F889B00695DDB /* DynamicExpanderMono.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DynamicExpanderMono.cpp; sourceTree = "<group>"; };
-		AFE0E1801F1F889B00695DDB /* DynamicExpanderMono.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicExpanderMono.h; sourceTree = "<group>"; };
-		AFE0E1811F1F889B00695DDB /* DynamicProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicProcessor.h; sourceTree = "<group>"; };
-		AFE0E1831F1F88A900695DDB /* MultibandExpander.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MultibandExpander.cpp; sourceTree = "<group>"; };
-		AFE0E1841F1F88A900695DDB /* MultibandExpander.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultibandExpander.h; sourceTree = "<group>"; };
 		AFE8837F1DCCA8F6003505EF /* AudioPlugin3DTIToolkit.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AudioPlugin3DTIToolkit.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFE889EC1DCCAC7E003505EF /* Config.Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.Release.xcconfig; sourceTree = "<group>"; };
-		AFE88B001DCCB223003505EF /* HRTFCereal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HRTFCereal.cpp; sourceTree = "<group>"; };
-		AFE88B011DCCB223003505EF /* HRTFCereal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRTFCereal.h; sourceTree = "<group>"; };
-		AFE88E1A1DCCB226003505EF /* ILDCereal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ILDCereal.cpp; sourceTree = "<group>"; };
-		AFE88E1B1DCCB226003505EF /* ILDCereal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILDCereal.h; sourceTree = "<group>"; };
 		AFE890A71DCCB3CF003505EF /* AudioPluginInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioPluginInterface.h; path = ../src/AudioPluginInterface.h; sourceTree = "<group>"; };
 		AFE890A81DCCB3CF003505EF /* AudioPluginUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AudioPluginUtil.cpp; path = ../src/AudioPluginUtil.cpp; sourceTree = "<group>"; };
 		AFE890A91DCCB3CF003505EF /* AudioPluginUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioPluginUtil.h; path = ../src/AudioPluginUtil.h; sourceTree = "<group>"; };
 		AFE890AA1DCCB3CF003505EF /* PluginList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginList.h; path = ../src/PluginList.h; sourceTree = "<group>"; };
-		AFF42CA71F791E5100A430DE /* Delay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Delay.cpp; sourceTree = "<group>"; };
-		AFF42CA81F791E5100A430DE /* Delay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Delay.h; sourceTree = "<group>"; };
-		AFF42CA91F791E5100A430DE /* FiltersBank.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FiltersBank.cpp; sourceTree = "<group>"; };
-		AFF42CAA1F791E5100A430DE /* FiltersBank.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FiltersBank.h; sourceTree = "<group>"; };
-		AFF42CAB1F791E5100A430DE /* NoiseGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NoiseGenerator.cpp; sourceTree = "<group>"; };
-		AFF42CAC1F791E5100A430DE /* NoiseGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoiseGenerator.h; sourceTree = "<group>"; };
-		AFF42CB61F7920CF00A430DE /* AudioState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioState.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,23 +201,23 @@
 		AFD67CB21E978F80000F4387 /* BinauralSpatializer */ = {
 			isa = PBXGroup;
 			children = (
-				AFD67CB31E978F80000F4387 /* 3DTI_BinauralSpatializer.h */,
-				AFD67CB61E978F80000F4387 /* BRIR.cpp */,
-				AFD67CB71E978F80000F4387 /* BRIR.h */,
-				AFD67CB81E978F80000F4387 /* Core.cpp */,
-				AFD67CB91E978F80000F4387 /* Core.h */,
-				AFD67CBA1E978F80000F4387 /* Environment.cpp */,
-				AFD67CBB1E978F80000F4387 /* Environment.h */,
-				AFD67CBC1E978F80000F4387 /* HRTF.cpp */,
-				AFD67CBD1E978F80000F4387 /* HRTF.h */,
-				AFD67CBE1E978F80000F4387 /* ILD.cpp */,
-				AFD67CBF1E978F80000F4387 /* ILD.h */,
-				AFD67CC01E978F80000F4387 /* Listener.cpp */,
-				AFD67CC11E978F80000F4387 /* Listener.h */,
-				AFD67CC21E978F80000F4387 /* SingleSourceDSP.cpp */,
-				AFD67CC31E978F80000F4387 /* SingleSourceDSP.h */,
-				AFD67CC41E978F80000F4387 /* UPCAnechoic.cpp */,
-				AFD67CC51E978F80000F4387 /* UPCAnechoic.h */,
+				AF156F8D2033472800D93A9F /* 3DTI_BinauralSpatializer.h */,
+				AF156F8E2033472800D93A9F /* BRIR.cpp */,
+				AF156F8F2033472800D93A9F /* BRIR.h */,
+				AF156F902033472800D93A9F /* Core.cpp */,
+				AF156F912033472800D93A9F /* Core.h */,
+				AF156F922033472800D93A9F /* Environment.cpp */,
+				AF156F932033472800D93A9F /* Environment.h */,
+				AF156F942033472800D93A9F /* HRTF.cpp */,
+				AF156F952033472800D93A9F /* HRTF.h */,
+				AF156F962033472800D93A9F /* ILD.cpp */,
+				AF156F972033472800D93A9F /* ILD.h */,
+				AF156F982033472800D93A9F /* Listener.cpp */,
+				AF156F992033472800D93A9F /* Listener.h */,
+				AF156F9A2033472800D93A9F /* SingleSourceDSP.cpp */,
+				AF156F9B2033472800D93A9F /* SingleSourceDSP.h */,
+				AF156F9C2033472800D93A9F /* UPCAnechoic.cpp */,
+				AF156F9D2033472800D93A9F /* UPCAnechoic.h */,
 			);
 			path = BinauralSpatializer;
 			sourceTree = "<group>";
@@ -219,50 +225,52 @@
 		AFD67CC61E978F80000F4387 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				AFBD85E02020CA9A00816FCD /* ErrorHandler.cpp */,
-				AFBD85E12020CA9A00816FCD /* ErrorHandler.h */,
-				AF5A97AA1F965167005EF9B7 /* Fprocessor.cpp */,
-				AF5A97AB1F965167005EF9B7 /* Fprocessor.h */,
-				AFF42CB61F7920CF00A430DE /* AudioState.h */,
-				AFF42CA71F791E5100A430DE /* Delay.cpp */,
-				AFF42CA81F791E5100A430DE /* Delay.h */,
-				AFF42CA91F791E5100A430DE /* FiltersBank.cpp */,
-				AFF42CAA1F791E5100A430DE /* FiltersBank.h */,
-				AFF42CAB1F791E5100A430DE /* NoiseGenerator.cpp */,
-				AFF42CAC1F791E5100A430DE /* NoiseGenerator.h */,
-				AFE0E17F1F1F889B00695DDB /* DynamicExpanderMono.cpp */,
-				AFE0E1801F1F889B00695DDB /* DynamicExpanderMono.h */,
-				AFE0E1811F1F889B00695DDB /* DynamicProcessor.h */,
-				AFD67CC81E978F80000F4387 /* AIR.h */,
-				AFD67CC91E978F80000F4387 /* BiquadFilter.cpp */,
-				AFD67CCA1E978F80000F4387 /* BiquadFilter.h */,
-				AFD67CCC1E978F80000F4387 /* Buffer.h */,
-				AFD67CCD1E978F80000F4387 /* CommonDefinitions.h */,
-				AFD67CCE1E978F80000F4387 /* Conventions.h */,
-				AFD67CD11E978F80000F4387 /* DistanceAttenuator.cpp */,
-				AFD67CD21E978F80000F4387 /* DistanceAttenuator.h */,
-				AFD67CD41E978F80000F4387 /* DynamicCompressorMono.cpp */,
-				AFD67CD51E978F80000F4387 /* DynamicCompressorMono.h */,
-				AFD67CD61E978F80000F4387 /* DynamicCompressorStereo.cpp */,
-				AFD67CD71E978F80000F4387 /* DynamicCompressorStereo.h */,
-				AFD67CD81E978F80000F4387 /* EnvelopeDetector.cpp */,
-				AFD67CD91E978F80000F4387 /* EnvelopeDetector.h */,
-				AFD67CDA1E978F80000F4387 /* FarDistanceEffects.cpp */,
-				AFD67CDB1E978F80000F4387 /* FarDistanceEffects.h */,
-				AFD67CDE1E978F80000F4387 /* fftsg.cpp */,
-				AFD67CDF1E978F80000F4387 /* fftsg.h */,
-				AFD67CE01E978F80000F4387 /* FiltersChain.cpp */,
-				AFD67CE11E978F80000F4387 /* FiltersChain.h */,
-				AFD67CE21E978F80000F4387 /* Magnitudes.cpp */,
-				AFD67CE31E978F80000F4387 /* Magnitudes.h */,
-				AFD67CE61E978F80000F4387 /* Quaternion.cpp */,
-				AFD67CE71E978F80000F4387 /* Quaternion.h */,
-				AFD67CE91E978F80000F4387 /* Transform.cpp */,
-				AFD67CEA1E978F80000F4387 /* Transform.h */,
-				AFD67CEB1E978F80000F4387 /* UPCEnvironment.cpp */,
-				AFD67CEC1E978F80000F4387 /* UPCEnvironment.h */,
-				AFD67CED1E978F80000F4387 /* Vector3.cpp */,
-				AFD67CEE1E978F80000F4387 /* Vector3.h */,
+				AF156FA62033479A00D93A9F /* AIR.h */,
+				AF156FA72033479A00D93A9F /* AudioState.h */,
+				AF156FA82033479A00D93A9F /* BiquadFilter.cpp */,
+				AF156FA92033479A00D93A9F /* BiquadFilter.h */,
+				AF156FAA2033479A00D93A9F /* Buffer.h */,
+				AF156FAB2033479A00D93A9F /* CommonDefinitions.h */,
+				AF156FAC2033479A00D93A9F /* Conventions.h */,
+				AF156FAD2033479A00D93A9F /* Delay.cpp */,
+				AF156FAE2033479A00D93A9F /* Delay.h */,
+				AF156FAF2033479A00D93A9F /* DistanceAttenuator.cpp */,
+				AF156FB02033479A00D93A9F /* DistanceAttenuator.h */,
+				AF156FB12033479A00D93A9F /* DynamicCompressorMono.cpp */,
+				AF156FB22033479A00D93A9F /* DynamicCompressorMono.h */,
+				AF156FB32033479A00D93A9F /* DynamicCompressorStereo.cpp */,
+				AF156FB42033479A00D93A9F /* DynamicCompressorStereo.h */,
+				AF156FB52033479A00D93A9F /* DynamicExpanderMono.cpp */,
+				AF156FB62033479A00D93A9F /* DynamicExpanderMono.h */,
+				AF156FB72033479A00D93A9F /* DynamicProcessor.h */,
+				AF156FB82033479A00D93A9F /* EnvelopeDetector.cpp */,
+				AF156FB92033479A00D93A9F /* EnvelopeDetector.h */,
+				AF156FBA2033479A00D93A9F /* ErrorHandler.cpp */,
+				AF156FBB2033479A00D93A9F /* ErrorHandler.h */,
+				AF156FBC2033479A00D93A9F /* FarDistanceEffects.cpp */,
+				AF156FBD2033479A00D93A9F /* FarDistanceEffects.h */,
+				AF156FBE2033479A00D93A9F /* fftsg.cpp */,
+				AF156FBF2033479A00D93A9F /* fftsg.h */,
+				AF156FC02033479A00D93A9F /* FiltersBank.cpp */,
+				AF156FC12033479A00D93A9F /* FiltersBank.h */,
+				AF156FC22033479A00D93A9F /* FiltersChain.cpp */,
+				AF156FC32033479A00D93A9F /* FiltersChain.h */,
+				AF156FC42033479A00D93A9F /* Fprocessor.cpp */,
+				AF156FC52033479A00D93A9F /* Fprocessor.h */,
+				AF156FC62033479A00D93A9F /* Magnitudes.cpp */,
+				AF156FC72033479A00D93A9F /* Magnitudes.h */,
+				AF156FC82033479A00D93A9F /* NoiseGenerator.cpp */,
+				AF156FC92033479A00D93A9F /* NoiseGenerator.h */,
+				AF156FCA2033479A00D93A9F /* Profiler.cpp */,
+				AF156FCB2033479A00D93A9F /* Profiler.h */,
+				AF156FCC2033479A00D93A9F /* Quaternion.cpp */,
+				AF156FCD2033479A00D93A9F /* Quaternion.h */,
+				AF156FCE2033479A00D93A9F /* Transform.cpp */,
+				AF156FCF2033479A00D93A9F /* Transform.h */,
+				AF156FD02033479A00D93A9F /* UPCEnvironment.cpp */,
+				AF156FD12033479A00D93A9F /* UPCEnvironment.h */,
+				AF156FD22033479A00D93A9F /* Vector3.cpp */,
+				AF156FD32033479A00D93A9F /* Vector3.h */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -270,23 +278,25 @@
 		AFD67CEF1E978F80000F4387 /* HAHLSimulation */ = {
 			isa = PBXGroup;
 			children = (
-				AF5A97A11F965150005EF9B7 /* FrequencySmearing.cpp */,
-				AF5A97A21F965150005EF9B7 /* FrequencySmearing.h */,
-				AF5A97A31F965150005EF9B7 /* HighOrderButterworthFilter.h */,
-				AF5A97A41F965150005EF9B7 /* HighOrderButteworthFilter.cpp */,
-				AF5A97A51F965150005EF9B7 /* TemporalDistortionSimulator.cpp */,
-				AF5A97A61F965150005EF9B7 /* TemporalDistortionSimulator.h */,
-				AFE0E1831F1F88A900695DDB /* MultibandExpander.cpp */,
-				AFE0E1841F1F88A900695DDB /* MultibandExpander.h */,
-				AFD67CF01E978F80000F4387 /* 3DTI_HAHLSimulator.h */,
-				AFD67CF11E978F80000F4387 /* DynamicEqualizer.cpp */,
-				AFD67CF21E978F80000F4387 /* DynamicEqualizer.h */,
-				AFD67CF31E978F80000F4387 /* Fig6Algorithm.cpp */,
-				AFD67CF41E978F80000F4387 /* Fig6Algorithm.h */,
-				AFD67CF71E978F80000F4387 /* HearingAidSim.cpp */,
-				AFD67CF81E978F80000F4387 /* HearingAidSim.h */,
-				AFD67CF91E978F80000F4387 /* HearingLossSim.cpp */,
-				AFD67CFA1E978F80000F4387 /* HearingLossSim.h */,
+				AF156FE8203347B600D93A9F /* 3DTI_HAHLSimulator.h */,
+				AF156FE9203347B600D93A9F /* ClassificationScaleHL.cpp */,
+				AF156FEA203347B600D93A9F /* ClassificationScaleHL.h */,
+				AF156FEB203347B600D93A9F /* DynamicEqualizer.cpp */,
+				AF156FEC203347B600D93A9F /* DynamicEqualizer.h */,
+				AF156FED203347B600D93A9F /* Fig6Algorithm.cpp */,
+				AF156FEE203347B600D93A9F /* Fig6Algorithm.h */,
+				AF156FEF203347B600D93A9F /* FrequencySmearing.cpp */,
+				AF156FF0203347B600D93A9F /* FrequencySmearing.h */,
+				AF156FF1203347B600D93A9F /* HearingAidSim.cpp */,
+				AF156FF2203347B600D93A9F /* HearingAidSim.h */,
+				AF156FF3203347B600D93A9F /* HearingLossSim.cpp */,
+				AF156FF4203347B600D93A9F /* HearingLossSim.h */,
+				AF156FF5203347B600D93A9F /* HighOrderButterworthFilter.h */,
+				AF156FF6203347B600D93A9F /* HighOrderButteworthFilter.cpp */,
+				AF156FF7203347B600D93A9F /* MultibandExpander.cpp */,
+				AF156FF8203347B600D93A9F /* MultibandExpander.h */,
+				AF156FF9203347B600D93A9F /* TemporalDistortionSimulator.cpp */,
+				AF156FFA203347B600D93A9F /* TemporalDistortionSimulator.h */,
 			);
 			path = HAHLSimulation;
 			sourceTree = "<group>";
@@ -326,8 +336,8 @@
 		AFE88A361DCCB223003505EF /* HRTF */ = {
 			isa = PBXGroup;
 			children = (
-				AFE88B001DCCB223003505EF /* HRTFCereal.cpp */,
-				AFE88B011DCCB223003505EF /* HRTFCereal.h */,
+				AF157004203347DC00D93A9F /* HRTFCereal.cpp */,
+				AF157005203347DC00D93A9F /* HRTFCereal.h */,
 			);
 			path = HRTF;
 			sourceTree = "<group>";
@@ -335,8 +345,8 @@
 		AFE88D5F1DCCB226003505EF /* ILD */ = {
 			isa = PBXGroup;
 			children = (
-				AFE88E1A1DCCB226003505EF /* ILDCereal.cpp */,
-				AFE88E1B1DCCB226003505EF /* ILDCereal.h */,
+				AF15700A203347F800D93A9F /* ILDCereal.cpp */,
+				AF15700B203347F800D93A9F /* ILDCereal.h */,
 			);
 			path = ILD;
 			sourceTree = "<group>";
@@ -410,47 +420,49 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AFD67D261E978F80000F4387 /* UPCEnvironment.cpp in Sources */,
-				AFD67D1F1E978F80000F4387 /* fftsg.cpp in Sources */,
-				AFD67D201E978F80000F4387 /* FiltersChain.cpp in Sources */,
-				AFD67D0E1E978F80000F4387 /* Core.cpp in Sources */,
-				AF5A97A91F965150005EF9B7 /* TemporalDistortionSimulator.cpp in Sources */,
-				AFF42CAD1F791E5100A430DE /* Delay.cpp in Sources */,
-				AFD67D0D1E978F80000F4387 /* BRIR.cpp in Sources */,
-				AF5A97AC1F965167005EF9B7 /* Fprocessor.cpp in Sources */,
-				AF5A97A71F965150005EF9B7 /* FrequencySmearing.cpp in Sources */,
+				AF15700C203347F800D93A9F /* ILDCereal.cpp in Sources */,
+				AF156FA22033472800D93A9F /* ILD.cpp in Sources */,
+				AF156FA42033472800D93A9F /* SingleSourceDSP.cpp in Sources */,
+				AF156FD82033479A00D93A9F /* DynamicCompressorStereo.cpp in Sources */,
+				AF157000203347B600D93A9F /* HearingLossSim.cpp in Sources */,
+				AF156FE72033479A00D93A9F /* Vector3.cpp in Sources */,
+				AF156FDE2033479A00D93A9F /* FiltersBank.cpp in Sources */,
 				AF391F8E1E55F14200EB4AC6 /* effect3DTIHA.cpp in Sources */,
-				AFD67D1D1E978F80000F4387 /* FarDistanceEffects.cpp in Sources */,
-				AFE0E1821F1F889B00695DDB /* DynamicExpanderMono.cpp in Sources */,
-				AFD67D1C1E978F80000F4387 /* EnvelopeDetector.cpp in Sources */,
-				AFD67D101E978F80000F4387 /* HRTF.cpp in Sources */,
-				AFD67D1A1E978F80000F4387 /* DynamicCompressorMono.cpp in Sources */,
-				AFD67D191E978F80000F4387 /* DistanceAttenuator.cpp in Sources */,
-				AFE890951DCCB226003505EF /* ILDCereal.cpp in Sources */,
-				AFD67D2B1E978F80000F4387 /* HearingAidSim.cpp in Sources */,
-				AF5A97A81F965150005EF9B7 /* HighOrderButteworthFilter.cpp in Sources */,
-				AFD67D211E978F80000F4387 /* Magnitudes.cpp in Sources */,
-				AFD67D251E978F80000F4387 /* Transform.cpp in Sources */,
-				AFD67D291E978F80000F4387 /* Fig6Algorithm.cpp in Sources */,
+				AF156FE52033479A00D93A9F /* Transform.cpp in Sources */,
+				AF156FFC203347B600D93A9F /* DynamicEqualizer.cpp in Sources */,
+				AF156F9E2033472800D93A9F /* BRIR.cpp in Sources */,
+				AF156FFF203347B600D93A9F /* HearingAidSim.cpp in Sources */,
+				AF156FA12033472800D93A9F /* HRTF.cpp in Sources */,
+				AF156FFB203347B600D93A9F /* ClassificationScaleHL.cpp in Sources */,
 				AFE890AC1DCCB3CF003505EF /* AudioPluginUtil.cpp in Sources */,
-				AFD67D281E978F80000F4387 /* DynamicEqualizer.cpp in Sources */,
-				AFE88E781DCCB226003505EF /* HRTFCereal.cpp in Sources */,
-				AFD67D161E978F80000F4387 /* BiquadFilter.cpp in Sources */,
-				AFF42CAE1F791E5100A430DE /* FiltersBank.cpp in Sources */,
-				AFD67D141E978F80000F4387 /* UPCAnechoic.cpp in Sources */,
-				AFD67D271E978F80000F4387 /* Vector3.cpp in Sources */,
-				AFD67D1B1E978F80000F4387 /* DynamicCompressorStereo.cpp in Sources */,
-				AFD67D131E978F80000F4387 /* SingleSourceDSP.cpp in Sources */,
-				AFD67D0F1E978F80000F4387 /* Environment.cpp in Sources */,
-				AFD67D231E978F80000F4387 /* Quaternion.cpp in Sources */,
-				AFD67D111E978F80000F4387 /* ILD.cpp in Sources */,
-				AFF42CAF1F791E5100A430DE /* NoiseGenerator.cpp in Sources */,
+				AF157002203347B600D93A9F /* MultibandExpander.cpp in Sources */,
+				AF156FDA2033479A00D93A9F /* EnvelopeDetector.cpp in Sources */,
+				AF156FFE203347B600D93A9F /* FrequencySmearing.cpp in Sources */,
+				AF156FA02033472800D93A9F /* Environment.cpp in Sources */,
+				AF156FE22033479A00D93A9F /* NoiseGenerator.cpp in Sources */,
+				AF156FE12033479A00D93A9F /* Magnitudes.cpp in Sources */,
+				AF156FA32033472800D93A9F /* Listener.cpp in Sources */,
+				AF156FD62033479A00D93A9F /* DistanceAttenuator.cpp in Sources */,
+				AF156FDC2033479A00D93A9F /* FarDistanceEffects.cpp in Sources */,
+				AF156FDD2033479A00D93A9F /* fftsg.cpp in Sources */,
+				AF156F9F2033472800D93A9F /* Core.cpp in Sources */,
+				AF156FD52033479A00D93A9F /* Delay.cpp in Sources */,
+				AF156FDB2033479A00D93A9F /* ErrorHandler.cpp in Sources */,
+				AF156FA52033472800D93A9F /* UPCAnechoic.cpp in Sources */,
+				AF156FD92033479A00D93A9F /* DynamicExpanderMono.cpp in Sources */,
+				AF157003203347B600D93A9F /* TemporalDistortionSimulator.cpp in Sources */,
+				AF156FE42033479A00D93A9F /* Quaternion.cpp in Sources */,
+				AF156FE62033479A00D93A9F /* UPCEnvironment.cpp in Sources */,
+				AF157008203347DC00D93A9F /* HRTFCereal.cpp in Sources */,
 				AF391F8F1E55F14200EB4AC6 /* effect3DTIHL.cpp in Sources */,
-				AFBD85E22020CA9A00816FCD /* ErrorHandler.cpp in Sources */,
-				AFD67D2C1E978F80000F4387 /* HearingLossSim.cpp in Sources */,
+				AF156FD72033479A00D93A9F /* DynamicCompressorMono.cpp in Sources */,
+				AF156FE32033479A00D93A9F /* Profiler.cpp in Sources */,
+				AF157001203347B600D93A9F /* HighOrderButteworthFilter.cpp in Sources */,
 				AF391F901E55F14200EB4AC6 /* effect3DTISpatializer.cpp in Sources */,
-				AFE0E1851F1F88A900695DDB /* MultibandExpander.cpp in Sources */,
-				AFD67D121E978F80000F4387 /* Listener.cpp in Sources */,
+				AF156FFD203347B600D93A9F /* Fig6Algorithm.cpp in Sources */,
+				AF156FE02033479A00D93A9F /* Fprocessor.cpp in Sources */,
+				AF156FD42033479A00D93A9F /* BiquadFilter.cpp in Sources */,
+				AF156FDF2033479A00D93A9F /* FiltersChain.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
