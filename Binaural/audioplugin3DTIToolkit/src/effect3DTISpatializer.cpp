@@ -94,6 +94,8 @@ namespace Spatializer3DTI
 		// High Performance and None modes
 		PARAM_HIGH_PERFORMANCE_ILD_FILE_STRING,
 		PARAM_SPATIALIZATION_MODE,
+		PARAM_BUFFER_SIZE,
+		PARAM_SAMPLE_RATE,
 
 		P_NUM
 	};
@@ -112,6 +114,8 @@ namespace Spatializer3DTI
 		bool loadedHighPerformanceILD;	// New
 		int spatializationMode;			// New
 		float parameters[P_NUM];
+//		int bufferSize;
+	//	int sampleRate;
 
 		// STRING SERIALIZER		
 		char* strHRTFpath;
@@ -216,6 +220,9 @@ namespace Spatializer3DTI
 		// High performance mode
 		RegisterParameter(definition, "HPILDPath", "", 0.0f, 255.0f, 0.0f, 1.0f, 1.0f, PARAM_HIGH_PERFORMANCE_ILD_FILE_STRING, "String with path of ILD binary file for High Performance mode");
 		RegisterParameter(definition, "SpatMode", "", 0.0f, 2.0f, 0.0f, 1.0f, 1.0f, PARAM_SPATIALIZATION_MODE, "Spatialization mode (0=High quality, 1=High performance, 2=None)");
+		//Sample Rate and BufferSize
+		RegisterParameter(definition, "BufferSize", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 1.0f, PARAM_BUFFER_SIZE, "Buffer size used by Unity");
+		RegisterParameter(definition, "SampleRate", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 1.0f, PARAM_SAMPLE_RATE, "Buffer size used by Unity");
 
         definition.flags |= UnityAudioEffectDefinitionFlags_IsSpatializer;
         return numparams;
@@ -504,6 +511,10 @@ namespace Spatializer3DTI
 		audioState.sampleRate = (int)state->samplerate;
 		audioState.bufferSize = (int)state->dspbuffersize;		
 		effectdata->core.SetAudioState(audioState);
+		
+		//Save samplerate and buffer size into the struct
+		//effectdata->bufferSize = audioState.bufferSize;
+		//effectdata->sampleRate = audioState.sampleRate;		
 
 		// Create listener
 		effectdata->listener = effectdata->core.CreateListener();
@@ -915,7 +926,17 @@ namespace Spatializer3DTI
 					else
 						*value = 0.0f;
 					break;
+				
+				case PARAM_BUFFER_SIZE:					
+					//*value = float(data->bufferSize);					
+					*value = (int)state->dspbuffersize;
+					break;
 
+				case PARAM_SAMPLE_RATE:
+					//*value = float(data->sampleRate);
+					*value = (int)state->samplerate;
+					break;
+				
 				default:
 					*value = data->parameters[index];
 					break;
