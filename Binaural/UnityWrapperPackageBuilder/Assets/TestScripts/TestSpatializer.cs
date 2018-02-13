@@ -11,8 +11,8 @@ public class TestSpatializer : MonoBehaviour
     bool toggleSource = true;
     const int COUNTTIME = 3;
     int countdown = COUNTTIME;
-    float lastTime;  
-
+    float lastTime;
+    float bufSize, samplingFreq;
     public AudioClip otherClip;
 
     void Start()
@@ -25,6 +25,10 @@ public class TestSpatializer : MonoBehaviour
 
     void Update()
     {
+        if(SpatializerAPI.GetBufferSize(out bufSize) && SpatializerAPI.GetSampleRate(out samplingFreq))
+        {
+            debugText.text = "Buffer size: " + bufSize.ToString() + "; Sample rate: " + samplingFreq.ToString() + "Hz";
+        }
         //debugText.text = "Countdown: " + countdown + " seconds";
         //if ((Time.time - lastTime) > 1.0f)
         //{            

@@ -88,7 +88,9 @@ public class API_3DTI_Spatializer : MonoBehaviour
     int GET_IS_CORE_READY = 20;
     int SET_HRTF_STEP = 21;
     int LOAD_3DTI_ILD_HIGHPERFORMANCE = 22; 
-    int SET_SPATIALIZATION_MODE = 23;     
+    int SET_SPATIALIZATION_MODE = 23;
+    int GET_BUFFER_SIZE   = 24;
+    int GET_SAMPLE_RATE   = 25;
 
     // For high performance / High quality modes, variables to check which resources have been loaded
     bool HighQualityModeHRTFLoaded = false;
@@ -692,6 +694,25 @@ public class API_3DTI_Spatializer : MonoBehaviour
         return GetBoolParameter(GET_LIMITER_COMPRESSION, out _compressing, source);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="_sampleRate"></param>
+    /// <returns></returns>
+    public bool GetSampleRate(out float _sampleRate)
+    {        
+        return GetFloatParameter(GET_SAMPLE_RATE, out _sampleRate);                
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="_bufferSize"></param>
+    /// <returns></returns>
+    public bool GetBufferSize(out float _bufferSize)
+    {
+        return GetFloatParameter(GET_BUFFER_SIZE, out _bufferSize);
+    }
     /////////////////////////////////////////////////////////////////////
     // AUXILIARY FUNCTIONS
     /////////////////////////////////////////////////////////////////////
