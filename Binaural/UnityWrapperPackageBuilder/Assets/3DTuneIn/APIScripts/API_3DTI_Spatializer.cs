@@ -11,16 +11,23 @@
 * Module: 3DTI Toolkit Unity Wrapper
 **/
 
+
+
 using UnityEngine;
-using System.Collections;
 using System.IO;            // Needed for FileStream
 using System.Collections.Generic;
-using System;
-using System.Runtime.InteropServices;
 using API_3DTI_Common;
+using System;
 
 public class API_3DTI_Spatializer : MonoBehaviour
 {
+    public enum TSampleRateEnum
+    {
+        K44, K48, K96
+    };
+    TSampleRateEnum sampleRate;
+
+    int sampleRateIndex = (int) TSampleRateEnum.K48; //48k by default
     // LISTENER:
     //public enum TSpatializationMode
     //{
@@ -31,9 +38,16 @@ public class API_3DTI_Spatializer : MonoBehaviour
     public const int SPATIALIZATION_MODE_HIGH_QUALITY = 0;
     public const int SPATIALIZATION_MODE_HIGH_PERFORMANCE = 1;
     public const int SPATIALIZATION_MODE_NONE = 2;
-    public string HRTFFileName = "";                // For internal use, DO NOT USE IT DIRECTLY
-    public string ILDNearFieldFileName = "";        // For internal use, DO NOT USE IT DIRECTLY
-    public string ILDHighPerformanceFileName = "";  // For internal use, DO NOT USE IT DIRECTLY
+    public string HRTFFileName44 = "";                // For internal use, DO NOT USE IT DIRECTLY
+    public string HRTFFileName48 = "";                // For internal use, DO NOT USE IT DIRECTLY
+    public string HRTFFileName96 = "";                // For internal use, DO NOT USE IT DIRECTLY
+    public string ILDNearFieldFileName44 = "";        // For internal use, DO NOT USE IT DIRECTLY
+    public string ILDNearFieldFileName48 = "";        // For internal use, DO NOT USE IT DIRECTLY
+    public string ILDNearFieldFileName96 = "";        // For internal use, DO NOT USE IT DIRECTLY
+    public string ILDHighPerformanceFileName44 = "";  // For internal use, DO NOT USE IT DIRECTLY
+    public string ILDHighPerformanceFileName48 = "";  // For internal use, DO NOT USE IT DIRECTLY
+    public string ILDHighPerformanceFileName96 = "";  // For internal use, DO NOT USE IT DIRECTLY
+
     public bool customITDEnabled = false;           // For internal use, DO NOT USE IT DIRECTLY
     public float listenerHeadRadius = 0.0875f;      // For internal use, DO NOT USE IT DIRECTLY    
     //public TSpatializationMode spatializationMode = TSpatializationMode.HIGH_QUALITY;        // For internal use, DO NOT USE IT DIRECTLY
@@ -91,7 +105,8 @@ public class API_3DTI_Spatializer : MonoBehaviour
     int SET_SPATIALIZATION_MODE = 23;
     int GET_BUFFER_SIZE   = 24;
     int GET_SAMPLE_RATE   = 25;
-
+    int GET_BUFFER_SIZE_CORE = 26;
+    int GET_SAMPLE_RATE_CORE = 27;
     // For high performance / High quality modes, variables to check which resources have been loaded
     bool HighQualityModeHRTFLoaded = false;
     bool HighQualityModeILDLoaded = false;
@@ -101,6 +116,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     bool isInitialized = false;
 
     /////////////////////////////////////////////////////////////////////
+
 
     /// <summary>
     /// Automatic setup of Toolkit Core (as read from custom GUI in Unity Inspector)
@@ -229,13 +245,30 @@ public class API_3DTI_Spatializer : MonoBehaviour
     {
         if (!SetHeadRadius(listenerHeadRadius, source)) return false;
         if (!SetCustomITD(customITDEnabled, source)) return false;
-
+        sampleRateIndex = GetSampleRateEnum();
         // HIGH QUALITY MODE (default)
         //if (spatializationMode == TSpatializationMode.HIGH_QUALITY)
         if (spatializationMode == SPATIALIZATION_MODE_HIGH_QUALITY)
         {
             if (!HighQualityModeILDLoaded)
             {
+                string ILDNearFieldFileName = "";
+                switch (sampleRateIndex)
+                {
+                    case (int)TSampleRateEnum.K44:
+                        ILDNearFieldFileName = ILDNearFieldFileName44;
+                        break;
+
+                    case (int)TSampleRateEnum.K48:
+                        ILDNearFieldFileName = ILDNearFieldFileName48;
+                        break;
+
+                    case (int)TSampleRateEnum.K96:
+                        ILDNearFieldFileName = ILDNearFieldFileName96;
+                        break;
+
+                }
+
                 if (!ILDNearFieldFileName.Equals(""))
                 {
                     #if (!UNITY_EDITOR)
@@ -245,7 +278,23 @@ public class API_3DTI_Spatializer : MonoBehaviour
                 }
             }
             if (!HighQualityModeHRTFLoaded)
-            { 
+            {
+                string HRTFFileName = "";
+                switch (sampleRateIndex)
+                {
+                    case (int)TSampleRateEnum.K44:
+                        HRTFFileName = HRTFFileName44;
+                        break;
+
+                    case (int)TSampleRateEnum.K48:
+                        HRTFFileName = HRTFFileName48;
+                        break;
+
+                    case (int)TSampleRateEnum.K96:
+                        HRTFFileName = HRTFFileName96;
+                        break;
+
+                }
                 if (!HRTFFileName.Equals(""))
                 {
                     #if (!UNITY_EDITOR)
@@ -262,6 +311,22 @@ public class API_3DTI_Spatializer : MonoBehaviour
         {
             if (!HighPerformanceModeILDLoaded)
             {
+                string ILDHighPerformanceFileName = "";
+                switch (sampleRateIndex)
+                {
+                    case (int)TSampleRateEnum.K44:
+                        ILDHighPerformanceFileName = ILDHighPerformanceFileName44;
+                        break;
+
+                    case (int)TSampleRateEnum.K48:
+                        ILDHighPerformanceFileName = ILDHighPerformanceFileName48;
+                        break;
+
+                    case (int)TSampleRateEnum.K96:
+                        ILDHighPerformanceFileName = ILDHighPerformanceFileName96;
+                        break;
+
+                }
                 if (!ILDHighPerformanceFileName.Equals(""))
                 {
                     #if (!UNITY_EDITOR)
@@ -334,8 +399,22 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// Load HRTF from a binary .3dti file
     /// </summary>
     public bool LoadHRTFBinary(string filename, AudioSource source=null)
-    {        
-        HRTFFileName = filename;
+    {
+        switch (sampleRateIndex)
+        {
+            case (int)TSampleRateEnum.K44:
+                HRTFFileName44 = filename;
+                break;
+
+            case (int)TSampleRateEnum.K48:
+                HRTFFileName48 = filename;
+                break;
+
+            case (int)TSampleRateEnum.K96:
+                HRTFFileName96 = filename;
+                break;
+
+        }
 
         List<AudioSource> audioSources;
         if (source != null)
@@ -370,7 +449,21 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>
     public bool LoadILDNearFieldBinary(string filename, AudioSource source=null)
     {
-        ILDNearFieldFileName = filename;
+        switch (sampleRateIndex)
+        {
+            case (int)TSampleRateEnum.K44:
+                ILDNearFieldFileName44 = filename;
+                break;
+
+            case (int)TSampleRateEnum.K48:
+                ILDNearFieldFileName48 = filename;
+                break;
+
+            case (int)TSampleRateEnum.K96:
+                ILDNearFieldFileName96 = filename;
+                break;
+
+        }
 
         List<AudioSource> audioSources;
         if (source != null)
@@ -405,7 +498,21 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// </summary>
     public bool LoadILDHighPerformanceBinary(string filename, AudioSource source=null)
     {
-        ILDHighPerformanceFileName = filename;
+        switch (sampleRateIndex)
+        {
+            case (int)TSampleRateEnum.K44:
+                ILDHighPerformanceFileName44 = filename;
+                break;
+
+            case (int)TSampleRateEnum.K48:
+                ILDHighPerformanceFileName48 = filename;
+                break;
+
+            case (int)TSampleRateEnum.K96:
+                ILDHighPerformanceFileName96 = filename;
+                break;
+
+        }
 
         List<AudioSource> audioSources;
         if (source != null)
@@ -695,7 +802,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Get audio sample rate in hertzs (Unity's)
     /// </summary>
     /// <param name="_sampleRate"></param>
     /// <returns></returns>
@@ -705,13 +812,32 @@ public class API_3DTI_Spatializer : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Get audio buffer size in number of samples (Unity's)
     /// </summary>
     /// <param name="_bufferSize"></param>
     /// <returns></returns>
     public bool GetBufferSize(out float _bufferSize)
     {
         return GetFloatParameter(GET_BUFFER_SIZE, out _bufferSize);
+    }
+    /// <summary>
+    /// Get audio sample rate in hertzs (Core's)
+    /// </summary>
+    /// <param name="_sampleRate"></param>
+    /// <returns></returns>
+    public bool GetSampleRateCore(out float _sampleRate)
+    {
+        return GetFloatParameter(GET_SAMPLE_RATE_CORE, out _sampleRate);
+    }
+
+    /// <summary>
+    /// Get audio buffer size in number of samples (Core's)
+    /// </summary>
+    /// <param name="_bufferSize"></param>
+    /// <returns></returns>
+    public bool GetBufferSizeCore(out float _bufferSize)
+    {
+        return GetFloatParameter(GET_BUFFER_SIZE_CORE, out _bufferSize);
     }
     /////////////////////////////////////////////////////////////////////
     // AUXILIARY FUNCTIONS
@@ -757,7 +883,42 @@ public class API_3DTI_Spatializer : MonoBehaviour
         // Send the command to get the value        
         return (s.GetSpatializerFloat(parameter, out value));
     }
-
+    public int GetSampleRateEnum()
+    {
+        int _index = 0;
+        int sampleRate = AudioSettings.outputSampleRate;
+        float sampleRateWrapper, sampleRateCore;
+        GetSampleRate(out sampleRateWrapper);
+        GetSampleRateCore(out sampleRateCore);
+        if (Application.isPlaying /*|| UnityEditor.EditorApplication.isPlaying*/)
+        {
+            if (sampleRate != sampleRateWrapper || sampleRate != sampleRateCore || sampleRateWrapper != sampleRateCore)
+            {
+                Debug.LogError("Sample Rate no coincidente entre AudioSettings, Wrapper y Core");
+            }
+        }
+        if (sampleRate > 0)
+        {
+            switch (sampleRate)
+            {
+                case 44100:
+                    _index = (int)TSampleRateEnum.K44;
+                    break;
+                case 48000:
+                    _index = (int)TSampleRateEnum.K48;
+                    break;
+                case 96000:
+                    _index = (int)TSampleRateEnum.K96;
+                    break;
+                default:
+                    Debug.Log("Está saltando el default en GetSampleRateIndex");
+                    _index = (int)TSampleRateEnum.K48;
+                    break;
+            }
+        }
+        Debug.Log(_index);
+        return _index;
+    }
     /// <summary>
     /// Send command to plugin to switch on/off write to Debug Log file
     /// </summary>

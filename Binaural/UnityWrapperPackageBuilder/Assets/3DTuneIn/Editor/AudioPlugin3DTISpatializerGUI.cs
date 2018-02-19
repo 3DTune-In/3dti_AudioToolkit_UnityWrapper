@@ -12,17 +12,20 @@
 **/
 
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEditor;
 using API_3DTI_Common;
+using System;
 
 [CustomEditor(typeof(API_3DTI_Spatializer))]
 public class AudioPlugin3DTISpatializerGUI : Editor
 {
+    
+
     API_3DTI_Spatializer toolkit;
     bool advancedSetup = false;
+    bool highPerformanceFiles = false;
+    bool highQualityFiles = false;
     bool haSetup = false;
     //bool initDone = false;
 
@@ -91,32 +94,111 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     /// <summary>
     /// Action for button Load HRTF
     /// </summary>
-    public void ButtonLoadHRTF()
+    public void ButtonLoadHRTF44()
     {        
         string filePath = EditorUtility.OpenFilePanel("Select HRTF File", "", "3dti-hrtf");
-        if (filePath.Length != 0)
-            Common3DTIGUI.ChangeFileName(ref toolkit.HRTFFileName, filePath);
+        if (filePath.Length != 0) {
+            Common3DTIGUI.ChangeFileName(ref toolkit.HRTFFileName44, filePath);
+        }
     }
-
+    /// <summary>
+    /// Action for button Load HRTF
+    /// </summary>
+    public void ButtonLoadHRTF48()
+    {
+        string filePath = EditorUtility.OpenFilePanel("Select HRTF File", "", "3dti-hrtf");
+        if (filePath.Length != 0)
+        {
+            Common3DTIGUI.ChangeFileName(ref toolkit.HRTFFileName48, filePath);
+        }
+    }/// <summary>
+     /// Action for button Load HRTF
+     /// </summary>
+    public void ButtonLoadHRTF96()
+    {
+        string filePath = EditorUtility.OpenFilePanel("Select HRTF File", "", "3dti-hrtf");
+        if (filePath.Length != 0)
+        {
+            Common3DTIGUI.ChangeFileName(ref toolkit.HRTFFileName96, filePath);
+        }
+    }
     /// <summary>
     /// Action for button Load ILD Near Field
     /// </summary>
-    public void ButtonLoadILDNearField()
+    public void ButtonLoadILDNearField44()
     {
-        string filePath = EditorUtility.OpenFilePanel("Select ILD File", "", "3dti-ild");        
+        string filePath = EditorUtility.OpenFilePanel("Select ILD File", "", "3dti-ild");
         if (filePath.Length != 0)
-            Common3DTIGUI.ChangeFileName(ref toolkit.ILDNearFieldFileName, filePath);
+        {
+
+
+            Common3DTIGUI.ChangeFileName(ref toolkit.ILDNearFieldFileName44, filePath);
+        }
+    }
+    /// <summary>
+     /// Action for button Load ILD Near Field
+     /// </summary>
+    public void ButtonLoadILDNearField48()
+    {
+        string filePath = EditorUtility.OpenFilePanel("Select ILD File", "", "3dti-ild");
+        if (filePath.Length != 0)
+        {
+
+
+            Common3DTIGUI.ChangeFileName(ref toolkit.ILDNearFieldFileName48, filePath);
+        }
+    }
+    /// <summary>
+     /// Action for button Load ILD Near Field
+     /// </summary>
+    public void ButtonLoadILDNearField96()
+    {
+        string filePath = EditorUtility.OpenFilePanel("Select ILD File", "", "3dti-ild");
+        if (filePath.Length != 0)
+        {
+
+
+            Common3DTIGUI.ChangeFileName(ref toolkit.ILDNearFieldFileName96, filePath);
+        }
     }
 
     /// <summary>
     /// Action for button Load ILD HIgh Performance
     /// </summary>
-    public void ButtonLoadILDHighPerformance()
+    public void ButtonLoadILDHighPerformance44()
     {
         string filePath = EditorUtility.OpenFilePanel("Select ILD File", "", "3dti-ild");
         if (filePath.Length != 0)
-            Common3DTIGUI.ChangeFileName(ref toolkit.ILDHighPerformanceFileName, filePath);
+        {
+            Common3DTIGUI.ChangeFileName(ref toolkit.ILDHighPerformanceFileName44, filePath);
+        }
     }
+    /// <summary>
+    /// Action for button Load ILD HIgh Performance
+    /// </summary>
+    public void ButtonLoadILDHighPerformance48()
+    {
+        string filePath = EditorUtility.OpenFilePanel("Select ILD File", "", "3dti-ild");
+        if (filePath.Length != 0)
+        {
+
+            Common3DTIGUI.ChangeFileName(ref toolkit.ILDHighPerformanceFileName48, filePath);
+        }
+    } 
+    
+    /// <summary>
+      /// Action for button Load ILD HIgh Performance
+      /// </summary>
+    public void ButtonLoadILDHighPerformance96()
+    {
+        string filePath = EditorUtility.OpenFilePanel("Select ILD File", "", "3dti-ild");
+        if (filePath.Length != 0)
+        {
+
+            Common3DTIGUI.ChangeFileName(ref toolkit.ILDHighPerformanceFileName96, filePath);
+        }
+    }
+
 
     /// <summary>
     /// Action for slider HeadRadius
@@ -195,27 +277,42 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             toolkit.SetSpatializationMode(toolkit.spatializationMode);
 
         Common3DTIGUI.SingleSpace();
-
+        
         // HIGH PERFORMANCE MODE CONTROLS
         if (toolkit.spatializationMode ==  API_3DTI_Spatializer.SPATIALIZATION_MODE_HIGH_PERFORMANCE)
         {            
-            Common3DTIGUI.AddLabelToParameterGroup("High Performance ILD");            
+            highPerformanceFiles = Common3DTIGUI.CreateFoldoutToggle(ref highPerformanceFiles, "High Performance ILD Files");
+            if (highPerformanceFiles) {
+            Common3DTIGUI.AddLabelToParameterGroup("High Performance ILD");
 
-            Common3DTIGUI.CreateLoadButtonAndBox("High Performance ILD", "Select the high performance ILD filter of the listener from a .3dti-ild file", ref toolkit.ILDHighPerformanceFileName, ButtonLoadILDHighPerformance);
+            Common3DTIGUI.CreateLoadButtonAndBox("ILD 44.1kHz", "Select the high performance ILD filter of the listener from a .3dti-ild file", ref toolkit.ILDHighPerformanceFileName44, ButtonLoadILDHighPerformance44);
+            Common3DTIGUI.CreateLoadButtonAndBox("ILD 48kHz", "Select the high performance ILD filter of the listener from a .3dti-ild file",   ref toolkit.ILDHighPerformanceFileName48, ButtonLoadILDHighPerformance48);
+            Common3DTIGUI.CreateLoadButtonAndBox("ILD 96kHz", "Select the high performance ILD filter of the listener from a .3dti-ild file",   ref toolkit.ILDHighPerformanceFileName96, ButtonLoadILDHighPerformance96);
+            }
         }
+
+        
 
         // HIGH QUALITY MODE CONTROLS
         if (toolkit.spatializationMode == API_3DTI_Spatializer.SPATIALIZATION_MODE_HIGH_QUALITY)
-        {        
+        {
+            highQualityFiles = Common3DTIGUI.CreateFoldoutToggle(ref highQualityFiles, "High Quality HRTF and ILD Files");
+            if (highQualityFiles)
+            {
             Common3DTIGUI.AddLabelToParameterGroup("HRTF");
             Common3DTIGUI.AddLabelToParameterGroup("Near Field Filter ILD");
 
             // HRTF:
-            Common3DTIGUI.CreateLoadButtonAndBox("HRTF", "Select the HRTF of the listener from a .3dti-hrtf file", ref toolkit.HRTFFileName, ButtonLoadHRTF);
+            Common3DTIGUI.CreateLoadButtonAndBox("HRTF 44.1kHz", "Select the HRTF of the listener from a .3dti-hrtf file", ref toolkit.HRTFFileName44, ButtonLoadHRTF44);
+            Common3DTIGUI.CreateLoadButtonAndBox("HRTF 48kHz", "Select the HRTF of the listener from a .3dti-hrtf file", ref toolkit.HRTFFileName48, ButtonLoadHRTF48);
+            Common3DTIGUI.CreateLoadButtonAndBox("HRTF 96kHz", "Select the HRTF of the listener from a .3dti-hrtf file", ref toolkit.HRTFFileName96, ButtonLoadHRTF96);
 
             // ILD:
             Common3DTIGUI.SingleSpace();
-            Common3DTIGUI.CreateLoadButtonAndBox("Near Field Filter ILD", "Select the ILD near field filter of the listener from a .3dti-ild file", ref toolkit.ILDNearFieldFileName, ButtonLoadILDNearField);
+            Common3DTIGUI.CreateLoadButtonAndBox("ILD 44.1kHz", "Select the ILD near field filter of the listener from a .3dti-ild file", ref toolkit.ILDNearFieldFileName44, ButtonLoadILDNearField44);
+            Common3DTIGUI.CreateLoadButtonAndBox("ILD 48kHz", "Select the ILD near field filter of the listener from a .3dti-ild file", ref toolkit.ILDNearFieldFileName48, ButtonLoadILDNearField48);
+            Common3DTIGUI.CreateLoadButtonAndBox("ILD 96kHz", "Select the ILD near field filter of the listener from a .3dti-ild file", ref toolkit.ILDNearFieldFileName96, ButtonLoadILDNearField96);
+            }
         }
 
         // ITD:    
