@@ -800,7 +800,9 @@ public class API_3DTI_Spatializer : MonoBehaviour
     {
         return GetBoolParameter(GET_LIMITER_COMPRESSION, out _compressing, source);
     }
-
+    /////////////////////////////////////////////////////////////////////
+    // SAMPLE RATE AND BUFFER SIZE GET METHODS
+    /////////////////////////////////////////////////////////////////////
     /// <summary>
     /// Get audio sample rate in hertzs (Unity's)
     /// </summary>
@@ -911,12 +913,20 @@ public class API_3DTI_Spatializer : MonoBehaviour
                     _index = (int)TSampleRateEnum.K96;
                     break;
                 default:
-                    Debug.Log("Está saltando el default en GetSampleRateIndex");
-                    _index = (int)TSampleRateEnum.K48;
+                    Debug.LogError("Sampling rates different than 44.1, 48 or 96kHz shall not be used." + Environment.NewLine + "Go to Edit -> Project Settings -> Audio and set System Sample Rate to a valid value.");
+                    Debug.Break();
+                    Debug.developerConsoleVisible = true;
+
+                    #if (UNITY_EDITOR)
+                        UnityEditor.EditorApplication.isPlaying = false;
+                    #else
+                        Application.Quit();
+                    #endif
+                        
+                        _index = (int)TSampleRateEnum.K48;
                     break;
             }
         }
-        Debug.Log(_index);
         return _index;
     }
     /// <summary>
