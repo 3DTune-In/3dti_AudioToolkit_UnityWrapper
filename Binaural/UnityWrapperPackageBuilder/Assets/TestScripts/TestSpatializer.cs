@@ -13,6 +13,7 @@ public class TestSpatializer : MonoBehaviour
     int countdown = COUNTTIME;
     float lastTime;
     float bufSize, samplingFreq;
+    float bufSizeC, samplingFreqC;
     public AudioClip otherClip;
 
     void Start()
@@ -25,10 +26,24 @@ public class TestSpatializer : MonoBehaviour
 
     void Update()
     {
-        if(SpatializerAPI.GetBufferSize(out bufSize) && SpatializerAPI.GetSampleRate(out samplingFreq))
-        {
-            debugText.text = "Buffer size: " + bufSize.ToString() + "; Sample rate: " + samplingFreq.ToString() + "Hz";
-        }
+        //if(SpatializerAPI.GetBufferSize(out bufSize) && SpatializerAPI.GetSampleRate(out samplingFreq))
+        SpatializerAPI.GetBufferSize(out bufSize);
+        SpatializerAPI.GetSampleRate(out samplingFreq);
+        SpatializerAPI.GetBufferSizeCore(out bufSizeC);
+        SpatializerAPI.GetSampleRateCore(out samplingFreqC);
+
+
+        
+        //{
+            debugText.text = "UNITY->BS:" + bufSize.ToString() + ";SR:" + samplingFreq.ToString() + 
+            "CORE->BS:" + bufSizeC.ToString() + ";SR:" + samplingFreqC.ToString();
+
+
+
+        //}
+
+        //if (SpatializerAPI.GetBufferSizeCore(out bufSizeC) && SpatializerAPI.GetSampleRateCore(out samplingFreqC))
+        //}
         //debugText.text = "Countdown: " + countdown + " seconds";
         //if ((Time.time - lastTime) > 1.0f)
         //{            

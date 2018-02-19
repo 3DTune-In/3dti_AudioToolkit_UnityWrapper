@@ -96,6 +96,9 @@ namespace Spatializer3DTI
 		PARAM_SPATIALIZATION_MODE,
 		PARAM_BUFFER_SIZE,
 		PARAM_SAMPLE_RATE,
+		PARAM_BUFFER_SIZE_CORE,
+		PARAM_SAMPLE_RATE_CORE,
+
 
 		P_NUM
 	};
@@ -223,7 +226,8 @@ namespace Spatializer3DTI
 		//Sample Rate and BufferSize
 		RegisterParameter(definition, "BufferSize", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 1.0f, PARAM_BUFFER_SIZE, "Buffer size used by Unity");
 		RegisterParameter(definition, "SampleRate", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 1.0f, PARAM_SAMPLE_RATE, "Buffer size used by Unity");
-
+		RegisterParameter(definition, "BufferSizeCore", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 1.0f, PARAM_BUFFER_SIZE_CORE, "Buffer size used by Core");
+		RegisterParameter(definition, "SampleRateCore", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 1.0f, PARAM_SAMPLE_RATE_CORE, "Buffer size used by Core");
         definition.flags |= UnityAudioEffectDefinitionFlags_IsSpatializer;
         return numparams;
     }
@@ -347,35 +351,44 @@ namespace Spatializer3DTI
 	int LoadHighPerformanceILDBinaryFile(UnityAudioEffectState* state)
 	{
 		EffectData* data = state->GetEffectData<EffectData>();
+		/*int sampleRateInFile = ILD::GetSampleRateFrom3dti(data->strNearFieldILDpath);
+		if (sampleRateInFile == (int)state->samplerate) {*/
 
-		// Get ILD 
-		//T_ILD_HashTable h;
-		//h = ILD::CreateFrom3dti(data->strHighPerformanceILDpath);	
-		bool boolResult = ILD::CreateFrom3dti_ILDSpatializationTable(data->strHighPerformanceILDpath, data->listener);		
+			// Get ILD 
+			//T_ILD_HashTable h;
+			//h = ILD::CreateFrom3dti(data->strHighPerformanceILDpath);	
+			bool boolResult = ILD::CreateFrom3dti_ILDSpatializationTable(data->strHighPerformanceILDpath, data->listener);
 
-		// Check errors
-		//TDebuggerResultStruct result = GET_LAST_RESULT_STRUCT();
-		//if (result.id != RESULT_OK)
-		//{
-		//	WriteLog(state, "ERROR TRYING TO LOAD HIGH PERFORMANCE ILD!!! ", result.suggestion);
-		//	return TLoadResult::RESULT_LOAD_ERROR;
-		//}
+			// Check errors
+			//TDebuggerResultStruct result = GET_LAST_RESULT_STRUCT();
+			//if (result.id != RESULT_OK)
+			//{
+			//	WriteLog(state, "ERROR TRYING TO LOAD HIGH PERFORMANCE ILD!!! ", result.suggestion);
+			//	return TLoadResult::RESULT_LOAD_ERROR;
+			//}
 
-		//if (h.size() > 0)		// TO DO: Improve this error check		
-		if (boolResult)
-		{
-			///Binaural::CILD::SetILD_HashTable(std::move(h));
-			WriteLog(state, "LOAD HIGH PERFORMANCE ILD: ILD loaded from binary 3DTI file: ", data->strHighPerformanceILDpath);
-			//WriteLog(state, "          Hash hable size is ", h.size());
-			free(data->strHighPerformanceILDpath);
-			return TLoadResult::RESULT_LOAD_OK;
-		}
+			//if (h.size() > 0)		// TO DO: Improve this error check		
+			if (boolResult)
+			{
+				///Binaural::CILD::SetILD_HashTable(std::move(h));
+				WriteLog(state, "LOAD HIGH PERFORMANCE ILD: ILD loaded from binary 3DTI file: ", data->strHighPerformanceILDpath);
+				//WriteLog(state, "          Hash hable size is ", h.size());
+				free(data->strHighPerformanceILDpath);
+				return TLoadResult::RESULT_LOAD_OK;
+			}
+			else
+			{
+				WriteLog(state, "LOAD HIGH PERFORMANCE ILD: ERROR!!! could not create ILD from path: ", data->strHighPerformanceILDpath);
+				free(data->strHighPerformanceILDpath);
+				return TLoadResult::RESULT_LOAD_ERROR;
+			}
+		/*}
 		else
-		{			
-			WriteLog(state, "LOAD HIGH PERFORMANCE ILD: ERROR!!! could not create ILD from path: ", data->strHighPerformanceILDpath);
-			free(data->strHighPerformanceILDpath);
+		{
+			WriteLog(state, "LOAD NEAR FIELD ILD: ERROR!!! output sample rate is not the same as the ILD from path: ", data->strNearFieldILDpath);
+			free(data->strNearFieldILDpath);
 			return TLoadResult::RESULT_LOAD_ERROR;
-		}
+		}*/
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -385,33 +398,45 @@ namespace Spatializer3DTI
 		EffectData* data = state->GetEffectData<EffectData>();
 
 		// Get ILD 
-		//T_ILD_HashTable h;
-		//h = ILD::CreateFrom3dti(data->strNearFieldILDpath);
-		bool boolResult = ILD::CreateFrom3dti_ILDNearFieldEffectTable(data->strNearFieldILDpath, data->listener);
+		
+		/*int sampleRateInFile = ILD::GetSampleRateFrom3dti(data->strNearFieldILDpath);
+		if (sampleRateInFile == (int)state->samplerate) 
+		{*/
+			bool boolResult = ILD::CreateFrom3dti_ILDNearFieldEffectTable(data->strNearFieldILDpath, data->listener);
+			// Check errors
+			//TResultStruct result = GET_LAST_RESULT_STRUCT();
+			//if (result.id != RESULT_OK)
+			//{
+			//	WriteLog(state, "ERROR TRYING TO LOAD NEAR FIELD ILD!!! ", result.suggestion);
+			//	return TLoadResult::RESULT_LOAD_ERROR;
+			//}
 
-		// Check errors
-		//TDebuggerResultStruct result = GET_LAST_RESULT_STRUCT();
-		//if (result.id != RESULT_OK)
-		//{
-		//	WriteLog(state, "ERROR TRYING TO LOAD NEAR FIELD ILD!!! ", result.suggestion);
-		//	return TLoadResult::RESULT_LOAD_ERROR;
-		//}
+			//if (h.size() > 0)		// TO DO: Improve this error check		
+			if (boolResult)
+			{
+				//Binaural::CILD::SetILD_HashTable(std::move(h));
+				WriteLog(state, "LOAD NEAR FIELD ILD: ILD loaded from binary 3DTI file: ", data->strNearFieldILDpath);
+				//WriteLog(state, "          Hash hable size is ", h.size());
+				free(data->strNearFieldILDpath);
+				return TLoadResult::RESULT_LOAD_OK;
+			}
+			else
+			{
+				WriteLog(state, "LOAD NEAR FIELD ILD: ERROR!!! could not create ILD from path: ", data->strNearFieldILDpath);
+				free(data->strNearFieldILDpath);
+				return TLoadResult::RESULT_LOAD_ERROR;
+			}
 
-		//if (h.size() > 0)		// TO DO: Improve this error check		
-		if (boolResult)
+		/*}
+		else 
 		{
-			//Binaural::CILD::SetILD_HashTable(std::move(h));
-			WriteLog(state, "LOAD NEAR FIELD ILD: ILD loaded from binary 3DTI file: ", data->strNearFieldILDpath);
-			//WriteLog(state, "          Hash hable size is ", h.size());
-			free(data->strNearFieldILDpath);
-			return TLoadResult::RESULT_LOAD_OK;
-		}
-		else
-		{
-			WriteLog(state, "LOAD NEAR FIELD ILD: ERROR!!! could not create ILD from path: ", data->strNearFieldILDpath);
+			WriteLog(state, "LOAD NEAR FIELD ILD: ERROR!!! output sample rate is not the same as the ILD from path: ", data->strNearFieldILDpath);
 			free(data->strNearFieldILDpath);
 			return TLoadResult::RESULT_LOAD_ERROR;
 		}
+		*/
+
+		
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -936,7 +961,15 @@ namespace Spatializer3DTI
 					//*value = float(data->sampleRate);
 					*value = (int)state->samplerate;
 					break;
-				
+				case PARAM_BUFFER_SIZE_CORE:
+					//*value = float(data->bufferSize);					
+					*value = state->GetEffectData<EffectData>()->core.GetAudioState().bufferSize;
+					break;
+
+				case PARAM_SAMPLE_RATE_CORE:
+					//*value = float(data->sampleRate);
+					*value = state->GetEffectData<EffectData>()->core.GetAudioState().sampleRate;
+					break;
 				default:
 					*value = data->parameters[index];
 					break;
