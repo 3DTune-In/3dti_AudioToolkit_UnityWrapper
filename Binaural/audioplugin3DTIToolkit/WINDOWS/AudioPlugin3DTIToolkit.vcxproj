@@ -231,7 +231,7 @@ copy $(TargetPath) ..\..\Assets\Plugins\x86\$(TargetName).dll
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;AudioPlugin3DTIToolkit_EXPORTS;_3DTI_AXIS_CONVENTION_UNITY;_3DTI_ANGLE_CONVENTION_LISTEN;SWITCH_ON_3DTI_DEBUGGER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;AudioPlugin3DTIToolkit_EXPORTS;_3DTI_AXIS_CONVENTION_UNITY;_3DTI_ANGLE_CONVENTION_LISTEN;SWITCH_ON_3DTI_ERRORHANDLER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>
