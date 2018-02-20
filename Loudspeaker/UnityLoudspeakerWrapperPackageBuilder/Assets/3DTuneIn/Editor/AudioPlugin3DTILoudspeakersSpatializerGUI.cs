@@ -114,7 +114,7 @@ public class AudioPlugin3DTILoudspeakerSpatializerGUI : Editor
             Common3DTIGUI.CreateFloatSlider(ref toolkitAPI.structureSide, "Structure side", "F2", "m", "Set one side of the speakers configuration structure, in meters", minStructSide, maxStructSide, SliderStructureSide);
             //Common3DTIGUI.CreateReadonlyFloatText("Minimum distance to listener", "F2", "m", "Minimum distance from any source to listener, in meters", toolkit.GetMinimumDistanceToListener());
 
-            Common3DTIGUI.BeginSubsection("Speakers Fine Adjustment");
+            Common3DTIGUI.BeginSubsection("Speakers Fine Adjustment (Audio Coordinate System x=Front, y=Left, z=Up)");
             {
                 Common3DTIGUI.SingleSpace();
                 GUILayout.BeginHorizontal();
