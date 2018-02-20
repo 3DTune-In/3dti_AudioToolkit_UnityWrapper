@@ -4,7 +4,11 @@ using UnityEngine;
 public class About3DTI : EditorWindow
 {
     Vector2 scrollPos;
-    const float windowWidth = 600;    
+    const float windowWidth = 600;
+    const float windowHeight = 1000;
+    const float scrollMargin = 0;
+    const float textMargin = scrollMargin + 30;    
+    const float sectionMargin = scrollMargin + 30; 
     static GUIStyle aboutTextStyle;
     static GUIStyle aboutSectionStyle;
     static GUIStyle aboutTitleStyle;
@@ -13,9 +17,10 @@ public class About3DTI : EditorWindow
     public static void ShowAboutWindow()
     {
         // Setup styles
-        aboutTextStyle = new GUIStyle(EditorStyles.textArea);
+        aboutTextStyle = new GUIStyle(EditorStyles.label);
         aboutTextStyle.wordWrap = true;
         aboutTextStyle.richText = true;
+        aboutTextStyle.alignment = TextAnchor.MiddleLeft;
         aboutSectionStyle = new GUIStyle(GUI.skin.box);
         aboutTitleStyle = new GUIStyle(GUI.skin.box);
         aboutTitleStyle.normal.textColor = EditorStyles.label.normal.textColor;
@@ -29,7 +34,9 @@ public class About3DTI : EditorWindow
 
     void OnGUI()
     {
-        scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(windowWidth));
+        maxSize = new Vector2(windowWidth, windowHeight);
+
+        scrollPos = EditorGUILayout.BeginScrollView(scrollPos, false, false, GUILayout.Width(windowWidth - scrollMargin));
         
         BeginAboutSection("3D-TUNE-IN TOOLKIT UNITY WRAPPER");
 
@@ -44,11 +51,8 @@ public class About3DTI : EditorWindow
             ShowParagraph("The 3D Tune-In Toolkit is a standard C++ library for audio spatialisation and simulation of hearing loss and hearing aids", "http://3d-tune-in.eu/toolkit-developers");
             ShowParagraph("The 3D Tune-In Toolkit together with the 3D Tune-In Resource Management Package will be released as open source under GPLv3 license for non-commercial use. Contact developers for commercial use.");
 
-            ShowParagraph("The Unity Wrapper of the 3DTi Toolkit (3DTi Unity Wrapper) allows integration of the different components of the Toolkit in any Unity Scene.These components are packed in the form of a Unity Package requiring Unity 5.2 or above. The current version of the package is built to support the following platforms:");
-            BeginBulletList();
-                ShowBulletListItem("As Host: Microsoft Windows, Mac OS X.");
-                ShowBulletListItem("As Target: Microsoft Windows x64, Mac OS X.");
-            EndBulletList();
+            ShowParagraph("The Unity Wrapper of the 3DTi Toolkit (3DTi Unity Wrapper) allows integration of the different components of the Toolkit in any Unity Scene.These components are packed in the form of a Unity Package requiring Unity 5.2 or above. The current version of the package is built for Microsoft Windows, as host and target.");
+            
             
 
             ShowParagraph("You may use this package to generate 3D sounds without additional restrictions to those imposed by the license of the original audio." +
@@ -60,10 +64,6 @@ public class About3DTI : EditorWindow
                     ShowBulletListItem("3D Tune-In Toolkit (Copyright © University of Malaga and Imperial College London - 2017), which uses:");
                     BeginBulletList();                      
                         ShowBulletListItem("Takuya OOURA General purpose FFT URL: http://www.kurims.kyoto-u.ac.jp/~ooura/fft.html");
-                    EndBulletList();
-                    ShowBulletListItem("3D Tune-In Resource Management Package (Copyright (c) University of Malaga and Imperial College London - 2017), which uses:");
-                    BeginBulletList();
-                        ShowBulletListItem("Cereal (Grant, W.Shane and Voorhies, Randolph(2017).cereal - A C++11 library for serialization URL: http://uscilab.github.io/cereal).");
                     EndBulletList();
                 EndBulletList();
             EndAboutSection();
@@ -82,7 +82,7 @@ public class About3DTI : EditorWindow
     /// <param name="urlText"></param>
     public static void ShowParagraph(string text, string urlText="")
     {                
-        GUILayout.Label(text, aboutTextStyle, GUILayout.Width(windowWidth));
+        GUILayout.Label(text, aboutTextStyle, GUILayout.Width(windowWidth - textMargin));
         if (urlText != "")
         {
             if (GUILayout.Button(urlText, urlStyle))
@@ -126,16 +126,16 @@ public class About3DTI : EditorWindow
     /// Begin a section containing many text paragraphs
     /// </summary>
     /// <param name="titleText"></param>
-    public static void BeginAboutSection(string titleText)
+    public void BeginAboutSection(string titleText)
     {
         GUILayout.BeginVertical(aboutSectionStyle);
-        GUILayout.Box(titleText, aboutTitleStyle, GUILayout.Width(windowWidth));
+        GUILayout.Box(titleText, aboutTitleStyle, GUILayout.Width(windowWidth - sectionMargin));
     }
 
     /// <summary>
     /// End section
     /// </summary>
-    public static void EndAboutSection()
+    public void EndAboutSection()
     {
         GUILayout.EndVertical();        
         //GUILayout.Space(spaceBetweenSections);          // Line spacing    
