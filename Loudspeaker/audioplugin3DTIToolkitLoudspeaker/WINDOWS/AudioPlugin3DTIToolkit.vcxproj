@@ -19,61 +19,61 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\BiquadFilter.cpp" />
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\DistanceAttenuator.cpp" />
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\DynamicCompressorMono.cpp" />
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\DynamicCompressorStereo.cpp" />
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\EnvelopeDetector.cpp" />
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\ErrorHandler.cpp" />
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.cpp" />
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\fftsg.cpp" />
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\FiltersChain.cpp" />
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\Fprocessor.cpp" />
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\Magnitudes.cpp" />
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\Profiler.cpp" />
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\Quaternion.cpp" />
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\Transform.cpp" />
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\UPCEnvironment.cpp" />
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\Common\Vector3.cpp" />
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\ARIRRaw.cpp" />
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\Core_LS.cpp" />
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\Environment_LS.cpp" />
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SingleSourceDSP_LS.cpp" />
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SpeakerSet.cpp" />
-    <ClCompile Include="..\..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SpeakerSetConfiguration.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\BiquadFilter.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\DistanceAttenuator.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\DynamicCompressorMono.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\DynamicCompressorStereo.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\EnvelopeDetector.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\ErrorHandler.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\FarDistanceEffects.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\fftsg.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\FiltersChain.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Fprocessor.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Magnitudes.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Profiler.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Quaternion.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Transform.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\UPCEnvironment.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Vector3.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit_Loudspeaker\LoudspeakersSpatializer\ARIRRaw.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit_Loudspeaker\LoudspeakersSpatializer\Core_LS.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit_Loudspeaker\LoudspeakersSpatializer\Environment_LS.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit_Loudspeaker\LoudspeakersSpatializer\SingleSourceDSP_LS.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit_Loudspeaker\LoudspeakersSpatializer\SpeakerSet.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit_Loudspeaker\LoudspeakersSpatializer\SpeakerSetConfiguration.cpp" />
     <ClCompile Include="..\src\effect3DTILoudspeakersSpatializer.cpp" />
     <ClCompile Include="..\src\AudioPluginUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\AIR.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\AudioState.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\BiquadFilter.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\Buffer.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\CommonDefinitions.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\Conventions.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\DistanceAttenuator.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\DynamicCompressor.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\DynamicCompressorMono.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\DynamicCompressorStereo.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\EnvelopeDetector.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\ErrorHandler.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\FarDistanceEffects.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\fftsg.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\FiltersChain.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\Fprocessor.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\Magnitudes.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\Profiler.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\Quaternion.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\Transform.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\UPCEnvironment.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\Common\Vector3.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\3DTI_LoudspeakersSpatializer.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\ARIRRaw.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\Core_LS.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\Environment_LS.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SingleSourceDSP_LS.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SpeakerSet.h" />
-    <ClInclude Include="..\..\..\3DTI_Toolkit_Core\LoudspeakersSpatializer\SpeakerSetConfiguration.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\AIR.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\AudioState.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\BiquadFilter.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Buffer.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\CommonDefinitions.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Conventions.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\DistanceAttenuator.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\DynamicCompressor.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\DynamicCompressorMono.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\DynamicCompressorStereo.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\EnvelopeDetector.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\ErrorHandler.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\FarDistanceEffects.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\fftsg.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\FiltersChain.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Fprocessor.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Magnitudes.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Profiler.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Quaternion.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Transform.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\UPCEnvironment.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Vector3.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit_Loudspeaker\LoudspeakersSpatializer\3DTI_LoudspeakersSpatializer.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit_Loudspeaker\LoudspeakersSpatializer\ARIRRaw.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit_Loudspeaker\LoudspeakersSpatializer\Core_LS.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit_Loudspeaker\LoudspeakersSpatializer\Environment_LS.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit_Loudspeaker\LoudspeakersSpatializer\SingleSourceDSP_LS.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit_Loudspeaker\LoudspeakersSpatializer\SpeakerSet.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit_Loudspeaker\LoudspeakersSpatializer\SpeakerSetConfiguration.h" />
     <ClInclude Include="..\src\AudioPluginInterface.h" />
     <ClInclude Include="..\src\AudioPluginUtil.h" />
     <ClInclude Include="..\src\PluginList.h" />
@@ -172,7 +172,7 @@ copy $(TargetPath) ..\..\Assets\Plugins\x86\$(TargetName).dll
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>..\..\..\3DTI_Toolkit_Core;..\..\..\3DTI_Toolkit_Modules;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\3dti_AudioToolkit\3dti_Toolkit;..\..\..\3dti_AudioToolkit\3dti_ResourceManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -222,7 +222,7 @@ copy $(TargetPath) ..\..\Assets\Plugins\x86\$(TargetName).dll
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>..\..\..\3DTI_Toolkit_Core;..\..\..\3DTI_Toolkit_Modules;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\3dti_AudioToolkit\3dti_Toolkit;..\..\..\3dti_AudioToolkit_Loudspeaker;..\..\..\3dti_AudioToolkit\3dti_ResourceManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
