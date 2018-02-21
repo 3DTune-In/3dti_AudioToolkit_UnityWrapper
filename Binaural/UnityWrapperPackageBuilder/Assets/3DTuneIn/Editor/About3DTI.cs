@@ -40,31 +40,23 @@ public class About3DTI : EditorWindow
         
         BeginAboutSection("3D-TUNE-IN TOOLKIT UNITY WRAPPER");
 
-            GUILayout.Label("Version 1.9 D2017xxxx Tk-xxxxx", EditorStyles.boldLabel);
+            GUILayout.Label("Version 1.12 D20180221 Tk D20180219", EditorStyles.boldLabel);
 
-            ShowParagraph("This software was developed by a team coordinated by Arcadio Reyes Lecuona (University of Malaga) and Lorenzo Picinali (Imperial College London). " +
-            "The members of the team are: Maria Cuevas Rodriguez, Daniel Gonzalez Toledo, Carlos Garre, Luis Molina Tanco and Ernesto de la Rubia, all affiliated to the University of Malaga. " + 
-            "BRIR and near field simulation filters provided by David Poirier-Quinot (Imperial College London)."); // High performance?
+            ShowParagraph("This software was developed by a team coordinated by Arcadio Reyes Lecuona (University of Malaga). The members of the team are: Maria Cuevas Rodriguez, Daniel Gonzalez Toledo, Carlos Garre, Luis Molina Tanco, Ángel Rodríguez Rivero and Ernesto de la Rubia, all affiliated to the University of Malaga.");
 
-            ShowParagraph("Copyright (c) University of Malaga and Imperial College London - 2017. Email : grupodiana@uma.es");
+            ShowParagraph("Copyright © University of Malaga - 2018. Email: areyes@uma.es");
 
-            ShowParagraph("The 3D Tune-In Toolkit is a standard C++ library for audio spatialisation and simulation of hearing loss and hearing aids", "http://3d-tune-in.eu/toolkit-developers");
-            ShowParagraph("The 3D Tune-In Toolkit together with the 3D Tune-In Resource Management Package will be released as open source under GPLv3 license for non-commercial use. Contact developers for commercial use.");
+            ShowParagraph("The 3D Tune-In Toolkit Unity Wrapper (3DTi Unity Wrapper) is a package which contains a compiled version of the 3D Tune-In Audio Toolkit (Copyright © University of Malaga and Imperial College London - 2018), which is available at https://github.com/3DTune-In/3dti_AudioToolkit.");
 
-            ShowParagraph("The Unity Wrapper of the 3DTi Toolkit (3DTi Unity Wrapper) allows integration of the different components of the Toolkit in any Unity Scene.These components are packed in the form of a Unity Package requiring Unity 5.2 or above. The current version of the package is built to support the following platforms:");
+            ShowParagraph("It allows integration of the different components of the Toolkit in any Unity Scene. These components are packed in the form of a Unity Package requiring Unity 5.2 or above. The current version of the package is built to support the following platforms:");
             BeginBulletList();
                 ShowBulletListItem("As Host: Microsoft Windows, Mac OS X.");
-                ShowBulletListItem("As Target: Microsoft Windows x64, Mac OS X, Android(4.4 or above), iOS.");
+                ShowBulletListItem("As Target: Microsoft Windows, Mac OS X, Android(4.4 or above), iOS.");
             EndBulletList();
-            
-
-            ShowParagraph("You may use this package to generate 3D sounds without additional restrictions to those imposed by the license of the original audio." +
-            "You are not compelled to make any mention to the 3D - Tune - In project or to the app when you use or distribute these audio files," +
-            "but we would highly appreciate if you might kindly acknowledge the use of the 3D - Tune - In Toolkit.");
             
             BeginAboutSection("Libraries used in this package");
                 BeginBulletList();
-                    ShowBulletListItem("3D Tune-In Toolkit (Copyright © University of Malaga and Imperial College London - 2017), which uses:");
+                    ShowBulletListItem("3D Tune-In Toolkit, which uses:");
                     BeginBulletList();                      
                         ShowBulletListItem("Takuya OOURA General purpose FFT URL: http://www.kurims.kyoto-u.ac.jp/~ooura/fft.html");
                     EndBulletList();
@@ -73,6 +65,23 @@ public class About3DTI : EditorWindow
                         ShowBulletListItem("Cereal (Grant, W.Shane and Voorhies, Randolph(2017).cereal - A C++11 library for serialization URL: http://uscilab.github.io/cereal).");
                     EndBulletList();
                 EndBulletList();
+            EndAboutSection();
+			
+			BeginAboutSection("External content distributed together with this software");
+                BeginBulletList();
+                    ShowBulletListItem("HRTF files, corresponding to IRC_1008, IRC_1013, IRC_1022, IRC_1031, IRC_1032, IRC_1048 and IRC_1053, are extracted from the LISTEN database and processed to extract ITD, shortened in different lengths and resampled at different sampling frequencies.");
+                EndBulletList();
+            EndAboutSection();
+
+			BeginAboutSection("License terms");
+			ShowParagraph("You have received this software as a beta-tester. You may not:");
+			BeginBulletList();
+                    ShowBulletListItem("Modify or create any derivative works from this software.");
+					ShowBulletListItem("Separate this software, which is licensed as a single product, into its component parts.");
+					ShowBulletListItem("Redistribute, encumber, sell, rent, lease, sublicense, or transfer this software under any circumstances.");
+					ShowBulletListItem("Remove or alter any trademark, logo, copyright or other proprietary notices, legends, symbols or labels.");
+					ShowBulletListItem("Publish or make public any results of benchmark tests run on any Software to a third party.");
+					
             EndAboutSection();
 
             ShowParagraph("This project has received funding from the European Union's Horizon 2020 research and innovation programme under grant agreement No 644051");
