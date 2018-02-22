@@ -81,7 +81,7 @@ public class About3DTI : EditorWindow
 					ShowBulletListItem("Redistribute, encumber, sell, rent, lease, sublicense, or transfer this software under any circumstances.");
 					ShowBulletListItem("Remove or alter any trademark, logo, copyright or other proprietary notices, legends, symbols or labels.");
 					ShowBulletListItem("Publish or make public any results of benchmark tests run on any Software to a third party.");
-					
+			ShowParagraph("You have received this software as a partner of the 3D Tune-In consortium. The partners of the 3D Tune-In consortium may use this software for commercial and non-commercial purposes as developed during the lifetime of the 3D Tune-In project (up to 30th April, 2018), provided that the wrapper is appropriately acknowledge, and that prompt communication of such development is given to the University of Malaga and Imperial College London, as copyright holders of the 3D Tune-In Audio Toolkit. This license does not apply for advancements/modifications/changes done on the Wrapper after the 30th of April 2018.");
             EndAboutSection();
 
             ShowParagraph("This project has received funding from the European Union's Horizon 2020 research and innovation programme under grant agreement No 644051");
