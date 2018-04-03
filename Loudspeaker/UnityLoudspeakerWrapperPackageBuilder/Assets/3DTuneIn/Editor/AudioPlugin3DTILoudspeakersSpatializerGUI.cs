@@ -96,8 +96,8 @@ public class AudioPlugin3DTILoudspeakerSpatializerGUI : Editor
             // Radio buttons
             int presetInt = (int)toolkitAPI.speakersConfigurationPreset;
             if (Common3DTIGUI.CreateRadioButtons(ref presetInt, 
-                                                 new List<string>(new string[] { "Cube", "Octahedron", "2D Square" }),
-                                                 new List<string>(new string[] { "Set cube configuration preset", "Set octahedron configuration preset", "Set 2D square configuration preset" })))
+                                                 new List<string>(new string[] { "Cube", "Octahedron", "2D Square" , "Irregular" }),
+                                                 new List<string>(new string[] { "Set cube configuration preset", "Set octahedron configuration preset", "Set 2D square configuration preset" , "Set irregular configuration" })))
             {
                 toolkitAPI.SetSpeakersConfigurationPreset((API_3DTI_LoudSpeakersSpatializer.T_LoudSpeakerConfigurationPreset)presetInt);
             }                

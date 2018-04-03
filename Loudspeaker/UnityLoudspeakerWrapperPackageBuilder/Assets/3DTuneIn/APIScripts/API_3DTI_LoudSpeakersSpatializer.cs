@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Xml;
 using UnityEngine;
 
 public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
@@ -8,7 +10,7 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     int lastSourceID = 0;                       // Internal use for debug log
 
     // CONFIGURATION PRESETS:
-    public enum T_LoudSpeakerConfigurationPreset { LS_PRESET_CUBE=0, LS_PRESET_OCTAHEDRON=1, LS_PRESET_2DSQUARE=2 };
+    public enum T_LoudSpeakerConfigurationPreset { LS_PRESET_CUBE=0, LS_PRESET_OCTAHEDRON=1, LS_PRESET_2DSQUARE=2 , LS_IRREGULAR_CONFIG=3};
     public T_LoudSpeakerConfigurationPreset  speakersConfigurationPreset = T_LoudSpeakerConfigurationPreset.LS_PRESET_CUBE;
 
     // ADVANCED:
@@ -20,6 +22,7 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     public bool debugLog = false;                   // Used by Inspector
     public float structureSide = 1.0f;  // Used by Inspector    
 
+    float[,] speakerCoefficients = new float[8,9];
     public List<Vector3> speakerPositions;  // Used by Inspector
     public List<Vector3> speakerOffsets;    // Used by Inspector
     int numberOfSpeakers;    
@@ -137,7 +140,8 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     {
         if ((preset != T_LoudSpeakerConfigurationPreset.LS_PRESET_2DSQUARE) &&
             (preset != T_LoudSpeakerConfigurationPreset.LS_PRESET_CUBE) &&
-            (preset != T_LoudSpeakerConfigurationPreset.LS_PRESET_OCTAHEDRON))
+            (preset != T_LoudSpeakerConfigurationPreset.LS_PRESET_OCTAHEDRON) &&
+            (preset != T_LoudSpeakerConfigurationPreset.LS_IRREGULAR_CONFIG))
             return false;
 
         speakersConfigurationPreset = preset;
@@ -154,6 +158,9 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
                 break;
             case T_LoudSpeakerConfigurationPreset.LS_PRESET_2DSQUARE:
                 numberOfSpeakers = 4;
+                break;
+            case T_LoudSpeakerConfigurationPreset.LS_IRREGULAR_CONFIG:
+                numberOfSpeakers = 8;
                 break;
             default:
                 return false;                
@@ -359,7 +366,74 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
                 speakerPositions[2] = new Vector3(_2DSquareSide, 0.0f, 0.0f) + speakerOffsets[2];   // Front speaker
                 speakerPositions[3] = new Vector3(-_2DSquareSide, 0.0f, 0.0f) + speakerOffsets[3];  // Back speaker
                 break;
+            case T_LoudSpeakerConfigurationPreset.LS_IRREGULAR_CONFIG:
+                LoadXML();
+                break;
         }
+    }
+
+    private void LoadXML()
+    {
+        string filePath = "./Assets/3DTuneIn/Resources/Coef.xml";
+
+        if (filePath != "")
+        {
+            XmlDocument file = new XmlDocument();
+            file.Load(filePath);
+            int index = 0;
+
+            foreach(XmlNode parentNode in file.DocumentElement.ChildNodes)
+            {
+                index++;
+                if (index > 7)
+                {
+                    return;
+                }
+                foreach (XmlNode speakerNode in parentNode.ChildNodes)
+                {
+                    
+                    //Debug.Log("Index: " + index.ToString());
+                    foreach (XmlNode node in speakerNode.ChildNodes)
+                    {
+                        if(node.Name != "gains")
+                        {
+                            string coordString = node.Value;
+                            string[] coordStringArray = CoefficientSplit(coordString, ',');
+                            string[] coordStringArrayFixed = new string[coordStringArray.Length];
+
+                            for (int k = 0; k < 3; k++)
+                            {
+                                coordStringArrayFixed.SetValue(coordStringArray[k].Substring(1), k);
+                            }
+                            speakerPositions[index].Set(float.Parse(coordStringArrayFixed[0], CultureInfo.InvariantCulture.NumberFormat),
+                                                        float.Parse(coordStringArrayFixed[1], CultureInfo.InvariantCulture.NumberFormat),
+                                                        float.Parse(coordStringArrayFixed[2], CultureInfo.InvariantCulture.NumberFormat));
+                        }
+                        else
+                        {
+                            string coeffString = node.Value;
+                            string[] coeffStringArray = CoefficientSplit(coeffString, ',');
+
+                            for (int k = 0; k < 9; k++)
+                            {
+                                speakerCoefficients[index, k] = float.Parse(coeffStringArray[k].Substring(1), CultureInfo.InvariantCulture.NumberFormat);
+                            }
+
+                            
+                        }
+                    }
+                }
+            }       
+        }
+    }
+
+    private string[] CoefficientSplit(string s, char c)
+    {
+        string[] numberStringVector;
+        numberStringVector = s.Split(',');
+        //Debug.Log("Tamaño array: " + numberStringVector.Length.ToString());
+        //for(int i = 0; i < numberStringVector.Length; i++) Debug.Log(numberStringVector[i]);
+        return numberStringVector;
     }
 
     /// <summary>
