@@ -374,57 +374,64 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
 
     private void LoadXML()
     {
-        string filePath = "./Assets/3DTuneIn/Resources/Coef.xml";
-
+        string filePath;
+        if (xmlPath == "")
+        {
+            filePath = "./Assets/3DTuneIn/Resources/Coef.xml";
+        }
+        else
+        {
+            filePath = xmlPath;
+        }
         if (filePath != "")
         {
             XmlDocument file = new XmlDocument();
             file.Load(filePath);
-            int index = 0;
+            XmlNodeList nodeList = file.GetElementsByTagName("pos");
+            Debug.Log("Número de miembros de nodeList para coordenadas: " + nodeList.Count.ToString());
+            for(int i = 0; i < nodeList.Count; i++) {
+                string coordString = nodeList[i].InnerXml;
+                Debug.Log("String de coordenadas del elemento " + i.ToString() + ": " + coordString);
+                string[] coordStringArray = CoefficientSplit(coordString, ',');
+                string[] coordStringArrayFixed = new string[coordStringArray.Length];
 
-            foreach(XmlNode parentNode in file.DocumentElement.ChildNodes)
-            {
-                index++;
-                if (index > 7)
+                for (int k = 0; k < 3; k++)
                 {
-                    return;
-                }
-                foreach (XmlNode speakerNode in parentNode.ChildNodes)
-                {
+                    coordStringArrayFixed.SetValue(coordStringArray[k].Substring(1), k);
+                    Debug.Log("Coordenada " + k.ToString() + " del altavoz " + i.ToString() +  ": " + coordStringArrayFixed[k].ToString());
                     
-                    //Debug.Log("Index: " + index.ToString());
-                    foreach (XmlNode node in speakerNode.ChildNodes)
-                    {
-                        if(node.Name != "gains")
-                        {
-                            string coordString = node.Value;
-                            string[] coordStringArray = CoefficientSplit(coordString, ',');
-                            string[] coordStringArrayFixed = new string[coordStringArray.Length];
-
-                            for (int k = 0; k < 3; k++)
-                            {
-                                coordStringArrayFixed.SetValue(coordStringArray[k].Substring(1), k);
-                            }
-                            speakerPositions[index].Set(float.Parse(coordStringArrayFixed[0], CultureInfo.InvariantCulture.NumberFormat),
-                                                        float.Parse(coordStringArrayFixed[1], CultureInfo.InvariantCulture.NumberFormat),
-                                                        float.Parse(coordStringArrayFixed[2], CultureInfo.InvariantCulture.NumberFormat));
-                        }
-                        else
-                        {
-                            string coeffString = node.Value;
-                            string[] coeffStringArray = CoefficientSplit(coeffString, ',');
-
-                            for (int k = 0; k < 9; k++)
-                            {
-                                speakerCoefficients[index, k] = float.Parse(coeffStringArray[k].Substring(1), CultureInfo.InvariantCulture.NumberFormat);
-                            }
-
-                            
-                        }
-                    }
                 }
-            }       
+
+                float x, y, z;
+
+                float.TryParse(coordStringArrayFixed[0].ToString(), out x);
+                float.TryParse(coordStringArrayFixed[1].ToString(), out y);
+                float.TryParse(coordStringArrayFixed[2].ToString(), out z);
+
+                Debug.Log(x.ToString() + y.ToString() + z.ToString());
+
+                speakerPositions[i] = new Vector3(x,y,z);
+                                                                                                           
+                Debug.Log(speakerPositions[i].x);
+                Debug.Log(speakerPositions[i].y);
+                Debug.Log(speakerPositions[i].z);
+            }
+            nodeList = file.GetElementsByTagName("gains");
+            Debug.Log("Número de miembros de nodeList para coeficientes: " + nodeList.Count.ToString());
+            for (int i = 0; i < nodeList.Count; i++)
+            {
+                string coeffString = nodeList[i].InnerXml;
+                Debug.Log("String de coeficientes del elemento " + i.ToString() +": " + coeffString);
+                string[] coeffStringArray = CoefficientSplit(coeffString, ',');
+
+                for (int k = 0; k < 9; k++)
+                {
+                    speakerCoefficients[i, k] = float.Parse(coeffStringArray[k].Substring(1), CultureInfo.InvariantCulture.NumberFormat);
+                    Debug.Log("Coeficiente " + k.ToString() + " del altavoz " + i.ToString() + ": " + speakerCoefficients[i, k].ToString());
+                }
+            }
         }
+
     }
 
     private string[] CoefficientSplit(string s, char c)
