@@ -45,6 +45,7 @@ enum TLoadResult { RESULT_LOAD_WAITING = 0, RESULT_LOAD_CONTINUE = 1, RESULT_LOA
 
 namespace LoudspeakersSpatializer3DTI
 {
+	void SaveSpeakersConfiguration(UnityAudioEffectState * state);
 #define MAX_NUMBER_OF_SPEAKERS 8
 
 	enum
@@ -91,6 +92,78 @@ namespace LoudspeakersSpatializer3DTI
 		PARAM_SPEAKER_7_W,
 		PARAM_SPEAKER_8_W,*/
 		PARAM_GET_MINDISTANCE,
+		PARAM_SPEAKER_1_C_1,
+		PARAM_SPEAKER_1_C_2,
+		PARAM_SPEAKER_1_C_3,
+		PARAM_SPEAKER_1_C_4,
+		PARAM_SPEAKER_1_C_5,
+		PARAM_SPEAKER_1_C_6,
+		PARAM_SPEAKER_1_C_7,
+		PARAM_SPEAKER_1_C_8,
+		PARAM_SPEAKER_1_C_9,
+		PARAM_SPEAKER_2_C_1,
+		PARAM_SPEAKER_2_C_2,
+		PARAM_SPEAKER_2_C_3,
+		PARAM_SPEAKER_2_C_4,
+		PARAM_SPEAKER_2_C_5,
+		PARAM_SPEAKER_2_C_6,
+		PARAM_SPEAKER_2_C_7,
+		PARAM_SPEAKER_2_C_8,
+		PARAM_SPEAKER_2_C_9,
+		PARAM_SPEAKER_3_C_1,
+		PARAM_SPEAKER_3_C_2,
+		PARAM_SPEAKER_3_C_3,
+		PARAM_SPEAKER_3_C_4,
+		PARAM_SPEAKER_3_C_5,
+		PARAM_SPEAKER_3_C_6,
+		PARAM_SPEAKER_3_C_7,
+		PARAM_SPEAKER_3_C_8,
+		PARAM_SPEAKER_3_C_9,
+		PARAM_SPEAKER_4_C_1,
+		PARAM_SPEAKER_4_C_2,
+		PARAM_SPEAKER_4_C_3,
+		PARAM_SPEAKER_4_C_4,
+		PARAM_SPEAKER_4_C_5,
+		PARAM_SPEAKER_4_C_6,
+		PARAM_SPEAKER_4_C_7,
+		PARAM_SPEAKER_4_C_8,
+		PARAM_SPEAKER_4_C_9,
+		PARAM_SPEAKER_5_C_1,
+		PARAM_SPEAKER_5_C_2,
+		PARAM_SPEAKER_5_C_3,
+		PARAM_SPEAKER_5_C_4,
+		PARAM_SPEAKER_5_C_5,
+		PARAM_SPEAKER_5_C_6,
+		PARAM_SPEAKER_5_C_7,
+		PARAM_SPEAKER_5_C_8,
+		PARAM_SPEAKER_5_C_9,
+		PARAM_SPEAKER_6_C_1,
+		PARAM_SPEAKER_6_C_2,
+		PARAM_SPEAKER_6_C_3,
+		PARAM_SPEAKER_6_C_4,
+		PARAM_SPEAKER_6_C_5,
+		PARAM_SPEAKER_6_C_6,
+		PARAM_SPEAKER_6_C_7,
+		PARAM_SPEAKER_6_C_8,
+		PARAM_SPEAKER_6_C_9,
+		PARAM_SPEAKER_7_C_1,
+		PARAM_SPEAKER_7_C_2,
+		PARAM_SPEAKER_7_C_3,
+		PARAM_SPEAKER_7_C_4,
+		PARAM_SPEAKER_7_C_5,
+		PARAM_SPEAKER_7_C_6,
+		PARAM_SPEAKER_7_C_7,
+		PARAM_SPEAKER_7_C_8,
+		PARAM_SPEAKER_7_C_9,
+		PARAM_SPEAKER_8_C_1,
+		PARAM_SPEAKER_8_C_2,
+		PARAM_SPEAKER_8_C_3,
+		PARAM_SPEAKER_8_C_4,
+		PARAM_SPEAKER_8_C_5,
+		PARAM_SPEAKER_8_C_6,
+		PARAM_SPEAKER_8_C_7,
+		PARAM_SPEAKER_8_C_8,
+		PARAM_SPEAKER_8_C_9,
 
 		P_NUM
 	};
@@ -108,6 +181,7 @@ namespace LoudspeakersSpatializer3DTI
 
 		//Speakers - store geometric position of each speaker	
 		std::vector<Common::CVector3> speakerPositions;
+		float speakerCoeff[8][9];
 		std::vector<bool> configuringSpeakers;		
 
 		bool coreReady;
@@ -215,7 +289,78 @@ namespace LoudspeakersSpatializer3DTI
 		RegisterParameter(definition, "speaker7_w", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 0.0f, PARAM_SPEAKER_7_W, "Speaker 7 gain");
 		RegisterParameter(definition, "speaker8_w", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 0.0f, PARAM_SPEAKER_8_W, "Speaker 8 gain");*/
 		RegisterParameter(definition, "getmindist", "m", 0.0f, FLT_MAX, 1.0f, 1.0f, 0.0f, PARAM_GET_MINDISTANCE, "Get minimum distance from sources to listener");
-
+		RegisterParameter(definition, "speaker1_c_1", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_1_C_1, "Speaker 1 coefficient 1");
+		RegisterParameter(definition, "speaker1_c_2", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_1_C_2, "Speaker 1 coefficient 2");
+		RegisterParameter(definition, "speaker1_c_3", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_1_C_3, "Speaker 1 coefficient 3");
+		RegisterParameter(definition, "speaker1_c_4", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_1_C_4, "Speaker 1 coefficient 4");
+		RegisterParameter(definition, "speaker1_c_5", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_1_C_5, "Speaker 1 coefficient 5");
+		RegisterParameter(definition, "speaker1_c_6", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_1_C_6, "Speaker 1 coefficient 6");
+		RegisterParameter(definition, "speaker1_c_7", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_1_C_7, "Speaker 1 coefficient 7");
+		RegisterParameter(definition, "speaker1_c_8", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_1_C_8, "Speaker 1 coefficient 8");
+		RegisterParameter(definition, "speaker1_c_9", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_1_C_9, "Speaker 1 coefficient 9");
+		RegisterParameter(definition, "speaker2_c_1", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_2_C_1, "Speaker 2 coefficient 1");
+		RegisterParameter(definition, "speaker2_c_2", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_2_C_2, "Speaker 2 coefficient 2");
+		RegisterParameter(definition, "speaker2_c_3", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_2_C_3, "Speaker 2 coefficient 3");
+		RegisterParameter(definition, "speaker2_c_4", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_2_C_4, "Speaker 2 coefficient 4");
+		RegisterParameter(definition, "speaker2_c_5", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_2_C_5, "Speaker 2 coefficient 5");
+		RegisterParameter(definition, "speaker2_c_6", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_2_C_6, "Speaker 2 coefficient 6");
+		RegisterParameter(definition, "speaker2_c_7", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_2_C_7, "Speaker 2 coefficient 7");
+		RegisterParameter(definition, "speaker2_c_8", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_2_C_8, "Speaker 2 coefficient 8");
+		RegisterParameter(definition, "speaker2_c_9", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_2_C_9, "Speaker 2 coefficient 9");
+		RegisterParameter(definition, "speaker3_c_1", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_3_C_1, "Speaker 3 coefficient 1");
+		RegisterParameter(definition, "speaker3_c_2", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_3_C_2, "Speaker 3 coefficient 2");
+		RegisterParameter(definition, "speaker3_c_3", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_3_C_3, "Speaker 3 coefficient 3");
+		RegisterParameter(definition, "speaker3_c_4", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_3_C_4, "Speaker 3 coefficient 4");
+		RegisterParameter(definition, "speaker3_c_5", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_3_C_5, "Speaker 3 coefficient 5");
+		RegisterParameter(definition, "speaker3_c_6", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_3_C_6, "Speaker 3 coefficient 6");
+		RegisterParameter(definition, "speaker3_c_7", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_3_C_7, "Speaker 3 coefficient 7");
+		RegisterParameter(definition, "speaker3_c_8", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_3_C_8, "Speaker 3 coefficient 8");
+		RegisterParameter(definition, "speaker3_c_9", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_3_C_9, "Speaker 3 coefficient 9");
+		RegisterParameter(definition, "speaker4_c_1", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_4_C_1, "Speaker 4 coefficient 1");
+		RegisterParameter(definition, "speaker4_c_2", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_4_C_2, "Speaker 4 coefficient 2");
+		RegisterParameter(definition, "speaker4_c_3", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_4_C_3, "Speaker 4 coefficient 3");
+		RegisterParameter(definition, "speaker4_c_4", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_4_C_4, "Speaker 4 coefficient 4");
+		RegisterParameter(definition, "speaker4_c_5", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_4_C_5, "Speaker 4 coefficient 5");
+		RegisterParameter(definition, "speaker4_c_6", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_4_C_6, "Speaker 4 coefficient 6");
+		RegisterParameter(definition, "speaker4_c_7", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_4_C_7, "Speaker 4 coefficient 7");
+		RegisterParameter(definition, "speaker4_c_8", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_4_C_8, "Speaker 4 coefficient 8");
+		RegisterParameter(definition, "speaker4_c_9", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_4_C_9, "Speaker 4 coefficient 9");
+		RegisterParameter(definition, "speaker5_c_1", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_5_C_1, "Speaker 5 coefficient 1");
+		RegisterParameter(definition, "speaker5_c_2", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_5_C_2, "Speaker 5 coefficient 2");
+		RegisterParameter(definition, "speaker5_c_3", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_5_C_3, "Speaker 5 coefficient 3");
+		RegisterParameter(definition, "speaker5_c_4", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_5_C_4, "Speaker 5 coefficient 4");
+		RegisterParameter(definition, "speaker5_c_5", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_5_C_5, "Speaker 5 coefficient 5");
+		RegisterParameter(definition, "speaker5_c_6", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_5_C_6, "Speaker 5 coefficient 6");
+		RegisterParameter(definition, "speaker5_c_7", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_5_C_7, "Speaker 5 coefficient 7");
+		RegisterParameter(definition, "speaker5_c_8", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_5_C_8, "Speaker 5 coefficient 8");
+		RegisterParameter(definition, "speaker5_c_9", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_5_C_9, "Speaker 5 coefficient 9");
+		RegisterParameter(definition, "speaker6_c_1", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_6_C_1, "Speaker 6 coefficient 1");
+		RegisterParameter(definition, "speaker6_c_2", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_6_C_2, "Speaker 6 coefficient 2");
+		RegisterParameter(definition, "speaker6_c_3", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_6_C_3, "Speaker 6 coefficient 3");
+		RegisterParameter(definition, "speaker6_c_4", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_6_C_4, "Speaker 6 coefficient 4");
+		RegisterParameter(definition, "speaker6_c_5", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_6_C_5, "Speaker 6 coefficient 5");
+		RegisterParameter(definition, "speaker6_c_6", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_6_C_6, "Speaker 6 coefficient 6");
+		RegisterParameter(definition, "speaker6_c_7", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_6_C_7, "Speaker 6 coefficient 7");
+		RegisterParameter(definition, "speaker6_c_8", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_6_C_8, "Speaker 6 coefficient 8");
+		RegisterParameter(definition, "speaker6_c_9", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_6_C_9, "Speaker 6 coefficient 9");
+		RegisterParameter(definition, "speaker7_c_1", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_7_C_1, "Speaker 7 coefficient 1");
+		RegisterParameter(definition, "speaker7_c_2", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_7_C_2, "Speaker 7 coefficient 2");
+		RegisterParameter(definition, "speaker7_c_3", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_7_C_3, "Speaker 7 coefficient 3");
+		RegisterParameter(definition, "speaker7_c_4", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_7_C_4, "Speaker 7 coefficient 4");
+		RegisterParameter(definition, "speaker7_c_5", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_7_C_5, "Speaker 7 coefficient 5");
+		RegisterParameter(definition, "speaker7_c_6", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_7_C_6, "Speaker 7 coefficient 6");
+		RegisterParameter(definition, "speaker7_c_7", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_7_C_7, "Speaker 7 coefficient 7");
+		RegisterParameter(definition, "speaker7_c_8", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_7_C_8, "Speaker 7 coefficient 8");
+		RegisterParameter(definition, "speaker7_c_9", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_7_C_9, "Speaker 7 coefficient 9");
+		RegisterParameter(definition, "speaker8_c_1", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_8_C_1, "Speaker 8 coefficient 1");
+		RegisterParameter(definition, "speaker8_c_2", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_8_C_2, "Speaker 8 coefficient 2");
+		RegisterParameter(definition, "speaker8_c_3", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_8_C_3, "Speaker 8 coefficient 3");
+		RegisterParameter(definition, "speaker8_c_4", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_8_C_4, "Speaker 8 coefficient 4");
+		RegisterParameter(definition, "speaker8_c_5", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_8_C_5, "Speaker 8 coefficient 5");
+		RegisterParameter(definition, "speaker8_c_6", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_8_C_6, "Speaker 8 coefficient 6");
+		RegisterParameter(definition, "speaker8_c_7", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_8_C_7, "Speaker 8 coefficient 7");
+		RegisterParameter(definition, "speaker8_c_8", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_8_C_8, "Speaker 8 coefficient 8");
+		RegisterParameter(definition, "speaker8_c_9", "", -10000.0f, FLT_MAX, 0.0f, 1.0f, 0.0f, PARAM_SPEAKER_8_C_9, "Speaker 8 coefficient 9");
 		definition.flags |= UnityAudioEffectDefinitionFlags_IsSpatializer;
 		return numparams;
 	}
@@ -307,7 +452,7 @@ namespace LoudspeakersSpatializer3DTI
 		EffectData* data = state->GetEffectData<EffectData>();
 
 		// Audio state:
-		Common::AudioState_Struct audioState = data->core.GetAudioState();
+		Common::TAudioStateStruct audioState = data->core.GetAudioState();
 		WriteLog(state, "CREATE: Sample rate set to ", audioState.sampleRate);
 		WriteLog(state, "CREATE: Buffer size set to ", audioState.bufferSize);
 
@@ -339,7 +484,14 @@ namespace LoudspeakersSpatializer3DTI
 		{
 			if (data->configuringSpeakers[i])
 				data->loudSpeakersConf.AddLoudspeaker(data->speakerPositions[i]);
+			
+			for (int j = 0; j < 9; j++) {
+				data->core.SetCustomCoefficient(i, j, data->speakerCoeff[i][j]);
+				WriteLog(state, to_string(data->speakerCoeff[i][j]), "");
+			}
 		}
+
+
 
 		data->loudSpeakersConf.EndSetup();
 
@@ -377,7 +529,7 @@ namespace LoudspeakersSpatializer3DTI
 		WriteLog(state, "Creating audio plugin...", "");
 
 		// Set default audio state			
-		Common::AudioState_Struct audioState;
+		Common::TAudioStateStruct audioState;
 		audioState.sampleRate = (int)state->samplerate;
 		audioState.bufferSize = (int)state->dspbuffersize;		
 		effectdata->core.SetAudioState(audioState);
@@ -691,6 +843,439 @@ namespace LoudspeakersSpatializer3DTI
 
 		case PARAM_GET_MINDISTANCE:			
 			WriteLog(state, "SET PARAMETER: WARNING! Attempt to set PARAM_GET_MINDISTANCE, which is a read-only parameter: ", value);
+			break;
+
+		case PARAM_SPEAKER_1_C_1:
+			data->speakerCoeff[0][0] = value;
+			data->configuringSpeakers[0] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 1 coefficient 1 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_1_C_2:
+			data->speakerCoeff[0][1] = value;
+			data->configuringSpeakers[0] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 1 coefficient 2 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_1_C_3:
+			data->speakerCoeff[0][2] = value;
+			data->configuringSpeakers[0] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 1 coefficient 3 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_1_C_4:
+			data->speakerCoeff[0][3] = value;
+			data->configuringSpeakers[0] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 1 coefficient 4 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_1_C_5:
+			data->speakerCoeff[0][4] = value;
+			data->configuringSpeakers[0] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 1 coefficient 5 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_1_C_6:
+			data->speakerCoeff[0][5] = value;
+			data->configuringSpeakers[0] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 1 coefficient 6 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_1_C_7:
+			data->speakerCoeff[0][6] = value;
+			data->configuringSpeakers[0] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 1 coefficient 7 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_1_C_8:
+			data->speakerCoeff[0][7] = value;
+			data->configuringSpeakers[0] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 1 coefficient 8 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_1_C_9:
+			data->speakerCoeff[0][8] = value;
+			data->configuringSpeakers[0] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 1 coefficient 9 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_2_C_1:
+			data->speakerCoeff[1][0] = value;
+			data->configuringSpeakers[1] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 2 coefficient 1 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_2_C_2:
+			data->speakerCoeff[1][1] = value;
+			data->configuringSpeakers[1] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 2 coefficient 2 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_2_C_3:
+			data->speakerCoeff[1][2] = value;
+			data->configuringSpeakers[1] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 2 coefficient 3 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_2_C_4:
+			data->speakerCoeff[1][3] = value;
+			data->configuringSpeakers[1] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 2 coefficient 4 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_2_C_5:
+			data->speakerCoeff[1][4] = value;
+			data->configuringSpeakers[1] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 2 coefficient 5 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_2_C_6:
+			data->speakerCoeff[1][5] = value;
+			data->configuringSpeakers[1] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 2 coefficient 6 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_2_C_7:
+			data->speakerCoeff[1][6] = value;
+			data->configuringSpeakers[1] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 2 coefficient 7 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_2_C_8:
+			data->speakerCoeff[1][7] = value;
+			data->configuringSpeakers[1] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 2 coefficient 8 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_2_C_9:
+			data->speakerCoeff[1][8] = value;
+			data->configuringSpeakers[1] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 2 coefficient 9 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_3_C_1:
+			data->speakerCoeff[2][0] = value;
+			data->configuringSpeakers[2] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 3 coefficient 1 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_3_C_2:
+			data->speakerCoeff[2][1] = value;
+			data->configuringSpeakers[2] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 3 coefficient 2 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_3_C_3:
+			data->speakerCoeff[2][2] = value;
+			data->configuringSpeakers[2] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 3 coefficient 3 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_3_C_4:
+			data->speakerCoeff[2][3] = value;
+			data->configuringSpeakers[2] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 3 coefficient 4 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_3_C_5:
+			data->speakerCoeff[2][4] = value;
+			data->configuringSpeakers[2] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 3 coefficient 5 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_3_C_6:
+			data->speakerCoeff[2][5] = value;
+			data->configuringSpeakers[2] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 3 coefficient 6 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_3_C_7:
+			data->speakerCoeff[2][6] = value;
+			data->configuringSpeakers[2] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 3 coefficient 7 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_3_C_8:
+			data->speakerCoeff[2][7] = value;
+			data->configuringSpeakers[2] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 3 coefficient 8 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_3_C_9:
+			data->speakerCoeff[2][8] = value;
+			data->configuringSpeakers[2] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 3 coefficient 9 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_4_C_1:
+			data->speakerCoeff[3][0] = value;
+			data->configuringSpeakers[3] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 4 coefficient 1 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_4_C_2:
+			data->speakerCoeff[3][1] = value;
+			data->configuringSpeakers[3] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 4 coefficient 2 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_4_C_3:
+			data->speakerCoeff[3][2] = value;
+			data->configuringSpeakers[3] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 4 coefficient 3 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_4_C_4:
+			data->speakerCoeff[3][3] = value;
+			data->configuringSpeakers[3] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 4 coefficient 4 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_4_C_5:
+			data->speakerCoeff[3][4] = value;
+			data->configuringSpeakers[3] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 4 coefficient 5 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_4_C_6:
+			data->speakerCoeff[3][5] = value;
+			data->configuringSpeakers[3] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 4 coefficient 6 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_4_C_7:
+			data->speakerCoeff[3][6] = value;
+			data->configuringSpeakers[3] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 4 coefficient 7 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_4_C_8:
+			data->speakerCoeff[3][7] = value;
+			data->configuringSpeakers[3] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 4 coefficient 8 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_4_C_9:
+			data->speakerCoeff[3][8] = value;
+			data->configuringSpeakers[3] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 4 coefficient 9 set to ",value);
+			break;
+
+
+		case PARAM_SPEAKER_5_C_1:
+			data->speakerCoeff[4][0] = value;
+			data->configuringSpeakers[4] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 5 coefficient 1 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_5_C_2:
+			data->speakerCoeff[4][1] = value;
+			data->configuringSpeakers[4] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 5 coefficient 2 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_5_C_3:
+			data->speakerCoeff[4][2] = value;
+			data->configuringSpeakers[4] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 5 coefficient 3 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_5_C_4:
+			data->speakerCoeff[4][3] = value;
+			data->configuringSpeakers[4] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 5 coefficient 4 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_5_C_5:
+			data->speakerCoeff[4][4] = value;
+			data->configuringSpeakers[4] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 5 coefficient 5 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_5_C_6:
+			data->speakerCoeff[4][5] = value;
+			data->configuringSpeakers[4] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 5 coefficient 6 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_5_C_7:
+			data->speakerCoeff[4][6] = value;
+			data->configuringSpeakers[4] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 5 coefficient 7 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_5_C_8:
+			data->speakerCoeff[4][7] = value;
+			data->configuringSpeakers[4] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 5 coefficient 8 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_5_C_9:
+			data->speakerCoeff[4][8] = value;
+			data->configuringSpeakers[4] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 5 coefficient 9 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_6_C_1:
+			data->speakerCoeff[5][0] = value;
+			data->configuringSpeakers[5] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 6 coefficient 1 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_6_C_2:
+			data->speakerCoeff[5][1] = value;
+			data->configuringSpeakers[5] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 6 coefficient 2 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_6_C_3:
+			data->speakerCoeff[5][2] = value;
+			data->configuringSpeakers[5] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 6 coefficient 3 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_6_C_4:
+			data->speakerCoeff[5][3] = value;
+			data->configuringSpeakers[5] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 6 coefficient 4 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_6_C_5:
+			data->speakerCoeff[5][4] = value;
+			data->configuringSpeakers[5] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 6 coefficient 5 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_6_C_6:
+			data->speakerCoeff[5][5] = value;
+			data->configuringSpeakers[5] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 6 coefficient 6 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_6_C_7:
+			data->speakerCoeff[5][6] = value;
+			data->configuringSpeakers[5] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 6 coefficient 7 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_6_C_8:
+			data->speakerCoeff[5][7] = value;
+			data->configuringSpeakers[5] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 6 coefficient 8 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_6_C_9:
+			data->speakerCoeff[5][8] = value;
+			data->configuringSpeakers[5] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 6 coefficient 9 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_7_C_1:
+			data->speakerCoeff[6][0] = value;
+			data->configuringSpeakers[6] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 7 coefficient 1 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_7_C_2:
+			data->speakerCoeff[6][1] = value;
+			data->configuringSpeakers[6] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 7 coefficient 2 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_7_C_3:
+			data->speakerCoeff[6][2] = value;
+			data->configuringSpeakers[6] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 7 coefficient 3 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_7_C_4:
+			data->speakerCoeff[6][3] = value;
+			data->configuringSpeakers[6] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 7 coefficient 4 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_7_C_5:
+			data->speakerCoeff[6][4] = value;
+			data->configuringSpeakers[6] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 7 coefficient 5 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_7_C_6:
+			data->speakerCoeff[6][5] = value;
+			data->configuringSpeakers[6] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 7 coefficient 6 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_7_C_7:
+			data->speakerCoeff[6][6] = value;
+			data->configuringSpeakers[6] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 7 coefficient 7 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_7_C_8:
+			data->speakerCoeff[6][7] = value;
+			data->configuringSpeakers[6] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 7 coefficient 8 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_7_C_9:
+			data->speakerCoeff[6][8] = value;
+			data->configuringSpeakers[6] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 7 coefficient 9 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_8_C_1:
+			data->speakerCoeff[7][0] = value;
+			data->configuringSpeakers[7] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 8 coefficient 1 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_8_C_2:
+			data->speakerCoeff[7][1] = value;
+			data->configuringSpeakers[7] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 8 coefficient 2 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_8_C_3:
+			data->speakerCoeff[7][2] = value;
+			data->configuringSpeakers[7] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 8 coefficient 3 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_8_C_4:
+			data->speakerCoeff[7][3] = value;
+			data->configuringSpeakers[7] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 8 coefficient 4 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_8_C_5:
+			data->speakerCoeff[7][4] = value;
+			data->configuringSpeakers[7] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 8 coefficient 5 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_8_C_6:
+			data->speakerCoeff[7][5] = value;
+			data->configuringSpeakers[7] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 8 coefficient 6 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_8_C_7:
+			data->speakerCoeff[7][6] = value;
+			data->configuringSpeakers[7] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 8 coefficient 7 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_8_C_8:
+			data->speakerCoeff[7][7] = value;
+			data->configuringSpeakers[7] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 8 coefficient 8 set to ",value);
+			break;
+
+		case PARAM_SPEAKER_8_C_9:
+			data->speakerCoeff[7][8] = value;
+			data->configuringSpeakers[7] = true;
+			WriteLog(state,"SET PARAMETER: Speaker 8 coefficient 9 set to ",value);
 			break;
 
 		default:
