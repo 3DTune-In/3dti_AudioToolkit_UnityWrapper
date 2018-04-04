@@ -34,10 +34,11 @@ public class AudioPlugin3DTILoudspeakerSpatializerGUI : Editor
     float minDB = -30.0f;
     float maxDB = 0.0f;
     float maxSoundSpeed = 1000.0f;
+    public string xmlPath;
 
     //////////////////////////////////////////////////////////////////////////////
 
-    
+
     /// <summary> This is where we create the layout for the inspector </summary>
     public override void OnInspectorGUI()
     {        
@@ -108,44 +109,50 @@ public class AudioPlugin3DTILoudspeakerSpatializerGUI : Editor
             }
             Common3DTIGUI.CreateReadonlyFloatText("Number of speakers", "", "", "Number of speakers of selected speakers configuration preset", toolkitAPI.GetNumberOfSpeakers());     // Show number of speakers 
             Common3DTIGUI.SingleSpace();
-
-            // Structure side         
-            Common3DTIGUI.AddLabelToParameterGroup("Structure side");   
-            Common3DTIGUI.CreateFloatSlider(ref toolkitAPI.structureSide, "Structure side", "F2", "m", "Set one side of the speakers configuration structure, in meters", minStructSide, maxStructSide, SliderStructureSide);
-            //Common3DTIGUI.CreateReadonlyFloatText("Minimum distance to listener", "F2", "m", "Minimum distance from any source to listener, in meters", toolkit.GetMinimumDistanceToListener());
-
-            Common3DTIGUI.BeginSubsection("Speakers Fine Adjustment (Audio Coordinate System x=Front, y=Left, z=Up)");
+            if(toolkitAPI.speakersConfigurationPreset == API_3DTI_LoudSpeakersSpatializer.T_LoudSpeakerConfigurationPreset.LS_IRREGULAR_CONFIG)
             {
-                Common3DTIGUI.SingleSpace();
-                GUILayout.BeginHorizontal();
-                {
-                    GUILayout.BeginVertical();
-                    {
-                        for (int i = 0; i < toolkitAPI.GetNumberOfSpeakers(); i++)                        
-                            ShowSpeakerPosition("Spk" + i.ToString(), toolkitAPI.GetSpeakerPosition(i));                        
-                    }
-                    GUILayout.EndVertical();
+                Common3DTIGUI.BeginSubsection("Irregular configuration XML file path:");
+                Common3DTIGUI.CreateLoadDragDropBox(ref toolkitAPI.xmlPath);
+                Common3DTIGUI.EndSubsection();
+            } else { 
+                // Structure side         
+                Common3DTIGUI.AddLabelToParameterGroup("Structure side");   
+                Common3DTIGUI.CreateFloatSlider(ref toolkitAPI.structureSide, "Structure side", "F2", "m", "Set one side of the speakers configuration structure, in meters", minStructSide, maxStructSide, SliderStructureSide);
+                //Common3DTIGUI.CreateReadonlyFloatText("Minimum distance to listener", "F2", "m", "Minimum distance from any source to listener, in meters", toolkit.GetMinimumDistanceToListener());
 
-                    GUILayout.BeginVertical();
+                Common3DTIGUI.BeginSubsection("Speakers Fine Adjustment (Audio Coordinate System x=Front, y=Left, z=Up)");
+                {
+                    Common3DTIGUI.SingleSpace();
+                    GUILayout.BeginHorizontal();
                     {
-                        for (int i = 0; i < toolkitAPI.GetNumberOfSpeakers(); i++)
-                            GUILayout.Label("Offset (cm):");
-                    }
-                    GUILayout.EndVertical();                    
-                    GUILayout.BeginVertical();
-                    {
-                        for (int i = 0; i < toolkitAPI.GetNumberOfSpeakers(); i++)
+                        GUILayout.BeginVertical();
                         {
-                            Vector3 speakerOffset = toolkitAPI.speakerOffsets[i];
-                            if (ShowSpeakerOffsetControl(ref speakerOffset, toolkitAPI.speakerPositions[i]))
-                                toolkitAPI.SetSpeakerOffset(i, speakerOffset);
+                            for (int i = 0; i < toolkitAPI.GetNumberOfSpeakers(); i++)                        
+                                ShowSpeakerPosition("Spk" + i.ToString(), toolkitAPI.GetSpeakerPosition(i));                        
                         }
+                        GUILayout.EndVertical();
+
+                        GUILayout.BeginVertical();
+                        {
+                            for (int i = 0; i < toolkitAPI.GetNumberOfSpeakers(); i++)
+                                GUILayout.Label("Offset (cm):");
+                        }
+                        GUILayout.EndVertical();                    
+                        GUILayout.BeginVertical();
+                        {
+                            for (int i = 0; i < toolkitAPI.GetNumberOfSpeakers(); i++)
+                            {
+                                Vector3 speakerOffset = toolkitAPI.speakerOffsets[i];
+                                if (ShowSpeakerOffsetControl(ref speakerOffset, toolkitAPI.speakerPositions[i]))
+                                    toolkitAPI.SetSpeakerOffset(i, speakerOffset);
+                            }
+                        }
+                        GUILayout.EndVertical();
                     }
-                    GUILayout.EndVertical();
+                    GUILayout.EndHorizontal();
                 }
-                GUILayout.EndHorizontal();
+                Common3DTIGUI.EndSubsection();
             }
-            Common3DTIGUI.EndSubsection();
         }
         Common3DTIGUI.EndSection();
     }
