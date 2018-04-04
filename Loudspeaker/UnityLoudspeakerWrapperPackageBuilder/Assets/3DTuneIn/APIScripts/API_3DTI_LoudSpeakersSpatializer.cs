@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Xml;
 using UnityEngine;
 
 public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
@@ -8,7 +10,7 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     int lastSourceID = 0;                       // Internal use for debug log
 
     // CONFIGURATION PRESETS:
-    public enum T_LoudSpeakerConfigurationPreset { LS_PRESET_CUBE=0, LS_PRESET_OCTAHEDRON=1, LS_PRESET_2DSQUARE=2 };
+    public enum T_LoudSpeakerConfigurationPreset { LS_PRESET_CUBE=0, LS_PRESET_OCTAHEDRON=1, LS_PRESET_2DSQUARE=2 , LS_IRREGULAR_CONFIG=3};
     public T_LoudSpeakerConfigurationPreset  speakersConfigurationPreset = T_LoudSpeakerConfigurationPreset.LS_PRESET_CUBE;
 
     // ADVANCED:
@@ -18,8 +20,11 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     public float magAnechoicAttenuation = -6.0f;    // Used by Inspector    
     public float magSoundSpeed = 343.0f;            // Used by Inspector
     public bool debugLog = false;                   // Used by Inspector
-    public float structureSide = 1.0f;  // Used by Inspector    
+    public float structureSide = 1.0f;  // Used by Inspector   
+    private bool regularMode = true;
+    public string xmlPath = "";
 
+    float[,] speakerCoefficients = new float[8,9];
     public List<Vector3> speakerPositions;  // Used by Inspector
     public List<Vector3> speakerOffsets;    // Used by Inspector
     int numberOfSpeakers;    
@@ -58,6 +63,79 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     int SET_SPEAKER_7_Z = 30;
     int SET_SPEAKER_8_Z = 31;
     int GET_MINIMUM_DISTANCE = 32;
+    int SET_SPEAKER_1_C_1 = 33;
+    int SET_SPEAKER_1_C_2 = 34;
+    int SET_SPEAKER_1_C_3 = 35;
+    int SET_SPEAKER_1_C_4 = 36;
+    int SET_SPEAKER_1_C_5 = 37;
+    int SET_SPEAKER_1_C_6 = 38;
+    int SET_SPEAKER_1_C_7 = 39;
+    int SET_SPEAKER_1_C_8 = 40;
+    int SET_SPEAKER_1_C_9 = 41;
+    int SET_SPEAKER_2_C_1 = 42;
+    int SET_SPEAKER_2_C_2 = 43;
+    int SET_SPEAKER_2_C_3 = 44;
+    int SET_SPEAKER_2_C_4 = 45;
+    int SET_SPEAKER_2_C_5 = 46;
+    int SET_SPEAKER_2_C_6 = 47;
+    int SET_SPEAKER_2_C_7 = 48;
+    int SET_SPEAKER_2_C_8 = 49;
+    int SET_SPEAKER_2_C_9 = 50;
+    int SET_SPEAKER_3_C_1 = 51;
+    int SET_SPEAKER_3_C_2 = 52;
+    int SET_SPEAKER_3_C_3 = 53;
+    int SET_SPEAKER_3_C_4 = 54;
+    int SET_SPEAKER_3_C_5 = 55;
+    int SET_SPEAKER_3_C_6 = 56;
+    int SET_SPEAKER_3_C_7 = 57;
+    int SET_SPEAKER_3_C_8 = 58;
+    int SET_SPEAKER_3_C_9 = 59;
+    int SET_SPEAKER_4_C_1 = 60;
+    int SET_SPEAKER_4_C_2 = 61;
+    int SET_SPEAKER_4_C_3 = 62;
+    int SET_SPEAKER_4_C_4 = 63;
+    int SET_SPEAKER_4_C_5 = 64;
+    int SET_SPEAKER_4_C_6 = 65;
+    int SET_SPEAKER_4_C_7 = 66;
+    int SET_SPEAKER_4_C_8 = 67;
+    int SET_SPEAKER_4_C_9 = 68;
+    int SET_SPEAKER_5_C_1 = 69;
+    int SET_SPEAKER_5_C_2 = 70;
+    int SET_SPEAKER_5_C_3 = 71;
+    int SET_SPEAKER_5_C_4 = 72;
+    int SET_SPEAKER_5_C_5 = 73;
+    int SET_SPEAKER_5_C_6 = 74;
+    int SET_SPEAKER_5_C_7 = 75;
+    int SET_SPEAKER_5_C_8 = 76;
+    int SET_SPEAKER_5_C_9 = 77;
+    int SET_SPEAKER_6_C_1 = 78;
+    int SET_SPEAKER_6_C_2 = 79;
+    int SET_SPEAKER_6_C_3 = 80;
+    int SET_SPEAKER_6_C_4 = 81;
+    int SET_SPEAKER_6_C_5 = 82;
+    int SET_SPEAKER_6_C_6 = 83;
+    int SET_SPEAKER_6_C_7 = 84;
+    int SET_SPEAKER_6_C_8 = 85;
+    int SET_SPEAKER_6_C_9 = 86;
+    int SET_SPEAKER_7_C_1 = 87;
+    int SET_SPEAKER_7_C_2 = 88;
+    int SET_SPEAKER_7_C_3 = 89;
+    int SET_SPEAKER_7_C_4 = 90;
+    int SET_SPEAKER_7_C_5 = 91;
+    int SET_SPEAKER_7_C_6 = 92;
+    int SET_SPEAKER_7_C_7 = 93;
+    int SET_SPEAKER_7_C_8 = 94;
+    int SET_SPEAKER_7_C_9 = 95;
+    int SET_SPEAKER_8_C_1 = 96;
+    int SET_SPEAKER_8_C_2 = 97;
+    int SET_SPEAKER_8_C_3 = 98;
+    int SET_SPEAKER_8_C_4 = 99;
+    int SET_SPEAKER_8_C_5 = 100;
+    int SET_SPEAKER_8_C_6 = 101;
+    int SET_SPEAKER_8_C_7 = 102;
+    int SET_SPEAKER_8_C_8 = 103;
+    int SET_SPEAKER_8_C_9 = 104;
+
 
     // Hack for modifying one single AudioSource (TO DO: fix this)
     bool selectSource = false;
@@ -137,7 +215,8 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
     {
         if ((preset != T_LoudSpeakerConfigurationPreset.LS_PRESET_2DSQUARE) &&
             (preset != T_LoudSpeakerConfigurationPreset.LS_PRESET_CUBE) &&
-            (preset != T_LoudSpeakerConfigurationPreset.LS_PRESET_OCTAHEDRON))
+            (preset != T_LoudSpeakerConfigurationPreset.LS_PRESET_OCTAHEDRON) &&
+            (preset != T_LoudSpeakerConfigurationPreset.LS_IRREGULAR_CONFIG))
             return false;
 
         speakersConfigurationPreset = preset;
@@ -148,12 +227,19 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         {
             case T_LoudSpeakerConfigurationPreset.LS_PRESET_CUBE:
                 numberOfSpeakers = 8;
+                regularMode = true;
                 break;            
             case T_LoudSpeakerConfigurationPreset.LS_PRESET_OCTAHEDRON:
                 numberOfSpeakers = 6;
+                regularMode = true;
                 break;
             case T_LoudSpeakerConfigurationPreset.LS_PRESET_2DSQUARE:
                 numberOfSpeakers = 4;
+                regularMode = true;
+                break;
+            case T_LoudSpeakerConfigurationPreset.LS_IRREGULAR_CONFIG:
+                numberOfSpeakers = 8;
+                regularMode = false;
                 break;
             default:
                 return false;                
@@ -260,7 +346,19 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         {
             if (!SendCommandForAllSources(SET_SPEAKER_1_X, GetSpeakerPosition(0).x)) return false;
             if (!SendCommandForAllSources(SET_SPEAKER_1_Y, GetSpeakerPosition(0).y)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_1_Z, GetSpeakerPosition(0).z)) return false;            
+            if (!SendCommandForAllSources(SET_SPEAKER_1_Z, GetSpeakerPosition(0).z)) return false;
+            if (!regularMode)
+            {
+                if (!SendCommandForAllSources(SET_SPEAKER_1_C_1, GetSpeakerCoefficient(0,0))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_1_C_2, GetSpeakerCoefficient(0,1))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_1_C_3, GetSpeakerCoefficient(0,2))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_1_C_4, GetSpeakerCoefficient(0,3))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_1_C_5, GetSpeakerCoefficient(0,4))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_1_C_6, GetSpeakerCoefficient(0,5))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_1_C_7, GetSpeakerCoefficient(0,6))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_1_C_8, GetSpeakerCoefficient(0,7))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_1_C_9, GetSpeakerCoefficient(0,8))) return false;
+            }            
         }
 
         // Speaker 2
@@ -268,7 +366,19 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         {
             if (!SendCommandForAllSources(SET_SPEAKER_2_X, GetSpeakerPosition(1).x)) return false;
             if (!SendCommandForAllSources(SET_SPEAKER_2_Y, GetSpeakerPosition(1).y)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_2_Z, GetSpeakerPosition(1).z)) return false;            
+            if (!SendCommandForAllSources(SET_SPEAKER_2_Z, GetSpeakerPosition(1).z)) return false;
+            if (!regularMode)
+            {
+                if (!SendCommandForAllSources(SET_SPEAKER_2_C_1, GetSpeakerCoefficient(1, 0))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_2_C_2, GetSpeakerCoefficient(1, 1))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_2_C_3, GetSpeakerCoefficient(1, 2))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_2_C_4, GetSpeakerCoefficient(1, 3))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_2_C_5, GetSpeakerCoefficient(1, 4))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_2_C_6, GetSpeakerCoefficient(1, 5))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_2_C_7, GetSpeakerCoefficient(1, 6))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_2_C_8, GetSpeakerCoefficient(1, 7))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_2_C_9, GetSpeakerCoefficient(1, 8))) return false;
+            }
         }
 
         // Speaker 3
@@ -276,7 +386,19 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         {
             if (!SendCommandForAllSources(SET_SPEAKER_3_X, GetSpeakerPosition(2).x)) return false;
             if (!SendCommandForAllSources(SET_SPEAKER_3_Y, GetSpeakerPosition(2).y)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_3_Z, GetSpeakerPosition(2).z)) return false;            
+            if (!SendCommandForAllSources(SET_SPEAKER_3_Z, GetSpeakerPosition(2).z)) return false;
+            if (!regularMode)
+            {
+                if (!SendCommandForAllSources(SET_SPEAKER_3_C_1, GetSpeakerCoefficient(2, 0))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_3_C_2, GetSpeakerCoefficient(2, 1))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_3_C_3, GetSpeakerCoefficient(2, 2))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_3_C_4, GetSpeakerCoefficient(2, 3))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_3_C_5, GetSpeakerCoefficient(2, 4))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_3_C_6, GetSpeakerCoefficient(2, 5))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_3_C_7, GetSpeakerCoefficient(2, 6))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_3_C_8, GetSpeakerCoefficient(2, 7))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_3_C_9, GetSpeakerCoefficient(2, 8))) return false;
+            }
         }
 
         // Speaker 4
@@ -284,7 +406,19 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         {
             if (!SendCommandForAllSources(SET_SPEAKER_4_X, GetSpeakerPosition(3).x)) return false;
             if (!SendCommandForAllSources(SET_SPEAKER_4_Y, GetSpeakerPosition(3).y)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_4_Z, GetSpeakerPosition(3).z)) return false;            
+            if (!SendCommandForAllSources(SET_SPEAKER_4_Z, GetSpeakerPosition(3).z)) return false;
+            if (!regularMode)
+            {
+                if (!SendCommandForAllSources(SET_SPEAKER_4_C_1, GetSpeakerCoefficient(3, 0))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_4_C_2, GetSpeakerCoefficient(3, 1))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_4_C_3, GetSpeakerCoefficient(3, 2))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_4_C_4, GetSpeakerCoefficient(3, 3))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_4_C_5, GetSpeakerCoefficient(3, 4))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_4_C_6, GetSpeakerCoefficient(3, 5))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_4_C_7, GetSpeakerCoefficient(3, 6))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_4_C_8, GetSpeakerCoefficient(3, 7))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_4_C_9, GetSpeakerCoefficient(3, 8))) return false;
+            }
         }
 
         // Speaker 5
@@ -292,7 +426,19 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         {
             if (!SendCommandForAllSources(SET_SPEAKER_5_X, GetSpeakerPosition(4).x)) return false;
             if (!SendCommandForAllSources(SET_SPEAKER_5_Y, GetSpeakerPosition(4).y)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_5_Z, GetSpeakerPosition(4).z)) return false;            
+            if (!SendCommandForAllSources(SET_SPEAKER_5_Z, GetSpeakerPosition(4).z)) return false;
+            if (!regularMode)
+            {
+                if (!SendCommandForAllSources(SET_SPEAKER_5_C_1, GetSpeakerCoefficient(4, 0))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_5_C_2, GetSpeakerCoefficient(4, 1))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_5_C_3, GetSpeakerCoefficient(4, 2))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_5_C_4, GetSpeakerCoefficient(4, 3))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_5_C_5, GetSpeakerCoefficient(4, 4))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_5_C_6, GetSpeakerCoefficient(4, 5))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_5_C_7, GetSpeakerCoefficient(4, 6))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_5_C_8, GetSpeakerCoefficient(4, 7))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_5_C_9, GetSpeakerCoefficient(4, 8))) return false;
+            }
         }
 
         // Speaker 6
@@ -300,7 +446,19 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         {
             if (!SendCommandForAllSources(SET_SPEAKER_6_X, GetSpeakerPosition(5).x)) return false;
             if (!SendCommandForAllSources(SET_SPEAKER_6_Y, GetSpeakerPosition(5).y)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_6_Z, GetSpeakerPosition(5).z)) return false;            
+            if (!SendCommandForAllSources(SET_SPEAKER_6_Z, GetSpeakerPosition(5).z)) return false;
+            if (!regularMode)
+            {
+                if (!SendCommandForAllSources(SET_SPEAKER_6_C_1, GetSpeakerCoefficient(5, 0))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_6_C_2, GetSpeakerCoefficient(5, 1))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_6_C_3, GetSpeakerCoefficient(5, 2))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_6_C_4, GetSpeakerCoefficient(5, 3))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_6_C_5, GetSpeakerCoefficient(5, 4))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_6_C_6, GetSpeakerCoefficient(5, 5))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_6_C_7, GetSpeakerCoefficient(5, 6))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_6_C_8, GetSpeakerCoefficient(5, 7))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_6_C_9, GetSpeakerCoefficient(5, 8))) return false;
+            }
         }
 
         // Speaker 7
@@ -308,7 +466,19 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         {
             if (!SendCommandForAllSources(SET_SPEAKER_7_X, GetSpeakerPosition(6).x)) return false;
             if (!SendCommandForAllSources(SET_SPEAKER_7_Y, GetSpeakerPosition(6).y)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_7_Z, GetSpeakerPosition(6).z)) return false;            
+            if (!SendCommandForAllSources(SET_SPEAKER_7_Z, GetSpeakerPosition(6).z)) return false;
+            if (!regularMode)
+            {
+                if (!SendCommandForAllSources(SET_SPEAKER_7_C_1, GetSpeakerCoefficient(6, 0))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_7_C_2, GetSpeakerCoefficient(6, 1))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_7_C_3, GetSpeakerCoefficient(6, 2))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_7_C_4, GetSpeakerCoefficient(6, 3))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_7_C_5, GetSpeakerCoefficient(6, 4))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_7_C_6, GetSpeakerCoefficient(6, 5))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_7_C_7, GetSpeakerCoefficient(6, 6))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_7_C_8, GetSpeakerCoefficient(6, 7))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_7_C_9, GetSpeakerCoefficient(6, 8))) return false;
+            }
         }
 
         // Speaker 8
@@ -316,13 +486,30 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
         {
             if (!SendCommandForAllSources(SET_SPEAKER_8_X, GetSpeakerPosition(7).x)) return false;
             if (!SendCommandForAllSources(SET_SPEAKER_8_Y, GetSpeakerPosition(7).y)) return false;
-            if (!SendCommandForAllSources(SET_SPEAKER_8_Z, GetSpeakerPosition(7).z)) return false;            
+            if (!SendCommandForAllSources(SET_SPEAKER_8_Z, GetSpeakerPosition(7).z)) return false;
+            if (!regularMode)
+            {
+                if (!SendCommandForAllSources(SET_SPEAKER_8_C_1, GetSpeakerCoefficient(7, 0))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_8_C_2, GetSpeakerCoefficient(7, 1))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_8_C_3, GetSpeakerCoefficient(7, 2))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_8_C_4, GetSpeakerCoefficient(7, 3))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_8_C_5, GetSpeakerCoefficient(7, 4))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_8_C_6, GetSpeakerCoefficient(7, 5))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_8_C_7, GetSpeakerCoefficient(7, 6))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_8_C_8, GetSpeakerCoefficient(7, 7))) return false;
+                if (!SendCommandForAllSources(SET_SPEAKER_8_C_9, GetSpeakerCoefficient(7, 8))) return false;
+            }
         }
 
         // Send command for ending setup
         if (!SendCommandForAllSources(SET_SAVE_SPEAKERS_CONFIG, 1.0f)) return false;
 
         return true;
+    }
+
+    private float GetSpeakerCoefficient(int speaker, int coefficient)
+    {
+        return speakerCoefficients[speaker, coefficient];
     }
 
     /// <summary>
@@ -359,7 +546,81 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
                 speakerPositions[2] = new Vector3(_2DSquareSide, 0.0f, 0.0f) + speakerOffsets[2];   // Front speaker
                 speakerPositions[3] = new Vector3(-_2DSquareSide, 0.0f, 0.0f) + speakerOffsets[3];  // Back speaker
                 break;
+            case T_LoudSpeakerConfigurationPreset.LS_IRREGULAR_CONFIG:
+                LoadXML();
+                break;
         }
+    }
+
+    private void LoadXML()
+    {
+        string filePath;
+        if (xmlPath == "")
+        {
+            filePath = "./Assets/3DTuneIn/Resources/Coef.xml";
+        }
+        else
+        {
+            filePath = xmlPath;
+        }
+        if (filePath != "")
+        {
+            XmlDocument file = new XmlDocument();
+            file.Load(filePath);
+            XmlNodeList nodeList = file.GetElementsByTagName("pos");
+            Debug.Log("Número de miembros de nodeList para coordenadas: " + nodeList.Count.ToString());
+            for(int i = 0; i < nodeList.Count; i++) {
+                string coordString = nodeList[i].InnerXml;
+                Debug.Log("String de coordenadas del elemento " + i.ToString() + ": " + coordString);
+                string[] coordStringArray = CoefficientSplit(coordString, ',');
+                string[] coordStringArrayFixed = new string[coordStringArray.Length];
+
+                for (int k = 0; k < 3; k++)
+                {
+                    coordStringArrayFixed.SetValue(coordStringArray[k].Substring(1), k);
+                    Debug.Log("Coordenada " + k.ToString() + " del altavoz " + i.ToString() +  ": " + coordStringArrayFixed[k].ToString());
+                    
+                }
+
+                float x, y, z;
+
+                float.TryParse(coordStringArrayFixed[0].ToString(), out x);
+                float.TryParse(coordStringArrayFixed[1].ToString(), out y);
+                float.TryParse(coordStringArrayFixed[2].ToString(), out z);
+
+                Debug.Log(x.ToString() + y.ToString() + z.ToString());
+
+                speakerPositions[i] = new Vector3(x,y,z);
+                                                                                                           
+                Debug.Log(speakerPositions[i].x);
+                Debug.Log(speakerPositions[i].y);
+                Debug.Log(speakerPositions[i].z);
+            }
+            nodeList = file.GetElementsByTagName("gains");
+            Debug.Log("Número de miembros de nodeList para coeficientes: " + nodeList.Count.ToString());
+            for (int i = 0; i < nodeList.Count; i++)
+            {
+                string coeffString = nodeList[i].InnerXml;
+                Debug.Log("String de coeficientes del elemento " + i.ToString() +": " + coeffString);
+                string[] coeffStringArray = CoefficientSplit(coeffString, ',');
+
+                for (int k = 0; k < 9; k++)
+                {
+                    speakerCoefficients[i, k] = float.Parse(coeffStringArray[k].Substring(1), CultureInfo.InvariantCulture.NumberFormat);
+                    Debug.Log("Coeficiente " + k.ToString() + " del altavoz " + i.ToString() + ": " + speakerCoefficients[i, k].ToString());
+                }
+            }
+        }
+
+    }
+
+    private string[] CoefficientSplit(string s, char c)
+    {
+        string[] numberStringVector;
+        numberStringVector = s.Split(',');
+        //Debug.Log("Tamaño array: " + numberStringVector.Length.ToString());
+        //for(int i = 0; i < numberStringVector.Length; i++) Debug.Log(numberStringVector[i]);
+        return numberStringVector;
     }
 
     /// <summary>
