@@ -568,17 +568,14 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
             XmlDocument file = new XmlDocument();
             file.Load(filePath);
             XmlNodeList nodeList = file.GetElementsByTagName("pos");
-            Debug.Log("Número de miembros de nodeList para coordenadas: " + nodeList.Count.ToString());
             for(int i = 0; i < nodeList.Count; i++) {
                 string coordString = nodeList[i].InnerXml;
-                Debug.Log("String de coordenadas del elemento " + i.ToString() + ": " + coordString);
                 string[] coordStringArray = CoefficientSplit(coordString, ',');
                 string[] coordStringArrayFixed = new string[coordStringArray.Length];
 
                 for (int k = 0; k < 3; k++)
                 {
                     coordStringArrayFixed.SetValue(coordStringArray[k].Substring(1), k);
-                    Debug.Log("Coordenada " + k.ToString() + " del altavoz " + i.ToString() +  ": " + coordStringArrayFixed[k].ToString());
                     
                 }
 
@@ -588,26 +585,18 @@ public class API_3DTI_LoudSpeakersSpatializer : MonoBehaviour {
                 float.TryParse(coordStringArrayFixed[1].ToString(), out y);
                 float.TryParse(coordStringArrayFixed[2].ToString(), out z);
 
-                Debug.Log(x.ToString() + y.ToString() + z.ToString());
-
                 speakerPositions[i] = new Vector3(x,y,z);
                                                                                                            
-                Debug.Log(speakerPositions[i].x);
-                Debug.Log(speakerPositions[i].y);
-                Debug.Log(speakerPositions[i].z);
-            }
+          }
             nodeList = file.GetElementsByTagName("gains");
-            Debug.Log("Número de miembros de nodeList para coeficientes: " + nodeList.Count.ToString());
             for (int i = 0; i < nodeList.Count; i++)
             {
                 string coeffString = nodeList[i].InnerXml;
-                Debug.Log("String de coeficientes del elemento " + i.ToString() +": " + coeffString);
                 string[] coeffStringArray = CoefficientSplit(coeffString, ',');
 
                 for (int k = 0; k < 9; k++)
                 {
                     speakerCoefficients[i, k] = float.Parse(coeffStringArray[k].Substring(1), CultureInfo.InvariantCulture.NumberFormat);
-                    Debug.Log("Coeficiente " + k.ToString() + " del altavoz " + i.ToString() + ": " + speakerCoefficients[i, k].ToString());
                 }
             }
         }
