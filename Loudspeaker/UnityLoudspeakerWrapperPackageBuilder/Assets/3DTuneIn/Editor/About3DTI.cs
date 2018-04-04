@@ -40,7 +40,7 @@ public class About3DTI : EditorWindow
         
         BeginAboutSection("3D-TUNE-IN TOOLKIT UNITY WRAPPER");
 
-            GUILayout.Label("Version 1.5 D20180221 Tk D20180219", EditorStyles.boldLabel);
+            GUILayout.Label("Version 1.6 D20180404 Tk-D20180403", EditorStyles.boldLabel);
 
             ShowParagraph("This software was developed by a team coordinated by Arcadio Reyes Lecuona (University of Malaga). The members of the team are: Maria Cuevas Rodriguez, Daniel Gonzalez Toledo, Carlos Garre, Luis Molina Tanco, Ángel Rodríguez Rivero and Ernesto de la Rubia, all affiliated to the University of Malaga.");
 
