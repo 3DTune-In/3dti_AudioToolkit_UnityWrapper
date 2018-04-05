@@ -1236,26 +1236,59 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         float bandWidth;
         float LRSync;
         HLAPI.GetTemporalDistortionPresetValues(preset, out bandUpperLimit, out whiteNoisePower, out bandWidth, out LRSync);
-
+        float activated;
         if (ear == T_ear.LEFT)
         {
-            plugin.SetFloatParameter("HLTABANDL", HLAPI.FromBandUpperLimitEnumToFloat(bandUpperLimit));
-            HLAPI.PARAM_LEFT_TA_BANDUPPERLIMIT = bandUpperLimit;
-            plugin.SetFloatParameter("HLTAPOWL", whiteNoisePower);
-            HLAPI.PARAM_LEFT_TA_WHITENOISEPOWER = whiteNoisePower;
-            plugin.SetFloatParameter("HLTALPFL", bandWidth);
-            HLAPI.PARAM_LEFT_TA_BANDWIDTH = bandWidth;
-            changingTDPresetLeft = true;
+            
+            if (plugin.GetFloatParameter("HLTAONL", out activated))
+            {
+                float minValue, maxValue, defaultValue;
+                
+                if(activated == 0)
+                {
+                    plugin.GetFloatParameterInfo("HLTAPOWL", out minValue, out maxValue, out defaultValue);
+                    plugin.SetFloatParameter("HLTAPOWL", minValue);
+                    HLAPI.PARAM_LEFT_TA_WHITENOISEPOWER = minValue;
+
+                    changingTDPresetLeft = true;
+                }
+                else
+                {
+                    plugin.SetFloatParameter("HLTABANDL", HLAPI.FromBandUpperLimitEnumToFloat(bandUpperLimit));
+                    HLAPI.PARAM_LEFT_TA_BANDUPPERLIMIT = bandUpperLimit;
+                    plugin.SetFloatParameter("HLTAPOWL", whiteNoisePower);
+                    HLAPI.PARAM_LEFT_TA_WHITENOISEPOWER = whiteNoisePower;
+                    plugin.SetFloatParameter("HLTALPFL", bandWidth);
+                    HLAPI.PARAM_LEFT_TA_BANDWIDTH = bandWidth;
+                    changingTDPresetLeft = true;
+                }
+            }
         }
         else
         {
-            plugin.SetFloatParameter("HLTABANDR", HLAPI.FromBandUpperLimitEnumToFloat(bandUpperLimit));
-            HLAPI.PARAM_RIGHT_TA_BANDUPPERLIMIT = bandUpperLimit;
-            plugin.SetFloatParameter("HLTAPOWR", whiteNoisePower);
-            HLAPI.PARAM_RIGHT_TA_WHITENOISEPOWER = whiteNoisePower;
-            plugin.SetFloatParameter("HLTALPFR", bandWidth);
-            HLAPI.PARAM_RIGHT_TA_BANDWIDTH = bandWidth;
-            changingTDPresetRight = true;
+            if (plugin.GetFloatParameter("HLTAONR", out activated))
+            {
+                float minValue, maxValue, defaultValue;
+
+                if (activated == 0)
+                {
+                    plugin.GetFloatParameterInfo("HLTAPOWR", out minValue, out maxValue, out defaultValue);
+                    plugin.SetFloatParameter("HLTAPOWR", minValue);
+                    HLAPI.PARAM_RIGHT_TA_WHITENOISEPOWER = minValue;
+
+                    changingTDPresetRight = true;
+                }
+                else
+                {
+                    plugin.SetFloatParameter("HLTABANDR", HLAPI.FromBandUpperLimitEnumToFloat(bandUpperLimit));
+                    HLAPI.PARAM_RIGHT_TA_BANDUPPERLIMIT = bandUpperLimit;
+                    plugin.SetFloatParameter("HLTAPOWR", whiteNoisePower);
+                    HLAPI.PARAM_RIGHT_TA_WHITENOISEPOWER = whiteNoisePower;
+                    plugin.SetFloatParameter("HLTALPFR", bandWidth);
+                    HLAPI.PARAM_RIGHT_TA_BANDWIDTH = bandWidth;
+                    changingTDPresetRight = true;
+                }
+            }
         }
         plugin.SetFloatParameter("HLTALR", LRSync);
         HLAPI.PARAM_TA_LRSYNC = LRSync;        
