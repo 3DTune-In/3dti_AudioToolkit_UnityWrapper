@@ -485,7 +485,7 @@ namespace Spatializer3DTI
 		// TO DO: Change this for high performance / high quality modes
 
 		// Audio state:		
-		Common::AudioState_Struct audioState = data->core.GetAudioState();
+		Common::TAudioStateStruct audioState = data->core.GetAudioState();
 		WriteLog(state, "CREATE: Sample rate set to ", audioState.sampleRate);
 		WriteLog(state, "CREATE: Buffer size set to ", audioState.bufferSize);
 		WriteLog(state, "CREATE: HRTF resampling step set to ", data->core.GetHRTFResamplingStep());
@@ -532,7 +532,7 @@ namespace Spatializer3DTI
 		WriteLog(state, "Creating audio plugin...", "");
 
 		// Set default audio state			
-		Common::AudioState_Struct audioState;
+		Common::TAudioStateStruct audioState;
 		audioState.sampleRate = (int)state->samplerate;
 		audioState.bufferSize = (int)state->dspbuffersize;		
 		effectdata->core.SetAudioState(audioState);
@@ -573,7 +573,7 @@ namespace Spatializer3DTI
 
 		// Spatialization modes
 		effectdata->spatializationMode = SPATIALIZATION_MODE_NONE;	
-		effectdata->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::None);
+		effectdata->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::NoSpatialization);
 		effectdata->loadedHRTF = false;
 		effectdata->loadedNearFieldILD = false;
 		effectdata->loadedHighPerformanceILD = false;
@@ -906,7 +906,7 @@ namespace Spatializer3DTI
 				}
 				if (value == 2.0f)
 				{
-					data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::None);					
+					data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::NoSpatialization);					
 					data->spatializationMode = SPATIALIZATION_MODE_NONE;
 					WriteLog(state, "SET PARAMETER: No spatialization mode is enabled", "");
 					UpdateCoreIsReady(state);
