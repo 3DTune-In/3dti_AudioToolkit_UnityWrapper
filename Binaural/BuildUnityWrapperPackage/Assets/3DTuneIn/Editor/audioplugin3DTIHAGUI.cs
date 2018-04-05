@@ -13,7 +13,8 @@ using API_3DTI_Common;
 public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
 {
     // Access to the HA API
-    API_3DTI_HA HAAPI;    
+    API_3DTI_HA HAAPI;
+    API_3DTI_HL HLAPI;
 
     // Start Play control
     bool isStartingPlay = false;
@@ -50,9 +51,12 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
             HAAPI = GameObject.FindObjectOfType<API_3DTI_HA>();
             if (HAAPI == null)
                 return false;
-
-            // Setup styles
-            Common3DTIGUI.InitStyles();
+        // Get HA API instance (TO DO: Error check)            
+        HLAPI = GameObject.FindObjectOfType<API_3DTI_HL>();
+        if (HLAPI == null)
+            return false;
+        // Setup styles
+        Common3DTIGUI.InitStyles();
         //}                
 
         //GUILayout.BeginArea(new Rect(10, 10, 100, 100));
@@ -140,6 +144,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
             // Left ear
             Common3DTIGUI.BeginLeftColumn(HAAPI.PARAM_PROCESS_LEFT_ON);
             {
+                DrawFig6Button(plugin, T_ear.LEFT);
                 DrawEQBandGains(plugin, T_ear.LEFT, ref HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT);
                 DrawEQLevelThresholds(plugin, T_ear.LEFT, ref HAAPI.PARAM_DYNAMICEQ_LEVELTHRESHOLDS_LEFT_DBFS);
                 DrawEQEnvelopeFollower(plugin, T_ear.LEFT, ref HAAPI.PARAM_DYNAMICEQ_ATTACKRELEASE_LEFT_MS);
@@ -152,6 +157,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
             // Right ear
             Common3DTIGUI.BeginRightColumn(HAAPI.PARAM_PROCESS_RIGHT_ON);
             {
+                DrawFig6Button(plugin, T_ear.RIGHT);
                 DrawEQBandGains(plugin, T_ear.RIGHT, ref HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT);
                 DrawEQLevelThresholds(plugin, T_ear.RIGHT, ref HAAPI.PARAM_DYNAMICEQ_LEVELTHRESHOLDS_RIGHT_DBFS);
                 DrawEQEnvelopeFollower(plugin, T_ear.RIGHT, ref HAAPI.PARAM_DYNAMICEQ_ATTACKRELEASE_RIGHT_MS);
@@ -163,6 +169,49 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
 
         }
         Common3DTIGUI.EndSection();
+    }
+    /// <summary>
+    /// Draw Fig6 button
+    /// </summary>
+    /// <param name="plugin"></param>
+    public void DrawFig6Button(IAudioEffectPlugin plugin, T_ear ear)
+    {
+        if(Common3DTIGUI.CreateButton("Fig6", "Adjusts the Dynamic Equalizer to the current audiometry settings"))
+        {
+
+            List<float> calculatedGains;
+            //float gain0, gain1, gain2;
+            //HAAPI.SetEQBandFromFig6(ear, bandIndex, earLossInput[(int)bandIndex], out gain0, out gain1, out gain2);
+            if (ear == T_ear.LEFT)
+            {
+                if (!HAAPI.SetEQFromFig6(plugin, ear, HLAPI.PARAM_AUDIOMETRY_LEFT.OfType<float>().ToList(), out calculatedGains))
+                {
+                    //Debug.LogWarning("error fig6 left");
+                }
+            }
+            else if (ear == T_ear.RIGHT)
+            {
+
+                if (!HAAPI.SetEQFromFig6(plugin, ear, HLAPI.PARAM_AUDIOMETRY_RIGHT.OfType<float>().ToList(), out calculatedGains))
+                {
+                    //Debug.LogWarning("error fig6 right");
+                }
+            }
+            else return;
+
+            for (int i = 0; i < HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT.GetLength(0); i++)
+            {
+                for (int j = 0; j < HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT.GetLength(1); j++)
+                {
+                    float gain = calculatedGains[HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT.GetLength(1) * i + j];
+                    //Debug.Log(gain.ToString());
+                    if (ear == T_ear.LEFT) HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[i, j] = gain;
+                    else HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[i, j] = gain;
+                }
+            }
+
+            //foreach (float g in calculatedGains) Debug.Log(g.ToString());
+        }
     }
 
     /// <summary>
