@@ -184,7 +184,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
             //HAAPI.SetEQBandFromFig6(ear, bandIndex, earLossInput[(int)bandIndex], out gain0, out gain1, out gain2);
             if (ear == T_ear.LEFT)
             {
-                if (!HAAPI.SetEQFromFig6(plugin, ear, HLAPI.PARAM_AUDIOMETRY_LEFT.OfType<float>().ToList(), out calculatedGains))
+                if (!HAAPI.SetEQFromFig6(/*plugin,*/ear, HLAPI.PARAM_AUDIOMETRY_LEFT.OfType<float>().ToList(), out calculatedGains))
                 {
                     //Debug.LogWarning("error fig6 left");
                 }
@@ -192,7 +192,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
             else if (ear == T_ear.RIGHT)
             {
 
-                if (!HAAPI.SetEQFromFig6(plugin, ear, HLAPI.PARAM_AUDIOMETRY_RIGHT.OfType<float>().ToList(), out calculatedGains))
+                if (!HAAPI.SetEQFromFig6(/*plugin, */ear, HLAPI.PARAM_AUDIOMETRY_RIGHT.OfType<float>().ToList(), out calculatedGains))
                 {
                     //Debug.LogWarning("error fig6 right");
                 }
