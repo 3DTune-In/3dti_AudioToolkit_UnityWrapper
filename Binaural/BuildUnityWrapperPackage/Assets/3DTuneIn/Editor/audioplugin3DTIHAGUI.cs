@@ -16,6 +16,12 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     API_3DTI_HA HAAPI;
     API_3DTI_HL HLAPI;
 
+    // Internal use constants
+    const float FIG6_THRESHOLD_0_DBSPL = 40.0f; // TO DO: consistent numbering
+    const float FIG6_THRESHOLD_1_DBSPL = 65.0f; // TO DO: consistent numbering
+    const float FIG6_THRESHOLD_2_DBSPL = 95.0f;
+    const float DBSPL_FOR_0_DBFS = 100.0f;
+
     // Start Play control
     bool isStartingPlay = false;
     bool playWasStarted = false;
@@ -184,7 +190,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
             //HAAPI.SetEQBandFromFig6(ear, bandIndex, earLossInput[(int)bandIndex], out gain0, out gain1, out gain2);
             if (ear == T_ear.LEFT)
             {
-                if (!HAAPI.SetEQFromFig6(plugin, ear, HLAPI.PARAM_AUDIOMETRY_LEFT.OfType<float>().ToList(), out calculatedGains))
+                if (!HAAPI.SetEQFromFig6(/*plugin,*/ear, HLAPI.PARAM_AUDIOMETRY_LEFT.OfType<float>().ToList(), out calculatedGains))
                 {
                     //Debug.LogWarning("error fig6 left");
                 }
@@ -192,21 +198,35 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
             else if (ear == T_ear.RIGHT)
             {
 
-                if (!HAAPI.SetEQFromFig6(plugin, ear, HLAPI.PARAM_AUDIOMETRY_RIGHT.OfType<float>().ToList(), out calculatedGains))
+                if (!HAAPI.SetEQFromFig6(ear, HLAPI.PARAM_AUDIOMETRY_RIGHT.OfType<float>().ToList(), out calculatedGains))
                 {
                     //Debug.LogWarning("error fig6 right");
                 }
             }
             else return;
 
+            plugin.SetFloatParameter("THR0", FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS);
+            plugin.SetFloatParameter("THR1", FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS);
+            plugin.SetFloatParameter("THR2", FIG6_THRESHOLD_2_DBSPL - DBSPL_FOR_0_DBFS);
+
             for (int i = 0; i < HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT.GetLength(0); i++)
             {
                 for (int j = 0; j < HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT.GetLength(1); j++)
                 {
                     float gain = calculatedGains[HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT.GetLength(1) * i + j];
-                    //Debug.Log(gain.ToString());
-                    if (ear == T_ear.LEFT) HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[i, j] = gain;
-                    else HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[i, j] = gain;
+                    string paramName = "DEQL" + i.ToString() + "B" + j.ToString();
+                    if (ear == T_ear.LEFT)
+                    {
+                        paramName += "L";
+                        HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[i, j] = gain;
+                    }
+                    else
+                    {
+                        paramName += "R";
+                        HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[i, j] = gain;
+                    }
+
+                    plugin.SetFloatParameter(paramName, gain);
                 }
             }
 
