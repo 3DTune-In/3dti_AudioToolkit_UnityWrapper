@@ -391,7 +391,7 @@ public class API_3DTI_HA : MonoBehaviour
     /// <param name="eqlevel"></param>
     /// <param name="gain (dB)"></param>
     /// <returns></returns>
-    public bool SetDynamicEQBandLevelGain(/*IAudioEffectPlugin plugin, */T_ear ear, T_HADynamicEQBand eqband, T_HADynamicEQLevel eqlevel, float gain)
+    public bool SetDynamicEQBandLevelGain(T_ear ear, T_HADynamicEQBand eqband, T_HADynamicEQLevel eqlevel, float gain)
     {
         string paramName = "HA3DTI_Gain_Level_" + ((int)eqlevel).ToString() + "_Band_" + ((int)eqband).ToString() + "_";
         /*if(ear == T_ear.LEFT)
@@ -413,7 +413,7 @@ public class API_3DTI_HA : MonoBehaviour
     /// <param name="eqlevel"></param>
     /// <param name="threshold (dB)"></param>
     /// <returns></returns>
-    public bool SetDynamicEQLevelThreshold(/*IAudioEffectPlugin plugin, */T_ear ear, T_HADynamicEQLevel eqlevel, float threshold)
+    public bool SetDynamicEQLevelThreshold(T_ear ear, T_HADynamicEQLevel eqlevel, float threshold)
     {
         string paramName = "HA3DTI_Threshold_";
         if(ear == T_ear.LEFT)
@@ -487,14 +487,14 @@ public class API_3DTI_HA : MonoBehaviour
     /// <param name="ear"></param>
     /// <param name="earLossList (dB[])"></param>
     /// <returns></returns>
-    public bool SetEQFromFig6(/*IAudioEffectPlugin plugin, */T_ear ear, List<float> earLossInput, out List<float> calculatedGains)
+    public bool SetEQFromFig6(T_ear ear, List<float> earLossInput, out List<float> calculatedGains)
     {
         // Both ears
         if (ear == T_ear.BOTH)
         {
-            if (!SetEQFromFig6(/*plugin, */T_ear.LEFT, earLossInput, out calculatedGains))
+            if (!SetEQFromFig6(T_ear.LEFT, earLossInput, out calculatedGains))
                 return false;
-            return SetEQFromFig6(/*plugin, */T_ear.RIGHT, earLossInput, out calculatedGains);
+            return SetEQFromFig6(T_ear.RIGHT, earLossInput, out calculatedGains);
         }
 
         // Init gains
@@ -508,18 +508,16 @@ public class API_3DTI_HA : MonoBehaviour
         }
 
         // Set level thresholds        
-        /*Debug.Log("SetDynamicEQLevelThreshold 0: " + */SetDynamicEQLevelThreshold(/*plugin, */ear, T_HADynamicEQLevel.LEVEL_0, FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS)/*.ToString())*/;// TO DO: consistent numbering
-        /*Debug.Log("SetDynamicEQLevelThreshold 2: " + */SetDynamicEQLevelThreshold(/*plugin, */ear, T_HADynamicEQLevel.LEVEL_2, FIG6_THRESHOLD_2_DBSPL - DBSPL_FOR_0_DBFS)/*.ToString())*/;
-        /*Debug.Log("SetDynamicEQLevelThreshold 1: " + */SetDynamicEQLevelThreshold(/*plugin, */ear, T_HADynamicEQLevel.LEVEL_1, FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS)/*.ToString())*/;// TO DO: consistent numbering
+        SetDynamicEQLevelThreshold(ear, T_HADynamicEQLevel.LEVEL_0, FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS);// TO DO: consistent numbering
+        SetDynamicEQLevelThreshold(ear, T_HADynamicEQLevel.LEVEL_2, FIG6_THRESHOLD_2_DBSPL - DBSPL_FOR_0_DBFS);
+        SetDynamicEQLevelThreshold(ear, T_HADynamicEQLevel.LEVEL_1, FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS);// TO DO: consistent numbering
 
         // Set band gains        
         foreach (T_HADynamicEQBand bandIndex in T_HADynamicEQBand.GetValues(typeof(T_HADynamicEQBand)))
         {
-            //Debug.Log(bandIndex.ToString() + "/" + T_HADynamicEQBand.GetValues(typeof(T_HADynamicEQBand)).Length.ToString());
             float gain0, gain1, gain2;
-            /*if (!*/SetEQBandFromFig6(/*plugin, */ear, bandIndex, earLossInput[(int)bandIndex], out gain0, out gain1, out gain2);/*)
-                return false;*/
-                //Debug.Log("SetEQBandFromFig6 devuelve false y da: " + gain0.ToString() + " " + gain1.ToString() + " " + gain2.ToString());
+            SetEQBandFromFig6(ear, bandIndex, earLossInput[(int)bandIndex], out gain0, out gain1, out gain2);
+
             calculatedGains[(int)bandIndex * NUM_EQ_CURVES] = gain0;
             calculatedGains[(int)bandIndex * NUM_EQ_CURVES + 1] = gain1;
             calculatedGains[(int)bandIndex * NUM_EQ_CURVES + 2] = gain2;
@@ -564,7 +562,7 @@ public class API_3DTI_HA : MonoBehaviour
     // AUXILIARY FUNCTIONS
     //////////////////////////////////////////////////////////////
 
-    public bool SetEQBandFromFig6(/*IAudioEffectPlugin plugin, */T_ear ear, T_HADynamicEQBand bandIndex, float earLoss, out float gain0, out float gain1, out float gain2)
+    public bool SetEQBandFromFig6(T_ear ear, T_HADynamicEQBand bandIndex, float earLoss, out float gain0, out float gain1, out float gain2)
     {
         // Level 0 (40 dB)        
         if (earLoss < 20.0f)
@@ -595,9 +593,9 @@ public class API_3DTI_HA : MonoBehaviour
             gain2 = 0.1f * Mathf.Pow(earLoss - 40.0f, 1.4f);
 
         // Set bands
-        if (!SetDynamicEQBandLevelGain(/*plugin, */ear, bandIndex, T_HADynamicEQLevel.LEVEL_1, gain0)) return false; // TO DO: coherent numbering. Curve 0 is now the reference for compression percentage
-        if (!SetDynamicEQBandLevelGain(/*plugin, */ear, bandIndex, T_HADynamicEQLevel.LEVEL_0, gain1)) return false; // TO DO: coherent numbering. Curve 0 is now the reference for compression percentage
-        if (!SetDynamicEQBandLevelGain(/*plugin, */ear, bandIndex, T_HADynamicEQLevel.LEVEL_2, gain2)) return false;
+        SetDynamicEQBandLevelGain(ear, bandIndex, T_HADynamicEQLevel.LEVEL_1, gain0); // TO DO: coherent numbering. Curve 0 is now the reference for compression percentage
+        SetDynamicEQBandLevelGain(ear, bandIndex, T_HADynamicEQLevel.LEVEL_0, gain1); // TO DO: coherent numbering. Curve 0 is now the reference for compression percentage
+        SetDynamicEQBandLevelGain(ear, bandIndex, T_HADynamicEQLevel.LEVEL_2, gain2);
 
         return true;
     }

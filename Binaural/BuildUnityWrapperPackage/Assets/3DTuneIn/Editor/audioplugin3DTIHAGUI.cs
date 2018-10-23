@@ -198,7 +198,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
             else if (ear == T_ear.RIGHT)
             {
 
-                if (!HAAPI.SetEQFromFig6(/*plugin, */ear, HLAPI.PARAM_AUDIOMETRY_RIGHT.OfType<float>().ToList(), out calculatedGains))
+                if (!HAAPI.SetEQFromFig6(ear, HLAPI.PARAM_AUDIOMETRY_RIGHT.OfType<float>().ToList(), out calculatedGains))
                 {
                     //Debug.LogWarning("error fig6 right");
                 }
