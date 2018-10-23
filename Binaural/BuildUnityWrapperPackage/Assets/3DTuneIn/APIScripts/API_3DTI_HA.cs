@@ -630,13 +630,10 @@ public class API_3DTI_HA : MonoBehaviour
             paramName += "Right";
             paramRight = value;
         }
-        bool aux = haMixer.SetFloat(paramName, value);
-        Debug.Log(paramName + " = " + value.ToString() + " returning " + aux.ToString());
+        
+
         // Set value
-        return aux;  // Da false aunque la causa es desconocida. En la documentación de Unity
-                                                    // dice que sólo da false si no encuentra el parámetro (no es el caso, porque  
-                                                    // cuando pasa eso sale por consola ese error) o cuando se edita un snapshot
-                                                    // y en esta escena no hay ningún snapshot.
+        return haMixer.SetFloat(paramName, value);
     }
 
     ///// <summary>

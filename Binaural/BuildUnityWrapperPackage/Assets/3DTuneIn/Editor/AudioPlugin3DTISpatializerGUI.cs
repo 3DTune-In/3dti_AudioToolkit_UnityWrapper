@@ -24,8 +24,8 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
     API_3DTI_Spatializer toolkit;
     bool advancedSetup = false;
-    bool highPerformanceFiles = false;
-    bool highQualityFiles = false;
+    //bool highPerformanceFiles = false;
+    //bool highQualityFiles = false;
     bool haSetup = false;
     //bool initDone = false;
 
