@@ -361,6 +361,7 @@
 				AFE8837B1DCCA8F6003505EF /* Sources */,
 				AFE8837C1DCCA8F6003505EF /* Frameworks */,
 				AFE8837D1DCCA8F6003505EF /* Resources */,
+				34CECF1B249516A80048FCA8 /* Copy bundle into test project (Tim / temp) */,
 			);
 			buildRules = (
 			);
@@ -414,6 +415,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		34CECF1B249516A80048FCA8 /* Copy bundle into test project (Tim / temp) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy bundle into test project (Tim / temp)";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nrsync -av --delete ~/Documents/dev/3DTI_UnityWrapper/Binaural/audioplugin3DTIToolkit/MACOSX/build/Debug/AudioPlugin3DTIToolkit.bundle/ ~/Documents/dev/SpatialisationToolkitTestbed/Assets/Plugins/MacOS/AudioPlugin3DTIToolkit.bundle/\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		AFE8837B1DCCA8F6003505EF /* Sources */ = {
