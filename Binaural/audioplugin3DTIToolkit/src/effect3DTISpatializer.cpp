@@ -60,24 +60,24 @@ namespace Spatializer3DTI
 
     enum
     {
-		PARAM_HRTF_FILE_STRING,
+		PARAM_HRTF_FILE_STRING, //0
 		PARAM_HEAD_RADIUS,
 		PARAM_SCALE_FACTOR,
 		PARAM_SOURCE_ID,	// DEBUG
 		PARAM_CUSTOM_ITD,
-		PARAM_HRTF_INTERPOLATION,
+		PARAM_HRTF_INTERPOLATION, // 5
 		PARAM_MOD_FARLPF,
 		PARAM_MOD_DISTATT,
 		PARAM_MOD_NEAR_FIELD_ILD,
 		PARAM_MOD_HRTF,
-		PARAM_MAG_ANECHATT,
+		PARAM_MAG_ANECHATT, // 10
 		PARAM_MAG_SOUNDSPEED,
 		PARAM_NEAR_FIELD_ILD_FILE_STRING,		
 		PARAM_DEBUG_LOG,
 		
 		// HA directionality
 		PARAM_HA_DIRECTIONALITY_EXTEND_LEFT,
-		PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT,
+		PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT, // 15
 		PARAM_HA_DIRECTIONALITY_ON_LEFT,
 		PARAM_HA_DIRECTIONALITY_ON_RIGHT,
 
@@ -86,7 +86,7 @@ namespace Spatializer3DTI
 		PARAM_LIMITER_GET_COMPRESSION,
 
 		// INITIALIZATION CHECK
-		PARAM_IS_CORE_READY,
+		PARAM_IS_CORE_READY, // 20
 		
 		// HRTF resampling step
 		PARAM_HRTF_STEP,
@@ -110,7 +110,7 @@ namespace Spatializer3DTI
 		int sourceID;	// DEBUG
 		std::shared_ptr<Binaural::CSingleSourceDSP> audioSource;
 		std::shared_ptr<Binaural::CListener> listener;				
-		Binaural::CCore core;
+		std::shared_ptr<Binaural::CCore> core;
 		bool coreReady;
 		bool loadedHRTF;				// New
 		bool loadedNearFieldILD;		// New
@@ -485,10 +485,10 @@ namespace Spatializer3DTI
 		// TO DO: Change this for high performance / high quality modes
 
 		// Audio state:		
-		Common::TAudioStateStruct audioState = data->core.GetAudioState();
+        Common::TAudioStateStruct audioState = data->core->GetAudioState();
 		WriteLog(state, "CREATE: Sample rate set to ", audioState.sampleRate);
 		WriteLog(state, "CREATE: Buffer size set to ", audioState.bufferSize);
-		WriteLog(state, "CREATE: HRTF resampling step set to ", data->core.GetHRTFResamplingStep());
+        WriteLog(state, "CREATE: HRTF resampling step set to ", data->core->GetHRTFResamplingStep());
 
 		// Listener:		
 		if (data->listener != nullptr)
@@ -519,46 +519,71 @@ namespace Spatializer3DTI
 
 	UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectState* state)
 	{
-		EffectData* effectdata = new EffectData;
-		//memset(effectdata, 0, sizeof(EffectData)); // Prefer not to write 0s on smart_ptr & Core objects.
-		state->effectdata = effectdata;
-		if (IsHostCompatible(state))
-			state->spatializerdata->distanceattenuationcallback = DistanceAttenuationCallback;
-		InitParametersFromDefinitions(InternalRegisterEffectDefinition, effectdata->parameters);
+        
+        // CREATE Instance state and grab parameters
+        
+        EffectData* effectdata = new EffectData;
+        { // Initialize
+            //memset(effectdata, 0, sizeof(EffectData)); // Prefer not to write 0s on smart_ptr & Core objects.
+            state->effectdata = effectdata;
+            if (IsHostCompatible(state))
+            {
+                state->spatializerdata->distanceattenuationcallback = DistanceAttenuationCallback;
+            }
+            InitParametersFromDefinitions(InternalRegisterEffectDefinition, effectdata->parameters);
+            effectdata->parameters[PARAM_SCALE_FACTOR] = 1.0f;
+            effectdata->sourceID = -1;
+        }
+        
+        
+        static std::shared_ptr<Binaural::CCore> core;
+        if (core == nullptr)
+        {
+            // SETUP CORE
+            
+            core = std::make_shared<Binaural::CCore>();
+         
+            // Set default audio state
+            Common::TAudioStateStruct audioState;
+            audioState.sampleRate = (int)state->samplerate;
+            audioState.bufferSize = (int)state->dspbuffersize;
+            core->SetAudioState(audioState);
+            core->CreateListener();
+            
 
-		// DEBUG LOG
-		//effectdata->debugLog = false;
+            // Set default HRTF resampling step
+            core->SetHRTFResamplingStep(effectdata->parameters[PARAM_HRTF_STEP]);
 
-		WriteLog(state, "Creating audio plugin...", "");
+        }
+        
+        // Grab components from Core
+        effectdata->core = core;
+        effectdata->listener = effectdata->core->GetListener();
+            assert(effectdata->listener != nullptr);
+        
+        // Now we have a Core, continue initializing effectdata
+        // Create source and set default interpolation method
+        effectdata->audioSource = effectdata->core->CreateSingleSourceDSP();
+        if (effectdata->audioSource != nullptr)
+        {
+            effectdata->audioSource->EnableInterpolation();
+            effectdata->audioSource->DisableNearFieldEffect();    // ILD disabled before loading ILD data
+        }
 
-		// Set default audio state			
-		Common::TAudioStateStruct audioState;
-		audioState.sampleRate = (int)state->samplerate;
-		audioState.bufferSize = (int)state->dspbuffersize;		
-		effectdata->core.SetAudioState(audioState);
+
+        WriteLog(state, "Creating audio plugin...", "");
+
 		
 		//Save samplerate and buffer size into the struct
 		//effectdata->bufferSize = audioState.bufferSize;
 		//effectdata->sampleRate = audioState.sampleRate;		
 
-		// Create listener
-		effectdata->listener = effectdata->core.CreateListener();
 
-		// Set default HRTF resampling step
-		effectdata->core.SetHRTFResamplingStep(effectdata->parameters[PARAM_HRTF_STEP]);
 
+        // TODO: Make these static members of effectdata
 		// Init parameters. Core is not ready until we load the HRTF. ILD will be disabled, so we don't need to worry yet
 		effectdata->coreReady = false;
-		effectdata->parameters[PARAM_SCALE_FACTOR] = 1.0f;
-		effectdata->sourceID = -1;
 
-		// Create source and set default interpolation method		
-		effectdata->audioSource = effectdata->core.CreateSingleSourceDSP();
-		if (effectdata->audioSource != nullptr)
-		{
-			effectdata->audioSource->EnableInterpolation();
-			effectdata->audioSource->DisableNearFieldEffect();	// ILD disabled before loading ILD data				
-		}
 
 		// STRING SERIALIZER
 		effectdata->strHRTFserializing = false;
@@ -790,16 +815,16 @@ namespace Spatializer3DTI
 				break;
 
 			case PARAM_MAG_ANECHATT:
-				magnitudes = data->core.GetMagnitudes();
+                magnitudes = data->core->GetMagnitudes();
 				magnitudes.SetAnechoicDistanceAttenuation(value);
-				data->core.SetMagnitudes(magnitudes);
+                data->core->SetMagnitudes(magnitudes);
 				WriteLog(state, "SET PARAMETER: Anechoic distance attenuation set to (dB) ", value);
 				break;
 
 			case PARAM_MAG_SOUNDSPEED:
-				magnitudes = data->core.GetMagnitudes();
+                magnitudes = data->core->GetMagnitudes();
 				magnitudes.SetSoundSpeed(value);
-				data->core.SetMagnitudes(magnitudes);
+                data->core->SetMagnitudes(magnitudes);
 				WriteLog(state, "SET PARAMETER: Sound speed set to (m/s) ", value);
 				break;
 
@@ -870,7 +895,7 @@ namespace Spatializer3DTI
 				break;
 
 			case PARAM_HRTF_STEP:				
-				data->core.SetHRTFResamplingStep((int)value);
+                data->core->SetHRTFResamplingStep((int)value);
 				WriteLog(state, "SET PARAMETER: HRTF resampling step set to (degrees) ", value);
 				break;
 
@@ -963,12 +988,12 @@ namespace Spatializer3DTI
 					break;
 				case PARAM_BUFFER_SIZE_CORE:
 					//*value = float(data->bufferSize);					
-					*value = state->GetEffectData<EffectData>()->core.GetAudioState().bufferSize;
+                    *value = state->GetEffectData<EffectData>()->core->GetAudioState().bufferSize;
 					break;
 
 				case PARAM_SAMPLE_RATE_CORE:
 					//*value = float(data->sampleRate);
-					*value = state->GetEffectData<EffectData>()->core.GetAudioState().sampleRate;
+					*value = state->GetEffectData<EffectData>()->core->GetAudioState().sampleRate;
 					break;
 				default:
 					*value = data->parameters[index];
