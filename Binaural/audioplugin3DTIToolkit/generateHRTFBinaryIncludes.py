@@ -40,11 +40,12 @@ with open(header_path, 'w') as header_file:
 #include <map>
 #include <string>
 #include <vector>
+#include <cstdint>
 
 namespace Spatializer3DTI
 {
 
-    extern const std::map<std::string, std::vector<unsigned char>> hrtfBinaries;
+    extern const std::map<std::string, std::basic_string<uint8_t>> hrtfBinaries;
 
 }
 
@@ -78,7 +79,7 @@ with open(source_path, 'w') as source_file:
 namespace Spatializer3DTI
 {{
 
-    const std::map<std::string, std::vector<unsigned char>> hrtfBinaries {{
+    const std::map<std::string, std::basic_string<uint8_t>> hrtfBinaries {{
 ''')
     outer_indent = ' '*4
     inner_indent = outer_indent + ' '*4
@@ -88,7 +89,7 @@ namespace Spatializer3DTI
         with open(path, 'rb') as file:
             data = file.read()
             map_key = os.path.basename(filename)
-            source_file.write(f'{outer_indent}{{ "{map_key}",  std::vector<unsigned char>{{' '\n')
+            source_file.write(f'{outer_indent}{{ "{map_key}",  std::basic_string<uint8_t>{{' '\n')
             hex_string = ', '.join((f'{b:#04x}' for b in data))
             # e.g. 0xa3, 0x12, 0x00
             # hex_string = '0x' + binascii.hexlify(data, ', 0x')
