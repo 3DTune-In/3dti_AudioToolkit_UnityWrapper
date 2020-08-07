@@ -62,10 +62,6 @@ namespace Spatializer3DTI
 #define LIMITER_RELEASE		500.0f
 #define LIMITER_RATIO		6
 
-#define SPATIALIZATION_MODE_HIGH_QUALITY		0
-#define SPATIALIZATION_MODE_HIGH_PERFORMANCE	1
-#define SPATIALIZATION_MODE_NONE				2
-
 
 namespace
 {
@@ -119,8 +115,9 @@ void WriteLog(string logtext)
 
     // Init parameters. Core is not ready until we load the HRTF. ILD will be disabled, so we don't need to worry yet
     Spatializer::Spatializer()
-    : coreReady(false)
-    , loadedHRTF(false)
+    : //coreReady(false)
+//    ,
+loadedHRTF(false)
     , loadedNearFieldILD(false)
     , loadedHighPerformanceILD(false)
     , spatializationMode(SPATIALIZATION_MODE_NONE)
@@ -257,14 +254,14 @@ void WriteLog(string logtext)
         // TODO: Change this default value to -1
 		RegisterParameter(definition, "MAGAneAtt", "dB", -30.0f, 0.0f, -3.0f, 1.0f, 1.0f, PARAM_MAG_ANECHATT, "Anechoic distance attenuation");
 		RegisterParameter(definition, "MAGSounSpd", "m/s", 10.0f, 1000.0f, 343.0f, 1.0f, 1.0f, PARAM_MAG_SOUNDSPEED, "Sound speed");
-		RegisterParameter(definition, "NFILDPath", "", 0.0f, 255.0f, 0.0f, 1.0f, 1.0f, PARAM_NEAR_FIELD_ILD_FILE_STRING, "String with path of ILD binary file for Near Field effect");		
+		RegisterParameter(definition, "NFILDPath", "", 0.0f, 255.0f, 0.0f, 1.0f, 1.0f, PARAM_NEAR_FIELD_ILD_FILE_STRING, "String with path of ILD binary file for Near Field effect");
 		RegisterParameter(definition, "DebugLog", "", 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, PARAM_DEBUG_LOG, "Generate debug log");
 		
 		// HA directionality
 		RegisterParameter(definition, "HADirExtL", "dB", 0.0f, 30.0f, 15.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_EXTEND_LEFT, "HA directionality attenuation (in dB) for Left ear");
 		RegisterParameter(definition, "HADirExtR", "dB", 0.0f, 30.0f, 15.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT, "HA directionality attenuation (in dB) for Right ear");
 		RegisterParameter(definition, "HADirOnL", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_ON_LEFT, "HA directionality switch for Left ear");
-		RegisterParameter(definition, "HADirOnR", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_ON_RIGHT, "HA directionality switch for Right ear");		
+		RegisterParameter(definition, "HADirOnR", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_ON_RIGHT, "HA directionality switch for Right ear");
 
 		// Limiter
 		RegisterParameter(definition, "LimitOn", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_LIMITER_SET_ON, "Limiter enabler for binaural spatializer");
@@ -295,18 +292,18 @@ void WriteLog(string logtext)
 		// SET LISTENER POSITION
 
 		// Inverted 4x4 listener matrix, as provided by Unity
-		float L[16];					
+		float L[16];
 		for (int i = 0; i < 16; i++)
 			L[i] = listenerMatrix[i];
 
-		float listenerpos_x = -(L[0] * L[12] + L[1] * L[13] + L[2] * L[14]) * scale;	// From Unity documentation, if listener is rotated 
-		float listenerpos_y = -(L[4] * L[12] + L[5] * L[13] + L[6] * L[14]) * scale;	// From Unity documentation, if listener is rotated 
-		float listenerpos_z = -(L[8] * L[12] + L[9] * L[13] + L[10] * L[14]) * scale;	// From Unity documentation, if listener is rotated 
+		float listenerpos_x = -(L[0] * L[12] + L[1] * L[13] + L[2] * L[14]) * scale;	// From Unity documentation, if listener is rotated
+		float listenerpos_y = -(L[4] * L[12] + L[5] * L[13] + L[6] * L[14]) * scale;	// From Unity documentation, if listener is rotated
+		float listenerpos_z = -(L[8] * L[12] + L[9] * L[13] + L[10] * L[14]) * scale;	// From Unity documentation, if listener is rotated
 		//float listenerpos_x = -L[12] * scale;	// If listener is not rotated
 		//float listenerpos_y = -L[13] * scale;	// If listener is not rotated
 		//float listenerpos_z = -L[14] * scale;	// If listener is not rotated
 		Common::CTransform listenerTransform;
-		listenerTransform.SetPosition(Common::CVector3(listenerpos_x, listenerpos_y, listenerpos_z));		
+		listenerTransform.SetPosition(Common::CVector3(listenerpos_x, listenerpos_y, listenerpos_z));
 
 		// SET LISTENER ORIENTATION
 
@@ -380,7 +377,7 @@ void WriteLog(string logtext)
 	{
 //		EffectData* data = state->GetEffectData<EffectData>();
 
-		// Load HRTF		
+		// Load HRTF
 		if (!HRTF::CreateFrom3dti(spatializer().strHRTFpath, spatializer().listener))
 		{
 			//TDebuggerResultStruct result = GET_LAST_RESULT_STRUCT();
@@ -402,7 +399,7 @@ void WriteLog(string logtext)
 			return TLoadResult::RESULT_LOAD_OK;
 		}
 		else
-		{			
+		{
 			WriteLog(state, "LOAD HRTF: ERROR!!! Could not create HRTF from path: ", spatializer().strHRTFpath);
 			free(spatializer().strHRTFpath);
 			return TLoadResult::RESULT_LOAD_ERROR;
@@ -417,9 +414,9 @@ void WriteLog(string logtext)
 		/*int sampleRateInFile = ILD::GetSampleRateFrom3dti(data->strNearFieldILDpath);
 		if (sampleRateInFile == (int)state->samplerate) {*/
 
-			// Get ILD 
+			// Get ILD
 			//T_ILD_HashTable h;
-			//h = ILD::CreateFrom3dti(data->strHighPerformanceILDpath);	
+			//h = ILD::CreateFrom3dti(data->strHighPerformanceILDpath);
 			bool boolResult = ILD::CreateFrom3dti_ILDSpatializationTable(spatializer().strHighPerformanceILDpath, spatializer().listener);
 
 			// Check errors
@@ -430,7 +427,7 @@ void WriteLog(string logtext)
 			//	return TLoadResult::RESULT_LOAD_ERROR;
 			//}
 
-			//if (h.size() > 0)		// TO DO: Improve this error check		
+			//if (h.size() > 0)		// TO DO: Improve this error check
 			if (boolResult)
 			{
 				///Binaural::CILD::SetILD_HashTable(std::move(h));
@@ -460,10 +457,10 @@ void WriteLog(string logtext)
 	{
 //		EffectData* data = state->GetEffectData<EffectData>();
 
-		// Get ILD 
+		// Get ILD
 		
 		/*int sampleRateInFile = ILD::GetSampleRateFrom3dti(data->strNearFieldILDpath);
-		if (sampleRateInFile == (int)state->samplerate) 
+		if (sampleRateInFile == (int)state->samplerate)
 		{*/
 			bool boolResult = ILD::CreateFrom3dti_ILDNearFieldEffectTable(spatializer().strNearFieldILDpath, spatializer().listener);
 			// Check errors
@@ -474,7 +471,7 @@ void WriteLog(string logtext)
 			//	return TLoadResult::RESULT_LOAD_ERROR;
 			//}
 
-			//if (h.size() > 0)		// TO DO: Improve this error check		
+			//if (h.size() > 0)		// TO DO: Improve this error check
 			if (boolResult)
 			{
 				//Binaural::CILD::SetILD_HashTable(std::move(h));
@@ -491,7 +488,7 @@ void WriteLog(string logtext)
 			}
 
 		/*}
-		else 
+		else
 		{
 			WriteLog(state, "LOAD NEAR FIELD ILD: ERROR!!! output sample rate is not the same as the ILD from path: ", data->strNearFieldILDpath);
 			free(data->strNearFieldILDpath);
@@ -521,15 +518,15 @@ void WriteLog(string logtext)
 		{
 			// Receive next character
 
-			// Concatenate char to string				
+			// Concatenate char to string
 			int valueInt = static_cast<int>(value);
-			char valueChr = static_cast<char>(valueInt);	
+			char valueChr = static_cast<char>(valueInt);
 			path[count] = valueChr;
-			++count; 
+			++count;
 
-			// Check if string has ended			
+			// Check if string has ended
 			if (count == length)
-			{		
+			{
 				path[count] = 0;	// End character
 				serializing = false;
 				return RESULT_LOAD_END;
@@ -542,24 +539,24 @@ void WriteLog(string logtext)
 	/////////////////////////////////////////////////////////////////////
 
 	void WriteLogHeader(UnityAudioEffectState* state)
-	{		
+	{
 		EffectData* data = state->GetEffectData<EffectData>();
 		
 		// TO DO: Change this for high performance / high quality modes
 
-		// Audio state:		
+		// Audio state:
         Common::TAudioStateStruct audioState = spatializer().core.GetAudioState();
 		WriteLog(state, "CREATE: Sample rate set to ", audioState.sampleRate);
 		WriteLog(state, "CREATE: Buffer size set to ", audioState.bufferSize);
         WriteLog(state, "CREATE: HRTF resampling step set to ", spatializer().core.GetHRTFResamplingStep());
 
-		// Listener:		
+		// Listener:
 		if (spatializer().listener != nullptr)
 			WriteLog(state, "CREATE: Listener created successfully", "");
 		else
 			WriteLog(state, "CREATE: ERROR!!!! Listener creation returned null pointer!", "");
 
-		// Source:		
+		// Source:
 		if (data->audioSource != nullptr)
 			WriteLog(state, "CREATE: Source created successfully", "");
 		else
@@ -604,7 +601,7 @@ void WriteLog(string logtext)
             bool initializedSuccessfully = spatializer().initialize((int)state->samplerate, (int)state->dspbuffersize);
             if (initializedSuccessfully)
             {
-                UpdateCoreIsReady();
+//                UpdateCoreIsReady();
                 
                 WriteLog(state, "Core initialized. Waiting for configuration...", "");
             }
@@ -624,7 +621,7 @@ void WriteLog(string logtext)
 		
 		//Save samplerate and buffer size into the struct
 		//effectdata->bufferSize = audioState.bufferSize;
-		//effectdata->sampleRate = audioState.sampleRate;		
+		//effectdata->sampleRate = audioState.sampleRate;
 
 
 
@@ -701,24 +698,24 @@ void WriteLog(string logtext)
 
 	/////////////////////////////////////////////////////////////////////
 
-	void UpdateCoreIsReady()
-	{
-//		EffectData* data = state->GetEffectData<EffectData>();
-
-		bool isReady = IsCoreReady();
-
-		if (!spatializer().coreReady && isReady)
-		{
-			spatializer().coreReady = true;
-			WriteLog("Core ready!!!!!", "");
-		}
-
-		if (spatializer().coreReady && !isReady)
-		{
-			spatializer().coreReady = false;
-			WriteLog("Core stopped!!!!! Waiting for loading resources...", "");
-		}
-	}
+//	void UpdateCoreIsReady()
+//	{
+////		EffectData* data = state->GetEffectData<EffectData>();
+//
+//		bool isReady = IsCoreReady();
+//
+//		if (!spatializer().coreReady && isReady)
+//		{
+//			spatializer().coreReady = true;
+//			WriteLog("Core ready!!!!!", "");
+//		}
+//
+//		if (spatializer().coreReady && !isReady)
+//		{
+//			spatializer().coreReady = false;
+//			WriteLog("Core stopped!!!!! Waiting for loading resources...", "");
+//		}
+//	}
 
 
 	/////////////////////////////////////////////////////////////////////
@@ -731,15 +728,15 @@ void WriteLog(string logtext)
             return UNITY_AUDIODSP_ERR_UNSUPPORTED;
         spatializer().parameters[index] = value;
 
-		Common::CMagnitudes magnitudes;		
-		int loadResult;		
+		Common::CMagnitudes magnitudes;
+		int loadResult;
 
 		spatializer().spatializerMutex.lock();
 
 		// Process command sent by C# API
 		switch (index)
 		{
-			case PARAM_HRTF_FILE_STRING:	// Load HRTF binary file (MANDATORY)								
+			case PARAM_HRTF_FILE_STRING:	// Load HRTF binary file (MANDATORY)
 				loadResult = BuildPathString(state, spatializer().strHRTFpath, spatializer().strHRTFserializing, spatializer().strHRTFlength, spatializer().strHRTFcount, value);
 				if (loadResult == TLoadResult::RESULT_LOAD_END)
 				{
@@ -747,12 +744,12 @@ void WriteLog(string logtext)
 					if (loadResult == TLoadResult::RESULT_LOAD_OK)
 					{
 						spatializer().loadedHRTF = true;
-						UpdateCoreIsReady();
+//						UpdateCoreIsReady();
 					}
 				}
 				break;
 
-			case PARAM_NEAR_FIELD_ILD_FILE_STRING:	// Load ILD binary file (MANDATORY?)								
+			case PARAM_NEAR_FIELD_ILD_FILE_STRING:	// Load ILD binary file (MANDATORY?)
 				loadResult = BuildPathString(state, spatializer().strNearFieldILDpath, spatializer().strNearFieldILDserializing, spatializer().strNearFieldILDlength, spatializer().strNearFieldILDcount, value);
 				if (loadResult == TLoadResult::RESULT_LOAD_END)
 				{
@@ -763,7 +760,7 @@ void WriteLog(string logtext)
                         // TODO: Need to enable near field effect when instantiating new audiosources
 						spatializer().loadedNearFieldILD = true;
 						WriteLog(state, "SET PARAMETER: Near Field ILD Enabled", "");
-						UpdateCoreIsReady();
+//						UpdateCoreIsReady();
 					}
 				}
 				break;
@@ -774,7 +771,7 @@ void WriteLog(string logtext)
 				break;
 
 			// FUNCTIONALITY TO BE IMPLEMENTED
-			case PARAM_SCALE_FACTOR:	// Set scale factor (OPTIONAL)				
+			case PARAM_SCALE_FACTOR:	// Set scale factor (OPTIONAL)
 				WriteLog(state, "SET PARAMETER: Scale factor changed to ", value);
 				break;
 
@@ -806,7 +803,7 @@ void WriteLog(string logtext)
 				{
 					data->audioSource->DisableInterpolation();
 					WriteLog(state, "SET PARAMETER: Run-time HRTF Interpolation switched ", "OFF");
-				}				
+				}
 				break;
 
 			case PARAM_MOD_FARLPF:
@@ -877,7 +874,7 @@ void WriteLog(string logtext)
 				WriteLog(state, "SET PARAMETER: Sound speed set to (m/s) ", value);
 				break;
 
-			case PARAM_DEBUG_LOG:				
+			case PARAM_DEBUG_LOG:
 				if (value != 0.0f)
 				{
 					spatializer().debugLog = true;
@@ -912,7 +909,7 @@ void WriteLog(string logtext)
 				{
 					spatializer().listener->DisableDirectionality(Common::T_ear::LEFT);
 					WriteLog(state, "SET PARAMETER: HA Directionality switched OFF for Left ear", "");
-				}				
+				}
 				break;
 
 			case PARAM_HA_DIRECTIONALITY_ON_RIGHT:
@@ -930,25 +927,25 @@ void WriteLog(string logtext)
 
 			case PARAM_LIMITER_SET_ON:
 				if (value > 0.0f)
-				{					
+				{
 					WriteLog(state, "SET PARAMETER: Limiter switched ON", "");
 				}
 				else
-				{					
+				{
 					WriteLog(state, "SET PARAMETER: Limiter switched OFF", "");
 				}
-				break;				
+				break;
 
 			case PARAM_LIMITER_GET_COMPRESSION:
 				WriteLog(state, "SET PARAMETER: WARNING! PARAM_LIMIT_GET_COMPRESSION is read only", "");
 				break;
 
-			case PARAM_HRTF_STEP:				
+			case PARAM_HRTF_STEP:
                 spatializer().core.SetHRTFResamplingStep((int)value);
 				WriteLog(state, "SET PARAMETER: HRTF resampling step set to (degrees) ", value);
 				break;
 
-			case PARAM_HIGH_PERFORMANCE_ILD_FILE_STRING:	// Load ILD binary file (MANDATORY?)								
+			case PARAM_HIGH_PERFORMANCE_ILD_FILE_STRING:	// Load ILD binary file (MANDATORY?)
 				loadResult = BuildPathString(state, spatializer().strHighPerformanceILDpath, spatializer().strHighPerformanceILDserializing, spatializer().strHighPerformanceILDlength, spatializer().strHighPerformanceILDcount, value);
 				if (loadResult == TLoadResult::RESULT_LOAD_END)
 				{
@@ -956,7 +953,7 @@ void WriteLog(string logtext)
 					if (loadResult == TLoadResult::RESULT_LOAD_OK)
 					{
 						spatializer().loadedHighPerformanceILD = true;
-						UpdateCoreIsReady();
+//						UpdateCoreIsReady();
 						//data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::HighPerformance);
 						//WriteLog(state, "SET PARAMETER: High Performance ILD Enabled", "");
 					}
@@ -971,21 +968,21 @@ void WriteLog(string logtext)
 					data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::HighQuality);
 					spatializer().spatializationMode = SPATIALIZATION_MODE_HIGH_QUALITY;
 					WriteLog(state, "SET PARAMETER: High Quality spatialization mode is enabled", "");
-					UpdateCoreIsReady();
+//					UpdateCoreIsReady();
 				}
 				if (value == 1.0f)
 				{
 					data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::HighPerformance);
 					spatializer().spatializationMode = SPATIALIZATION_MODE_HIGH_PERFORMANCE;
 					WriteLog(state, "SET PARAMETER: High performance spatialization mode is enabled", "");
-					UpdateCoreIsReady();
+//					UpdateCoreIsReady();
 				}
 				if (value == 2.0f)
 				{
-					data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::NoSpatialization);					
+					data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::NoSpatialization);
 					spatializer().spatializationMode = SPATIALIZATION_MODE_NONE;
 					WriteLog(state, "SET PARAMETER: No spatialization mode is enabled", "");
-					UpdateCoreIsReady();
+//					UpdateCoreIsReady();
 				}
 				break;
 
@@ -1011,7 +1008,7 @@ void WriteLog(string logtext)
 			valuestr[0] = 0;
 
 		if (value != NULL)
-		{ 
+		{
 			switch (index)
 			{
 				case PARAM_LIMITER_GET_COMPRESSION:
@@ -1022,14 +1019,14 @@ void WriteLog(string logtext)
 					break;
 
 				case PARAM_IS_CORE_READY:
-					if (spatializer().coreReady)
+					if (spatializer().isReady())
 						*value = 1.0f;
 					else
 						*value = 0.0f;
 					break;
 				
-				case PARAM_BUFFER_SIZE:					
-					//*value = float(data->bufferSize);					
+				case PARAM_BUFFER_SIZE:
+					//*value = float(data->bufferSize);
 					*value = (int)state->dspbuffersize;
 					break;
 
@@ -1038,7 +1035,7 @@ void WriteLog(string logtext)
 					*value = (int)state->samplerate;
 					break;
 				case PARAM_BUFFER_SIZE_CORE:
-					//*value = float(data->bufferSize);					
+					//*value = float(data->bufferSize);
                     *value = spatializer().core.GetAudioState().bufferSize;
 					break;
 
@@ -1049,7 +1046,7 @@ void WriteLog(string logtext)
 				default:
 					*value = spatializer().parameters[index];
 					break;
-			}						
+			}
 		}
         return UNITY_AUDIODSP_OK;
     }
@@ -1096,11 +1093,11 @@ void WriteLog(string logtext)
 			return UNITY_AUDIODSP_OK;
 		}
 
-		// Set source and listener transforms		
+		// Set source and listener transforms
 		data->audioSource->SetSourceTransform(ComputeSourceTransformFromMatrix(state->spatializerdata->sourcematrix, spatializer().parameters[PARAM_SCALE_FACTOR]));
 		spatializer().listener->SetListenerTransform(ComputeListenerTransformFromMatrix(state->spatializerdata->listenermatrix, spatializer().parameters[PARAM_SCALE_FACTOR]));
 
-		// Now check that listener and source are not in the same position. 
+		// Now check that listener and source are not in the same position.
 		// This might happens in some weird cases, such as when trying to process a source with no clip
 		if (spatializer().listener->GetListenerTransform().GetVectorTo(data->audioSource->GetSourceTransform()).GetSqrDistance() < 0.0001f)
 		{
@@ -1140,7 +1137,7 @@ void WriteLog(string logtext)
 			spatializer().limiter.Process(outStereoBuffer);
 		}
 
-		// Transform output buffer			
+		// Transform output buffer
 		int i = 0;
 		for (auto it = outStereoBuffer.begin(); it != outStereoBuffer.end(); it++)
 		{

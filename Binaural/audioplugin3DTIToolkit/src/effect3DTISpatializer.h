@@ -5,7 +5,15 @@
 
 
 namespace Spatializer3DTI
+{
+    
+    enum SpatializationMode : int
     {
+        SPATIALIZATION_MODE_HIGH_QUALITY = 0,
+        SPATIALIZATION_MODE_HIGH_PERFORMANCE = 1,
+        SPATIALIZATION_MODE_NONE = 2,
+    };
+
     
     enum
     {
@@ -63,7 +71,8 @@ namespace Spatializer3DTI
     public:
         std::shared_ptr<Binaural::CListener> listener;
         Binaural::CCore core;
-        bool coreReady;
+        // replaced with function
+//        bool coreReady;
         bool loadedHRTF;                // New
         bool loadedNearFieldILD;        // New
         bool loadedHighPerformanceILD;    // New
@@ -100,6 +109,25 @@ namespace Spatializer3DTI
             return listener != nullptr;
         }
         
+        bool isReady() const
+        {
+            switch (spatializationMode)
+            {
+                case SPATIALIZATION_MODE_NONE:
+                    return true;
+                case SPATIALIZATION_MODE_HIGH_PERFORMANCE:
+                    return loadedHighPerformanceILD;
+                case SPATIALIZATION_MODE_HIGH_QUALITY:
+                    //TODO: Tim I've removed this test for now as it makes this function dependent on a single audio source. Instead, we should enable the nearfieldeffect on the audiosource within CreateCallback based on whether the nearfield is loaded in globalState. When that's done, this test becomes redundant
+                    //            if ((!sharedState().loadedNearFieldILD) && (data->audioSource->IsNearFieldEffectEnabled()))
+                    //                isReady = false;
+
+                    return loadedHRTF;
+                default:
+                    return false;
+            }
+        }
+        
     protected:
         // Init parameters. Core is not ready until we load the HRTF. ILD will be disabled, so we don't need to worry yet
         bool initialize(int sampleRate, int dspBufferSize);
@@ -124,7 +152,7 @@ namespace Spatializer3DTI
     
     
     bool IsCoreReady();
-    void UpdateCoreIsReady();
+//    void UpdateCoreIsReady();
     
 //    template <class T>
 //    void WriteLog(UnityAudioEffectState* state, string logtext, const T& value);
