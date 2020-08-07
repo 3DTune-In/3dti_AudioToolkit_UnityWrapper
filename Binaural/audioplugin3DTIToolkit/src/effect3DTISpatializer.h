@@ -54,7 +54,8 @@ namespace Spatializer3DTI
     
     UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectState* state);
     
-    class GlobalState
+    // Singleton class holding state for the whole plugin (we have a single listener as permitted by Unity)
+    class SpatializerState
     {
     public:
         std::shared_ptr<Binaural::CListener> listener;
@@ -89,12 +90,18 @@ namespace Spatializer3DTI
         // MUTEX
         std::mutex spatializerMutex;
         
+        SpatializerState();
+        
+        bool isInitialized() const
+        {
+            return listener != nullptr;
+        }
         
     protected:
         // Init parameters. Core is not ready until we load the HRTF. ILD will be disabled, so we don't need to worry yet
-        GlobalState(int sampleRate, int dspBufferSize);
+        bool initialize(int sampleRate, int dspBufferSize);
         
-        // Instance is only constructed
+        // initialize is only called by CreateCallback
         friend UNITY_AUDIODSP_RESULT CreateCallback(UnityAudioEffectState* state);
     };
     

@@ -70,7 +70,7 @@ namespace Spatializer3DTI
 namespace
 {
     // This is constructed by the first CreateCallback call
-    GlobalState* globalState = nullptr;
+    SpatializerState* globalState = nullptr;
 }
 
 
@@ -105,11 +105,16 @@ void WriteLog(UnityAudioEffectState* state, string logtext, const T& value)
     WriteLog(logtext, value, state->GetEffectData<EffectData>()->sourceID);
 }
 
+void WriteLog(string logtext)
+{
+    WriteLog(logtext, "");
+}
+
 
 /////////////////////////////////////////////////////////////////////
 
     // Init parameters. Core is not ready until we load the HRTF. ILD will be disabled, so we don't need to worry yet
-    GlobalState::GlobalState(int sampleRate, int dspBufferSize)
+    SpatializerState::SpatializerState()
     : coreReady(false)
     , loadedHRTF(false)
     , loadedNearFieldILD(false)
@@ -127,7 +132,14 @@ void WriteLog(UnityAudioEffectState* state, string logtext, const T& value)
     , strHighPerformanceILDserializing(false)
     , strHighPerformanceILDcount(0)
     , strHighPerformanceILDlength(0)
+{
+    
+}
+
+    bool SpatializerState::initialize(int sampleRate, int dspBufferSize)
     {
+        WriteLog("Initializing 3DTI Spatializer...");
+        
         InitParametersFromDefinitions(InternalRegisterEffectDefinition, parameters);
         parameters[PARAM_SCALE_FACTOR] = 1.0f;
 
@@ -164,6 +176,16 @@ void WriteLog(UnityAudioEffectState* state, string logtext, const T& value)
             WriteLog("Error when attempting to load bundled HRTF data:",defaultHRTFKey);
         }
 
+        if (isInitialized())
+        {
+            WriteLog("3DTI Spatializer initialized.");
+            return true;
+        }
+        else
+        {
+            WriteLog("3DTI Spatializer failed to initialized.");
+            return false;
+        }
     }
 
    
@@ -575,7 +597,8 @@ void WriteLog(UnityAudioEffectState* state, string logtext, const T& value)
         // The first time we run we need to initialize the core
         if (globalState == nullptr)
         {
-            globalState = new GlobalState((int)state->samplerate, (int)state->dspbuffersize);
+            globalState = new SpatializerState();
+            globalState->initialize((int)state->samplerate, (int)state->dspbuffersize);
             UpdateCoreIsReady();
             
             WriteLog(state, "Core initialized. Waiting for configuration...", "");
