@@ -66,7 +66,7 @@ namespace Spatializer3DTI
 namespace
 {
     // Single state instance shared across all audio sources
-        Spatializer& spatializer()
+    Spatializer& spatializer()
     {
         static Spatializer spatializer;
         return spatializer;
@@ -156,37 +156,39 @@ loadedHRTF(false)
 
         limiter.Setup(sampleRate, LIMITER_RATIO, LIMITER_THRESHOLD, LIMITER_ATTACK, LIMITER_RELEASE);
 
-        // Load default HRTF
-        
-        std::string defaultHRTFKey =
-        sampleRate == 44100? "3DTI_HRTF_IRC1008_512s_44100Hz.3dti-hrtf"
-        : sampleRate == 48000? "3DTI_HRTF_IRC1008_512s_48000Hz.3dti-hrtf"
-        : sampleRate == 96000? "3DTI_HRTF_IRC1008_512s_96000Hz.3dti-hrtf"
-        : "";
-        
-        if (defaultHRTFKey == "")
-        {
-            writeMyLog("Unable to load default HRTF file as no HRTF is bundled for sample rate "+std::to_string(sampleRate));
-        }
-        else if (LoadHRTFBinaryString(hrtfBinaries.at(defaultHRTFKey), listener) == TLoadResult::RESULT_LOAD_OK)
-        {
-            loadedHRTF = true;
-        }
-        else
-        {
-            WriteLog("Error when attempting to load bundled HRTF data:",defaultHRTFKey);
-        }
-
-        if (isInitialized())
-        {
-            WriteLog("3DTI Spatializer initialized.");
-            return true;
-        }
-        else
-        {
-            WriteLog("3DTI Spatializer failed to initialized.");
-            return false;
-        }
+//        // Load default HRTF
+//
+//        std::string defaultHRTFKey =
+//        sampleRate == 44100? "3DTI_HRTF_IRC1008_512s_44100Hz.3dti-hrtf"
+//        : sampleRate == 48000? "3DTI_HRTF_IRC1008_512s_48000Hz.3dti-hrtf"
+//        : sampleRate == 96000? "3DTI_HRTF_IRC1008_512s_96000Hz.3dti-hrtf"
+//        : "";
+//
+//        if (defaultHRTFKey == "")
+//        {
+//            writeMyLog("Unable to load default HRTF file as no HRTF is bundled for sample rate "+std::to_string(sampleRate));
+//        }
+//        else if (LoadHRTFBinaryString(hrtfBinaries.at(defaultHRTFKey), listener) == TLoadResult::RESULT_LOAD_OK)
+//        {
+//            loadedHRTF = true;
+//        }
+//        else
+//        {
+//            WriteLog("Error when attempting to load bundled HRTF data:",defaultHRTFKey);
+//        }
+//
+//        if (isInitialized())
+//        {
+//            WriteLog("3DTI Spatializer initialized.");
+//            return true;
+//        }
+//        else
+//        {
+//            WriteLog("3DTI Spatializer failed to initialized.");
+//            return false;
+//        }
+// TODO: Temp - return a more meaninful value
+        return true;
     }
 
    
@@ -613,7 +615,15 @@ loadedHRTF(false)
         if (effectdata->audioSource != nullptr)
         {
             effectdata->audioSource->EnableInterpolation();
-            effectdata->audioSource->DisableNearFieldEffect();    // ILD disabled before loading ILD data
+            if (spatializer().spatializationMode == SPATIALIZATION_MODE_HIGH_QUALITY && spatializer().loadedHighPerformanceILD)
+            {
+                effectdata->audioSource->EnableNearFieldEffect();
+            }
+            else
+            {
+                effectdata->audioSource->DisableNearFieldEffect();    // ILD disabled before loading ILD data
+            }
+                
         }
 
 
@@ -756,8 +766,8 @@ loadedHRTF(false)
 					loadResult = LoadNearFieldILDBinaryFile(state);
 					if (loadResult == TLoadResult::RESULT_LOAD_OK)
 					{
-						data->audioSource->EnableNearFieldEffect();
-                        // TODO: Need to enable near field effect when instantiating new audiosources
+                        // This is now enabled when instantiating a new source
+//						data->audioSource->EnableNearFieldEffect();
 						spatializer().loadedNearFieldILD = true;
 						WriteLog(state, "SET PARAMETER: Near Field ILD Enabled", "");
 //						UpdateCoreIsReady();
