@@ -116,22 +116,47 @@ public class API_3DTI_Spatializer : MonoBehaviour
     bool isInitialized = false;
 
     /////////////////////////////////////////////////////////////////////
+    ///
+    // This is to force Unity to make a spatializer instance so we can set up
+    // the common values at the start of the scene.
+    private AudioSource silentAudioSource;
 
 
     /// <summary>
     /// Automatic setup of Toolkit Core (as read from custom GUI in Unity Inspector)
     /// </summary>
     void Start ()
-    {        
+    {
         //StartBinauralSpatializer();
+
+        
+        silentAudioSource = gameObject.AddComponent<AudioSource>();
+        silentAudioSource.spatialize = true;
+        silentAudioSource.clip = Resources.Load<AudioClip>("silence");
+        if (silentAudioSource.clip == null)
+        {
+            Debug.LogError("Failed to load resource for audio file 'silence.wav'", this);
+        }
+        else
+        {
+            silentAudioSource.Play();
+        }
     }
 
     void Update()
     {
-        if (!isInitialized)
+        if (!isInitialized && IsCoreReadyToStart())
         {
             if (StartBinauralSpatializer())
+            {
                 isInitialized = true;
+
+                if (silentAudioSource != null)
+                {
+                    Destroy(silentAudioSource);
+                    silentAudioSource = null;
+                }
+            }
         }
     }
 
@@ -140,12 +165,22 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /////////////////////////////////////////////////////////////////////
     
     /// <summary>
-    /// Sends all configuration to all spatialized sources. 
-    /// Use it each time you reactive an audio source or reactive its "spatialize" attribute. 
+    /// Sends the configuration to the spatializer plugin. This can only be run
+    /// once a spatialized AudioSource is playing.
     /// </summary>
-    public bool StartBinauralSpatializer(AudioSource source=null)
+    private bool StartBinauralSpatializer()
     {
-        // Select only one AudioSource        
+        // Select an AudioSource
+        AudioSource source = null;
+        foreach (AudioSource s in FindObjectsOfType<AudioSource>())
+        {
+            if (s.isActiveAndEnabled && s.spatialize)
+            {
+                source = s;
+            }
+        }
+
+
         if (source != null)
         {                        
             // Check if core is already started
@@ -669,7 +704,10 @@ public class API_3DTI_Spatializer : MonoBehaviour
         spatializationMode = mode;
 
         // Load resources        
-        SetupListener();    
+        if (!SetupListener())
+        {
+            Debug.LogWarning("SetupListener returned false", this);
+        }
 
         // Send command to plugin        
         return SendCommand(SET_SPATIALIZATION_MODE, (float)(mode), null);   
@@ -885,6 +923,15 @@ public class API_3DTI_Spatializer : MonoBehaviour
         // Send the command to get the value        
         return (s.GetSpatializerFloat(parameter, out value));
     }
+
+    public bool IsCoreReadyToStart()
+    {
+        // Test if the core has received the correct sample rate yet. This will happen after the first spatialized sound triggers the CreateCallback method
+        float sampleRateCore;
+        GetSampleRateCore(out sampleRateCore);
+        return (int)sampleRateCore == AudioSettings.outputSampleRate;
+    }
+
     public int GetSampleRateEnum()
     {
         int _index = 0;
@@ -892,11 +939,12 @@ public class API_3DTI_Spatializer : MonoBehaviour
         float sampleRateWrapper, sampleRateCore;
         GetSampleRate(out sampleRateWrapper);
         GetSampleRateCore(out sampleRateCore);
+        Debug.Log($"sampleRate: {sampleRate}, sampleRateWrapper: {sampleRateWrapper}, sampleRateCore: {sampleRateCore}");
         if (Application.isPlaying /*|| UnityEditor.EditorApplication.isPlaying*/)
         {
             if (sampleRate != sampleRateWrapper || sampleRate != sampleRateCore || sampleRateWrapper != sampleRateCore)
             {
-                Debug.LogError("Sample Rate no coincidente entre AudioSettings, Wrapper y Core");
+                Debug.LogError($"Sample Rate no coincidente entre AudioSettings ({sampleRate}), Wrapper ({sampleRateWrapper}) y Core ({sampleRateCore})");
             }
         }
         if (sampleRate > 0)
