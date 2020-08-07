@@ -669,32 +669,32 @@ loadedHRTF(false)
 
 	/////////////////////////////////////////////////////////////////////
 
-	bool IsCoreReady()
-	{
-//		EffectData* data = state->GetEffectData<EffectData>();
-
-		bool isReady = false;
-
-		if (spatializer().spatializationMode == SPATIALIZATION_MODE_NONE)
-			isReady = true;
-
-		if (spatializer().spatializationMode == SPATIALIZATION_MODE_HIGH_PERFORMANCE)
-		{
-			if (spatializer().loadedHighPerformanceILD)
-				isReady = true;
-		}
-
-		if (spatializer().spatializationMode == SPATIALIZATION_MODE_HIGH_QUALITY)
-		{
-			if (spatializer().loadedHRTF)
-				isReady = true;
-            //TODO: Tim I've removed this test for now as it makes this function dependent on a single audio source. Instead, we should enable the nearfieldeffect on the audiosource within CreateCallback based on whether the nearfield is loaded in globalState. When that's done, this test becomes redundant
-//			if ((!sharedState().loadedNearFieldILD) && (data->audioSource->IsNearFieldEffectEnabled()))
-//				isReady = false;
-		}
-
-		return isReady;
-	}
+//	bool IsCoreReady()
+//	{
+////		EffectData* data = state->GetEffectData<EffectData>();
+//
+//		bool isReady = false;
+//
+//		if (spatializer().spatializationMode == SPATIALIZATION_MODE_NONE)
+//			isReady = true;
+//
+//		if (spatializer().spatializationMode == SPATIALIZATION_MODE_HIGH_PERFORMANCE)
+//		{
+//			if (spatializer().loadedHighPerformanceILD)
+//				isReady = true;
+//		}
+//
+//		if (spatializer().spatializationMode == SPATIALIZATION_MODE_HIGH_QUALITY)
+//		{
+//			if (spatializer().loadedHRTF)
+//				isReady = true;
+//            //TODO: Tim I've removed this test for now as it makes this function dependent on a single audio source. Instead, we should enable the nearfieldeffect on the audiosource within CreateCallback based on whether the nearfield is loaded in globalState. When that's done, this test becomes redundant
+////			if ((!sharedState().loadedNearFieldILD) && (data->audioSource->IsNearFieldEffectEnabled()))
+////				isReady = false;
+//		}
+//
+//		return isReady;
+//	}
 
 	/////////////////////////////////////////////////////////////////////
 
@@ -1083,7 +1083,7 @@ loadedHRTF(false)
 
 		// Before doing anything, check that the core is ready
 		//if (!data->coreReady)
-		if (!IsCoreReady())
+		if (!spatializer().isReady())
 		{
 			// Put silence in outbuffer
 			//WriteLog(state, "PROCESS: Core is not ready yet...", "");

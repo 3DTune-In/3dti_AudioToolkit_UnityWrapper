@@ -151,7 +151,7 @@ namespace Spatializer3DTI
     int LoadHRTFBinaryString(const std::basic_string<uint8_t>& hrtfData, std::shared_ptr<Binaural::CListener> listener);
     
     
-    bool IsCoreReady();
+//    bool IsCoreReady();
 //    void UpdateCoreIsReady();
     
 //    template <class T>
