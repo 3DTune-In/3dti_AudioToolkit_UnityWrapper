@@ -156,39 +156,93 @@ loadedHRTF(false)
 
         limiter.Setup(sampleRate, LIMITER_RATIO, LIMITER_THRESHOLD, LIMITER_ATTACK, LIMITER_RELEASE);
 
-//        // Load default HRTF
-//
-//        std::string defaultHRTFKey =
-//        sampleRate == 44100? "3DTI_HRTF_IRC1008_512s_44100Hz.3dti-hrtf"
-//        : sampleRate == 48000? "3DTI_HRTF_IRC1008_512s_48000Hz.3dti-hrtf"
-//        : sampleRate == 96000? "3DTI_HRTF_IRC1008_512s_96000Hz.3dti-hrtf"
-//        : "";
-//
-//        if (defaultHRTFKey == "")
-//        {
-//            WriteLog("Unable to load default HRTF file as no HRTF is bundled for sample rate "+std::to_string(sampleRate));
-//        }
-//        else if (LoadHRTFBinaryString(hrtfBinaries.at(defaultHRTFKey), listener) == TLoadResult::RESULT_LOAD_OK)
-//        {
-//            loadedHRTF = true;
-//        }
-//        else
-//        {
-//            WriteLog("Error when attempting to load bundled HRTF data:",defaultHRTFKey);
-//        }
-//
-//        if (isInitialized())
-//        {
-//            WriteLog("3DTI Spatializer initialized.");
-//            return true;
-//        }
-//        else
-//        {
-//            WriteLog("3DTI Spatializer failed to initialized.");
-//            return false;
-//        }
-// TODO: Temp - return a more meaninful value
+#ifndef SPATIALIZER3DTI_EXCLUDE_DEFAULT_LISTENER_BINARIES
+        
+        // We load default values for the Listener binaries (HRTF and ILD).
+        // This section can be excluded using the above define, which you
+        // may want to do if you're using custom binaries and want to avoid
+        // the memory consumption of having these values hard coded.
+        std::string sr = std::to_string(sampleRate);
+
+        {
+            // Load default HRTF
+            std::string key = "3DTI_HRTF_IRC1032_512s_"+sr+"Hz.3dti-hrtf";
+            
+            if (listenerBinaries.count(key)==0)
+            {
+                WriteLog("Unable to load default HRTF file as none is bundled for sample rate "+std::to_string(sampleRate));
+            }
+            else
+            {
+                loadedHRTF = LoadHRTFBinaryString(listenerBinaries.at(key), listener);
+                if (!loadedHRTF)
+                {
+                    WriteLog("Error when attempting to load bundled HRTF data:",key);
+                }
+            }
+        }
+        
+        {
+            // Load default High Quality ILD
+            std::string key = "NearFieldCompensation_ILD_"+sr+".3dti-ild";
+            
+            if (listenerBinaries.count(key)==0)
+            {
+                WriteLog("Unable to load default Near Field Compensation ILD file as none is bundled for sample rate "+std::to_string(sampleRate));
+            }
+            else
+            {
+                loadedNearFieldILD = LoadNearFieldILDBinaryString(listenerBinaries.at(key), listener);
+                if (!loadedNearFieldILD)
+                {
+                    WriteLog("Error when attempting to load bundled HRTF data:",key);
+                }
+            }
+        }
+        
+        {
+            // Load default High Performance ILD
+            std::string key = "HRTF_ILD_"+sr+".3dti-ild";
+            
+            if (listenerBinaries.count(key)==0)
+            {
+                WriteLog("Unable to load default High Performance ILD file as none is bundled for sample rate "+std::to_string(sampleRate));
+            }
+            else
+            {
+                loadedHighPerformanceILD = LoadHighPerformanceILDBinaryString(listenerBinaries.at(key), listener);
+                if (!loadedHighPerformanceILD)
+                {
+                    WriteLog("Error when attempting to load bundled HRTF data:",key);
+                }
+            }
+        }
+        
+        if (loadedHRTF)
+        {
+            spatializationMode = SPATIALIZATION_MODE_HIGH_QUALITY;
+        }
+        else if (loadedHighPerformanceILD)
+        {
+            spatializationMode = SPATIALIZATION_MODE_HIGH_PERFORMANCE;
+        }
+        
+
+        if (isInitialized())
+        {
+            WriteLog("3DTI Spatializer initialized.");
+            return true;
+        }
+        else
+        {
+            WriteLog("3DTI Spatializer failed to initialized.");
+            return false;
+        }
+#else
+        WriteLog("3DTI Spatializer initialized but awaiting listener binaries.");
+
         return true;
+#endif
     }
 
    
@@ -336,12 +390,12 @@ loadedHRTF(false)
 
 	/////////////////////////////////////////////////////////////////////
 
-    int LoadHRTFBinaryString(const std::basic_string<uint8_t>& hrtfData, std::shared_ptr<Binaural::CListener> listener)
-{
-    std::istringstream stream(reinterpret_cast<const std::basic_string<char>&>(hrtfData));
-    bool result = HRTF::CreateFrom3dtiStream(stream, listener);
-    return result? TLoadResult::RESULT_LOAD_OK : TLoadResult::RESULT_LOAD_ERROR;
-}
+    bool LoadHRTFBinaryString(const std::basic_string<uint8_t>& hrtfData, std::shared_ptr<Binaural::CListener> listener)
+    {
+        std::istringstream stream(reinterpret_cast<const std::basic_string<char>&>(hrtfData));
+        return HRTF::CreateFrom3dtiStream(stream, listener);
+
+    }
 
 	int LoadHRTFBinaryFile(UnityAudioEffectState* state)
 	{
@@ -374,9 +428,15 @@ loadedHRTF(false)
 			free(spatializer().strHRTFpath);
 			return TLoadResult::RESULT_LOAD_ERROR;
 		}
-	}
+    }
 
-	/////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
+
+    bool LoadHighPerformanceILDBinaryString(const std::basic_string<uint8_t>& ildData, std::shared_ptr<Binaural::CListener> listener)
+    {
+        std::istringstream stream(reinterpret_cast<const std::basic_string<char>&>(ildData));
+        return ILD::CreateFrom3dtiStream(stream, listener, ILD::T_ILDTable::ILDSpatializationTable);
+    }
 
 	int LoadHighPerformanceILDBinaryFile(UnityAudioEffectState* state)
 	{
@@ -421,6 +481,12 @@ loadedHRTF(false)
 	}
 
 	/////////////////////////////////////////////////////////////////////
+
+    bool LoadNearFieldILDBinaryString(const std::basic_string<uint8_t>& ildData, std::shared_ptr<Binaural::CListener> listener)
+    {
+        std::istringstream stream(reinterpret_cast<const std::basic_string<char>&>(ildData));
+        return ILD::CreateFrom3dtiStream(stream, listener, ILD::T_ILDTable::ILDNearFieldEffectTable);
+    }
 
 	int LoadNearFieldILDBinaryFile(UnityAudioEffectState* state)
 	{

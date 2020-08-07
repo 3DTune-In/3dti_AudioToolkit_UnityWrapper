@@ -142,9 +142,9 @@ namespace Spatializer3DTI
     
     
     int InternalRegisterEffectDefinition(UnityAudioEffectDefinition& definition);
-    int LoadHRTFBinaryString(const std::basic_string<uint8_t>& hrtfData, std::shared_ptr<Binaural::CListener> listener);
-    
-    
+    bool LoadHRTFBinaryString(const std::basic_string<uint8_t>& hrtfData, std::shared_ptr<Binaural::CListener> listener);
+    bool LoadHighPerformanceILDBinaryString(const std::basic_string<uint8_t>& ildData,  std::shared_ptr<Binaural::CListener> listener);
+    bool LoadNearFieldILDBinaryString(const std::basic_string<uint8_t>& ildData, std::shared_ptr<Binaural::CListener> listener);
 
 }
 

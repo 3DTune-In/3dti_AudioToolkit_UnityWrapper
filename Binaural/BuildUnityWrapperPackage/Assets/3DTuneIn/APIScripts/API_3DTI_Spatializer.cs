@@ -180,19 +180,12 @@ public class API_3DTI_Spatializer : MonoBehaviour
             }
         }
 
-
-        if (source != null)
-        {                        
-            // Check if core is already started
-            bool isReady;
-            if (!GetBoolParameter(GET_IS_CORE_READY, out isReady))
-                return false;
-            else
-            {
-                if (isReady)
-                    return false;
-            }
+        if (source == null)
+        {
+            return false;
         }
+
+
 
         // Debug log:
         if (!SendWriteDebugLog(debugLog, source)) return false;
@@ -219,55 +212,55 @@ public class API_3DTI_Spatializer : MonoBehaviour
         return true;
     }
 
-    /// <summary>
-    /// Enable all binaural spatialization processes for one (or all) source/s
-    /// </summary>
-    /// <param name="source"></param>
-    /// <returns></returns>
-    public bool EnableSpatialization(AudioSource source=null)
-    {
-        //if (spatializationMode == SPATIALIZATION_MODE_HIGH_QUALITY)
-        //{
-        //    //if (!SetModHRTF(true)) return false;
-        //    if (!SetModNearFieldILD(true, source)) return false;
-        //    if (!SetModFarLPF(true, source)) return false;
-        //    if (!SetModDistanceAttenuation(true, source)) return false;
-        //    return SendCommand(SET_SPATIALIZATION_MODE, (float)(spatializationMode), source);
-        //}
-        //if (spatializationMode == SPATIALIZATION_MODE_HIGH_PERFORMANCE)
-        //{
-        //    if (!SetModFarLPF(true, source)) return false;
-        //    if (!SetModDistanceAttenuation(true, source)) return false;
-        //    return SendCommand(SET_SPATIALIZATION_MODE, (float)(spatializationMode), source);
-        //}
-        //return false;
-        return SendCommand(SET_SPATIALIZATION_MODE, (float)(spatializationMode), source);
-    }
+    ///// <summary>
+    ///// Enable all binaural spatialization processes for one (or all) source/s
+    ///// </summary>
+    ///// <param name="source"></param>
+    ///// <returns></returns>
+    //public bool EnableSpatialization(AudioSource source=null)
+    //{
+    //    //if (spatializationMode == SPATIALIZATION_MODE_HIGH_QUALITY)
+    //    //{
+    //    //    //if (!SetModHRTF(true)) return false;
+    //    //    if (!SetModNearFieldILD(true, source)) return false;
+    //    //    if (!SetModFarLPF(true, source)) return false;
+    //    //    if (!SetModDistanceAttenuation(true, source)) return false;
+    //    //    return SendCommand(SET_SPATIALIZATION_MODE, (float)(spatializationMode), source);
+    //    //}
+    //    //if (spatializationMode == SPATIALIZATION_MODE_HIGH_PERFORMANCE)
+    //    //{
+    //    //    if (!SetModFarLPF(true, source)) return false;
+    //    //    if (!SetModDistanceAttenuation(true, source)) return false;
+    //    //    return SendCommand(SET_SPATIALIZATION_MODE, (float)(spatializationMode), source);
+    //    //}
+    //    //return false;
+    //    return SendCommand(SET_SPATIALIZATION_MODE, (float)(spatializationMode), source);
+    //}
 
-    /// <summary>
-    /// Enable all binaural spatialization processes for one (or all) source/s
-    /// </summary>
-    /// <param name="source"></param>
-    /// <returns></returns>
-    public bool DisableSpatialization(AudioSource source = null)
-    {
-        //if (spatializationMode == SPATIALIZATION_MODE_HIGH_QUALITY)
-        //{
-        //    //if (!SetModHRTF(false, source)) return false;
-        //    if (!SetModNearFieldILD(false, source)) return false;
-        //    if (!SetModFarLPF(false, source)) return false;
-        //    if (!SetModDistanceAttenuation(false, source)) return false;
-        //    return SendCommand(SET_SPATIALIZATION_MODE, (float)(SPATIALIZATION_MODE_NONE), source);
-        //}
-        //if (spatializationMode == SPATIALIZATION_MODE_HIGH_PERFORMANCE)
-        //{
-        //    if (!SetModFarLPF(false, source)) return false;
-        //    if (!SetModDistanceAttenuation(false, source)) return false;
-        //    return SendCommand(SET_SPATIALIZATION_MODE, (float)(SPATIALIZATION_MODE_NONE), source);
-        //}
-        //return false;
-        return SendCommand(SET_SPATIALIZATION_MODE, (float)(SPATIALIZATION_MODE_NONE), source);
-    }
+    ///// <summary>
+    ///// Enable all binaural spatialization processes for one (or all) source/s
+    ///// </summary>
+    ///// <param name="source"></param>
+    ///// <returns></returns>
+    //public bool DisableSpatialization(AudioSource source = null)
+    //{
+    //    //if (spatializationMode == SPATIALIZATION_MODE_HIGH_QUALITY)
+    //    //{
+    //    //    //if (!SetModHRTF(false, source)) return false;
+    //    //    if (!SetModNearFieldILD(false, source)) return false;
+    //    //    if (!SetModFarLPF(false, source)) return false;
+    //    //    if (!SetModDistanceAttenuation(false, source)) return false;
+    //    //    return SendCommand(SET_SPATIALIZATION_MODE, (float)(SPATIALIZATION_MODE_NONE), source);
+    //    //}
+    //    //if (spatializationMode == SPATIALIZATION_MODE_HIGH_PERFORMANCE)
+    //    //{
+    //    //    if (!SetModFarLPF(false, source)) return false;
+    //    //    if (!SetModDistanceAttenuation(false, source)) return false;
+    //    //    return SendCommand(SET_SPATIALIZATION_MODE, (float)(SPATIALIZATION_MODE_NONE), source);
+    //    //}
+    //    //return false;
+    //    return SendCommand(SET_SPATIALIZATION_MODE, (float)(SPATIALIZATION_MODE_NONE), source);
+    //}
 
     /////////////////////////////////////////////////////////////////////
     // LISTENER METHODS
