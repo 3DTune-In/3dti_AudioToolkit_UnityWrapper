@@ -118,10 +118,6 @@ namespace Spatializer3DTI
                 case SPATIALIZATION_MODE_HIGH_PERFORMANCE:
                     return loadedHighPerformanceILD;
                 case SPATIALIZATION_MODE_HIGH_QUALITY:
-                    //TODO: Tim I've removed this test for now as it makes this function dependent on a single audio source. Instead, we should enable the nearfieldeffect on the audiosource within CreateCallback based on whether the nearfield is loaded in globalState. When that's done, this test becomes redundant
-                    //            if ((!sharedState().loadedNearFieldILD) && (data->audioSource->IsNearFieldEffectEnabled()))
-                    //                isReady = false;
-
                     return loadedHRTF;
                 default:
                     return false;
@@ -142,8 +138,6 @@ namespace Spatializer3DTI
     {
         int sourceID;    // DEBUG
         std::shared_ptr<Binaural::CSingleSourceDSP> audioSource;
-        //        int bufferSize;
-        //    int sampleRate;
     };
     
     
@@ -151,15 +145,7 @@ namespace Spatializer3DTI
     int LoadHRTFBinaryString(const std::basic_string<uint8_t>& hrtfData, std::shared_ptr<Binaural::CListener> listener);
     
     
-//    bool IsCoreReady();
-//    void UpdateCoreIsReady();
-    
-//    template <class T>
-//    void WriteLog(UnityAudioEffectState* state, string logtext, const T& value);
-//
-//    // Defined in the cpp file (it's normal to define templates in the header but doesn't matter here as it's only used in that file anyway)
-//    template <class T>
-//    void WriteLog(string logtext, const T& value, int sourceID=-1);
+
 }
 
 

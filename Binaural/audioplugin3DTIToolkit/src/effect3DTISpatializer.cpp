@@ -166,7 +166,7 @@ loadedHRTF(false)
 //
 //        if (defaultHRTFKey == "")
 //        {
-//            writeMyLog("Unable to load default HRTF file as no HRTF is bundled for sample rate "+std::to_string(sampleRate));
+//            WriteLog("Unable to load default HRTF file as no HRTF is bundled for sample rate "+std::to_string(sampleRate));
 //        }
 //        else if (LoadHRTFBinaryString(hrtfBinaries.at(defaultHRTFKey), listener) == TLoadResult::RESULT_LOAD_OK)
 //        {
@@ -196,39 +196,7 @@ loadedHRTF(false)
 
 /////////////////////////////////////////////////////////////////////
 
-    
-
-	/////////////////////////////////////////////////////////////////////
-
-//	template <class T>
-//	void WriteLog(UnityAudioEffectState* state, string logtext, const T& value)
-//	{
-//		EffectData* data = state->GetEffectData<EffectData>();
-//		if (globalState != nullptr && sharedState().debugLog)
-//		{
-//			#ifdef DEBUG_LOG_FILE_BINSP
-//			ofstream logfile;
-//			int sourceid = data->sourceID;
-//			logfile.open("3DTI_BinauralSpatializer_DebugLog.txt", ofstream::out | ofstream::app);
-//			if (sourceid != -1)
-//				logfile << sourceid << ": " << logtext << value << endl;
-//			else
-//				logfile << logtext << value << endl;
-//			logfile.close();
-//			#endif
-//
-//			#ifdef DEBUG_LOG_CAT
-//			std::ostringstream os;
-//			os << logtext << value;
-//			string fulltext = os.str();
-//			__android_log_print(ANDROID_LOG_DEBUG, "3DTISPATIALIZER", fulltext.c_str());
-//			#endif
-//		}
-//	}
-
-	/////////////////////////////////////////////////////////////////////
-
-
+  
     inline bool IsHostCompatible(UnityAudioEffectState* state)
     {
         // Somewhat convoluted error checking here because hostapiversion is only supported from SDK version 1.03 (i.e. Unity 5.2) and onwards.
@@ -412,7 +380,6 @@ loadedHRTF(false)
 
 	int LoadHighPerformanceILDBinaryFile(UnityAudioEffectState* state)
 	{
-//		EffectData* data = state->GetEffectData<EffectData>();
 		/*int sampleRateInFile = ILD::GetSampleRateFrom3dti(data->strNearFieldILDpath);
 		if (sampleRateInFile == (int)state->samplerate) {*/
 
@@ -457,8 +424,6 @@ loadedHRTF(false)
 
 	int LoadNearFieldILDBinaryFile(UnityAudioEffectState* state)
 	{
-//		EffectData* data = state->GetEffectData<EffectData>();
-
 		// Get ILD
 		
 		/*int sampleRateInFile = ILD::GetSampleRateFrom3dti(data->strNearFieldILDpath);
@@ -603,8 +568,6 @@ loadedHRTF(false)
             bool initializedSuccessfully = spatializer().initialize((int)state->samplerate, (int)state->dspbuffersize);
             if (initializedSuccessfully)
             {
-//                UpdateCoreIsReady();
-                
                 WriteLog(state, "Core initialized. Waiting for configuration...", "");
             }
         }
@@ -627,37 +590,6 @@ loadedHRTF(false)
         }
 
 
-
-		
-		//Save samplerate and buffer size into the struct
-		//effectdata->bufferSize = audioState.bufferSize;
-		//effectdata->sampleRate = audioState.sampleRate;
-
-
-
-//        // these are all inited now in GlobalState constructor
-//		// Init parameters. Core is not ready until we load the HRTF. ILD will be disabled, so we don't need to worry yet
-//		effectdata->coreReady = false;
-//
-//
-//		// STRING SERIALIZER
-//		effectdata->strHRTFserializing = false;
-//		effectdata->strHRTFcount = 0;
-//		effectdata->strNearFieldILDserializing = false;
-//		effectdata->strNearFieldILDcount = 0;
-//		effectdata->strHighPerformanceILDserializing = false;
-//		effectdata->strHighPerformanceILDcount = 0;
-
-//		// Setup limiter
-//		effectdata->limiter.Setup(state->samplerate, LIMITER_RATIO, LIMITER_THRESHOLD, LIMITER_ATTACK, LIMITER_RELEASE);
-//
-//		// Spatialization modes
-//		effectdata->spatializationMode = SPATIALIZATION_MODE_NONE;
-//		effectdata->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::NoSpatialization);
-//		effectdata->loadedHRTF = false;
-//		effectdata->loadedNearFieldILD = false;
-//		effectdata->loadedHighPerformanceILD = false;
-
 		// 3DTI Debugger
 #if defined (SWITCH_ON_3DTI_ERRORHANDLER) || defined (_3DTI_ANDROID_ERRORHANDLER)
 		Common::CErrorHandler::Instance().SetAssertMode(ASSERT_MODE_CONTINUE);
@@ -676,56 +608,6 @@ loadedHRTF(false)
 		delete data;
 		return UNITY_AUDIODSP_OK;
 	}
-
-	/////////////////////////////////////////////////////////////////////
-
-//	bool IsCoreReady()
-//	{
-////		EffectData* data = state->GetEffectData<EffectData>();
-//
-//		bool isReady = false;
-//
-//		if (spatializer().spatializationMode == SPATIALIZATION_MODE_NONE)
-//			isReady = true;
-//
-//		if (spatializer().spatializationMode == SPATIALIZATION_MODE_HIGH_PERFORMANCE)
-//		{
-//			if (spatializer().loadedHighPerformanceILD)
-//				isReady = true;
-//		}
-//
-//		if (spatializer().spatializationMode == SPATIALIZATION_MODE_HIGH_QUALITY)
-//		{
-//			if (spatializer().loadedHRTF)
-//				isReady = true;
-//            //TODO: Tim I've removed this test for now as it makes this function dependent on a single audio source. Instead, we should enable the nearfieldeffect on the audiosource within CreateCallback based on whether the nearfield is loaded in globalState. When that's done, this test becomes redundant
-////			if ((!sharedState().loadedNearFieldILD) && (data->audioSource->IsNearFieldEffectEnabled()))
-////				isReady = false;
-//		}
-//
-//		return isReady;
-//	}
-
-	/////////////////////////////////////////////////////////////////////
-
-//	void UpdateCoreIsReady()
-//	{
-////		EffectData* data = state->GetEffectData<EffectData>();
-//
-//		bool isReady = IsCoreReady();
-//
-//		if (!spatializer().coreReady && isReady)
-//		{
-//			spatializer().coreReady = true;
-//			WriteLog("Core ready!!!!!", "");
-//		}
-//
-//		if (spatializer().coreReady && !isReady)
-//		{
-//			spatializer().coreReady = false;
-//			WriteLog("Core stopped!!!!! Waiting for loading resources...", "");
-//		}
-//	}
 
 
 	/////////////////////////////////////////////////////////////////////
