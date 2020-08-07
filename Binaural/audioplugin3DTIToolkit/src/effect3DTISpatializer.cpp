@@ -69,15 +69,19 @@ namespace Spatializer3DTI
 
 namespace
 {
-    // This is constructed by the first CreateCallback call
-    SpatializerState* globalState = nullptr;
+    // Single state instance shared across all audio sources
+        Spatializer& spatializer()
+    {
+        static Spatializer spatializer;
+        return spatializer;
+    }
 }
 
 
 template <class T>
 void WriteLog(string logtext, const T& value, int sourceID=-1)
 {
-    if (globalState != nullptr && globalState->debugLog)
+    if (spatializer().debugLog)
     {
 #ifdef DEBUG_LOG_FILE_BINSP
         ofstream logfile;
@@ -114,7 +118,7 @@ void WriteLog(string logtext)
 /////////////////////////////////////////////////////////////////////
 
     // Init parameters. Core is not ready until we load the HRTF. ILD will be disabled, so we don't need to worry yet
-    SpatializerState::SpatializerState()
+    Spatializer::Spatializer()
     : coreReady(false)
     , loadedHRTF(false)
     , loadedNearFieldILD(false)
@@ -136,7 +140,7 @@ void WriteLog(string logtext)
     
 }
 
-    bool SpatializerState::initialize(int sampleRate, int dspBufferSize)
+    bool Spatializer::initialize(int sampleRate, int dspBufferSize)
     {
         WriteLog("Initializing 3DTI Spatializer...");
         
@@ -201,7 +205,7 @@ void WriteLog(string logtext)
 //	void WriteLog(UnityAudioEffectState* state, string logtext, const T& value)
 //	{
 //		EffectData* data = state->GetEffectData<EffectData>();
-//		if (globalState != nullptr && globalState->debugLog)
+//		if (globalState != nullptr && sharedState().debugLog)
 //		{
 //			#ifdef DEBUG_LOG_FILE_BINSP
 //			ofstream logfile;
@@ -377,30 +381,30 @@ void WriteLog(string logtext)
 //		EffectData* data = state->GetEffectData<EffectData>();
 
 		// Load HRTF		
-		if (!HRTF::CreateFrom3dti(globalState->strHRTFpath, globalState->listener))
+		if (!HRTF::CreateFrom3dti(spatializer().strHRTFpath, spatializer().listener))
 		{
 			//TDebuggerResultStruct result = GET_LAST_RESULT_STRUCT();
 			//WriteLog(state, "ERROR TRYING TO LOAD HRTF!!! ", result.suggestion);
 			return TLoadResult::RESULT_LOAD_ERROR;
 		}
 
-		if (globalState->listener->GetHRTF()->GetHRIRLength() != 0)
+		if (spatializer().listener->GetHRTF()->GetHRIRLength() != 0)
 		{
 			//data->listener->LoadHRTF(std::move(myHead));
-			WriteLog(state, "LOAD HRTF: HRTF loaded from binary 3DTI file: ", globalState->strHRTFpath);
-			WriteLog(state, "           HRIR length is ", globalState->listener->GetHRTF()->GetHRIRLength());
+			WriteLog(state, "LOAD HRTF: HRTF loaded from binary 3DTI file: ", spatializer().strHRTFpath);
+			WriteLog(state, "           HRIR length is ", spatializer().listener->GetHRTF()->GetHRIRLength());
 			WriteLog(state, "           Sample rate is ", state->samplerate);
 			WriteLog(state, "           Buffer size is ", state->dspbuffersize);
 
 			// Free memory
-			free(globalState->strHRTFpath);
+			free(spatializer().strHRTFpath);
 
 			return TLoadResult::RESULT_LOAD_OK;
 		}
 		else
 		{			
-			WriteLog(state, "LOAD HRTF: ERROR!!! Could not create HRTF from path: ", globalState->strHRTFpath);
-			free(globalState->strHRTFpath);
+			WriteLog(state, "LOAD HRTF: ERROR!!! Could not create HRTF from path: ", spatializer().strHRTFpath);
+			free(spatializer().strHRTFpath);
 			return TLoadResult::RESULT_LOAD_ERROR;
 		}
 	}
@@ -416,7 +420,7 @@ void WriteLog(string logtext)
 			// Get ILD 
 			//T_ILD_HashTable h;
 			//h = ILD::CreateFrom3dti(data->strHighPerformanceILDpath);	
-			bool boolResult = ILD::CreateFrom3dti_ILDSpatializationTable(globalState->strHighPerformanceILDpath, globalState->listener);
+			bool boolResult = ILD::CreateFrom3dti_ILDSpatializationTable(spatializer().strHighPerformanceILDpath, spatializer().listener);
 
 			// Check errors
 			//TDebuggerResultStruct result = GET_LAST_RESULT_STRUCT();
@@ -430,15 +434,15 @@ void WriteLog(string logtext)
 			if (boolResult)
 			{
 				///Binaural::CILD::SetILD_HashTable(std::move(h));
-				WriteLog(state, "LOAD HIGH PERFORMANCE ILD: ILD loaded from binary 3DTI file: ", globalState->strHighPerformanceILDpath);
+				WriteLog(state, "LOAD HIGH PERFORMANCE ILD: ILD loaded from binary 3DTI file: ", spatializer().strHighPerformanceILDpath);
 				//WriteLog(state, "          Hash hable size is ", h.size());
-				free(globalState->strHighPerformanceILDpath);
+				free(spatializer().strHighPerformanceILDpath);
 				return TLoadResult::RESULT_LOAD_OK;
 			}
 			else
 			{
-				WriteLog(state, "LOAD HIGH PERFORMANCE ILD: ERROR!!! could not create ILD from path: ", globalState->strHighPerformanceILDpath);
-				free(globalState->strHighPerformanceILDpath);
+				WriteLog(state, "LOAD HIGH PERFORMANCE ILD: ERROR!!! could not create ILD from path: ", spatializer().strHighPerformanceILDpath);
+				free(spatializer().strHighPerformanceILDpath);
 				return TLoadResult::RESULT_LOAD_ERROR;
 			}
 		/*}
@@ -461,7 +465,7 @@ void WriteLog(string logtext)
 		/*int sampleRateInFile = ILD::GetSampleRateFrom3dti(data->strNearFieldILDpath);
 		if (sampleRateInFile == (int)state->samplerate) 
 		{*/
-			bool boolResult = ILD::CreateFrom3dti_ILDNearFieldEffectTable(globalState->strNearFieldILDpath, globalState->listener);
+			bool boolResult = ILD::CreateFrom3dti_ILDNearFieldEffectTable(spatializer().strNearFieldILDpath, spatializer().listener);
 			// Check errors
 			//TResultStruct result = GET_LAST_RESULT_STRUCT();
 			//if (result.id != RESULT_OK)
@@ -474,15 +478,15 @@ void WriteLog(string logtext)
 			if (boolResult)
 			{
 				//Binaural::CILD::SetILD_HashTable(std::move(h));
-				WriteLog(state, "LOAD NEAR FIELD ILD: ILD loaded from binary 3DTI file: ", globalState->strNearFieldILDpath);
+				WriteLog(state, "LOAD NEAR FIELD ILD: ILD loaded from binary 3DTI file: ", spatializer().strNearFieldILDpath);
 				//WriteLog(state, "          Hash hable size is ", h.size());
-				free(globalState->strNearFieldILDpath);
+				free(spatializer().strNearFieldILDpath);
 				return TLoadResult::RESULT_LOAD_OK;
 			}
 			else
 			{
-				WriteLog(state, "LOAD NEAR FIELD ILD: ERROR!!! could not create ILD from path: ", globalState->strNearFieldILDpath);
-				free(globalState->strNearFieldILDpath);
+				WriteLog(state, "LOAD NEAR FIELD ILD: ERROR!!! could not create ILD from path: ", spatializer().strNearFieldILDpath);
+				free(spatializer().strNearFieldILDpath);
 				return TLoadResult::RESULT_LOAD_ERROR;
 			}
 
@@ -544,13 +548,13 @@ void WriteLog(string logtext)
 		// TO DO: Change this for high performance / high quality modes
 
 		// Audio state:		
-        Common::TAudioStateStruct audioState = globalState->core.GetAudioState();
+        Common::TAudioStateStruct audioState = spatializer().core.GetAudioState();
 		WriteLog(state, "CREATE: Sample rate set to ", audioState.sampleRate);
 		WriteLog(state, "CREATE: Buffer size set to ", audioState.bufferSize);
-        WriteLog(state, "CREATE: HRTF resampling step set to ", globalState->core.GetHRTFResamplingStep());
+        WriteLog(state, "CREATE: HRTF resampling step set to ", spatializer().core.GetHRTFResamplingStep());
 
 		// Listener:		
-		if (globalState->listener != nullptr)
+		if (spatializer().listener != nullptr)
 			WriteLog(state, "CREATE: Listener created successfully", "");
 		else
 			WriteLog(state, "CREATE: ERROR!!!! Listener creation returned null pointer!", "");
@@ -595,18 +599,20 @@ void WriteLog(string logtext)
         WriteLog(state, "Creating audio plugin...", "");
 
         // The first time we run we need to initialize the core
-        if (globalState == nullptr)
+        if (!spatializer().isInitialized())
         {
-            globalState = new SpatializerState();
-            globalState->initialize((int)state->samplerate, (int)state->dspbuffersize);
-            UpdateCoreIsReady();
-            
-            WriteLog(state, "Core initialized. Waiting for configuration...", "");
+            bool initializedSuccessfully = spatializer().initialize((int)state->samplerate, (int)state->dspbuffersize);
+            if (initializedSuccessfully)
+            {
+                UpdateCoreIsReady();
+                
+                WriteLog(state, "Core initialized. Waiting for configuration...", "");
+            }
         }
         
         
         // Create source and set default interpolation method
-        effectdata->audioSource = globalState->core.CreateSingleSourceDSP();
+        effectdata->audioSource = spatializer().core.CreateSingleSourceDSP();
         if (effectdata->audioSource != nullptr)
         {
             effectdata->audioSource->EnableInterpolation();
@@ -672,21 +678,21 @@ void WriteLog(string logtext)
 
 		bool isReady = false;
 
-		if (globalState->spatializationMode == SPATIALIZATION_MODE_NONE)
+		if (spatializer().spatializationMode == SPATIALIZATION_MODE_NONE)
 			isReady = true;
 
-		if (globalState->spatializationMode == SPATIALIZATION_MODE_HIGH_PERFORMANCE)
+		if (spatializer().spatializationMode == SPATIALIZATION_MODE_HIGH_PERFORMANCE)
 		{
-			if (globalState->loadedHighPerformanceILD)
+			if (spatializer().loadedHighPerformanceILD)
 				isReady = true;
 		}
 
-		if (globalState->spatializationMode == SPATIALIZATION_MODE_HIGH_QUALITY)
+		if (spatializer().spatializationMode == SPATIALIZATION_MODE_HIGH_QUALITY)
 		{
-			if (globalState->loadedHRTF)
+			if (spatializer().loadedHRTF)
 				isReady = true;
             //TODO: Tim I've removed this test for now as it makes this function dependent on a single audio source. Instead, we should enable the nearfieldeffect on the audiosource within CreateCallback based on whether the nearfield is loaded in globalState. When that's done, this test becomes redundant
-//			if ((!globalState->loadedNearFieldILD) && (data->audioSource->IsNearFieldEffectEnabled()))
+//			if ((!sharedState().loadedNearFieldILD) && (data->audioSource->IsNearFieldEffectEnabled()))
 //				isReady = false;
 		}
 
@@ -701,15 +707,15 @@ void WriteLog(string logtext)
 
 		bool isReady = IsCoreReady();
 
-		if (!globalState->coreReady && isReady)
+		if (!spatializer().coreReady && isReady)
 		{
-			globalState->coreReady = true;
+			spatializer().coreReady = true;
 			WriteLog("Core ready!!!!!", "");
 		}
 
-		if (globalState->coreReady && !isReady)
+		if (spatializer().coreReady && !isReady)
 		{
-			globalState->coreReady = false;
+			spatializer().coreReady = false;
 			WriteLog("Core stopped!!!!! Waiting for loading resources...", "");
 		}
 	}
@@ -723,31 +729,31 @@ void WriteLog(string logtext)
         EffectData* data = state->GetEffectData<EffectData>();
         if (index >= P_NUM)
             return UNITY_AUDIODSP_ERR_UNSUPPORTED;
-        globalState->parameters[index] = value;
+        spatializer().parameters[index] = value;
 
 		Common::CMagnitudes magnitudes;		
 		int loadResult;		
 
-		globalState->spatializerMutex.lock();
+		spatializer().spatializerMutex.lock();
 
 		// Process command sent by C# API
 		switch (index)
 		{
 			case PARAM_HRTF_FILE_STRING:	// Load HRTF binary file (MANDATORY)								
-				loadResult = BuildPathString(state, globalState->strHRTFpath, globalState->strHRTFserializing, globalState->strHRTFlength, globalState->strHRTFcount, value);
+				loadResult = BuildPathString(state, spatializer().strHRTFpath, spatializer().strHRTFserializing, spatializer().strHRTFlength, spatializer().strHRTFcount, value);
 				if (loadResult == TLoadResult::RESULT_LOAD_END)
 				{
 					loadResult = LoadHRTFBinaryFile(state);
 					if (loadResult == TLoadResult::RESULT_LOAD_OK)
 					{
-						globalState->loadedHRTF = true;
+						spatializer().loadedHRTF = true;
 						UpdateCoreIsReady();
 					}
 				}
 				break;
 
 			case PARAM_NEAR_FIELD_ILD_FILE_STRING:	// Load ILD binary file (MANDATORY?)								
-				loadResult = BuildPathString(state, globalState->strNearFieldILDpath, globalState->strNearFieldILDserializing, globalState->strNearFieldILDlength, globalState->strNearFieldILDcount, value);
+				loadResult = BuildPathString(state, spatializer().strNearFieldILDpath, spatializer().strNearFieldILDserializing, spatializer().strNearFieldILDlength, spatializer().strNearFieldILDcount, value);
 				if (loadResult == TLoadResult::RESULT_LOAD_END)
 				{
 					loadResult = LoadNearFieldILDBinaryFile(state);
@@ -755,7 +761,7 @@ void WriteLog(string logtext)
 					{
 						data->audioSource->EnableNearFieldEffect();
                         // TODO: Need to enable near field effect when instantiating new audiosources
-						globalState->loadedNearFieldILD = true;
+						spatializer().loadedNearFieldILD = true;
 						WriteLog(state, "SET PARAMETER: Near Field ILD Enabled", "");
 						UpdateCoreIsReady();
 					}
@@ -763,7 +769,7 @@ void WriteLog(string logtext)
 				break;
 
 			case PARAM_HEAD_RADIUS:	// Set listener head radius (OPTIONAL)
-				globalState->listener->SetHeadRadius(value);
+				spatializer().listener->SetHeadRadius(value);
 				WriteLog(state, "SET PARAMETER: Listener head radius changed to ", value);
 				break;
 
@@ -780,12 +786,12 @@ void WriteLog(string logtext)
 			case PARAM_CUSTOM_ITD:	// Enable custom ITD (OPTIONAL)
 				if (value > 0.0f)
 				{
-					globalState->listener->EnableCustomizedITD();
+					spatializer().listener->EnableCustomizedITD();
 					WriteLog(state, "SET PARAMETER: Custom ITD is ", "Enabled");
 				}
 				else
 				{
-					globalState->listener->DisableCustomizedITD();
+					spatializer().listener->DisableCustomizedITD();
 					WriteLog(state, "SET PARAMETER: Custom ITD is ", "Disabled");
 				}
 				break;
@@ -858,23 +864,23 @@ void WriteLog(string logtext)
 				break;
 
 			case PARAM_MAG_ANECHATT:
-                magnitudes = globalState->core.GetMagnitudes();
+                magnitudes = spatializer().core.GetMagnitudes();
 				magnitudes.SetAnechoicDistanceAttenuation(value);
-                globalState->core.SetMagnitudes(magnitudes);
+                spatializer().core.SetMagnitudes(magnitudes);
 				WriteLog(state, "SET PARAMETER: Anechoic distance attenuation set to (dB) ", value);
 				break;
 
 			case PARAM_MAG_SOUNDSPEED:
-                magnitudes = globalState->core.GetMagnitudes();
+                magnitudes = spatializer().core.GetMagnitudes();
 				magnitudes.SetSoundSpeed(value);
-                globalState->core.SetMagnitudes(magnitudes);
+                spatializer().core.SetMagnitudes(magnitudes);
 				WriteLog(state, "SET PARAMETER: Sound speed set to (m/s) ", value);
 				break;
 
 			case PARAM_DEBUG_LOG:				
 				if (value != 0.0f)
 				{
-					globalState->debugLog = true;
+					spatializer().debugLog = true;
 					WriteLogHeader(state);
 #if defined (SWITCH_ON_3DTI_ERRORHANDLER) || defined (_3DTI_ANDROID_ERRORHANDLER)
                     Common::CErrorHandler::Instance().SetErrorLogFile("3DTi_ErrorLog.txt");
@@ -883,28 +889,28 @@ void WriteLog(string logtext)
 #endif
 				}
 				else
-					globalState->debugLog = false;
+					spatializer().debugLog = false;
 				break;
 
 			case PARAM_HA_DIRECTIONALITY_EXTEND_LEFT:
-				globalState->listener->SetDirectionality_dB(Common::T_ear::LEFT, value);
+				spatializer().listener->SetDirectionality_dB(Common::T_ear::LEFT, value);
 				WriteLog(state, "SET PARAMETER: HA Directionality for Left ear set to (dB) ", value);
 				break;
 
 			case PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT:
-				globalState->listener->SetDirectionality_dB(Common::T_ear::RIGHT, value);
+				spatializer().listener->SetDirectionality_dB(Common::T_ear::RIGHT, value);
 				WriteLog(state, "SET PARAMETER: HA Directionality for Right ear set to (dB) ", value);
 				break;
 
 			case PARAM_HA_DIRECTIONALITY_ON_LEFT:
 				if (value > 0.0f)
 				{
-					globalState->listener->EnableDirectionality(Common::T_ear::LEFT);
+					spatializer().listener->EnableDirectionality(Common::T_ear::LEFT);
 					WriteLog(state, "SET PARAMETER: HA Directionality switched ON for Left ear", "");
 				}
 				else
 				{
-					globalState->listener->DisableDirectionality(Common::T_ear::LEFT);
+					spatializer().listener->DisableDirectionality(Common::T_ear::LEFT);
 					WriteLog(state, "SET PARAMETER: HA Directionality switched OFF for Left ear", "");
 				}				
 				break;
@@ -912,12 +918,12 @@ void WriteLog(string logtext)
 			case PARAM_HA_DIRECTIONALITY_ON_RIGHT:
 				if (value > 0.0f)
 				{
-					globalState->listener->EnableDirectionality(Common::T_ear::RIGHT);
+					spatializer().listener->EnableDirectionality(Common::T_ear::RIGHT);
 					WriteLog(state, "SET PARAMETER: HA Directionality switched ON for Right ear", "");
 				}
 				else
 				{
-					globalState->listener->DisableDirectionality(Common::T_ear::RIGHT);
+					spatializer().listener->DisableDirectionality(Common::T_ear::RIGHT);
 					WriteLog(state, "SET PARAMETER: HA Directionality switched OFF for Right ear", "");
 				}
 				break;
@@ -938,18 +944,18 @@ void WriteLog(string logtext)
 				break;
 
 			case PARAM_HRTF_STEP:				
-                globalState->core.SetHRTFResamplingStep((int)value);
+                spatializer().core.SetHRTFResamplingStep((int)value);
 				WriteLog(state, "SET PARAMETER: HRTF resampling step set to (degrees) ", value);
 				break;
 
 			case PARAM_HIGH_PERFORMANCE_ILD_FILE_STRING:	// Load ILD binary file (MANDATORY?)								
-				loadResult = BuildPathString(state, globalState->strHighPerformanceILDpath, globalState->strHighPerformanceILDserializing, globalState->strHighPerformanceILDlength, globalState->strHighPerformanceILDcount, value);
+				loadResult = BuildPathString(state, spatializer().strHighPerformanceILDpath, spatializer().strHighPerformanceILDserializing, spatializer().strHighPerformanceILDlength, spatializer().strHighPerformanceILDcount, value);
 				if (loadResult == TLoadResult::RESULT_LOAD_END)
 				{
 					loadResult = LoadHighPerformanceILDBinaryFile(state);
 					if (loadResult == TLoadResult::RESULT_LOAD_OK)
 					{
-						globalState->loadedHighPerformanceILD = true;
+						spatializer().loadedHighPerformanceILD = true;
 						UpdateCoreIsReady();
 						//data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::HighPerformance);
 						//WriteLog(state, "SET PARAMETER: High Performance ILD Enabled", "");
@@ -963,21 +969,21 @@ void WriteLog(string logtext)
                     // TODO: update all sources when being made instead of just this one (also in the other value cases of this switch case)
                     // TODO: Investigate whether it's possible for different audio sources to have different quality settings. (Probably not though)
 					data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::HighQuality);
-					globalState->spatializationMode = SPATIALIZATION_MODE_HIGH_QUALITY;
+					spatializer().spatializationMode = SPATIALIZATION_MODE_HIGH_QUALITY;
 					WriteLog(state, "SET PARAMETER: High Quality spatialization mode is enabled", "");
 					UpdateCoreIsReady();
 				}
 				if (value == 1.0f)
 				{
 					data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::HighPerformance);
-					globalState->spatializationMode = SPATIALIZATION_MODE_HIGH_PERFORMANCE;
+					spatializer().spatializationMode = SPATIALIZATION_MODE_HIGH_PERFORMANCE;
 					WriteLog(state, "SET PARAMETER: High performance spatialization mode is enabled", "");
 					UpdateCoreIsReady();
 				}
 				if (value == 2.0f)
 				{
 					data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::NoSpatialization);					
-					globalState->spatializationMode = SPATIALIZATION_MODE_NONE;
+					spatializer().spatializationMode = SPATIALIZATION_MODE_NONE;
 					WriteLog(state, "SET PARAMETER: No spatialization mode is enabled", "");
 					UpdateCoreIsReady();
 				}
@@ -989,7 +995,7 @@ void WriteLog(string logtext)
 				break;
 		}
 
-		globalState->spatializerMutex.unlock();
+		spatializer().spatializerMutex.unlock();
 
         return UNITY_AUDIODSP_OK;
     }
@@ -1009,14 +1015,14 @@ void WriteLog(string logtext)
 			switch (index)
 			{
 				case PARAM_LIMITER_GET_COMPRESSION:
-					if (globalState->limiter.IsDynamicProcessApplied())
+					if (spatializer().limiter.IsDynamicProcessApplied())
 						*value = 1.0f;
 					else
 						*value = 0.0f;
 					break;
 
 				case PARAM_IS_CORE_READY:
-					if (globalState->coreReady)
+					if (spatializer().coreReady)
 						*value = 1.0f;
 					else
 						*value = 0.0f;
@@ -1033,15 +1039,15 @@ void WriteLog(string logtext)
 					break;
 				case PARAM_BUFFER_SIZE_CORE:
 					//*value = float(data->bufferSize);					
-                    *value = globalState->core.GetAudioState().bufferSize;
+                    *value = spatializer().core.GetAudioState().bufferSize;
 					break;
 
 				case PARAM_SAMPLE_RATE_CORE:
 					//*value = float(data->sampleRate);
-					*value = globalState->core.GetAudioState().sampleRate;
+					*value = spatializer().core.GetAudioState().sampleRate;
 					break;
 				default:
-					*value = globalState->parameters[index];
+					*value = spatializer().parameters[index];
 					break;
 			}						
 		}
@@ -1076,7 +1082,7 @@ void WriteLog(string logtext)
 		EffectData* data = state->GetEffectData<EffectData>();
 
         // TODO: Would be nice not to lock a mutex every time we process data
-		globalState->spatializerMutex.lock();
+		spatializer().spatializerMutex.lock();
 
 		// Before doing anything, check that the core is ready
 		//if (!data->coreReady)
@@ -1086,20 +1092,20 @@ void WriteLog(string logtext)
 			//WriteLog(state, "PROCESS: Core is not ready yet...", "");
 			memset(outbuffer, 0.0f, length * outchannels * sizeof(float));
             // TODO: Use a lock guard instead of manual locking/unlocking
-			globalState->spatializerMutex.unlock();
+			spatializer().spatializerMutex.unlock();
 			return UNITY_AUDIODSP_OK;
 		}
 
 		// Set source and listener transforms		
-		data->audioSource->SetSourceTransform(ComputeSourceTransformFromMatrix(state->spatializerdata->sourcematrix, globalState->parameters[PARAM_SCALE_FACTOR]));
-		globalState->listener->SetListenerTransform(ComputeListenerTransformFromMatrix(state->spatializerdata->listenermatrix, globalState->parameters[PARAM_SCALE_FACTOR]));
+		data->audioSource->SetSourceTransform(ComputeSourceTransformFromMatrix(state->spatializerdata->sourcematrix, spatializer().parameters[PARAM_SCALE_FACTOR]));
+		spatializer().listener->SetListenerTransform(ComputeListenerTransformFromMatrix(state->spatializerdata->listenermatrix, spatializer().parameters[PARAM_SCALE_FACTOR]));
 
 		// Now check that listener and source are not in the same position. 
 		// This might happens in some weird cases, such as when trying to process a source with no clip
-		if (globalState->listener->GetListenerTransform().GetVectorTo(data->audioSource->GetSourceTransform()).GetSqrDistance() < 0.0001f)
+		if (spatializer().listener->GetListenerTransform().GetVectorTo(data->audioSource->GetSourceTransform()).GetSqrDistance() < 0.0001f)
 		{
 			WriteLog(state, "WARNING during Process! AudioSource and Listener positions are the same (do you have a source with no clip?)", "");
-			globalState->spatializerMutex.unlock();
+			spatializer().spatializerMutex.unlock();
 			return UNITY_AUDIODSP_OK;
 		}
 
@@ -1129,9 +1135,9 @@ void WriteLog(string logtext)
 		// Limiter
 		CStereoBuffer<float> outStereoBuffer;
 		outStereoBuffer.Interlace(outLeftBuffer, outRightBuffer);
-		if (globalState->parameters[PARAM_LIMITER_SET_ON])
+		if (spatializer().parameters[PARAM_LIMITER_SET_ON])
 		{
-			globalState->limiter.Process(outStereoBuffer);
+			spatializer().limiter.Process(outStereoBuffer);
 		}
 
 		// Transform output buffer			
@@ -1141,7 +1147,7 @@ void WriteLog(string logtext)
 			outbuffer[i++] = *it;
 		}
 
-		globalState->spatializerMutex.unlock();
+		spatializer().spatializerMutex.unlock();
 
         return UNITY_AUDIODSP_OK;
     }

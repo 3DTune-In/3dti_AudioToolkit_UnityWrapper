@@ -54,8 +54,11 @@ namespace Spatializer3DTI
     
     UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectState* state);
     
-    // Singleton class holding state for the whole plugin (we have a single listener as permitted by Unity)
-    class SpatializerState
+    // Class holding state for the whole plugin (we have a single
+    // listener as permitted by Unity). This is effectively a
+    // singleton class, though for simplicity we just hold an
+    // instance in a free variable rather than using a static member.
+    class Spatializer
     {
     public:
         std::shared_ptr<Binaural::CListener> listener;
@@ -90,7 +93,7 @@ namespace Spatializer3DTI
         // MUTEX
         std::mutex spatializerMutex;
         
-        SpatializerState();
+        Spatializer();
         
         bool isInitialized() const
         {
@@ -105,6 +108,8 @@ namespace Spatializer3DTI
         friend UNITY_AUDIODSP_RESULT CreateCallback(UnityAudioEffectState* state);
     };
     
+    // State of a single source in the scene. An instance of this is
+    // created/destroyed with each Unity AudioSource.
     struct EffectData
     {
         int sourceID;    // DEBUG
