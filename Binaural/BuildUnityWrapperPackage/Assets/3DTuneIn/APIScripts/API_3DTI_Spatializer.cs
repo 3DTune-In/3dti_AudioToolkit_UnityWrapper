@@ -64,7 +64,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     public bool modDistAtt = true;              // For internal use, DO NOT USE IT DIRECTLY
     public bool modNearFieldILD = true;         // For internal use, DO NOT USE IT DIRECTLY
     public bool modHRTF = true;                 // For internal use, DO NOT USE IT DIRECTLY
-    public float magAnechoicAttenuation = -3.0f;    // For internal use, DO NOT USE IT DIRECTLY    
+    public float magAnechoicAttenuation = -1.0f;    // For internal use, DO NOT USE IT DIRECTLY    
     public float magSoundSpeed = 343.0f;            // For internal use, DO NOT USE IT DIRECTLY
     public bool debugLog = false;                   // For internal use, DO NOT USE IT DIRECTLY    
 
