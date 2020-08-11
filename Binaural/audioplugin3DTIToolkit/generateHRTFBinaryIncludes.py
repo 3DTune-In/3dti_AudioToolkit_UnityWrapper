@@ -13,9 +13,9 @@ print("script dir: "+script_dir)
 
 path_to_3dti_AudioToolkit_resources_directory = os.path.join(script_dir, *'../BuildUnityWrapperPackage/Assets/3DTuneIn/Data'.split('/'))
 input_files = [
-    os.path.join(*'HighQuality/HRTF/3DTI_HRTF_IRC1032_512s_44100Hz.3dti-hrtf'.split('/')),
-    os.path.join(*'HighQuality/HRTF/3DTI_HRTF_IRC1032_512s_48000Hz.3dti-hrtf'.split('/')),
-    os.path.join(*'HighQuality/HRTF/3DTI_HRTF_IRC1032_512s_96000Hz.3dti-hrtf'.split('/')),
+    os.path.join(*'HighQuality/HRTF/3DTI_HRTF_IRC1032_256s_44100Hz.3dti-hrtf'.split('/')),
+    os.path.join(*'HighQuality/HRTF/3DTI_HRTF_IRC1032_256s_48000Hz.3dti-hrtf'.split('/')),
+    os.path.join(*'HighQuality/HRTF/3DTI_HRTF_IRC1032_256s_96000Hz.3dti-hrtf'.split('/')),
     os.path.join(*'HighQuality/ILD/NearFieldCompensation_ILD_48000.3dti-ild'.split('/')),
     os.path.join(*'HighQuality/ILD/NearFieldCompensation_ILD_44100.3dti-ild'.split('/')),
     os.path.join(*'HighQuality/ILD/NearFieldCompensation_ILD_96000.3dti-ild'.split('/')),
@@ -50,6 +50,7 @@ with open(header_path, 'w') as header_file:
 #include <string>
 #include <vector>
 #include <cstdint>
+#include "../src/config.h"
 
 namespace Spatializer3DTI
 {
