@@ -129,7 +129,7 @@ namespace Spatializer3DTI
         bool initialize(int sampleRate, int dspBufferSize);
         
         // initialize is only called by CreateCallback
-        friend UNITY_AUDIODSP_RESULT CreateCallback(UnityAudioEffectState* state);
+        friend UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectState* state);
     };
     
     // State of a single source in the scene. An instance of this is
