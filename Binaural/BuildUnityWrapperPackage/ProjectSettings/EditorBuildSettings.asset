@@ -4,4 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/3DTuneIn/Sample/3DTuneInSpatializerSampleScene.unity
+    guid: de5c29f6c111d41b8ba3a40c7b456567
+  m_configObjects: {}
