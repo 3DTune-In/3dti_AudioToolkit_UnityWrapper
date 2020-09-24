@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using API_3DTI_Common;
 using System;
+using System.Linq;
 
 [CustomEditor(typeof(API_3DTI_Spatializer))]
 public class AudioPlugin3DTISpatializerGUI : Editor
@@ -47,21 +48,51 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 	//temp tim
 	int selectedHRTF44;
 
-    //////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////
 
-    /// <summary>
-    /// This is where we create the layout for the inspector
-    /// </summary>
-    public override void OnInspectorGUI()
+
+	public static (string[] highQualityHRTFs, string[] highQualityILDs, string[] highPerformanceILDs) GetFilterBinaryPaths(TSampleRateEnum sampleRate)
+	{
+		string sampleRateLabel =
+			sampleRate == TSampleRateEnum.K44 ? "44100"
+			: sampleRate == TSampleRateEnum.K48 ? "48000"
+			: sampleRate == TSampleRateEnum.K96 ? "96000"
+			: "(unknown sample rate)";
+
+		string[] highPerformanceILDs = Resources.LoadAll<TextAsset>("Data/HighPerformance/ILD")
+			.Where(x => x.name.Contains(sampleRateLabel))
+			.Select(item => item.name).ToArray();
+
+		string[] highQualityHRTFs = Resources.LoadAll<TextAsset>("Data/HighQuality/HRTF")
+			.Where(x => x.name.Contains(sampleRateLabel))
+			.Select(item => item.name).ToArray();
+
+		string[] highQualityILDs = Resources.LoadAll<TextAsset>("Data/HighQuality/ILD")
+			.Where(x => x.name.Contains(sampleRateLabel))
+			.Select(item => item.name).ToArray();
+
+		return (highQualityHRTFs, highQualityILDs, highPerformanceILDs);
+	}
+
+
+
+	/// <summary>
+	/// This is where we create the layout for the inspector
+	/// </summary>
+	public override void OnInspectorGUI()
     {
-        // Init on first pass
-        //if (!initDone)
-        //{
-            toolkit = (API_3DTI_Spatializer)target; // Get access to API script       
+
+
+
+		// Init on first pass
+		//if (!initDone)
+		//{
+		toolkit = (API_3DTI_Spatializer)target; // Get access to API script       
             Common3DTIGUI.InitStyles(); // Init styles
-         
-        // Check starting play
-        if (EditorApplication.isPlaying && !playWasStarted)
+		//Debug.Log($"HRTFFileName44 = {toolkit.HRTFFileName44}, HRTFFileName48 = {toolkit.HRTFFileName48}");
+
+		// Check starting play
+		if (EditorApplication.isPlaying && !playWasStarted)
         {
             isStartingPlay = true;
             playWasStarted = true;
@@ -88,6 +119,12 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
         // End starting play
         isStartingPlay = false;
+
+		if (GUI.changed)
+		{
+			Undo.RecordObject(toolkit, "Modify 3DTI Spatializer parameter");
+			EditorUtility.SetDirty(toolkit);
+		}
     }
 
 
@@ -289,7 +326,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
            // if (highPerformanceFiles) {
             Common3DTIGUI.AddLabelToParameterGroup("High Performance ILD");
 
-			//var paths = API_3DTI_Spatializer.GetFilterBinaryPaths(API_3DTI_Spatializer.TSampleRateEnum.K44).highPerformanceILDs;
+			//var paths = GetFilterBinaryPaths(API_3DTI_Spatializer.TSampleRateEnum.K44).highPerformanceILDs;
 			//int index = new List<string>(paths).IndexOf(toolkit.ILDHighPerformanceFileName44);
 			//index = EditorGUILayout.Popup(selectedHRTF44, paths);
 			//toolkit.ILDHighPerformanceFileName44 = paths[index];
@@ -300,9 +337,9 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 			//Common3DTIGUI.CreateLoadButtonAndBox("ILD 48kHz", "Select the high performance ILD filter of the listener from a .3dti-ild file",   ref toolkit.ILDHighPerformanceFileName48, ButtonLoadILDHighPerformance48);
    //         Common3DTIGUI.CreateLoadButtonAndBox("ILD 96kHz", "Select the high performance ILD filter of the listener from a .3dti-ild file",   ref toolkit.ILDHighPerformanceFileName96, ButtonLoadILDHighPerformance96);
 
-			Common3DTIGUI.CreatePopupStringSelector("ILD 44.1kHz", "Select the high performance ILD filter of the listener from a .3dti-ild file", API_3DTI_Spatializer.GetFilterBinaryPaths(TSampleRateEnum.K44).highPerformanceILDs, ref toolkit.ILDHighPerformanceFileName44);
-			Common3DTIGUI.CreatePopupStringSelector("ILD 48kHz", "Select the high performance ILD filter of the listener from a .3dti-ild file", API_3DTI_Spatializer.GetFilterBinaryPaths(TSampleRateEnum.K48).highPerformanceILDs, ref toolkit.ILDHighPerformanceFileName48);
-			Common3DTIGUI.CreatePopupStringSelector("ILD 96kHz", "Select the high performance ILD filter of the listener from a .3dti-ild file", API_3DTI_Spatializer.GetFilterBinaryPaths(TSampleRateEnum.K96).highPerformanceILDs, ref toolkit.ILDHighPerformanceFileName96);
+			Common3DTIGUI.CreatePopupStringSelector("ILD 44.1kHz", "Select the high performance ILD filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K44).highPerformanceILDs, ref toolkit.ILDHighPerformanceFileName44, "Assets/3DTuneIn/Resources/Data/HighPerformance/ILD/", ".bytes");
+			Common3DTIGUI.CreatePopupStringSelector("ILD 48kHz", "Select the high performance ILD filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K48).highPerformanceILDs, ref toolkit.ILDHighPerformanceFileName48, "Assets/3DTuneIn/Resources/Data/HighPerformance/ILD/", ".bytes");
+			Common3DTIGUI.CreatePopupStringSelector("ILD 96kHz", "Select the high performance ILD filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K96).highPerformanceILDs, ref toolkit.ILDHighPerformanceFileName96, "Assets/3DTuneIn/Resources/Data/HighPerformance/ILD/", ".bytes");
 			//  }
 		}
 
@@ -318,9 +355,9 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             Common3DTIGUI.AddLabelToParameterGroup("Near Field Filter ILD");
 
 			// HRTF:
-			Common3DTIGUI.CreatePopupStringSelector("HRTF 44.1kHz", "Select the HRTF of the listener from a .3dti-hrtf file", API_3DTI_Spatializer.GetFilterBinaryPaths(TSampleRateEnum.K44).highQualityHRTFs, ref toolkit.HRTFFileName44);
-			Common3DTIGUI.CreatePopupStringSelector("HRTF 48kHz", "Select the HRTF of the listener from a .3dti-hrtf file", API_3DTI_Spatializer.GetFilterBinaryPaths(TSampleRateEnum.K48).highQualityHRTFs, ref toolkit.HRTFFileName48);
-			Common3DTIGUI.CreatePopupStringSelector("HRTF 96kHz", "Select the HRTF of the listener from a .3dti-hrtf file", API_3DTI_Spatializer.GetFilterBinaryPaths(TSampleRateEnum.K96).highQualityHRTFs, ref toolkit.HRTFFileName96);
+			Common3DTIGUI.CreatePopupStringSelector("HRTF 44.1kHz", "Select the HRTF of the listener from a .3dti-hrtf file", GetFilterBinaryPaths(TSampleRateEnum.K44).highQualityHRTFs, ref toolkit.HRTFFileName44, "Assets/3DTuneIn/Resources/Data/HighQuality/HRTF/", ".bytes");
+			Common3DTIGUI.CreatePopupStringSelector("HRTF 48kHz", "Select the HRTF of the listener from a .3dti-hrtf file", GetFilterBinaryPaths(TSampleRateEnum.K48).highQualityHRTFs, ref toolkit.HRTFFileName48, "Assets/3DTuneIn/Resources/Data/HighQuality/HRTF/", ".bytes");
+			Common3DTIGUI.CreatePopupStringSelector("HRTF 96kHz", "Select the HRTF of the listener from a .3dti-hrtf file", GetFilterBinaryPaths(TSampleRateEnum.K96).highQualityHRTFs, ref toolkit.HRTFFileName96, "Assets/3DTuneIn/Resources/Data/HighQuality/HRTF/", ".bytes");
 
 			//Common3DTIGUI.CreateLoadButtonAndBox("HRTF 44.1kHz", "Select the HRTF of the listener from a .3dti-hrtf file", ref toolkit.HRTFFileName44, ButtonLoadHRTF44);
 			//Common3DTIGUI.CreateLoadButtonAndBox("HRTF 48kHz", "Select the HRTF of the listener from a .3dti-hrtf file", ref toolkit.HRTFFileName48, ButtonLoadHRTF48);
@@ -328,9 +365,9 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
             // ILD:
             Common3DTIGUI.SingleSpace();
-			Common3DTIGUI.CreatePopupStringSelector("ILD 44.1kHz", "Select the ILD near field filter of the listener from a .3dti-ild file", API_3DTI_Spatializer.GetFilterBinaryPaths(TSampleRateEnum.K44).highQualityILDs, ref toolkit.ILDNearFieldFileName44);
-			Common3DTIGUI.CreatePopupStringSelector("ILD 48kHz", "Select the ILD near field filter of the listener from a .3dti-ild file", API_3DTI_Spatializer.GetFilterBinaryPaths(TSampleRateEnum.K48).highQualityILDs, ref toolkit.ILDNearFieldFileName48);
-			Common3DTIGUI.CreatePopupStringSelector("ILD 96kHz", "Select the ILD near field filter of the listener from a .3dti-ild file", API_3DTI_Spatializer.GetFilterBinaryPaths(TSampleRateEnum.K96).highQualityILDs, ref toolkit.ILDNearFieldFileName96);
+			Common3DTIGUI.CreatePopupStringSelector("ILD 44.1kHz", "Select the ILD near field filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K44).highQualityILDs, ref toolkit.ILDNearFieldFileName44, "Assets/3DTuneIn/Resources/Data/HighQuality/ILD/", ".bytes");
+			Common3DTIGUI.CreatePopupStringSelector("ILD 48kHz", "Select the ILD near field filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K48).highQualityILDs, ref toolkit.ILDNearFieldFileName48, "Assets/3DTuneIn/Resources/Data/HighQuality/ILD/", ".bytes");
+			Common3DTIGUI.CreatePopupStringSelector("ILD 96kHz", "Select the ILD near field filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K96).highQualityILDs, ref toolkit.ILDNearFieldFileName96, "Assets/3DTuneIn/Resources/Data/HighQuality/ILD/", ".bytes");
 
 
 			//Common3DTIGUI.CreateLoadButtonAndBox("ILD 44.1kHz", "Select the ILD near field filter of the listener from a .3dti-ild file", ref toolkit.ILDNearFieldFileName44, ButtonLoadILDNearField44);

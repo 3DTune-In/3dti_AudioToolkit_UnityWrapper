@@ -18,7 +18,6 @@ using System.IO;            // Needed for FileStream
 
 
 using UnityEngine;
-using System.Linq;
 
 public enum TSampleRateEnum
 {
@@ -41,15 +40,29 @@ public class API_3DTI_Spatializer : MonoBehaviour
 	public const int SPATIALIZATION_MODE_HIGH_QUALITY = 0;
 	public const int SPATIALIZATION_MODE_HIGH_PERFORMANCE = 1;
 	public const int SPATIALIZATION_MODE_NONE = 2;
-	public string HRTFFileName44 = "";                // For internal use, DO NOT USE IT DIRECTLY
-	public string HRTFFileName48 = "";                // For internal use, DO NOT USE IT DIRECTLY
-	public string HRTFFileName96 = "";                // For internal use, DO NOT USE IT DIRECTLY
-	public string ILDNearFieldFileName44 = "";        // For internal use, DO NOT USE IT DIRECTLY
-	public string ILDNearFieldFileName48 = "";        // For internal use, DO NOT USE IT DIRECTLY
-	public string ILDNearFieldFileName96 = "";        // For internal use, DO NOT USE IT DIRECTLY
-	public string ILDHighPerformanceFileName44 = "";  // For internal use, DO NOT USE IT DIRECTLY
-	public string ILDHighPerformanceFileName48 = "";  // For internal use, DO NOT USE IT DIRECTLY
-	public string ILDHighPerformanceFileName96 = "";  // For internal use, DO NOT USE IT DIRECTLY
+
+	// ===== These values are written to by the Editor GUI panel
+
+	public string HRTFFileName44 = "Assets/3DTuneIn/Resources/Data/HighQuality/HRTF/3DTI_HRTF_IRC1032_256s_44100Hz.3dti-hrtf.bytes";
+	public string HRTFFileName48 = "Assets/3DTuneIn/Resources/Data/HighQuality/HRTF/3DTI_HRTF_IRC1032_256s_48000Hz.3dti-hrtf.bytes";
+	public string HRTFFileName96 = "Assets/3DTuneIn/Resources/Data/HighQuality/HRTF/3DTI_HRTF_IRC1032_256s_96000Hz.3dti-hrtf.bytes";
+	public string ILDNearFieldFileName44 = "Assets/3DTuneIn/Resources/Data/HighQuality/ILD/NearFieldCompensation_ILD_44100.3dti-ild.bytes";
+	public string ILDNearFieldFileName48 = "Assets/3DTuneIn/Resources/Data/HighQuality/ILD/NearFieldCompensation_ILD_48000.3dti-ild.bytes";
+	public string ILDNearFieldFileName96 = "Assets/3DTuneIn/Resources/Data/HighQuality/ILD/NearFieldCompensation_ILD_96000.3dti-ild.bytes";
+	public string ILDHighPerformanceFileName44 = "Assets/3DTuneIn/Resources/Data/HighPerformance/ILD/HRTF_ILD_44100.3dti-ild.bytes";
+	public string ILDHighPerformanceFileName48 = "Assets/3DTuneIn/Resources/Data/HighPerformance/ILD/HRTF_ILD_48000.3dti-ild.bytes";
+	public string ILDHighPerformanceFileName96 = "Assets/3DTuneIn/Resources/Data/HighPerformance/ILD/HRTF_ILD_96000.3dti-ild.bytes";
+
+	//[SerializeField]
+	//public string HRTFFileName44 = "";
+	//public string HRTFFileName48 = "";
+	//public string HRTFFileName96 = "";
+	//public string ILDNearFieldFileName44 = "";
+	//public string ILDNearFieldFileName48 = "";
+	//public string ILDNearFieldFileName96 = "";
+	//public string ILDHighPerformanceFileName44 = "";
+	//public string ILDHighPerformanceFileName48 = "";
+	//public string ILDHighPerformanceFileName96 = "";
 
 	public bool customITDEnabled = false;           // For internal use, DO NOT USE IT DIRECTLY
 	public float listenerHeadRadius = 0.0875f;      // For internal use, DO NOT USE IT DIRECTLY    
@@ -125,28 +138,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
 	private AudioSource silentAudioSource;
 
 
-	public static (string[] highQualityHRTFs, string[] highQualityILDs, string[] highPerformanceILDs) GetFilterBinaryPaths(TSampleRateEnum sampleRate)
-	{
-		string sampleRateLabel =
-			sampleRate == TSampleRateEnum.K44 ? "44100"
-			: sampleRate == TSampleRateEnum.K48 ? "48000"
-			: sampleRate == TSampleRateEnum.K96 ? "96000"
-			: "(unknown sample rate)";
 
-		string[] highPerformanceILDs = Resources.LoadAll<TextAsset>("Data/HighPerformance/ILD")
-			.Where(x => x.name.Contains(sampleRateLabel))
-			.Select(item => item.name).ToArray();
-
-		string[] highQualityHRTFs = Resources.LoadAll<TextAsset>("Data/HighQuality/HRTF")
-			.Where(x => x.name.Contains(sampleRateLabel))
-			.Select(item => item.name).ToArray();
-
-		string[] highQualityILDs = Resources.LoadAll<TextAsset>("Data/HighQuality/ILD")
-			.Where(x => x.name.Contains(sampleRateLabel))
-			.Select(item => item.name).ToArray();
-
-		return (highQualityHRTFs, highQualityILDs, highPerformanceILDs);
-	}
 
 
 	/// <summary>

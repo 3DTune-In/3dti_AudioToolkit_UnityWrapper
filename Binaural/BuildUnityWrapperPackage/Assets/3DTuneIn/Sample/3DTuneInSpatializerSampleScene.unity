@@ -309,15 +309,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0b0b66fe32e6446a7e3cb6e903d1b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HRTFFileName44: 3DTI_HRTF_IRC1032_256s_44100Hz.3dti-hrtf
-  HRTFFileName48: 3DTI_HRTF_IRC1032_256s_48000Hz.3dti-hrtf
-  HRTFFileName96: 3DTI_HRTF_IRC1032_256s_96000Hz.3dti-hrtf
-  ILDNearFieldFileName44: NearFieldCompensation_ILD_44100.3dti-ild
-  ILDNearFieldFileName48: NearFieldCompensation_ILD_48000.3dti-ild
-  ILDNearFieldFileName96: NearFieldCompensation_ILD_96000.3dti-ild
-  ILDHighPerformanceFileName44: HRTF_ILD_44100.3dti-ild
-  ILDHighPerformanceFileName48: HRTF_ILD_48000.3dti-ild
-  ILDHighPerformanceFileName96: HRTF_ILD_96000.3dti-ild
+  HRTFFileName44: Assets/3DTuneIn/Resources/Data/HighQuality/HRTF/3DTI_HRTF_IRC1032_512s_44100Hz.3dti-hrtf.bytes
+  HRTFFileName48: Assets/3DTuneIn/Resources/Data/HighQuality/HRTF/3DTI_HRTF_IRC1053_512s_48000Hz.3dti-hrtf.bytes
+  HRTFFileName96: Assets/3DTuneIn/Resources/Data/HighQuality/HRTF/3DTI_HRTF_IRC1048_512s_96000Hz.3dti-hrtf.bytes
+  ILDNearFieldFileName44: Assets/3DTuneIn/Resources/Data/HighQuality/ILD/NearFieldCompensation_ILD_44100.3dti-ild.bytes
+  ILDNearFieldFileName48: Assets/3DTuneIn/Resources/Data/HighQuality/ILD/NearFieldCompensation_ILD_48000.3dti-ild.bytes
+  ILDNearFieldFileName96: Assets/3DTuneIn/Resources/Data/HighQuality/ILD/NearFieldCompensation_ILD_96000.3dti-ild.bytes
+  ILDHighPerformanceFileName44: Assets/3DTuneIn/Resources/Data/HighPerformance/ILD/HRTF_ILD_44100.3dti-ild.bytes
+  ILDHighPerformanceFileName48: 
+  ILDHighPerformanceFileName96: 
   customITDEnabled: 0
   listenerHeadRadius: 0.0875
   spatializationMode: 0

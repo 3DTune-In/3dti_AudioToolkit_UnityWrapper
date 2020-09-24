@@ -342,13 +342,18 @@ public class Common3DTIGUI
     }
 
 
-	public static void CreatePopupStringSelector(string titleText, string tooltip, string[] items, ref string target)
+	public static void CreatePopupStringSelector(string titleText, string tooltip, string[] items, ref string target, string prefix="", string suffix="")
 	{
 		EditorGUILayout.BeginHorizontal();
 		//EditorGUILayout.PrefixLabel(new GUIContent(titleText, tooltip), parameterLabelStyle, GUILayout.Width(GetParameterLabelWidth()));
-		int selectedIndex = new List<string>(items).IndexOf(target);
-		selectedIndex = EditorGUILayout.Popup(new GUIContent(titleText, tooltip), selectedIndex, items);
-		target = selectedIndex<0? "" : items[selectedIndex];
+		int selectedIndex = -1;
+		if (target.Length > prefix.Length + suffix.Length && target.StartsWith(prefix) && target.EndsWith(suffix))
+		{
+			string trimmedTarget = target.Remove(target.Length - suffix.Length).Remove(0, prefix.Length);
+			selectedIndex = new List<string>(items).IndexOf(trimmedTarget);
+		}
+		int newSelectedIndex = EditorGUILayout.Popup(new GUIContent(titleText, tooltip), selectedIndex, items);
+		target = newSelectedIndex < 0? "" : (prefix + items[newSelectedIndex] + suffix);
 		EditorGUILayout.EndHorizontal();
 	}
 
