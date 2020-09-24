@@ -28,6 +28,11 @@ public class Common3DTIGUI
     static GUIStyle aboutButtonStyle;
     static GUIStyle bigTitleStyle;
 
+	//public static void ListHRTFFiles()
+	//{
+	//	UnityEditor.
+	//}
+
     /// <summary>
     /// Init all styles
     /// </summary>
@@ -335,6 +340,18 @@ public class Common3DTIGUI
                 break;
         }
     }
+
+
+	public static void CreatePopupStringSelector(string titleText, string tooltip, string[] items, ref string target)
+	{
+		EditorGUILayout.BeginHorizontal();
+		//EditorGUILayout.PrefixLabel(new GUIContent(titleText, tooltip), parameterLabelStyle, GUILayout.Width(GetParameterLabelWidth()));
+		int selectedIndex = new List<string>(items).IndexOf(target);
+		selectedIndex = EditorGUILayout.Popup(new GUIContent(titleText, tooltip), selectedIndex, items);
+		target = selectedIndex<0? "" : items[selectedIndex];
+		EditorGUILayout.EndHorizontal();
+	}
+
 
     /// <summary>
     /// Create a button and a drag&drop box for loading a file

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657856, g: 0.49641234, b: 0.57481724, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -309,15 +309,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0b0b66fe32e6446a7e3cb6e903d1b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HRTFFileName44: Assets/3DTuneIn/Data/HighQuality/HRTF/3DTI_HRTF_IRC1032_512s_44100Hz.3dti-hrtf
-  HRTFFileName48: Assets/3DTuneIn/Data/HighQuality/HRTF/3DTI_HRTF_IRC1032_512s_48000Hz.3dti-hrtf
-  HRTFFileName96: Assets/3DTuneIn/Data/HighQuality/HRTF/3DTI_HRTF_IRC1032_512s_96000Hz.3dti-hrtf
-  ILDNearFieldFileName44: Assets/3DTuneIn/Data/HighQuality/ILD/NearFieldCompensation_ILD_44100.3dti-ild
-  ILDNearFieldFileName48: Assets/3DTuneIn/Data/HighQuality/ILD/NearFieldCompensation_ILD_48000.3dti-ild
-  ILDNearFieldFileName96: Assets/3DTuneIn/Data/HighQuality/ILD/NearFieldCompensation_ILD_96000.3dti-ild
-  ILDHighPerformanceFileName44: 
-  ILDHighPerformanceFileName48: 
-  ILDHighPerformanceFileName96: 
+  HRTFFileName44: 3DTI_HRTF_IRC1032_256s_44100Hz.3dti-hrtf
+  HRTFFileName48: 3DTI_HRTF_IRC1032_256s_48000Hz.3dti-hrtf
+  HRTFFileName96: 3DTI_HRTF_IRC1032_256s_96000Hz.3dti-hrtf
+  ILDNearFieldFileName44: NearFieldCompensation_ILD_44100.3dti-ild
+  ILDNearFieldFileName48: NearFieldCompensation_ILD_48000.3dti-ild
+  ILDNearFieldFileName96: NearFieldCompensation_ILD_96000.3dti-ild
+  ILDHighPerformanceFileName44: HRTF_ILD_44100.3dti-ild
+  ILDHighPerformanceFileName48: HRTF_ILD_48000.3dti-ild
+  ILDHighPerformanceFileName96: HRTF_ILD_96000.3dti-ild
   customITDEnabled: 0
   listenerHeadRadius: 0.0875
   spatializationMode: 0
