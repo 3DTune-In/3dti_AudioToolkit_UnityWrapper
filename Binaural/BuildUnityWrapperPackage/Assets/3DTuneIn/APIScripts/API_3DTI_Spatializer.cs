@@ -352,10 +352,11 @@ public class API_3DTI_Spatializer : MonoBehaviour
 
 				if (!ILDNearFieldFileName.Equals(""))
 				{
-#if (!UNITY_EDITOR)
-                    if (SaveResourceAsBinary(ILDNearFieldFileName, ".3dti-ild", out ILDNearFieldFileName) != 1) return false;
-#endif
-					if (!LoadILDNearFieldBinary(ILDNearFieldFileName, source))
+					//#if (!UNITY_EDITOR)
+					string binaryPath;
+                    if (SaveResourceAsBinary(ILDNearFieldFileName, ".3dti-ild", out binaryPath) != 1) return false;
+//#endif
+					if (!LoadILDNearFieldBinary(binaryPath, source))
 					{
 						return false;
 					}
@@ -381,10 +382,11 @@ public class API_3DTI_Spatializer : MonoBehaviour
 				}
 				if (!HRTFFileName.Equals(""))
 				{
-#if (!UNITY_EDITOR)
-                    if (SaveResourceAsBinary(HRTFFileName, ".3dti-hrtf", out HRTFFileName) != 1) return false; 
-#endif
-					if (!LoadHRTFBinary(HRTFFileName, source))
+					//#if (!UNITY_EDITOR)
+					string binaryPath;
+                    if (SaveResourceAsBinary(HRTFFileName, ".3dti-hrtf", out binaryPath) != 1) return false; 
+//#endif
+					if (!LoadHRTFBinary(binaryPath, source))
 					{
 						return false;
 					}
@@ -416,10 +418,11 @@ public class API_3DTI_Spatializer : MonoBehaviour
 				}
 				if (!ILDHighPerformanceFileName.Equals(""))
 				{
-#if (!UNITY_EDITOR)
-                    if (SaveResourceAsBinary(ILDHighPerformanceFileName, ".3dti-ild", out ILDHighPerformanceFileName) != 1) return false;
-#endif
-					if (!LoadILDHighPerformanceBinary(ILDHighPerformanceFileName, source))
+					string filePath;
+//#if (!UNITY_EDITOR)
+                    if (SaveResourceAsBinary(ILDHighPerformanceFileName, ".3dti-ild", out filePath) != 1) return false;
+//#endif
+					if (!LoadILDHighPerformanceBinary(filePath, source))
 					{
 						return false;
 					}
@@ -435,8 +438,9 @@ public class API_3DTI_Spatializer : MonoBehaviour
 	/// </summary>    
 	public int SaveResourceAsBinary(string originalname, string extension, out string filename)
 	{
-		// Get only file name from full path
-		string namewithoutextension = Path.GetFileNameWithoutExtension(originalname);
+		// Remove extension. NB we keep the path as the file may be in a subfolder of our Resources folder
+		//string namewithoutextension = Path.GetFileNameWithoutExtension(originalname);
+		string namewithoutextension = Path.ChangeExtension(originalname, null);
 
 		// Setup name for new file
 		string dataPath = Application.persistentDataPath;
@@ -454,7 +458,9 @@ public class API_3DTI_Spatializer : MonoBehaviour
 		MemoryStream streamData = new MemoryStream(txtAsset.bytes);
 		byte[] dataArray = streamData.ToArray();
 
+
 		// Write binary data to binary file        
+		Directory.CreateDirectory(Path.GetDirectoryName(newfilename));
 		using (BinaryWriter writer = new BinaryWriter(File.Open(newfilename, FileMode.Create)))
 		{
 			writer.Write(dataArray);
@@ -490,21 +496,21 @@ public class API_3DTI_Spatializer : MonoBehaviour
 	/// </summary>
 	public bool LoadHRTFBinary(string filename, AudioSource source = null)
 	{
-		switch (sampleRateIndex)
-		{
-			case (int)TSampleRateEnum.K44:
-				HRTFFileName44 = filename;
-				break;
+		//switch (sampleRateIndex)
+		//{
+		//	case (int)TSampleRateEnum.K44:
+		//		HRTFFileName44 = filename;
+		//		break;
 
-			case (int)TSampleRateEnum.K48:
-				HRTFFileName48 = filename;
-				break;
+		//	case (int)TSampleRateEnum.K48:
+		//		HRTFFileName48 = filename;
+		//		break;
 
-			case (int)TSampleRateEnum.K96:
-				HRTFFileName96 = filename;
-				break;
+		//	case (int)TSampleRateEnum.K96:
+		//		HRTFFileName96 = filename;
+		//		break;
 
-		}
+		//}
 
 		List<AudioSource> audioSources;
 		if (source != null)
@@ -542,21 +548,21 @@ public class API_3DTI_Spatializer : MonoBehaviour
 	/// </summary>
 	public bool LoadILDNearFieldBinary(string filename, AudioSource source = null)
 	{
-		switch (sampleRateIndex)
-		{
-			case (int)TSampleRateEnum.K44:
-				ILDNearFieldFileName44 = filename;
-				break;
+		//switch (sampleRateIndex)
+		//{
+		//	case (int)TSampleRateEnum.K44:
+		//		ILDNearFieldFileName44 = filename;
+		//		break;
 
-			case (int)TSampleRateEnum.K48:
-				ILDNearFieldFileName48 = filename;
-				break;
+		//	case (int)TSampleRateEnum.K48:
+		//		ILDNearFieldFileName48 = filename;
+		//		break;
 
-			case (int)TSampleRateEnum.K96:
-				ILDNearFieldFileName96 = filename;
-				break;
+		//	case (int)TSampleRateEnum.K96:
+		//		ILDNearFieldFileName96 = filename;
+		//		break;
 
-		}
+		//}
 
 		List<AudioSource> audioSources;
 		if (source != null)
@@ -594,21 +600,21 @@ public class API_3DTI_Spatializer : MonoBehaviour
 	/// </summary>
 	public bool LoadILDHighPerformanceBinary(string filename, AudioSource source = null)
 	{
-		switch (sampleRateIndex)
-		{
-			case (int)TSampleRateEnum.K44:
-				ILDHighPerformanceFileName44 = filename;
-				break;
+		//switch (sampleRateIndex)
+		//{
+		//	case (int)TSampleRateEnum.K44:
+		//		ILDHighPerformanceFileName44 = filename;
+		//		break;
 
-			case (int)TSampleRateEnum.K48:
-				ILDHighPerformanceFileName48 = filename;
-				break;
+		//	case (int)TSampleRateEnum.K48:
+		//		ILDHighPerformanceFileName48 = filename;
+		//		break;
 
-			case (int)TSampleRateEnum.K96:
-				ILDHighPerformanceFileName96 = filename;
-				break;
+		//	case (int)TSampleRateEnum.K96:
+		//		ILDHighPerformanceFileName96 = filename;
+		//		break;
 
-		}
+		//}
 
 		List<AudioSource> audioSources;
 		if (source != null)

@@ -309,15 +309,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0b0b66fe32e6446a7e3cb6e903d1b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HRTFFileName44: Assets/3DTuneIn/Resources/Data/HighQuality/HRTF/3DTI_HRTF_IRC1032_512s_44100Hz.3dti-hrtf.bytes
-  HRTFFileName48: Assets/3DTuneIn/Resources/Data/HighQuality/HRTF/3DTI_HRTF_IRC1053_512s_48000Hz.3dti-hrtf.bytes
-  HRTFFileName96: Assets/3DTuneIn/Resources/Data/HighQuality/HRTF/3DTI_HRTF_IRC1048_512s_96000Hz.3dti-hrtf.bytes
-  ILDNearFieldFileName44: Assets/3DTuneIn/Resources/Data/HighQuality/ILD/NearFieldCompensation_ILD_44100.3dti-ild.bytes
-  ILDNearFieldFileName48: Assets/3DTuneIn/Resources/Data/HighQuality/ILD/NearFieldCompensation_ILD_48000.3dti-ild.bytes
-  ILDNearFieldFileName96: Assets/3DTuneIn/Resources/Data/HighQuality/ILD/NearFieldCompensation_ILD_96000.3dti-ild.bytes
-  ILDHighPerformanceFileName44: Assets/3DTuneIn/Resources/Data/HighPerformance/ILD/HRTF_ILD_44100.3dti-ild.bytes
-  ILDHighPerformanceFileName48: 
-  ILDHighPerformanceFileName96: 
+  HRTFFileName44: Data/HighQuality/HRTF/3DTI_HRTF_IRC1032_256s_44100Hz.3dti-hrtf.bytes
+  HRTFFileName48: Data/HighQuality/HRTF/3DTI_HRTF_IRC1032_256s_48000Hz.3dti-hrtf.bytes
+  HRTFFileName96: Data/HighQuality/HRTF/3DTI_HRTF_IRC1032_256s_96000Hz.3dti-hrtf.bytes
+  ILDNearFieldFileName44: Data/HighQuality/ILD/NearFieldCompensation_ILD_44100.3dti-ild.bytes
+  ILDNearFieldFileName48: Data/HighQuality/ILD/NearFieldCompensation_ILD_48000.3dti-ild.bytes
+  ILDNearFieldFileName96: Data/HighQuality/ILD/NearFieldCompensation_ILD_96000.3dti-ild.bytes
+  ILDHighPerformanceFileName44: Data/HighPerformance/ILD/HRTF_ILD_44100.3dti-ild.bytes
+  ILDHighPerformanceFileName48: Data/HighPerformance/ILD/HRTF_ILD_48000.3dti-ild.bytes
+  ILDHighPerformanceFileName96: Data/HighPerformance/ILD/HRTF_ILD_96000.3dti-ild.bytes
   customITDEnabled: 0
   listenerHeadRadius: 0.0875
   spatializationMode: 0
@@ -330,7 +330,7 @@ MonoBehaviour:
   modHRTF: 1
   magAnechoicAttenuation: -3
   magSoundSpeed: 343
-  debugLog: 0
+  debugLog: 1
   doHADirectionalityLeft: 0
   doHADirectionalityRight: 0
   HADirectionalityExtendLeft: 15
