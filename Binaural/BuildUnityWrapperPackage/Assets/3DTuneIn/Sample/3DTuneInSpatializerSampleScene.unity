@@ -330,7 +330,7 @@ MonoBehaviour:
   modHRTF: 1
   magAnechoicAttenuation: -3
   magSoundSpeed: 343
-  debugLog: 1
+  debugLog: 0
   doHADirectionalityLeft: 0
   doHADirectionalityRight: 0
   HADirectionalityExtendLeft: 15
