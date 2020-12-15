@@ -970,12 +970,12 @@ loadedHRTF(false)
 
 		// Now check that listener and source are not in the same position.
 		// This might happens in some weird cases, such as when trying to process a source with no clip
-		if (spatializer().listener->GetListenerTransform().GetVectorTo(data->audioSource->GetSourceTransform()).GetSqrDistance() < 0.0001f)
-		{
-			WriteLog(state, "WARNING during Process! AudioSource and Listener positions are the same (do you have a source with no clip?)", "");
-			spatializer().spatializerMutex.unlock();
-			return UNITY_AUDIODSP_OK;
-		}
+		//if (spatializer().listener->GetListenerTransform().GetVectorTo(data->audioSource->GetSourceTransform()).GetSqrDistance() < 0.0001f)
+		//{
+		//	WriteLog(state, "WARNING during Process! AudioSource and Listener positions are the same (do you have a source with no clip?)", "");
+		//	spatializer().spatializerMutex.unlock();
+		//	return UNITY_AUDIODSP_OK;
+		//}
 
 		// Transform input buffer
 		CMonoBuffer<float> inMonoBuffer(length);
