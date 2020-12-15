@@ -179,9 +179,9 @@ loadedHRTF(false)
         int numparams = P_NUM;
         definition.paramdefs = new UnityAudioParameterDefinition[numparams];
 		RegisterParameter(definition, "HRTFPath", "", 0.0f, 255.0f, 0.0f, 1.0f, 1.0f, PARAM_HRTF_FILE_STRING, "String with path of HRTF binary file");
-		RegisterParameter(definition, "HeadRadius", "m", 0.0f, FLT_MAX, 0.0875f, 1.0f, 1.0f, PARAM_HEAD_RADIUS, "Listener head radius");
-		RegisterParameter(definition, "ScaleFactor", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 1.0f, PARAM_SCALE_FACTOR, "Scale factor for over/under sized scenes");
-		RegisterParameter(definition, "SourceID", "", -1.0f, FLT_MAX, -1.0f, 1.0f, 1.0f, PARAM_SOURCE_ID, "Source ID for debug");
+		RegisterParameter(definition, "HeadRadius", "m", 0.0f, /*FLT_MAX*/ 1e20, 0.0875f, 1.0f, 1.0f, PARAM_HEAD_RADIUS, "Listener head radius");
+		RegisterParameter(definition, "ScaleFactor", "", 0.0f, /*FLT_MAX*/ 1e20, 1.0f, 1.0f, 1.0f, PARAM_SCALE_FACTOR, "Scale factor for over/under sized scenes");
+		RegisterParameter(definition, "SourceID", "", -1.0f, /*FLT_MAX*/ 1e20, -1.0f, 1.0f, 1.0f, PARAM_SOURCE_ID, "Source ID for debug");
 		RegisterParameter(definition, "CustomITD", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_CUSTOM_ITD, "Enabled custom ITD");
 		RegisterParameter(definition, "HRTFInterp", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_HRTF_INTERPOLATION, "HRTF Interpolation method");
 		RegisterParameter(definition, "MODfarLPF", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_FARLPF, "Far distance LPF module enabler");
@@ -733,7 +733,7 @@ loadedHRTF(false)
 
 			case PARAM_MAG_ANECHATT:
                 magnitudes = spatializer().core.GetMagnitudes();
-				magnitudes.SetAnechoicDistanceAttenuation(value);
+				magnitudes.SetAnechoicDistanceAttenuation(min(0.0f, max(-1.0e20, value)));
                 spatializer().core.SetMagnitudes(magnitudes);
 				WriteLog(state, "SET PARAMETER: Anechoic distance attenuation set to (dB) ", value);
 				break;
