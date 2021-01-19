@@ -86,8 +86,11 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         //{
             // Get HL API instance (TO DO: Error check)
             HLAPI = GameObject.FindObjectOfType<API_3DTI_HL>();
-            if (HLAPI == null)
-                return false;
+        if (HLAPI == null)
+        {
+            GUILayout.Label("Please create an instance of API_3DTI_HL in the scene hierarchy to use this effect.");
+            return false;
+        }
 
 		// Setup styles
         Common3DTIGUI.InitStyles();

@@ -56,11 +56,17 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
             // Get HA API instance (TO DO: Error check)            
             HAAPI = GameObject.FindObjectOfType<API_3DTI_HA>();
             if (HAAPI == null)
+        {
+                GUILayout.Label("Please create an instance of API_3DTI_HA in the scene hierarchy to use this effect.");
                 return false;
+        }
         // Get HA API instance (TO DO: Error check)            
         HLAPI = GameObject.FindObjectOfType<API_3DTI_HL>();
         if (HLAPI == null)
+        {
+            GUILayout.Label("In addition to the API_3DTI_HA component, the Hearing Aid simulator also depends on API_3DTI_HL. Please create an instance of API_3DTI_HL in the scene hierarchy to use this effect.");
             return false;
+        }
         // Setup styles
         Common3DTIGUI.InitStyles();
         //}                
