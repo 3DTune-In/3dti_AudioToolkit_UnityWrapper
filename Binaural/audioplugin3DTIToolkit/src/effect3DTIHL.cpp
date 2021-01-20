@@ -35,6 +35,8 @@ using namespace std;
 #include <string>
 #include <sstream>
 #endif
+#include "Common/CommonDefinitions.h"
+#include "HAHLSimulation/ButterworthMultibandExpander.h"
 
 //enum THLClassificationScaleCurve { HL_CS_ERROR =-1, HL_CS_NOLOSS =0, 
 //								   HL_CS_A =1, HL_CS_B =2, HL_CS_C =3, HL_CS_D =4, HL_CS_E =5, HL_CS_F =6,
@@ -622,7 +624,25 @@ enum
 			effectdata->HL.DisableFrequencySmearing(Common::T_ear::BOTH);
 
 		// Hearing loss simulator Setup		
-		effectdata->HL.Setup(state->samplerate, DEFAULT_CALIBRATION_DBSPL, DEFAULT_INIFREQ, DEFAULT_BANDSNUMBER, DEFAULT_FILTERSPERBAND, state->dspbuffersize);		
+		//effectdata->HL.Setup(state->samplerate, DEFAULT_CALIBRATION_DBSPL, DEFAULT_INIFREQ, DEFAULT_BANDSNUMBER, DEFAULT_FILTERSPERBAND, state->dspbuffersize);
+		effectdata->HL.Setup(state->samplerate, DEFAULT_CALIBRATION_DBSPL, DEFAULT_BANDSNUMBER, state->dspbuffersize);
+
+		// Tim: We now need to manually create multiband expanders before calling SetFromAudiometry
+		for (auto ear : { Common::T_ear::LEFT, Common::T_ear::RIGHT })
+		{
+#pragma message(": warning: todo use a define to set which multiband expander to use")
+#pragma message(": warning: todo use a define/parameter to set whether filterGrouping is enabled")
+			auto multibandExpander = std::make_shared<HAHLSimulation::CButterworthMultibandExpander>();
+			const bool TEMP_DEFAULT_FILTER_GROUPING = false;
+			multibandExpander->Setup(state->samplerate, DEFAULT_INIFREQ, effectdata->HL.GetNumberOfBands(), TEMP_DEFAULT_FILTER_GROUPING);
+			effectdata->HL.SetMultibandExpander(ear, multibandExpander);
+			// Tim: Likewise for frequency smearing
+#pragma message(": warning: todo use a define to set which frequency smearer to use")
+#pragma message(": warning: todo find appropriate default for dsp buffer size")
+			auto frequencySmearer = std::make_shared<HAHLSimulation::CBaerMooreFrequencySmearing>();
+			frequencySmearer->Setup(state->dspbuffersize, state->samplerate);
+			effectdata->HL.SetFrequencySmearer(ear, frequencySmearer);
+		}
 
 		// Initial setup of hearing loss levels
 		effectdata->HL.SetFromAudiometry_dBHL(Common::T_ear::BOTH, DEFAULT_AUDIOMETRY);
@@ -631,8 +651,11 @@ enum
 		effectdata->HL.SetCalibration(DEFAULT_CALIBRATION_DBSPL);
 
 		// Setup of envelope detectors
-		effectdata->HL.SetAttackForAllBands(Common::T_ear::BOTH, DEFAULT_ATTACK);
-		effectdata->HL.SetReleaseForAllBands(Common::T_ear::BOTH, DEFAULT_RELEASE);
+		for (bool filterGrouping : {false, true})
+		{
+			effectdata->HL.SetAttackForAllBands(Common::T_ear::BOTH, DEFAULT_ATTACK, filterGrouping);
+			effectdata->HL.SetReleaseForAllBands(Common::T_ear::BOTH, DEFAULT_RELEASE, filterGrouping);
+		}
 
 		// Initial setup of temporal distortion simulator
 		effectdata->HL.GetTemporalDistortionSimulator()->SetBandUpperLimit(Common::T_ear::BOTH, DEFAULT_TABAND);
@@ -860,22 +883,30 @@ enum
 
 			// ENVELOPE DETECTORS:
 			case PARAM_MBE_ATTACK_LEFT:
-				data->HL.SetAttackForAllBands(Common::T_ear::LEFT, value);
+#pragma message(": warning: todo - make separate parameters for the two filter grouping options")
+				for (bool filterGrouping : {false, true})
+					data->HL.SetAttackForAllBands(Common::T_ear::LEFT, value, filterGrouping);
 				WriteLog(state, "SET PARAMETER: Attack time (ms) for Left envelope detectors set to: ", value);				
 				break;
 
 			case PARAM_MBE_ATTACK_RIGHT:
-				data->HL.SetAttackForAllBands(Common::T_ear::RIGHT, value);
+#pragma message(": warning: todo - make separate parameters for the two filter grouping options")
+				for (bool filterGrouping : {false, true})
+					data->HL.SetAttackForAllBands(Common::T_ear::RIGHT, value, filterGrouping);
 				WriteLog(state, "SET PARAMETER: Attack time (ms) for Right envelope detectors set to: ", value);
 				break;
 
 			case PARAM_MBE_RELEASE_LEFT:
-				data->HL.SetReleaseForAllBands(Common::T_ear::LEFT, value);
+#pragma message(": warning: todo - make separate parameters for the two filter grouping options")
+				for (bool filterGrouping : {false, true})
+					data->HL.SetReleaseForAllBands(Common::T_ear::LEFT, value, filterGrouping);
 				WriteLog(state, "SET PARAMETER: Release time (ms) for Left envelope detectors set to: ", value);
 				break;
 
 			case PARAM_MBE_RELEASE_RIGHT:
-				data->HL.SetReleaseForAllBands(Common::T_ear::RIGHT, value);
+#pragma message(": warning: todo - make separate parameters for the two filter grouping options")
+				for (bool filterGrouping : {false, true})
+					data->HL.SetReleaseForAllBands(Common::T_ear::RIGHT, value, filterGrouping);
 				WriteLog(state, "SET PARAMETER: Release time (ms) for Right envelope detectors set to: ", value);
 				break;
 
@@ -991,7 +1022,8 @@ enum
 			case PARAM_FS_DOWN_SIZE_LEFT:
 				if ((int)value > 0)
 				{
-					data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetDownwardSmearingBufferSize((int)value);
+#pragma message(": warning: todo")
+					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetDownwardSmearingBufferSize((int)value);
 					WriteLog(state, "SET PARAMETER: Downward smearing buffer size for left ear = ", (int)value);
 				}
 				else
@@ -1001,7 +1033,8 @@ enum
 			case PARAM_FS_DOWN_SIZE_RIGHT:
 				if ((int)value > 0)
 				{
-					data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetDownwardSmearingBufferSize((int)value);
+#pragma message(": warning: todo")
+					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetDownwardSmearingBufferSize((int)value);
 					WriteLog(state, "SET PARAMETER: Downward smearing buffer size for right ear = ", (int)value);
 				}
 				else
@@ -1011,7 +1044,8 @@ enum
 			case PARAM_FS_UP_SIZE_LEFT:
 				if ((int)value > 0)
 				{
-					data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetUpwardSmearingBufferSize((int)value);
+#pragma message(": warning: todo")
+					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetUpwardSmearingBufferSize((int)value);
 					WriteLog(state, "SET PARAMETER: Upward smearing buffer size for left ear = ", (int)value);
 				}
 				else
@@ -1021,7 +1055,8 @@ enum
 			case PARAM_FS_UP_SIZE_RIGHT:
 				if ((int)value > 0)
 				{
-					data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetUpwardSmearingBufferSize((int)value);
+#pragma message(": warning: todo")
+					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetUpwardSmearingBufferSize((int)value);
 					WriteLog(state, "SET PARAMETER: Upward smearing buffer size for right ear = ", (int)value);
 				}
 				else
@@ -1031,7 +1066,8 @@ enum
 			case PARAM_FS_DOWN_HZ_LEFT:
 				if (value >= 0.0f)
 				{
-					data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetDownwardSmearing_Hz(value);
+#pragma message(": warning: todo")
+					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetDownwardSmearing_Hz(value);
 					WriteLog(state, "SET PARAMETER: Downward smearing amount (in Hz) for left ear = ", value);
 				}
 				else
@@ -1041,7 +1077,8 @@ enum
 			case PARAM_FS_DOWN_HZ_RIGHT:
 				if (value >= 0.0f)
 				{
-					data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetDownwardSmearing_Hz(value);
+#pragma message(": warning: todo")
+					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetDownwardSmearing_Hz(value);
 					WriteLog(state, "SET PARAMETER: Downward smearing amount (in Hz) for right ear = ", value);
 				}
 				else
@@ -1051,7 +1088,8 @@ enum
 			case PARAM_FS_UP_HZ_LEFT:
 				if (value >= 0.0f)
 				{
-					data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetUpwardSmearing_Hz(value);
+#pragma message(": warning: todo")
+					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetUpwardSmearing_Hz(value);
 					WriteLog(state, "SET PARAMETER: Upward smearing amount (in Hz) for left ear = ", value);
 				}
 				else
@@ -1061,7 +1099,8 @@ enum
 			case PARAM_FS_UP_HZ_RIGHT:
 				if (value >= 0.0f)
 				{
-					data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetUpwardSmearing_Hz(value);
+#pragma message(": warning: todo")
+					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetUpwardSmearing_Hz(value);
 					WriteLog(state, "SET PARAMETER: Upward smearing amount (in Hz) for right ear = ", value);
 				}
 				else
