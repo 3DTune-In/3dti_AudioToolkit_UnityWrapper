@@ -691,6 +691,28 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             {
                 EditorGUI.BeginDisabledGroup(!HLAPI.FS_LEFT_ON);
                 {
+                    Common3DTIGUI.SingleSpace();
+                    GUILayout.BeginHorizontal();
+                    {
+                        float approachFloat;
+                        if (plugin.GetFloatParameter("HLFSAPPROACHL", out approachFloat))
+                        {
+                            string[] options = new string[] { "Baer-Moore", "Graf" };
+                            int approach = Math.Max(0, Math.Min((int)approachFloat, options.Length));
+                            //string approachString = ((API_3DTI_HL.T_HLFrequencySmearingApproach)approachFloat) == API_3DTI_HL.T_HLFrequencySmearingApproach.BAERMOORE ? "Baer-Moore" : "Graf";
+                            //string newApproach = approach;
+                            //Common3DTIGUI.CreatePopupStringSelector("Approach", "Which algorithm is used for frequency", new string[] { "Baer-Moore", "Graf" }, ref newApproach);
+                            int newApproach = EditorGUILayout.Popup(new GUIContent("Approach", "Which algorithm is used for frequency"), approach, options);
+
+                            if (approach != newApproach)
+                            {
+                                plugin.SetFloatParameter("HLFSAPPROACHL", (float) newApproach);
+                            }
+                        }
+                    }
+                    GUILayout.EndHorizontal();
+                    Common3DTIGUI.SingleSpace();
+
                     // PRESETS
                     Common3DTIGUI.SingleSpace();
                     GUILayout.BeginHorizontal();

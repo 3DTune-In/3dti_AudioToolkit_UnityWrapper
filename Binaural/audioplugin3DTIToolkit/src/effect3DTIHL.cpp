@@ -49,10 +49,11 @@ using namespace std;
 namespace HLSimulation3DTI
 {
 
+	using namespace Common;
+
 	enum FrequencySmearingApproach : int
 	{
-		FREQUENCYSMEARING_APPROACH_OFF = 0,
-		FREQUENCYSMEARING_APPROACH_BAERMOORE,
+		FREQUENCYSMEARING_APPROACH_BAERMOORE = 0,
 		FREQUENCYSMEARING_APPROACH_GRAF,
 		FREQUENCYSMEARING_APPROACH_COUNT
 	};
@@ -65,8 +66,8 @@ namespace HLSimulation3DTI
 #define DEFAULT_HL_ON				false
 #define DEFAULT_MULTIBANDEXPANDER_ON	true
 #define DEFAULT_TEMPORALDISTORTION_ON	false
-//#define DEFAULT_FREQUENCYSMEARING_ON	false
-#define DEFAULT_FREQUENCYSMEARING_APPROACH FREQUENCYSMEARING_APPROACH_OFF
+#define DEFAULT_FREQUENCYSMEARING_ON	false
+#define DEFAULT_FREQUENCYSMEARING_APPROACH FREQUENCYSMEARING_APPROACH_BAERMOORE
 // Multiband expander:
 #define DEFAULT_INIFREQ				62.5
 #define DEFAULT_BANDSNUMBER			9
@@ -183,8 +184,8 @@ enum
 	// Frequency smearing
 	PARAM_FREQUENCYSMEARING_APPROACH_LEFT,
 	PARAM_FREQUENCYSMEARING_APPROACH_RIGHT,
-	//PARAM_FREQUENCYSMEARING_ON_LEFT,
-	//PARAM_FREQUENCYSMEARING_ON_RIGHT,
+	PARAM_FREQUENCYSMEARING_ON_LEFT,
+	PARAM_FREQUENCYSMEARING_ON_RIGHT,
 	PARAM_FS_DOWN_SIZE_LEFT,
 	PARAM_FS_DOWN_SIZE_RIGHT,
 	PARAM_FS_UP_SIZE_LEFT,
@@ -513,10 +514,10 @@ enum
 		RegisterParameter(definition, "HLTA1GR", "", MIN_TAAUTOCORRELATION, MAX_TAAUTOCORRELATION, 0.0f, 1.0f, 1.0f, PARAM_TA_AUTOCORR1_GET_RIGHT, "Autocorrelation coefficient one in right temporal distortion noise source?");
 
 		// Frequency smearing
-		RegisterParameter(definition, "HLFSONL", "", 0.0f, FREQUENCYSMEARING_APPROACH_COUNT, DEFAULT_FREQUENCYSMEARING_APPROACH, 1.0f, 1.0f, PARAM_FREQUENCYSMEARING_APPROACH_LEFT, "Switch on frequency smearing simulation for left ear");
-		RegisterParameter(definition, "HLFSONR", "", 0.0f, FREQUENCYSMEARING_APPROACH_COUNT, DEFAULT_FREQUENCYSMEARING_APPROACH, 1.0f, 1.0f, PARAM_FREQUENCYSMEARING_APPROACH_RIGHT, "Switch on frequency smearing simulation for right ear");
-		//RegisterParameter(definition, "HLFSONL", "", 0.0f, 1.0f, Bool2Float(DEFAULT_FREQUENCYSMEARING_ON), 1.0f, 1.0f, PARAM_FREQUENCYSMEARING_ON_LEFT, "Switch on frequency smearing simulation for left ear");
-		//RegisterParameter(definition, "HLFSONR", "", 0.0f, 1.0f, Bool2Float(DEFAULT_FREQUENCYSMEARING_ON), 1.0f, 1.0f, PARAM_FREQUENCYSMEARING_ON_RIGHT, "Switch on frequency smearing simulation for right ear");
+		RegisterParameter(definition, "HLFSONL", "", 0.0f, 1.0f, DEFAULT_FREQUENCYSMEARING_ON, 1.0f, 1.0f, PARAM_FREQUENCYSMEARING_ON_LEFT, "Switch on frequency smearing simulation for left ear");
+		RegisterParameter(definition, "HLFSONR", "", 0.0f, 1.0f, DEFAULT_FREQUENCYSMEARING_ON, 1.0f, 1.0f, PARAM_FREQUENCYSMEARING_ON_RIGHT, "Switch on frequency smearing simulation for right ear");
+		RegisterParameter(definition, "HLFSAPPROACHL", "", 0.0f, FREQUENCYSMEARING_APPROACH_COUNT, DEFAULT_FREQUENCYSMEARING_APPROACH, 1.0f, 1.0f, PARAM_FREQUENCYSMEARING_APPROACH_LEFT, "Approach used for Frequency smearing");
+		RegisterParameter(definition, "HLFSAPPROACHR", "", 0.0f, FREQUENCYSMEARING_APPROACH_COUNT, DEFAULT_FREQUENCYSMEARING_APPROACH, 1.0f, 1.0f, PARAM_FREQUENCYSMEARING_APPROACH_RIGHT, "Approach used for Frequency smearing");
 		RegisterParameter(definition, "HLFSDOWNSZL", "", MIN_FSSIZE, MAX_FSSIZE, DEFAULT_FSSIZE, 1.0f, 1.0f, PARAM_FS_DOWN_SIZE_LEFT, "Size of downward section of smearing window for left ear");
 		RegisterParameter(definition, "HLFSDOWNSZR", "", MIN_FSSIZE, MAX_FSSIZE, DEFAULT_FSSIZE, 1.0f, 1.0f, PARAM_FS_DOWN_SIZE_RIGHT, "Size of downward section of smearing window for right ear");
 		RegisterParameter(definition, "HLFSUPSZL", "", MIN_FSSIZE, MAX_FSSIZE, DEFAULT_FSSIZE, 1.0f, 1.0f, PARAM_FS_UP_SIZE_LEFT, "Size of upward section of smearing window for left ear");
@@ -610,6 +611,35 @@ enum
 
 	/////////////////////////////////////////////////////////////////////	
 
+	void updateFrequencySmearer(UnityAudioEffectState* state, Common::T_ear ear)
+	{
+		EffectData* data = state->GetEffectData<EffectData>();
+		FrequencySmearingApproach approach = data->parameters[PARAM_FREQUENCYSMEARING_APPROACH_LEFT + ear] == FREQUENCYSMEARING_APPROACH_BAERMOORE? FREQUENCYSMEARING_APPROACH_BAERMOORE  : FREQUENCYSMEARING_APPROACH_GRAF;
+		assert(ear == LEFT || ear == RIGHT);
+		static_assert(LEFT == 0 && RIGHT == 1, "Lets us add the ear to parameter enum");
+		if (approach == FREQUENCYSMEARING_APPROACH_BAERMOORE)
+		{
+			auto frequencySmearer = std::make_shared<HAHLSimulation::CBaerMooreFrequencySmearing>();
+			frequencySmearer->Setup(state->dspbuffersize, state->samplerate);
+			frequencySmearer->SetDownwardBroadeningFactor(data->parameters[PARAM_FS_DOWN_HZ_LEFT+ear]);
+			frequencySmearer->SetUpwardBroadeningFactor(data->parameters[PARAM_FS_UP_HZ_LEFT+ear]);
+			data->HL.SetFrequencySmearer(ear, frequencySmearer);
+			//effectdata->HL.EnableFrequencySmearing(Common::LEFT);
+		}
+		else
+		{
+			assert(approach == FREQUENCYSMEARING_APPROACH_GRAF);
+			auto frequencySmearer = std::make_shared<HAHLSimulation::CGraf3DTIFrequencySmearing>();
+			frequencySmearer->Setup(state->dspbuffersize, state->samplerate);
+			frequencySmearer->SetDownwardSmearingBufferSize((int) data->parameters[PARAM_FS_DOWN_SIZE_LEFT + ear]);
+			frequencySmearer->SetUpwardSmearingBufferSize((int) data->parameters[PARAM_FS_UP_SIZE_LEFT + ear]);
+			frequencySmearer->SetDownwardSmearing_Hz(data->parameters[PARAM_FS_DOWN_HZ_LEFT + ear]);
+			frequencySmearer->SetUpwardSmearing_Hz(data->parameters[PARAM_FS_UP_HZ_LEFT + ear]);
+			data->HL.SetFrequencySmearer(ear, frequencySmearer);
+		}
+	}
+
+
 	UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectState* state)
 	{
 		EffectData* effectdata = new EffectData;
@@ -634,10 +664,10 @@ enum
 			effectdata->HL.EnableTemporalDistortion(Common::T_ear::BOTH);
 		else
 			effectdata->HL.DisableTemporalDistortion(Common::T_ear::BOTH);
-		//if (DEFAULT_FREQUENCYSMEARING_ON)
-		//	effectdata->HL.EnableFrequencySmearing(Common::T_ear::BOTH);
-		//else
-		//	effectdata->HL.DisableFrequencySmearing(Common::T_ear::BOTH);
+		if (DEFAULT_FREQUENCYSMEARING_ON)
+			effectdata->HL.EnableFrequencySmearing(Common::T_ear::BOTH);
+		else
+			effectdata->HL.DisableFrequencySmearing(Common::T_ear::BOTH);
 
 		// Hearing loss simulator Setup		
 		//effectdata->HL.Setup(state->samplerate, DEFAULT_CALIBRATION_DBSPL, DEFAULT_INIFREQ, DEFAULT_BANDSNUMBER, DEFAULT_FILTERSPERBAND, state->dspbuffersize);
@@ -652,30 +682,11 @@ enum
 			const bool TEMP_DEFAULT_FILTER_GROUPING = false;
 			multibandExpander->Setup(state->samplerate, DEFAULT_INIFREQ, effectdata->HL.GetNumberOfBands(), TEMP_DEFAULT_FILTER_GROUPING);
 			effectdata->HL.SetMultibandExpander(ear, multibandExpander);
+
+			updateFrequencySmearer(state, ear);
 		}
 
 
-		// Tim: Likewise for frequency smearing
-#pragma message(": warning: todo use a define to set which frequency smearer to use")
-#pragma message(": warning: todo find appropriate default for dsp buffer size")
-		if (effectdata->parameters[PARAM_FREQUENCYSMEARING_APPROACH_LEFT] == FREQUENCYSMEARING_APPROACH_BAERMOORE)
-		{
-			auto frequencySmearer = std::make_shared<HAHLSimulation::CBaerMooreFrequencySmearing>();
-			frequencySmearer->Setup(state->dspbuffersize, state->samplerate);
-			frequencySmearer->SetDownwardBroadeningFactor(effectdata->parameters[PARAM_FS_DOWN_HZ_LEFT]);
-			frequencySmearer->SetUpwardBroadeningFactor(effectdata->parameters[PARAM_FS_UP_HZ_LEFT]);
-			effectdata->HL.SetFrequencySmearer(Common::LEFT, frequencySmearer);
-			effectdata->HL.EnableFrequencySmearing(Common::LEFT);
-		}
-		if (effectdata->parameters[PARAM_FREQUENCYSMEARING_APPROACH_RIGHT] == FREQUENCYSMEARING_APPROACH_BAERMOORE)
-		{
-			auto frequencySmearer = std::make_shared<HAHLSimulation::CBaerMooreFrequencySmearing>();
-			frequencySmearer->Setup(state->dspbuffersize, state->samplerate);
-			frequencySmearer->SetDownwardBroadeningFactor(effectdata->parameters[PARAM_FS_DOWN_HZ_RIGHT]);
-			frequencySmearer->SetUpwardBroadeningFactor(effectdata->parameters[PARAM_FS_UP_HZ_RIGHT]);
-			effectdata->HL.SetFrequencySmearer(Common::RIGHT, frequencySmearer);
-			effectdata->HL.EnableFrequencySmearing(Common::RIGHT);
-		}
 
 
 		// Initial setup of hearing loss levels
@@ -771,6 +782,8 @@ enum
         EffectData* data = state->GetEffectData<EffectData>();
         if (index >= P_NUM)
             return UNITY_AUDIODSP_ERR_UNSUPPORTED;
+
+		// Note that as parameters are stored in here then for some updates we can delegate to another function, such as updateFrequencySmearer(..)
         data->parameters[index] = value;
 
 		//THLClassificationScaleCurve curve;
@@ -1017,158 +1030,175 @@ enum
 				break;
 
 			// FREQUENCY SMEARING:
-			case PARAM_FREQUENCYSMEARING_APPROACH_LEFT:
-				if (((int)value != 0) && ((int)value != 1))
-					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to switch on/off frequency smearing in left ear with non boolean value ", value);
-				else
-				{
-					if (!Float2Bool(value))
-					{
-						data->HL.DisableFrequencySmearing(Common::T_ear::LEFT);
-						WriteLog(state, "SET PARAMETER: Frequency smearing in left ear switched OFF", "");
-					}
-					if (Float2Bool(value))
-					{
-						if (std::dynamic_pointer_cast<HAHLSimulation::CBaerMooreFrequencySmearing>(data->HL.GetFrequencySmearingSimulator(Common::LEFT)) == nullptr)
-						{
-							auto frequencySmearer = std::make_shared<HAHLSimulation::CBaerMooreFrequencySmearing>();
-							frequencySmearer->Setup(state->dspbuffersize, state->samplerate);
-							frequencySmearer->SetDownwardBroadeningFactor(data->parameters[PARAM_FS_DOWN_HZ_LEFT]);
-							frequencySmearer->SetUpwardBroadeningFactor(data->parameters[PARAM_FS_UP_HZ_LEFT]);
-							data->HL.SetFrequencySmearer(Common::LEFT, frequencySmearer);
-							data->HL.EnableFrequencySmearing(Common::LEFT);
-						}
-						data->HL.EnableFrequencySmearing(Common::T_ear::LEFT);
-						WriteLog(state, "SET PARAMETER: Frequency smearing in left ear switched ON", "");
-					}
-				}
-				break;
-
-			case PARAM_FREQUENCYSMEARING_APPROACH_RIGHT:
-				if (((int)value != 0) && ((int)value != 1))
-					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to switch on/off frequency smearing in right ear with non boolean value ", value);
-				else
-				{
-					if (!Float2Bool(value))
-					{
-						data->HL.DisableFrequencySmearing(Common::T_ear::RIGHT);
-						WriteLog(state, "SET PARAMETER: Frequency smearing in right ear switched OFF", "");
-					}
-					if (Float2Bool(value))
-					{
-						data->HL.EnableFrequencySmearing(Common::T_ear::RIGHT);
-						WriteLog(state, "SET PARAMETER: Frequency smearing in right ear switched ON", "");
-					}
-				}
-				break;
-
+			case PARAM_FREQUENCYSMEARING_ON_LEFT:
 			case PARAM_FS_DOWN_SIZE_LEFT:
-				if ((int)value > 0)
-				{
-#pragma message(": warning: todo")
-					
-					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetDownwardSmearingBufferSize((int)value);
-					WriteLog(state, "SET PARAMETER: Downward smearing buffer size for left ear = ", (int)value);
-				}
-				else
-					WriteLog(state, "SET PARAMETER: ERROR!!! Wrong size for downward smearing buffer in left ear = ", (int)value);
-				break;
-
-			case PARAM_FS_DOWN_SIZE_RIGHT:
-				if ((int)value > 0)
-				{
-#pragma message(": warning: todo")
-					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetDownwardSmearingBufferSize((int)value);
-					WriteLog(state, "SET PARAMETER: Downward smearing buffer size for right ear = ", (int)value);
-				}
-				else
-					WriteLog(state, "SET PARAMETER: ERROR!!! Wrong size for downward smearing buffer in right ear = ", (int)value);
-				break;
-
 			case PARAM_FS_UP_SIZE_LEFT:
-				if ((int)value > 0)
-				{
-#pragma message(": warning: todo")
-					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetUpwardSmearingBufferSize((int)value);
-					WriteLog(state, "SET PARAMETER: Upward smearing buffer size for left ear = ", (int)value);
-				}
-				else
-					WriteLog(state, "SET PARAMETER: ERROR!!! Wrong size for upward smearing buffer in left ear = ", (int)value);
-				break;
-
-			case PARAM_FS_UP_SIZE_RIGHT:
-				if ((int)value > 0)
-				{
-#pragma message(": warning: todo")
-					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetUpwardSmearingBufferSize((int)value);
-					WriteLog(state, "SET PARAMETER: Upward smearing buffer size for right ear = ", (int)value);
-				}
-				else
-					WriteLog(state, "SET PARAMETER: ERROR!!! Wrong size for upward smearing buffer in right ear = ", (int)value);
-				break;
-
 			case PARAM_FS_DOWN_HZ_LEFT:
-				if (value >= 0.0f)
-				{
-#pragma message(": warning: todo: Separate parameter for each frequency smearer? Or check which type we have before casting")
-
-					if (data->parameters[PARAM_FREQUENCYSMEARING_APPROACH_LEFT] == FREQUENCYSMEARING_APPROACH_BAERMOORE)
-					{
-						shared_ptr<HAHLSimulation::CFrequencySmearing> abstractSmearer = data->HL.GetFrequencySmearingSimulator(Common::LEFT);
-						assert(abstractSmearer != nullptr);
-						auto smearer = std::dynamic_pointer_cast<HAHLSimulation::CBaerMooreFrequencySmearing>(abstractSmearer);
-						// If this fails then data->parameters has fallen out of sync with the state of data->HL
-						assert(smearer != nullptr);
-						smearer->SetDownwardBroadeningFactor(value);
-					}
-					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetDownwardSmearing_Hz(value);
-					WriteLog(state, "SET PARAMETER: Downward smearing amount (in Hz) for left ear = ", value);
-				}
-				else
-					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to set a negative downward smearing amount (in Hz) for left ear = ", value);
-				break;
-
-			case PARAM_FS_DOWN_HZ_RIGHT:
-				if (value >= 0.0f)
-				{
-#pragma message(": warning: todo")
-					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetDownwardSmearing_Hz(value);
-					WriteLog(state, "SET PARAMETER: Downward smearing amount (in Hz) for right ear = ", value);
-				}
-				else
-					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to set a negative downward smearing amount (in Hz) for right ear = ", value);
-				break;
-
 			case PARAM_FS_UP_HZ_LEFT:
-				if (value >= 0.0f)
-				{
-#pragma message(": warning: todo")
-					if (data->parameters[PARAM_FREQUENCYSMEARING_APPROACH_LEFT] == FREQUENCYSMEARING_APPROACH_BAERMOORE)
-					{
-						shared_ptr<HAHLSimulation::CFrequencySmearing> abstractSmearer = data->HL.GetFrequencySmearingSimulator(Common::LEFT);
-						assert(abstractSmearer != nullptr);
-						auto smearer = std::dynamic_pointer_cast<HAHLSimulation::CBaerMooreFrequencySmearing>(abstractSmearer);
-						// If this fails then data->parameters has fallen out of sync with the state of data->HL
-						assert(smearer != nullptr);
-						smearer->SetUpwardBroadeningFactor(value);
-					}
-					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetUpwardSmearing_Hz(value);
-					WriteLog(state, "SET PARAMETER: Upward smearing amount (in Hz) for left ear = ", value);
-				}
-				else
-					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to set a negative upward smearing amount (in Hz) for left ear = ", value);
+				updateFrequencySmearer(state, LEFT);
+				break;
+			case PARAM_FREQUENCYSMEARING_ON_RIGHT:
+			case PARAM_FS_DOWN_SIZE_RIGHT:
+			case PARAM_FS_UP_SIZE_RIGHT:
+			case PARAM_FS_DOWN_HZ_RIGHT:
+			case PARAM_FS_UP_HZ_RIGHT:
+				updateFrequencySmearer(state, RIGHT);
 				break;
 
-			case PARAM_FS_UP_HZ_RIGHT:
-				if (value >= 0.0f)
-				{
-#pragma message(": warning: todo")
-					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetUpwardSmearing_Hz(value);
-					WriteLog(state, "SET PARAMETER: Upward smearing amount (in Hz) for right ear = ", value);
-				}
-				else
-					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to set a negative upward smearing amount (in Hz) for right ear = ", value);
-				break;
+
+
+//			case PARAM_FREQUENCYSMEARING_ON_LEFT:
+//				if (((int)value != 0) && ((int)value != 1))
+//					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to switch on/off frequency smearing in left ear with non boolean value ", value);
+//				else
+//				{
+//					if (!Float2Bool(value))
+//					{
+//						data->HL.DisableFrequencySmearing(Common::T_ear::LEFT);
+//						WriteLog(state, "SET PARAMETER: Frequency smearing in left ear switched OFF", "");
+//					}
+//					if (Float2Bool(value))
+//					{
+//						//if (std::dynamic_pointer_cast<HAHLSimulation::CBaerMooreFrequencySmearing>(data->HL.GetFrequencySmearingSimulator(Common::LEFT)) == nullptr)
+//						//{
+//						//	auto frequencySmearer = std::make_shared<HAHLSimulation::CBaerMooreFrequencySmearing>();
+//						//	frequencySmearer->Setup(state->dspbuffersize, state->samplerate);
+//						//	frequencySmearer->SetDownwardBroadeningFactor(data->parameters[PARAM_FS_DOWN_HZ_LEFT]);
+//						//	frequencySmearer->SetUpwardBroadeningFactor(data->parameters[PARAM_FS_UP_HZ_LEFT]);
+//						//	data->HL.SetFrequencySmearer(Common::LEFT, frequencySmearer);
+//						//	data->HL.EnableFrequencySmearing(Common::LEFT);
+//						//}
+//						data->HL.EnableFrequencySmearing(Common::T_ear::LEFT);
+//						WriteLog(state, "SET PARAMETER: Frequency smearing in left ear switched ON", "");
+//					}
+//				}
+//				break;
+//
+//			case PARAM_FREQUENCYSMEARING_ON_RIGHT:
+//				if (((int)value != 0) && ((int)value != 1))
+//					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to switch on/off frequency smearing in right ear with non boolean value ", value);
+//				else
+//				{
+//					if (!Float2Bool(value))
+//					{
+//						data->HL.DisableFrequencySmearing(Common::T_ear::RIGHT);
+//						WriteLog(state, "SET PARAMETER: Frequency smearing in right ear switched OFF", "");
+//					}
+//					if (Float2Bool(value))
+//					{
+//						data->HL.EnableFrequencySmearing(Common::T_ear::RIGHT);
+//						WriteLog(state, "SET PARAMETER: Frequency smearing in right ear switched ON", "");
+//					}
+//				}
+//				break;
+//
+//			case PARAM_FS_DOWN_SIZE_LEFT:
+//				if ((int)value > 0)
+//				{
+//#pragma message(": warning: todo")
+//					
+//					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetDownwardSmearingBufferSize((int)value);
+//					WriteLog(state, "SET PARAMETER: Downward smearing buffer size for left ear = ", (int)value);
+//				}
+//				else
+//					WriteLog(state, "SET PARAMETER: ERROR!!! Wrong size for downward smearing buffer in left ear = ", (int)value);
+//				break;
+//
+//			case PARAM_FS_DOWN_SIZE_RIGHT:
+//				if ((int)value > 0)
+//				{
+//#pragma message(": warning: todo")
+//					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetDownwardSmearingBufferSize((int)value);
+//					WriteLog(state, "SET PARAMETER: Downward smearing buffer size for right ear = ", (int)value);
+//				}
+//				else
+//					WriteLog(state, "SET PARAMETER: ERROR!!! Wrong size for downward smearing buffer in right ear = ", (int)value);
+//				break;
+//
+//			case PARAM_FS_UP_SIZE_LEFT:
+//				if ((int)value > 0)
+//				{
+//#pragma message(": warning: todo")
+//					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetUpwardSmearingBufferSize((int)value);
+//					WriteLog(state, "SET PARAMETER: Upward smearing buffer size for left ear = ", (int)value);
+//				}
+//				else
+//					WriteLog(state, "SET PARAMETER: ERROR!!! Wrong size for upward smearing buffer in left ear = ", (int)value);
+//				break;
+//
+//			case PARAM_FS_UP_SIZE_RIGHT:
+//				if ((int)value > 0)
+//				{
+//#pragma message(": warning: todo")
+//					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetUpwardSmearingBufferSize((int)value);
+//					WriteLog(state, "SET PARAMETER: Upward smearing buffer size for right ear = ", (int)value);
+//				}
+//				else
+//					WriteLog(state, "SET PARAMETER: ERROR!!! Wrong size for upward smearing buffer in right ear = ", (int)value);
+//				break;
+//
+//			case PARAM_FS_DOWN_HZ_LEFT:
+//				if (value >= 0.0f)
+//				{
+//#pragma message(": warning: todo: Separate parameter for each frequency smearer? Or check which type we have before casting")
+//
+//					//if (data->parameters[PARAM_FREQUENCYSMEARING_APPROACH_LEFT] == FREQUENCYSMEARING_APPROACH_BAERMOORE)
+//					//{
+//					//	shared_ptr<HAHLSimulation::CFrequencySmearing> abstractSmearer = data->HL.GetFrequencySmearingSimulator(Common::LEFT);
+//					//	assert(abstractSmearer != nullptr);
+//					//	auto smearer = std::dynamic_pointer_cast<HAHLSimulation::CBaerMooreFrequencySmearing>(abstractSmearer);
+//					//	// If this fails then data->parameters has fallen out of sync with the state of data->HL
+//					//	assert(smearer != nullptr);
+//					//	smearer->SetDownwardBroadeningFactor(value);
+//					//}
+//					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetDownwardSmearing_Hz(value);
+//					WriteLog(state, "SET PARAMETER: Downward smearing amount (in Hz) for left ear = ", value);
+//				}
+//				else
+//					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to set a negative downward smearing amount (in Hz) for left ear = ", value);
+//				break;
+//
+//			case PARAM_FS_DOWN_HZ_RIGHT:
+//				if (value >= 0.0f)
+//				{
+//#pragma message(": warning: todo")
+//					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetDownwardSmearing_Hz(value);
+//					WriteLog(state, "SET PARAMETER: Downward smearing amount (in Hz) for right ear = ", value);
+//				}
+//				else
+//					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to set a negative downward smearing amount (in Hz) for right ear = ", value);
+//				break;
+//
+//			case PARAM_FS_UP_HZ_LEFT:
+//				if (value >= 0.0f)
+//				{
+//#pragma message(": warning: todo")
+//					//if (data->parameters[PARAM_FREQUENCYSMEARING_APPROACH_LEFT] == FREQUENCYSMEARING_APPROACH_BAERMOORE)
+//					//{
+//					//	shared_ptr<HAHLSimulation::CFrequencySmearing> abstractSmearer = data->HL.GetFrequencySmearingSimulator(Common::LEFT);
+//					//	assert(abstractSmearer != nullptr);
+//					//	auto smearer = std::dynamic_pointer_cast<HAHLSimulation::CBaerMooreFrequencySmearing>(abstractSmearer);
+//					//	// If this fails then data->parameters has fallen out of sync with the state of data->HL
+//					//	assert(smearer != nullptr);
+//					//	smearer->SetUpwardBroadeningFactor(value);
+//					//}
+//					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetUpwardSmearing_Hz(value);
+//					WriteLog(state, "SET PARAMETER: Upward smearing amount (in Hz) for left ear = ", value);
+//				}
+//				else
+//					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to set a negative upward smearing amount (in Hz) for left ear = ", value);
+//				break;
+//
+//			case PARAM_FS_UP_HZ_RIGHT:
+//				if (value >= 0.0f)
+//				{
+//#pragma message(": warning: todo")
+//					//data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetUpwardSmearing_Hz(value);
+//					WriteLog(state, "SET PARAMETER: Upward smearing amount (in Hz) for right ear = ", value);
+//				}
+//				else
+//					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to set a negative upward smearing amount (in Hz) for right ear = ", value);
+//				break;
 
 			// CLASSIFICATION SCALE:
 
