@@ -463,10 +463,10 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         // LEFT EAR
         if (Common3DTIGUI.BeginLeftColumn(plugin, ref HLAPI.GLOBAL_LEFT_ON, "LEFT EAR", "Enable left ear hearing loss", new List<string> { "HLONL" }, isStartingPlay))
         {
-            if (HLAPI.GLOBAL_LEFT_ON)
-                HLAPI.EnableHearingLoss(T_ear.LEFT);
-            else
-                HLAPI.DisableHearingLoss(T_ear.LEFT);
+            //if (HLAPI.GLOBAL_LEFT_ON)
+            //    HLAPI.EnableHearingLoss(T_ear.LEFT);
+            //else
+            //    HLAPI.DisableHearingLoss(T_ear.LEFT);
         }
         {
             // Draw ear icon
@@ -480,10 +480,10 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         // RIGHT EAR
         if (Common3DTIGUI.BeginRightColumn(plugin, ref HLAPI.GLOBAL_RIGHT_ON, "RIGHT EAR", "Enable right ear hearing loss", new List<string> { "HLONR" }, isStartingPlay))
         {
-            if (HLAPI.GLOBAL_RIGHT_ON)
-                HLAPI.EnableHearingLoss(T_ear.RIGHT);
-            else
-                HLAPI.DisableHearingLoss(T_ear.RIGHT);
+            //if (HLAPI.GLOBAL_RIGHT_ON)
+            //    HLAPI.EnableHearingLoss(T_ear.RIGHT);
+            //else
+            //    HLAPI.DisableHearingLoss(T_ear.RIGHT);
         }
         {
             // Draw ear icon
@@ -561,9 +561,9 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
 
                     // CONTROLS
                     Common3DTIGUI.AddLabelToParameterGroup("Band upper limit");
-                    float bandUpperLimit = HLAPI.FromBandUpperLimitEnumToFloat(HLAPI.PARAM_LEFT_TA_BANDUPPERLIMIT);
+                    float bandUpperLimit = API_3DTI_HL.FromBandUpperLimitEnumToFloat(HLAPI.PARAM_LEFT_TA_BANDUPPERLIMIT);
                     if (Common3DTIGUI.CreatePluginParameterDiscreteSlider(plugin, ref bandUpperLimit, "HLTABANDL", "Band upper limit", "Hz", "Set temporal distortion band upper limit in left ear", new List<float> { 200, 400, 800, 1600, 3200, 6400, 12800 })) ResetAllTemporalDistortionButtonSelections(T_ear.LEFT);
-                    HLAPI.PARAM_LEFT_TA_BANDUPPERLIMIT = HLAPI.FromFloatToBandUpperLimitEnum(bandUpperLimit);
+                    HLAPI.PARAM_LEFT_TA_BANDUPPERLIMIT = API_3DTI_HL.FromFloatToBandUpperLimitEnum(bandUpperLimit);
 
                     Common3DTIGUI.BeginSubsection("Jitter generator");
                     {
@@ -577,12 +577,12 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                     // Copy left values to right if LRSync is on. It is done internally by the toolkit, but not shown in the GUI
                     if (HLAPI.PARAM_TA_LRSYNC_ON)
                     {
-                        plugin.SetFloatParameter("HLTABANDR", HLAPI.FromBandUpperLimitEnumToFloat(HLAPI.PARAM_LEFT_TA_BANDUPPERLIMIT));
+                        plugin.SetFloatParameter("HLTABANDR", API_3DTI_HL.FromBandUpperLimitEnumToFloat(HLAPI.PARAM_LEFT_TA_BANDUPPERLIMIT));
                         plugin.SetFloatParameter("HLTAPOWR", HLAPI.PARAM_LEFT_TA_WHITENOISEPOWER);
                         plugin.SetFloatParameter("HLTALPFR", HLAPI.PARAM_LEFT_TA_BANDWIDTH);
-                        HLAPI.SetTemporalDistortionBandUpperLimit(T_ear.RIGHT, HLAPI.PARAM_LEFT_TA_BANDUPPERLIMIT);
-                        HLAPI.SetTemporalDistortionWhiteNoisePower(T_ear.RIGHT, HLAPI.PARAM_LEFT_TA_WHITENOISEPOWER);
-                        HLAPI.SetTemporalDistortionBandwidth(T_ear.RIGHT, HLAPI.PARAM_LEFT_TA_BANDWIDTH);
+                        //HLAPI.SetTemporalDistortionBandUpperLimit(T_ear.RIGHT, HLAPI.PARAM_LEFT_TA_BANDUPPERLIMIT);
+                        //HLAPI.SetTemporalDistortionWhiteNoisePower(T_ear.RIGHT, HLAPI.PARAM_LEFT_TA_WHITENOISEPOWER);
+                        //HLAPI.SetTemporalDistortionBandwidth(T_ear.RIGHT, HLAPI.PARAM_LEFT_TA_BANDWIDTH);
                         ResetAllTemporalDistortionButtonSelections(T_ear.RIGHT);
                     }
 
@@ -607,13 +607,13 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 // Copy left values to right when LRSync is switched on. It is done internally by the toolkit, but not shown in the GUI
                 if (HLAPI.PARAM_TA_LRSYNC_ON)
                 {
-                    plugin.SetFloatParameter("HLTABANDR", HLAPI.FromBandUpperLimitEnumToFloat(HLAPI.PARAM_LEFT_TA_BANDUPPERLIMIT));
+                    plugin.SetFloatParameter("HLTABANDR", API_3DTI_HL.FromBandUpperLimitEnumToFloat(HLAPI.PARAM_LEFT_TA_BANDUPPERLIMIT));
                     plugin.SetFloatParameter("HLTAPOWR", HLAPI.PARAM_LEFT_TA_WHITENOISEPOWER);
                     plugin.SetFloatParameter("HLTALPFR", HLAPI.PARAM_LEFT_TA_BANDWIDTH);
                     //plugin.SetFloatParameter("HLTAPOSTONR", CommonFunctions.Bool2Float(HLAPI.PARAM_LEFT_TA_POSTLPF));                    
-                    HLAPI.SetTemporalDistortionBandUpperLimit(T_ear.RIGHT, HLAPI.PARAM_LEFT_TA_BANDUPPERLIMIT);
-                    HLAPI.SetTemporalDistortionWhiteNoisePower(T_ear.RIGHT, HLAPI.PARAM_LEFT_TA_WHITENOISEPOWER);
-                    HLAPI.SetTemporalDistortionBandwidth(T_ear.RIGHT, HLAPI.PARAM_LEFT_TA_BANDWIDTH);
+                    //HLAPI.SetTemporalDistortionBandUpperLimit(T_ear.RIGHT, HLAPI.PARAM_LEFT_TA_BANDUPPERLIMIT);
+                    //HLAPI.SetTemporalDistortionWhiteNoisePower(T_ear.RIGHT, HLAPI.PARAM_LEFT_TA_WHITENOISEPOWER);
+                    //HLAPI.SetTemporalDistortionBandwidth(T_ear.RIGHT, HLAPI.PARAM_LEFT_TA_BANDWIDTH);
                     ResetAllTemporalDistortionButtonSelections(T_ear.RIGHT);
                 }
             }
@@ -634,9 +634,9 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
 
                     // CONTROLS
                     Common3DTIGUI.AddLabelToParameterGroup("Band upper limit");
-                    float bandUpperLimit = HLAPI.FromBandUpperLimitEnumToFloat(HLAPI.PARAM_RIGHT_TA_BANDUPPERLIMIT);
+                    float bandUpperLimit = API_3DTI_HL.FromBandUpperLimitEnumToFloat(HLAPI.PARAM_RIGHT_TA_BANDUPPERLIMIT);
                     if (Common3DTIGUI.CreatePluginParameterDiscreteSlider(plugin, ref bandUpperLimit, "HLTABANDR", "Band upper limit", "Hz", "Set temporal distortion band upper limit in right ear", new List<float> { 200, 400, 800, 1600, 3200, 6400, 12800 })) ResetAllTemporalDistortionButtonSelections(T_ear.RIGHT);
-                    HLAPI.PARAM_RIGHT_TA_BANDUPPERLIMIT = HLAPI.FromFloatToBandUpperLimitEnum(bandUpperLimit);
+                    HLAPI.PARAM_RIGHT_TA_BANDUPPERLIMIT = API_3DTI_HL.FromFloatToBandUpperLimitEnum(bandUpperLimit);
 
                     Common3DTIGUI.BeginSubsection("Jitter generator");
                     {
@@ -863,7 +863,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             selectedCurve = selectedCurveRight;
         }
 
-        char letter = HLAPI.FromClassificationScaleCurveToChar(curve);
+        char letter = API_3DTI_HL.FromClassificationScaleCurveToChar(curve);
 
         GUILayout.BeginHorizontal();
         {
@@ -877,7 +877,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 GUI.color = baseColor;
 
             // Create button with letter and do action if pressed
-            if (Common3DTIGUI.CreateButton(letter.ToString(), "Select " + HLAPI.FromClassificationScaleCurveToString(curve) + " curve of HL classification scale for " + earName + " ear"))
+            if (Common3DTIGUI.CreateButton(letter.ToString(), "Select " + API_3DTI_HL.FromClassificationScaleCurveToString(curve) + " curve of HL classification scale for " + earName + " ear"))
             {
                 SetClassificationScaleCurve(plugin, ear, curve);
                 if (ear == T_ear.LEFT)
@@ -964,8 +964,8 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             GUI.color = baseColor;
 
         // Create button with severity level and do action if pressed
-        string severityStr = HLAPI.FromClassificationScaleSeverityToString(severity);
-        if (Common3DTIGUI.CreateButton(severityStr, "Select " + severityStr + " (" + HLAPI.FromClassificationScaleSeverityToInt(severity) + ") severity of HL classification scale for " + earName + " ear"))
+        string severityStr = API_3DTI_HL.FromClassificationScaleSeverityToString(severity);
+        if (Common3DTIGUI.CreateButton(severityStr, "Select " + severityStr + " (" + API_3DTI_HL.FromClassificationScaleSeverityToInt(severity) + ") severity of HL classification scale for " + earName + " ear"))
         {
             SetClassificationScaleSeverity(plugin, ear, severity);
             if (ear == T_ear.LEFT)
@@ -1051,7 +1051,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     public void SetClassificationScale(IAudioEffectPlugin plugin, T_ear ear, API_3DTI_HL.T_HLClassificationScaleCurve curve, int slope, API_3DTI_HL.T_HLClassificationScaleSeverity severity)
     {        
         List<float> hl;
-        HLAPI.GetClassificationScaleHL(curve, slope, severity, out hl);
+        API_3DTI_HL.GetClassificationScaleHL(curve, slope, severity, out hl);
         if (ear == T_ear.LEFT)
         {
             selectedCurveLeft = curve;
@@ -1238,7 +1238,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         float whiteNoisePower;
         float bandWidth;
         float LRSync;
-        HLAPI.GetTemporalDistortionPresetValues(preset, out bandUpperLimit, out whiteNoisePower, out bandWidth, out LRSync);
+        API_3DTI_HL.GetTemporalDistortionPresetValues(preset, out bandUpperLimit, out whiteNoisePower, out bandWidth, out LRSync);
         float activated;
         if (ear == T_ear.LEFT)
         {
@@ -1257,7 +1257,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 }
                 else
                 {
-                    plugin.SetFloatParameter("HLTABANDL", HLAPI.FromBandUpperLimitEnumToFloat(bandUpperLimit));
+                    plugin.SetFloatParameter("HLTABANDL", API_3DTI_HL.FromBandUpperLimitEnumToFloat(bandUpperLimit));
                     HLAPI.PARAM_LEFT_TA_BANDUPPERLIMIT = bandUpperLimit;
                     plugin.SetFloatParameter("HLTAPOWL", whiteNoisePower);
                     HLAPI.PARAM_LEFT_TA_WHITENOISEPOWER = whiteNoisePower;
@@ -1283,7 +1283,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 }
                 else
                 {
-                    plugin.SetFloatParameter("HLTABANDR", HLAPI.FromBandUpperLimitEnumToFloat(bandUpperLimit));
+                    plugin.SetFloatParameter("HLTABANDR", API_3DTI_HL.FromBandUpperLimitEnumToFloat(bandUpperLimit));
                     HLAPI.PARAM_RIGHT_TA_BANDUPPERLIMIT = bandUpperLimit;
                     plugin.SetFloatParameter("HLTAPOWR", whiteNoisePower);
                     HLAPI.PARAM_RIGHT_TA_WHITENOISEPOWER = whiteNoisePower;
@@ -1325,7 +1325,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     {
         int downSize, upSize;
         float downHz, upHz;
-        HLAPI.GetFrequencySmearingPresetValues(preset, out downSize, out upSize, out downHz, out upHz);
+        API_3DTI_HL.GetFrequencySmearingPresetValues(preset, out downSize, out upSize, out downHz, out upHz);
 
         if (ear == T_ear.LEFT)
         {
