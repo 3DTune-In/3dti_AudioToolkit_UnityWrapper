@@ -733,7 +733,7 @@ loadedHRTF(false)
 
 			case PARAM_MAG_ANECHATT:
                 magnitudes = spatializer().core.GetMagnitudes();
-				magnitudes.SetAnechoicDistanceAttenuation(min(0.0f, max(-1.0e20, value)));
+				magnitudes.SetAnechoicDistanceAttenuation(min(0.0f, max(-1.0e20f, value)));
                 spatializer().core.SetMagnitudes(magnitudes);
 				WriteLog(state, "SET PARAMETER: Anechoic distance attenuation set to (dB) ", value);
 				break;
