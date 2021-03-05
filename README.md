@@ -1,10 +1,16 @@
 # Unity Wrapper for 3D-Tune-In Toolkit
 
-Date: January 2021
-Version: 2.0
-Authors (version 1): 3DI-DIANA Research Group (M. Cuevas-Rodriguez, E.J. de la Rubia-Cuestas, C. Garre-del Olmo, D. GonzalezToledo, L. Molina-Tanco, A. Reyes-Lecuona)
-Authors (version 2): Tim Murray-Browne, Lorenzo Picinali (Imperial College London)
+This is the README file for the 3D-Tune-In Toolkit Unity Wrapper. 
+If this is the first time you use the wrapper, please read the quick start guide.
+After that, if you want to develop your own apps using the wrapper, please read the reference manual.
 
+**The structure of the repository is as follows:**
+```
+3dti_UnityWrapper
+├── Binaural
+    ├── BuildUnityWrapperPackage
+    └── audioplugin3DTIToolkit
+```
 ## Introduction
 
 The 3D-Tune-In Toolkit (3DTi Toolkit) consists in a set of C++ libraries and resources providing solutions for 3D audio spatialization and simulation of hearing loss and hearing aids. The main components of the 3DTi Toolkit are:
@@ -82,3 +88,28 @@ An issue has been reported if your locale uses a comma ',' instead of a period '
 This wrapper currently only integrates the 3DTI Toolkit release from 2018 'M20181003'. A future release is planned which will integrate updates that have happened to the toolkit since then.
 
 I'm also exploring if it's possible to eliminate the need to have *API_3DTI_HL* and *API_3DTI_HA* components, and to see if there's a simpler way to directly set parameters on these plugins from C# code without relying on manually exposing each parameter within the included *3DTI_HAHL_Mixer*. 
+
+## Credits
+
+This software was developed by a team coordinated by 
+-	Arcadio Reyes-Lecuona ([University of Malaga](https://www.uma.es/)). Contact: areyes@uma.es  
+-	Lorenzo Picinali ([Imperial College London](https://www.imperial.ac.uk/)). Contact: l.picinali@imperial.ac.uk 
+
+The members of the development team of the version 1.x are (in alphabetical order):
+
+- [Maria Cuevas-Rodriguez](https://github.com/mariacuevas) (University of Malaga) 
+- [Carlos Garre](https://github.com/carlosgarre) (University of Malaga) (Left the team Jan 2018)
+- [Daniel Gonzalez-Toledo](https://github.com/dgonzalezt) (University of Malaga) 
+- [Luis Molina-Tanco](https://github.com/lmtanco) (University of Malaga)
+- [Ángel Rodríguez-Rivero](https://github.com/ardgzrivero) (University of Malaga) (Joined the team Feb 2018 to Jul 2019)
+
+
+The developer of the version 2.0 is:
+
+- [Tim Murray-Browne](https://github.com/timmb) (Imperial College London)
+
+## Acknowledgements 
+
+![European Union](images/EU_flag.png "European Union") This project has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 644051. 
+
+We would like to acknowledge Dr. Brian FG Katz and his team for their contributions in the field of sound spatialization, which were used as the basis for part of this software.
