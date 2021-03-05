@@ -152,7 +152,7 @@ public class Common3DTIGUI
         }
         
         // Text field with units
-        string valueString = GUILayout.TextField(variable.ToString(decimalDigits), GUILayout.ExpandWidth(false));
+        string valueString = GUILayout.TextField(variable.ToString(decimalDigits, System.Globalization.CultureInfo.InvariantCulture), GUILayout.ExpandWidth(false));
         GUILayout.Label(units, GUILayout.ExpandWidth(false));
         float newValue;
         bool valid = float.TryParse(valueString, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out newValue);
@@ -742,7 +742,7 @@ public class Common3DTIGUI
             GUILayout.BeginHorizontal();
             {
                 GUILayout.Label(new GUIContent(name, tooltip));
-                valueString = GUILayout.TextField(variable.ToString(decimalDigits), GUILayout.ExpandWidth(false));
+                valueString = GUILayout.TextField(variable.ToString(decimalDigits, System.Globalization.CultureInfo.InvariantCulture), GUILayout.ExpandWidth(false));
                 GUILayout.Label(units, GUILayout.ExpandWidth(false));
 
                 float newValue;
