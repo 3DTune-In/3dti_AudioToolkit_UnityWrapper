@@ -1,8 +1,8 @@
 # Change Log
 All notable changes to the 3DTuneIn Toolkit will be documented in this file.
 
-v2.0:
-	General:
+## v2.0:
+**General:**
 	- Target Unity build is now 2019.4.
 	- Spatializer plugin now shares HRTF data between audio sources.
 	- Audio sources can be created dynamically while a scene is running.
@@ -18,40 +18,39 @@ v2.0:
 		- Visual Studio 2019 (Windows, Android)
 		- Xcode 11 (MacOS, iOS)
 
-v1.15.0:
-    General:
+## v1.15.0:
+**General:**
     - Fixed compiling error in new Unity versions
-    Hearing aid simulation:
+**Hearing aid simulation:**
     - Fixed Fig6 button bug
-v1.14.0:
-    General:
+
+##v1.14.0:
+**General:**
     - Uses new version of the Toolkit that fixes axes issues.
     - Fixed no sound bug
 
-v1.13.0:
-    Hearing aid simulation:
+##v1.13.0:
+**Hearing aid simulation:**
     - Added Fig6 button to Dynamic Equalizer
-    Hearing loss simulation:
+**Hearing loss simulation:**
     - Fixed temporal distortion bug
 
-v1.12.0:
-    General:
+##v1.12.0:
+**General:**
     - Uses new repository
     - GUI now admits different HRTF and ILD files for each permitted sample rate
-    Binaural Spatialization:
+**Binaural Spatialization:**
     - New API functions to get buffer size and sample rate
     - Sample rates different than 44.1, 48 or 96kHz are not permitted
-    Documentation:
+**Documentation:**
     - Reference manual: added description of the new functions
 
-v1.11.0:
-    General: 
+##v1.11.0:
+**General: **
     - Added 11 .png files to Assets/3DTuneIn/Resources with images of the hearing loss clasiffication scale curves
-
-    Hearing aid simulation:
+**Hearing aid simulation:**
     - Added global title in GUI: HEARING AID SIMULATION
-
-    Hearing loss simulation:
+**Hearing loss simulation:**
     - Added support for HL Classification Scale in: plugin, API and GUI
     - Added support for Temporal Distortion presets (in GUI and API)
     - Added support for Frequency Smearing presets (in GUI and API)
@@ -64,64 +63,54 @@ v1.11.0:
     - Changed range of dBHL levels in audiometry, from 0 to 160 dB (maximum possible with classification scale)
     - Added global titles in GUI: AUDIOMETRY and HEARING LOSS SIMULATION
     - Improved some error log messages      
-
-    Documentation: 
+**Documentation: **
     - Reference manual: reestructuration of section 4, removing the concept of Basic vs Advanced HL API
     - Reference manual: added description of HL classification scale methods and types
     - Reference manual: added methods for setting HL presets in temporal distortion and frequency smearing, in HL
     - Reference manual: changed example of HL API (section 4.7) after removing audiometry presets
     - Quick start guide and Reference manual: changed screenshots of HL and HA GUIs
 
-v1.10.2: 
-    Binaural spatialization:
+##v1.10.2: 
+**Binaural spatialization:**
     - Fixed bug in Toolkit core: directionality enable/disable was always affecting only to left ear
     - Fixed bug causing some toggles in GUI to show values not coherent with API and plugin
-
-    Hearing loss simulation:
+**Hearing loss simulation:**
     - Fixed bug of GUI styles initialization in HL editor script (when HL was alone in the scene, without HA).
     - Fixed bug causing some toggles in GUI to show values not coherent with API and plugin
-
-    Hearing aid simulation:
+**Hearing aid simulation:**
     - Fixed bug of consistency between GUI and API in Tone Control parameters.
     - Dynamic EQ band gains are now editable in GUI text boxes
     - Fixed bug causing some toggles in GUI to show values not coherent with API and plugin
 
-v1.10.1:
-    Binaural spatialization:
+##v1.10.1:
+**Binaural spatialization:**
     - Fixed problem in scenes created from scratch in Unity 2017, where spatialization was not initialized on Start. 
-
-    Hearing loss simulation:
+**Hearing loss simulation:**
     - Fixed bug: HL GUI was not shown in Audio Mixer if HA API script was not added to the scene.
     - Fixed bug: HL GUI was partially shown even if HL API script was not added to the scene.
     - Plugin rebuilt to fix a bug internal to the toolkit, where the frequency smearing window was not properly normalized.
-
-    Hearing aid simulation:
+**Hearing aid simulation:**
     - Fixed bug: HA GUI was partially shown even if HA API script was not added to the scene.
 
-v1.10.0:
-
-    General:
+##v1.10.0:
+**General:**
     - Tested in Unity 2017. 
-
-    Hearing loss simulation:
+**Hearing loss simulation:**
     - New temporal distortion module, with corresponding API and GUI controls.
     - New frequency smearing module, with corresponding API and GUI controls.
     - New switches for enabling/disabling non-linear attenuation (multiband expander) for each ear.
     - Reestructuration of HL modules, with new names, in GUI.
-
-    Documentation:
+**Documentation:**
     - Reference manual: added description of new methods and types in HL API.
     - Reference manual: changed screenshots of the HL editor GUI.
     - Quick start guide: changed screenshots of the HL editor GUI. 
 
-v1.9.0:
-
-    General: 
+##v1.9.0:
+**General: **
     - Added file Assets/3DTuneIn/Editor/Common3DTIGUI.cs with common definitions for shared look and feel of all editor GUIs.
     - Added About button (with associated file Assets/3DTuneIn/Editor/About3DTI.cs) to all GUIs.
     - Removed files GUIHelpers.cs and MathHelpers.cs from Assets/3DTuneIn/Editor.
-
-    Binaural spatialization:
+**Binaural spatialization:**
     - New High Performance mode, replacing HRTF convolution and near field filter with a single high performance ILD filter. 
     - New No Spatialization mode, disabling HRTF convolution and all ILD filters. 
     - The former spatialization mode (HRTF and near field ILD) is now called High Quality mode. 
@@ -134,20 +123,17 @@ v1.9.0:
     - The look and feel of the editor GUI has been fully changed.
     - Tooltips included in most controls of the GUI.
     - Added option for calling API methods independently for each AudioSource.
-
-    Hearing aid simulation:
+**Hearing aid simulation:**
     - When attaching API_3DTI_HA.cs to a game object, the only public parameter shown in Inspector is the mixer. 
     - Fixed bug in HA limiter, causing saturation.
     - The look and feel of the editor GUI has been fully changed.
     - Tooltips included in most controls of the GUI.
-
-    Hearing loss simulation:
+**Hearing loss simulation:**
     - Hearing loss simulator is redone from scratch. All API methods and GUI controls are new. 
     - When attaching API_3DTI_HL.cs to a game object, the only public parameter shown in Inspector is the mixer. 
     - The look and feel of the editor GUI has been fully changed.
     - Tooltips included in most controls of the GUI.    
-
-    Documentation:
+**Documentation:**
     - Reference manual: added description of the three spatialization modes in section 3.1.
     - Reference manual: added description of AudioSource optional parameters in section 3.1.
     - Reference manual: changed description of EnableSpatialization and DisableSpatialization methods in section 3.1.
@@ -170,16 +156,14 @@ v1.9.0:
     - Quick start guide: added description of how the spatialization plugin interacts with default AudioSource parameters in section 2.
     - Quick start guide: all text is revised. 
 
-v1.8.0:
-
-    General: 
+##v1.8.0:
+**General: **
     - Added API_3DTI_Common.cs script with common definitions for all APIs. 
     - All "int ear" parameters in all APIs are replaced with T_ear type from API_3DTI_Common.
     - Simplified iOS builds with AppDelegate to avoid the need of modifying the XCode project built by Unity.
     - Reorganization of Assets folder structure 
     - Fixed clicks when changing filter coefficients, i.e: when changing HA LPF or HPF cutoff, when moving fast along far or near distances (from Toolkit).
-
-    Binaural spatialization:
+**Binaural spatialization:**
     - Fixed bug of crash after multiple calls to StartBinauralSpatializer. 
     - Fixed bug of crash when trying to spatialize an AudioSource with no clip assigned.
     - Fixed bug of crash when an audio source is inside the listener's head (now a warning is reported to the debug log).
@@ -188,8 +172,7 @@ v1.8.0:
     - Added optional limiter control, both in GUI and API.
     - Changed default magnitude for anechoic distance attenuation to -3dB. 
     - Added HRTF resampling step, both in GUI and API.
-
-    Hearing aid simulation:
+**Hearing aid simulation:**
     - New type and constant definitions in API. 
     - Method SetEQFromFig6 method now returns the list of gains calculated for each band.
     - High level control in HA for EQ Tone (low, mid, high), both in GUI and API.
@@ -199,13 +182,11 @@ v1.8.0:
     - Sliders shown in HA editor GUI for EQ band gains and quantization noise bits, now show integer values.
     - Added optional imiter control, both in GUI and API.
     - Fixed bug related with coherency in parameters between plugin, GUI and API scripts.
-
-    Hearing loss simulation:
+**Hearing loss simulation:**
     - Replaced constant definitions in API with enumerated types.
     - Fixed bug in API and GUI, not handling correctly the relation between the global HL switch and the independent switches for each subprocess.
     - Fixed bug related with coherency in parameters between plugin, GUI and API scripts.
-
-    Documentation:
+**Documentation:**
     - New section in Reference Manual (Section 2) explaining the common definitions of API_3DTI_Common: T_ear.
     - Added new methods to Binaural Spatializer API in Reference Maunal (Section 3.3): SwithOnOffLimiter, GetLimiterCompression.
     - Improved description of SetHADirectionalityExtend method in Reference Manual (Section 3.4).
@@ -220,7 +201,7 @@ v1.8.0:
     - Removed old section 5 (Building Apps for Target Platforms) from Quick Start Guide.
     - Added tips on audio clip import options to Quick Guide (new Section 5), thanks to Riccardo Braga. 
 
-v1.7:
+##v1.7:
     - First version with full support for iOS target platform.
     - All audio plugins are joined into one single plugin (audioplugin3DTIToolkit).
     - Added method StartBinauralSpatializer to Spatializer API to support enabling/disabling audio sources, enabling/disabling spatialize attribute, creating new spatialized audio sources on runtime, and switching off the PlayOnAwake attribute.
@@ -235,15 +216,15 @@ v1.7:
     - Code cleaning of all Editor and API scripts.
     - First version with this README file.
 
-v1.6.2:
+####v1.6.2:
     - Fixed issue with code signing in Mac OS Sierra
     - Fixed bug in creation of binary files for Spatializer in Android builds
     - Cleaning of warnings from editor GUI scripts
 
-v1.6.1:
+##v1.6.1:
     - Fixed bug in core with distance attenuation
 
-v1.6:
+##v1.6:
     - Full support for Hearing Aid Simulation (both spatialization and postprocessing effects). 
     - Hearing Loss Simulation for Mac OSX platform.
     - Added "Write Debug Log" to GUI to help support.
