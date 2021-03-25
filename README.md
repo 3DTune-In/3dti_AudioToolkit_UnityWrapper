@@ -24,12 +24,12 @@ The 3D-Tune-In Toolkit (3DTi Toolkit) consists in a set of C++ libraries and res
 - Resource files (HRTF, ILD, BRIR)
 - Resource management package
 
-The Unity Wrapper of the 3DTi Toolkit (3DTi Unity Wrapper) allows integration of the different components of the Toolkit in any Unity Scene. These components are packed in the form of a Unity Package requiring Unity 2019.4 or above. The current version of the package is built to support the following platforms:
+The Unity Wrapper of the 3DTi Toolkit (3DTi Unity Wrapper) allows integration of some of these components of the Toolkit in any Unity Scene. These components are packed in the form of a Unity Package requiring Unity 2019.4 or above. The current version of the package is built to support the following platforms:
 
 - As Host: Microsoft Windows 10, MacOS.
 - As Target: Microsoft Windows x64, MacOS, Android (4.4 or above), iOS. (We also include binaries for Windows x86 but they are not tested on a 32 bit computer so are not officially supported.)
 
-In this version, the follow parts of the 3DTI Toolkit are made available to a Unity application:
+In its current version, the following parts of the 3DTI Toolkit are made available to a Unity application:
 
 - Binaural anechoic spatializer
 - Hearing loss simulation
@@ -87,7 +87,7 @@ An issue has been reported if your locale uses a comma ',' instead of a period '
 
 This wrapper currently only integrates the 3DTI Toolkit release from 2018 'M20181003'. A future release is planned which will integrate updates that have happened to the toolkit since then.
 
-I'm also exploring if it's possible to eliminate the need to have *API_3DTI_HL* and *API_3DTI_HA* components, and to see if there's a simpler way to directly set parameters on these plugins from C# code without relying on manually exposing each parameter within the included *3DTI_HAHL_Mixer*. 
+We are also exploring if it's possible to eliminate the need to have *API_3DTI_HL* and *API_3DTI_HA* components, and to see if there's a simpler way to directly set parameters on these plugins from C# code without relying on manually exposing each parameter within the included *3DTI_HAHL_Mixer*. 
 
 ## Credits
 
