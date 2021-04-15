@@ -318,7 +318,9 @@ loadedHRTF(false)
 		const string sofaExtension = ".sofa"s;
 		if (hrtfPath.size() >= sofaExtension.size() && hrtfPath.substr(hrtfPath.size() - sofaExtension.size()) == sofaExtension)
 		{
-			if (!HRTF::CreateFromSofa(hrtfPath, spatializer().listener))
+			// We assume an ILD file holds the delays, so our SOFA file does not specify delays
+			bool specifiedDelays = false;
+			if (!HRTF::CreateFromSofa(hrtfPath, spatializer().listener, specifiedDelays))
 			{
 				return TLoadResult::RESULT_LOAD_ERROR;
 			}

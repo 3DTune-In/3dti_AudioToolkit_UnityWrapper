@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\HRTF\HRTFCereal.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\HRTF\HRTFFactory.cpp" />
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\ILD\ILDCereal.cpp" />
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\sofacoustics\libsofa\dependencies\include\ncAtt.cpp" />
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\sofacoustics\libsofa\dependencies\include\ncByte.cpp" />

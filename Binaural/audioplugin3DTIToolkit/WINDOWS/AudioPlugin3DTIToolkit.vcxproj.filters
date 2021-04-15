@@ -287,6 +287,9 @@
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Delay.cpp">
       <Filter>3dti_Toolkit\Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\HRTF\HRTFFactory.cpp">
+      <Filter>3dti_ResourceManager\HRTF</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\HRTF\HRTFCereal.h">
