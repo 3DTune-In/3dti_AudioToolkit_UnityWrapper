@@ -136,6 +136,20 @@ public class API_3DTI_HL : MonoBehaviour
     [HideInInspector]
     public T_HLClassificationScaleSeverity PARAM_CLASSIFICATION_SEVERITY_RIGHT = 0;      // For internal use, DO NOT USE IT DIRECTLY
 
+
+    // Convenience method that avoids custom type allowing it to be connected to a UI element in the Editor.
+    public void EnableHearingLossInBothEars(bool isEnabled)
+    {
+        if (isEnabled)
+        {
+            EnableHearingLoss(T_ear.BOTH);
+        }
+        else
+        {
+            DisableHearingLoss(T_ear.BOTH);
+        }
+    }
+
     ///////////////////////////////////////
     // GLOBAL CONTROLS
     ///////////////////////////////////////
