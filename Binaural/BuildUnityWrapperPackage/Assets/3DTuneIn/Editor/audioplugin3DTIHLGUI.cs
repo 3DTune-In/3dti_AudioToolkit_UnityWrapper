@@ -685,6 +685,8 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     {
         Common3DTIGUI.BeginSection("3DTUNE-IN FREQUENCY SMEARING");
         {
+            string[] options = new string[] { "Baer-Moore", "Graf" };
+
             // LEFT EAR            
             EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_LEFT_ON);
             Common3DTIGUI.BeginLeftColumn(plugin, ref HLAPI.FS_LEFT_ON, "LEFT EAR", "Enable frequency smearing simulation for left ear", new List<string> { "HLFSONL" }, isStartingPlay, true);
@@ -697,11 +699,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                         float approachFloat;
                         if (plugin.GetFloatParameter("HLFSAPPROACHL", out approachFloat))
                         {
-                            string[] options = new string[] { "Baer-Moore", "Graf" };
                             int approach = Math.Max(0, Math.Min((int)approachFloat, options.Length));
-                            //string approachString = ((API_3DTI_HL.T_HLFrequencySmearingApproach)approachFloat) == API_3DTI_HL.T_HLFrequencySmearingApproach.BAERMOORE ? "Baer-Moore" : "Graf";
-                            //string newApproach = approach;
-                            //Common3DTIGUI.CreatePopupStringSelector("Approach", "Which algorithm is used for frequency", new string[] { "Baer-Moore", "Graf" }, ref newApproach);
                             int newApproach = EditorGUILayout.Popup(new GUIContent("Approach", "Which algorithm is used for frequency"), approach, options);
 
                             if (approach != newApproach)
@@ -758,8 +756,27 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             {
                 EditorGUI.BeginDisabledGroup(!HLAPI.FS_RIGHT_ON);
                 {
-                    // PRESETS
                     Common3DTIGUI.SingleSpace();
+                    GUILayout.BeginHorizontal();
+                    {
+                        float approachFloat;
+                        if (plugin.GetFloatParameter("HLFSAPPROACHR", out approachFloat))
+                        {
+                            int approach = Math.Max(0, Math.Min((int)approachFloat, options.Length));
+                            int newApproach = EditorGUILayout.Popup(new GUIContent("Approach", "Which algorithm is used for frequency"), approach, options);
+
+                            if (approach != newApproach)
+                            {
+                                plugin.SetFloatParameter("HLFSAPPROACHR", (float)newApproach);
+                            }
+                        }
+                    }
+
+                    GUILayout.EndHorizontal();
+                Common3DTIGUI.SingleSpace();
+
+                // PRESETS
+                Common3DTIGUI.SingleSpace();
                     GUILayout.BeginHorizontal();
                     {
                         if (DrawPresetButtonsForOneEar(plugin, T_ear.RIGHT, "Frequency Smearing", ref selectedFSPresetRight))

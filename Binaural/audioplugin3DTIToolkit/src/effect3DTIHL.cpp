@@ -38,6 +38,7 @@ using namespace std;
 #include "Common/CommonDefinitions.h"
 #include "HAHLSimulation/ButterworthMultibandExpander.h"
 #include "HAHLSimulation/FrequencySmearing.h"
+#include <mutex>
 
 //enum THLClassificationScaleCurve { HL_CS_ERROR =-1, HL_CS_NOLOSS =0, 
 //								   HL_CS_A =1, HL_CS_B =2, HL_CS_C =3, HL_CS_D =4, HL_CS_E =5, HL_CS_F =6,
@@ -220,6 +221,7 @@ enum
 
 		// DEBUG LOG
 		//bool debugLog = true;
+		std::mutex mutex;
 	};
 
 	/////////////////////////////////////////////////////////////////////
@@ -613,10 +615,20 @@ enum
 
 	void updateFrequencySmearer(UnityAudioEffectState* state, Common::T_ear ear)
 	{
+		assert(ear == LEFT || ear == RIGHT);
+		static_assert(LEFT == 0 && RIGHT == 1, "This assumption allows us to add the ear to parameter enum");
+
 		EffectData* data = state->GetEffectData<EffectData>();
 		FrequencySmearingApproach approach = data->parameters[PARAM_FREQUENCYSMEARING_APPROACH_LEFT + ear] == FREQUENCYSMEARING_APPROACH_BAERMOORE? FREQUENCYSMEARING_APPROACH_BAERMOORE  : FREQUENCYSMEARING_APPROACH_GRAF;
-		assert(ear == LEFT || ear == RIGHT);
-		static_assert(LEFT == 0 && RIGHT == 1, "Lets us add the ear to parameter enum");
+		if (data->parameters[PARAM_FREQUENCYSMEARING_ON_LEFT + ear])
+		{
+			data->HL.EnableFrequencySmearing(ear);
+		}
+		else
+		{
+			data->HL.DisableFrequencySmearing(ear);
+		}
+
 		if (approach == FREQUENCYSMEARING_APPROACH_BAERMOORE)
 		{
 			auto frequencySmearer = std::make_shared<HAHLSimulation::CBaerMooreFrequencySmearing>();
@@ -624,7 +636,6 @@ enum
 			frequencySmearer->SetDownwardBroadeningFactor(data->parameters[PARAM_FS_DOWN_HZ_LEFT+ear]);
 			frequencySmearer->SetUpwardBroadeningFactor(data->parameters[PARAM_FS_UP_HZ_LEFT+ear]);
 			data->HL.SetFrequencySmearer(ear, frequencySmearer);
-			//effectdata->HL.EnableFrequencySmearing(Common::LEFT);
 		}
 		else
 		{
@@ -677,10 +688,14 @@ enum
 		for (auto ear : { Common::T_ear::LEFT, Common::T_ear::RIGHT })
 		{
 #pragma message(": warning: todo use a define to set which multiband expander to use")
-#pragma message(": warning: todo use a define/parameter to set whether filterGrouping is enabled")
 			auto multibandExpander = std::make_shared<HAHLSimulation::CButterworthMultibandExpander>();
+#pragma message(": warning: todo use a define/parameter to set whether filterGrouping is enabled")
 			const bool TEMP_DEFAULT_FILTER_GROUPING = false;
 			multibandExpander->Setup(state->samplerate, DEFAULT_INIFREQ, effectdata->HL.GetNumberOfBands(), TEMP_DEFAULT_FILTER_GROUPING);
+#pragma message(": warning: todo possibly the number of filterbanks depends on whether filter_grouping is enabled")
+			const int TEMP_DEFAULT_NUM_FILTERS_PER_BAND = 3;
+			multibandExpander->SetNumberOfFiltersPerBand(TEMP_DEFAULT_NUM_FILTERS_PER_BAND);
+			assert(multibandExpander->IsReady());
 			effectdata->HL.SetMultibandExpander(ear, multibandExpander);
 
 			updateFrequencySmearer(state, ear);
@@ -758,7 +773,7 @@ enum
 		}
 		
 		// Set hearing loss level
-		HAHLSimulation::CHearingLossSim HL = state->GetEffectData<EffectData>()->HL;
+		HAHLSimulation::CHearingLossSim& HL = state->GetEffectData<EffectData>()->HL;
 		HL.SetHearingLevel_dBHL(ear, bandIndex, valueDBHL);
 					
 		// Debug log output
@@ -785,6 +800,9 @@ enum
 
 		// Note that as parameters are stored in here then for some updates we can delegate to another function, such as updateFrequencySmearer(..)
         data->parameters[index] = value;
+
+		std::lock_guard<std::mutex> lock(data->mutex);
+
 
 		//THLClassificationScaleCurve curve;
 		//int severity;		
@@ -1411,7 +1429,12 @@ enum
 		Common::CEarPair<CMonoBuffer<float>> outBufferPair;
 		outBufferPair.left.Fill(length, 0.0f);
 		outBufferPair.right.Fill(length, 0.0f);
-		data->HL.Process(inBufferPair, outBufferPair);		
+
+		{
+			std::lock_guard<std::mutex> lock(data->mutex);
+			data->HL.Process(inBufferPair, outBufferPair);
+
+		}
 
 		data->parameters[PARAM_TA_AUTOCORR0_GET_LEFT] = data->HL.GetTemporalDistortionSimulator()->GetPower(Common::T_ear::LEFT);
 		data->parameters[PARAM_TA_AUTOCORR1_GET_LEFT] = data->HL.GetTemporalDistortionSimulator()->GetNormalizedAutocorrelation(Common::T_ear::LEFT);
