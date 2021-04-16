@@ -270,6 +270,10 @@ AudioMixerController:
     name: HL3DTI_HL_Band_4_Right
   - guid: 07196df0752037f44bf5e3f8395d68a7
     name: HL3DTI_TA_Autocor1_Get_Left
+  - guid: a1a51556613f3bd41b03f2a05a310ecb
+    name: HL3DTI_HL_FS_Approach_Left
+  - guid: 955d986d03afc7f4a9913a407b3c5ce8
+    name: HL3DTI_HL_FS_Approach_Right
   m_AudioMixerGroupViews:
   - guids:
     - 839c4ed9355208546be95fc11b89d737

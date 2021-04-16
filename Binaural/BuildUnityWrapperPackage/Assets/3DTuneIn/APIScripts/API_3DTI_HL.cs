@@ -17,6 +17,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;   // For ReadOnlyCollection
 using API_3DTI_Common;
+using System;
 
 public class API_3DTI_HL : MonoBehaviour
 {
@@ -905,6 +906,44 @@ public class API_3DTI_HL : MonoBehaviour
         // Send command
         return hlMixer.SetFloat(paramName, CommonFunctions.Bool2Float(false));
     }
+
+
+    public bool GetFrequencySmearingApproach(T_ear ear, out T_HLFrequencySmearingApproach approach)
+    {
+        if (ear==T_ear.BOTH)
+        {
+            Debug.LogWarning("ear must be LEFT or RIGHT but not BOTH", this);
+        }
+        float f_approach;
+        bool ok;
+        if ((ear==T_ear.LEFT && hlMixer.GetFloat("HL3DTI_HL_FS_Approach_Left", out f_approach))
+            || 
+            (ear == T_ear.RIGHT && hlMixer.GetFloat("HL3DTI_HL_FS_Approach_Right", out f_approach))
+            )
+        {
+            if (Enum.IsDefined(typeof(T_HLFrequencySmearingApproach), (int)f_approach))
+            {
+                approach = (T_HLFrequencySmearingApproach)(int)f_approach;
+                return true;
+            }
+            Debug.LogError("Invalid value for T_HLFrequencySmearingApproach received from plugin.", this);
+        }
+        approach = T_HLFrequencySmearingApproach.BAERMOORE;
+        return false;
+    }
+
+
+
+    public bool SetFrequencySmearingApproach(T_ear ear, T_HLFrequencySmearingApproach approach)
+    {
+        if (ear==T_ear.BOTH)
+        {
+            return SetFrequencySmearingApproach(T_ear.LEFT, approach) && SetFrequencySmearingApproach(T_ear.RIGHT, approach);
+        }
+        return hlMixer.SetFloat($"HL3DTI_HL_FS_Approach_{(ear==T_ear.LEFT? "Left" : "Right")}", (float)approach);
+    }
+
+
 
     /// <summary>
     /// Set buffer size for downward section of smearing window

@@ -254,6 +254,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     {
         Common3DTIGUI.BeginSection("CLASSIFICATION SCALE");
         {
+            EditorGUI.BeginDisabledGroup(!(HLAPI.GLOBAL_LEFT_ON && HLAPI.MBE_LEFT_ON));
             // LEFT EAR
             Common3DTIGUI.BeginLeftColumn(true);
             {
@@ -317,8 +318,10 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 GUILayout.EndVertical();
             }
             Common3DTIGUI.EndLeftColumn();
+            EditorGUI.EndDisabledGroup();
 
             // RIGHT EAR
+            EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_RIGHT_ON && HLAPI.MBE_RIGHT_ON);
             Common3DTIGUI.BeginRightColumn(true);
             {
                 GUILayout.BeginVertical();
@@ -381,6 +384,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 GUILayout.EndVertical();
             }
             Common3DTIGUI.EndRightColumn();
+            EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_RIGHT_ON && HLAPI.MBE_RIGHT_ON);
         }
         Common3DTIGUI.EndSection();
     }
@@ -394,6 +398,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         Common3DTIGUI.BeginSection("FINE ADJUSTMENT");
         {
             // LEFT EAR
+            EditorGUI.BeginDisabledGroup(!(HLAPI.GLOBAL_LEFT_ON && HLAPI.MBE_LEFT_ON));
             Common3DTIGUI.BeginLeftColumn(true);
             //Common3DTIGUI.BeginLeftColumn(HLAPI.GLOBAL_LEFT_ON);
             //EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_LEFT_ON);
@@ -421,8 +426,10 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             }
             Common3DTIGUI.EndLeftColumn();
             //EditorGUI.EndDisabledGroup();
+            EditorGUI.EndDisabledGroup();
 
             // RIGHT EAR
+            EditorGUI.BeginDisabledGroup(!(HLAPI.GLOBAL_RIGHT_ON && HLAPI.MBE_RIGHT_ON));
             Common3DTIGUI.BeginRightColumn(true);
             //Common3DTIGUI.BeginRightColumn(HLAPI.GLOBAL_RIGHT_ON);
             //EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_RIGHT_ON);
@@ -451,6 +458,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             Common3DTIGUI.EndRightColumn();
             //EditorGUI.EndDisabledGroup();
         }
+        EditorGUI.EndDisabledGroup();
         Common3DTIGUI.EndSection();
     }
 
@@ -699,10 +707,10 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                         float approachFloat;
                         if (plugin.GetFloatParameter("HLFSAPPROACHL", out approachFloat))
                         {
-                            int approach = Math.Max(0, Math.Min((int)approachFloat, options.Length));
-                            int newApproach = EditorGUILayout.Popup(new GUIContent("Approach", "Which algorithm is used for frequency"), approach, options);
+                            int approachInt = Math.Max(0, Math.Min((int)approachFloat, options.Length));
+                            int newApproach = EditorGUILayout.Popup(new GUIContent("Approach", "Which algorithm is used for frequency"), approachInt, options);
 
-                            if (approach != newApproach)
+                            if (approachInt != newApproach)
                             {
                                 plugin.SetFloatParameter("HLFSAPPROACHL", (float) newApproach);
                             }
@@ -723,24 +731,38 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
 
                     // Downward
                     Common3DTIGUI.BeginSubsection("Downward smearing");
-                    Common3DTIGUI.AddLabelToParameterGroup("Buffer size");
+                    API_3DTI_HL.T_HLFrequencySmearingApproach approach;
+                    bool isGrafApproach = HLAPI.GetFrequencySmearingApproach(T_ear.LEFT, out approach) && approach == API_3DTI_HL.T_HLFrequencySmearingApproach.GRAF;
+                    if (isGrafApproach)
+                    {
+                        Common3DTIGUI.AddLabelToParameterGroup("Buffer size");
+                    }
                     Common3DTIGUI.AddLabelToParameterGroup("Smearing amount");
 
-                    float FloatDownwardSize = (float)HLAPI.PARAM_LEFT_FS_DOWN_SIZE;
-                    if (Common3DTIGUI.CreatePluginParameterSlider(plugin, ref FloatDownwardSize, "HLFSDOWNSZL", "Buffer size", false, "samples", "Set buffer size for downward section of smearing window in left ear")) ResetAllFrequencySmearingButtonSelections(T_ear.LEFT);
-                    HLAPI.PARAM_LEFT_FS_DOWN_SIZE = (int)FloatDownwardSize;
+                    if (isGrafApproach)
+                    {
+                        float FloatDownwardSize = (float)HLAPI.PARAM_LEFT_FS_DOWN_SIZE;
+                        if (Common3DTIGUI.CreatePluginParameterSlider(plugin, ref FloatDownwardSize, "HLFSDOWNSZL", "Buffer size", false, "samples", "Set buffer size for downward section of smearing window in left ear")) ResetAllFrequencySmearingButtonSelections(T_ear.LEFT);
+                        HLAPI.PARAM_LEFT_FS_DOWN_SIZE = (int)FloatDownwardSize;
+                    }
 
                     if (Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_LEFT_FS_DOWN_HZ, "HLFSDOWNHZL", "Smearing amount", true, "Hz", "Set smearing amount (standard deviation, in Hz) for downward section of smearing window in left ear")) ResetAllFrequencySmearingButtonSelections(T_ear.LEFT);
                     Common3DTIGUI.EndSubsection();
 
                     // Upward
                     Common3DTIGUI.BeginSubsection("Upward smearing");
-                    Common3DTIGUI.AddLabelToParameterGroup("Buffer size");
+                    if (isGrafApproach)
+                    {
+                        Common3DTIGUI.AddLabelToParameterGroup("Buffer size");
+                    }
                     Common3DTIGUI.AddLabelToParameterGroup("Smearing amount");
 
-                    float FloatUpwardSize = (float)HLAPI.PARAM_LEFT_FS_UP_SIZE;
-                    if (Common3DTIGUI.CreatePluginParameterSlider(plugin, ref FloatUpwardSize, "HLFSUPSZL", "Buffer size", false, "samples", "Set buffer size for upward section of smearing window in left ear")) ResetAllFrequencySmearingButtonSelections(T_ear.LEFT);
-                    HLAPI.PARAM_LEFT_FS_UP_SIZE = (int)FloatUpwardSize;
+                    if (isGrafApproach)
+                    {
+                        float FloatUpwardSize = (float)HLAPI.PARAM_LEFT_FS_UP_SIZE;
+                        if (Common3DTIGUI.CreatePluginParameterSlider(plugin, ref FloatUpwardSize, "HLFSUPSZL", "Buffer size", false, "samples", "Set buffer size for upward section of smearing window in left ear")) ResetAllFrequencySmearingButtonSelections(T_ear.LEFT);
+                        HLAPI.PARAM_LEFT_FS_UP_SIZE = (int)FloatUpwardSize;
+                    }
 
                     if (Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_LEFT_FS_UP_HZ, "HLFSUPHZL", "Smearing amount", true, "Hz", "Set smearing amount (standard deviation, in Hz) for upward section of smearing window in left ear")) ResetAllFrequencySmearingButtonSelections(T_ear.LEFT);
                     Common3DTIGUI.EndSubsection();
@@ -762,10 +784,10 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                         float approachFloat;
                         if (plugin.GetFloatParameter("HLFSAPPROACHR", out approachFloat))
                         {
-                            int approach = Math.Max(0, Math.Min((int)approachFloat, options.Length));
-                            int newApproach = EditorGUILayout.Popup(new GUIContent("Approach", "Which algorithm is used for frequency"), approach, options);
+                            int approachInt = Math.Max(0, Math.Min((int)approachFloat, options.Length));
+                            int newApproach = EditorGUILayout.Popup(new GUIContent("Approach", "Which algorithm is used for frequency"), approachInt, options);
 
-                            if (approach != newApproach)
+                            if (approachInt != newApproach)
                             {
                                 plugin.SetFloatParameter("HLFSAPPROACHR", (float)newApproach);
                             }

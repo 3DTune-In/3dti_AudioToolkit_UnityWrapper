@@ -196,6 +196,7 @@ enum
 	PARAM_FS_UP_HZ_LEFT,
 	PARAM_FS_UP_HZ_RIGHT,
 
+
 	// Classification scale
 	//PARAM_CLASSIFICATION_CURVE_LEFT,
 	//PARAM_CLASSIFICATION_SEVERITY_LEFT,
@@ -404,45 +405,45 @@ enum
 	//	return result;
 	//}
 
-	void SetNewAudiometry(UnityAudioEffectState* state, Common::T_ear ear, TAudiometry& audiometry)
-	{
-		// Resize audiometry if needed
-		if (audiometry.size() == 7)
-		{
-			audiometry.insert(audiometry.begin(), audiometry[0]);						// Copy first value, to have 9 bands from 7
-			audiometry.insert(audiometry.end(), audiometry[audiometry.size() - 1]);	// Copy last value, to have 9 bands from 7
-		}
+	//void SetNewAudiometry(UnityAudioEffectState* state, Common::T_ear ear, TAudiometry& audiometry)
+	//{
+	//	// Resize audiometry if needed
+	//	if (audiometry.size() == 7)
+	//	{
+	//		audiometry.insert(audiometry.begin(), audiometry[0]);						// Copy first value, to have 9 bands from 7
+	//		audiometry.insert(audiometry.end(), audiometry[audiometry.size() - 1]);	// Copy last value, to have 9 bands from 7
+	//	}
 
-		// Set audiometry in HL simulator
-		EffectData* data = state->GetEffectData<EffectData>();
-		data->HL.SetFromAudiometry_dBHL(ear, audiometry);
+	//	// Set audiometry in HL simulator
+	//	EffectData* data = state->GetEffectData<EffectData>();
+	//	data->HL.SetFromAudiometry_dBHL(ear, audiometry);
 
-		// Set all audiometry (hearing loss levels) parameters to keep coherency
-		if (ear == Common::T_ear::LEFT)
-		{
-			data->parameters[PARAM_MBE_BAND_0_LEFT] = audiometry[0];
-			data->parameters[PARAM_MBE_BAND_1_LEFT] = audiometry[1];
-			data->parameters[PARAM_MBE_BAND_2_LEFT] = audiometry[2];
-			data->parameters[PARAM_MBE_BAND_3_LEFT] = audiometry[3];
-			data->parameters[PARAM_MBE_BAND_4_LEFT] = audiometry[4];
-			data->parameters[PARAM_MBE_BAND_5_LEFT] = audiometry[5];
-			data->parameters[PARAM_MBE_BAND_6_LEFT] = audiometry[6];
-			data->parameters[PARAM_MBE_BAND_7_LEFT] = audiometry[7];
-			data->parameters[PARAM_MBE_BAND_8_LEFT] = audiometry[8];
-		}
-		else
-		{
-			data->parameters[PARAM_MBE_BAND_0_RIGHT] = audiometry[0];
-			data->parameters[PARAM_MBE_BAND_1_RIGHT] = audiometry[1];
-			data->parameters[PARAM_MBE_BAND_2_RIGHT] = audiometry[2];
-			data->parameters[PARAM_MBE_BAND_3_RIGHT] = audiometry[3];
-			data->parameters[PARAM_MBE_BAND_4_RIGHT] = audiometry[4];
-			data->parameters[PARAM_MBE_BAND_5_RIGHT] = audiometry[5];
-			data->parameters[PARAM_MBE_BAND_6_RIGHT] = audiometry[6];
-			data->parameters[PARAM_MBE_BAND_7_RIGHT] = audiometry[7];
-			data->parameters[PARAM_MBE_BAND_8_RIGHT] = audiometry[8];
-		}
-	}
+	//	// Set all audiometry (hearing loss levels) parameters to keep coherency
+	//	if (ear == Common::T_ear::LEFT)
+	//	{
+	//		data->parameters[PARAM_MBE_BAND_0_LEFT] = audiometry[0];
+	//		data->parameters[PARAM_MBE_BAND_1_LEFT] = audiometry[1];
+	//		data->parameters[PARAM_MBE_BAND_2_LEFT] = audiometry[2];
+	//		data->parameters[PARAM_MBE_BAND_3_LEFT] = audiometry[3];
+	//		data->parameters[PARAM_MBE_BAND_4_LEFT] = audiometry[4];
+	//		data->parameters[PARAM_MBE_BAND_5_LEFT] = audiometry[5];
+	//		data->parameters[PARAM_MBE_BAND_6_LEFT] = audiometry[6];
+	//		data->parameters[PARAM_MBE_BAND_7_LEFT] = audiometry[7];
+	//		data->parameters[PARAM_MBE_BAND_8_LEFT] = audiometry[8];
+	//	}
+	//	else
+	//	{
+	//		data->parameters[PARAM_MBE_BAND_0_RIGHT] = audiometry[0];
+	//		data->parameters[PARAM_MBE_BAND_1_RIGHT] = audiometry[1];
+	//		data->parameters[PARAM_MBE_BAND_2_RIGHT] = audiometry[2];
+	//		data->parameters[PARAM_MBE_BAND_3_RIGHT] = audiometry[3];
+	//		data->parameters[PARAM_MBE_BAND_4_RIGHT] = audiometry[4];
+	//		data->parameters[PARAM_MBE_BAND_5_RIGHT] = audiometry[5];
+	//		data->parameters[PARAM_MBE_BAND_6_RIGHT] = audiometry[6];
+	//		data->parameters[PARAM_MBE_BAND_7_RIGHT] = audiometry[7];
+	//		data->parameters[PARAM_MBE_BAND_8_RIGHT] = audiometry[8];
+	//	}
+	//}
 
 	/////////////////////////////////////////////////////////////////////
 
