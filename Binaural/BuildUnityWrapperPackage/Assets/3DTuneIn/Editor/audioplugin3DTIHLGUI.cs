@@ -518,9 +518,17 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             if (HLAPI.MBE_LEFT_ON)
             {
                 Common3DTIGUI.AddLabelToParameterGroup("Attack");
-                Common3DTIGUI.AddLabelToParameterGroup("Release");
                 Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_LEFT_ATTACK, "HLATKL", "Attack", false, "ms", "Set attack time of envelope detectors in left ear");
+
+                Common3DTIGUI.AddLabelToParameterGroup("Release");
                 Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_LEFT_RELEASE, "HLRELL", "Release", false, "ms", "Set release time of envelope detectors in left ear");
+
+                //Common3DTIGUI.AddLabelToParameterGroup("Approach");
+                //API_3DTI_HL.T_MultibandExpanderApproach approach;
+                //HLAPI.GetMultibandExpanderApproach(T_ear.LEFT, out approach);
+                //Common3DTIGUI.CreatePopupStringSelector<API_3DTI_HL.T_MultibandExpanderApproach>("Approach", "Set the multiband expander algorithm for the left ear", ref approach);
+                //HLAPI.SetMultibandExpanderApproach(T_ear.LEFT, approach);
+
             }
             Common3DTIGUI.EndLeftColumn();
             EditorGUI.EndDisabledGroup();

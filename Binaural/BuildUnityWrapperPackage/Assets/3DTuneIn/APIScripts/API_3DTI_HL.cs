@@ -41,6 +41,10 @@ public class API_3DTI_HL : MonoBehaviour
                                                   HL_CS_SEVERITY_PROFOUND =6, HL_CS_SEVERITY_UNDEFINED = -1};
 
     public enum T_HLFrequencySmearingApproach : int { BAERMOORE, GRAF };
+    public enum T_MultibandExpanderApproach : int { 
+        Butterworth, 
+        Gammatone, 
+    };
 
     // Internal constants
     const float DEFAULT_CALIBRATION = 100.0f;
@@ -907,40 +911,85 @@ public class API_3DTI_HL : MonoBehaviour
         return hlMixer.SetFloat(paramName, CommonFunctions.Bool2Float(false));
     }
 
-
-    public bool GetFrequencySmearingApproach(T_ear ear, out T_HLFrequencySmearingApproach approach)
+    /// NB mixerLabelPref will have either "Left" or "Right" appended.
+    private bool GetEnum<T>(T_ear ear, string mixerLabelPrefix, out T value) where T : System.Enum
     {
-        if (ear==T_ear.BOTH)
+        if (ear == T_ear.BOTH)
         {
             Debug.LogWarning("ear must be LEFT or RIGHT but not BOTH", this);
         }
-        float f_approach;
-        bool ok;
-        if ((ear==T_ear.LEFT && hlMixer.GetFloat("HL3DTI_HL_FS_Approach_Left", out f_approach))
-            || 
-            (ear == T_ear.RIGHT && hlMixer.GetFloat("HL3DTI_HL_FS_Approach_Right", out f_approach))
-            )
+        float f_value;
+        if (hlMixer.GetFloat(mixerLabelPrefix + (ear == T_ear.LEFT ? "Left" : "Right"), out f_value))
         {
-            if (Enum.IsDefined(typeof(T_HLFrequencySmearingApproach), (int)f_approach))
+            if (Enum.IsDefined(typeof(T), (int)f_value))
             {
-                approach = (T_HLFrequencySmearingApproach)(int)f_approach;
+                value = (T)(object)(int)(f_value);
                 return true;
             }
-            Debug.LogError("Invalid value for T_HLFrequencySmearingApproach received from plugin.", this);
+            Debug.LogError($"Invalid value {f_value} for type {typeof(T).Name} received from plugin.", this);
         }
-        approach = T_HLFrequencySmearingApproach.BAERMOORE;
+        // need to set some value
+        value = (T) Enum.GetValues(typeof(T)).GetValue(0);
         return false;
+    }
+
+
+    private bool SetEnum<T>(T_ear ear, string mixerLabelPrefix, T newValue) where T : System.Enum
+    {
+        if (ear == T_ear.BOTH)
+        {
+            return SetEnum<T>(T_ear.LEFT, mixerLabelPrefix, newValue) && SetEnum<T>(T_ear.RIGHT, mixerLabelPrefix, newValue);
+        }
+        return hlMixer.SetFloat(mixerLabelPrefix + (ear == T_ear.LEFT ? "Left" : "Right"), (float)(int)(object)newValue);
+    }
+
+
+    public bool GetMultibandExpanderApproach(T_ear ear, out T_MultibandExpanderApproach approach)
+    {
+        return GetEnum<T_MultibandExpanderApproach>(ear, "HL3DTI_HL_MBE_Approach_", out approach);
+    }
+
+    public bool SetMultibandExpanderApproach(T_ear ear, T_MultibandExpanderApproach approach)
+    {
+        return SetEnum(ear, "HL3DTI_HL_MBE_Approach_", approach);
+    }
+
+
+    public bool GetFrequencySmearingApproach(T_ear ear, out T_HLFrequencySmearingApproach approach)
+    {
+        return GetEnum<T_HLFrequencySmearingApproach>(ear, "HL3DTI_HL_FS_Approach_", out approach);
+        //if (ear==T_ear.BOTH)
+        //{
+        //    Debug.LogWarning("ear must be LEFT or RIGHT but not BOTH", this);
+        //}
+        //float f_approach;
+        //bool ok;
+        //if ((ear==T_ear.LEFT && hlMixer.GetFloat("HL3DTI_HL_FS_Approach_Left", out f_approach))
+        //    || 
+        //    (ear == T_ear.RIGHT && hlMixer.GetFloat("HL3DTI_HL_FS_Approach_Right", out f_approach))
+        //    )
+        //{
+        //    if (Enum.IsDefined(typeof(T_HLFrequencySmearingApproach), (int)f_approach))
+        //    {
+        //        approach = (T_HLFrequencySmearingApproach)(int)f_approach;
+        //        return true;
+        //    }
+        //    Debug.LogError("Invalid value for T_HLFrequencySmearingApproach received from plugin.", this);
+        //}
+        //approach = T_HLFrequencySmearingApproach.BAERMOORE;
+        //return false;
     }
 
 
 
     public bool SetFrequencySmearingApproach(T_ear ear, T_HLFrequencySmearingApproach approach)
     {
-        if (ear==T_ear.BOTH)
-        {
-            return SetFrequencySmearingApproach(T_ear.LEFT, approach) && SetFrequencySmearingApproach(T_ear.RIGHT, approach);
-        }
-        return hlMixer.SetFloat($"HL3DTI_HL_FS_Approach_{(ear==T_ear.LEFT? "Left" : "Right")}", (float)approach);
+        return SetEnum<T_HLFrequencySmearingApproach>(ear, "HL3DTI_HL_FS_Approach_", approach);
+        //if (ear==T_ear.BOTH)
+        //{
+        //    return SetFrequencySmearingApproach(T_ear.LEFT, approach) && SetFrequencySmearingApproach(T_ear.RIGHT, approach);
+        //}
+        //return hlMixer.SetFloat($"HL3DTI_HL_FS_Approach_{(ear==T_ear.LEFT? "Left" : "Right")}", (float)approach);
     }
 
 

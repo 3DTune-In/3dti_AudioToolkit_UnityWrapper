@@ -361,6 +361,27 @@ public class Common3DTIGUI
 		EditorGUILayout.EndHorizontal();
 	}
 
+    public static void CreatePopupStringSelector<T>(string titleText, string tooltip, ref T target) where T : System.Enum
+    {
+        EditorGUILayout.BeginHorizontal();
+        Array valueObjects = Enum.GetValues(typeof(T));
+        var values = new T[valueObjects.Length];
+        var labels = new string[valueObjects.Length];
+        int currentIndex = 0;
+        for (int i=0; i<valueObjects.Length; i++)
+        {
+            values[i] = (T)(object)valueObjects.GetValue(i);
+            labels[i] = values[i].ToString();
+            if (EqualityComparer<T>.Default.Equals(values[i], target))
+            {
+                currentIndex = i;
+            }
+        }
+
+        int newIndex = EditorGUILayout.Popup(new GUIContent(titleText, tooltip), currentIndex, labels);
+        target = values[newIndex];
+    }
+
 
     /// <summary>
     /// Create a button and a drag&drop box for loading a file

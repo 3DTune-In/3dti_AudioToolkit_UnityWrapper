@@ -39,6 +39,7 @@ using namespace std;
 #include "HAHLSimulation/ButterworthMultibandExpander.h"
 #include "HAHLSimulation/FrequencySmearing.h"
 #include <mutex>
+#include "HAHLSimulation/GammatoneMultibandExpander.h"
 
 //enum THLClassificationScaleCurve { HL_CS_ERROR =-1, HL_CS_NOLOSS =0, 
 //								   HL_CS_A =1, HL_CS_B =2, HL_CS_C =3, HL_CS_D =4, HL_CS_E =5, HL_CS_F =6,
@@ -59,6 +60,13 @@ namespace HLSimulation3DTI
 		FREQUENCYSMEARING_APPROACH_COUNT
 	};
 
+	enum MultibandExpanderApproach : int
+	{
+		BUTTERWORTH = 0,
+		GAMMATONE = 1,
+		MBE_APPROACH_COUNT,
+	};
+
 //////////////////////////////////////////////////////
 
 // Default values for parameters
@@ -66,9 +74,12 @@ namespace HLSimulation3DTI
 #define DEFAULT_HL_ON				false
 #define DEFAULT_HL_ON				false
 #define DEFAULT_MULTIBANDEXPANDER_ON	true
+#define DEFAULT_MULTIBANDEXPANDER_FILTER_GROUPING false
+#define DEFAULT_MULTIBANDEXPANDER_NUM_FILTERS_PER_BAND 3
+#define DEFAULT_MULTIBANDEXPANDER_APPROACH BUTTERWORTH
 #define DEFAULT_TEMPORALDISTORTION_ON	false
 #define DEFAULT_FREQUENCYSMEARING_ON	false
-#define DEFAULT_FREQUENCYSMEARING_APPROACH FREQUENCYSMEARING_APPROACH_BAERMOORE
+#define DEFAULT_FREQUENCYSMEARING_APPROACH FrequencySmearingApproach::FREQUENCYSMEARING_APPROACH_BAERMOORE
 // Multiband expander:
 #define DEFAULT_INIFREQ				62.5
 #define DEFAULT_BANDSNUMBER			9
@@ -156,10 +167,19 @@ enum
 	// Calibration
 	PARAM_CALIBRATION_DBSPL_FOR_0DBFS,
 
+	// Multiband expander approaches
+	PARAM_MBE_APPROACH_LEFT,
+	PARAM_MBE_APPROACH_RIGHT,
+	PARAM_MBE_FILTER_GROUPING_LEFT,
+	PARAM_MBE_FILTER_GROUPING_RIGHT,
+	PARAM_MBE_NUM_FILTERS_PER_BAND_LEFT, // Butterworth only
+	PARAM_MBE_NUM_FILTERS_PER_BAND_RIGHT, // Butterworth only
+
+
 	// Multiband expander envelope detectors
 	PARAM_MBE_ATTACK_LEFT,
-	PARAM_MBE_RELEASE_LEFT,
 	PARAM_MBE_ATTACK_RIGHT,
+	PARAM_MBE_RELEASE_LEFT,
 	PARAM_MBE_RELEASE_RIGHT,
 	
 	// Switch on/off multiband expander for each ear
@@ -490,6 +510,15 @@ enum
 		// Calibration
 		RegisterParameter(definition, "HLCAL", "dBSPL", 0.0f, MAX_CALIBRATION_DBSPL, DEFAULT_CALIBRATION_DBSPL, 1.0f, 1.0f, PARAM_CALIBRATION_DBSPL_FOR_0DBFS, "Calibration: dBSPL equivalent to 0 dBFS");	
 
+		// Multiband expander approaches
+
+		RegisterParameter(definition, "HLMBEAPPROACHL", "", 0.0f, MBE_APPROACH_COUNT, DEFAULT_MULTIBANDEXPANDER_APPROACH, 1.0f, 1.0f, PARAM_MBE_APPROACH_LEFT, "Multiband expander algorithm for left ear");
+		RegisterParameter(definition, "HLMBEAPPROACHR", "", 0.0f, MBE_APPROACH_COUNT, DEFAULT_MULTIBANDEXPANDER_APPROACH, 1.0f, 1.0f, PARAM_MBE_APPROACH_RIGHT, "Multiband expander algorithm for right ear");
+		RegisterParameter(definition, "HLMBEFGL", "", 0.0f, 1.0f, Bool2Float(DEFAULT_MULTIBANDEXPANDER_FILTER_GROUPING), 1.0f, 1.0f, PARAM_MBE_FILTER_GROUPING_LEFT, "Multiband expander filter grouping for left ear");
+		RegisterParameter(definition, "HLMBEFGR", "", 0.0f, 1.0f, Bool2Float(DEFAULT_MULTIBANDEXPANDER_FILTER_GROUPING), 1.0f, 1.0f, PARAM_MBE_FILTER_GROUPING_RIGHT, "Multiband expander filter grouping for right ear");
+		RegisterParameter(definition, "HLMBEFPBL", "", 1.0f, 9.0f, DEFAULT_MULTIBANDEXPANDER_NUM_FILTERS_PER_BAND, 1.0f, 1.0f, PARAM_MBE_NUM_FILTERS_PER_BAND_LEFT, "Multiband expander number of filters per band for left ear (odd number)");
+		RegisterParameter(definition, "HLMBEFPBR", "", 1.0f, 9.0f, DEFAULT_MULTIBANDEXPANDER_NUM_FILTERS_PER_BAND, 1.0f, 1.0f, PARAM_MBE_NUM_FILTERS_PER_BAND_RIGHT, "Multiband expander number of filters per band for right ear (odd number)");
+
 		// Multiband expander envelope detectors
 		RegisterParameter(definition, "HLATKL", "ms", 0.0f, MAX_ATTACK, DEFAULT_ATTACK, 1.0f, 1.0f, PARAM_MBE_ATTACK_LEFT, "Attack time for left ear envelope detectors (ms)");
 		RegisterParameter(definition, "HLRELL", "ms", 0.0f, MAX_RELEASE, DEFAULT_RELEASE, 1.0f, 1.0f, PARAM_MBE_RELEASE_LEFT, "Release time for left ear envelope detectors (ms)");
@@ -614,6 +643,104 @@ enum
 
 	/////////////////////////////////////////////////////////////////////	
 
+
+	void SetOneHearingLossLevel(UnityAudioEffectState* state, Common::T_ear ear, int bandIndex, float valueDBHL)
+	{
+		// Check errors
+		if ((bandIndex > DEFAULT_BANDSNUMBER) || (bandIndex < 0))
+		{
+			WriteLog(state, "SET PARAMETER: ERROR!!!! Attempt to set hearing level for an incorrect band index: ", bandIndex);
+			return;
+		}
+		if ((valueDBHL < MIN_HEARINGLOSS) || (valueDBHL > MAX_HEARINGLOSS))
+		{
+			WriteLog(state, "SET PARAMETER: ERROR!!!! Attempt to set a wrong dBHL value for hearing loss level: ", valueDBHL);
+			return;
+		}
+
+		// Set hearing loss level
+		HAHLSimulation::CHearingLossSim& HL = state->GetEffectData<EffectData>()->HL;
+		HL.SetHearingLevel_dBHL(ear, bandIndex, valueDBHL);
+
+		// Debug log output
+		string earStr = "Unknown";
+		if (ear == Common::T_ear::LEFT)
+			earStr = "Left";
+		if (ear == Common::T_ear::RIGHT)
+			earStr = "Right";
+#ifndef UNITY_ANDROID
+		string logOutput = "SET PARAMETER: Hearing loss of band " + std::to_string(bandIndex) + " for " + earStr + " ear set to " + std::to_string(valueDBHL) + " dBHL";
+#else
+		string logOutput = "SET PARAMETER: Hearing loss changed for" + earStr + " ear"; //???
+#endif
+		WriteLog(state, logOutput, "");
+	}
+
+	/////////////////////////////////////////////////////////////////////
+
+	void updateMultibandExpander(UnityAudioEffectState* state, Common::T_ear ear)
+	{
+		assert(ear == LEFT || ear == RIGHT);
+		static_assert(LEFT == 0 && RIGHT == 1, "This assumption allows us to add the ear to parameter enum");
+		EffectData* data = state->GetEffectData<EffectData>();
+
+		MultibandExpanderApproach newApproach = (MultibandExpanderApproach) max(0, min(MBE_APPROACH_COUNT - 1, int(data->parameters[PARAM_MBE_APPROACH_LEFT + ear])));
+		bool filterGrouping = data->parameters[PARAM_MBE_FILTER_GROUPING_LEFT + ear] > 0.0f;
+		int filtersPerBand = static_cast<int>(data->parameters[PARAM_MBE_NUM_FILTERS_PER_BAND_LEFT + ear]);
+		// ensure odd number
+		filtersPerBand = filtersPerBand / 2 * 2 + 1;
+		filtersPerBand = max(filtersPerBand, 1);
+
+		std::shared_ptr<HAHLSimulation::CMultibandExpander> expander;
+		// keep a specific pointer to butterworth as there is a class-specific function to call later on
+		std::shared_ptr<HAHLSimulation::CButterworthMultibandExpander> butterworthExpander;
+		if (newApproach == BUTTERWORTH)
+		{
+			expander = butterworthExpander = std::make_shared<HAHLSimulation::CButterworthMultibandExpander>();
+		}
+		else
+		{
+			assert(newApproach == GAMMATONE);
+			expander = std::make_shared<HAHLSimulation::CGammatoneMultibandExpander>();
+		}
+		expander->Setup(state->samplerate, DEFAULT_INIFREQ, data->HL.GetNumberOfBands(), filterGrouping);
+		if (newApproach == BUTTERWORTH)
+		{
+			butterworthExpander->SetNumberOfFiltersPerBand(filtersPerBand);
+		}
+		data->HL.SetMultibandExpander(ear, expander);
+
+		// Refresh audiometry
+		if (ear == LEFT)
+		{
+			SetOneHearingLossLevel(state, Common::T_ear::LEFT, 0, data->parameters[PARAM_MBE_BAND_0_LEFT]);
+			SetOneHearingLossLevel(state, Common::T_ear::LEFT, 1, data->parameters[PARAM_MBE_BAND_1_LEFT]);
+			SetOneHearingLossLevel(state, Common::T_ear::LEFT, 2, data->parameters[PARAM_MBE_BAND_2_LEFT]);
+			SetOneHearingLossLevel(state, Common::T_ear::LEFT, 3, data->parameters[PARAM_MBE_BAND_3_LEFT]);
+			SetOneHearingLossLevel(state, Common::T_ear::LEFT, 4, data->parameters[PARAM_MBE_BAND_4_LEFT]);
+			SetOneHearingLossLevel(state, Common::T_ear::LEFT, 5, data->parameters[PARAM_MBE_BAND_5_LEFT]);
+			SetOneHearingLossLevel(state, Common::T_ear::LEFT, 6, data->parameters[PARAM_MBE_BAND_6_LEFT]);
+			SetOneHearingLossLevel(state, Common::T_ear::LEFT, 7, data->parameters[PARAM_MBE_BAND_7_LEFT]);
+			SetOneHearingLossLevel(state, Common::T_ear::LEFT, 8, data->parameters[PARAM_MBE_BAND_8_LEFT]);
+		}
+		else
+		{
+			assert(ear == RIGHT);
+			SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 0, data->parameters[PARAM_MBE_BAND_0_RIGHT]);
+			SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 1, data->parameters[PARAM_MBE_BAND_1_RIGHT]);
+			SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 2, data->parameters[PARAM_MBE_BAND_2_RIGHT]);
+			SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 3, data->parameters[PARAM_MBE_BAND_3_RIGHT]);
+			SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 4, data->parameters[PARAM_MBE_BAND_4_RIGHT]);
+			SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 5, data->parameters[PARAM_MBE_BAND_5_RIGHT]);
+			SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 6, data->parameters[PARAM_MBE_BAND_6_RIGHT]);
+			SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 7, data->parameters[PARAM_MBE_BAND_7_RIGHT]);
+			SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 8, data->parameters[PARAM_MBE_BAND_8_RIGHT]);
+		}
+	}
+
+
+	/////////////////////////////////////////////////////////////////////	
+
 	void updateFrequencySmearer(UnityAudioEffectState* state, Common::T_ear ear)
 	{
 		assert(ear == LEFT || ear == RIGHT);
@@ -688,16 +815,14 @@ enum
 		// Tim: We now need to manually create multiband expanders before calling SetFromAudiometry
 		for (auto ear : { Common::T_ear::LEFT, Common::T_ear::RIGHT })
 		{
-#pragma message(": warning: todo use a define to set which multiband expander to use")
-			auto multibandExpander = std::make_shared<HAHLSimulation::CButterworthMultibandExpander>();
-#pragma message(": warning: todo use a define/parameter to set whether filterGrouping is enabled")
-			const bool TEMP_DEFAULT_FILTER_GROUPING = false;
-			multibandExpander->Setup(state->samplerate, DEFAULT_INIFREQ, effectdata->HL.GetNumberOfBands(), TEMP_DEFAULT_FILTER_GROUPING);
-#pragma message(": warning: todo possibly the number of filterbanks depends on whether filter_grouping is enabled")
-			const int TEMP_DEFAULT_NUM_FILTERS_PER_BAND = 3;
-			multibandExpander->SetNumberOfFiltersPerBand(TEMP_DEFAULT_NUM_FILTERS_PER_BAND);
-			assert(multibandExpander->IsReady());
-			effectdata->HL.SetMultibandExpander(ear, multibandExpander);
+			updateMultibandExpander(state, ear);
+			//auto multibandExpander = std::make_shared<HAHLSimulation::CButterworthMultibandExpander>();
+			//const bool TEMP_DEFAULT_FILTER_GROUPING = false;
+			//multibandExpander->Setup(state->samplerate, DEFAULT_INIFREQ, effectdata->HL.GetNumberOfBands(), TEMP_DEFAULT_FILTER_GROUPING);
+			//const int TEMP_DEFAULT_NUM_FILTERS_PER_BAND = 3;
+			//multibandExpander->SetNumberOfFiltersPerBand(TEMP_DEFAULT_NUM_FILTERS_PER_BAND);
+			//effectdata->HL.SetMultibandExpander(ear, multibandExpander);
+			assert(effectdata->HL.GetMultibandExpander(ear)->IsReady());
 
 			updateFrequencySmearer(state, ear);
 		}
@@ -757,39 +882,7 @@ enum
         return UNITY_AUDIODSP_OK;
     }
 
-	/////////////////////////////////////////////////////////////////////
-
-	void SetOneHearingLossLevel(UnityAudioEffectState* state, Common::T_ear ear, int bandIndex, float valueDBHL)
-	{
-		// Check errors
-		if ((bandIndex > DEFAULT_BANDSNUMBER) || (bandIndex < 0))
-		{
-			WriteLog(state, "SET PARAMETER: ERROR!!!! Attempt to set hearing level for an incorrect band index: ", bandIndex);
-			return;
-		}
-		if ((valueDBHL < MIN_HEARINGLOSS) || (valueDBHL > MAX_HEARINGLOSS))
-		{
-			WriteLog(state, "SET PARAMETER: ERROR!!!! Attempt to set a wrong dBHL value for hearing loss level: ", valueDBHL);
-			return;
-		}
-		
-		// Set hearing loss level
-		HAHLSimulation::CHearingLossSim& HL = state->GetEffectData<EffectData>()->HL;
-		HL.SetHearingLevel_dBHL(ear, bandIndex, valueDBHL);
-					
-		// Debug log output
-		string earStr = "Unknown";
-		if (ear == Common::T_ear::LEFT)
-			earStr = "Left";
-		if (ear == Common::T_ear::RIGHT)
-			earStr = "Right";
-		#ifndef UNITY_ANDROID
-		string logOutput = "SET PARAMETER: Hearing loss of band " + std::to_string(bandIndex) + " for " + earStr + " ear set to " + std::to_string(valueDBHL) + " dBHL";
-		#else
-		string logOutput = "SET PARAMETER: Hearing loss changed for" + earStr + " ear"; //???
-		#endif
-		WriteLog(state, logOutput, "");		
-	}
+	
 
 	/////////////////////////////////////////////////////////////////////
 
@@ -945,6 +1038,31 @@ enum
 			case PARAM_CALIBRATION_DBSPL_FOR_0DBFS:
 				data->HL.SetCalibration(value);
 				WriteLog(state, "SET PARAMETER: Calibration (dBSPL for 0dBFS) set to: ", value);
+				break;
+
+			//case PARAM_MBE_APPROACH_LEFT:
+			//{
+			//	MultibandExpanderApproach approach = (MultibandExpanderApproach) max(0, min(MBE_APPROACH_COUNT - 1, int(value)));
+
+			//}
+
+			//case PARAM_MBE_FILTER_GROUPING_LEFT:
+			//{
+			//	bool filterGrouping = Float2Bool(value);
+			//	data->HL.GetMultibandExpander(LEFT)->Setup(state->samplerate, DEFAULT_INIFREQ, data->HL.GetNumberOfBands(), filterGrouping);
+			//}
+			//break;
+
+			case PARAM_MBE_APPROACH_LEFT:
+			case PARAM_MBE_FILTER_GROUPING_LEFT:
+			case PARAM_MBE_NUM_FILTERS_PER_BAND_LEFT:
+				updateMultibandExpander(state, LEFT);
+				break;
+
+			case PARAM_MBE_APPROACH_RIGHT:
+			case PARAM_MBE_FILTER_GROUPING_RIGHT:
+			case PARAM_MBE_NUM_FILTERS_PER_BAND_RIGHT:
+				updateMultibandExpander(state, RIGHT);
 				break;
 
 			// ENVELOPE DETECTORS:
