@@ -13,25 +13,22 @@ After that, if you want to develop your own apps using the wrapper, please read 
 ```
 ## Introduction
 
-The 3D-Tune-In Toolkit (3DTi Toolkit) consists in a set of C++ libraries and resources providing solutions for 3D audio spatialization and simulation of hearing loss and hearing aids. The main components of the 3DTi Toolkit are:
+The 3D-Tune-In Toolkit (3DTI Toolkit) consists in a set of C++ libraries and resources providing solutions for 3D audio spatialization and simulation of hearing loss and hearing aids. All the documentation about the library and the code is available at:
 
-- Binaural anechoic spatializer
-- Binaural environment simulation
-- Loudspeakers anechoic spatializer
-- Loudspeakers environment simulation
-- Hearing loss simulation
-- Hearing aid simulation
-- Resource files (HRTF, ILD, BRIR)
-- Resource management package
+https://github.com/3DTune-In/3dti_AudioToolkit.
 
-The Unity Wrapper of the 3DTi Toolkit (3DTi Unity Wrapper) allows integration of some of these components of the Toolkit in any Unity Scene. These components are packed in the form of a Unity Package requiring Unity 2019.4 or above. The current version of the package is built to support the following platforms:
+Technical details about the 3D Tune-In Toolkit spatialiser are described in:
+
+Cuevas-Rodríguez M, Picinali L, González-Toledo D, Garre C, de la Rubia-Cuestas E, Molina-Tanco L and Reyes-Lecuona A. (2019) 3D Tune-In Toolkit: An open-source library for real-time binaural spatialisation. PLOS ONE 14(3): e0211899. https://doi.org/10.1371/journal.pone.0211899
+
+**The Unity Wrapper** of the 3DTi Toolkit (3DTI Unity Wrapper) allows integration of some of these components of the Toolkit in any Unity Scene. These components are packed in the form of a Unity Package requiring Unity 2019.4 or above. The current version of the package is built to support the following platforms:
 
 - As Host: Microsoft Windows 10, MacOS.
 - As Target: Microsoft Windows x64, MacOS, Android (4.4 or above), iOS. (We also include binaries for Windows x86 but they are not tested on a 32 bit computer so are not officially supported.)
 
 In its current version, the following parts of the 3DTI Toolkit are made available to a Unity application:
 
-- Binaural anechoic spatializer
+- Binaural anechoic spatializer (reverb simulation not included)
 - Hearing loss simulation
 - Hearing aid simulation
 
@@ -86,8 +83,6 @@ An issue has been reported if your locale uses a comma ',' instead of a period '
 ## Future plans
 
 This wrapper currently only integrates the 3DTI Toolkit release from 2018 'M20181003'. A future release is planned which will integrate updates that have happened to the toolkit since then.
-
-We are also exploring if it's possible to eliminate the need to have *API_3DTI_HL* and *API_3DTI_HA* components, and to see if there's a simpler way to directly set parameters on these plugins from C# code without relying on manually exposing each parameter within the included *3DTI_HAHL_Mixer*. 
 
 ## Credits
 
