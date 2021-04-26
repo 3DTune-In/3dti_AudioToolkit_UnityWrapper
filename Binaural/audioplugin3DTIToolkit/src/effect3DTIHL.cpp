@@ -1576,3 +1576,9 @@ enum
         return UNITY_AUDIODSP_OK;
     }
 }
+
+
+extern "C" UNITY_AUDIODSP_EXPORT_API int MyTestFunction(int value) {
+	std::cerr << "Test function called ("<<value<<")." << std::endl;
+	return value + 1;
+}
