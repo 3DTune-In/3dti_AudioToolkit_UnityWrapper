@@ -81,6 +81,8 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     /// <returns></returns>
     public override bool OnGUI(IAudioEffectPlugin plugin)
     {
+ 
+
         //return false;
         // Initialization (first run)
         //if (!initDone)
@@ -106,6 +108,57 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         {
             playWasStarted = false;
         }
+
+        // This test code demonstrates that we can set parameters directly using the plugin and the mixer will update itself
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("Print HL3DTI_Attack_Left via mixer"))
+        {
+            float attackLeft;
+            if (HLAPI.hlMixer.GetFloat("HL3DTI_Attack_Left", out attackLeft))
+            {
+                Debug.Log($"Value of HL3DTI_Attack_Left is {attackLeft} from mixer");
+            }
+            else
+            {
+                Debug.Log("Failed to get value of HL3DTI_Attack_Left from mixer");
+            }
+        }
+        if (GUILayout.Button("Print HL3DTI_Attack_Left via plugin"))
+        {
+            float attackLeft;
+            if (plugin.GetFloatParameter("HLATKL", out attackLeft))
+            {
+                Debug.Log($"Value of HL3DTI_Attack_Left is {attackLeft} from plugin");
+            }
+            else
+            {
+                Debug.Log("Failed to get value of HL3DTI_Attack_Left from plugin");
+            }
+        }
+
+        if (GUILayout.Button("Set HL3DTI_Attack_Left to 543 via mixer"))
+        {
+            if (HLAPI.hlMixer.SetFloat("HL3DTI_Attack_Left", 543))
+            {
+                Debug.Log($"Set HL3DTI_Attack_Left to 543 via mixer");
+            }
+            else
+            {
+                Debug.LogWarning("Failed to set HL3DTI_Attack_Left via mixer");
+            }
+        }
+        if (GUILayout.Button("Set HL3DTI_Attack_Left to 543 via plugin"))
+        {
+            if (plugin.SetFloatParameter("HLATKL", 543))
+            {
+                Debug.Log($"Set HL3DTI_Attack_Left to 543 via plugin");
+            }
+            else
+            {
+                Debug.LogWarning("Failed to set HL3DTI_Attack_Left via plugin");
+            }
+        }
+        EditorGUILayout.EndHorizontal();
 
         // DRAW AUDIOMETRY GUI
         Common3DTIGUI.Show3DTILogo();
@@ -522,7 +575,37 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             if (HLAPI.MBE_LEFT_ON)
             {
                 Common3DTIGUI.AddLabelToParameterGroup("Attack");
-                Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_LEFT_ATTACK, "HLATKL", "Attack", false, "ms", "Set attack time of envelope detectors in left ear");
+                //Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_LEFT_ATTACK, "HLATKL", "Attack", false, "ms", "Set attack time of envelope detectors in left ear");
+
+                {
+                    // temp unfolding of function while we test removing the HLAPI copy variable
+                    // Get parameter info
+                    float newValue;
+                    float minValue, maxValue;
+                    plugin.GetFloatParameterInfo("HLATKL", out minValue, out maxValue, out newValue);
+
+                    // Set float resolution
+                    string resolution;
+                    if (false)
+                        resolution = "F2";
+                    else
+                        resolution = "F0";
+
+                    // Create slider and set value
+                    plugin.GetFloatParameter("HLATKL", out newValue);
+                    bool valueChanged;
+                    if (false)
+                        valueChanged = Common3DTIGUI.CreateCompactFloatSlider(ref newValue, "Attack", resolution, "ms", "Enable non-linear attenuation for left ear", minValue, maxValue);
+                    else
+                        valueChanged = Common3DTIGUI.CreateFloatSlider(ref newValue, "Attack", resolution, "ms", "Enable non-linear attenuation for left ear", minValue, maxValue);
+
+                    if (valueChanged)
+                    {
+                        plugin.SetFloatParameter("HLATKL", newValue);
+                        //APIparam = newValue;
+                    }
+                }
+
 
                 Common3DTIGUI.AddLabelToParameterGroup("Release");
                 Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_LEFT_RELEASE, "HLRELL", "Release", false, "ms", "Set release time of envelope detectors in left ear");

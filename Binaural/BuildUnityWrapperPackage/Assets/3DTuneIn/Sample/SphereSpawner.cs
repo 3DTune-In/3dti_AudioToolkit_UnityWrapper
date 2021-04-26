@@ -44,6 +44,20 @@ public class SphereSpawner : MonoBehaviour, IPointerClickHandler
         Debug.Log($"{spawnedSphereEmitters.Count} sources active.");
     }
 
+    public void TempTest()
+    {
+        var mixer = GameObject.FindObjectOfType<API_3DTI_HL>().hlMixer;
+        int newValue = Random.Range(100, 1000);
+        if (mixer.SetFloat("HL3DTI_Attack_Left", newValue))
+        {
+            Debug.Log($"Set HL3DTI_Attack_Left to {newValue}");
+        }
+        else
+        {
+            Debug.Log("Failed to set HL3DTI_Attack_Left via mixer (from button)");
+        }
+    }
+
     public void RemoveSource()
     {
         if (spawnedSphereEmitters.Count > 0)

@@ -67,8 +67,8 @@ public class API_3DTI_HL : MonoBehaviour
     public float [] PARAM_AUDIOMETRY_LEFT = new float[9] { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };  // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
     public float [] PARAM_AUDIOMETRY_RIGHT = new float[9] { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }; // For internal use, DO NOT USE IT DIRECTLY
-    [HideInInspector]
-    public float PARAM_LEFT_ATTACK = DEFAULT_ATTACK;            // For internal use, DO NOT USE IT DIRECTLY
+    //[HideInInspector]
+    //public float PARAM_LEFT_ATTACK = DEFAULT_ATTACK;            // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
     public float PARAM_LEFT_RELEASE = DEFAULT_RELEASE;          // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
@@ -469,7 +469,7 @@ public class API_3DTI_HL : MonoBehaviour
         if (ear == T_ear.LEFT)
         {
             if (!hlMixer.SetFloat("HL3DTI_Attack_Left", attack)) return false;
-            PARAM_LEFT_ATTACK = attack;
+            //PARAM_LEFT_ATTACK = attack;
         }
         if (ear == T_ear.RIGHT)
         {
