@@ -308,7 +308,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     {
         Common3DTIGUI.BeginSection("CLASSIFICATION SCALE");
         {
-            EditorGUI.BeginDisabledGroup(!(HLAPI.GLOBAL_LEFT_ON && HLAPI.MBE_LEFT_ON));
+            EditorGUI.BeginDisabledGroup(!(plugin.GetBoolParameter("HLONL") && plugin.GetBoolParameter("HLMBEONL")));
             // LEFT EAR
             Common3DTIGUI.BeginLeftColumn(true);
             {
@@ -375,7 +375,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             EditorGUI.EndDisabledGroup();
 
             // RIGHT EAR
-            EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_RIGHT_ON && HLAPI.MBE_RIGHT_ON);
+            EditorGUI.BeginDisabledGroup(!(plugin.GetBoolParameter("HLONR") && plugin.GetBoolParameter("HLMBEONR")));
             Common3DTIGUI.BeginRightColumn(true);
             {
                 GUILayout.BeginVertical();
@@ -453,7 +453,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         Common3DTIGUI.BeginSection("FINE ADJUSTMENT");
         {
             // LEFT EAR
-            EditorGUI.BeginDisabledGroup(!(HLAPI.GLOBAL_LEFT_ON && HLAPI.MBE_LEFT_ON));
+            EditorGUI.BeginDisabledGroup(!(plugin.GetBoolParameter("HLONL") && plugin.GetBoolParameter("HLMBEONL")));
             Common3DTIGUI.BeginLeftColumn(true);
             //Common3DTIGUI.BeginLeftColumn(HLAPI.GLOBAL_LEFT_ON);
             //EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_LEFT_ON);
@@ -484,7 +484,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             EditorGUI.EndDisabledGroup();
 
             // RIGHT EAR
-            EditorGUI.BeginDisabledGroup(!(HLAPI.GLOBAL_RIGHT_ON && HLAPI.MBE_RIGHT_ON));
+            EditorGUI.BeginDisabledGroup(!(plugin.GetBoolParameter("HLONR") && plugin.GetBoolParameter("HLMBEONR")));
             Common3DTIGUI.BeginRightColumn(true);
             //Common3DTIGUI.BeginRightColumn(HLAPI.GLOBAL_RIGHT_ON);
             //EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_RIGHT_ON);
@@ -524,22 +524,22 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     public void DrawHLEars(IAudioEffectPlugin plugin)
     {
         // LEFT EAR
-#warning("temp - part of removing HLAPI.GLOBAL_LEFT_ON parameter")
+//#warning("temp - part of removing HLAPI.GLOBAL_LEFT_ON parameter")
 
-        bool global_left_on;
-        {
-            float v;
-            bool ok = plugin.GetFloatParameter("HLONL", out v);
-            global_left_on = v > 0;
-        }
-        if (Common3DTIGUI.BeginLeftColumn(plugin, ref global_left_on, "LEFT EAR", "Enable left ear hearing loss", new List<string> { "HLONL" }, isStartingPlay))
+//        bool global_left_on;
+//        {
+//            float v;
+//            bool ok = plugin.GetFloatParameter("HLONL", out v);
+//            global_left_on = v > 0;
+//        }
+        Common3DTIGUI.BeginColumn(plugin, T_ear.LEFT, "HLONL", "LEFT EAR", "Enable left ear hearing loss");
         {
             //if (HLAPI.GLOBAL_LEFT_ON)
             //    HLAPI.EnableHearingLoss(T_ear.LEFT);
             //else
             //    HLAPI.DisableHearingLoss(T_ear.LEFT);
         }
-        plugin.SetFloatParameter("HLONL", global_left_on ? 1.0f : 0.0f);
+        //plugin.SetFloatParameter("HLONL", global_left_on ? 1.0f : 0.0f);
 
         {
             // Draw ear icon
@@ -548,10 +548,11 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             GUILayout.Label("", GUILayout.ExpandWidth(true));
             GUILayout.EndHorizontal();
         }
-        Common3DTIGUI.EndLeftColumn();
+        Common3DTIGUI.EndColumn(T_ear.LEFT);
 
         // RIGHT EAR
-        if (Common3DTIGUI.BeginRightColumn(plugin, ref HLAPI.GLOBAL_RIGHT_ON, "RIGHT EAR", "Enable right ear hearing loss", new List<string> { "HLONR" }, isStartingPlay))
+        Common3DTIGUI.BeginColumn(plugin, T_ear.RIGHT, "HLONR", "RIGHT EAR", "Enable right ear hearing loss");
+        //if (Common3DTIGUI.BeginRightColumn(plugin, ref HLAPI.GLOBAL_RIGHT_ON, "RIGHT EAR", "Enable right ear hearing loss", new List<string> { "HLONR" }, isStartingPlay))
         {
             //if (HLAPI.GLOBAL_RIGHT_ON)
             //    HLAPI.EnableHearingLoss(T_ear.RIGHT);
@@ -565,7 +566,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             Common3DTIGUI.DrawEar(T_ear.RIGHT);
             GUILayout.EndHorizontal();
         }
-        Common3DTIGUI.EndRightColumn();
+        Common3DTIGUI.EndColumn(T_ear.RIGHT);
     }
 
     /// <summary>
@@ -579,18 +580,13 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             string[] approachLabels = new string[] { "Butterworth", "Gammatone" };
 
             // LEFT EAR
-            //Common3DTIGUI.BeginLeftColumn(HLAPI.GLOBAL_LEFT_ON);
-            EditorGUI.BeginDisabledGroup(!Common3DTIGUI.GetBoolParameter(plugin, "HLONL"));
+            EditorGUI.BeginDisabledGroup(!plugin.GetBoolParameter("HLONL"));
             {
-                //Common3DTIGUI.BeginLeftColumn(plugin, ref HLAPI.MBE_LEFT_ON, "LEFT EAR", "Enable non-linear attenuation for left ear", new List<string> { "HLMBEONL" }, isStartingPlay, true);
-
                 // MBE
 
                 Common3DTIGUI.BeginColumn(plugin, T_ear.LEFT, "HLMBEONL", "LEFT EAR", "Enable non-linear attenuation for left ear");
-                //if (HLAPI.MBE_LEFT_ON)
                 {
                     Common3DTIGUI.AddLabelToParameterGroup("Attack");
-                    //Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_LEFT_ATTACK, "HLATKL", "Attack", false, "ms", "Set attack time of envelope detectors in left ear");
 
                     {
                         // temp unfolding of function while we test removing the HLAPI copy variable
@@ -644,15 +640,17 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                     }
 
                 }
-                Common3DTIGUI.EndLeftColumn();
+                //Common3DTIGUI.EndLeftColumn();
+                Common3DTIGUI.EndColumn(T_ear.LEFT);
             }
             EditorGUI.EndDisabledGroup();
 
             // RIGHT EAR
             //Common3DTIGUI.BeginRightColumn(HLAPI.GLOBAL_RIGHT_ON);
-            EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_RIGHT_ON);
-            Common3DTIGUI.BeginRightColumn(plugin, ref HLAPI.MBE_RIGHT_ON, "RIGHT EAR", "Enable non-linear attenuation for right ear", new List<string> { "HLMBEONR" }, isStartingPlay, true);
-            if (HLAPI.MBE_RIGHT_ON)
+            EditorGUI.BeginDisabledGroup(!plugin.GetBoolParameter("HLONR"));
+            //Common3DTIGUI.BeginRightColumn(plugin, ref HLAPI.MBE_RIGHT_ON, "RIGHT EAR", "Enable non-linear attenuation for right ear", new List<string> { "HLMBEONR" }, isStartingPlay, true);
+            Common3DTIGUI.BeginColumn(plugin, T_ear.RIGHT, "HLMBEONR", "RIGHT EAR", "Enable non-linear attenuation for right ear");
+            //if (HLAPI.MBE_RIGHT_ON)
             {
                 Common3DTIGUI.AddLabelToParameterGroup("Attack");
                 Common3DTIGUI.AddLabelToParameterGroup("Release");
@@ -676,7 +674,8 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                     }
                 }
             }
-            Common3DTIGUI.EndRightColumn();
+            //Common3DTIGUI.EndRightColumn();
+            Common3DTIGUI.EndColumn(T_ear.RIGHT);
             EditorGUI.EndDisabledGroup();
         }
         Common3DTIGUI.EndSection();
@@ -691,11 +690,12 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         Common3DTIGUI.BeginSection("3DTUNE-IN TEMPORAL DISTORTION");
         {
             // LEFT EAR            
-            EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_LEFT_ON);
-            Common3DTIGUI.BeginLeftColumn(plugin, ref HLAPI.TA_LEFT_ON, "LEFT EAR", "Enable temporal distortion simulation for left ear", new List<string> { "HLTAONL" }, isStartingPlay, true);
+            EditorGUI.BeginDisabledGroup(!plugin.GetBoolParameter("HLONL"));
+            //Common3DTIGUI.BeginLeftColumn(plugin, ref HLAPI.TA_LEFT_ON, "LEFT EAR", "Enable temporal distortion simulation for left ear", new List<string> { "HLTAONL" }, isStartingPlay, true);
+            Common3DTIGUI.BeginColumn(plugin, T_ear.LEFT, "HLTAONL", "LEFT EAR", "Enable temporal distortion simulation for left ear");
             {
                 //if (HLAPI.TA_LEFT_ON)
-                EditorGUI.BeginDisabledGroup(!HLAPI.TA_LEFT_ON);
+                EditorGUI.BeginDisabledGroup(!plugin.GetBoolParameter("HLTAONL"));
                 {
                     // PRESETS
                     Common3DTIGUI.SingleSpace();
@@ -745,12 +745,13 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 }
                 EditorGUI.EndDisabledGroup();
             }
-            Common3DTIGUI.EndLeftColumn();
+            Common3DTIGUI.EndColumn(T_ear.LEFT);
             EditorGUI.EndDisabledGroup();
 
             // RIGHT EAR            
-            EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_RIGHT_ON);
-            if (Common3DTIGUI.BeginRightColumn(plugin, ref HLAPI.TA_RIGHT_ON, "RIGHT EAR", "Enable temporal distortion simulation for right ear", new List<string> { "HLTAONR" }, isStartingPlay, true))
+            EditorGUI.BeginDisabledGroup(!plugin.GetBoolParameter("HLONR"));
+            Common3DTIGUI.BeginColumn(plugin, T_ear.RIGHT, "HLTAONR", "RIGHT EAR", "Enable temporal distortion simulation for right ear");
+            //if (Common3DTIGUI.BeginColumn(plugin, T_ear.RIGHT, "HLTAONR", "RIGHT EAR", "Enable temporal distortion simulation for right ear"))
             {
                 // Copy left values to right when LRSync is switched on. It is done internally by the toolkit, but not shown in the GUI
                 if (HLAPI.PARAM_TA_LRSYNC_ON)
@@ -768,7 +769,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             {
                 //if (HLAPI.TA_RIGHT_ON)                
                 EditorGUI.BeginDisabledGroup(HLAPI.PARAM_TA_LRSYNC_ON);
-                EditorGUI.BeginDisabledGroup(!HLAPI.TA_RIGHT_ON);
+                EditorGUI.BeginDisabledGroup(!plugin.GetBoolParameter("HLONR"));
                 {
                     // PRESETS
                     Common3DTIGUI.SingleSpace();
@@ -806,12 +807,12 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 }
                 EditorGUI.EndDisabledGroup();
             }
-            Common3DTIGUI.EndRightColumn();
+            Common3DTIGUI.EndColumn(T_ear.RIGHT);
             EditorGUI.EndDisabledGroup();
             EditorGUI.EndDisabledGroup();
 
             // Left-right synchronicity
-            EditorGUI.BeginDisabledGroup((!HLAPI.GLOBAL_LEFT_ON && !HLAPI.GLOBAL_RIGHT_ON) || (!HLAPI.TA_LEFT_ON && !HLAPI.TA_RIGHT_ON));
+            EditorGUI.BeginDisabledGroup((!plugin.GetBoolParameter("HLONL") && !plugin.GetBoolParameter("HLONR")) || (!HLAPI.TA_LEFT_ON && !HLAPI.TA_RIGHT_ON));
             {
                 Common3DTIGUI.CreatePluginToggle(plugin, ref HLAPI.PARAM_TA_LRSYNC_ON, "Allow Left-Right synchronicity control", "HLTALRON", "Enable control for left-right synchronicity in temporal distortion", isStartingPlay);
                 if (HLAPI.PARAM_TA_LRSYNC_ON)
@@ -836,10 +837,10 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             string[] options = new string[] { "Baer-Moore", "Graf" };
 
             // LEFT EAR            
-            EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_LEFT_ON);
-            Common3DTIGUI.BeginLeftColumn(plugin, ref HLAPI.FS_LEFT_ON, "LEFT EAR", "Enable frequency smearing simulation for left ear", new List<string> { "HLFSONL" }, isStartingPlay, true);
+            EditorGUI.BeginDisabledGroup(!plugin.GetBoolParameter("HLONL"));
+            Common3DTIGUI.BeginColumn(plugin, T_ear.LEFT, "HLFSONL",  "LEFT EAR", "Enable frequency smearing simulation for left ear");
             {
-                EditorGUI.BeginDisabledGroup(!HLAPI.FS_LEFT_ON);
+                EditorGUI.BeginDisabledGroup(!plugin.GetBoolParameter("HLFSONL"));
                 {
                     Common3DTIGUI.SingleSpace();
                     GUILayout.BeginHorizontal();
@@ -909,14 +910,14 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 }
                 EditorGUI.EndDisabledGroup();
             }
-            Common3DTIGUI.EndLeftColumn();
+            Common3DTIGUI.EndColumn(T_ear.LEFT);
             EditorGUI.EndDisabledGroup();
 
             // RIGHT EAR            
-            EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_RIGHT_ON);
-            Common3DTIGUI.BeginRightColumn(plugin, ref HLAPI.FS_RIGHT_ON, "RIGHT EAR", "Enable frequency smearing simulation for right ear", new List<string> { "HLFSONR" }, isStartingPlay, true);
+            EditorGUI.BeginDisabledGroup(!plugin.GetBoolParameter("HLONR"));
+            Common3DTIGUI.BeginColumn(plugin, T_ear.RIGHT, "HLFSONR", "RIGHT EAR", "Enable frequency smearing simulation for right ear");
             {
-                EditorGUI.BeginDisabledGroup(!HLAPI.FS_RIGHT_ON);
+                EditorGUI.BeginDisabledGroup(!plugin.GetBoolParameter("HLFSONR"));
                 {
                     Common3DTIGUI.SingleSpace();
                     GUILayout.BeginHorizontal();
@@ -973,7 +974,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 }
                 EditorGUI.EndDisabledGroup();
             }
-            Common3DTIGUI.EndRightColumn();
+            Common3DTIGUI.EndColumn(T_ear.RIGHT);
             EditorGUI.EndDisabledGroup();
         }
         Common3DTIGUI.EndSection();

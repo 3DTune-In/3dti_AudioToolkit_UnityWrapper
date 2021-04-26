@@ -524,7 +524,6 @@ public class Common3DTIGUI
         return changed;
     }
 
-    // The column will be disabled unless both globalIsEnabledParameterName is true and the toggle box is checked.
     public static void BeginColumn(IAudioEffectPlugin plugin, T_ear ear, string toggleBoxParameterName, string title, string tooltip)
     {
         ResetParameterGroup();
@@ -569,6 +568,19 @@ public class Common3DTIGUI
                 EditorGUI.EndDisabledGroup();   // End DisabledGroup 
             GUILayout.EndVertical();            // End column
             GUILayout.Space(spaceBetweenColumns);   // Space between columns        
+    }
+
+    public static void EndColumn(T_ear ear)
+    {
+        EditorGUI.EndDisabledGroup();   // End DisabledGroup 
+        GUILayout.EndVertical();            // End column
+        if (ear == T_ear.RIGHT)
+        {
+            GUILayout.EndHorizontal();                      // End section (ear pair)        
+        }
+        GUILayout.Space(spaceBetweenColumns);   // Space between columns  
+
+
     }
 
     /// <summary>
@@ -877,12 +889,4 @@ public class Common3DTIGUI
         return "unknown";
     }
 
-    public static bool GetBoolParameter(IAudioEffectPlugin plugin, string parameterName)
-    {
-        if (!plugin.GetFloatParameter(parameterName, out float value))
-        {
-            Debug.LogError($"Failed to get parameter {parameterName} from audio plugin.");
-        }
-        return value != 0.0f;
-    }
 }

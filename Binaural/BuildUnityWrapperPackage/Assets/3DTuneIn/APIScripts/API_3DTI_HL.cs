@@ -57,12 +57,12 @@ public class API_3DTI_HL : MonoBehaviour
     const float DEFAULT_FS_HZ = 0.0f;
 
     // Internal parameters for consistency with GUI
-    [HideInInspector]
+    //[HideInInspector]
     //public bool GLOBAL_LEFT_ON = false;                         // For internal use, DO NOT USE IT DIRECTLY
-    public bool GLOBAL_LEFT_ON { get { float v; return hlMixer.GetFloat("HL3DTI_Process_LeftOn", out v) && v > 0.0f; } }
+    //public bool GLOBAL_LEFT_ON { get { float v; return hlMixer.GetFloat("HL3DTI_Process_LeftOn", out v) && v > 0.0f; } }
 
-    [HideInInspector]
-    public bool GLOBAL_RIGHT_ON = false;                        // For internal use, DO NOT USE IT DIRECTLY
+    //[HideInInspector]
+    //public bool GLOBAL_RIGHT_ON = false;                        // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
     public float PARAM_CALIBRATION = DEFAULT_CALIBRATION;       // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
@@ -106,10 +106,10 @@ public class API_3DTI_HL : MonoBehaviour
     public bool PARAM_LEFT_TA_POSTLPF = true;                    // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
     public bool PARAM_RIGHT_TA_POSTLPF = true;                    // For internal use, DO NOT USE IT DIRECTLY
-    [HideInInspector]
-    public bool FS_LEFT_ON = false;                         // For internal use, DO NOT USE IT DIRECTLY
-    [HideInInspector]
-    public bool FS_RIGHT_ON = false;                        // For internal use, DO NOT USE IT DIRECTLY
+    //[HideInInspector]
+    //public bool FS_LEFT_ON = false;                         // For internal use, DO NOT USE IT DIRECTLY
+    //[HideInInspector]
+    //public bool FS_RIGHT_ON = false;                        // For internal use, DO NOT USE IT DIRECTLY
     //[HideInInspector]
     //public T_HLFrequencySmearingApproach PARAM_FREQUENCYSMEARING_APPROACH_LEFT = T_HLFrequencySmearingApproach.BAERMOORE;                         // For internal use, DO NOT USE IT DIRECTLY
     //[HideInInspector]
@@ -184,7 +184,7 @@ public class API_3DTI_HL : MonoBehaviour
         }
         else
         {
-            GLOBAL_RIGHT_ON = true;
+            //GLOBAL_RIGHT_ON = true;
             paramName += "Process_RightOn";
         }
 
@@ -215,7 +215,7 @@ public class API_3DTI_HL : MonoBehaviour
         }
         else
         {
-            GLOBAL_RIGHT_ON = false;
+            //GLOBAL_RIGHT_ON = false;
             paramName += "Process_RightOn";
         }
 
