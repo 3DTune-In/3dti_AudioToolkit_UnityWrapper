@@ -274,6 +274,10 @@ AudioMixerController:
     name: HL3DTI_HL_FS_Approach_Left
   - guid: 955d986d03afc7f4a9913a407b3c5ce8
     name: HL3DTI_HL_FS_Approach_Right
+  - guid: 0b16e56ec37e4314281ea86518999221
+    name: HL3DTI_HL_MBE_Approach_Left
+  - guid: 402289c894fc4904683731676549d724
+    name: HL3DTI_HL_MBE_Approach_Right
   m_AudioMixerGroupViews:
   - guids:
     - 839c4ed9355208546be95fc11b89d737
@@ -432,6 +436,7 @@ AudioMixerSnapshotController:
     9f89a8b8fa077ff4ead05be0710a24be: 30
     d9da3ab8457b9e24383b5ecba9087b52: 30
     52be5ab811cd2e84e86ce478c2c03d02: 1000
+    402289c894fc4904683731676549d724: 1
     2c1c43d84677b2047b6657a2f411b5bd: 50
     151d27d86548c2e4897961940baaac8b: -25
     88558ef82d271ae47a0e1a62ba8dd701: 0
@@ -500,6 +505,7 @@ AudioMixerSnapshotController:
     d3fc0f4e6b1bf2c4a9b94ae6938e082d: 1
     3a3fc15eaa93a23498deb7072c054dc0: 3.73
     94a8f16eb4b6173438035ec9ecf89bc5: 30
+    0b16e56ec37e4314281ea86518999221: 1
     54b73c6e134aac247a2d45aecd61fa07: 0
     f345317eab249ce43b1b42b09d019515: 0
     9b9fe67e660aba04caa5642537842bfd: -12
@@ -822,6 +828,10 @@ AudioMixerEffectController:
     m_GUID: a1a51556613f3bd41b03f2a05a310ecb
   - m_ParameterName: HLFSAPPROACHR
     m_GUID: 955d986d03afc7f4a9913a407b3c5ce8
+  - m_ParameterName: HLMBEAPPROACHL
+    m_GUID: 0b16e56ec37e4314281ea86518999221
+  - m_ParameterName: HLMBEAPPROACHR
+    m_GUID: 402289c894fc4904683731676549d724
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
   m_Bypass: 0

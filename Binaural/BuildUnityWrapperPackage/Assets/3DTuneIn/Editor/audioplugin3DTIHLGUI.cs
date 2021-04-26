@@ -81,6 +81,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     /// <returns></returns>
     public override bool OnGUI(IAudioEffectPlugin plugin)
     {
+        //return false;
         // Initialization (first run)
         //if (!initDone)
         //{
@@ -384,7 +385,8 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 GUILayout.EndVertical();
             }
             Common3DTIGUI.EndRightColumn();
-            EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_RIGHT_ON && HLAPI.MBE_RIGHT_ON);
+            //EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_RIGHT_ON && HLAPI.MBE_RIGHT_ON);
+            EditorGUI.EndDisabledGroup();
         }
         Common3DTIGUI.EndSection();
     }
@@ -511,6 +513,8 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     {
         Common3DTIGUI.BeginSection("3DTUNE-IN NON-LINEAR ATTENUATION");
         {
+            string[] approachLabels = new string[] { "Butterworth", "Gammatone" };
+
             // LEFT EAR
             //Common3DTIGUI.BeginLeftColumn(HLAPI.GLOBAL_LEFT_ON);
             EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_LEFT_ON);
@@ -529,6 +533,18 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 //Common3DTIGUI.CreatePopupStringSelector<API_3DTI_HL.T_MultibandExpanderApproach>("Approach", "Set the multiband expander algorithm for the left ear", ref approach);
                 //HLAPI.SetMultibandExpanderApproach(T_ear.LEFT, approach);
 
+                float approachFloat;
+                if (plugin.GetFloatParameter("HLMBEAPPROACHL", out approachFloat))
+                {
+                    int approachInt = Math.Max(0, Math.Min((int)approachFloat, approachLabels.Length));
+                    int newApproach = EditorGUILayout.Popup(new GUIContent("Approach", "Algorithm used for multiband expansion in left ear"), approachInt, approachLabels);
+
+                    if (approachInt != newApproach)
+                    {
+                        plugin.SetFloatParameter("HLMBEAPPROACHL", (float)newApproach);
+                    }
+                }
+
             }
             Common3DTIGUI.EndLeftColumn();
             EditorGUI.EndDisabledGroup();
@@ -543,6 +559,23 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 Common3DTIGUI.AddLabelToParameterGroup("Release");
                 Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_RIGHT_ATTACK, "HLATKR", "Attack", false, "ms", "Set attack time of envelope detectors in right ear");
                 Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_RIGHT_RELEASE, "HLRELR", "Release", false, "ms", "Set release time of envelope detectors in right ear");
+
+                //Common3DTIGUI.AddLabelToParameterGroup("Approach");
+                //API_3DTI_HL.T_MultibandExpanderApproach approach;
+                //HLAPI.GetMultibandExpanderApproach(T_ear.RIGHT, out approach);
+                //Common3DTIGUI.CreatePopupStringSelector<API_3DTI_HL.T_MultibandExpanderApproach>("Approach", "Set the multiband expander algorithm for the right ear", ref approach);
+                //HLAPI.SetMultibandExpanderApproach(T_ear.RIGHT, approach);
+                float approachFloat;
+                if (plugin.GetFloatParameter("HLMBEAPPROACHR", out approachFloat))
+                {
+                    int approachInt = Math.Max(0, Math.Min((int)approachFloat, approachLabels.Length));
+                    int newApproach = EditorGUILayout.Popup(new GUIContent("Approach", "Algorithm used for multiband expansion in right ear"), approachInt, approachLabels);
+
+                    if (approachInt != newApproach)
+                    {
+                        plugin.SetFloatParameter("HLMBEAPPROACHR", (float)newApproach);
+                    }
+                }
             }
             Common3DTIGUI.EndRightColumn();
             EditorGUI.EndDisabledGroup();
@@ -716,7 +749,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                         if (plugin.GetFloatParameter("HLFSAPPROACHL", out approachFloat))
                         {
                             int approachInt = Math.Max(0, Math.Min((int)approachFloat, options.Length));
-                            int newApproach = EditorGUILayout.Popup(new GUIContent("Approach", "Which algorithm is used for frequency"), approachInt, options);
+                            int newApproach = EditorGUILayout.Popup(new GUIContent("Approach", "Algorithm used for frequency smearing in left ear"), approachInt, options);
 
                             if (approachInt != newApproach)
                             {
