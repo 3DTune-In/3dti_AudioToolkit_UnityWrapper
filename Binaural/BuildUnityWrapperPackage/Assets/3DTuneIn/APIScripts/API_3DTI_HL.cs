@@ -30,20 +30,20 @@ public class API_3DTI_HL : MonoBehaviour
     //public static readonly ReadOnlyCollection<float> AUDIOMETRY_PRESET_MODERATE = new ReadOnlyCollection<float>(new[] { 32f, 32f, 37f, 42f, 53f, 56f, 56f, 56f, 56f });
     //public static readonly ReadOnlyCollection<float> AUDIOMETRY_PRESET_SEVERE = new ReadOnlyCollection<float>(new[] { 62f, 62f, 67f, 72f, 83f, 86f, 86f, 86f, 86f });
     //public static readonly ReadOnlyCollection<float> AUDIOMETRY_PRESET_NORMAL = new ReadOnlyCollection<float>(new[] { 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f });        
-    public enum T_HLBand { HZ_62 =0, HZ_125 =1, HZ_250 =2, HZ_500 = 3, HZ_1K = 4, HZ_2K = 5, HZ_4K = 6, HZ_8K =7, HZ_16K =8 };
+    public enum T_HLBand { HZ_62 = 0, HZ_125 = 1, HZ_250 = 2, HZ_500 = 3, HZ_1K = 4, HZ_2K = 5, HZ_4K = 6, HZ_8K = 7, HZ_16K = 8 };
     public const int NUM_HL_BANDS = 9;
-    public enum T_HLTemporalDistortionBandUpperLimit { HZ_UL_200 =0, HZ_UL_400 =1, HZ_UL_800 =2, HZ_UL_1600 =3, HZ_UL_3200 =4, HZ_UL_6400 =5, HZ_UL_12800 =6, HZ_UL_WRONG =-1 };
-    public enum T_HLClassificationScaleCurve {HL_CS_UNDEFINED = -1, HL_CS_NOLOSS = 0, HL_CS_A = 1, HL_CS_B = 2, HL_CS_C = 3, HL_CS_D = 4, HL_CS_E = 5, HL_CS_F = 6,
-                                              HL_CS_G = 7, HL_CS_H = 8, HL_CS_I = 9, HL_CS_J = 10, HL_CS_K = 11};      
-    public enum T_HLPreset { HL_PRESET_NORMAL =0, HL_PRESET_MILD =1, HL_PRESET_MODERATE =2, HL_PRESET_SEVERE =3, HL_PRESET_CUSTOM =-1};  
-    public enum T_HLClassificationScaleSeverity { HL_CS_SEVERITY_NOLOSS =0, HL_CS_SEVERITY_MILD =1, HL_CS_SEVERITY_MILDMODERATE =2,
-                                                  HL_CS_SEVERITY_MODERATE =3, HL_CS_SEVERITY_MODERATESEVERE =4, HL_CS_SEVERITY_SEVERE =5,
-                                                  HL_CS_SEVERITY_PROFOUND =6, HL_CS_SEVERITY_UNDEFINED = -1};
+    public enum T_HLTemporalDistortionBandUpperLimit { HZ_UL_200 = 0, HZ_UL_400 = 1, HZ_UL_800 = 2, HZ_UL_1600 = 3, HZ_UL_3200 = 4, HZ_UL_6400 = 5, HZ_UL_12800 = 6, HZ_UL_WRONG = -1 };
+    public enum T_HLClassificationScaleCurve { HL_CS_UNDEFINED = -1, HL_CS_NOLOSS = 0, HL_CS_A = 1, HL_CS_B = 2, HL_CS_C = 3, HL_CS_D = 4, HL_CS_E = 5, HL_CS_F = 6,
+        HL_CS_G = 7, HL_CS_H = 8, HL_CS_I = 9, HL_CS_J = 10, HL_CS_K = 11 };
+    public enum T_HLPreset { HL_PRESET_NORMAL = 0, HL_PRESET_MILD = 1, HL_PRESET_MODERATE = 2, HL_PRESET_SEVERE = 3, HL_PRESET_CUSTOM = -1 };
+    public enum T_HLClassificationScaleSeverity { HL_CS_SEVERITY_NOLOSS = 0, HL_CS_SEVERITY_MILD = 1, HL_CS_SEVERITY_MILDMODERATE = 2,
+        HL_CS_SEVERITY_MODERATE = 3, HL_CS_SEVERITY_MODERATESEVERE = 4, HL_CS_SEVERITY_SEVERE = 5,
+        HL_CS_SEVERITY_PROFOUND = 6, HL_CS_SEVERITY_UNDEFINED = -1 };
 
     public enum T_HLFrequencySmearingApproach : int { BAERMOORE, GRAF };
-    public enum T_MultibandExpanderApproach : int { 
-        Butterworth, 
-        Gammatone, 
+    public enum T_MultibandExpanderApproach : int {
+        Butterworth,
+        Gammatone,
     };
 
     // Internal constants
@@ -58,7 +58,9 @@ public class API_3DTI_HL : MonoBehaviour
 
     // Internal parameters for consistency with GUI
     [HideInInspector]
-    public bool GLOBAL_LEFT_ON = false;                         // For internal use, DO NOT USE IT DIRECTLY
+    //public bool GLOBAL_LEFT_ON = false;                         // For internal use, DO NOT USE IT DIRECTLY
+    public bool GLOBAL_LEFT_ON { get { float v; return hlMixer.GetFloat("HL3DTI_Process_LeftOn", out v) && v > 0.0f; } }
+
     [HideInInspector]
     public bool GLOBAL_RIGHT_ON = false;                        // For internal use, DO NOT USE IT DIRECTLY
     [HideInInspector]
@@ -177,7 +179,7 @@ public class API_3DTI_HL : MonoBehaviour
         string paramName = "HL3DTI_";
         if (ear == T_ear.LEFT)
         {
-            GLOBAL_LEFT_ON = true;
+            //GLOBAL_LEFT_ON = true;
             paramName += "Process_LeftOn";
         }
         else
@@ -208,7 +210,7 @@ public class API_3DTI_HL : MonoBehaviour
         string paramName = "HL3DTI_";
         if (ear == T_ear.LEFT)
         {
-            GLOBAL_LEFT_ON = false;
+            //GLOBAL_LEFT_ON = false;
             paramName += "Process_LeftOn";
         }
         else

@@ -524,13 +524,23 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     public void DrawHLEars(IAudioEffectPlugin plugin)
     {
         // LEFT EAR
-        if (Common3DTIGUI.BeginLeftColumn(plugin, ref HLAPI.GLOBAL_LEFT_ON, "LEFT EAR", "Enable left ear hearing loss", new List<string> { "HLONL" }, isStartingPlay))
+#warning("temp - part of removing HLAPI.GLOBAL_LEFT_ON parameter")
+
+        bool global_left_on;
+        {
+            float v;
+            bool ok = plugin.GetFloatParameter("HLONL", out v);
+            global_left_on = v > 0;
+        }
+        if (Common3DTIGUI.BeginLeftColumn(plugin, ref global_left_on, "LEFT EAR", "Enable left ear hearing loss", new List<string> { "HLONL" }, isStartingPlay))
         {
             //if (HLAPI.GLOBAL_LEFT_ON)
             //    HLAPI.EnableHearingLoss(T_ear.LEFT);
             //else
             //    HLAPI.DisableHearingLoss(T_ear.LEFT);
         }
+        plugin.SetFloatParameter("HLONL", global_left_on ? 1.0f : 0.0f);
+
         {
             // Draw ear icon
             GUILayout.BeginHorizontal();
@@ -570,66 +580,72 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
 
             // LEFT EAR
             //Common3DTIGUI.BeginLeftColumn(HLAPI.GLOBAL_LEFT_ON);
-            EditorGUI.BeginDisabledGroup(!HLAPI.GLOBAL_LEFT_ON);
-            Common3DTIGUI.BeginLeftColumn(plugin, ref HLAPI.MBE_LEFT_ON, "LEFT EAR", "Enable non-linear attenuation for left ear", new List<string> { "HLMBEONL" }, isStartingPlay, true);
-            if (HLAPI.MBE_LEFT_ON)
+            EditorGUI.BeginDisabledGroup(!Common3DTIGUI.GetBoolParameter(plugin, "HLONL"));
             {
-                Common3DTIGUI.AddLabelToParameterGroup("Attack");
-                //Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_LEFT_ATTACK, "HLATKL", "Attack", false, "ms", "Set attack time of envelope detectors in left ear");
+                //Common3DTIGUI.BeginLeftColumn(plugin, ref HLAPI.MBE_LEFT_ON, "LEFT EAR", "Enable non-linear attenuation for left ear", new List<string> { "HLMBEONL" }, isStartingPlay, true);
 
+                // MBE
+
+                Common3DTIGUI.BeginColumn(plugin, T_ear.LEFT, "HLMBEONL", "LEFT EAR", "Enable non-linear attenuation for left ear");
+                //if (HLAPI.MBE_LEFT_ON)
                 {
-                    // temp unfolding of function while we test removing the HLAPI copy variable
-                    // Get parameter info
-                    float newValue;
-                    float minValue, maxValue;
-                    plugin.GetFloatParameterInfo("HLATKL", out minValue, out maxValue, out newValue);
+                    Common3DTIGUI.AddLabelToParameterGroup("Attack");
+                    //Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_LEFT_ATTACK, "HLATKL", "Attack", false, "ms", "Set attack time of envelope detectors in left ear");
 
-                    // Set float resolution
-                    string resolution;
-                    if (false)
-                        resolution = "F2";
-                    else
-                        resolution = "F0";
-
-                    // Create slider and set value
-                    plugin.GetFloatParameter("HLATKL", out newValue);
-                    bool valueChanged;
-                    if (false)
-                        valueChanged = Common3DTIGUI.CreateCompactFloatSlider(ref newValue, "Attack", resolution, "ms", "Enable non-linear attenuation for left ear", minValue, maxValue);
-                    else
-                        valueChanged = Common3DTIGUI.CreateFloatSlider(ref newValue, "Attack", resolution, "ms", "Enable non-linear attenuation for left ear", minValue, maxValue);
-
-                    if (valueChanged)
                     {
-                        plugin.SetFloatParameter("HLATKL", newValue);
-                        //APIparam = newValue;
+                        // temp unfolding of function while we test removing the HLAPI copy variable
+                        // Get parameter info
+                        float newValue;
+                        float minValue, maxValue;
+                        plugin.GetFloatParameterInfo("HLATKL", out minValue, out maxValue, out newValue);
+
+                        // Set float resolution
+                        string resolution;
+                        if (false)
+                            resolution = "F2";
+                        else
+                            resolution = "F0";
+
+                        // Create slider and set value
+                        plugin.GetFloatParameter("HLATKL", out newValue);
+                        bool valueChanged;
+                        if (false)
+                            valueChanged = Common3DTIGUI.CreateCompactFloatSlider(ref newValue, "Attack", resolution, "ms", "Enable non-linear attenuation for left ear", minValue, maxValue);
+                        else
+                            valueChanged = Common3DTIGUI.CreateFloatSlider(ref newValue, "Attack", resolution, "ms", "Enable non-linear attenuation for left ear", minValue, maxValue);
+
+                        if (valueChanged)
+                        {
+                            plugin.SetFloatParameter("HLATKL", newValue);
+                            //APIparam = newValue;
+                        }
                     }
-                }
 
 
-                Common3DTIGUI.AddLabelToParameterGroup("Release");
-                Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_LEFT_RELEASE, "HLRELL", "Release", false, "ms", "Set release time of envelope detectors in left ear");
+                    Common3DTIGUI.AddLabelToParameterGroup("Release");
+                    Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_LEFT_RELEASE, "HLRELL", "Release", false, "ms", "Set release time of envelope detectors in left ear");
 
-                //Common3DTIGUI.AddLabelToParameterGroup("Approach");
-                //API_3DTI_HL.T_MultibandExpanderApproach approach;
-                //HLAPI.GetMultibandExpanderApproach(T_ear.LEFT, out approach);
-                //Common3DTIGUI.CreatePopupStringSelector<API_3DTI_HL.T_MultibandExpanderApproach>("Approach", "Set the multiband expander algorithm for the left ear", ref approach);
-                //HLAPI.SetMultibandExpanderApproach(T_ear.LEFT, approach);
+                    //Common3DTIGUI.AddLabelToParameterGroup("Approach");
+                    //API_3DTI_HL.T_MultibandExpanderApproach approach;
+                    //HLAPI.GetMultibandExpanderApproach(T_ear.LEFT, out approach);
+                    //Common3DTIGUI.CreatePopupStringSelector<API_3DTI_HL.T_MultibandExpanderApproach>("Approach", "Set the multiband expander algorithm for the left ear", ref approach);
+                    //HLAPI.SetMultibandExpanderApproach(T_ear.LEFT, approach);
 
-                float approachFloat;
-                if (plugin.GetFloatParameter("HLMBEAPPROACHL", out approachFloat))
-                {
-                    int approachInt = Math.Max(0, Math.Min((int)approachFloat, approachLabels.Length));
-                    int newApproach = EditorGUILayout.Popup(new GUIContent("Approach", "Algorithm used for multiband expansion in left ear"), approachInt, approachLabels);
-
-                    if (approachInt != newApproach)
+                    float approachFloat;
+                    if (plugin.GetFloatParameter("HLMBEAPPROACHL", out approachFloat))
                     {
-                        plugin.SetFloatParameter("HLMBEAPPROACHL", (float)newApproach);
-                    }
-                }
+                        int approachInt = Math.Max(0, Math.Min((int)approachFloat, approachLabels.Length));
+                        int newApproach = EditorGUILayout.Popup(new GUIContent("Approach", "Algorithm used for multiband expansion in left ear"), approachInt, approachLabels);
 
+                        if (approachInt != newApproach)
+                        {
+                            plugin.SetFloatParameter("HLMBEAPPROACHL", (float)newApproach);
+                        }
+                    }
+
+                }
+                Common3DTIGUI.EndLeftColumn();
             }
-            Common3DTIGUI.EndLeftColumn();
             EditorGUI.EndDisabledGroup();
 
             // RIGHT EAR

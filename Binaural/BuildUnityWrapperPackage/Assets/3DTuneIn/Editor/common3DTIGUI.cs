@@ -524,6 +524,42 @@ public class Common3DTIGUI
         return changed;
     }
 
+    // The column will be disabled unless both globalIsEnabledParameterName is true and the toggle box is checked.
+    public static void BeginColumn(IAudioEffectPlugin plugin, T_ear ear, string toggleBoxParameterName, string title, string tooltip)
+    {
+        ResetParameterGroup();
+        if (ear == T_ear.LEFT)
+        {
+            GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));                     // Begin section (ear pair)
+            GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(false));  // Begin column (left ear)                               
+
+        }
+        else
+        {
+            ResetParameterGroup();
+            GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(false));  // Begin column (right ear)
+        }
+
+        bool oldValue;
+        {
+            if (!plugin.GetFloatParameter(toggleBoxParameterName, out float v))
+            {
+                Debug.LogError($"Failed to get value for {toggleBoxParameterName} from plugin");
+            }
+            oldValue = v != 0.0f;
+        }
+
+
+        bool newValue = GUILayout.Toggle(oldValue, new GUIContent(title, tooltip), GUILayout.ExpandWidth(false));
+
+        if (oldValue != newValue)
+        {
+            plugin.SetFloatParameter(toggleBoxParameterName, newValue? 1.0f : 0.0f);
+        }
+        EditorGUI.BeginDisabledGroup(!newValue); // Begin DisabledGroup
+
+    }
+
     /// <summary>
     /// End column for left ear
     /// </summary>
@@ -839,5 +875,14 @@ public class Common3DTIGUI
         if (ear == T_ear.BOTH)
             return "both";
         return "unknown";
+    }
+
+    public static bool GetBoolParameter(IAudioEffectPlugin plugin, string parameterName)
+    {
+        if (!plugin.GetFloatParameter(parameterName, out float value))
+        {
+            Debug.LogError($"Failed to get parameter {parameterName} from audio plugin.");
+        }
+        return value != 0.0f;
     }
 }
