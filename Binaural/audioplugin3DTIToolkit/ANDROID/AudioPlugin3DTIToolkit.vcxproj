@@ -49,12 +49,14 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>Clang_3_8</PlatformToolset>
     <UseOfStl>c++_static</UseOfStl>
+    <AndroidAPILevel>android-22</AndroidAPILevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>Clang_3_8</PlatformToolset>
     <UseOfStl>c++_static</UseOfStl>
+    <AndroidAPILevel>android-22</AndroidAPILevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -118,13 +120,15 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <CppLanguageStandard>c++1y</CppLanguageStandard>
       <CompileAs>Default</CompileAs>
-      <AdditionalOptions>
-      </AdditionalOptions>
-      <AdditionalIncludeDirectories>$(VS_NdkRoot)/sources/android/support/include;..\..\..\3dti_AudioToolkit\3dti_Toolkit;..\..\..\3dti_AudioToolkit\3dti_ResourceManager;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\cereal\include;..\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>--sysroot="$(SYSROOT)"</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(VS_NdkRoot)/sources/android/support/include;..\..\..\3dti_AudioToolkit\3dti_Toolkit;..\..\..\3dti_AudioToolkit\3dti_ResourceManager;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\eigen;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\cereal\include;..\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>Enabled</ExceptionHandling>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PreprocessorDefinitions>DEBUG;AudioPlugin3DTIToolkit_EXPORTS;_3DTI_AXIS_CONVENTION_UNITY;_3DTI_ANGLE_CONVENTION_LISTEN;UNITY_ANDROID;UNITY_64;_3DTI_ANDROID_ERRORHANDLER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <Link>
+      <AdditionalOptions>--sysroot="$(SYSROOT)" %(AdditionalOptions)</AdditionalOptions>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -134,81 +138,110 @@
       <PreprocessorDefinitions>NDEBUG;AudioPlugin3DTIToolkit_EXPORTS;_3DTI_AXIS_CONVENTION_UNITY;_3DTI_ANGLE_CONVENTION_LISTEN;UNITY_ANDROID;UNITY_64;_3DTI_ANDROID_ERRORHANDLER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UndefineAllPreprocessorDefinitions>
       </UndefineAllPreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(VS_NdkRoot)/sources/android/support/include;..\..\..\3dti_AudioToolkit\3dti_Toolkit;..\..\..\3dti_AudioToolkit\3dti_ResourceManager;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\cereal\include;..\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(VS_NdkRoot)/sources/android/support/include;..\..\..\3dti_AudioToolkit\3dti_Toolkit;..\..\..\3dti_AudioToolkit\3dti_ResourceManager;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\eigen;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\cereal\include;..\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <CppLanguageStandard>c++1y</CppLanguageStandard>
+      <AdditionalOptions>--sysroot="$(SYSROOT)"</AdditionalOptions>
     </ClCompile>
+    <Link>
+      <AdditionalOptions>--sysroot="$(SYSROOT)" %(AdditionalOptions)</AdditionalOptions>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(VS_NdkRoot)/sources/android/support/include;..\..\..\3dti_AudioToolkit\3dti_Toolkit;..\..\..\3dti_AudioToolkit\3dti_ResourceManager;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\cereal\include;..\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(VS_NdkRoot)/sources/android/support/include;..\..\..\3dti_AudioToolkit\3dti_Toolkit;..\..\..\3dti_AudioToolkit\3dti_ResourceManager;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\eigen;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\cereal\include;..\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>Enabled</ExceptionHandling>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <CppLanguageStandard>c++1y</CppLanguageStandard>
       <PreprocessorDefinitions>DEBUG;AudioPlugin3DTIToolkit_EXPORTS;_3DTI_AXIS_CONVENTION_UNITY;_3DTI_ANGLE_CONVENTION_LISTEN;UNITY_ANDROID;_3DTI_ANDROID_ERRORHANDLER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>--sysroot="$(SYSROOT)"</AdditionalOptions>
     </ClCompile>
+    <Link>
+      <AdditionalOptions>--sysroot="$(SYSROOT)" %(AdditionalOptions)</AdditionalOptions>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(VS_NdkRoot)/sources/android/support/include;..\..\..\3dti_AudioToolkit\3dti_Toolkit;..\..\..\3dti_AudioToolkit\3dti_ResourceManager;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\cereal\include;..\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(VS_NdkRoot)/sources/android/support/include;..\..\..\3dti_AudioToolkit\3dti_Toolkit;..\..\..\3dti_AudioToolkit\3dti_ResourceManager;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\eigen;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\cereal\include;..\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>Enabled</ExceptionHandling>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <CppLanguageStandard>c++1y</CppLanguageStandard>
       <PreprocessorDefinitions>NDEBUG;AudioPlugin3DTIToolkit_EXPORTS;_3DTI_AXIS_CONVENTION_UNITY;_3DTI_ANGLE_CONVENTION_LISTEN;UNITY_ANDROID;_3DTI_ANDROID_ERRORHANDLER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>--sysroot="$(SYSROOT)"</AdditionalOptions>
     </ClCompile>
+    <Link>
+      <AdditionalOptions>--sysroot="$(SYSROOT)" %(AdditionalOptions)</AdditionalOptions>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(VS_NdkRoot)/sources/android/support/include;..\..\..\3dti_AudioToolkit\3dti_Toolkit;..\..\..\3dti_AudioToolkit\3dti_ResourceManager;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\cereal\include;..\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(VS_NdkRoot)/sources/android/support/include;..\..\..\3dti_AudioToolkit\3dti_Toolkit;..\..\..\3dti_AudioToolkit\3dti_ResourceManager;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\eigen;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\cereal\include;..\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>Enabled</ExceptionHandling>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <CppLanguageStandard>c++1y</CppLanguageStandard>
-      <PreprocessorDefinitions>DEBUG;AudioPlugin3DTIToolkit_EXPORTS;_3DTI_AXIS_CONVENTION_UNITY;_3DTI_ANGLE_CONVENTION_LISTEN;UNITY_ANDROID;UNITY_64;_3DTI_ANDROID_ERRORHANDLER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;AudioPlugin3DTIToolkit_EXPORTS;_3DTI_AXIS_CONVENTION_UNITY;_3DTI_ANGLE_CONVENTION_LISTEN;UNITY_ANDROID;__LP64__;_3DTI_ANDROID_ERRORHANDLER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>--sysroot="$(SYSROOT)"</AdditionalOptions>
     </ClCompile>
+    <Link>
+      <AdditionalOptions>--sysroot="$(SYSROOT)" %(AdditionalOptions)</AdditionalOptions>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(VS_NdkRoot)/sources/android/support/include;..\..\..\3dti_AudioToolkit\3dti_Toolkit;..\..\..\3dti_AudioToolkit\3dti_ResourceManager;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\cereal\include;..\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(VS_NdkRoot)/sources/android/support/include;..\..\..\3dti_AudioToolkit\3dti_Toolkit;..\..\..\3dti_AudioToolkit\3dti_ResourceManager;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\eigen;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\cereal\include;..\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>Enabled</ExceptionHandling>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <CppLanguageStandard>c++1y</CppLanguageStandard>
-      <PreprocessorDefinitions>NDEBUG;AudioPlugin3DTIToolkit_EXPORTS;_3DTI_AXIS_CONVENTION_UNITY;_3DTI_ANGLE_CONVENTION_LISTEN;UNITY_ANDROID;UNITY_64=1;_3DTI_ANDROID_ERRORHANDLER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;AudioPlugin3DTIToolkit_EXPORTS;_3DTI_AXIS_CONVENTION_UNITY;_3DTI_ANGLE_CONVENTION_LISTEN;UNITY_ANDROID;__LP64__;_3DTI_ANDROID_ERRORHANDLER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>--sysroot="$(SYSROOT)"</AdditionalOptions>
     </ClCompile>
+    <Link>
+      <AdditionalOptions>--sysroot="$(SYSROOT)" %(AdditionalOptions)</AdditionalOptions>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(VS_NdkRoot)/sources/android/support/include;..\..\..\3dti_AudioToolkit\3dti_Toolkit;..\..\..\3dti_AudioToolkit\3dti_ResourceManager;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\cereal\include;..\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(VS_NdkRoot)/sources/android/support/include;..\..\..\3dti_AudioToolkit\3dti_Toolkit;..\..\..\3dti_AudioToolkit\3dti_ResourceManager;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\eigen;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\cereal\include;..\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>Enabled</ExceptionHandling>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <CppLanguageStandard>c++1y</CppLanguageStandard>
       <PreprocessorDefinitions>DEBUG;AudioPlugin3DTIToolkit_EXPORTS;_3DTI_AXIS_CONVENTION_UNITY;_3DTI_ANGLE_CONVENTION_LISTEN;UNITY_ANDROID;_3DTI_ANDROID_ERRORHANDLER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>--sysroot="$(SYSROOT)"</AdditionalOptions>
     </ClCompile>
+    <Link>
+      <AdditionalOptions>--sysroot="$(SYSROOT)" %(AdditionalOptions)</AdditionalOptions>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PreprocessorDefinitions>NDEBUG;AudioPlugin3DTIToolkit_EXPORTS;_3DTI_AXIS_CONVENTION_UNITY;_3DTI_ANGLE_CONVENTION_LISTEN;UNITY_ANDROID;_3DTI_ANDROID_ERRORHANDLER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(VS_NdkRoot)/sources/android/support/include;..\..\..\3dti_AudioToolkit\3dti_Toolkit;..\..\..\3dti_AudioToolkit\3dti_ResourceManager;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\cereal\include;..\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(VS_NdkRoot)/sources/android/support/include;..\..\..\3dti_AudioToolkit\3dti_Toolkit;..\..\..\3dti_AudioToolkit\3dti_ResourceManager;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\eigen;..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\cereal\include;..\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CppLanguageStandard>c++1y</CppLanguageStandard>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <ExceptionHandling>Enabled</ExceptionHandling>
+      <AdditionalOptions>--sysroot="$(SYSROOT)"</AdditionalOptions>
     </ClCompile>
     <Link>
       <LibraryDependencies>$(StlLibraryName);%(LibraryDependencies);m</LibraryDependencies>
+      <AdditionalOptions>--sysroot="$(SYSROOT)" %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\HRTF\HRTFCereal.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\ILD\ILDCereal.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\BinauralSpatializer\3DTI_BinauralSpatializer.h" />
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\BinauralSpatializer\BRIR.h" />
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\BinauralSpatializer\Core.h" />
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\BinauralSpatializer\Environment.h" />
@@ -225,7 +258,6 @@
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Conventions.h" />
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Delay.h" />
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\DistanceAttenuator.h" />
-    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\DynamicCompressor.h" />
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\DynamicCompressorMono.h" />
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\DynamicCompressorStereo.h" />
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\DynamicExpanderMono.h" />
@@ -237,6 +269,8 @@
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\FiltersBank.h" />
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\FiltersChain.h" />
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Fprocessor.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\GammatoneFilter.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\GammatoneFilterBank.h" />
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Magnitudes.h" />
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\NoiseGenerator.h" />
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Profiler.h" />
@@ -244,16 +278,20 @@
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Transform.h" />
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\UPCEnvironment.h" />
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Vector3.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\3DTI_HAHLSimulator.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\BaerMooreFrequencySmearing.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\ButterworthMultibandExpander.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\ClassificationScaleHL.h" />
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\DynamicEqualizer.h" />
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\Fig6Algorithm.h" />
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\FrequencySmearing.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\GammatoneMultibandExpander.h" />
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\Graf3DTIFrequencySmearing.h" />
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\HearingAidSim.h" />
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\HearingLossSim.h" />
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\HighOrderButterworthFilter.h" />
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\MultibandExpander.h" />
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\TemporalDistortionSimulator.h" />
-    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\HRTF\HRTFCereal.h" />
-    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\ILD\ILDCereal.h" />
     <ClInclude Include="..\src\AudioPluginInterface.h" />
     <ClInclude Include="..\src\AudioPluginUtil.h" />
     <ClInclude Include="..\src\CommonUtils.h" />
@@ -262,6 +300,8 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\HRTF\HRTFCereal.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\ILD\ILDCereal.cpp" />
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\BinauralSpatializer\BRIR.cpp" />
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\BinauralSpatializer\Core.cpp" />
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\BinauralSpatializer\Environment.cpp" />
@@ -283,22 +323,26 @@
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\FiltersBank.cpp" />
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\FiltersChain.cpp" />
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Fprocessor.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\GammatoneFilter.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\GammatoneFilterBank.cpp" />
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Magnitudes.cpp" />
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\NoiseGenerator.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Profiler.cpp" />
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Quaternion.cpp" />
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Transform.cpp" />
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\UPCEnvironment.cpp" />
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Vector3.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\BaerMooreFrequencySmearing.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\ButterworthMultibandExpander.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\ClassificationScaleHL.cpp" />
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\DynamicEqualizer.cpp" />
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\Fig6Algorithm.cpp" />
-    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\FrequencySmearing.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\GammatoneMultibandExpander.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\Graf3DTIFrequencySmearing.cpp" />
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\HearingAidSim.cpp" />
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\HearingLossSim.cpp" />
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\HighOrderButteworthFilter.cpp" />
-    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\MultibandExpander.cpp" />
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\TemporalDistortionSimulator.cpp" />
-    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\HRTF\HRTFCereal.cpp" />
-    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\ILD\ILDCereal.cpp" />
     <ClCompile Include="..\src\AudioPluginUtil.cpp" />
     <ClCompile Include="..\src\effect3DTIHA.cpp" />
     <ClCompile Include="..\src\effect3DTIHL.cpp" />

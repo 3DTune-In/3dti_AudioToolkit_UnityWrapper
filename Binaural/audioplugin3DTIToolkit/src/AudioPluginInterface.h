@@ -56,7 +56,7 @@ typedef signed char SInt8;
 #endif
 
 #if UNITY_64
-#   if UNITY_LINUX
+#   if UNITY_LINUX || UNITY_ANDROID
 #       ifndef SInt32_defined
 #           define SInt32_defined
 typedef signed int SInt32;
