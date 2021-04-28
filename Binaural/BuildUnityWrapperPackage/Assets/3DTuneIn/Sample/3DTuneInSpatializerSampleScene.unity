@@ -862,9 +862,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0b0b66fe32e6446a7e3cb6e903d1b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HRTFFileName44: Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_512s_44100Hz.sofa.bytes
-  HRTFFileName48: Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_512s_48000Hz.sofa.bytes
-  HRTFFileName96: Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_512s_96000Hz.sofa.bytes
+  HRTFFileName44: Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_512s_44100Hz.3dti-hrtf.bytes
+  HRTFFileName48: Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_512s_48000Hz.3dti-hrtf.bytes
+  HRTFFileName96: Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_512s_96000Hz.3dti-hrtf.bytes
   ILDNearFieldFileName44: Data/HighQuality/ILD/NearFieldCompensation_ILD_44100.3dti-ild.bytes
   ILDNearFieldFileName48: Data/HighQuality/ILD/NearFieldCompensation_ILD_48000.3dti-ild.bytes
   ILDNearFieldFileName96: Data/HighQuality/ILD/NearFieldCompensation_ILD_96000.3dti-ild.bytes
@@ -902,8 +902,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hlMixer: {fileID: 24100000, guid: 02d04237d0308a14ea0c3b720849faae, type: 2}
-  GLOBAL_LEFT_ON: 1
-  GLOBAL_RIGHT_ON: 1
   PARAM_CALIBRATION: 100
   PARAM_AUDIOMETRY_LEFT:
   - 100
@@ -942,8 +940,6 @@ MonoBehaviour:
   PARAM_TA_LRSYNC_ON: 0
   PARAM_LEFT_TA_POSTLPF: 1
   PARAM_RIGHT_TA_POSTLPF: 1
-  FS_LEFT_ON: 1
-  FS_RIGHT_ON: 0
   PARAM_LEFT_FS_DOWN_SIZE: 150
   PARAM_LEFT_FS_UP_SIZE: 150
   PARAM_RIGHT_FS_DOWN_SIZE: 15
