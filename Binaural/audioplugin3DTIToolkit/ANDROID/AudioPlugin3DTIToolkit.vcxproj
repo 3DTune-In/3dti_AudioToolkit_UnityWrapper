@@ -38,25 +38,25 @@
     <ProjectGuid>{41d114cf-c808-4722-85f5-d1e1030b8ca8}</ProjectGuid>
     <Keyword>Android</Keyword>
     <RootNamespace>AudioPlugin3DTIToolkit</RootNamespace>
-    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+    <MinimumVisualStudioVersion>16.0</MinimumVisualStudioVersion>
     <ApplicationType>Android</ApplicationType>
-    <ApplicationTypeRevision>2.0</ApplicationTypeRevision>
+    <ApplicationTypeRevision>3.0</ApplicationTypeRevision>
     <ProjectName>AudioPlugin3DTIToolkit</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>Clang_3_8</PlatformToolset>
     <UseOfStl>c++_static</UseOfStl>
-    <AndroidAPILevel>android-22</AndroidAPILevel>
+    <AndroidAPILevel>android-26</AndroidAPILevel>
+    <PlatformToolset>Clang_5_0</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>Clang_3_8</PlatformToolset>
     <UseOfStl>c++_static</UseOfStl>
-    <AndroidAPILevel>android-22</AndroidAPILevel>
+    <AndroidAPILevel>android-26</AndroidAPILevel>
+    <PlatformToolset>Clang_5_0</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -188,9 +188,13 @@
       <PreprocessorDefinitions>DEBUG;AudioPlugin3DTIToolkit_EXPORTS;_3DTI_AXIS_CONVENTION_UNITY;_3DTI_ANGLE_CONVENTION_LISTEN;UNITY_ANDROID;__LP64__;_3DTI_ANDROID_ERRORHANDLER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>--sysroot="$(SYSROOT)"</AdditionalOptions>
     </ClCompile>
+    <Link />
     <Link>
-      <AdditionalOptions>--sysroot="$(SYSROOT)" %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>--sysroot="$(SysrootLink)" -lm %(AdditionalOptions)</AdditionalOptions>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /f /s /y $(TargetPath) $(ProjectDir)..\..\BuildUnityWrapperPackage\Assets\Plugins\Android\</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <ClCompile>
@@ -204,8 +208,11 @@
       <AdditionalOptions>--sysroot="$(SYSROOT)"</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalOptions>--sysroot="$(SYSROOT)" %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>--sysroot="$(SysrootLink)" -lm %(AdditionalOptions)</AdditionalOptions>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /f /s /y $(TargetPath) $(ProjectDir)..\..\BuildUnityWrapperPackage\Assets\Plugins\Android\</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>

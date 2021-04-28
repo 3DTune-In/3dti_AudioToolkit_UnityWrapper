@@ -315,6 +315,7 @@ loadedHRTF(false)
 	{
 		// Load HRTF
 		const string hrtfPath(spatializer().strHRTFpath);
+#ifdef UNITY_WIN
 		const string sofaExtension = ".sofa"s;
 		if (hrtfPath.size() >= sofaExtension.size() && hrtfPath.substr(hrtfPath.size() - sofaExtension.size()) == sofaExtension)
 		{
@@ -326,7 +327,9 @@ loadedHRTF(false)
 			}
 		}
 		// If not sofa file then assume its a 3dti-hrtf file
-		else if (!HRTF::CreateFrom3dti(spatializer().strHRTFpath, spatializer().listener))
+		else
+#endif
+			if (!HRTF::CreateFrom3dti(spatializer().strHRTFpath, spatializer().listener))
 		{
 			//TDebuggerResultStruct result = GET_LAST_RESULT_STRUCT();
 			//WriteLog(state, "ERROR TRYING TO LOAD HRTF!!! ", result.suggestion);
