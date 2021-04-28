@@ -1578,7 +1578,10 @@ enum
 }
 
 
-extern "C" UNITY_AUDIODSP_EXPORT_API int MyTestFunction(int value) {
-	std::cerr << "Test function called ("<<value<<")." << std::endl;
-	return value + 1;
-}
+//extern "C" UNITY_AUDIODSP_EXPORT_API bool HasSofaSupport() {
+//#ifdef UNITY_WIN
+//	return true;
+//#else
+//	return false;
+//#endif
+//}

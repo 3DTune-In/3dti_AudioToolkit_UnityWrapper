@@ -42,10 +42,10 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     bool playWasStarted = false;
 
 
-	//////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////
 
 
-	public static (string[] highQualityHRTFs, string[] highQualityILDs, string[] highPerformanceILDs) GetFilterBinaryPaths(TSampleRateEnum sampleRate)
+    public static (string[] highQualityHRTFs, string[] highQualityILDs, string[] highPerformanceILDs) GetFilterBinaryPaths(TSampleRateEnum sampleRate)
 	{
 		string sampleRateLabel =
 			sampleRate == TSampleRateEnum.K44 ? "44100"
@@ -53,7 +53,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 			: sampleRate == TSampleRateEnum.K96 ? "96000"
 			: "(unknown sample rate)";
 
-		string[] highPerformanceILDs = Resources.LoadAll<TextAsset>("Data/HighPerformance/ILD")
+        string[] highPerformanceILDs = Resources.LoadAll<TextAsset>("Data/HighPerformance/ILD")
 			.Where(x => x.name.Contains(sampleRateLabel))
 			.Select(item => item.name).ToArray();
 
@@ -203,7 +203,9 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             toolkit.SetSpatializationMode(toolkit.spatializationMode);
 
         Common3DTIGUI.SingleSpace();
-        
+
+        bool wasSofaFileSelected = toolkit.HRTFFileName44.EndsWith(".sofa.bytes") || toolkit.HRTFFileName48.EndsWith(".sofa.bytes") || toolkit.HRTFFileName96.EndsWith(".sofa.bytes");
+
         // HIGH PERFORMANCE MODE CONTROLS
         if (toolkit.spatializationMode ==  API_3DTI_Spatializer.SPATIALIZATION_MODE_HIGH_PERFORMANCE)
         {            
@@ -236,9 +238,15 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 			Common3DTIGUI.CreatePopupStringSelector("ILD 96kHz", "Select the ILD near field filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K96).highQualityILDs, ref toolkit.ILDNearFieldFileName96, "Data/HighQuality/ILD/", ".bytes");
 
 		}
+        bool isSofaFileSelected = toolkit.HRTFFileName44.EndsWith(".sofa.bytes") || toolkit.HRTFFileName48.EndsWith(".sofa.bytes") || toolkit.HRTFFileName96.EndsWith(".sofa.bytes");
 
-		// ITD:    
-		if (!(toolkit.spatializationMode == API_3DTI_Spatializer.SPATIALIZATION_MODE_NONE))
+        if (!wasSofaFileSelected && isSofaFileSelected)
+        {
+            Debug.Log("NB: SOFA HRTF files are only supported on Windows.");
+        }
+
+        // ITD:    
+            if (!(toolkit.spatializationMode == API_3DTI_Spatializer.SPATIALIZATION_MODE_NONE))
         {
             Common3DTIGUI.ResetParameterGroup();
             Common3DTIGUI.AddLabelToParameterGroup("Custom ITD");

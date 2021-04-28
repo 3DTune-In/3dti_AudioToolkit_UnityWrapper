@@ -15,6 +15,9 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     // INTERNAL VARIABLES
     /////////////////////////////////////////////////////////
 
+    /// Used for exposing and debugging;
+    bool showRawParameters = false;
+
     // Access to the HL API
     API_3DTI_HL HLAPI;
 
@@ -109,62 +112,64 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             playWasStarted = false;
         }
 
-        // This test code demonstrates that we can set parameters directly using the plugin and the mixer will update itself
-        EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Print HL3DTI_Attack_Left via mixer"))
-        {
-            float attackLeft;
-            if (HLAPI.hlMixer.GetFloat("HL3DTI_Attack_Left", out attackLeft))
-            {
-                Debug.Log($"Value of HL3DTI_Attack_Left is {attackLeft} from mixer");
-            }
-            else
-            {
-                Debug.Log("Failed to get value of HL3DTI_Attack_Left from mixer");
-            }
-        }
-        if (GUILayout.Button("Print HL3DTI_Attack_Left via plugin"))
-        {
-            float attackLeft;
-            if (plugin.GetFloatParameter("HLATKL", out attackLeft))
-            {
-                Debug.Log($"Value of HL3DTI_Attack_Left is {attackLeft} from plugin");
-            }
-            else
-            {
-                Debug.Log("Failed to get value of HL3DTI_Attack_Left from plugin");
-            }
-        }
+        //// This test code demonstrates that we can set parameters directly using the plugin and the mixer will update itself
+        //EditorGUILayout.BeginHorizontal();
+        //if (GUILayout.Button("Print HL3DTI_Attack_Left via mixer"))
+        //{
+        //    float attackLeft;
+        //    if (HLAPI.hlMixer.GetFloat("HL3DTI_Attack_Left", out attackLeft))
+        //    {
+        //        Debug.Log($"Value of HL3DTI_Attack_Left is {attackLeft} from mixer");
+        //    }
+        //    else
+        //    {
+        //        Debug.Log("Failed to get value of HL3DTI_Attack_Left from mixer");
+        //    }
+        //}
+        //if (GUILayout.Button("Print HL3DTI_Attack_Left via plugin"))
+        //{
+        //    float attackLeft;
+        //    if (plugin.GetFloatParameter("HLATKL", out attackLeft))
+        //    {
+        //        Debug.Log($"Value of HL3DTI_Attack_Left is {attackLeft} from plugin");
+        //    }
+        //    else
+        //    {
+        //        Debug.Log("Failed to get value of HL3DTI_Attack_Left from plugin");
+        //    }
+        //}
 
-        if (GUILayout.Button("Set HL3DTI_Attack_Left to 543 via mixer"))
-        {
-            if (HLAPI.hlMixer.SetFloat("HL3DTI_Attack_Left", 543))
-            {
-                Debug.Log($"Set HL3DTI_Attack_Left to 543 via mixer");
-            }
-            else
-            {
-                Debug.LogWarning("Failed to set HL3DTI_Attack_Left via mixer");
-            }
-        }
-        if (GUILayout.Button("Set HL3DTI_Attack_Left to 543 via plugin"))
-        {
-            if (plugin.SetFloatParameter("HLATKL", 543))
-            {
-                Debug.Log($"Set HL3DTI_Attack_Left to 543 via plugin");
-            }
-            else
-            {
-                Debug.LogWarning("Failed to set HL3DTI_Attack_Left via plugin");
-            }
-        }
-        EditorGUILayout.EndHorizontal();
+        //if (GUILayout.Button("Set HL3DTI_Attack_Left to 543 via mixer"))
+        //{
+        //    if (HLAPI.hlMixer.SetFloat("HL3DTI_Attack_Left", 543))
+        //    {
+        //        Debug.Log($"Set HL3DTI_Attack_Left to 543 via mixer");
+        //    }
+        //    else
+        //    {
+        //        Debug.LogWarning("Failed to set HL3DTI_Attack_Left via mixer");
+        //    }
+        //}
+        //if (GUILayout.Button("Set HL3DTI_Attack_Left to 543 via plugin"))
+        //{
+        //    if (plugin.SetFloatParameter("HLATKL", 543))
+        //    {
+        //        Debug.Log($"Set HL3DTI_Attack_Left to 543 via plugin");
+        //    }
+        //    else
+        //    {
+        //        Debug.LogWarning("Failed to set HL3DTI_Attack_Left via plugin");
+        //    }
+        //}
+        //EditorGUILayout.EndHorizontal();
 
         // DRAW AUDIOMETRY GUI
         Common3DTIGUI.Show3DTILogo();
+
         Common3DTIGUI.ShowGUITitle("AUDIOMETRY");
         Common3DTIGUI.SingleSpace();
         Common3DTIGUI.ShowAboutButton();
+        showRawParameters = GUILayout.Toggle(showRawParameters, new GUIContent("Show raw parameters", "Used for exposing parameters to the mixer and debugging"));
         Common3DTIGUI.SingleSpace();
 
         DrawCalibration(plugin);
@@ -198,8 +203,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         changingFSPresetLeft = false;
         changingFSPresetRight = false;
 
-        //return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG AND EXPOSING PARAMETERS)
-        return false;     // DO NOT SHOW DEFAULT CONTROLS
+        return showRawParameters;
     }
 
 

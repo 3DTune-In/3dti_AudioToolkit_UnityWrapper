@@ -862,7 +862,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0b0b66fe32e6446a7e3cb6e903d1b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HRTFFileName44: Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_512s_44100Hz.3dti-hrtf.bytes
+  HRTFFileName44: Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_128s_44100Hz.3dti-hrtf.bytes
   HRTFFileName48: Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_512s_48000Hz.3dti-hrtf.bytes
   HRTFFileName96: Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_512s_96000Hz.3dti-hrtf.bytes
   ILDNearFieldFileName44: Data/HighQuality/ILD/NearFieldCompensation_ILD_44100.3dti-ild.bytes
