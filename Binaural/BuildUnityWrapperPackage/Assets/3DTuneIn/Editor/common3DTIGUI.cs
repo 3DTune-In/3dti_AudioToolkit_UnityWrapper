@@ -375,7 +375,7 @@ public class Common3DTIGUI
         int defaultValue = (int)Enum.GetValues(typeof(T)).GetValue(0);
 
 
-        int newValue = (int)(object) EditorGUILayout.Popup(new GUIContent(title, tooltip), values.Contains(value) ? value : defaultValue, Enum.GetNames(typeof(T)), parameterLabelStyle, GUILayout.ExpandWidth(true));
+        int newValue = (int)(object) EditorGUILayout.Popup(new GUIContent(title, tooltip), values.Contains(value)? value : defaultValue, Enum.GetNames(typeof(T)));
         if (!Enum.IsDefined(typeof(T), newValue))
         {
             Debug.LogError($"Invalid value for {typeof(T)} received from popup: {newValue}.");
@@ -900,7 +900,9 @@ public class Common3DTIGUI
             GUILayout.EndHorizontal();
             
             variable = GUILayout.HorizontalSlider(variable, minValue, maxValue);
+            GUILayout.Space(singleSpace * 3);
         }
+
         GUILayout.EndVertical();
 
         return (variable != previousVar);
