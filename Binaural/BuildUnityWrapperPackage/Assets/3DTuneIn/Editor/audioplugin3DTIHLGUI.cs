@@ -548,7 +548,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     {
         Common3DTIGUI.BeginSection("3DTUNE-IN NON-LINEAR ATTENUATION");
         {
-            string[] approachLabels = new string[] { "Butterworth", "Gammatone" };
+            //string[] approachLabels = new string[] { "Butterworth", "Gammatone" };
 
             // LEFT EAR
             EditorGUI.BeginDisabledGroup(!plugin.GetBoolParameter("HLONL"));
@@ -557,35 +557,16 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
 
                 Common3DTIGUI.BeginColumn(plugin, T_ear.LEFT, "HLMBEONL", "LEFT EAR", "Enable non-linear attenuation for left ear");
                 {
+                    Common3DTIGUI.PluginEnumSelector<API_3DTI_HL.T_MultibandExpanderApproach>(plugin, "HLMBEAPPROACHL", "Approach", "Algorithm used for multiband expansion in left ear");
+
                     Common3DTIGUI.AddLabelToParameterGroup("Attack");
-
-                    {
-                        // Create slider and set value
-                       
-                        plugin.GetFloatParameterInfo("HLATKL", out float minValue, out float maxValue, out _);
-                        plugin.GetFloatParameter("HLATKL", out float newValue);
-                        bool valueChanged = Common3DTIGUI.CreateCompactFloatSlider(ref newValue, "Attack", "F0", "ms", "Enable non-linear attenuation for left ear", minValue, maxValue);
-                        if (valueChanged)
-                        {
-                            plugin.SetFloatParameter("HLATKL", newValue);
-                        }
-                    }
-
-
                     Common3DTIGUI.AddLabelToParameterGroup("Release");
+
+                    // This is the new approach we're moving towards, where there is no reference to HLAPI but everything done directly with the plugin
+                    Common3DTIGUI.CreatePluginParameterSlider(plugin, "HLATKL", "Attack", true, "ms", "Set attack time of envelope detectors in left ear");
+                    // This is the old approach being phased out.
                     Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_LEFT_RELEASE, "HLRELL", "Release", false, "ms", "Set release time of envelope detectors in left ear");
 
-                    float approachFloat;
-                    if (plugin.GetFloatParameter("HLMBEAPPROACHL", out approachFloat))
-                    {
-                        int approachInt = Math.Max(0, Math.Min((int)approachFloat, approachLabels.Length));
-                        int newApproach = EditorGUILayout.Popup(new GUIContent("Approach", "Algorithm used for multiband expansion in left ear"), approachInt, approachLabels);
-
-                        if (approachInt != newApproach)
-                        {
-                            plugin.SetFloatParameter("HLMBEAPPROACHL", (float)newApproach);
-                        }
-                    }
 
                 }
                 Common3DTIGUI.EndColumn(T_ear.LEFT);
@@ -596,22 +577,14 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             EditorGUI.BeginDisabledGroup(!plugin.GetBoolParameter("HLONR"));
             Common3DTIGUI.BeginColumn(plugin, T_ear.RIGHT, "HLMBEONR", "RIGHT EAR", "Enable non-linear attenuation for right ear");
             {
+                Common3DTIGUI.PluginEnumSelector<API_3DTI_HL.T_MultibandExpanderApproach>(plugin, "HLMBEAPPROACHR", "Approach", "Algorithm used for multiband expansion in right ear");
+
                 Common3DTIGUI.AddLabelToParameterGroup("Attack");
                 Common3DTIGUI.AddLabelToParameterGroup("Release");
                 Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_RIGHT_ATTACK, "HLATKR", "Attack", false, "ms", "Set attack time of envelope detectors in right ear");
                 Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_RIGHT_RELEASE, "HLRELR", "Release", false, "ms", "Set release time of envelope detectors in right ear");
 
-                float approachFloat;
-                if (plugin.GetFloatParameter("HLMBEAPPROACHR", out approachFloat))
-                {
-                    int approachInt = Math.Max(0, Math.Min((int)approachFloat, approachLabels.Length));
-                    int newApproach = EditorGUILayout.Popup(new GUIContent("Approach", "Algorithm used for multiband expansion in right ear"), approachInt, approachLabels);
 
-                    if (approachInt != newApproach)
-                    {
-                        plugin.SetFloatParameter("HLMBEAPPROACHR", (float)newApproach);
-                    }
-                }
             }
             Common3DTIGUI.EndColumn(T_ear.RIGHT);
             EditorGUI.EndDisabledGroup();
@@ -778,19 +751,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 {
                     Common3DTIGUI.SingleSpace();
                     GUILayout.BeginHorizontal();
-                    {
-                        float approachFloat;
-                        if (plugin.GetFloatParameter("HLFSAPPROACHL", out approachFloat))
-                        {
-                            int approachInt = Math.Max(0, Math.Min((int)approachFloat, options.Length));
-                            int newApproach = EditorGUILayout.Popup(new GUIContent("Approach", "Algorithm used for frequency smearing in left ear"), approachInt, options);
-
-                            if (approachInt != newApproach)
-                            {
-                                plugin.SetFloatParameter("HLFSAPPROACHL", (float) newApproach);
-                            }
-                        }
-                    }
+                    API_3DTI_HL.T_HLFrequencySmearingApproach approach = Common3DTIGUI.PluginEnumSelector<API_3DTI_HL.T_HLFrequencySmearingApproach>(plugin, "HLFSAPPROACHL", "Approach", "Algorithm used for frequency smearing in left ear");
                     GUILayout.EndHorizontal();
                     Common3DTIGUI.SingleSpace();
 
@@ -806,15 +767,10 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
 
                     // Downward
                     Common3DTIGUI.BeginSubsection("Downward smearing");
-                    API_3DTI_HL.T_HLFrequencySmearingApproach approach;
-                    bool isGrafApproach = HLAPI.GetFrequencySmearingApproach(T_ear.LEFT, out approach) && approach == API_3DTI_HL.T_HLFrequencySmearingApproach.GRAF;
-                    if (isGrafApproach)
-                    {
-                        Common3DTIGUI.AddLabelToParameterGroup("Buffer size");
-                    }
+                    Common3DTIGUI.AddLabelToParameterGroup("Buffer size");
                     Common3DTIGUI.AddLabelToParameterGroup("Smearing amount");
 
-                    if (isGrafApproach)
+                    if (approach == API_3DTI_HL.T_HLFrequencySmearingApproach.Graf)
                     {
                         float FloatDownwardSize = (float)HLAPI.PARAM_LEFT_FS_DOWN_SIZE;
                         if (Common3DTIGUI.CreatePluginParameterSlider(plugin, ref FloatDownwardSize, "HLFSDOWNSZL", "Buffer size", false, "samples", "Set buffer size for downward section of smearing window in left ear")) ResetAllFrequencySmearingButtonSelections(T_ear.LEFT);
@@ -826,13 +782,10 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
 
                     // Upward
                     Common3DTIGUI.BeginSubsection("Upward smearing");
-                    if (isGrafApproach)
-                    {
-                        Common3DTIGUI.AddLabelToParameterGroup("Buffer size");
-                    }
+                    Common3DTIGUI.AddLabelToParameterGroup("Buffer size");
                     Common3DTIGUI.AddLabelToParameterGroup("Smearing amount");
 
-                    if (isGrafApproach)
+                    if (approach == API_3DTI_HL.T_HLFrequencySmearingApproach.Graf)
                     {
                         float FloatUpwardSize = (float)HLAPI.PARAM_LEFT_FS_UP_SIZE;
                         if (Common3DTIGUI.CreatePluginParameterSlider(plugin, ref FloatUpwardSize, "HLFSUPSZL", "Buffer size", false, "samples", "Set buffer size for upward section of smearing window in left ear")) ResetAllFrequencySmearingButtonSelections(T_ear.LEFT);
@@ -855,25 +808,12 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 {
                     Common3DTIGUI.SingleSpace();
                     GUILayout.BeginHorizontal();
-                    {
-                        float approachFloat;
-                        if (plugin.GetFloatParameter("HLFSAPPROACHR", out approachFloat))
-                        {
-                            int approachInt = Math.Max(0, Math.Min((int)approachFloat, options.Length));
-                            int newApproach = EditorGUILayout.Popup(new GUIContent("Approach", "Which algorithm is used for frequency"), approachInt, options);
-
-                            if (approachInt != newApproach)
-                            {
-                                plugin.SetFloatParameter("HLFSAPPROACHR", (float)newApproach);
-                            }
-                        }
-                    }
-
+                    API_3DTI_HL.T_HLFrequencySmearingApproach approach = Common3DTIGUI.PluginEnumSelector<API_3DTI_HL.T_HLFrequencySmearingApproach>(plugin, "HLFSAPPROACHR", "Approach", "Algorithm used for frequency smearing in right ear");
                     GUILayout.EndHorizontal();
-                Common3DTIGUI.SingleSpace();
+                    Common3DTIGUI.SingleSpace();
 
-                // PRESETS
-                Common3DTIGUI.SingleSpace();
+                    // PRESETS
+                    Common3DTIGUI.SingleSpace();
                     GUILayout.BeginHorizontal();
                     {
                         if (DrawPresetButtonsForOneEar(plugin, T_ear.RIGHT, "Frequency Smearing", ref selectedFSPresetRight))
@@ -887,9 +827,12 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                     Common3DTIGUI.AddLabelToParameterGroup("Buffer size");
                     Common3DTIGUI.AddLabelToParameterGroup("Smearing amount");
 
-                    float FloatDownwardSize = (float)HLAPI.PARAM_RIGHT_FS_DOWN_SIZE;
-                    if (Common3DTIGUI.CreatePluginParameterSlider(plugin, ref FloatDownwardSize, "HLFSDOWNSZR", "Buffer size", false, "samples", "Set buffer size for downward section of smearing window in right ear")) ResetAllFrequencySmearingButtonSelections(T_ear.RIGHT);
-                    HLAPI.PARAM_RIGHT_FS_DOWN_SIZE = (int)FloatDownwardSize;
+                    if (approach == API_3DTI_HL.T_HLFrequencySmearingApproach.Graf)
+                    {
+                        float FloatDownwardSize = (float)HLAPI.PARAM_RIGHT_FS_DOWN_SIZE;
+                        if (Common3DTIGUI.CreatePluginParameterSlider(plugin, ref FloatDownwardSize, "HLFSDOWNSZR", "Buffer size", false, "samples", "Set buffer size for downward section of smearing window in right ear")) ResetAllFrequencySmearingButtonSelections(T_ear.RIGHT);
+                        HLAPI.PARAM_RIGHT_FS_DOWN_SIZE = (int)FloatDownwardSize;
+                    }
 
                     if (Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_RIGHT_FS_DOWN_HZ, "HLFSDOWNHZR", "Smearing amount", true, "Hz", "Set smearing amount (standard deviation, in Hz) for downward section of smearing window in right ear")) ResetAllFrequencySmearingButtonSelections(T_ear.RIGHT);
                     Common3DTIGUI.EndSubsection();
@@ -899,9 +842,12 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                     Common3DTIGUI.AddLabelToParameterGroup("Buffer size");
                     Common3DTIGUI.AddLabelToParameterGroup("Smearing amount");
 
-                    float FloatUpwardSize = (float)HLAPI.PARAM_RIGHT_FS_UP_SIZE;
-                    if (Common3DTIGUI.CreatePluginParameterSlider(plugin, ref FloatUpwardSize, "HLFSUPSZR", "Buffer size", false, "samples", "Set buffer size for upward section of smearing window in right ear")) ResetAllFrequencySmearingButtonSelections(T_ear.RIGHT);
-                    HLAPI.PARAM_RIGHT_FS_UP_SIZE = (int)FloatUpwardSize;
+                    if (approach == API_3DTI_HL.T_HLFrequencySmearingApproach.Graf)
+                    {
+                        float FloatUpwardSize = (float)HLAPI.PARAM_RIGHT_FS_UP_SIZE;
+                        if (Common3DTIGUI.CreatePluginParameterSlider(plugin, ref FloatUpwardSize, "HLFSUPSZR", "Buffer size", false, "samples", "Set buffer size for upward section of smearing window in right ear")) ResetAllFrequencySmearingButtonSelections(T_ear.RIGHT);
+                        HLAPI.PARAM_RIGHT_FS_UP_SIZE = (int)FloatUpwardSize;
+                    }
 
                     if (Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_RIGHT_FS_UP_HZ, "HLFSUPHZR", "Smearing amount", true, "Hz", "Set smearing amount (standard deviation, in Hz) for upward section of smearing window in right ear")) ResetAllFrequencySmearingButtonSelections(T_ear.RIGHT);
                     Common3DTIGUI.EndSubsection();

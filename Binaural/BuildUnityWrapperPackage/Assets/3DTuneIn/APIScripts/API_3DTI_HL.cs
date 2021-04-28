@@ -40,11 +40,14 @@ public class API_3DTI_HL : MonoBehaviour
         HL_CS_SEVERITY_MODERATE = 3, HL_CS_SEVERITY_MODERATESEVERE = 4, HL_CS_SEVERITY_SEVERE = 5,
         HL_CS_SEVERITY_PROFOUND = 6, HL_CS_SEVERITY_UNDEFINED = -1 };
 
-    public enum T_HLFrequencySmearingApproach : int { BAERMOORE, GRAF };
+    public enum T_HLFrequencySmearingApproach : int { 
+        BaerMoore, 
+        Graf 
+    };
     public enum T_MultibandExpanderApproach : int {
         Butterworth,
         Gammatone,
-    };
+    }; 
 
     // Internal constants
     const float DEFAULT_CALIBRATION = 100.0f;

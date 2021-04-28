@@ -5,8 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using System.Reflection;
 using API_3DTI_Common;
-
-
+using System.Linq;
 
 public class Common3DTIGUI
 {
@@ -362,6 +361,34 @@ public class Common3DTIGUI
 		target = newSelectedIndex < 0? "" : (prefix + items[newSelectedIndex] + suffix);
 		EditorGUILayout.EndHorizontal();
 	}
+
+    public static T PluginEnumSelector<T>(IAudioEffectPlugin plugin, string parameterName, string title, string tooltip) where T : Enum
+    {
+        int value = plugin.GetIntParameter(parameterName);
+        Debug.Assert(Enum.GetUnderlyingType(typeof(T)) == typeof(int));
+        int[] values = (int[])Enum.GetValues(typeof(T));
+        if (!values.Contains(value))
+        {
+            Debug.LogWarning($"Plugin returned invalid value for {parameterName}: {value}");
+        }
+
+        int defaultValue = (int)Enum.GetValues(typeof(T)).GetValue(0);
+
+
+        int newValue = (int)(object) EditorGUILayout.Popup(new GUIContent(title, tooltip), values.Contains(value) ? value : defaultValue, Enum.GetNames(typeof(T)), parameterLabelStyle, GUILayout.ExpandWidth(true));
+        if (!Enum.IsDefined(typeof(T), newValue))
+        {
+            Debug.LogError($"Invalid value for {typeof(T)} received from popup: {newValue}.");
+        }
+
+        if (value != newValue)
+        {
+            plugin.SetFloatParameter(parameterName, newValue);
+        }
+
+        return (T)(object)newValue;
+    }
+
 
     public static void CreatePopupStringSelector<T>(string titleText, string tooltip, ref T target) where T : System.Enum
     {
@@ -748,6 +775,55 @@ public class Common3DTIGUI
             return true;
         }
 
+        return false;
+    }
+
+    // Create slider for plugin parameter without requiring a reference to a variable mirroring the value.
+    public static bool CreatePluginParameterSlider(IAudioEffectPlugin plugin, string parameterName, string parameterTitle, bool isFloat, string units, string tooltip, bool isCompact=false)
+    {
+        // Get parameter info
+        plugin.GetFloatParameterInfo(parameterName, out float minValue, out float maxValue, out float _);
+        float oldValue = plugin.GetFloatParameter(parameterName);
+
+
+        SingleSpace();
+
+        float newValue;
+        string valueString;
+        if (isCompact)
+        {
+            GUILayout.BeginVertical(GUILayout.ExpandWidth(false));
+            GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));
+            GUILayout.Label(new GUIContent(parameterTitle, tooltip));
+            valueString = GUILayout.TextField(oldValue.ToString(isFloat ? "F2" : "F0", System.Globalization.CultureInfo.InvariantCulture), GUILayout.ExpandWidth(false));
+            GUILayout.Label(units, GUILayout.ExpandWidth(false));
+            GUILayout.EndHorizontal();
+            newValue = GUILayout.HorizontalSlider(oldValue, minValue, maxValue);
+
+            GUILayout.EndVertical();
+        }
+        else
+        {
+            GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));
+            GUILayout.Label(new GUIContent(parameterTitle, tooltip), parameterLabelStyle, GUILayout.Width(GetParameterLabelWidth()));
+            newValue = GUILayout.HorizontalSlider(oldValue, minValue, maxValue, GUILayout.ExpandWidth(true));
+            valueString = GUILayout.TextField(newValue.ToString(isFloat ? "F2" : "F0", System.Globalization.CultureInfo.InvariantCulture), GUILayout.ExpandWidth(false));
+            GUILayout.Label(units, GUILayout.ExpandWidth(false));
+            GUILayout.EndHorizontal();
+        }
+
+
+        bool parseOk = float.TryParse(valueString, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float parsedValueString);
+        if (parseOk)
+        {
+            newValue = parsedValueString;
+        }
+
+        if (newValue != oldValue)
+        {
+            plugin.SetFloatParameter(parameterName, newValue);
+            return true;
+        }
         return false;
     }
 
