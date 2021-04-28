@@ -12,6 +12,8 @@ using API_3DTI_Common;
 
 public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
 {
+    bool showRawParameters = false;
+
     // Access to the HA API
     API_3DTI_HA HAAPI;
     API_3DTI_HL HLAPI;
@@ -89,6 +91,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         Common3DTIGUI.ShowGUITitle("HEARING AID SIMULATION");
         Common3DTIGUI.SingleSpace();
         Common3DTIGUI.ShowAboutButton();
+        showRawParameters = GUILayout.Toggle(showRawParameters, new GUIContent("Show raw parameters", "Used for exposing parameters to the mixer and debugging"));
         Common3DTIGUI.SingleSpace();        
 
         DrawEars(plugin);
@@ -102,8 +105,9 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         // End starting play
         isStartingPlay = false;
 
+        return showRawParameters;
         //return true;        // SHOW ALSO DEFAULT CONTROLS (FOR DEBUG AND EXPOSING PARAMETERS)
-        return false;     // DO NOT SHOW DEFAULT CONTROLS
+        //return false;     // DO NOT SHOW DEFAULT CONTROLS
     }
 
     /// <summary>

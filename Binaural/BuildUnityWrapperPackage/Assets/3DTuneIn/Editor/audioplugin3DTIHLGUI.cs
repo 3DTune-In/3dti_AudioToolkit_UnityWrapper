@@ -560,31 +560,14 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                     Common3DTIGUI.AddLabelToParameterGroup("Attack");
 
                     {
-                        // temp unfolding of function while we test removing the HLAPI copy variable
-                        // Get parameter info
-                        float newValue;
-                        float minValue, maxValue;
-                        plugin.GetFloatParameterInfo("HLATKL", out minValue, out maxValue, out newValue);
-
-                        // Set float resolution
-                        string resolution;
-                        if (false)
-                            resolution = "F2";
-                        else
-                            resolution = "F0";
-
                         // Create slider and set value
-                        plugin.GetFloatParameter("HLATKL", out newValue);
-                        bool valueChanged;
-                        if (false)
-                            valueChanged = Common3DTIGUI.CreateCompactFloatSlider(ref newValue, "Attack", resolution, "ms", "Enable non-linear attenuation for left ear", minValue, maxValue);
-                        else
-                            valueChanged = Common3DTIGUI.CreateFloatSlider(ref newValue, "Attack", resolution, "ms", "Enable non-linear attenuation for left ear", minValue, maxValue);
-
+                       
+                        plugin.GetFloatParameterInfo("HLATKL", out float minValue, out float maxValue, out _);
+                        plugin.GetFloatParameter("HLATKL", out float newValue);
+                        bool valueChanged = Common3DTIGUI.CreateCompactFloatSlider(ref newValue, "Attack", "F0", "ms", "Enable non-linear attenuation for left ear", minValue, maxValue);
                         if (valueChanged)
                         {
                             plugin.SetFloatParameter("HLATKL", newValue);
-                            //APIparam = newValue;
                         }
                     }
 
