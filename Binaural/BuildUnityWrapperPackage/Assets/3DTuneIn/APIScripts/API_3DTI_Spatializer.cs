@@ -146,11 +146,11 @@ public class API_3DTI_Spatializer : MonoBehaviour
 	/// </summary>
 	void Start()
 	{
-		//StartBinauralSpatializer();
-		
+        StartBinauralSpatializer();
 
 
-		silentAudioSource = gameObject.AddComponent<AudioSource>();
+
+        silentAudioSource = gameObject.AddComponent<AudioSource>();
 		silentAudioSource.spatialize = true;
 		silentAudioSource.clip = Resources.Load<AudioClip>("silence");
 		if (silentAudioSource.clip == null)
