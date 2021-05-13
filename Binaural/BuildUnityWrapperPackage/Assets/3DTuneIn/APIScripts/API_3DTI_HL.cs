@@ -24,6 +24,42 @@ public class API_3DTI_HL : MonoBehaviour
     // Global variables
     public AudioMixer hlMixer;  // Drag&drop here the HAHL_3DTI_Mixer
 
+    public enum Parameter
+    {
+        [Parameter(pluginName = "HLONL", mixerName = "HL3DTI_Process_LeftOn", type = typeof(bool), label="Left ear", description="Enable HL processing for left ear")]
+        OnLeft,
+        [Parameter(pluginName = "HLONR", mixerName = "HL3DTI_Process_RightOn", type = typeof(bool), label ="Right ear", description ="Enable HL processing for right ear")]
+        OnRight,
+    };
+
+    public bool setParameter<T>(Parameter p, T value) where T: IConvertible
+    {
+        ParameterAttribute metadata = p.GetAttribute<ParameterAttribute>();
+        Debug.Assert(value.GetType() == metadata.type);
+
+        if (!hlMixer.SetFloat(metadata.mixerName, Convert.ToSingle(value)))
+        {
+            Debug.LogError($"Failed to set parameter {metadata.mixerName} on mixer {hlMixer}", this);
+            return false;
+        }
+        return true;
+    }
+
+    public T getParameter<T>(Parameter p) where T: IConvertible
+    {
+        ParameterAttribute metadata = p.GetAttribute<ParameterAttribute>();
+        Debug.Assert(typeof(T) == metadata.type);
+
+        float fValue;
+        if (!hlMixer.GetFloat(metadata.mixerName, out fValue))
+        {
+            Debug.LogError($"Failed to get parameter {metadata.mixerName} from mixer {hlMixer}", this);
+            return default(T);
+        }
+
+        return (T)Convert.ChangeType(fValue, typeof(T));
+    }
+
 
     // Public constant and type definitions 
     //public static readonly ReadOnlyCollection<float> AUDIOMETRY_PRESET_MILD = new ReadOnlyCollection<float>(new[] { 7f, 7f, 12f, 17f, 28f, 31f, 31f, 31f, 31f });
@@ -150,81 +186,74 @@ public class API_3DTI_HL : MonoBehaviour
     // Convenience method that avoids custom type allowing it to be connected to a UI element in the Editor.
     public void EnableHearingLossInBothEars(bool isEnabled)
     {
-        if (isEnabled)
-        {
-            EnableHearingLoss(T_ear.BOTH);
-        }
-        else
-        {
-            DisableHearingLoss(T_ear.BOTH);
-        }
+        setParameter(Parameter.OnLeft, isEnabled);
     }
 
     ///////////////////////////////////////
     // GLOBAL CONTROLS
     ///////////////////////////////////////
 
-    /// <summary>
-    /// Enable hearing loss for one ear
-    /// </summary>
-    /// <param name="ear"></param>
-    /// <returns></returns>
-    public bool EnableHearingLoss(T_ear ear)
-    {
-        // Both ears
-        if (ear == T_ear.BOTH)
-        {
-            if (!EnableHearingLoss(T_ear.LEFT)) return false;
-            return EnableHearingLoss(T_ear.RIGHT);
-        }
+    ///// <summary>
+    ///// Enable hearing loss for one ear
+    ///// </summary>
+    ///// <param name="ear"></param>
+    ///// <returns></returns>
+    //public bool EnableHearingLoss(T_ear ear)
+    //{
+    //    // Both ears
+    //    if (ear == T_ear.BOTH)
+    //    {
+    //        if (!EnableHearingLoss(T_ear.LEFT)) return false;
+    //        return EnableHearingLoss(T_ear.RIGHT);
+    //    }
 
-        // Set internal variables and build parameter string
-        string paramName = "HL3DTI_";
-        if (ear == T_ear.LEFT)
-        {
-            //GLOBAL_LEFT_ON = true;
-            paramName += "Process_LeftOn";
-        }
-        else
-        {
-            //GLOBAL_RIGHT_ON = true;
-            paramName += "Process_RightOn";
-        }
+    //    // Set internal variables and build parameter string
+    //    string paramName = "HL3DTI_";
+    //    if (ear == T_ear.LEFT)
+    //    {
+    //        //GLOBAL_LEFT_ON = true;
+    //        paramName += "Process_LeftOn";
+    //    }
+    //    else
+    //    {
+    //        //GLOBAL_RIGHT_ON = true;
+    //        paramName += "Process_RightOn";
+    //    }
 
-        // Send command
-        return hlMixer.SetFloat(paramName, CommonFunctions.Bool2Float(true));
-    }
+    //    // Send command
+    //    return hlMixer.SetFloat(paramName, CommonFunctions.Bool2Float(true));
+    //}
 
-    /// <summary>
-    /// Disable hearing loss for one ear
-    /// </summary>
-    /// <param name="ear"></param>
-    /// <returns></returns>
-    public bool DisableHearingLoss(T_ear ear)
-    {
-        // Both ears
-        if (ear == T_ear.BOTH)
-        {
-            if (!DisableHearingLoss(T_ear.LEFT)) return false;
-            return DisableHearingLoss(T_ear.RIGHT);
-        }
+    ///// <summary>
+    ///// Disable hearing loss for one ear
+    ///// </summary>
+    ///// <param name="ear"></param>
+    ///// <returns></returns>
+    //public bool DisableHearingLoss(T_ear ear)
+    //{
+    //    // Both ears
+    //    if (ear == T_ear.BOTH)
+    //    {
+    //        if (!DisableHearingLoss(T_ear.LEFT)) return false;
+    //        return DisableHearingLoss(T_ear.RIGHT);
+    //    }
 
-        // Set internal variables and build parameter string
-        string paramName = "HL3DTI_";
-        if (ear == T_ear.LEFT)
-        {
-            //GLOBAL_LEFT_ON = false;
-            paramName += "Process_LeftOn";
-        }
-        else
-        {
-            //GLOBAL_RIGHT_ON = false;
-            paramName += "Process_RightOn";
-        }
+    //    // Set internal variables and build parameter string
+    //    string paramName = "HL3DTI_";
+    //    if (ear == T_ear.LEFT)
+    //    {
+    //        //GLOBAL_LEFT_ON = false;
+    //        paramName += "Process_LeftOn";
+    //    }
+    //    else
+    //    {
+    //        //GLOBAL_RIGHT_ON = false;
+    //        paramName += "Process_RightOn";
+    //    }
 
-        // Send command
-        return hlMixer.SetFloat(paramName, CommonFunctions.Bool2Float(false));
-    }
+    //    // Send command
+    //    return hlMixer.SetFloat(paramName, CommonFunctions.Bool2Float(false));
+    //}
 
     /// <summary>
     /// Set calibration to allow conversion between dBSPL and dBHL to dBFS (internally used by the hearing loss simulator)

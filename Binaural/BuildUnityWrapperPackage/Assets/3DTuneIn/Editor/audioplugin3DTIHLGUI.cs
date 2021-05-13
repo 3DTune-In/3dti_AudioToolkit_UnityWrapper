@@ -518,7 +518,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     public void DrawHLEars(IAudioEffectPlugin plugin)
     {
         // LEFT EAR
-        Common3DTIGUI.BeginColumn(plugin, T_ear.LEFT, "HLONL", "LEFT EAR", "Enable left ear hearing loss");
+        Common3DTIGUI.BeginColumn(plugin, T_ear.LEFT, API_3DTI_HL.Parameter.OnLeft);
         {
             // Draw ear icon
             GUILayout.BeginHorizontal();
@@ -529,7 +529,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         Common3DTIGUI.EndColumn(T_ear.LEFT);
 
         // RIGHT EAR
-        Common3DTIGUI.BeginColumn(plugin, T_ear.RIGHT, "HLONR", "RIGHT EAR", "Enable right ear hearing loss");
+        Common3DTIGUI.BeginColumn(plugin, T_ear.RIGHT, API_3DTI_HL.Parameter.OnRight);
         {
             // Draw ear icon
             GUILayout.BeginHorizontal();

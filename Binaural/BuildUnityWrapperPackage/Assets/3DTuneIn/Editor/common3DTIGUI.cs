@@ -551,6 +551,27 @@ public class Common3DTIGUI
         return changed;
     }
 
+    public static void BeginColumn<ParameterT>(IAudioEffectPlugin plugin, T_ear ear, ParameterT toggleBoxParameter) where ParameterT : Enum
+    {
+        ResetParameterGroup();
+        if (ear == T_ear.LEFT)
+        {
+            GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));                     // Begin section (ear pair)
+            GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(false));  // Begin column (left ear)                               
+
+        }
+        else
+        {
+            ResetParameterGroup();
+            GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(false));  // Begin column (right ear)
+        }
+
+        bool isEnabled = Convert.ToBoolean(CreateControl(plugin, toggleBoxParameter));
+
+        EditorGUI.BeginDisabledGroup(!isEnabled); // Begin DisabledGroup
+
+    }
+
     public static void BeginColumn(IAudioEffectPlugin plugin, T_ear ear, string toggleBoxParameterName, string title, string tooltip)
     {
         ResetParameterGroup();
@@ -777,6 +798,103 @@ public class Common3DTIGUI
 
         return false;
     }
+
+
+    // Create a control for a parameter. This returns the raw float value of the parameter's current value.
+    public static float CreateControl<T>(IAudioEffectPlugin plugin, T parameter, bool isCompact=false) where T : Enum
+    {
+        ParameterAttribute p = parameter.GetAttribute<ParameterAttribute>();
+        if (p == null)
+        {
+            throw new Exception($"Failed to find ParameterAttribute for parameter {parameter}");
+        }
+
+
+
+        SingleSpace();
+
+        if (p.type == typeof(float) || p.type==typeof(int))
+        {
+            // Get parameter info
+            plugin.GetFloatParameterInfo(p.pluginName, out float minValue, out float maxValue, out float _);
+
+            float oldValue = plugin.GetFloatParameter(p.pluginName);
+            float newValue;
+            string valueString;
+            if (isCompact)
+            {
+                GUILayout.BeginVertical(GUILayout.ExpandWidth(false));
+                GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));
+                GUILayout.Label(new GUIContent(p.label, p.description));
+                valueString = GUILayout.TextField(oldValue.ToString(p.type==typeof(float) ? "F2" : "F0", System.Globalization.CultureInfo.InvariantCulture), GUILayout.ExpandWidth(false));
+                GUILayout.Label(p.units, GUILayout.ExpandWidth(false));
+                GUILayout.EndHorizontal();
+                newValue = GUILayout.HorizontalSlider(oldValue, minValue, maxValue);
+
+                GUILayout.EndVertical();
+            }
+            else
+            {
+                GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));
+                GUILayout.Label(new GUIContent(p.label, p.description), parameterLabelStyle, GUILayout.Width(GetParameterLabelWidth()));
+                newValue = GUILayout.HorizontalSlider(oldValue, minValue, maxValue, GUILayout.ExpandWidth(true));
+                valueString = GUILayout.TextField(newValue.ToString(p.type==typeof(float) ? "F2" : "F0", System.Globalization.CultureInfo.InvariantCulture), GUILayout.ExpandWidth(false));
+                GUILayout.Label(p.units, GUILayout.ExpandWidth(false));
+                GUILayout.EndHorizontal();
+            }
+
+            bool parseOk = float.TryParse(valueString, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float parsedValueString);
+            if (parseOk)
+            {
+                newValue = parsedValueString;
+            }
+
+            if (newValue != oldValue)
+            {
+                plugin.SetFloatParameter(p.pluginName, newValue);
+            }
+            return newValue;
+        }
+        else if (p.type == typeof(bool))
+        {
+            bool oldValue = plugin.GetBoolParameter(p.pluginName);
+            bool newValue = GUILayout.Toggle(oldValue, new GUIContent(p.label, p.description), GUILayout.ExpandWidth(false));
+            if (newValue != oldValue)
+            {
+                bool setOK = plugin.SetFloatParameter(p.pluginName, Convert.ToSingle(newValue));
+                Debug.Assert(setOK);
+            }
+            return Convert.ToSingle(newValue);
+        }
+        else if (p.type.IsSubclassOf(typeof(Enum)))
+        {
+            int value = plugin.GetIntParameter(p.pluginName);
+            Debug.Assert(Enum.GetUnderlyingType(p.type) == typeof(int));
+            int[] values = (int[])Enum.GetValues(p.type);
+            if (!values.Contains(value))
+            {
+                Debug.LogWarning($"Plugin returned invalid value for {p.label}: {value}");
+            }
+
+            int defaultValue = (int)Enum.GetValues(p.type).GetValue(0);
+
+            int newValue = (int)(object)EditorGUILayout.Popup(new GUIContent(p.label, p.description), values.Contains(value) ? value : defaultValue, Enum.GetNames(p.type));
+            Debug.Assert(Enum.IsDefined(p.type, newValue));
+
+            if (value != newValue)
+            {
+                bool setOK = plugin.SetFloatParameter(p.pluginName, newValue);
+                Debug.Assert(setOK);
+            }
+
+            return Convert.ToSingle(newValue);
+        }
+        else
+        {
+            throw new Exception($"Cannot create GUI control for Parameter of type {p.type}.");
+        }
+    }
+
 
     // Create slider for plugin parameter without requiring a reference to a variable mirroring the value.
     public static bool CreatePluginParameterSlider(IAudioEffectPlugin plugin, string parameterName, string parameterTitle, bool isFloat, string units, string tooltip, bool isCompact=false)
