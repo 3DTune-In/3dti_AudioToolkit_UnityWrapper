@@ -29,13 +29,7 @@ public class API_3DTI_HL : MonoBehaviour
     public const int NumMultibandExpansionBands = 9;
     public enum Parameter
     {
-        //[Parameter(pluginName = "HLONL", mixerName = "HL3DTI_Process_LeftOn", type = typeof(bool), label="Left ear", description="Enable HL processing for left ear")]
-        //OnLeft,
-        //[Parameter(pluginName = "HLONR", mixerName = "HL3DTI_Process_RightOn", type = typeof(bool), label ="Right ear", description ="Enable HL processing for right ear")]
-        //OnRight,
-
-
-        [Parameter(pluginNameLeft = "HLONL", pluginNameRight = "HLONR", mixerNameLeft = "HL3DTI_Process_LeftOn", mixerNameRight = "HL3DTI_Process_RightOn", label = "Left ear enabled", description = "Switch on hearing loss simulation", type = typeof(bool))]
+        [Parameter(pluginNameLeft = "HLONL", pluginNameRight = "HLONR", mixerNameLeft = "HL3DTI_Process_LeftOn", mixerNameRight = "HL3DTI_Process_RightOn", label = "Hearing loss enabled", description = "Switch on hearing loss simulation", type = typeof(bool))]
         HLOn,
         [Parameter(pluginNameLeft = "HLCAL", pluginNameRight = "HLCAL", mixerNameLeft = "HL3DTI_Calibration", mixerNameRight = "HL3DTI_Calibration", units = "dBSPL", label = "Calibration", description = "Calibration: dBSPL equivalent to 0 dBFS", type = typeof(bool))]
         Calibration,
@@ -205,10 +199,10 @@ public class API_3DTI_HL : MonoBehaviour
     //public bool GLOBAL_RIGHT_ON = false;                        // For internal use, DO NOT USE IT DIRECTLY
     //[HideInInspector]
     //public float PARAM_CALIBRATION = DEFAULT_CALIBRATION;       // For internal use, DO NOT USE IT DIRECTLY
-    [HideInInspector]
-    public float[] PARAM_AUDIOMETRY_LEFT = new float[9] { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };  // For internal use, DO NOT USE IT DIRECTLY
-    [HideInInspector]
-    public float[] PARAM_AUDIOMETRY_RIGHT = new float[9] { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }; // For internal use, DO NOT USE IT DIRECTLY
+    //[HideInInspector]
+    //public float[] PARAM_AUDIOMETRY_LEFT = new float[9] { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };  // For internal use, DO NOT USE IT DIRECTLY
+    //[HideInInspector]
+    //public float[] PARAM_AUDIOMETRY_RIGHT = new float[9] { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }; // For internal use, DO NOT USE IT DIRECTLY
     //[HideInInspector]
     //public float PARAM_LEFT_ATTACK = DEFAULT_ATTACK;            // For internal use, DO NOT USE IT DIRECTLY
     //[HideInInspector]

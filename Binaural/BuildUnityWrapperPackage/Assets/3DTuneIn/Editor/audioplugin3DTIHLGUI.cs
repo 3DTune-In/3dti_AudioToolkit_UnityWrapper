@@ -358,56 +358,65 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     {
         Common3DTIGUI.BeginSection("FINE ADJUSTMENT");
         {
-            // LEFT EAR
-            EditorGUI.BeginDisabledGroup(!(plugin.GetBoolParameter("HLONL") && plugin.GetBoolParameter("HLMBEONL")));
-            Common3DTIGUI.BeginLeftColumn(true);
+            foreach (T_ear ear in new T_ear[] { T_ear.LEFT, T_ear.RIGHT })
             {
-                Common3DTIGUI.AddLabelToParameterGroup("62.5 Hz");
-                Common3DTIGUI.AddLabelToParameterGroup("125 Hz");
-                Common3DTIGUI.AddLabelToParameterGroup("250 Hz");
-                Common3DTIGUI.AddLabelToParameterGroup("500 Hz");
-                Common3DTIGUI.AddLabelToParameterGroup("1 KHz");
-                Common3DTIGUI.AddLabelToParameterGroup("2 KHz");
-                Common3DTIGUI.AddLabelToParameterGroup("4 KHz");
-                Common3DTIGUI.AddLabelToParameterGroup("8 KHz");
-                Common3DTIGUI.AddLabelToParameterGroup("16 KHz");
-                for (int i=0; i< API_3DTI_HL.NumMultibandExpansionBands; i++)
+                // LEFT EAR
+                //EditorGUI.BeginDisabledGroup(!(plugin.GetBoolParameter("HLONL") && plugin.GetBoolParameter("HLMBEONL")));
+                EditorGUI.BeginDisabledGroup(!(plugin.GetParameter<Parameter, bool>(HLOn, ear) && plugin.GetParameter<Parameter, bool>(MultibandExpansionOn, ear)));
+                //Common3DTIGUI.BeginLeftColumn(true);
+                //Common3DTIGUI.BeginColumn(ear);
+                if (ear == T_ear.LEFT)
+                    BeginLeftColumn(true);
+                else
+                    BeginRightColumn(true);
                 {
-                    if (CreateControl(plugin, MultibandExpansionBand0 + i, T_ear.LEFT))
+                    Common3DTIGUI.AddLabelToParameterGroup("62.5 Hz");
+                    Common3DTIGUI.AddLabelToParameterGroup("125 Hz");
+                    Common3DTIGUI.AddLabelToParameterGroup("250 Hz");
+                    Common3DTIGUI.AddLabelToParameterGroup("500 Hz");
+                    Common3DTIGUI.AddLabelToParameterGroup("1 KHz");
+                    Common3DTIGUI.AddLabelToParameterGroup("2 KHz");
+                    Common3DTIGUI.AddLabelToParameterGroup("4 KHz");
+                    Common3DTIGUI.AddLabelToParameterGroup("8 KHz");
+                    Common3DTIGUI.AddLabelToParameterGroup("16 KHz");
+                    for (int i = 0; i < API_3DTI_HL.NumMultibandExpansionBands; i++)
                     {
-                        ResetAllAudiometryButtonSelections(T_ear.LEFT);
+                        if (CreateControl(plugin, MultibandExpansionBand0 + i, ear))
+                        {
+                            ResetAllAudiometryButtonSelections(ear);
+                        }
                     }
-                }
-               
-            }
-            Common3DTIGUI.EndLeftColumn();
-            EditorGUI.EndDisabledGroup();
 
-            // RIGHT EAR
-            EditorGUI.BeginDisabledGroup(!(plugin.GetBoolParameter("HLONR") && plugin.GetBoolParameter("HLMBEONR")));
-            Common3DTIGUI.BeginRightColumn(true);
-            {
-                Common3DTIGUI.AddLabelToParameterGroup("62.5 Hz");
-                Common3DTIGUI.AddLabelToParameterGroup("125 Hz");
-                Common3DTIGUI.AddLabelToParameterGroup("250 Hz");
-                Common3DTIGUI.AddLabelToParameterGroup("500 Hz");
-                Common3DTIGUI.AddLabelToParameterGroup("1 KHz");
-                Common3DTIGUI.AddLabelToParameterGroup("2 KHz");
-                Common3DTIGUI.AddLabelToParameterGroup("4 KHz");
-                Common3DTIGUI.AddLabelToParameterGroup("8 KHz");
-                Common3DTIGUI.AddLabelToParameterGroup("16 KHz");
-                for (int i = 0; i < API_3DTI_HL.NumMultibandExpansionBands; i++)
-                {
-                    if (CreateControl(plugin, MultibandExpansionBand0 + i, T_ear.RIGHT))
-                    {
-                        ResetAllAudiometryButtonSelections(T_ear.RIGHT);
-                    }
                 }
-              
+                Common3DTIGUI.EndColumn(ear);
+                //Common3DTIGUI.EndLeftColumn();
+                EditorGUI.EndDisabledGroup();
             }
-            Common3DTIGUI.EndRightColumn();
+            //// RIGHT EAR
+            //EditorGUI.BeginDisabledGroup(!(plugin.GetBoolParameter("HLONR") && plugin.GetBoolParameter("HLMBEONR")));
+            //Common3DTIGUI.BeginRightColumn(true);
+            //{
+            //    Common3DTIGUI.AddLabelToParameterGroup("62.5 Hz");
+            //    Common3DTIGUI.AddLabelToParameterGroup("125 Hz");
+            //    Common3DTIGUI.AddLabelToParameterGroup("250 Hz");
+            //    Common3DTIGUI.AddLabelToParameterGroup("500 Hz");
+            //    Common3DTIGUI.AddLabelToParameterGroup("1 KHz");
+            //    Common3DTIGUI.AddLabelToParameterGroup("2 KHz");
+            //    Common3DTIGUI.AddLabelToParameterGroup("4 KHz");
+            //    Common3DTIGUI.AddLabelToParameterGroup("8 KHz");
+            //    Common3DTIGUI.AddLabelToParameterGroup("16 KHz");
+            //    for (int i = 0; i < API_3DTI_HL.NumMultibandExpansionBands; i++)
+            //    {
+            //        if (CreateControl(plugin, MultibandExpansionBand0 + i, T_ear.RIGHT))
+            //        {
+            //            ResetAllAudiometryButtonSelections(T_ear.RIGHT);
+            //        }
+            //    }
+              
+            //}
+            //Common3DTIGUI.EndRightColumn();
         }
-        EditorGUI.EndDisabledGroup();
+        //EditorGUI.EndDisabledGroup();
         Common3DTIGUI.EndSection();
     }
 
@@ -417,6 +426,17 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     /// <param name="plugin"></param>
     public void DrawHLEars(IAudioEffectPlugin plugin)
     {
+        //DrawColumnForEachEar(plugin, null, new Parameter[] { }, null, (ear) => {
+        //    // Draw ear icon
+        //    //GUILayout.BeginVertical(GUILayout.ExpandWidth(false));
+        //    //GUILayout.BeginHorizontal();
+        //    Common3DTIGUI.DrawEar(ear);
+        //    GUILayout.Label("", GUILayout.ExpandWidth(true));
+        //    //GUILayout.EndHorizontal();
+        //    //GUILayout.EndVertical();
+        //    return false; 
+        //});
+
         // LEFT EAR
         Common3DTIGUI.BeginColumn(plugin, T_ear.LEFT, API_3DTI_HL.Parameter.HLOn);
         {
@@ -446,34 +466,40 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     /// <param name="plugin"></param>
     public void DrawNonLinearAttenuation(IAudioEffectPlugin plugin)
     {
-        Common3DTIGUI.BeginSection("3DTUNE-IN NON-LINEAR ATTENUATION");
-        {
-            //string[] approachLabels = new string[] { "Butterworth", "Gammatone" };
+        DrawColumnForEachEar(plugin, "3DTUNE-IN NON-LINEAR ATTENUATION", new Parameter[] { HLOn }, MultibandExpansionOn, 
+            (T_ear ear) => CreateControls(plugin, ear, false, MultibandExpansionApproach, MultibandExpansionAttack, MultibandExpansionRelease)
+        );
 
-            // LEFT EAR
-            EditorGUI.BeginDisabledGroup(!plugin.GetBoolParameter("HLONL"));
-            {
-                // MBE
+        //Common3DTIGUI.BeginSection("3DTUNE-IN NON-LINEAR ATTENUATION");
+        //{
+        //    foreach (T_ear ear in new T_ear[] { T_ear.LEFT, T_ear.RIGHT })
+        //    {
 
-                Common3DTIGUI.BeginColumn(plugin, T_ear.LEFT, "HLMBEONL", "LEFT EAR", "Enable non-linear attenuation for left ear");
-                {
-                    CreateControls(plugin, T_ear.LEFT, false, MultibandExpansionApproach, MultibandExpansionAttack, MultibandExpansionRelease);
+        //        EditorGUI.BeginDisabledGroup(!plugin.GetParameter<Parameter, bool>(HLOn, ear));
+        //        {
+        //            // MBE
 
-                }
-                Common3DTIGUI.EndColumn(T_ear.LEFT);
-            }
-            EditorGUI.EndDisabledGroup();
+        //            Common3DTIGUI.BeginColumn(plugin, ear, MultibandExpansionOn);
+        //            //Common3DTIGUI.BeginColumn(plugin, T_ear.LEFT, "HLMBEONL", "LEFT EAR", "Enable non-linear attenuation for left ear");
+        //            {
+        //                CreateControls(plugin, ear, false, MultibandExpansionApproach, MultibandExpansionAttack, MultibandExpansionRelease);
 
-            // RIGHT EAR
-            EditorGUI.BeginDisabledGroup(!plugin.GetBoolParameter("HLONR"));
-            Common3DTIGUI.BeginColumn(plugin, T_ear.RIGHT, "HLMBEONR", "RIGHT EAR", "Enable non-linear attenuation for right ear");
-            {
-                CreateControls(plugin, T_ear.RIGHT, false, MultibandExpansionApproach, MultibandExpansionAttack, MultibandExpansionRelease);
-            }
-            Common3DTIGUI.EndColumn(T_ear.RIGHT);
-            EditorGUI.EndDisabledGroup();
-        }
-        Common3DTIGUI.EndSection();
+        //            }
+        //            Common3DTIGUI.EndColumn(ear);
+        //        }
+        //        EditorGUI.EndDisabledGroup();
+        //    }
+
+        //    //// RIGHT EAR
+        //    //EditorGUI.BeginDisabledGroup(!plugin.GetBoolParameter("HLONR"));
+        //    //Common3DTIGUI.BeginColumn(plugin, T_ear.RIGHT, "HLMBEONR", "RIGHT EAR", "Enable non-linear attenuation for right ear");
+        //    //{
+        //    //    CreateControls(plugin, T_ear.RIGHT, false, MultibandExpansionApproach, MultibandExpansionAttack, MultibandExpansionRelease);
+        //    //}
+        //    //Common3DTIGUI.EndColumn(T_ear.RIGHT);
+        //    //EditorGUI.EndDisabledGroup();
+        //}
+        //Common3DTIGUI.EndSection();
     }
 
     /// <summary>
@@ -482,63 +508,110 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     /// <param name="plugin"></param>
     public void DrawTemporalDistortion(IAudioEffectPlugin plugin)
     {
-        Common3DTIGUI.BeginSection("3DTUNE-IN TEMPORAL DISTORTION");
+        bool returnValue = DrawColumnForEachEar(plugin, "3DTUNE-IN TEMPORAL DISTORTION", new Parameter[] { HLOn }, TemporalDistortionOn,
+            (ear) =>
         {
-            foreach (T_ear ear in new T_ear[] { T_ear.LEFT, T_ear.RIGHT })
+            // PER EAR
+
+            // If we are syncing then disable the right ear controls as they are apparently not used in the plugin.
+            EditorGUI.BeginDisabledGroup(ear == T_ear.RIGHT && plugin.GetParameter<Parameter, bool>(TemporalDistortionLRSyncOn));
+            // PRESETS
+            Common3DTIGUI.SingleSpace();
+            GUILayout.BeginHorizontal();
             {
-                EditorGUI.BeginDisabledGroup(!plugin.GetParameter<Parameter, bool>(HLOn, ear));
-                BeginColumn(plugin, ear, TemporalDistortionOn);
-                {
-                    // If we are syncing then disable the right ear controls as they are apparently not used in the plugin.
-                    EditorGUI.BeginDisabledGroup(ear == T_ear.RIGHT && plugin.GetParameter<Parameter, bool>(TemporalDistortionLRSyncOn));
-                    {
-                        // PRESETS
-                        Common3DTIGUI.SingleSpace();
-                        GUILayout.BeginHorizontal();
-                        {
-                            if (DrawPresetButtonsForOneEar(plugin, ear, "Temporal Distortion", ref selectedTDPresetLeft))
-                                SetTemporalDistortionPreset(plugin, ear, selectedTDPresetLeft);
-                        }
-                        GUILayout.EndHorizontal();
-                        Common3DTIGUI.SingleSpace();
-
-                        // CONTROLS
-
-                        if (CreateControl(plugin, TemporalDistortionBandUpperLimit, ear))
-                        {
-                            ResetAllTemporalDistortionButtonSelections(ear);
-                        }
-
-                        Common3DTIGUI.BeginSubsection("Jitter generator");
-                        {
-                            if (CreateControls(plugin, ear, false, TemporalDistortionWhiteNoisePower, TemporalDistortionNoiseBandwidth))
-                            {
-                                ResetAllTemporalDistortionButtonSelections(ear);
-                            }
-
-                        }
-                        Common3DTIGUI.EndSubsection();
-                    }
-                    EditorGUI.EndDisabledGroup();
-                }
-                Common3DTIGUI.EndColumn(ear);
-                EditorGUI.EndDisabledGroup();
+                if (DrawPresetButtonsForOneEar(plugin, ear, "Temporal Distortion", ref selectedTDPresetLeft))
+                    SetTemporalDistortionPreset(plugin, ear, selectedTDPresetLeft);
             }
+            GUILayout.EndHorizontal();
+            Common3DTIGUI.SingleSpace();
 
-    
-            // Left-right synchronicity
+            // CONTROLS
+            bool retValue = CreateControl(plugin, TemporalDistortionBandUpperLimit, ear);
+            Common3DTIGUI.BeginSubsection("Jitter generator");
+            {
+                retValue = CreateControls(plugin, ear, false, TemporalDistortionWhiteNoisePower, TemporalDistortionNoiseBandwidth) || retValue;
+            }
+            Common3DTIGUI.EndSubsection();
+            EditorGUI.EndDisabledGroup();
+            return retValue;
+        },
+        () =>
+        {
+            // BOTH EARS
+
             bool canSynchronize = plugin.GetParameter<Parameter, bool>(HLOn, T_ear.LEFT) && plugin.GetParameter<Parameter, bool>(HLOn, T_ear.RIGHT) && plugin.GetParameter<Parameter, bool>(TemporalDistortionOn, T_ear.LEFT) && plugin.GetParameter<Parameter, bool>(TemporalDistortionOn, T_ear.RIGHT);
             if (!canSynchronize)
             {
                 plugin.SetParameter(TemporalDistortionLRSyncOn, false, T_ear.BOTH);
             }
             EditorGUI.BeginDisabledGroup(!canSynchronize);
-            {
-                CreateControls(plugin, T_ear.BOTH, false, TemporalDistortionLRSyncOn, TemporalDistortionLRSyncAmount);
-            }
+            bool retValue = CreateControls(plugin, T_ear.BOTH, false, TemporalDistortionLRSyncOn, TemporalDistortionLRSyncAmount);
             EditorGUI.EndDisabledGroup();
-        }
-        Common3DTIGUI.EndSection();
+            return retValue;
+        });
+
+        //    if (returnValue)
+        //{
+        //    ResetAllTemporalDistortionButtonSelections(ear);
+        //}
+
+        //Common3DTIGUI.BeginSection("3DTUNE-IN TEMPORAL DISTORTION");
+        //{
+        //    foreach (T_ear ear in new T_ear[] { T_ear.LEFT, T_ear.RIGHT })
+        //    {
+        //        EditorGUI.BeginDisabledGroup(!plugin.GetParameter<Parameter, bool>(HLOn, ear));
+        //        BeginColumn(plugin, ear, TemporalDistortionOn);
+        //        {
+        //            // If we are syncing then disable the right ear controls as they are apparently not used in the plugin.
+        //            EditorGUI.BeginDisabledGroup(ear == T_ear.RIGHT && plugin.GetParameter<Parameter, bool>(TemporalDistortionLRSyncOn));
+        //            {
+        //                // PRESETS
+        //                Common3DTIGUI.SingleSpace();
+        //                GUILayout.BeginHorizontal();
+        //                {
+        //                    if (DrawPresetButtonsForOneEar(plugin, ear, "Temporal Distortion", ref selectedTDPresetLeft))
+        //                        SetTemporalDistortionPreset(plugin, ear, selectedTDPresetLeft);
+        //                }
+        //                GUILayout.EndHorizontal();
+        //                Common3DTIGUI.SingleSpace();
+
+        //                // CONTROLS
+
+        //                if (CreateControl(plugin, TemporalDistortionBandUpperLimit, ear))
+        //                {
+        //                    ResetAllTemporalDistortionButtonSelections(ear);
+        //                }
+
+        //                Common3DTIGUI.BeginSubsection("Jitter generator");
+        //                {
+        //                    if (CreateControls(plugin, ear, false, TemporalDistortionWhiteNoisePower, TemporalDistortionNoiseBandwidth))
+        //                    {
+        //                        ResetAllTemporalDistortionButtonSelections(ear);
+        //                    }
+
+        //                }
+        //                Common3DTIGUI.EndSubsection();
+        //            }
+        //            EditorGUI.EndDisabledGroup();
+        //        }
+        //        Common3DTIGUI.EndColumn(ear);
+        //        EditorGUI.EndDisabledGroup();
+        //    }
+
+
+        //    // Left-right synchronicity
+        //    bool canSynchronize = plugin.GetParameter<Parameter, bool>(HLOn, T_ear.LEFT) && plugin.GetParameter<Parameter, bool>(HLOn, T_ear.RIGHT) && plugin.GetParameter<Parameter, bool>(TemporalDistortionOn, T_ear.LEFT) && plugin.GetParameter<Parameter, bool>(TemporalDistortionOn, T_ear.RIGHT);
+        //    if (!canSynchronize)
+        //    {
+        //        plugin.SetParameter(TemporalDistortionLRSyncOn, false, T_ear.BOTH);
+        //    }
+        //    EditorGUI.BeginDisabledGroup(!canSynchronize);
+        //    {
+        //        CreateControls(plugin, T_ear.BOTH, false, TemporalDistortionLRSyncOn, TemporalDistortionLRSyncAmount);
+        //    }
+        //    EditorGUI.EndDisabledGroup();
+        //}
+        //Common3DTIGUI.EndSection();
     }
 
     /// <summary>
@@ -547,7 +620,10 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     /// <param name="plugin"></param>
     public void DrawFrequencySmearing(IAudioEffectPlugin plugin)
     {
-        Common3DTIGUI.BeginSection("3DTUNE-IN FREQUENCY SMEARING");
+        //DrawColumnForEachEar(plugin, "3DTUNE-IN FREQUENCY SMEARING", new Parameter[] { HLOn }, FrequencySmearingOn, (ear) =>
+        //{
+
+        //});
         {
             foreach (T_ear ear in new T_ear[] { T_ear.LEFT, T_ear.RIGHT })
             {
@@ -565,8 +641,8 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                     Common3DTIGUI.SingleSpace();
                     GUILayout.BeginHorizontal();
                     {
-                        if (DrawPresetButtonsForOneEar(plugin, ear, "Frequency Smearing", ref (ear==T_ear.LEFT)? ref selectedFSPresetLeft : ref selectedFSPresetRight))
-                            SetFrequencySmearingPreset(plugin, ear, ear==T_ear.LEFT? selectedFSPresetLeft : selectedFSPresetRight);
+                        if (DrawPresetButtonsForOneEar(plugin, ear, "Frequency Smearing", ref (ear == T_ear.LEFT) ? ref selectedFSPresetLeft : ref selectedFSPresetRight))
+                            SetFrequencySmearingPreset(plugin, ear, ear == T_ear.LEFT ? selectedFSPresetLeft : selectedFSPresetRight);
                     }
                     GUILayout.EndHorizontal();
                     Common3DTIGUI.SingleSpace();
@@ -609,9 +685,76 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 EditorGUI.EndDisabledGroup();
             }
 
-   
+
         }
         Common3DTIGUI.EndSection();
+
+
+        //Common3DTIGUI.BeginSection("3DTUNE-IN FREQUENCY SMEARING");
+        //{
+        //    foreach (T_ear ear in new T_ear[] { T_ear.LEFT, T_ear.RIGHT })
+        //    {
+
+        //        EditorGUI.BeginDisabledGroup(!plugin.GetParameter<Parameter, bool>(HLOn, ear));
+        //        Common3DTIGUI.BeginColumn(plugin, ear, FrequencySmearingOn);
+        //        {
+        //            Common3DTIGUI.SingleSpace();
+        //            GUILayout.BeginHorizontal();
+        //            CreateControl(plugin, FrequencySmearingApproach, ear);
+        //            GUILayout.EndHorizontal();
+        //            Common3DTIGUI.SingleSpace();
+
+        //            // PRESETS
+        //            Common3DTIGUI.SingleSpace();
+        //            GUILayout.BeginHorizontal();
+        //            {
+        //                if (DrawPresetButtonsForOneEar(plugin, ear, "Frequency Smearing", ref (ear==T_ear.LEFT)? ref selectedFSPresetLeft : ref selectedFSPresetRight))
+        //                    SetFrequencySmearingPreset(plugin, ear, ear==T_ear.LEFT? selectedFSPresetLeft : selectedFSPresetRight);
+        //            }
+        //            GUILayout.EndHorizontal();
+        //            Common3DTIGUI.SingleSpace();
+
+        //            // Downward
+        //            Common3DTIGUI.BeginSubsection("Downward smearing");
+        //            Common3DTIGUI.AddLabelToParameterGroup("Buffer size");
+        //            Common3DTIGUI.AddLabelToParameterGroup("Smearing amount");
+
+        //            if (plugin.GetParameter<Parameter, T_HLFrequencySmearingApproach>(FrequencySmearingApproach, ear) == T_HLFrequencySmearingApproach.Graf)
+        //            {
+        //                if (CreateControl(plugin, FrequencySmearingDownSize, ear))
+        //                {
+        //                    ResetAllFrequencySmearingButtonSelections(ear);
+        //                }
+        //            }
+
+        //            if (CreateControl(plugin, FrequencySmearingDownHz, ear))
+        //            {
+        //                ResetAllFrequencySmearingButtonSelections(ear);
+        //            }
+
+        //            Common3DTIGUI.EndSubsection();
+
+        //            // Upward
+        //            Common3DTIGUI.BeginSubsection("Upward smearing");
+        //            Common3DTIGUI.AddLabelToParameterGroup("Buffer size");
+        //            Common3DTIGUI.AddLabelToParameterGroup("Smearing amount");
+
+        //            if (plugin.GetParameter<Parameter, T_HLFrequencySmearingApproach>(FrequencySmearingApproach, ear) == T_HLFrequencySmearingApproach.Graf)
+        //            {
+        //                if (CreateControl(plugin, FrequencySmearingUpSize, ear)) { ResetAllFrequencySmearingButtonSelections(ear); }
+        //            }
+
+        //            if (CreateControl(plugin, FrequencySmearingUpHz, ear)) { ResetAllFrequencySmearingButtonSelections(ear); }
+
+        //            Common3DTIGUI.EndSubsection();
+        //        }
+        //        Common3DTIGUI.EndColumn(ear);
+        //        EditorGUI.EndDisabledGroup();
+        //    }
+
+
+        //}
+        //Common3DTIGUI.EndSection();
     }
 
 

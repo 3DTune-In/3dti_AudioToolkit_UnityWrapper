@@ -526,6 +526,78 @@ public static class Common3DTIGUI
         GUILayout.Space(singleSpace);
     }
 
+
+    // Draw two columns, one for each ear, and use the provided function to populate with controls.
+    // If any of enablerParameters is false then the contents will be disabled. enablerParameters
+    // should all have bool as their underlying type.
+    // If toggleParameter is non-null then it should be a bool parameter. A toggle will be drawn and when unchecked
+    // the callback will be called in a disabled group
+    // perEarCallback is drawn for each ear in its respective column
+    // bothEarsCallback is drawn after everything at full width
+    // returns true if perEarCallback ever returns true
+    public static bool DrawColumnForEachEar<ParameterT>(IAudioEffectPlugin plugin, string title, ParameterT[] enablerParameters, ParameterT? groupEnabledToggleParameter, Func<T_ear, bool> perEarCallback, Func<bool> bothEarsCallback = null) 
+        where ParameterT : struct, Enum
+    {
+        bool returnValue = false;
+
+        if (title != null)
+        {
+            Common3DTIGUI.BeginSection(title);
+        }
+        GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));                     // Begin section (ear pair)
+        {
+            foreach (T_ear ear in new T_ear[] { T_ear.LEFT, T_ear.RIGHT })
+            {
+                bool isEnabled = true;
+                foreach (ParameterT p in enablerParameters)
+                {
+                    isEnabled = isEnabled && plugin.GetParameter<ParameterT, bool>(p, ear);
+                }
+                EditorGUI.BeginDisabledGroup(!isEnabled);
+                {
+                    //-
+                    ResetParameterGroup();
+                    if (ear == T_ear.LEFT)
+                    {
+                        GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(false));  // Begin column (left ear)
+                    }
+                    else
+                    {
+                        ResetParameterGroup();
+                        GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(false));  // Begin column (right ear)
+                    }
+                    //-
+                    float isGroupToggleEnabled = 1.0f;
+                    if (groupEnabledToggleParameter.HasValue)
+                    {
+                        Convert.ToBoolean(CreateControl(plugin, groupEnabledToggleParameter.Value, out isGroupToggleEnabled, ear));
+                    }
+                    EditorGUI.BeginDisabledGroup(isGroupToggleEnabled == 0.0f); // Begin DisabledGroup
+                    {
+                        returnValue = perEarCallback(ear) || returnValue;
+                    }
+                    EditorGUI.EndDisabledGroup();
+                    //-
+                    GUILayout.EndVertical();            // End column
+                    GUILayout.Space(spaceBetweenColumns);   // Space between columns 
+                    //-
+                }
+                EditorGUI.EndDisabledGroup();
+            }
+        }
+        GUILayout.EndHorizontal();                      // End section (ear pair)        
+
+        if (bothEarsCallback != null)
+        {
+            returnValue = bothEarsCallback() || returnValue;
+        }
+
+        Common3DTIGUI.EndSection();
+
+        return returnValue;
+    }
+
+
     /// <summary>
     /// Begin column for left ear
     /// </summary>
@@ -552,7 +624,7 @@ public static class Common3DTIGUI
     }
 
     // Start a column with a toggle control controlling the given parameter.
-    public static void BeginColumn<ParameterT>(IAudioEffectPlugin plugin, T_ear ear, ParameterT toggleBoxParameter) where ParameterT : Enum
+    public static void BeginColumn<ParameterT>(IAudioEffectPlugin plugin, T_ear ear, ParameterT toggleBoxParameter) where ParameterT : struct, Enum
     {
         ResetParameterGroup();
         if (ear == T_ear.LEFT)
@@ -568,45 +640,63 @@ public static class Common3DTIGUI
         }
 
         Convert.ToBoolean(CreateControl(plugin, toggleBoxParameter, out float isEnabled, ear));
-
         EditorGUI.BeginDisabledGroup(isEnabled == 0.0f); // Begin DisabledGroup
-
     }
 
-    public static void BeginColumn(IAudioEffectPlugin plugin, T_ear ear, string toggleBoxParameterName, string title, string tooltip)
-    {
-        ResetParameterGroup();
-        if (ear == T_ear.LEFT)
-        {
-            GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));                     // Begin section (ear pair)
-            GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(false));  // Begin column (left ear)                               
+    //public static void BeginColumn(IAudioEffectPlugin plugin, T_ear ear, string toggleBoxParameterName, string title, string tooltip)
+    //{
+    //    ResetParameterGroup();
+    //    if (ear == T_ear.LEFT)
+    //    {
+    //        GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));                     // Begin section (ear pair)
+    //        GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(false));  // Begin column (left ear)                               
 
-        }
-        else
-        {
-            ResetParameterGroup();
-            GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(false));  // Begin column (right ear)
-        }
+    //    }
+    //    else
+    //    {
+    //        ResetParameterGroup();
+    //        GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(false));  // Begin column (right ear)
+    //    }
 
-        bool oldValue;
-        {
-            if (!plugin.GetFloatParameter(toggleBoxParameterName, out float v))
-            {
-                Debug.LogError($"Failed to get value for {toggleBoxParameterName} from plugin");
-            }
-            oldValue = v != 0.0f;
-        }
+    //    bool oldValue;
+    //    {
+    //        if (!plugin.GetFloatParameter(toggleBoxParameterName, out float v))
+    //        {
+    //            Debug.LogError($"Failed to get value for {toggleBoxParameterName} from plugin");
+    //        }
+    //        oldValue = v != 0.0f;
+    //    }
 
 
-        bool newValue = GUILayout.Toggle(oldValue, new GUIContent(title, tooltip), GUILayout.ExpandWidth(false));
+    //    bool newValue = GUILayout.Toggle(oldValue, new GUIContent(title, tooltip), GUILayout.ExpandWidth(false));
 
-        if (oldValue != newValue)
-        {
-            plugin.SetFloatParameter(toggleBoxParameterName, newValue? 1.0f : 0.0f);
-        }
-        EditorGUI.BeginDisabledGroup(!newValue); // Begin DisabledGroup
+    //    if (oldValue != newValue)
+    //    {
+    //        plugin.SetFloatParameter(toggleBoxParameterName, newValue? 1.0f : 0.0f);
+    //    }
+    //    EditorGUI.BeginDisabledGroup(!newValue); // Begin DisabledGroup
 
-    }
+    //}
+
+
+    //public static void BeginColumn(T_ear ear)
+    //{
+    //    ResetParameterGroup();
+    //    if (ear == T_ear.LEFT)
+    //    {
+    //        GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));                     // Begin section (ear pair)
+    //        GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(false));  // Begin column (left ear)                               
+
+    //    }
+    //    else
+    //    {
+    //        ResetParameterGroup();
+    //        GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(false));  // Begin column (right ear)
+    //    }
+
+    //    EditorGUI.BeginDisabledGroup(false); // Begin DisabledGroup
+
+    //}
 
     /// <summary>
     /// End column for left ear

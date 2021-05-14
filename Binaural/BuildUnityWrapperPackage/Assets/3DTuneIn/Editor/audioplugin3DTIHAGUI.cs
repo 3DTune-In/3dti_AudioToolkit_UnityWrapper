@@ -192,28 +192,38 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     /// <param name="plugin"></param>
     public void DrawFig6Button(IAudioEffectPlugin plugin, T_ear ear)
     {
+        Debug.Assert(ear != T_ear.BOTH);
+
         if(Common3DTIGUI.CreateButton("Fig6", "Adjusts the Dynamic Equalizer to the current audiometry settings"))
         {
-
             List<float> calculatedGains;
             //float gain0, gain1, gain2;
             //HAAPI.SetEQBandFromFig6(ear, bandIndex, earLossInput[(int)bandIndex], out gain0, out gain1, out gain2);
-            if (ear == T_ear.LEFT)
-            {
-                if (!HAAPI.SetEQFromFig6(/*plugin,*/ear, HLAPI.PARAM_AUDIOMETRY_LEFT.OfType<float>().ToList(), out calculatedGains))
+            //if (ear == T_ear.LEFT)
+            //{
+                var audiometry = new List<float>();
+                for (int i=0; i<API_3DTI_HL.NumMultibandExpansionBands; i++)
+                {
+                    audiometry.Add(HLAPI.GetParameter<float>(API_3DTI_HL.Parameter.MultibandExpansionBand0 + i, ear));
+                }
+                if (!HAAPI.SetEQFromFig6(/*plugin,*/ear, audiometry, out calculatedGains))
                 {
                     //Debug.LogWarning("error fig6 left");
                 }
-            }
-            else if (ear == T_ear.RIGHT)
-            {
-
-                if (!HAAPI.SetEQFromFig6(ear, HLAPI.PARAM_AUDIOMETRY_RIGHT.OfType<float>().ToList(), out calculatedGains))
-                {
-                    //Debug.LogWarning("error fig6 right");
-                }
-            }
-            else return;
+            //}
+            //else if (ear == T_ear.RIGHT)
+            //{
+            //    var audiometry = new List<float>();
+            //    for (int i = 0; i < API_3DTI_HL.NumMultibandExpansionBands; i++)
+            //    {
+            //        audiometry.Add(HLAPI.GetParameter<float>(API_3DTI_HL.Parameter.MultibandExpansionBand0 + i, ear));
+            //    }
+            //    if (!HAAPI.SetEQFromFig6(ear, audiometry, out calculatedGains))
+            //    {
+            //        //Debug.LogWarning("error fig6 right");
+            //    }
+            //}
+            //else return;
 
             plugin.SetFloatParameter("THR0", FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS);
             plugin.SetFloatParameter("THR1", FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS);
