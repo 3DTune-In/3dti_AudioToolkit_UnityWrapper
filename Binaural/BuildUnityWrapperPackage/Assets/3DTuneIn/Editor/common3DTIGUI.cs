@@ -643,65 +643,6 @@ public static class Common3DTIGUI
         EditorGUI.BeginDisabledGroup(isEnabled == 0.0f); // Begin DisabledGroup
     }
 
-    //public static void BeginColumn(IAudioEffectPlugin plugin, T_ear ear, string toggleBoxParameterName, string title, string tooltip)
-    //{
-    //    ResetParameterGroup();
-    //    if (ear == T_ear.LEFT)
-    //    {
-    //        GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));                     // Begin section (ear pair)
-    //        GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(false));  // Begin column (left ear)                               
-
-    //    }
-    //    else
-    //    {
-    //        ResetParameterGroup();
-    //        GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(false));  // Begin column (right ear)
-    //    }
-
-    //    bool oldValue;
-    //    {
-    //        if (!plugin.GetFloatParameter(toggleBoxParameterName, out float v))
-    //        {
-    //            Debug.LogError($"Failed to get value for {toggleBoxParameterName} from plugin");
-    //        }
-    //        oldValue = v != 0.0f;
-    //    }
-
-
-    //    bool newValue = GUILayout.Toggle(oldValue, new GUIContent(title, tooltip), GUILayout.ExpandWidth(false));
-
-    //    if (oldValue != newValue)
-    //    {
-    //        plugin.SetFloatParameter(toggleBoxParameterName, newValue? 1.0f : 0.0f);
-    //    }
-    //    EditorGUI.BeginDisabledGroup(!newValue); // Begin DisabledGroup
-
-    //}
-
-
-    //public static void BeginColumn(T_ear ear)
-    //{
-    //    ResetParameterGroup();
-    //    if (ear == T_ear.LEFT)
-    //    {
-    //        GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));                     // Begin section (ear pair)
-    //        GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(false));  // Begin column (left ear)                               
-
-    //    }
-    //    else
-    //    {
-    //        ResetParameterGroup();
-    //        GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(false));  // Begin column (right ear)
-    //    }
-
-    //    EditorGUI.BeginDisabledGroup(false); // Begin DisabledGroup
-
-    //}
-
-    /// <summary>
-    /// End column for left ear
-    /// </summary>
-    /// <param name="endToogleGroup"></param>
     public static void EndLeftColumn()
     {
                 EditorGUI.EndDisabledGroup();   // End DisabledGroup 
@@ -1027,102 +968,7 @@ public static class Common3DTIGUI
     }
 
 
-    // Create slider for plugin parameter without requiring a reference to a variable mirroring the value.
-    public static bool CreatePluginParameterSlider(IAudioEffectPlugin plugin, string parameterName, string parameterTitle, bool isFloat, string units, string tooltip, bool isCompact=false)
-    {
-        // Get parameter info
-        plugin.GetFloatParameterInfo(parameterName, out float minValue, out float maxValue, out float _);
-        float oldValue = plugin.GetFloatParameter(parameterName);
-
-
-        SingleSpace();
-
-        float newValue;
-        string valueString;
-        if (isCompact)
-        {
-            GUILayout.BeginVertical(GUILayout.ExpandWidth(false));
-            GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));
-            GUILayout.Label(new GUIContent(parameterTitle, tooltip));
-            valueString = GUILayout.TextField(oldValue.ToString(isFloat ? "F2" : "F0", System.Globalization.CultureInfo.InvariantCulture), GUILayout.ExpandWidth(false));
-            GUILayout.Label(units, GUILayout.ExpandWidth(false));
-            GUILayout.EndHorizontal();
-            newValue = GUILayout.HorizontalSlider(oldValue, minValue, maxValue);
-
-            GUILayout.EndVertical();
-        }
-        else
-        {
-            GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));
-            GUILayout.Label(new GUIContent(parameterTitle, tooltip), parameterLabelStyle, GUILayout.Width(GetParameterLabelWidth()));
-            newValue = GUILayout.HorizontalSlider(oldValue, minValue, maxValue, GUILayout.ExpandWidth(true));
-            valueString = GUILayout.TextField(newValue.ToString(isFloat ? "F2" : "F0", System.Globalization.CultureInfo.InvariantCulture), GUILayout.ExpandWidth(false));
-            GUILayout.Label(units, GUILayout.ExpandWidth(false));
-            GUILayout.EndHorizontal();
-        }
-
-
-        bool parseOk = float.TryParse(valueString, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float parsedValueString);
-        if (parseOk)
-        {
-            newValue = parsedValueString;
-        }
-
-        if (newValue != oldValue)
-        {
-            plugin.SetFloatParameter(parameterName, newValue);
-            return true;
-        }
-        return false;
-    }
-
-    /// <summary>
-    /// Create a slider associated to a parameter of an audio plugin, which accepts only a set of discrete values
-    /// </summary>
-    /// <param name="plugin"></param>
-    /// <param name="parameterName"></param>
-    /// <param name="parameterText"></param>
-    /// <param name="isFloat"></param>
-    /// <param name="units"></param>
-    /// <returns>True if slider value has changed</returns>
-    public static bool CreatePluginParameterDiscreteSlider(IAudioEffectPlugin plugin, ref float APIparam, string parameterName, string parameterText, string units, string tooltip, List<float> discreteValues)
-    {
-        // TO DO: print marks with discrete values
-
-        // Get parameter info
-        float newValue;
-        float minValue, maxValue;
-        plugin.GetFloatParameterInfo(parameterName, out minValue, out maxValue, out newValue);
-
-        // Create slider and set value
-        plugin.GetFloatParameter(parameterName, out newValue);
-        bool valueChanged;
-        valueChanged = CreateFloatSlider(ref newValue, parameterText, "F0", units, tooltip, minValue, maxValue);
-
-        if (valueChanged)
-        {
-            // Snap to closest discrete value            
-            float minDistance = Mathf.Abs(newValue - discreteValues[0]); // Warning! this does not work with negative valu
-            float closestValue = discreteValues[0];
-            foreach (int discreteValue in discreteValues)
-            {
-                float distance = Mathf.Abs(newValue - discreteValue);
-                if (distance < minDistance)
-                {
-                    minDistance = distance;
-                    closestValue = discreteValue;
-                }
-            }
-            newValue = closestValue;
-
-            // Set value
-            plugin.SetFloatParameter(parameterName, newValue);
-            APIparam = newValue;
-            return true;
-        }
-
-        return false;
-    }
+   
 
     /// <summary>
     /// Auxiliary function for creating sliders for float variables with specific format
@@ -1158,7 +1004,7 @@ public static class Common3DTIGUI
     }
 
     /// <summary>
-    ///  Auxiliary function for creating toogle input
+    ///  Auxiliary function for creating toggle input
     /// </summary>    
     public static void CreatePluginToggle(IAudioEffectPlugin plugin, ref bool boolvar, string toggleText, string switchParameter, string tooltip, bool forceChange)
     {        
