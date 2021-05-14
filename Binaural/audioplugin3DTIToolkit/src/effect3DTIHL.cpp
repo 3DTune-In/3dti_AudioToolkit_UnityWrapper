@@ -1097,31 +1097,62 @@ enum
 			// TEMPORAL DISTORTION SIMULATION:
 			case PARAM_TA_BAND_LEFT:
 				data->HL.GetTemporalDistortionSimulator()->SetBandUpperLimit(Common::T_ear::LEFT, value);
+				if (data->parameters[PARAM_TA_LRSYNC_ON])
+				{
+					// to keep us in sync with the TemporalDistortionSimulator internal variables.
+					data->parameters[PARAM_TA_BAND_RIGHT] = value;
+				}
 				WriteLog(state, "SET PARAMETER: Band upper limit (Hz) for Left temporal distortion simulator set to: ", value);
 				break;
 
 			case PARAM_TA_BAND_RIGHT:
 				data->HL.GetTemporalDistortionSimulator()->SetBandUpperLimit(Common::T_ear::RIGHT, value);
+				if (data->parameters[PARAM_TA_LRSYNC_ON])
+				{
+					// to keep us in sync with the TemporalDistortionSimulator internal variables.
+					data->parameters[PARAM_TA_BAND_LEFT] = value;
+				}
+
 				WriteLog(state, "SET PARAMETER: Band upper limit (Hz) for Right temporal distortion simulator set to: ", value);
 				break;
 
 			case PARAM_TA_NOISELPF_LEFT:
 				data->HL.GetTemporalDistortionSimulator()->SetNoiseAutocorrelationFilterCutoffFrequency(Common::T_ear::LEFT, value);
+				if (data->parameters[PARAM_TA_LRSYNC_ON])
+				{
+					// to keep us in sync with the TemporalDistortionSimulator internal variables.
+					data->parameters[PARAM_TA_NOISELPF_RIGHT] = value;
+				}
 				WriteLog(state, "SET PARAMETER: Noise autocorrelation LPF cutoff (Hz) for Left temporal distortion simulator set to: ", value);
 				break;
 
 			case PARAM_TA_NOISELPF_RIGHT:
 				data->HL.GetTemporalDistortionSimulator()->SetNoiseAutocorrelationFilterCutoffFrequency(Common::T_ear::RIGHT, value);
+				if (data->parameters[PARAM_TA_LRSYNC_ON])
+				{
+					// to keep us in sync with the TemporalDistortionSimulator internal variables.
+					data->parameters[PARAM_TA_NOISELPF_LEFT] = value;
+				}
 				WriteLog(state, "SET PARAMETER: Noise autocorrelation LPF cutoff (Hz) for Right temporal Distortion simulator set to: ", value);
 				break;
 
 			case PARAM_TA_NOISEPOWER_LEFT:
 				data->HL.GetTemporalDistortionSimulator()->SetWhiteNoisePower(Common::T_ear::LEFT, value);
+				if (data->parameters[PARAM_TA_LRSYNC_ON])
+				{
+					// to keep us in sync with the TemporalDistortionSimulator internal variables.
+					data->parameters[PARAM_TA_NOISEPOWER_RIGHT] = value;
+				}
 				WriteLog(state, "SET PARAMETER: White noise power (ms) for Left temporal Distortion simulator set to: ", value);
 				break;
 
 			case PARAM_TA_NOISEPOWER_RIGHT:
 				data->HL.GetTemporalDistortionSimulator()->SetWhiteNoisePower(Common::T_ear::RIGHT, value);
+				if (data->parameters[PARAM_TA_LRSYNC_ON])
+				{
+					// to keep us in sync with the TemporalDistortionSimulator internal variables.
+					data->parameters[PARAM_TA_NOISEPOWER_LEFT] = value;
+				}
 				WriteLog(state, "SET PARAMETER: White noise power (ms) for Right temporal distortion simulator set to: ", value);
 				break;
 
@@ -1149,6 +1180,11 @@ enum
 					{
 						data->HL.GetTemporalDistortionSimulator()->EnableLeftRightNoiseSynchronicity();
 						WriteLog(state, "SET PARAMETER: Left-right ear synchronicity in temporal distortion simulator switched ON", "");
+
+						// LR Sync causes the temporal distortion to copy parameters from left to right
+						data->parameters[PARAM_TA_BAND_RIGHT] = data->parameters[PARAM_TA_BAND_LEFT];
+						data->parameters[PARAM_TA_NOISELPF_RIGHT] = data->parameters[PARAM_TA_NOISELPF_LEFT];
+						data->parameters[PARAM_TA_NOISEPOWER_RIGHT] = data->parameters[PARAM_TA_NOISEPOWER_LEFT];
 					}
 				}
 				break;

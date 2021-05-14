@@ -7,7 +7,7 @@ using System.Reflection;
 using API_3DTI_Common;
 using System.Linq;
 
-public class Common3DTIGUI
+public static class Common3DTIGUI
 {
     static int logoheight = 59;
     static int earsize = 40;
@@ -551,6 +551,7 @@ public class Common3DTIGUI
         return changed;
     }
 
+    // Start a column with a toggle control controlling the given parameter.
     public static void BeginColumn<ParameterT>(IAudioEffectPlugin plugin, T_ear ear, ParameterT toggleBoxParameter) where ParameterT : Enum
     {
         ResetParameterGroup();
@@ -566,9 +567,9 @@ public class Common3DTIGUI
             GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(false));  // Begin column (right ear)
         }
 
-        bool isEnabled = Convert.ToBoolean(CreateControl(plugin, toggleBoxParameter));
+        Convert.ToBoolean(CreateControl(plugin, toggleBoxParameter, out float isEnabled, ear));
 
-        EditorGUI.BeginDisabledGroup(!isEnabled); // Begin DisabledGroup
+        EditorGUI.BeginDisabledGroup(isEnabled == 0.0f); // Begin DisabledGroup
 
     }
 
@@ -799,9 +800,39 @@ public class Common3DTIGUI
         return false;
     }
 
+    // Create a group of controls with the labels aligned. Returns true if any control changed
+    public static bool CreateControls<T>(IAudioEffectPlugin plugin, T_ear ear, bool isCompact, params T[] parameters)
+        where T : Enum
+    {
+        foreach (T parameter in parameters)
+        {
+            ParameterAttribute p = parameter.GetAttribute<ParameterAttribute>();
+            if (p == null)
+            {
+                throw new Exception($"Failed to find ParameterAttribute for parameter {parameter}");
+            }
+            AddLabelToParameterGroup(p.label);
+        }
+        bool didChange = false;
+        foreach (T parameter in parameters)
+        {
+            ParameterAttribute p = parameter.GetAttribute<ParameterAttribute>();
+            Debug.Assert(p != null);
+            didChange = CreateControl(plugin, parameter, ear, isCompact) || didChange;
+        }
+        return didChange;
+    }
 
-    // Create a control for a parameter. This returns the raw float value of the parameter's current value.
-    public static float CreateControl<T>(IAudioEffectPlugin plugin, T parameter, bool isCompact=false) where T : Enum
+    // Create a control for a parameter. Returns true if the value has changed
+    public static bool CreateControl<T>(IAudioEffectPlugin plugin, T parameter, T_ear ear, bool isCompact = false) where T : Enum
+    {
+        return CreateControl(plugin, parameter, out float _, ear, isCompact);
+    }
+
+
+    // Create a control for a parameter. Returns true if the value has changed. Use this version if you need to grab a copy of the updated value. The updated value is always represented as a float as received directly from the plugin.
+    public static bool CreateControl<ParameterEnum>(IAudioEffectPlugin plugin, ParameterEnum parameter, out float value, T_ear ear, bool isCompact=false) 
+        where ParameterEnum : Enum 
     {
         ParameterAttribute p = parameter.GetAttribute<ParameterAttribute>();
         if (p == null)
@@ -809,16 +840,15 @@ public class Common3DTIGUI
             throw new Exception($"Failed to find ParameterAttribute for parameter {parameter}");
         }
 
-
-
         SingleSpace();
 
         if (p.type == typeof(float) || p.type==typeof(int))
         {
             // Get parameter info
-            plugin.GetFloatParameterInfo(p.pluginName, out float minValue, out float maxValue, out float _);
+            plugin.GetFloatParameterInfo(p.pluginName(ear), out float minValue, out float maxValue, out float _);
 
-            float oldValue = plugin.GetFloatParameter(p.pluginName);
+            //float oldValue = plugin.GetFloatParameter(p.pluginName(ear));
+            float oldValue = plugin.GetParameter<ParameterEnum, float>(parameter, ear);
             float newValue;
             string valueString;
             if (isCompact)
@@ -829,13 +859,14 @@ public class Common3DTIGUI
                 valueString = GUILayout.TextField(oldValue.ToString(p.type==typeof(float) ? "F2" : "F0", System.Globalization.CultureInfo.InvariantCulture), GUILayout.ExpandWidth(false));
                 GUILayout.Label(p.units, GUILayout.ExpandWidth(false));
                 GUILayout.EndHorizontal();
+                // TODO: I Think this will have a bug where newValue gets overwritten by oldvalue in the parse below
                 newValue = GUILayout.HorizontalSlider(oldValue, minValue, maxValue);
-
                 GUILayout.EndVertical();
             }
             else
             {
                 GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));
+                AddLabelToParameterGroup(p.label);
                 GUILayout.Label(new GUIContent(p.label, p.description), parameterLabelStyle, GUILayout.Width(GetParameterLabelWidth()));
                 newValue = GUILayout.HorizontalSlider(oldValue, minValue, maxValue, GUILayout.ExpandWidth(true));
                 valueString = GUILayout.TextField(newValue.ToString(p.type==typeof(float) ? "F2" : "F0", System.Globalization.CultureInfo.InvariantCulture), GUILayout.ExpandWidth(false));
@@ -848,46 +879,56 @@ public class Common3DTIGUI
             {
                 newValue = parsedValueString;
             }
+            if (p.validValues != null && p.validValues.Length > 0)
+            {
+                // Lock to nearest valid value
+                newValue = p.validValues.OrderBy(x => Math.Abs(x - newValue)).First();
+            }
+            value = Convert.ToSingle(newValue);
 
             if (newValue != oldValue)
             {
-                plugin.SetFloatParameter(p.pluginName, newValue);
+                plugin.SetFloatParameter(p.pluginName(ear), newValue);
+                return true;
             }
-            return newValue;
+            return false;
         }
         else if (p.type == typeof(bool))
         {
-            bool oldValue = plugin.GetBoolParameter(p.pluginName);
+            bool oldValue = plugin.GetParameter<ParameterEnum, bool>(parameter, ear);
             bool newValue = GUILayout.Toggle(oldValue, new GUIContent(p.label, p.description), GUILayout.ExpandWidth(false));
+            value = Convert.ToSingle(newValue);
             if (newValue != oldValue)
             {
-                bool setOK = plugin.SetFloatParameter(p.pluginName, Convert.ToSingle(newValue));
+                bool setOK = plugin.SetFloatParameter(p.pluginName(ear), Convert.ToSingle(newValue));
                 Debug.Assert(setOK);
+                return true;
             }
-            return Convert.ToSingle(newValue);
+            return false;
         }
-        else if (p.type.IsSubclassOf(typeof(Enum)))
+        else if (p.type.IsEnum)
         {
-            int value = plugin.GetIntParameter(p.pluginName);
+            int oldValue = plugin.GetParameter<ParameterEnum, int>(parameter, ear);
             Debug.Assert(Enum.GetUnderlyingType(p.type) == typeof(int));
             int[] values = (int[])Enum.GetValues(p.type);
-            if (!values.Contains(value))
+            if (!values.Contains(oldValue))
             {
-                Debug.LogWarning($"Plugin returned invalid value for {p.label}: {value}");
+                Debug.LogWarning($"Plugin returned invalid value for {p.label}: {oldValue}");
             }
 
             int defaultValue = (int)Enum.GetValues(p.type).GetValue(0);
 
-            int newValue = (int)(object)EditorGUILayout.Popup(new GUIContent(p.label, p.description), values.Contains(value) ? value : defaultValue, Enum.GetNames(p.type));
+            int newValue = (int)(object)EditorGUILayout.Popup(new GUIContent(p.label, p.description), values.Contains(oldValue) ? oldValue : defaultValue, Enum.GetNames(p.type));
             Debug.Assert(Enum.IsDefined(p.type, newValue));
+            value = Convert.ToSingle(newValue);
 
-            if (value != newValue)
+            if (newValue != oldValue)
             {
-                bool setOK = plugin.SetFloatParameter(p.pluginName, newValue);
+                bool setOK = plugin.SetFloatParameter(p.pluginName(ear), newValue);
                 Debug.Assert(setOK);
+                return true;
             }
-
-            return Convert.ToSingle(newValue);
+            return false;
         }
         else
         {
