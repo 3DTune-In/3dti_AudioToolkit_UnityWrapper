@@ -28,7 +28,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     Color selectedColor = Color.gray;
     Color baseColor = Color.white;
     float csCurveWidth = 25.0f;     // Width of classification scale curve images
-    float csCurveHeight = 10.0f;    // Height of classiciation scale curve images
+    float csCurveHeight = 10.0f;    // Height of classification scale curve images
     float csSlopeWidth = 15.0f;     // Width of blank space before classification scale slope buttons
     float csSlopeHeight = 10.0f;     // Height of blank space before classification scale slope buttons
 
