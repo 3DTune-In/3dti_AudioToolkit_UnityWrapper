@@ -71,6 +71,7 @@ namespace Spatializer3DTI
     public:
         std::shared_ptr<Binaural::CListener> listener;
         Binaural::CCore core;
+        std::shared_ptr<Binaural::CEnvironment> environment;
         // replaced with function
 //        bool coreReady;
         bool loadedHRTF;                // New

@@ -2,18 +2,20 @@
 using System;
 using System.Collections.Generic;
 using System.IO;            // Needed for FileStream
-							/**
-							*** API for 3D-Tune-In Toolkit Unity Wrapper ***
-							*
-							* version beta 1.0
-							* Created on: July 2016
-							* 
-							* Author: 3DI-DIANA Research Group / University of Malaga / Spain
-							* Contact: areyes@uma.es
-							* 
-							* Project: 3DTI (3D-games for TUNing and lEarnINg about hearing aids)
-							* Module: 3DTI Toolkit Unity Wrapper
-							**/
+using System.Runtime.InteropServices;
+
+/**
+*** API for 3D-Tune-In Toolkit Unity Wrapper ***
+*
+* version beta 1.0
+* Created on: July 2016
+* 
+* Author: 3DI-DIANA Research Group / University of Malaga / Spain
+* Contact: areyes@uma.es
+* 
+* Project: 3DTI (3D-games for TUNing and lEarnINg about hearing aids)
+* Module: 3DTI Toolkit Unity Wrapper
+**/
 
 
 
@@ -138,14 +140,23 @@ public class API_3DTI_Spatializer : MonoBehaviour
 	private AudioSource silentAudioSource;
 
 
+#if UNITY_IPHONE
+    [DllImport ("__Internal")]
 
-
-
-	/// <summary>
+#else
+    [DllImport("AudioPlugin3DTIToolkit")]
+#endif
+    public static extern bool Create3DTISpatializer(int sampleRate, int dspBufferSize, string brirPath);  /// <summary>
+	
 	/// Automatic setup of Toolkit Core (as read from custom GUI in Unity Inspector)
 	/// </summary>
-	void Start()
+    void Start()
 	{
+		string brirPath = @"C:\Users\timmb\Documents\dev\3DTI_UnityWrapper\3dti_AudioToolkit\resources\BRIR\3DTI\3DTI_BRIR_large_44100Hz.3dti-brir";
+		AudioSettings.GetDSPBufferSize(out int bufferSize, out int numBuffers);
+		//Debug.Assert(numBuffers == 2);
+		Create3DTISpatializer(AudioSettings.outputSampleRate, bufferSize, brirPath);
+
         StartBinauralSpatializer();
 
 

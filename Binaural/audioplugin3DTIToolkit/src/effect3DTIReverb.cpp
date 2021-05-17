@@ -58,6 +58,8 @@ void WriteLog(int channelid, string logtext, const T& value)
 using namespace Binaural;
 using namespace Common;
 
+
+
 namespace Reverb3DTI
 {
 	enum
@@ -66,6 +68,54 @@ namespace Reverb3DTI
 		PARAM_CHANNEL_ID,	// W=0, X=1, Y=2
 		P_NUM
 	};
+
+	extern "C" UNITY_AUDIODSP_EXPORT_API bool Create3DTISpatializer(int sampleRate, int dspBufferSize, char* brirPath) {
+		//auto spat = spatializer();
+		//if (!spat.isInitialized())
+		//{
+		//	spatializer().initialize(sampleRate, dspBufferSize);
+		//	auto env = core.CreateEnvironment();
+		//	
+
+		std::ifstream brirStream(brirPath, std::ifstream::binary);
+		if (brirStream)
+		{
+			Spatializer3DTI::Spatializer& spat = Spatializer3DTI::spatializer();
+			assert(spat.isInitialized());
+			auto environment = spat.core.CreateEnvironment();
+			if (BRIR::CreateFrom3dtiStream(brirStream, environment))
+			{
+				std::atomic_store(&spat.environment, environment);
+				return true;
+			}
+
+			//// get length of file:
+			//brirStream.seekg(0, brirStream.end);
+			//int length = brirStream.tellg();
+			//brirStream.seekg(0, brirStream.beg);
+
+			//vector<uint8_t> brirBuffer(length);
+
+			//std::cout << "Reading " << length << " characters... ";
+			//// read data as a block:
+			//brirStream.read(brirBuffer.data(), length);
+
+			//if (brirStream)
+			//	std::cout << "all characters read successfully.";
+			//else
+			//	std::cout << "error: only " << brirStream.gcount() << " could be read";
+			//brirStream.close();
+
+
+			//// ...buffer contains the entire file...
+
+			//delete[] brirBuffer;
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 /////////////////////////////////////////////////////////////////////
 	
@@ -294,12 +344,24 @@ namespace Reverb3DTI
 		Common::CEarPair<CMonoBuffer<float>> bReverbOutput;
 		bReverbOutput.left.resize(bufferSize);
 		bReverbOutput.right.resize(bufferSize);
-		state->GetEffectData<Reverb3DTI::EffectData>()->environment->ProcessVirtualAmbisonicReverb(bReverbOutput.left, bReverbOutput.right);
-
-		for (int i = 0; i < length; i++)
+		auto environment = std::atomic_load(&Spatializer3DTI::spatializer().environment);
+		assert(bReverbOutput.left.size() == length && bReverbOutput.right.size() == length);
+		if (environment != nullptr)
 		{
-			outbuffer[i * 2 + 0] = bReverbOutput.left[i];
-			outbuffer[i * 2 + 1] = bReverbOutput.right[i];
+			environment->ProcessVirtualAmbisonicReverb(bReverbOutput.left, bReverbOutput.right);
+
+			for (int i = 0; i < length; i++)
+			{
+				outbuffer[i * 2 + 0] = bReverbOutput.left[i];
+				outbuffer[i * 2 + 1] = bReverbOutput.right[i];
+			}
+		}
+		else
+		{
+			for (int i = 0; i < length * 2; i++)
+			{
+				outbuffer[i] = inbuffer[i];
+			}
 		}
 
 		return UNITY_AUDIODSP_OK;
