@@ -290,6 +290,10 @@
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\HRTF\HRTFFactory.cpp">
       <Filter>3dti_ResourceManager\HRTF</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\effect3DTIReverb.cpp" />
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\BRIR\BRIRCereal.cpp">
+      <Filter>3dti_ResourceManager\BRIR</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\HRTF\HRTFCereal.h">
@@ -633,6 +637,9 @@
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\third_party_libraries\sofacoustics\libsofa\dependencies\include\ncUbyte.h">
       <Filter>3dti_ResourceManager\sofa\netcdf</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\BRIR\BRIRCereal.h">
+      <Filter>3dti_ResourceManager\BRIR</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="3dti_Toolkit">
@@ -661,6 +668,9 @@
     </Filter>
     <Filter Include="3dti_ResourceManager\sofa\netcdf">
       <UniqueIdentifier>{17731016-2fb1-4f37-8638-c609fd45e26c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3dti_ResourceManager\BRIR">
+      <UniqueIdentifier>{11111ef4-975a-401a-be61-64f3dc74abbd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

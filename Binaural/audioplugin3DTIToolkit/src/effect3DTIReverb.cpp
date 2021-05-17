@@ -11,7 +11,7 @@
 * Module: 3DTI Toolkit Unity Wrapper
 **/
 
-#include "stdafx.h"
+//#include "stdafx.h"
 
 #include "AudioPluginUtil.h"
 
@@ -19,13 +19,16 @@
 // WARNING: This define must be done before including Core.h!
 #define AXIS_CONVENTION UNITY
 
-#include "Core.h"
+//#include "Core.h"
 
 // Includes for reading HRTF data and logging dor debug
 #include <fstream>
 #include <iostream>
 #include <time.h>
 #include <HRTF/HRTFCereal.h>
+#include "Common/AIR.h"
+#include "effect3DTISpatializer.h"
+#include "BRIR/BRIRCereal.h"
 
 using namespace std;
 
@@ -52,7 +55,10 @@ void WriteLog(int channelid, string logtext, const T& value)
 
 /////////////////////////////////////////////////////////////////////
 
-namespace UnityReverb3DTI
+using namespace Binaural;
+using namespace Common;
+
+namespace Reverb3DTI
 {
 	enum
 	{		
@@ -68,10 +74,11 @@ namespace UnityReverb3DTI
 		int channelID;	// W=0, X=1, Y=2
 		bool pluginCreated=false;	// createcallback might be called more than once...
 		float parameters[P_NUM];		
-		CCore* core;
-		bool coreReady;				// Temporary solution before integration of CoreState class in Core	
-		bool abirReady;				// Temporary solution before integration of CoreState class in Core	
+		//CCore* core;
+		//bool coreReady;				// Temporary solution before integration of CoreState class in Core	
+		//bool abirReady;				// Temporary solution before integration of CoreState class in Core	
 		bool channelReady;			// Temporary solution before integration of CoreState class in Core	
+		std::shared_ptr<CEnvironment> environment;
 	};
 
 /////////////////////////////////////////////////////////////////////
@@ -106,37 +113,37 @@ namespace UnityReverb3DTI
 //
 ///////////////////////////////////////////////////////////////////////
 
-	int LoadABIRBinaryFile(UnityAudioEffectState* state, float floatHandle)
-	{
-		EffectData* data = state->GetEffectData<EffectData>();		
+	//int LoadABIRBinaryFile(UnityAudioEffectState* state, float floatHandle)
+	//{
+	//	EffectData* data = state->GetEffectData<EffectData>();		
 
-		// Cast from float to HANDLE
-		int intHandle = (int)floatHandle;
-		HANDLE fileHandle = (HANDLE)intHandle;
+	//	// Cast from float to HANDLE
+	//	int intHandle = (int)floatHandle;
+	//	HANDLE fileHandle = (HANDLE)intHandle;
 
-		// Check that handle is correct
-		if (fileHandle == INVALID_HANDLE_VALUE)
-		{
-			WriteLog(data->channelID, "Error!!! Invalid file handle in ABIR binary file", "");
-			return -1;
-		}
-		
-		// Get ABIR and check errors
-		CABIR myABIR;
-		//CABIR myABIR = ABIR::CreateFrom3dtiHandle(fileHandle);		// <----- THIS IS THE ONLY MISSING THING!!!!
-		if (myABIR.GetDataLength() != 0)		// TO DO: Improve this error check
-		{
-			data->core->LoadABIR(std::move(myABIR));
-			WriteLog(data->channelID, "ABIR loaded from binary 3DTI file:", "");
-			WriteLog(data->channelID, "	Data length: ", myABIR.GetDataLength());
-			return 1;
-		}
-		else
-		{
-			WriteLog(data->channelID, "Error!!! could not create ABIR from handle", "");
-			return -1;
-		}
-	}
+	//	// Check that handle is correct
+	//	if (fileHandle == INVALID_HANDLE_VALUE)
+	//	{
+	//		WriteLog(data->channelID, "Error!!! Invalid file handle in ABIR binary file", "");
+	//		return -1;
+	//	}
+	//	
+	//	// Get ABIR and check errors
+	//	CABIR myABIR;
+	//	//CABIR myABIR = ABIR::CreateFrom3dtiHandle(fileHandle);		// <----- THIS IS THE ONLY MISSING THING!!!!
+	//	if (myABIR.GetDataLength() != 0)		// TO DO: Improve this error check
+	//	{
+	//		Spatializer3DTI::spatializer().core->LoadABIR(std::move(myABIR));
+	//		WriteLog(data->channelID, "ABIR loaded from binary 3DTI file:", "");
+	//		WriteLog(data->channelID, "	Data length: ", myABIR.GetDataLength());
+	//		return 1;
+	//	}
+	//	else
+	//	{
+	//		WriteLog(data->channelID, "Error!!! could not create ABIR from handle", "");
+	//		return -1;
+	//	}
+	//}
 
 /////////////////////////////////////////////////////////////////////
 
@@ -167,12 +174,14 @@ namespace UnityReverb3DTI
 			//
 
 			// Core initialization
-			effectdata->core = new CCore();
-			WriteLog(effectdata->channelID, "Core initialized", "");
+			//effectdata->core = new CCore();
+			//WriteLog(effectdata->channelID, "Core initialized", "");
 
 			// Init parameters. Core is not ready until we load the ABIR and set the channel ID...
-			effectdata->coreReady = false;			
-			effectdata->abirReady = false;
+			//effectdata->coreReady = false;			
+			//effectdata->abirReady = false;
+			effectdata->environment = Spatializer3DTI::spatializer().core.CreateEnvironment();
+			BRIR::CreateFrom3dti(R"(C:\Users\timmb\Documents\dev\3DTI_UnityWrapper\3dti_AudioToolkit\resources\BRIR\3DTI\3DTI_BRIR_large_44100Hz.3dti-brir)", effectdata->environment);
 			effectdata->channelReady = false;
 
 			// Set default audio state
@@ -209,12 +218,12 @@ namespace UnityReverb3DTI
 		string channel;
 		switch (index)
 		{
-			case PARAM_ABIR_FILE_HANDLE:	// Load ABIR binary file (MANDATORY)
-				if (LoadABIRBinaryFile(state, value))
-				{
-					data->abirReady = true;		// Temporary solution before integration of CoreState class					
-				}
-				break;
+			//case PARAM_ABIR_FILE_HANDLE:	// Load ABIR binary file (MANDATORY)
+			//	if (LoadABIRBinaryFile(state, value))
+			//	{
+			//		data->abirReady = true;		// Temporary solution before integration of CoreState class					
+			//	}
+			//	break;
 
 			case PARAM_CHANNEL_ID:	
 				data->channelID = (int)value;				
@@ -234,11 +243,11 @@ namespace UnityReverb3DTI
 				break;
 		}
 
-		if (!data->coreReady && data->abirReady && data->channelReady)
-		{
-			data->coreReady = true;
-			WriteLog(data->channelID, "Core Ready!", "");
-		}
+		//if (!data->coreReady && data->abirReady && data->channelReady)
+		//{
+		//	data->coreReady = true;
+		//	WriteLog(data->channelID, "Core Ready!", "");
+		//}
 
 		return UNITY_AUDIODSP_OK;
 	}
@@ -268,43 +277,71 @@ namespace UnityReverb3DTI
 /////////////////////////////////////////////////////////////////////
 
 	UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectState* state, float* inbuffer, float* outbuffer, unsigned int length, int inchannels, int outchannels)
-	{		
-		EffectData* data = state->GetEffectData<EffectData>();		
-
-		// Check that I/O formats are right and that the host API supports this feature		
-		if (inchannels != 2 || outchannels != 2 ||
-			!IsHostCompatible(state))
+	{	
+		if (inchannels != 2 || outchannels != 2)
 		{
-			WriteLog(data->channelID, "	ERROR! Wrong number of channels or Host is not compatible", "");
-			memcpy(outbuffer, inbuffer, length * outchannels * sizeof(float));
-			return UNITY_AUDIODSP_OK;
-		}						
-		
-		// Before doing anything, check that the core is ready
-		// Temporary solution, before integration of CoreState class
-		if (!data->coreReady)
-			return UNITY_AUDIODSP_OK;		
-
-		// Transform input buffer
-		// TO DO: Avoid this copy
-		CStereoBuffer<float> inStereoBuffer(length);
-		for (int i = 0; i < length*2; i++)
-		{
-			inStereoBuffer[i] = inbuffer[i]; 
+			return UNITY_AUDIODSP_ERR_UNSUPPORTED;
 		}
-		
-		// Process!!		
-		CStereoBuffer<float> outStereoBuffer(length * 2);	
-		data->core->ProcessEncodedChannelReverb((TBFormatChannel)data->channelID, inStereoBuffer, outStereoBuffer);		
 
-		// Transform output buffer
-		// TO DO: Avoid this copy
-		int i = 0;
-		for (auto it = outStereoBuffer.begin(); it != outStereoBuffer.end(); it++)
+		const int bufferSize = Spatializer3DTI::spatializer().core.GetAudioState().bufferSize;
+
+		if (bufferSize != length)
 		{
-			outbuffer[i++] = *it;
+			return UNITY_AUDIODSP_ERR_UNSUPPORTED;
+		}
+
+		// 7. Process reverb and generate the reverb output
+		Common::CEarPair<CMonoBuffer<float>> bReverbOutput;
+		bReverbOutput.left.resize(bufferSize);
+		bReverbOutput.right.resize(bufferSize);
+		state->GetEffectData<Reverb3DTI::EffectData>()->environment->ProcessVirtualAmbisonicReverb(bReverbOutput.left, bReverbOutput.right);
+
+		for (int i = 0; i < length; i++)
+		{
+			outbuffer[i * 2 + 0] = bReverbOutput.left[i];
+			outbuffer[i * 2 + 1] = bReverbOutput.right[i];
 		}
 
 		return UNITY_AUDIODSP_OK;
+
+
+
+		//EffectData* data = state->GetEffectData<EffectData>();		
+
+		//// Check that I/O formats are right and that the host API supports this feature		
+		//if (inchannels != 2 || outchannels != 2 ||
+		//	!IsHostCompatible(state))
+		//{
+		//	WriteLog(data->channelID, "	ERROR! Wrong number of channels or Host is not compatible", "");
+		//	memcpy(outbuffer, inbuffer, length * outchannels * sizeof(float));
+		//	return UNITY_AUDIODSP_OK;
+		//}						
+		//
+		//// Before doing anything, check that the core is ready
+		//// Temporary solution, before integration of CoreState class
+		//if (!data->coreReady)
+		//	return UNITY_AUDIODSP_OK;		
+
+		//// Transform input buffer
+		//// TO DO: Avoid this copy
+		//CStereoBuffer<float> inStereoBuffer(length);
+		//for (int i = 0; i < length*2; i++)
+		//{
+		//	inStereoBuffer[i] = inbuffer[i]; 
+		//}
+		//
+		//// Process!!		
+		//CStereoBuffer<float> outStereoBuffer(length * 2);	
+		//data->core->ProcessEncodedChannelReverb((TBFormatChannel)data->channelID, inStereoBuffer, outStereoBuffer);		
+
+		//// Transform output buffer
+		//// TO DO: Avoid this copy
+		//int i = 0;
+		//for (auto it = outStereoBuffer.begin(); it != outStereoBuffer.end(); it++)
+		//{
+		//	outbuffer[i++] = *it;
+		//}
+
+		//return UNITY_AUDIODSP_OK;
 	}
 }

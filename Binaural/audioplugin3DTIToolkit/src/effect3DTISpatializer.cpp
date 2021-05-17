@@ -61,14 +61,11 @@ namespace Spatializer3DTI
 #define LIMITER_RATIO		6
 
 
-namespace
+// Single state instance shared across all audio sources
+Spatializer& spatializer()
 {
-    // Single state instance shared across all audio sources
-    Spatializer& spatializer()
-    {
-        static Spatializer spatializer;
-        return spatializer;
-    }
+    static Spatializer spatializer;
+    return spatializer;
 }
 
 

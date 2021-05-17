@@ -131,6 +131,8 @@ namespace Spatializer3DTI
         // initialize is only called by CreateCallback
         friend UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectState* state);
     };
+    // Get singleton instance.
+    Spatializer& spatializer();
     
     // State of a single source in the scene. An instance of this is
     // created/destroyed with each Unity AudioSource.
