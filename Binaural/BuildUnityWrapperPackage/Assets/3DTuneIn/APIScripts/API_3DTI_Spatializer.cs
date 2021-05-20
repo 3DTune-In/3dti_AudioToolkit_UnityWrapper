@@ -146,16 +146,60 @@ public class API_3DTI_Spatializer : MonoBehaviour
 #else
     [DllImport("AudioPlugin3DTIToolkit")]
 #endif
-    public static extern bool Create3DTISpatializer(int sampleRate, int dspBufferSize, string brirPath);  /// <summary>
-	
-	/// Automatic setup of Toolkit Core (as read from custom GUI in Unity Inspector)
-	/// </summary>
-    void Start()
+    public static extern bool setup3DTISpatializer(string hrtfPath, string ildPath, string highPerformanceILDPath, string brirPath);  /// <summary>
+
+																																						 /// Automatic setup of Toolkit Core (as read from custom GUI in Unity Inspector)
+																																						 /// </summary>
+	void Start()
 	{
-		string brirPath = @"C:\Users\timmb\Documents\dev\3DTI_UnityWrapper\3dti_AudioToolkit\resources\BRIR\3DTI\3DTI_BRIR_large_44100Hz.3dti-brir";
-		AudioSettings.GetDSPBufferSize(out int bufferSize, out int numBuffers);
+		string brirPath44 = "Data/Reverb/BRIR/3DTI_BRIR_large_44100Hz.3dti-brir.bytes";
+		string brirPath48 = "Data/Reverb/BRIR/3DTI_BRIR_large_48000Hz.3dti-brir.bytes";
+        string brirPath96 = "Data/Reverb/BRIR/3DTI_BRIR_large_96000Hz.3dti-brir.bytes";
 		//Debug.Assert(numBuffers == 2);
-		Create3DTISpatializer(AudioSettings.outputSampleRate, bufferSize, brirPath);
+		bool loadOK = false;
+
+		// TODO: Only enforce passing in required binaries given the setup (e.g. high performance/high quality)
+		switch (AudioSettings.outputSampleRate)
+		{
+			case 44100:
+                {
+                    loadOK = (SaveResourceAsBinary(HRTFFileName44, out string hrtfPath) == 1)
+                        && (SaveResourceAsBinary(ILDNearFieldFileName44, out string ildPath) == 1)
+                        && (SaveResourceAsBinary(ILDHighPerformanceFileName44, out string ildHighPerformancePath) == 1)
+                        && (SaveResourceAsBinary(brirPath44, out string brirPath) == 1)
+                        && setup3DTISpatializer(hrtfPath, ildPath, ildHighPerformancePath, brirPath);
+                }
+                break;
+            case 48000:
+                {
+                    loadOK = (SaveResourceAsBinary(HRTFFileName48, out string hrtfPath) == 1)
+                            && (SaveResourceAsBinary(ILDNearFieldFileName48, out string ildPath) == 1)
+                            && (SaveResourceAsBinary(ILDHighPerformanceFileName48, out string ildHighPerformancePath) == 1)
+                            && (SaveResourceAsBinary(brirPath48, out string brirPath) == 1)
+                            && setup3DTISpatializer(hrtfPath, ildPath, ildHighPerformancePath, brirPath);
+                }
+                break;
+            case 96000:
+                {
+                    loadOK = (SaveResourceAsBinary(HRTFFileName96, out string hrtfPath) == 1)
+                            && (SaveResourceAsBinary(ILDNearFieldFileName96, out string ildPath) == 1)
+                            && (SaveResourceAsBinary(ILDHighPerformanceFileName96, out string ildHighPerformancePath) == 1)
+                            && (SaveResourceAsBinary(brirPath96, out string brirPath) == 1)
+                            && setup3DTISpatializer(hrtfPath, ildPath, ildHighPerformancePath, brirPath);
+                }
+                break;
+            default:
+                Debug.LogError($"Unsupported sample rate for 3DTI Spatializer {AudioSettings.outputSampleRate}");
+                break;
+        }
+        if (!loadOK)
+        {
+			Debug.LogError("Failed to initialize Spatializer plugin");
+        }
+		else
+        {
+			Debug.Log("Spatializer plugin initialized.");
+        }
 
         StartBinauralSpatializer();
 

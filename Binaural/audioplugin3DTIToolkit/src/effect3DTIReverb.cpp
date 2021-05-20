@@ -29,14 +29,16 @@
 #include "Common/AIR.h"
 #include "effect3DTISpatializer.h"
 #include "BRIR/BRIRCereal.h"
+#include "HRTF/HRTFFactory.h"
+#include "ILD/ILDCereal.h"
 
 using namespace std;
 
 // DEBUG LOG FILE
 //#define LOG_FILE
-template <class T>
-void WriteLog(int channelid, string logtext, const T& value)
+void WriteLog(string logText)
 {
+	std::cerr << logText << std::endl;
 #ifdef LOG_FILE
 	string channel="Undefined channel";
 	if (channelid == 0)
@@ -62,14 +64,169 @@ using namespace Common;
 
 namespace Reverb3DTI
 {
+	enum SpatializationMode : int
+	{
+		SPATIALIZATION_MODE_HIGH_QUALITY = 0,
+		SPATIALIZATION_MODE_HIGH_PERFORMANCE = 1,
+		SPATIALIZATION_MODE_NONE = 2,
+	};
+
 	enum
-	{		
-		PARAM_ABIR_FILE_HANDLE,
-		PARAM_CHANNEL_ID,	// W=0, X=1, Y=2
+	{
+		PARAM_HEAD_RADIUS,
+		PARAM_CUSTOM_ITD,
+		PARAM_MOD_FARLPF,
+		PARAM_MOD_DISTATT,
+		PARAM_MOD_NEAR_FIELD_ILD,
+		PARAM_MAG_ANECHATT, // 10
+		PARAM_MAG_SOUNDSPEED,
+
+		// HA directionality
+		PARAM_HA_DIRECTIONALITY_EXTEND_LEFT,
+		PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT, // 15
+		PARAM_HA_DIRECTIONALITY_ON_LEFT,
+		PARAM_HA_DIRECTIONALITY_ON_RIGHT,
+
+		// Limiter
+		PARAM_LIMITER_SET_ON,
+
+
+		// HRTF resampling step
+		PARAM_HRTF_STEP,
+
+		// High Performance and None modes
+		//PARAM_HIGH_PERFORMANCE_ILD_FILE_STRING,
+		PARAM_SPATIALIZATION_MODE,
+		//PARAM_BUFFER_SIZE,
+		//PARAM_SAMPLE_RATE,
+		//PARAM_BUFFER_SIZE_CORE,
+		//PARAM_SAMPLE_RATE_CORE,
+		// Read only status parameters
+		PARAM_IS_READY,
+
 		P_NUM
 	};
 
-	extern "C" UNITY_AUDIODSP_EXPORT_API bool Create3DTISpatializer(int sampleRate, int dspBufferSize, char* brirPath) {
+	// readonly parameters to mvoe to getfloatbuffer method
+	//PARAM_LIMITER_GET_COMPRESSION,
+		//PARAM_IS_CORE_READY, // 20
+
+	
+
+	
+
+	
+/////////////////////////////////////////////////////////////////////
+	
+	struct SpatializerCore
+	{
+		// Each instance of the reverb effect has an instance of the Core
+		Binaural::CCore core;
+		std::shared_ptr<Binaural::CListener> listener;
+		std::shared_ptr<Binaural::CEnvironment> environment;
+		Common::CDynamicCompressorStereo limiter;
+		float parameters[P_NUM];
+		std::mutex mutex;
+
+		SpatializerCore(UInt32 sampleRate, UInt32 bufferSize)
+		{
+			sInstances.push_back(this);
+			// do this to force the setFloat initialization to trigger a call to loadBinaries when it is first called()
+			parameters[PARAM_SPATIALIZATION_MODE] = SPATIALIZATION_MODE_NONE;
+
+			Common::TAudioStateStruct audioState;
+			audioState.sampleRate = sampleRate;
+			audioState.bufferSize = bufferSize;
+			core.SetAudioState(audioState);
+			listener = core.CreateListener();
+
+			const float LimiterThreshold = -30.0f;
+			const float LimiterAttack = 500.0f;
+			const float LimiterRelease = 500.0f;
+			const float LimiterRatio = 6;
+			limiter.Setup(sampleRate, LimiterRatio, LimiterThreshold, LimiterAttack, LimiterRelease);
+		}
+
+		~SpatializerCore()
+		{
+			auto it = find(sInstances.begin(), sInstances.end(), this);
+			assert(it != sInstances.end());
+			if (it != sInstances.end())
+			{
+				sInstances.erase(it);
+			}
+			assert(find(sInstances.begin(), sInstances.end(), this) == sInstances.end());
+		}
+
+		bool loadBinaries()
+		{
+			std::lock_guard<std::mutex> lock(mutex);
+
+			bool loadOK = true;
+			if (parameters[PARAM_SPATIALIZATION_MODE] == SPATIALIZATION_MODE_HIGH_QUALITY)
+			{
+#ifdef UNITY_WIN
+				const string sofaExtension = ".sofa"s;
+				if (hrtfPath.size() >= sofaExtension.size() && hrtfPath.substr(hrtfPath.size() - sofaExtension.size()) == sofaExtension)
+				{
+					// We assume an ILD file holds the delays, so our SOFA file does not specify delays
+					bool specifiedDelays = false;
+					loadOK = HRTF::CreateFromSofa(hrtfPath, listener, specifiedDelays) && loadOK;
+				}
+				// If not sofa file then assume its a 3dti-hrtf file
+				else
+#endif
+				{
+					loadOK = !hrtfPath.empty() && HRTF::CreateFrom3dti(hrtfPath, listener) && loadOK;
+				}
+				loadOK = !ildPath.empty() && ILD::CreateFrom3dti_ILDNearFieldEffectTable(ildPath, listener) && loadOK;
+			}
+			else if (parameters[PARAM_SPATIALIZATION_MODE] == SPATIALIZATION_MODE_HIGH_PERFORMANCE)
+			{
+					loadOK = !highPerformanceILDPath.empty() && ILD::CreateFrom3dti_ILDSpatializationTable(highPerformanceILDPath, listener) && loadOK;
+			}
+			if (!brirPath.empty())
+			{
+				environment = Spatializer3DTI::spatializer().core.CreateEnvironment();
+				loadOK = BRIR::CreateFrom3dti(brirPath, environment) && loadOK;
+			}
+
+			parameters[PARAM_IS_READY] = loadOK;
+
+			return loadOK;
+		}
+
+		static string hrtfPath;
+		static string ildPath;
+		static string highPerformanceILDPath;
+		static string brirPath;
+
+		static vector<SpatializerCore*> instances() { return sInstances; }
+
+	private:
+		static vector<SpatializerCore*> sInstances;
+	};
+
+	string SpatializerCore::hrtfPath;
+	string SpatializerCore::ildPath;
+	string SpatializerCore::highPerformanceILDPath;
+	string SpatializerCore::brirPath;
+	vector<SpatializerCore*> SpatializerCore::sInstances;
+
+
+
+
+	extern "C" UNITY_AUDIODSP_EXPORT_API bool setup3DTISpatializer(const char* hrtfPath, const char* ildPath, const char* highPerformanceILDPath, const char* brirPath) {
+
+		SpatializerCore::hrtfPath = hrtfPath;
+		SpatializerCore::ildPath = ildPath;
+		SpatializerCore::highPerformanceILDPath = highPerformanceILDPath;
+		SpatializerCore::brirPath = brirPath;
+		auto instances = SpatializerCore::instances();
+		return all_of(instances.begin(), instances.end(), [](auto instance) {
+			return instance->loadBinaries();
+			});
+
 		//auto spat = spatializer();
 		//if (!spat.isInitialized())
 		//{
@@ -77,59 +234,47 @@ namespace Reverb3DTI
 		//	auto env = core.CreateEnvironment();
 		//	
 
-		std::ifstream brirStream(brirPath, std::ifstream::binary);
-		if (brirStream)
-		{
-			Spatializer3DTI::Spatializer& spat = Spatializer3DTI::spatializer();
-			assert(spat.isInitialized());
-			auto environment = spat.core.CreateEnvironment();
-			if (BRIR::CreateFrom3dtiStream(brirStream, environment))
-			{
-				std::atomic_store(&spat.environment, environment);
-				return true;
-			}
+		//std::ifstream brirStream(brirPath, std::ifstream::binary);
+		//if (brirStream)
+		//{
+		//	Spatializer3DTI::Spatializer& spat = Spatializer3DTI::spatializer();
+		//	assert(spat.isInitialized());
+		//	auto environment = spat.core.CreateEnvironment();
+		//	if (BRIR::CreateFrom3dtiStream(brirStream, environment))
+		//	{
+		//		std::atomic_store(&spat.environment, environment);
+		//		return true;
+		//	}
 
-			//// get length of file:
-			//brirStream.seekg(0, brirStream.end);
-			//int length = brirStream.tellg();
-			//brirStream.seekg(0, brirStream.beg);
+		//	//// get length of file:
+		//	//brirStream.seekg(0, brirStream.end);
+		//	//int length = brirStream.tellg();
+		//	//brirStream.seekg(0, brirStream.beg);
 
-			//vector<uint8_t> brirBuffer(length);
+		//	//vector<uint8_t> brirBuffer(length);
 
-			//std::cout << "Reading " << length << " characters... ";
-			//// read data as a block:
-			//brirStream.read(brirBuffer.data(), length);
+		//	//std::cout << "Reading " << length << " characters... ";
+		//	//// read data as a block:
+		//	//brirStream.read(brirBuffer.data(), length);
 
-			//if (brirStream)
-			//	std::cout << "all characters read successfully.";
-			//else
-			//	std::cout << "error: only " << brirStream.gcount() << " could be read";
-			//brirStream.close();
+		//	//if (brirStream)
+		//	//	std::cout << "all characters read successfully.";
+		//	//else
+		//	//	std::cout << "error: only " << brirStream.gcount() << " could be read";
+		//	//brirStream.close();
 
 
-			//// ...buffer contains the entire file...
+		//	//// ...buffer contains the entire file...
 
-			//delete[] brirBuffer;
-		}
-		else
-		{
-			return false;
-		}
+		//	//delete[] brirBuffer;
+		//}
+		//else
+		//{
+		//	return false;
+		//}
 	}
 
-/////////////////////////////////////////////////////////////////////
-	
-	struct EffectData
-	{
-		int channelID;	// W=0, X=1, Y=2
-		bool pluginCreated=false;	// createcallback might be called more than once...
-		float parameters[P_NUM];		
-		//CCore* core;
-		//bool coreReady;				// Temporary solution before integration of CoreState class in Core	
-		//bool abirReady;				// Temporary solution before integration of CoreState class in Core	
-		bool channelReady;			// Temporary solution before integration of CoreState class in Core	
-		std::shared_ptr<CEnvironment> environment;
-	};
+
 
 /////////////////////////////////////////////////////////////////////
 
@@ -147,102 +292,48 @@ namespace Reverb3DTI
 	{
 		int numparams = P_NUM;
 		definition.paramdefs = new UnityAudioParameterDefinition[numparams];				
-		RegisterParameter(definition, "ABIRHandle", "", 0.0f, FLT_MAX, 0.0f, 1.0f, 1.0f, PARAM_ABIR_FILE_HANDLE, "Handle of ABIR binary file");
-		RegisterParameter(definition, "ChannelID", "", -1.0f, 2.0f, -1.0f, 1.0f, 1.0f, PARAM_CHANNEL_ID, "b-Format Channel");
+		RegisterParameter(definition, "HeadRadius", "m", 0.0f, /*FLT_MAX*/ 1e20, 0.0875f, 1.0f, 1.0f, PARAM_HEAD_RADIUS, "Listener head radius");
+		RegisterParameter(definition, "CustomITD", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_CUSTOM_ITD, "Enabled custom ITD");
+		RegisterParameter(definition, "MODfarLPF", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_FARLPF, "Far distance LPF module enabler");
+		RegisterParameter(definition, "MODDistAtt", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_DISTATT, "Distance attenuation module enabler");
+		RegisterParameter(definition, "MODNFILD", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_NEAR_FIELD_ILD, "Near distance ILD module enabler");
+		// TODO: Change this default value to -1
+		RegisterParameter(definition, "MAGAneAtt", "dB", -30.0f, 0.0f, -3.0f, 1.0f, 1.0f, PARAM_MAG_ANECHATT, "Anechoic distance attenuation");
+		RegisterParameter(definition, "MAGSounSpd", "m/s", 10.0f, 1000.0f, 343.0f, 1.0f, 1.0f, PARAM_MAG_SOUNDSPEED, "Sound speed");
+
+		// HA directionality
+		RegisterParameter(definition, "HADirExtL", "dB", 0.0f, 30.0f, 15.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_EXTEND_LEFT, "HA directionality attenuation (in dB) for Left ear");
+		RegisterParameter(definition, "HADirExtR", "dB", 0.0f, 30.0f, 15.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT, "HA directionality attenuation (in dB) for Right ear");
+		RegisterParameter(definition, "HADirOnL", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_ON_LEFT, "HA directionality switch for Left ear");
+		RegisterParameter(definition, "HADirOnR", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_ON_RIGHT, "HA directionality switch for Right ear");
+
+		// Limiter
+		RegisterParameter(definition, "LimitOn", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_LIMITER_SET_ON, "Limiter enabler for binaural spatializer");
+
+		// HRTF resampling step
+		RegisterParameter(definition, "HRTFstep", "deg", 1.0f, 90.0f, 15.0f, 1.0f, 1.0f, PARAM_HRTF_STEP, "HRTF resampling step (in degrees)");
+
+		// High performance mode
+		RegisterParameter(definition, "SpatMode", "", 0.0f, 2.0f, 0.0f, 1.0f, 1.0f, PARAM_SPATIALIZATION_MODE, "Spatialization mode (0=High quality, 1=High performance, 2=None)");
+		// readonly
+		RegisterParameter(definition, "SpatIsReady", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_IS_READY, "Is spatializer initialized and ready");
+
 		return numparams;
 	}
 
-/////////////////////////////////////////////////////////////////////
-
-//	static UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK DistanceAttenuationCallback(UnityAudioEffectState* state, float distanceIn, float attenuationIn, float* attenuationOut)
-//	{
-//		// 3DTI: distance attenuation is processed per-source in C# script inside Unity. Do nothing here
-//		*attenuationOut = attenuationIn;
-//		return UNITY_AUDIODSP_OK;
-//	}
-//
-///////////////////////////////////////////////////////////////////////
-
-	//int LoadABIRBinaryFile(UnityAudioEffectState* state, float floatHandle)
-	//{
-	//	EffectData* data = state->GetEffectData<EffectData>();		
-
-	//	// Cast from float to HANDLE
-	//	int intHandle = (int)floatHandle;
-	//	HANDLE fileHandle = (HANDLE)intHandle;
-
-	//	// Check that handle is correct
-	//	if (fileHandle == INVALID_HANDLE_VALUE)
-	//	{
-	//		WriteLog(data->channelID, "Error!!! Invalid file handle in ABIR binary file", "");
-	//		return -1;
-	//	}
-	//	
-	//	// Get ABIR and check errors
-	//	CABIR myABIR;
-	//	//CABIR myABIR = ABIR::CreateFrom3dtiHandle(fileHandle);		// <----- THIS IS THE ONLY MISSING THING!!!!
-	//	if (myABIR.GetDataLength() != 0)		// TO DO: Improve this error check
-	//	{
-	//		Spatializer3DTI::spatializer().core->LoadABIR(std::move(myABIR));
-	//		WriteLog(data->channelID, "ABIR loaded from binary 3DTI file:", "");
-	//		WriteLog(data->channelID, "	Data length: ", myABIR.GetDataLength());
-	//		return 1;
-	//	}
-	//	else
-	//	{
-	//		WriteLog(data->channelID, "Error!!! could not create ABIR from handle", "");
-	//		return -1;
-	//	}
-	//}
 
 /////////////////////////////////////////////////////////////////////
 
 	UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectState* state)
 	{
-		EffectData* effectdata = new EffectData;
-		memset(effectdata, 0, sizeof(EffectData));
-		state->effectdata = effectdata;
+		SpatializerCore* spatializer = new SpatializerCore(state->samplerate, state->dspbuffersize);
+		state->effectdata = spatializer;
 
-		if (!effectdata->pluginCreated)
-		{
-			InitParametersFromDefinitions(InternalRegisterEffectDefinition, effectdata->parameters);		
+		// Initialization will happen when the SPATIALIZATION_MODE parameter is set.
 
-			effectdata->pluginCreated = true;
-			effectdata->channelID = -1;
 
-			// DEBUG: Start log file
-			#ifdef LOG_FILE
-			time_t rawtime;
-			struct tm * timeinfo;
-			char buffer[80];
-			time(&rawtime);
-			timeinfo = localtime(&rawtime);
-			strftime(buffer, 80, "%d-%m-%Y %I:%M:%S", timeinfo);
-			std::string str(buffer);
-			WriteLog(effectdata->channelID, "***************************************************************************************\nDebug log started at ", str);
-			#endif
-			//
-
-			// Core initialization
-			//effectdata->core = new CCore();
-			//WriteLog(effectdata->channelID, "Core initialized", "");
-
-			// Init parameters. Core is not ready until we load the ABIR and set the channel ID...
-			//effectdata->coreReady = false;			
-			//effectdata->abirReady = false;
-			effectdata->environment = Spatializer3DTI::spatializer().core.CreateEnvironment();
-			BRIR::CreateFrom3dti(R"(C:\Users\timmb\Documents\dev\3DTI_UnityWrapper\3dti_AudioToolkit\resources\BRIR\3DTI\3DTI_BRIR_large_44100Hz.3dti-brir)", effectdata->environment);
-			effectdata->channelReady = false;
-
-			// Set default audio state
-			// QUESTIONS: How does this overlaps with explicit call to SetAudioState from C# API? What about buffer size?
-			// TO DO: FIX THIS AFTER CORESTATE!!!
-			//CAudioState audioState;
-			//audioState.SetSampleRate((int)state->samplerate);
-			//effectdata->core->SetAudioState(audioState);
-			//WriteLog(effectdata->channelID, "Sample rate set to ", state->samplerate);
-		}
-
+		InitParametersFromDefinitions(InternalRegisterEffectDefinition, spatializer->parameters);
+	
 		return UNITY_AUDIODSP_OK;
 	}
 
@@ -250,7 +341,7 @@ namespace Reverb3DTI
 
 	UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ReleaseCallback(UnityAudioEffectState* state)
 	{
-		EffectData* data = state->GetEffectData<EffectData>();
+		SpatializerCore* data = state->GetEffectData<SpatializerCore>();
 		delete data;
 		return UNITY_AUDIODSP_OK;
 	}
@@ -259,45 +350,99 @@ namespace Reverb3DTI
 
 	UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAudioEffectState* state, int index, float value)
 	{
-		EffectData* data = state->GetEffectData<EffectData>();
+		SpatializerCore* spatializer = state->GetEffectData<SpatializerCore>();
 		if (index >= P_NUM)
+		{
 			return UNITY_AUDIODSP_ERR_UNSUPPORTED;
-		data->parameters[index] = value;		
+		}
+		lock_guard<mutex> lock(spatializer->mutex);
+		const float prevValue = spatializer->parameters[index];
+		spatializer->parameters[index] = value;
 
 		// Process command sent by C# API
-		string channel;
 		switch (index)
 		{
-			//case PARAM_ABIR_FILE_HANDLE:	// Load ABIR binary file (MANDATORY)
-			//	if (LoadABIRBinaryFile(state, value))
-			//	{
-			//		data->abirReady = true;		// Temporary solution before integration of CoreState class					
-			//	}
-			//	break;
+		case PARAM_HEAD_RADIUS:	// Set listener head radius (OPTIONAL)
+			spatializer->listener->SetHeadRadius(value);
+			break;
 
-			case PARAM_CHANNEL_ID:	
-				data->channelID = (int)value;				
-				switch (data->channelID)
-				{
-					case 0: channel = "W"; data->channelReady = true;  break;
-					case 1: channel = "X"; data->channelReady = true;  break;
-					case 2: channel = "Y"; data->channelReady = true;  break;
-					default: channel = "Unknown channel"; break;
-				}
-				WriteLog(data->channelID, "Source ID set to: ", channel);
-				break;
+		case PARAM_CUSTOM_ITD:	// Enable custom ITD (OPTIONAL)
+			if (value != 0.0f)
+			{
+				spatializer->listener->EnableCustomizedITD();
+			}
+			else
+			{
+				spatializer->listener->DisableCustomizedITD();
+			}
+			break;
 
-			default:
-				WriteLog(data->channelID, "Unknown float parameter passed from API: ", index);
-				return UNITY_AUDIODSP_ERR_UNSUPPORTED;
-				break;
+		case PARAM_MAG_ANECHATT:
+		{
+			Common::CMagnitudes magnitudes = spatializer->core.GetMagnitudes();
+			magnitudes.SetAnechoicDistanceAttenuation(min(0.0f, max(-1.0e20f, value)));
+			spatializer->core.SetMagnitudes(magnitudes);
 		}
+			break;
 
-		//if (!data->coreReady && data->abirReady && data->channelReady)
-		//{
-		//	data->coreReady = true;
-		//	WriteLog(data->channelID, "Core Ready!", "");
-		//}
+		case PARAM_MAG_SOUNDSPEED:
+		{
+			Common::CMagnitudes magnitudes = spatializer->core.GetMagnitudes();
+			magnitudes.SetSoundSpeed(value);
+			spatializer->core.SetMagnitudes(magnitudes);
+		}
+			break;
+
+		case PARAM_HA_DIRECTIONALITY_EXTEND_LEFT:
+			spatializer->listener->SetDirectionality_dB(Common::T_ear::LEFT, value);
+			break;
+
+		case PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT:
+			spatializer->listener->SetDirectionality_dB(Common::T_ear::RIGHT, value);
+			break;
+
+		case PARAM_HA_DIRECTIONALITY_ON_LEFT:
+			if (value > 0.0f)
+			{
+				spatializer->listener->EnableDirectionality(Common::T_ear::LEFT);
+			}
+			else
+			{
+				spatializer->listener->DisableDirectionality(Common::T_ear::LEFT);
+			}
+			break;
+
+		case PARAM_HA_DIRECTIONALITY_ON_RIGHT:
+			if (value > 0.0f)
+			{
+				spatializer->listener->EnableDirectionality(Common::T_ear::RIGHT);
+			}
+			else
+			{
+				spatializer->listener->DisableDirectionality(Common::T_ear::RIGHT);
+			}
+			break;
+
+		case PARAM_LIMITER_SET_ON:
+			// read directly from the parameter
+			break;
+
+		case PARAM_HRTF_STEP:
+			spatializer->core.SetHRTFResamplingStep((int)value);
+			break;
+
+		case PARAM_SPATIALIZATION_MODE:
+			if (value != prevValue)
+			{
+				spatializer->loadBinaries();
+			}
+			break;
+
+		default:
+			WriteLog("SET PARAMETER: ERROR!!!! Unknown float parameter received from API: ");
+			return UNITY_AUDIODSP_ERR_UNSUPPORTED;
+			break;
+		}
 
 		return UNITY_AUDIODSP_OK;
 	}
@@ -306,11 +451,14 @@ namespace Reverb3DTI
 
 	UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK GetFloatParameterCallback(UnityAudioEffectState* state, int index, float* value, char *valuestr)
 	{
-		EffectData* data = state->GetEffectData<EffectData>();
+
+		SpatializerCore* spatializer = state->GetEffectData<SpatializerCore>();
+		const lock_guard<mutex> lock(spatializer->mutex);
+
 		if (index >= P_NUM)
 			return UNITY_AUDIODSP_ERR_UNSUPPORTED;
 		if (value != NULL)
-			*value = data->parameters[index];
+			*value = spatializer->parameters[index];
 		if (valuestr != NULL)
 			valuestr[0] = 0;
 		return UNITY_AUDIODSP_OK;
@@ -328,7 +476,9 @@ namespace Reverb3DTI
 
 	UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectState* state, float* inbuffer, float* outbuffer, unsigned int length, int inchannels, int outchannels)
 	{	
-		if (inchannels != 2 || outchannels != 2)
+		SpatializerCore* spatializer = state->GetEffectData<SpatializerCore>();
+
+		if (inchannels != 2 || outchannels != 2 || spatializer->environment == nullptr)
 		{
 			return UNITY_AUDIODSP_ERR_UNSUPPORTED;
 		}
@@ -339,6 +489,8 @@ namespace Reverb3DTI
 		{
 			return UNITY_AUDIODSP_ERR_UNSUPPORTED;
 		}
+
+		const lock_guard<mutex> lock(spatializer->mutex);
 
 		// 7. Process reverb and generate the reverb output
 		Common::CEarPair<CMonoBuffer<float>> bReverbOutput;
@@ -368,42 +520,5 @@ namespace Reverb3DTI
 
 
 
-		//EffectData* data = state->GetEffectData<EffectData>();		
-
-		//// Check that I/O formats are right and that the host API supports this feature		
-		//if (inchannels != 2 || outchannels != 2 ||
-		//	!IsHostCompatible(state))
-		//{
-		//	WriteLog(data->channelID, "	ERROR! Wrong number of channels or Host is not compatible", "");
-		//	memcpy(outbuffer, inbuffer, length * outchannels * sizeof(float));
-		//	return UNITY_AUDIODSP_OK;
-		//}						
-		//
-		//// Before doing anything, check that the core is ready
-		//// Temporary solution, before integration of CoreState class
-		//if (!data->coreReady)
-		//	return UNITY_AUDIODSP_OK;		
-
-		//// Transform input buffer
-		//// TO DO: Avoid this copy
-		//CStereoBuffer<float> inStereoBuffer(length);
-		//for (int i = 0; i < length*2; i++)
-		//{
-		//	inStereoBuffer[i] = inbuffer[i]; 
-		//}
-		//
-		//// Process!!		
-		//CStereoBuffer<float> outStereoBuffer(length * 2);	
-		//data->core->ProcessEncodedChannelReverb((TBFormatChannel)data->channelID, inStereoBuffer, outStereoBuffer);		
-
-		//// Transform output buffer
-		//// TO DO: Avoid this copy
-		//int i = 0;
-		//for (auto it = outStereoBuffer.begin(); it != outStereoBuffer.end(); it++)
-		//{
-		//	outbuffer[i++] = *it;
-		//}
-
-		//return UNITY_AUDIODSP_OK;
 	}
 }

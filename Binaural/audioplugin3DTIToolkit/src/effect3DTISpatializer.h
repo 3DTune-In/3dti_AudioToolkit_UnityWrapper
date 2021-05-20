@@ -22,10 +22,10 @@ namespace Spatializer3DTI
         PARAM_SCALE_FACTOR,
         PARAM_SOURCE_ID,    // DEBUG
         PARAM_CUSTOM_ITD,
-        PARAM_HRTF_INTERPOLATION, // 5
-        PARAM_MOD_FARLPF,
-        PARAM_MOD_DISTATT,
-        PARAM_MOD_NEAR_FIELD_ILD,
+        PARAM_HRTF_INTERPOLATION, // 5 ### SOURCE ####
+        PARAM_MOD_FARLPF, // ### SOURCE ####
+        PARAM_MOD_DISTATT, // ### SOURCE ####
+        PARAM_MOD_NEAR_FIELD_ILD,// ### SOURCE ####
         PARAM_MOD_HRTF,
         PARAM_MAG_ANECHATT, // 10
         PARAM_MAG_SOUNDSPEED,
@@ -50,7 +50,7 @@ namespace Spatializer3DTI
         
         // High Performance and None modes
         PARAM_HIGH_PERFORMANCE_ILD_FILE_STRING,
-        PARAM_SPATIALIZATION_MODE,
+        PARAM_SPATIALIZATION_MODE,// ### SOURCE ####
         PARAM_BUFFER_SIZE,
         PARAM_SAMPLE_RATE,
         PARAM_BUFFER_SIZE_CORE,
