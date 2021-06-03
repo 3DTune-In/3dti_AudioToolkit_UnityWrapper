@@ -468,13 +468,13 @@ enum
 	/////////////////////////////////////////////////////////////////////
 
 
-    inline bool IsHostCompatible(UnityAudioEffectState* state)
-    {
-        // Somewhat convoluted error checking here because hostapiversion is only supported from SDK version 1.03 (i.e. Unity 5.2) and onwards.
-        return
-            state->structsize >= sizeof(UnityAudioEffectState) &&
-            state->hostapiversion >= UNITY_AUDIO_PLUGIN_API_VERSION;
-    }
+    //inline bool IsHostCompatible(UnityAudioEffectState* state)
+    //{
+    //    // Somewhat convoluted error checking here because hostapiversion is only supported from SDK version 1.03 (i.e. Unity 5.2) and onwards.
+    //    return
+    //        state->structsize >= sizeof(UnityAudioEffectState) &&
+    //        state->hostapiversion >= UNITY_AUDIO_PLUGIN_API_VERSION;
+    //}
 
 	/////////////////////////////////////////////////////////////////////
 
