@@ -14,7 +14,7 @@
 * by Tim Murray-Browne at the Dyson School of Engineering, Imperial College London.
 **/
 
-#include "effect3DTISpatializer.h"
+#include "effect3DTISpatializerSource.h"
 
 //#include <BinauralSpatializer\3DTI_BinauralSpatializer.h>
 #include <Common/ErrorHandler.h>
@@ -49,12 +49,12 @@ enum TLoadResult { RESULT_LOAD_WAITING = 0, RESULT_LOAD_CONTINUE = 1, RESULT_LOA
 
 #include <cfloat>
 #include "HRTF/HRTFFactory.h"
-#include "effect3DTIReverb.h"
+#include "effect3DTISpatializerCore.h"
 #include "CommonUtils.h"
 
 /////////////////////////////////////////////////////////////////////
 
-namespace Spatializer3DTI
+namespace SpatializerSource3DTI
 {
 
 	//#define LIMITER_THRESHOLD	-30.0f
@@ -139,7 +139,7 @@ struct EffectData
 {
 	int sourceID;    // DEBUG
 	std::shared_ptr<Binaural::CSingleSourceDSP> audioSource;
-	Reverb3DTI::SpatializerCore* spatializer;
+	SpatializerCore3DTI::SpatializerCore* spatializer;
 	float parameters[P_NUM];
 };
 
@@ -499,7 +499,7 @@ void WriteLogHeader(UnityAudioEffectState* state)
 
 	// TO DO: Change this for high performance / high quality modes
 
-	Reverb3DTI::SpatializerCore* spatializer = data->spatializer;
+	SpatializerCore3DTI::SpatializerCore* spatializer = data->spatializer;
 
 	// Audio state:
 	Common::TAudioStateStruct audioState = spatializer->core.GetAudioState();
@@ -550,7 +550,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectSta
 			state->spatializerdata->distanceattenuationcallback = DistanceAttenuationCallback;
 		}
 		effectdata->sourceID = -1;
-		effectdata->spatializer = Reverb3DTI::SpatializerCore::instance();
+		effectdata->spatializer = SpatializerCore3DTI::SpatializerCore::instance();
 
 		if (effectdata->spatializer == nullptr)
 		{
@@ -606,7 +606,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ReleaseCallback(UnityAudioEffectSt
 UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAudioEffectState* state, int index, float value)
 {
 	EffectData* data = state->GetEffectData<EffectData>();
-	Reverb3DTI::SpatializerCore* spatializer = data->spatializer;
+	SpatializerCore3DTI::SpatializerCore* spatializer = data->spatializer;
 	assert(data != nullptr && spatializer != nullptr);
 	if (index >= P_NUM)
 		return UNITY_AUDIODSP_ERR_UNSUPPORTED;
@@ -850,7 +850,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 	case PARAM_SPATIALIZATION_MODE:
 		if (value == 0.0f)
 		{
-			if (spatializer->parameters[Reverb3DTI::PARAM_IS_HIGH_QUALITY_HRTF_LOADED] == 0)
+			if (spatializer->parameters[SpatializerCore3DTI::PARAM_IS_HIGH_QUALITY_HRTF_LOADED] == 0)
 			{
 				WriteLog("Error: Cannot set Spatialization mode to High Quality as no HRTF is loaded.");
 				data->parameters[PARAM_SPATIALIZATION_MODE] = SPATIALIZATION_MODE_NONE;
@@ -861,7 +861,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 			{
 				data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::HighQuality);
 				WriteLog(state, "SET PARAMETER: High Quality spatialization mode is enabled", "");
-				if (spatializer->parameters[Reverb3DTI::PARAM_IS_HIGH_QUALITY_ILD_LOADED])
+				if (spatializer->parameters[SpatializerCore3DTI::PARAM_IS_HIGH_QUALITY_ILD_LOADED])
 				{
 					data->audioSource->EnableNearFieldEffect();
 				}
@@ -873,7 +873,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 		}
 		else if (value == 1.0f)
 		{
-			if (spatializer->parameters[Reverb3DTI::PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED] == 0)
+			if (spatializer->parameters[SpatializerCore3DTI::PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED] == 0)
 			{
 				WriteLog("Error: Cannot set Spatialization mode to High Performance as no HRTF is loaded.");
 				data->parameters[PARAM_SPATIALIZATION_MODE] = SPATIALIZATION_MODE_NONE;
@@ -986,21 +986,21 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectSt
 
 	EffectData* data = state->GetEffectData<EffectData>();
 
-	Reverb3DTI::SpatializerCore* spatializer = data->spatializer;
+	SpatializerCore3DTI::SpatializerCore* spatializer = data->spatializer;
 	assert(spatializer != nullptr);
 
 	std::lock_guard<std::mutex> lock(spatializer->mutex);
 
 	//spatializer.spatializerMutex.lock();
 
-	if (data->audioSource->GetSpatializationMode() == Binaural::HighQuality && !spatializer->parameters[Reverb3DTI::PARAM_IS_HIGH_QUALITY_HRTF_LOADED])
+	if (data->audioSource->GetSpatializationMode() == Binaural::HighQuality && !spatializer->parameters[SpatializerCore3DTI::PARAM_IS_HIGH_QUALITY_HRTF_LOADED])
 	{
 		//std::copy(inbuffer, inbuffer + length * (size_t)outchannels, outbuffer);
 		//memset(outbuffer, 0.0f, length * (size_t)outchannels * sizeof(float));
 		std::fill(inbuffer, inbuffer + length * (size_t)outchannels, 0.0f);
 		return UNITY_AUDIODSP_OK;
 	}
-	else if (data->audioSource->GetSpatializationMode() == Binaural::HighPerformance && !spatializer->parameters[Reverb3DTI::PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED])
+	else if (data->audioSource->GetSpatializationMode() == Binaural::HighPerformance && !spatializer->parameters[SpatializerCore3DTI::PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED])
 	{
 		//std::copy(inbuffer, inbuffer + length * (size_t)outchannels, outbuffer);
 		//memset(outbuffer, 0.0f, length * (size_t)outchannels * sizeof(float));
@@ -1020,8 +1020,8 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectSt
 	  //}
 
 	  // Set source and listener transforms
-	data->audioSource->SetSourceTransform(ComputeSourceTransformFromMatrix(state->spatializerdata->sourcematrix, spatializer->parameters[Reverb3DTI::PARAM_SCALE_FACTOR]));
-	spatializer->listener->SetListenerTransform(ComputeListenerTransformFromMatrix(state->spatializerdata->listenermatrix, spatializer->parameters[Reverb3DTI::PARAM_SCALE_FACTOR]));
+	data->audioSource->SetSourceTransform(ComputeSourceTransformFromMatrix(state->spatializerdata->sourcematrix, spatializer->parameters[SpatializerCore3DTI::PARAM_SCALE_FACTOR]));
+	spatializer->listener->SetListenerTransform(ComputeListenerTransformFromMatrix(state->spatializerdata->listenermatrix, spatializer->parameters[SpatializerCore3DTI::PARAM_SCALE_FACTOR]));
 
 	// Now check that listener and source are not in the same position.
 	// This might happens in some weird cases, such as when trying to process a source with no clip
@@ -1058,7 +1058,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectSt
 	// Limiter
 	CStereoBuffer<float> outStereoBuffer;
 	outStereoBuffer.Interlace(outLeftBuffer, outRightBuffer);
-	if (spatializer->parameters[Reverb3DTI::PARAM_LIMITER_SET_ON])
+	if (spatializer->parameters[SpatializerCore3DTI::PARAM_LIMITER_SET_ON])
 	{
 		spatializer->limiter.Process(outStereoBuffer);
 	}

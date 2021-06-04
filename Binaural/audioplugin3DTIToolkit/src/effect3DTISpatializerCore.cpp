@@ -27,12 +27,12 @@
 #include <time.h>
 #include <HRTF/HRTFCereal.h>
 #include "Common/AIR.h"
-#include "effect3DTISpatializer.h"
+#include "effect3DTISpatializerSource.h"
 #include "BRIR/BRIRCereal.h"
 #include "HRTF/HRTFFactory.h"
 #include "ILD/ILDCereal.h"
 
-#include "effect3DTIReverb.h"
+#include "effect3DTISpatializerCore.h"
 
 using namespace std;
 
@@ -44,7 +44,7 @@ using namespace Common;
 
 
 
-namespace Reverb3DTI
+namespace SpatializerCore3DTI
 {
 
 
@@ -426,7 +426,7 @@ namespace Reverb3DTI
 	}
 
 
-	Reverb3DTI::SpatializerCore* SpatializerCore::create(UInt32 sampleRate, UInt32 bufferSize)
+	SpatializerCore3DTI::SpatializerCore* SpatializerCore::create(UInt32 sampleRate, UInt32 bufferSize)
 	{
 		if (instancePtr() != nullptr)
 		{
@@ -437,13 +437,13 @@ namespace Reverb3DTI
 	}
 
 
-	Reverb3DTI::SpatializerCore* SpatializerCore::instance()
+	SpatializerCore3DTI::SpatializerCore* SpatializerCore::instance()
 	{
 		return instancePtr();
 	}
 
 
-	Reverb3DTI::SpatializerCore*& SpatializerCore::instancePtr()
+	SpatializerCore3DTI::SpatializerCore*& SpatializerCore::instancePtr()
 	{
 		static SpatializerCore* s(nullptr);
 		return s;
@@ -451,7 +451,7 @@ namespace Reverb3DTI
 
 }
 
-char const* Reverb3DTI::SpatializerCore::TooManyInstancesEception::what() const
+char const* SpatializerCore3DTI::SpatializerCore::TooManyInstancesEception::what() const
 {
 	return "SpatializerCore already exists. Only one SpatializerCore instance is currently supported.";
 }

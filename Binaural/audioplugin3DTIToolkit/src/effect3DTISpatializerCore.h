@@ -7,7 +7,7 @@
 
 
 
-namespace Reverb3DTI
+namespace SpatializerCore3DTI
 {
 	enum SpatializationMode : int
 	{

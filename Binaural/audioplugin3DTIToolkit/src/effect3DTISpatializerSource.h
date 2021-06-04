@@ -2,10 +2,10 @@
 #include "AudioPluginUtil.h"
 #include <BinauralSpatializer/Core.h>
 #include <Common/DynamicCompressorStereo.h>
-#include "effect3DTIReverb.h"
+#include "effect3DTISpatializerCore.h"
 
 
-namespace Spatializer3DTI
+namespace SpatializerSource3DTI
 {
     
 

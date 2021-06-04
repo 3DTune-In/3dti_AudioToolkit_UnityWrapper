@@ -123,8 +123,8 @@
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\TemporalDistortionSimulator.cpp" />
     <ClCompile Include="..\src\effect3DTIHA.cpp" />
     <ClCompile Include="..\src\effect3DTIHL.cpp" />
-    <ClCompile Include="..\src\effect3DTIReverb.cpp" />
-    <ClCompile Include="..\src\effect3DTISpatializer.cpp" />
+    <ClCompile Include="..\src\effect3DTISpatializerCore.cpp" />
+    <ClCompile Include="..\src\effect3DTISpatializerSource.cpp" />
     <ClCompile Include="..\src\AudioPluginUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -244,7 +244,8 @@
     <ClInclude Include="..\src\AudioPluginInterface.h" />
     <ClInclude Include="..\src\AudioPluginUtil.h" />
     <ClInclude Include="..\src\CommonUtils.h" />
-    <ClInclude Include="..\src\effect3DTISpatializer.h" />
+    <ClInclude Include="..\src\effect3DTISpatializerCore.h" />
+    <ClInclude Include="..\src\effect3DTISpatializerSource.h" />
     <ClInclude Include="..\src\PluginList.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
