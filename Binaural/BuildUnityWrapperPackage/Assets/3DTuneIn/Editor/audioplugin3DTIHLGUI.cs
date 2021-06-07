@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;   // For ReadOnlyCollection
 using UnityEditor;
 using UnityEngine;
 using API_3DTI_Common;
+using UnityEngine.Audio;
 
 using static Common3DTIGUI;
 using static API_3DTI_HL;

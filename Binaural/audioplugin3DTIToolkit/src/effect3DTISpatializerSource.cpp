@@ -122,14 +122,15 @@ enum SpatializationMode : int
 };
 
 
+// These values are set explicitly as they need to correspond to values in the C# components.
 enum
 {
-	PARAM_SOURCE_ID,    // DEBUG
-	PARAM_HRTF_INTERPOLATION, // 5 ### SOURCE ####
-	PARAM_MOD_FARLPF, // ### SOURCE ####
-	PARAM_MOD_DISTATT, // ### SOURCE ####
-	PARAM_MOD_NEAR_FIELD_ILD,// ### SOURCE ####
-	PARAM_SPATIALIZATION_MODE,// ### SOURCE ####
+	//PARAM_SOURCE_ID,    // DEBUG
+	PARAM_HRTF_INTERPOLATION = 0, // ### SOURCE ####
+	PARAM_MOD_FARLPF = 1, // ### SOURCE ####
+	PARAM_MOD_DISTATT = 2, // ### SOURCE ####
+	PARAM_MOD_NEAR_FIELD_ILD = 3,// ### SOURCE ####
+	PARAM_SPATIALIZATION_MODE = 4,// ### SOURCE ####
 
 
 	P_NUM
@@ -207,7 +208,7 @@ int InternalRegisterEffectDefinition(UnityAudioEffectDefinition& definition)
 {
 	int numparams = P_NUM;
 	definition.paramdefs = new UnityAudioParameterDefinition[numparams];
-	RegisterParameter(definition, "SourceID", "", -1.0f, /*FLT_MAX*/ 1e20f, -1.0f, 1.0f, 1.0f, PARAM_SOURCE_ID, "Source ID for debug");
+	//RegisterParameter(definition, "SourceID", "", -1.0f, /*FLT_MAX*/ 1e20f, -1.0f, 1.0f, 1.0f, PARAM_SOURCE_ID, "Source ID for debug");
 	RegisterParameter(definition, "HRTFInterp", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_HRTF_INTERPOLATION, "HRTF Interpolation method");
 	RegisterParameter(definition, "MODfarLPF", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_FARLPF, "Far distance LPF module enabler");
 	RegisterParameter(definition, "MODDistAtt", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_DISTATT, "Distance attenuation module enabler");
@@ -662,10 +663,10 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 					//	WriteLog(state, "SET PARAMETER: Scale factor changed to ", value);
 					//	break;
 
-	case PARAM_SOURCE_ID:	// DEBUG
-		data->sourceID = (int)value;
-		WriteLog(state, "SET PARAMETER: Source ID set to ", data->sourceID);
-		break;
+	//case PARAM_SOURCE_ID:	// DEBUG
+	//	data->sourceID = (int)value;
+	//	WriteLog(state, "SET PARAMETER: Source ID set to ", data->sourceID);
+	//	break;
 
 		//case PARAM_CUSTOM_ITD:	// Enable custom ITD (OPTIONAL)
 		//	if (value > 0.0f)
@@ -850,7 +851,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 	case PARAM_SPATIALIZATION_MODE:
 		if (value == 0.0f)
 		{
-			if (spatializer->parameters[SpatializerCore3DTI::PARAM_IS_HIGH_QUALITY_HRTF_LOADED] == 0)
+			if (spatializer->unityParameters[SpatializerCore3DTI::PARAM_IS_HIGH_QUALITY_HRTF_LOADED] == 0)
 			{
 				WriteLog("Error: Cannot set Spatialization mode to High Quality as no HRTF is loaded.");
 				data->parameters[PARAM_SPATIALIZATION_MODE] = SPATIALIZATION_MODE_NONE;
@@ -861,7 +862,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 			{
 				data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::HighQuality);
 				WriteLog(state, "SET PARAMETER: High Quality spatialization mode is enabled", "");
-				if (spatializer->parameters[SpatializerCore3DTI::PARAM_IS_HIGH_QUALITY_ILD_LOADED])
+				if (spatializer->unityParameters[SpatializerCore3DTI::PARAM_IS_HIGH_QUALITY_ILD_LOADED])
 				{
 					data->audioSource->EnableNearFieldEffect();
 				}
@@ -873,7 +874,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 		}
 		else if (value == 1.0f)
 		{
-			if (spatializer->parameters[SpatializerCore3DTI::PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED] == 0)
+			if (spatializer->unityParameters[SpatializerCore3DTI::PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED] == 0)
 			{
 				WriteLog("Error: Cannot set Spatialization mode to High Performance as no HRTF is loaded.");
 				data->parameters[PARAM_SPATIALIZATION_MODE] = SPATIALIZATION_MODE_NONE;
@@ -914,8 +915,8 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK GetFloatParameterCallback(UnityAud
 
 	if (value != NULL)
 	{
-		switch (index)
-		{
+		//switch (index)
+		//{
 			//case PARAM_LIMITER_GET_COMPRESSION:
 			//	if (spatializer().limiter.IsDynamicProcessApplied())
 			//		*value = 1.0f;
@@ -948,10 +949,10 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK GetFloatParameterCallback(UnityAud
 			//	//*value = float(data->sampleRate);
 			//	*value = spatializer().core.GetAudioState().sampleRate;
 			//	break;
-		default:
+		//default:
 			*value = data->parameters[index];
-			break;
-		}
+			//break;
+		//}
 	}
 	return UNITY_AUDIODSP_OK;
 }
@@ -993,14 +994,14 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectSt
 
 	//spatializer.spatializerMutex.lock();
 
-	if (data->audioSource->GetSpatializationMode() == Binaural::HighQuality && !spatializer->parameters[SpatializerCore3DTI::PARAM_IS_HIGH_QUALITY_HRTF_LOADED])
+	if (data->audioSource->GetSpatializationMode() == Binaural::HighQuality && !spatializer->unityParameters[SpatializerCore3DTI::PARAM_IS_HIGH_QUALITY_HRTF_LOADED])
 	{
 		//std::copy(inbuffer, inbuffer + length * (size_t)outchannels, outbuffer);
 		//memset(outbuffer, 0.0f, length * (size_t)outchannels * sizeof(float));
 		std::fill(inbuffer, inbuffer + length * (size_t)outchannels, 0.0f);
 		return UNITY_AUDIODSP_OK;
 	}
-	else if (data->audioSource->GetSpatializationMode() == Binaural::HighPerformance && !spatializer->parameters[SpatializerCore3DTI::PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED])
+	else if (data->audioSource->GetSpatializationMode() == Binaural::HighPerformance && !spatializer->unityParameters[SpatializerCore3DTI::PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED])
 	{
 		//std::copy(inbuffer, inbuffer + length * (size_t)outchannels, outbuffer);
 		//memset(outbuffer, 0.0f, length * (size_t)outchannels * sizeof(float));
@@ -1020,8 +1021,8 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectSt
 	  //}
 
 	  // Set source and listener transforms
-	data->audioSource->SetSourceTransform(ComputeSourceTransformFromMatrix(state->spatializerdata->sourcematrix, spatializer->parameters[SpatializerCore3DTI::PARAM_SCALE_FACTOR]));
-	spatializer->listener->SetListenerTransform(ComputeListenerTransformFromMatrix(state->spatializerdata->listenermatrix, spatializer->parameters[SpatializerCore3DTI::PARAM_SCALE_FACTOR]));
+	data->audioSource->SetSourceTransform(ComputeSourceTransformFromMatrix(state->spatializerdata->sourcematrix, spatializer->unityParameters[SpatializerCore3DTI::PARAM_SCALE_FACTOR]));
+	spatializer->listener->SetListenerTransform(ComputeListenerTransformFromMatrix(state->spatializerdata->listenermatrix, spatializer->unityParameters[SpatializerCore3DTI::PARAM_SCALE_FACTOR]));
 
 	// Now check that listener and source are not in the same position.
 	// This might happens in some weird cases, such as when trying to process a source with no clip
@@ -1058,7 +1059,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectSt
 	// Limiter
 	CStereoBuffer<float> outStereoBuffer;
 	outStereoBuffer.Interlace(outLeftBuffer, outRightBuffer);
-	if (spatializer->parameters[SpatializerCore3DTI::PARAM_LIMITER_SET_ON])
+	if (spatializer->unityParameters[SpatializerCore3DTI::PARAM_LIMITER_SET_ON])
 	{
 		spatializer->limiter.Process(outStereoBuffer);
 	}

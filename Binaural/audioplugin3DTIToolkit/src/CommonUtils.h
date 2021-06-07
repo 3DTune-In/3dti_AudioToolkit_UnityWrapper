@@ -54,6 +54,11 @@ inline std::string Bool2String(bool b)
 		return "OFF";
 }
 
+inline float clamp(float x, float min, float max)
+{
+	return x < min ? min : x > max ? max : x;
+}
+
 ///////////////////////////////////////
 
 #endif

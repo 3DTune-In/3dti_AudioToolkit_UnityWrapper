@@ -22,7 +22,7 @@ public static class Common3DTIGUI
     static GUIStyle sectionStyle;
     static GUIStyle subsectionStyle;
     static GUIStyle dragdropStyle;
-    static GUIStyle parameterLabelStyle;
+    public static GUIStyle parameterLabelStyle;
     static GUIStyle leftColumnStyle;
     static GUIStyle rightColumnStyle;
     static GUIStyle intFieldStyle;
@@ -968,7 +968,18 @@ public static class Common3DTIGUI
     }
 
 
-   
+
+
+  
+
+
+
+
+
+
+
+
+
 
     /// <summary>
     /// Auxiliary function for creating sliders for float variables with specific format

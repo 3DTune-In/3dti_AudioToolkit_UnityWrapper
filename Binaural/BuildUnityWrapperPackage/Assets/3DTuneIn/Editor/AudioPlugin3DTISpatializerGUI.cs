@@ -17,6 +17,7 @@ using UnityEditor;
 using API_3DTI_Common;
 using System;
 using System.Linq;
+using static API_3DTI_Spatializer;
 
 [CustomEditor(typeof(API_3DTI_Spatializer))]
 public class AudioPlugin3DTISpatializerGUI : Editor
@@ -122,6 +123,112 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     }
 
 
+
+
+
+
+    // Create a control for a SpatializerParameter parameter. Returns true if the value changed
+    public bool CreateControl(FloatParameter parameter, bool isCompact = false)
+    {
+        SpatializerParameterAttribute p = parameter.GetAttribute<SpatializerParameterAttribute>();
+        if (p == null)
+        {
+            throw new Exception($"Failed to find SpatializerParameterAttribute for parameter {parameter}");
+        }
+
+        Common3DTIGUI.SingleSpace();
+
+        if (p.type == typeof(float) || p.type == typeof(int))
+        {
+            toolkit.GetFloatParameter(parameter, out float oldValue);
+            float newValue;
+            string valueString;
+            if (isCompact)
+            {
+                GUILayout.BeginVertical(GUILayout.ExpandWidth(false));
+                GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));
+                GUILayout.Label(new GUIContent(p.label, p.description));
+                valueString = GUILayout.TextField(oldValue.ToString(p.type == typeof(float) ? "F2" : "F0", System.Globalization.CultureInfo.InvariantCulture), GUILayout.ExpandWidth(false));
+                GUILayout.Label(p.units, GUILayout.ExpandWidth(false));
+                GUILayout.EndHorizontal();
+                // TODO: I Think this will have a bug where newValue gets overwritten by oldvalue in the parse below
+                newValue = GUILayout.HorizontalSlider(oldValue, p.min, p.max);
+                GUILayout.EndVertical();
+            }
+            else
+            {
+                GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));
+                Common3DTIGUI.AddLabelToParameterGroup(p.label);
+                GUILayout.Label(new GUIContent(p.label, p.description), Common3DTIGUI.parameterLabelStyle, GUILayout.Width(Common3DTIGUI.GetParameterLabelWidth()));
+                newValue = GUILayout.HorizontalSlider(oldValue, p.min, p.max, GUILayout.ExpandWidth(true));
+                valueString = GUILayout.TextField(newValue.ToString(p.type == typeof(float) ? "F2" : "F0", System.Globalization.CultureInfo.InvariantCulture), GUILayout.ExpandWidth(false));
+                GUILayout.Label(p.units, GUILayout.ExpandWidth(false));
+                GUILayout.EndHorizontal();
+            }
+
+            bool parseOk = float.TryParse(valueString, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float parsedValueString);
+            if (parseOk)
+            {
+                newValue = parsedValueString;
+            }
+            if (p.validValues != null && p.validValues.Length > 0)
+            {
+                // Lock to nearest valid value
+                newValue = p.validValues.OrderBy(x => Math.Abs(x - newValue)).First();
+            }
+
+            if (newValue != oldValue)
+            {
+                toolkit.SetFloatParameter(parameter, newValue);
+                return true;
+            }
+            return false;
+        }
+        else if (p.type == typeof(bool))
+        {
+            bool oldValue = toolkit.GetFloatParameter(parameter) != 0.0f;
+            bool newValue = GUILayout.Toggle(oldValue, new GUIContent(p.label, p.description), GUILayout.ExpandWidth(false));
+            if (newValue != oldValue)
+            {
+                bool setOK = toolkit.SetFloatParameter(parameter, Convert.ToSingle(newValue));
+                Debug.Assert(setOK);
+                return true;
+            }
+            return false;
+        }
+        else if (p.type.IsEnum)
+        {
+            toolkit.GetFloatParameter(parameter, out float oldFloatValue);
+            int oldValue = (int)oldFloatValue;
+            Debug.Assert(Enum.GetUnderlyingType(p.type) == typeof(int));
+            int[] values = (int[])Enum.GetValues(p.type);
+            if (!values.Contains(oldValue))
+            {
+                Debug.LogWarning($"Plugin returned invalid value for {p.label}: {oldValue}");
+            }
+
+            int defaultValue = (int)Enum.GetValues(p.type).GetValue(0);
+
+            int newValue = (int)(object)EditorGUILayout.Popup(new GUIContent(p.label, p.description), values.Contains(oldValue) ? oldValue : defaultValue, Enum.GetNames(p.type));
+            Debug.Assert(Enum.IsDefined(p.type, newValue));
+
+            if (newValue != oldValue)
+            {
+                bool setOK = toolkit.SetFloatParameter(parameter, newValue);
+                Debug.Assert(setOK);
+                return true;
+            }
+            return false;
+        }
+        else
+        {
+            throw new Exception($"Cannot create GUI control for Parameter of type {p.type}.");
+        }
+    }
+
+
+
+
     ///////////////////////////////////////////////////////////
     // GUI ELEMENT ACTIONS
     ///////////////////////////////////////////////////////////
@@ -134,6 +241,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     /// </summary>
     public void SliderHeadRadius()
     {
+        //toolkit.SetFloatParameter(API_3DTI_Spatializer.FloatParameter.PARAM_HEAD_RADIUS, )
         toolkit.SetHeadRadius(toolkit.listenerHeadRadius);
     }
 
@@ -252,10 +360,14 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             Common3DTIGUI.AddLabelToParameterGroup("Custom ITD");
             Common3DTIGUI.AddLabelToParameterGroup("Head radius");
             Common3DTIGUI.SingleSpace();
-            if (Common3DTIGUI.CreateToggle(ref toolkit.customITDEnabled, "Custom ITD", "Enable Interaural Time Difference customization", isStartingPlay))
-                toolkit.SetCustomITD(toolkit.customITDEnabled);
-            if (toolkit.customITDEnabled)
-                Common3DTIGUI.CreateFloatSlider(ref toolkit.listenerHeadRadius, "Head radius", "F4", "meters", "Set listener head radius", 0.0f, maxHeadRadius, SliderHeadRadius);
+            CreateControl(FloatParameter.PARAM_CUSTOM_ITD);
+            //if (Common3DTIGUI.CreateToggle(ref toolkit.customITDEnabled, "Custom ITD", "Enable Interaural Time Difference customization", isStartingPlay))
+                //toolkit.SetCustomITD(toolkit.customITDEnabled);
+            if (toolkit.GetFloatParameter(FloatParameter.PARAM_CUSTOM_ITD) != 0.0f)
+            {
+                //Common3DTIGUI.CreateFloatSlider(ref toolkit.listenerHeadRadius, "Head radius", "F4", "meters", "Set listener head radius", 0.0f, maxHeadRadius, SliderHeadRadius);
+                CreateControl(FloatParameter.PARAM_HEAD_RADIUS);
+            }
         }
 
         Common3DTIGUI.EndSection();

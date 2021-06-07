@@ -16,52 +16,34 @@ namespace SpatializerCore3DTI
 		SPATIALIZATION_MODE_NONE = 2,
 	};
 
-	enum
+	// Parameters set outside of the unity Parameter system
+	enum FloatParameter : int
 	{
-		PARAM_HEAD_RADIUS,
-		PARAM_SCALE_FACTOR,
-		PARAM_CUSTOM_ITD,
-		PARAM_MAG_ANECHATT,
-		PARAM_MAG_SOUNDSPEED,
+		PARAM_HEAD_RADIUS = 0,
+		PARAM_SCALE_FACTOR = 1,
+		PARAM_CUSTOM_ITD = 2,
+		PARAM_MAG_ANECHATT = 3,
+		PARAM_MAG_SOUNDSPEED = 4,
+		PARAM_HA_DIRECTIONALITY_EXTEND_LEFT = 5,
+		PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT = 6,
+		PARAM_HA_DIRECTIONALITY_ON_LEFT = 7,
+		PARAM_HA_DIRECTIONALITY_ON_RIGHT = 8,
+		PARAM_LIMITER_SET_ON = 9,
+		PARAM_HRTF_STEP = 10,
+		NumFloatParameters = 11,
+	};
 
-		// HA directionality
-		PARAM_HA_DIRECTIONALITY_EXTEND_LEFT,
-		PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT, // 15
-		PARAM_HA_DIRECTIONALITY_ON_LEFT,
-		PARAM_HA_DIRECTIONALITY_ON_RIGHT,
-
-		// Limiter
-		PARAM_LIMITER_SET_ON,
-
-
-		// HRTF resampling step
-		PARAM_HRTF_STEP,
-
-		// High Performance and None modes
-		//PARAM_HIGH_PERFORMANCE_ILD_FILE_STRING,
-		//PARAM_SPATIALIZATION_MODE,
-		//PARAM_BUFFER_SIZE,
-		//PARAM_SAMPLE_RATE,
-		//PARAM_BUFFER_SIZE_CORE,
-		//PARAM_SAMPLE_RATE_CORE,
+		// Define unity parameters separately
+	enum UnityParameters
+	{
 		// Read only status parameters
 		PARAM_IS_HIGH_QUALITY_HRTF_LOADED,
 		PARAM_IS_HIGH_QUALITY_ILD_LOADED,
 		PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED,
 		PARAM_IS_REVERB_BRIR_LOADED,
 
-		PARAM_LIMITER_GET_COMPRESSION,
-
 		P_NUM
 	};
-
-	// readonly parameters to mvoe to getfloatbuffer method
-	//PARAM_LIMITER_GET_COMPRESSION,
-		//PARAM_IS_CORE_READY, // 20
-
-
-
-
 
 
 /////////////////////////////////////////////////////////////////////
@@ -74,7 +56,9 @@ namespace SpatializerCore3DTI
 		std::shared_ptr<Binaural::CEnvironment> environment;
 		Common::CDynamicCompressorStereo limiter;
 		// TODO: Most of these are not used as we set parameters directly in the above classes
-		float parameters[P_NUM];
+		float unityParameters[P_NUM];
+		float scaleFactor;
+		bool isLimiterEnabled;
 		std::mutex mutex;
 
 	protected:
@@ -83,7 +67,7 @@ namespace SpatializerCore3DTI
 	public:
 		~SpatializerCore();
 
-		bool loadBinaries(std::string hrtfPath,	std::string ildPath, std::string highPerformanceILDPath,std::string brirPath);
+		bool loadBinaries(std::string hrtfPath,	std::string ildPath, std::string highPerformanceILDPath, std::string brirPath);
 
 
 		class TooManyInstancesEception : public std::exception
