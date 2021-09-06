@@ -42,10 +42,12 @@ public class SpatializerParameterAttribute : System.Attribute
     public float[] validValues;
 	public float min;
 	public float max;
+	public float defaultValue;
 }
 
 
 [System.AttributeUsage(System.AttributeTargets.Field)]
+// TODO: Remove this and just use SpatializerParameterAttribute
 public class SpatializerSourceParameterAttribute : System.Attribute
 {
 	// The name used to set using setSpatializerFloat
@@ -61,6 +63,7 @@ public class SpatializerSourceParameterAttribute : System.Attribute
     public float[] validValues;
     public float min;
     public float max;
+    public float defaultValue;
 }
 
 
@@ -70,11 +73,12 @@ public class API_3DTI_Spatializer : MonoBehaviour
     // Set this to the 3DTI mixer containing the SpatializerCore3DTI effect.
     public AudioMixer spatializereCoreMixer;
 
-    public enum FloatParameter
+    public enum SpatializerParameter
     {
-        [SpatializerParameter(label="Head radius", description = "Set listener head radius", units="m", min=0.0f, max=1e20f)]
+        [SpatializerParameter(label="Head radius", description = "Set listener head radius", units="m", min=0.0f, max=1e20f, defaultValue = 0.0875f)]
         PARAM_HEAD_RADIUS = 0,
 
+		// TODO: Add remaining default values
 		[SpatializerParameter(label = "Scale factor", description= "Set the proportion between metres and Unity scale units", min = 1e-20f, max = 1e20f)]
 		PARAM_SCALE_FACTOR = 1,
 
@@ -105,20 +109,18 @@ public class API_3DTI_Spatializer : MonoBehaviour
         [SpatializerParameter(label = "HRTF resampling step", description = "HRTF resampling step; Lower values give better quality at the cost of more memory usage", min = 1, max = 90, type = typeof(int))]
         PARAM_HRTF_STEP = 10,
     };
-	const int NumFloatParameters = 11;
+	public const int NumSpatializerParameters = 11;
 
+	// Store the parameter values here for Unity to serialize. We initialize them to their default values. This is private and clients should use the accessor/getter methods below which will ensure the plugin is kept in sync with these values.
 	[SerializeField]
-	//float[] floatParameters = new float[Enum.GetNames(typeof(FloatParameter)).Length];
-
-	// Initialize to NaN so we know whether to override with default values from the plugin or whether Unity has serialized these
-	private float[] floatParameters = Enumerable.Repeat(float.NaN, NumFloatParameters).ToArray<float>();
+	private float[] spatializerParameters = Enumerable.Range(0, NumSpatializerParameters).Select(i => ((SpatializerParameter)i).GetAttribute<SpatializerParameterAttribute>().defaultValue).ToArray<float>();
 
 
 	/// <summary>
 	/// Parameters that can be set for each specific sound source using AudioSource.setSpatializerFloat
 	/// Note: I'm not sure the pluginName is relevant for these, but it's here for completeness.
 	/// </summary>
-	enum SpatializerSourceParameters
+	public enum SpatializerSourceParameter
     {
         [SpatializerSourceParameter(pluginName="HRTFInterp", label = "Enable HRTF interpolation", description = "Enable runtime interpolation of HRIRs, to allow for smoother transitions when moving listener and/or sources", min = 0, max = 1, type = typeof(bool))]
         PARAM_HRTF_INTERPOLATION = 0,
@@ -128,14 +130,16 @@ public class API_3DTI_Spatializer : MonoBehaviour
         PARAM_MOD_DISTATT = 2,
         [SpatializerSourceParameter(pluginName = "MODNFILD", label = "Enable near distance ILD", description = "Enable near field filter for sources very close to the listener. High quality only. Depends on the High Quality ILD binary being loaded.", min = 0, max = 1, type = typeof(bool))]
         PARAM_MOD_NEAR_FIELD_ILD = 3,
-        [SpatializerSourceParameter(pluginName = "SpatMode", label = "Set spatialization mode (0=High quality, 1=High performance, 2=None)", description= "Set spatialization mode (0=High quality, 1=High performance, 2=None). Note, High quality depends on the HRTF binary being loaded and High Performance depends on the High Performance ILD binary being loaded." min = 0, max = 2, type = typeof(int))]
+        [SpatializerSourceParameter(pluginName = "SpatMode", label = "Set spatialization mode (0=High quality, 1=High performance, 2=None)", description= "Set spatialization mode (0=High quality, 1=High performance, 2=None). Note, High quality depends on the HRTF binary being loaded and High Performance depends on the High Performance ILD binary being loaded.", min = 0, max = 2, type = typeof(int))]
         PARAM_SPATIALIZATION_MODE = 4,
     }
+	public const int NumSpatializerSourceParameters = 5;
+    // Initialize to NaN so we know whether to override with default values from the plugin or whether Unity has serialized these
+    private float[] spatializerSourceParameterInitialValues = Enumerable.Range(0, NumSpatializerSourceParameters).Select(i => ((SpatializerSourceParameter)i).GetAttribute<SpatializerSourceParameterAttribute>().defaultValue).ToArray<float>();
 
-	
-	// ======
+    // ======
 
-	TSampleRateEnum sampleRate;
+    TSampleRateEnum sampleRate;
 
 	int sampleRateIndex = (int)TSampleRateEnum.K48; //48k by default
 													// LISTENER:
@@ -175,72 +179,72 @@ public class API_3DTI_Spatializer : MonoBehaviour
     //public string ILDHighPerformanceFileName48 = "";
     //public string ILDHighPerformanceFileName96 = "";
 
-    public bool customITDEnabled = false;           // For internal use, DO NOT USE IT DIRECTLY
-	public float listenerHeadRadius = 0.0875f;      // For internal use, DO NOT USE IT DIRECTLY    
-													//public TSpatializationMode spatializationMode = TSpatializationMode.HIGH_QUALITY;        // For internal use, DO NOT USE IT DIRECTLY
-	public int spatializationMode = SPATIALIZATION_MODE_HIGH_QUALITY;   // For internal use, DO NOT USE IT DIRECTLY
+ //   public bool customITDEnabled = false;           // For internal use, DO NOT USE IT DIRECTLY
+	//public float listenerHeadRadius = 0.0875f;      // For internal use, DO NOT USE IT DIRECTLY    
+	//												//public TSpatializationMode spatializationMode = TSpatializationMode.HIGH_QUALITY;        // For internal use, DO NOT USE IT DIRECTLY
+	//public int spatializationMode = SPATIALIZATION_MODE_HIGH_QUALITY;   // For internal use, DO NOT USE IT DIRECTLY
 
-	// SOURCE:
-	int lastSourceID = 0;                       // For internal use, DO NOT USE IT DIRECTLY
+	//// SOURCE:
+	//int lastSourceID = 0;                       // For internal use, DO NOT USE IT DIRECTLY
 
-	// ADVANCED:
-	public float scaleFactor = 1.0f;            // For internal use, DO NOT USE IT DIRECTLY
-	public bool runtimeInterpolateHRTF = true;  // For internal use, DO NOT USE IT DIRECTLY
-	public int HRTFstep = 15;                   // For internal use, DO NOT USE IT DIRECTLY
-	public bool modFarLPF = true;               // For internal use, DO NOT USE IT DIRECTLY
-	public bool modDistAtt = true;              // For internal use, DO NOT USE IT DIRECTLY
-	public bool modNearFieldILD = true;         // For internal use, DO NOT USE IT DIRECTLY
-	public bool modHRTF = true;                 // For internal use, DO NOT USE IT DIRECTLY
-	public float magAnechoicAttenuation = -1.0f;    // For internal use, DO NOT USE IT DIRECTLY    
-	public float magSoundSpeed = 343.0f;            // For internal use, DO NOT USE IT DIRECTLY
-	public bool debugLog = false;                   // For internal use, DO NOT USE IT DIRECTLY    
+	//// ADVANCED:
+	//public float scaleFactor = 1.0f;            // For internal use, DO NOT USE IT DIRECTLY
+	//public bool runtimeInterpolateHRTF = true;  // For internal use, DO NOT USE IT DIRECTLY
+	//public int HRTFstep = 15;                   // For internal use, DO NOT USE IT DIRECTLY
+	//public bool modFarLPF = true;               // For internal use, DO NOT USE IT DIRECTLY
+	//public bool modDistAtt = true;              // For internal use, DO NOT USE IT DIRECTLY
+	//public bool modNearFieldILD = true;         // For internal use, DO NOT USE IT DIRECTLY
+	//public bool modHRTF = true;                 // For internal use, DO NOT USE IT DIRECTLY
+	//public float magAnechoicAttenuation = -1.0f;    // For internal use, DO NOT USE IT DIRECTLY    
+	//public float magSoundSpeed = 343.0f;            // For internal use, DO NOT USE IT DIRECTLY
+	//public bool debugLog = false;                   // For internal use, DO NOT USE IT DIRECTLY    
 
-	// HEARING AID DIRECTIONALITY:
-	//public CEarAPIParameter<bool> doHADirectionality = new CEarAPIParameter<bool>(false);
-	public bool doHADirectionalityLeft = false;     // For internal use, DO NOT USE IT DIRECTLY    
-	public bool doHADirectionalityRight = false;    // For internal use, DO NOT USE IT DIRECTLY    
-	public float HADirectionalityExtendLeft = 15.0f;    // For internal use, DO NOT USE IT DIRECTLY
-	public float HADirectionalityExtendRight = 15.0f;   // For internal use, DO NOT USE IT DIRECTLY
+	//// HEARING AID DIRECTIONALITY:
+	////public CEarAPIParameter<bool> doHADirectionality = new CEarAPIParameter<bool>(false);
+	//public bool doHADirectionalityLeft = false;     // For internal use, DO NOT USE IT DIRECTLY    
+	//public bool doHADirectionalityRight = false;    // For internal use, DO NOT USE IT DIRECTLY    
+	//public float HADirectionalityExtendLeft = 15.0f;    // For internal use, DO NOT USE IT DIRECTLY
+	//public float HADirectionalityExtendRight = 15.0f;   // For internal use, DO NOT USE IT DIRECTLY
 
-	// LIMITER
-	public bool doLimiter = true;               // For internal use, DO NOT USE IT DIRECTLY
+	//// LIMITER
+	//public bool doLimiter = true;               // For internal use, DO NOT USE IT DIRECTLY
 
-	// Definition of spatializer plugin commands
-	int LOAD_3DTI_HRTF = 0;
-	int SET_HEAD_RADIUS = 1;
-	int SET_SCALE_FACTOR = 2;
-	int SET_SOURCE_ID = 3;
-	int SET_CUSTOM_ITD = 4;
-	int SET_HRTF_INTERPOLATION = 5;
-	int SET_MOD_FARLPF = 6;
-	int SET_MOD_DISTATT = 7;
-	int SET_MOD_NEARFIELD_ILD = 8;
-	//int SET_MOD_HRTF = 9;   // DEPRECATED
-	int SET_MAG_ANECHATT = 10;
-	int SET_MAG_SOUNDSPEED = 11;
-	int LOAD_3DTI_ILD_NEARFIELD = 12;
-	int SET_DEBUG_LOG = 13;
-	int SET_HA_DIRECTIONALITY_EXTEND_LEFT = 14;
-	int SET_HA_DIRECTIONALITY_EXTEND_RIGHT = 15;
-	int SET_HA_DIRECTIONALITY_ON_LEFT = 16;
-	int SET_HA_DIRECTIONALITY_ON_RIGHT = 17;
-	int SET_LIMITER_ON = 18;
-	int GET_LIMITER_COMPRESSION = 19;
-	int GET_IS_CORE_READY = 20;
-	int SET_HRTF_STEP = 21;
-	int LOAD_3DTI_ILD_HIGHPERFORMANCE = 22;
-	int SET_SPATIALIZATION_MODE = 23;
-	int GET_BUFFER_SIZE = 24;
-	int GET_SAMPLE_RATE = 25;
-	int GET_BUFFER_SIZE_CORE = 26;
-	int GET_SAMPLE_RATE_CORE = 27;
-	// For high performance / High quality modes, variables to check which resources have been loaded
-	bool HighQualityModeHRTFLoaded = false;
-	bool HighQualityModeILDLoaded = false;
-	bool HighPerformanceModeILDLoaded = false;
+	//// Definition of spatializer plugin commands
+	//int LOAD_3DTI_HRTF = 0;
+	//int SET_HEAD_RADIUS = 1;
+	//int SET_SCALE_FACTOR = 2;
+	//int SET_SOURCE_ID = 3;
+	//int SET_CUSTOM_ITD = 4;
+	//int SET_HRTF_INTERPOLATION = 5;
+	//int SET_MOD_FARLPF = 6;
+	//int SET_MOD_DISTATT = 7;
+	//int SET_MOD_NEARFIELD_ILD = 8;
+	////int SET_MOD_HRTF = 9;   // DEPRECATED
+	//int SET_MAG_ANECHATT = 10;
+	//int SET_MAG_SOUNDSPEED = 11;
+	//int LOAD_3DTI_ILD_NEARFIELD = 12;
+	//int SET_DEBUG_LOG = 13;
+	//int SET_HA_DIRECTIONALITY_EXTEND_LEFT = 14;
+	//int SET_HA_DIRECTIONALITY_EXTEND_RIGHT = 15;
+	//int SET_HA_DIRECTIONALITY_ON_LEFT = 16;
+	//int SET_HA_DIRECTIONALITY_ON_RIGHT = 17;
+	//int SET_LIMITER_ON = 18;
+	//int GET_LIMITER_COMPRESSION = 19;
+	//int GET_IS_CORE_READY = 20;
+	//int SET_HRTF_STEP = 21;
+	//int LOAD_3DTI_ILD_HIGHPERFORMANCE = 22;
+	//int SET_SPATIALIZATION_MODE = 23;
+	//int GET_BUFFER_SIZE = 24;
+	//int GET_SAMPLE_RATE = 25;
+	//int GET_BUFFER_SIZE_CORE = 26;
+	//int GET_SAMPLE_RATE_CORE = 27;
+	//// For high performance / High quality modes, variables to check which resources have been loaded
+	//bool HighQualityModeHRTFLoaded = false;
+	//bool HighQualityModeILDLoaded = false;
+	//bool HighPerformanceModeILDLoaded = false;
 
-	// This is needed from Unity 2017
-	bool isInitialized = false;
+	//// This is needed from Unity 2017
+	//bool isInitialized = false;
 
 	/////////////////////////////////////////////////////////////////////
 	///
@@ -298,9 +302,9 @@ public class API_3DTI_Spatializer : MonoBehaviour
 			return;
         }
 
-		for (int i=0; i<NumFloatParameters; i++)
+		for (int i=0; i<NumSpatializerParameters; i++)
         {
-			if (!Set3DTISpatializerFloat(i, floatParameters[i]))
+			if (!Set3DTISpatializerFloat(i, spatializerParameters[i]))
             {
 				Debug.LogError($"Failed to set 3DTI parameter {i}.", this);
             }
@@ -357,14 +361,16 @@ public class API_3DTI_Spatializer : MonoBehaviour
 
 	}
 
-	public bool SetFloatParameter(FloatParameter parameter, float value)
+	// --- Spatializer Core parameters
+
+	public bool SetFloatParameter(SpatializerParameter parameter, float value)
     {
 		if (!Set3DTISpatializerFloat((int)parameter, value))
         {
 			Debug.LogError($"Failed to set parameter {parameter} on 3DTI Spatializer plugin.", this);
 			return false;
         }
-		if (!Get3DTISpatializerFloat((int)parameter, out floatParameters[(int) value]))
+		if (!Get3DTISpatializerFloat((int)parameter, out spatializerParameters[(int) value]))
         {
 			Debug.LogError($"Failed to retrieve value of parameter {parameter} from 3DTI Spatializer plugin after setting it.", this);
 			return false;
@@ -372,7 +378,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
 		return true;
     }
 
-    public bool GetFloatParameter(FloatParameter parameter, out float value)
+    public bool GetFloatParameter(SpatializerParameter parameter, out float value)
     {
 		if (!Get3DTISpatializerFloat((int)parameter, out value))
         {
@@ -383,15 +389,43 @@ public class API_3DTI_Spatializer : MonoBehaviour
     }
 
     // Throws exception on failure
-    public float GetFloatParameter(FloatParameter parameter)
+    public float GetFloatParameter(SpatializerParameter parameter)
     {
         if (!Get3DTISpatializerFloat((int)parameter, out float value))
         {
-			throw new Exception("Failed to retrieve parameter {parameter} from 3DTI Spatializer plugin.");
+			throw new Exception($"Failed to retrieve parameter {parameter} from 3DTI Spatializer plugin.");
         }
         return value;
     }
 
+
+	// ---- Spatializer per-audio source parameters
+
+	/// <summary>
+	/// Set a spatializer parameter for a specific source
+	/// </summary>
+	/// <param name="parameter">The per-source parameter to set</param>
+	/// <param name="value">The new value for the parameter</param>
+	/// <param name="source">The source on which to set this value. If null then the default value will be changed for new instances.</param>
+	/// <returns></returns>
+	public bool SetFloatParameter(SpatializerSourceParameter parameter, float value, AudioSource source = null)
+    {
+        // TODO: Pass default values to the dll
+		if (source==null)
+        {
+			throw new NotImplementedException("Default parameters not yet implemented");
+        }
+        return source.SetSpatializerFloat((int)parameter, value);
+    }
+
+	public bool GetFloatParameter(SpatializerSourceParameter parameter, out float value, AudioSource source = null)
+    {
+        if (source == null)
+        {
+            throw new NotImplementedException("Default parameters not yet implemented");
+        }
+		return source.GetSpatializerFloat((int)parameter, out value);
+    }
 
 
     void Update()
@@ -976,56 +1010,56 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Switch on/off far distance LPF
     /// </summary>        
-    public bool SetModFarLPF(bool _enable, AudioSource source = null)
-    {
-        modFarLPF = _enable;
-        return SendCommand(SET_MOD_FARLPF, CommonFunctions.Bool2Float(_enable), source);
-    }
+ //   public bool SetModFarLPF(bool _enable, AudioSource source = null)
+ //   {
+ //       modFarLPF = _enable;
+ //       return SendCommand(SET_MOD_FARLPF, CommonFunctions.Bool2Float(_enable), source);
+ //   }
 
-    /////////////////////////////////////////////////////////////////////
+ //   /////////////////////////////////////////////////////////////////////
 
-    /// <summary>
-    /// Switch on/off distance attenuation
-    /// </summary>        
-    public bool SetModDistanceAttenuation(bool _enable, AudioSource source = null)
-    {
-        modDistAtt = _enable;
-        return SendCommand(SET_MOD_DISTATT, CommonFunctions.Bool2Float(_enable), source);
-    }
+ //   /// <summary>
+ //   /// Switch on/off distance attenuation
+ //   /// </summary>        
+ //   public bool SetModDistanceAttenuation(bool _enable, AudioSource source = null)
+ //   {
+ //       modDistAtt = _enable;
+ //       return SendCommand(SET_MOD_DISTATT, CommonFunctions.Bool2Float(_enable), source);
+ //   }
 
-    /////////////////////////////////////////////////////////////////////
+ //   /////////////////////////////////////////////////////////////////////
 
-    /// <summary>
-    /// Switch on/off near field ILD
-    /// </summary>        
-    public bool SetModNearFieldILD(bool _enable, AudioSource source = null)
-    {
-        modNearFieldILD = _enable;
-        return SendCommand(SET_MOD_NEARFIELD_ILD, CommonFunctions.Bool2Float(_enable), source);
-    }
+ //   /// <summary>
+ //   /// Switch on/off near field ILD
+ //   /// </summary>        
+ //   public bool SetModNearFieldILD(bool _enable, AudioSource source = null)
+ //   {
+ //       modNearFieldILD = _enable;
+ //       return SendCommand(SET_MOD_NEARFIELD_ILD, CommonFunctions.Bool2Float(_enable), source);
+ //   }
 
-    /////////////////////////////////////////////////////////////////////
+ //   /////////////////////////////////////////////////////////////////////
 
-    /// <summary>
-    /// Set spatialization mode (high quality, high performance, or none)
-    /// </summary>
-    /// <param name="mode"></param>
-    /// <returns></returns>
-    public bool SetSpatializationMode(int mode)
-	{
-		// SPATIALIZATION MODE IS COMMON FOR ALL SOURCES
+ //   /// <summary>
+ //   /// Set spatialization mode (high quality, high performance, or none)
+ //   /// </summary>
+ //   /// <param name="mode"></param>
+ //   /// <returns></returns>
+ //   public bool SetSpatializationMode(int mode)
+	//{
+	//	// SPATIALIZATION MODE IS COMMON FOR ALL SOURCES
 
-		spatializationMode = mode;
+	//	spatializationMode = mode;
 
-		// Load resources        
-		if (!SetupListener())
-		{
-			Debug.LogWarning("SetupListener returned false", this);
-		}
+	//	// Load resources        
+	//	if (!SetupListener())
+	//	{
+	//		Debug.LogWarning("SetupListener returned false", this);
+	//	}
 
-		// Send command to plugin        
-		return SendCommand(SET_SPATIALIZATION_MODE, (float)(mode), null);
-	}
+	//	// Send command to plugin        
+	//	return SendCommand(SET_SPATIALIZATION_MODE, (float)(mode), null);
+	//}
 
 	/////////////////////////////////////////////////////////////////////
 
@@ -1278,17 +1312,17 @@ public class API_3DTI_Spatializer : MonoBehaviour
 	{
 		int _index = 0;
 		int sampleRate = AudioSettings.outputSampleRate;
-		float sampleRateWrapper, sampleRateCore;
-		GetSampleRate(out sampleRateWrapper);
-		GetSampleRateCore(out sampleRateCore);
-		Debug.Log($"sampleRate: {sampleRate}, sampleRateWrapper: {sampleRateWrapper}, sampleRateCore: {sampleRateCore}");
-		if (Application.isPlaying /*|| UnityEditor.EditorApplication.isPlaying*/)
-		{
-			if (sampleRate != sampleRateWrapper || sampleRate != sampleRateCore || sampleRateWrapper != sampleRateCore)
-			{
-				Debug.LogError($"Sample Rate no coincidente entre AudioSettings ({sampleRate}), Wrapper ({sampleRateWrapper}) y Core ({sampleRateCore})");
-			}
-		}
+		//float sampleRateWrapper, sampleRateCore;
+		//GetSampleRate(out sampleRateWrapper);
+		//GetSampleRateCore(out sampleRateCore);
+		//Debug.Log($"sampleRate: {sampleRate}, sampleRateWrapper: {sampleRateWrapper}, sampleRateCore: {sampleRateCore}");
+		//if (Application.isPlaying /*|| UnityEditor.EditorApplication.isPlaying*/)
+		//{
+		//	if (sampleRate != sampleRateWrapper || sampleRate != sampleRateCore || sampleRateWrapper != sampleRateCore)
+		//	{
+		//		Debug.LogError($"Sample Rate no coincidente entre AudioSettings ({sampleRate}), Wrapper ({sampleRateWrapper}) y Core ({sampleRateCore})");
+		//	}
+		//}
 		if (sampleRate > 0)
 		{
 			switch (sampleRate)

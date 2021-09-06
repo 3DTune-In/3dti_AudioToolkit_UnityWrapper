@@ -128,7 +128,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
 
     // Create a control for a SpatializerParameter parameter. Returns true if the value changed
-    public bool CreateControl(FloatParameter parameter, bool isCompact = false)
+    public bool CreateControl(SpatializerParameter parameter, bool isCompact = false)
     {
         SpatializerParameterAttribute p = parameter.GetAttribute<SpatializerParameterAttribute>();
         if (p == null)

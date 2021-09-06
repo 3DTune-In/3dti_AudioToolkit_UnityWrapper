@@ -317,7 +317,7 @@ namespace SpatializerCore3DTI
 			state->effectdata = spatializer;
 			InitParametersFromDefinitions(InternalRegisterEffectDefinition, spatializer->unityParameters);
 		}
-		catch (const SpatializerCore::TooManyInstancesEception&)
+		catch (const SpatializerCore::TooManyInstancesException&)
 		{
 			WriteLog("Error: Attempted to create multiple Spatializer Core plugins. Only one is supported.");
 			return UNITY_AUDIODSP_ERR_UNSUPPORTED;
@@ -626,7 +626,7 @@ namespace SpatializerCore3DTI
 
 }
 
-char const* SpatializerCore3DTI::SpatializerCore::TooManyInstancesEception::what() const
+char const* SpatializerCore3DTI::SpatializerCore::TooManyInstancesException::what() const
 {
 	return "SpatializerCore already exists. Only one SpatializerCore instance is currently supported.";
 }

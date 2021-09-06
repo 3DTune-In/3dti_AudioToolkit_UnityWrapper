@@ -70,13 +70,13 @@ namespace SpatializerCore3DTI
 		bool loadBinaries(std::string hrtfPath,	std::string ildPath, std::string highPerformanceILDPath, std::string brirPath);
 
 
-		class TooManyInstancesEception : public std::exception
+		class TooManyInstancesException : public std::exception
 		{
 		public:
 			virtual char const* what() const;
 		};
 
-		/// Create instance. Throws TooManyInstancesEception if instance already exists.
+		/// Create instance. Throws TooManyInstancesException if instance already exists.
 		static SpatializerCore* create(UInt32 sampleRate, UInt32 bufferSize);
 
 		/// \return instance or null if nullptr have been made yet
