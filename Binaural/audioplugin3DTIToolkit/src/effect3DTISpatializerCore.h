@@ -19,18 +19,28 @@ namespace SpatializerCore3DTI
 	// Parameters set outside of the unity Parameter system
 	enum FloatParameter : int
 	{
-		PARAM_HEAD_RADIUS = 0,
-		PARAM_SCALE_FACTOR = 1,
-		PARAM_CUSTOM_ITD = 2,
-		PARAM_MAG_ANECHATT = 3,
-		PARAM_MAG_SOUNDSPEED = 4,
-		PARAM_HA_DIRECTIONALITY_EXTEND_LEFT = 5,
-		PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT = 6,
-		PARAM_HA_DIRECTIONALITY_ON_LEFT = 7,
-		PARAM_HA_DIRECTIONALITY_ON_RIGHT = 8,
-		PARAM_LIMITER_SET_ON = 9,
-		PARAM_HRTF_STEP = 10,
-		NumFloatParameters = 11,
+		// Per-source parameters. We store them in the core so we know what value to initialize the values to on a new source instance.
+		PARAM_HRTF_INTERPOLATION = 0, // ### SOURCE ####
+		PARAM_MOD_FARLPF = 1, // ### SOURCE ####
+		PARAM_MOD_DISTATT = 2, // ### SOURCE ####
+		PARAM_MOD_NEAR_FIELD_ILD = 3,// ### SOURCE ####
+		PARAM_SPATIALIZATION_MODE = 4,// ### SOURCE ####
+		NumSourceParameters = 5,
+
+		// Core parameters
+		PARAM_HEAD_RADIUS = 5,
+		PARAM_SCALE_FACTOR = 6,
+		PARAM_CUSTOM_ITD = 7,
+		PARAM_MAG_ANECHATT = 8,
+		PARAM_MAG_SOUNDSPEED = 9,
+		PARAM_HA_DIRECTIONALITY_EXTEND_LEFT = 10,
+		PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT = 11,
+		PARAM_HA_DIRECTIONALITY_ON_LEFT = 12,
+		PARAM_HA_DIRECTIONALITY_ON_RIGHT = 13,
+		PARAM_LIMITER_SET_ON = 14,
+		PARAM_HRTF_STEP = 15,
+		// The following are per-source parameters. We store their values on the SptializerCore plugin as initialization values for when a source is instantiated.
+		NumFloatParameters = 16,
 	};
 
 		// Define unity parameters separately
@@ -55,7 +65,7 @@ namespace SpatializerCore3DTI
 		std::shared_ptr<Binaural::CListener> listener;
 		std::shared_ptr<Binaural::CEnvironment> environment;
 		Common::CDynamicCompressorStereo limiter;
-		// TODO: Most of these are not used as we set parameters directly in the above classes
+		float perSourceInitialValues[NumSourceParameters];
 		float unityParameters[P_NUM];
 		float scaleFactor;
 		bool isLimiterEnabled;

@@ -43,28 +43,30 @@ public class SpatializerParameterAttribute : System.Attribute
 	public float min;
 	public float max;
 	public float defaultValue;
+	// If true then this parameter may be set individually on a specific source
+	public bool isSourceParameter = false;
 }
 
 
-[System.AttributeUsage(System.AttributeTargets.Field)]
-// TODO: Remove this and just use SpatializerParameterAttribute
-public class SpatializerSourceParameterAttribute : System.Attribute
-{
-	// The name used to set using setSpatializerFloat
-	public string pluginName;
-    public Type type = typeof(float);
-    // Tooltip for GUI
-    public string description;
-    // Label used in GUI
-    public string label;
-    // For numeric values, the units label, e.g. "dB"
-    public string units;
-    // For int/float parameters: limit to these discrete values. Leave as null for no limits.
-    public float[] validValues;
-    public float min;
-    public float max;
-    public float defaultValue;
-}
+//[System.AttributeUsage(System.AttributeTargets.Field)]
+//// TODO: Remove this and just use SpatializerParameterAttribute
+//public class SpatializerSourceParameterAttribute : System.Attribute
+//{
+//	// The name used to set using setSpatializerFloat
+//	public string pluginName;
+//    public Type type = typeof(float);
+//    // Tooltip for GUI
+//    public string description;
+//    // Label used in GUI
+//    public string label;
+//    // For numeric values, the units label, e.g. "dB"
+//    public string units;
+//    // For int/float parameters: limit to these discrete values. Leave as null for no limits.
+//    public float[] validValues;
+//    public float min;
+//    public float max;
+//    public float defaultValue;
+//}
 
 
 public class API_3DTI_Spatializer : MonoBehaviour
@@ -72,70 +74,82 @@ public class API_3DTI_Spatializer : MonoBehaviour
 
     // Set this to the 3DTI mixer containing the SpatializerCore3DTI effect.
     public AudioMixer spatializereCoreMixer;
-
+	
+	// Note: The numbering of these parameters must be kept in sync with the C++ plugin source code. Per-source parameters must appear first for compatibility with the plugin.
+	// The int value of these enums may change in future versions. For compatibility, always use the enum value name rather than the int value (i.e. use SptaializerParameter.PARAM_HRTF_INTERPOLATION instead of 0).
     public enum SpatializerParameter
     {
-        [SpatializerParameter(label="Head radius", description = "Set listener head radius", units="m", min=0.0f, max=1e20f, defaultValue = 0.0875f)]
-        PARAM_HEAD_RADIUS = 0,
+        [SpatializerParameter(/*pluginName="HRTFInterp",*/ label = "Enable HRTF interpolation", description = "Enable runtime interpolation of HRIRs, to allow for smoother transitions when moving listener and/or sources", min = 0, max = 1, type = typeof(bool), isSourceParameter = true)]
+        PARAM_HRTF_INTERPOLATION = 0,
+
+        [SpatializerParameter(/*pluginName = "MODfarLPF",*/ label = "Enable far distance LPF", description = "Enable low pass filter to simulate sound coming from far distances", min = 0, max = 1, type = typeof(bool), isSourceParameter = true)]
+        PARAM_MOD_FARLPF = 1,
+
+        [SpatializerParameter(/*pluginName = "MODDistAtt",*/ label = "Enable distance attenuation", description = "Enable attenuation of sound depending on distance to listener", min = 0, max = 1, type = typeof(bool), isSourceParameter = true)]
+        PARAM_MOD_DISTATT = 2,
+
+        [SpatializerParameter(/*pluginName = "MODNFILD",*/ label = "Enable near distance ILD", description = "Enable near field filter for sources very close to the listener. High quality only. Depends on th" +
+            "e High Quality ILD binary being loaded.", min = 0, max = 1, type = typeof(bool), isSourceParameter = true)]
+        PARAM_MOD_NEAR_FIELD_ILD = 3,
+
+        [SpatializerParameter(/*pluginName = "SpatMode",*/ label = "Set spatialization mode (0=High quality, 1=High performance, 2=None)", description = "Set spatialization mode (0=High quality, 1=High performance, 2=None). Note, High quality depends on the HRTF binary being loaded and High Performance depends on the High Performance ILD binary being loaded.", min = 0, max = 2, type = typeof(int), isSourceParameter = true)]
+        PARAM_SPATIALIZATION_MODE = 4,
+    
+		[SpatializerParameter(label="Head radius", description = "Set listener head radius", units="m", min=0.0f, max=1e20f, defaultValue = 0.0875f)]
+        PARAM_HEAD_RADIUS = 5,
 
 		// TODO: Add remaining default values
 		[SpatializerParameter(label = "Scale factor", description= "Set the proportion between metres and Unity scale units", min = 1e-20f, max = 1e20f)]
-		PARAM_SCALE_FACTOR = 1,
+		PARAM_SCALE_FACTOR = 6,
 
 		[SpatializerParameter(label = "Enable custom ITD", description = "Enable Interaural Time Difference customization", type =typeof(bool))]
-        PARAM_CUSTOM_ITD = 2,
+        PARAM_CUSTOM_ITD = 7,
 
         [SpatializerParameter(label = "Anechoic distance attenuation", description = "Set attenuation in dB for each double distance", min = -30.0f, max = 0.0f)]
-        PARAM_MAG_ANECHATT = 3,
+        PARAM_MAG_ANECHATT = 8,
 
         [SpatializerParameter(label = "Sound speed", description = "Set sound speed, used for custom ITD computation", units ="m/s", min = 10.0f, max = 1000.0f)]
-        PARAM_MAG_SOUNDSPEED = 4,
+        PARAM_MAG_SOUNDSPEED = 9,
 
         [SpatializerParameter(label = "Anechoic directionality attenuation for left ear", description = "Set directionality extend for left ear. The value is the attenuation in decibels applied to sources placed behind the listener", units = "dB", min = 0.0f, max = 30.0f)]
-        PARAM_HA_DIRECTIONALITY_EXTEND_LEFT = 5,
+        PARAM_HA_DIRECTIONALITY_EXTEND_LEFT = 10,
 
         [SpatializerParameter(label = "Anechoic directionality attenuation for right ear", description = "Set directionality extend for right ear. The value is the attenuation in decibels applied to sources placed behind the listener", units = "dB", min = 0.0f, max = 30.0f)]
-        PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT = 6,
+        PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT = 11,
 
         [SpatializerParameter(label = "Enable directionality simulation for left ear", type=typeof(bool))]
-        PARAM_HA_DIRECTIONALITY_ON_LEFT = 7,
+        PARAM_HA_DIRECTIONALITY_ON_LEFT = 12,
 
         [SpatializerParameter(label = "Enable directionality simulation for right ear", type = typeof(bool))]
-        PARAM_HA_DIRECTIONALITY_ON_RIGHT = 8,
+        PARAM_HA_DIRECTIONALITY_ON_RIGHT = 13,
 
         [SpatializerParameter(label = "Enable limiter", description = "Enable dynamics limiter after spatialization, to avoid potential saturation", type = typeof(bool))]
-        PARAM_LIMITER_SET_ON = 9,
+        PARAM_LIMITER_SET_ON = 14,
 
         [SpatializerParameter(label = "HRTF resampling step", description = "HRTF resampling step; Lower values give better quality at the cost of more memory usage", min = 1, max = 90, type = typeof(int))]
-        PARAM_HRTF_STEP = 10,
+        PARAM_HRTF_STEP = 15,
     };
-	public const int NumSpatializerParameters = 11;
+
+
+    public const int NumSpatializerParameters = 16;
 
 	// Store the parameter values here for Unity to serialize. We initialize them to their default values. This is private and clients should use the accessor/getter methods below which will ensure the plugin is kept in sync with these values.
+	// NB, per-source parameters may be set on individual sources but they are also set on the core which defines their initial value.
 	[SerializeField]
 	private float[] spatializerParameters = Enumerable.Range(0, NumSpatializerParameters).Select(i => ((SpatializerParameter)i).GetAttribute<SpatializerParameterAttribute>().defaultValue).ToArray<float>();
 
 
-	/// <summary>
-	/// Parameters that can be set for each specific sound source using AudioSource.setSpatializerFloat
-	/// Note: I'm not sure the pluginName is relevant for these, but it's here for completeness.
-	/// </summary>
-	public enum SpatializerSourceParameter
-    {
-        [SpatializerSourceParameter(pluginName="HRTFInterp", label = "Enable HRTF interpolation", description = "Enable runtime interpolation of HRIRs, to allow for smoother transitions when moving listener and/or sources", min = 0, max = 1, type = typeof(bool))]
-        PARAM_HRTF_INTERPOLATION = 0,
-        [SpatializerSourceParameter(pluginName = "MODfarLPF", label = "Enable far distance LPF", description = "Enable low pass filter to simulate sound coming from far distances", min = 0, max = 1, type = typeof(bool))]
-        PARAM_MOD_FARLPF = 1,
-        [SpatializerSourceParameter(pluginName = "MODDistAtt", label = "Enable distance attenuation", description= "Enable attenuation of sound depending on distance to listener",min = 0, max = 1, type = typeof(bool))]
-        PARAM_MOD_DISTATT = 2,
-        [SpatializerSourceParameter(pluginName = "MODNFILD", label = "Enable near distance ILD", description = "Enable near field filter for sources very close to the listener. High quality only. Depends on the High Quality ILD binary being loaded.", min = 0, max = 1, type = typeof(bool))]
-        PARAM_MOD_NEAR_FIELD_ILD = 3,
-        [SpatializerSourceParameter(pluginName = "SpatMode", label = "Set spatialization mode (0=High quality, 1=High performance, 2=None)", description= "Set spatialization mode (0=High quality, 1=High performance, 2=None). Note, High quality depends on the HRTF binary being loaded and High Performance depends on the High Performance ILD binary being loaded.", min = 0, max = 2, type = typeof(int))]
-        PARAM_SPATIALIZATION_MODE = 4,
-    }
-	public const int NumSpatializerSourceParameters = 5;
-    // Initialize to NaN so we know whether to override with default values from the plugin or whether Unity has serialized these
-    private float[] spatializerSourceParameterInitialValues = Enumerable.Range(0, NumSpatializerSourceParameters).Select(i => ((SpatializerSourceParameter)i).GetAttribute<SpatializerSourceParameterAttribute>().defaultValue).ToArray<float>();
+	///// <summary>
+	///// Parameters that can be set for each specific sound source using AudioSource.setSpatializerFloat
+	///// Note: I'm not sure the pluginName is relevant for these, but it's here for completeness.
+	///// </summary>
+	//public enum SpatializerSourceParameter
+ //   {
+
+ //   }
+	//public const int NumSpatializerSourceParameters = 5;
+ //   // Initialize to NaN so we know whether to override with default values from the plugin or whether Unity has serialized these
+ //   private float[] spatializerSourceParameterInitialValues = Enumerable.Range(0, NumSpatializerSourceParameters).Select(i => ((SpatializerParameter)i).GetAttribute<SpatializerParameterAttribute>().defaultValue).ToArray<float>();
 
     // ======
 
@@ -363,23 +377,69 @@ public class API_3DTI_Spatializer : MonoBehaviour
 
 	// --- Spatializer Core parameters
 
-	public bool SetFloatParameter(SpatializerParameter parameter, float value)
+	private bool SetFloatParameter(SpatializerParameter parameter, float value, AudioSource source = null)
     {
-		if (!Set3DTISpatializerFloat((int)parameter, value))
-        {
-			Debug.LogError($"Failed to set parameter {parameter} on 3DTI Spatializer plugin.", this);
-			return false;
-        }
-		if (!Get3DTISpatializerFloat((int)parameter, out spatializerParameters[(int) value]))
-        {
-			Debug.LogError($"Failed to retrieve value of parameter {parameter} from 3DTI Spatializer plugin after setting it.", this);
-			return false;
-        }
+		if (source != null)
+		{
+			if (!parameter.GetAttribute<SpatializerParameterAttribute>().isSourceParameter)
+            {
+				Debug.LogError($"Cannot set spatialization parameter {parameter} on a single AudioSource. Call this method with source==null to set this parameter on the Spatializer Core.", this);
+				return false;
+            }
+			else
+			{
+				if (!source.SetSpatializerFloat((int)parameter, value))
+				{
+                    Debug.LogError($"Failed to set spatialization parameter {parameter} for AudioSource {source} on 3DTI Spatializer plugin.", this);
+                    return false;
+                }
+				if (!source.GetSpatializerFloat((int)parameter, out float finalValue))
+                {
+                    Debug.LogError($"Failed to retrieve value of parameter {parameter} for AudioSource {source} from 3DTI Spatializer plugin after setting it.", this);
+					return false;
+                }
+				else if (finalValue != value)
+                {
+					Debug.LogWarning($"Value for parameter {parameter} on source {source} was requested to be set to {value} but 3DTI Spatializer plugin corrected this value to {finalValue}");
+                }
+            }
+
+		}
+		else
+		{
+			if (!Set3DTISpatializerFloat((int)parameter, value))
+			{
+				Debug.LogError($"Failed to set parameter {parameter} on 3DTI Spatializer plugin.", this);
+				return false;
+			}
+			if (!Get3DTISpatializerFloat((int)parameter, out spatializerParameters[(int)parameter]))
+			{
+				Debug.LogError($"Failed to retrieve value of parameter {parameter} from 3DTI Spatializer plugin after setting it.", this);
+				return false;
+			}
+		}
 		return true;
     }
 
-    public bool GetFloatParameter(SpatializerParameter parameter, out float value)
+	private bool GetFloatParameter(SpatializerParameter parameter, out float value, AudioSource source=null)
     {
+		if (source != null)
+        {
+            if (!parameter.GetAttribute<SpatializerParameterAttribute>().isSourceParameter)
+            {
+                Debug.LogError($"Cannot get spatialization parameter {parameter} for a single AudioSource as it is not a per-source parameter. Call this method with source==null to retrieve this parameter's value on the Spatializer Core.", this);
+				value = parameter.GetAttribute<SpatializerParameterAttribute>().defaultValue;
+                return false;
+            }
+            else
+            {
+                if (!source.GetSpatializerFloat((int)parameter, out value))
+                {
+                    Debug.LogError($"Failed to retrieve value of parameter {parameter} for AudioSource {source} from 3DTI Spatializer plugin.", this);
+                    return false;
+                }
+            }
+        }
 		if (!Get3DTISpatializerFloat((int)parameter, out value))
         {
             Debug.LogError($"Failed to retrieve parameter {parameter} from 3DTI Spatializer plugin.", this);
@@ -389,42 +449,28 @@ public class API_3DTI_Spatializer : MonoBehaviour
     }
 
     // Throws exception on failure
-    public float GetFloatParameter(SpatializerParameter parameter)
+    private float GetFloatParameter(SpatializerParameter parameter, AudioSource source=null)
     {
-        if (!Get3DTISpatializerFloat((int)parameter, out float value))
+        if (!GetFloatParameter(parameter, out float value, source))
         {
 			throw new Exception($"Failed to retrieve parameter {parameter} from 3DTI Spatializer plugin.");
         }
         return value;
     }
 
-
-	// ---- Spatializer per-audio source parameters
-
-	/// <summary>
-	/// Set a spatializer parameter for a specific source
-	/// </summary>
-	/// <param name="parameter">The per-source parameter to set</param>
-	/// <param name="value">The new value for the parameter</param>
-	/// <param name="source">The source on which to set this value. If null then the default value will be changed for new instances.</param>
-	/// <returns></returns>
-	public bool SetFloatParameter(SpatializerSourceParameter parameter, float value, AudioSource source = null)
+	public T GetParameter<T>(SpatializerParameter parameter, AudioSource source = null)
     {
-        // TODO: Pass default values to the dll
-		if (source==null)
-        {
-			throw new NotImplementedException("Default parameters not yet implemented");
-        }
-        return source.SetSpatializerFloat((int)parameter, value);
+		SpatializerParameterAttribute attributes = parameter.GetAttribute<SpatializerParameterAttribute>();
+		Debug.Assert(typeof(T) == attributes.type);
+		float f = GetFloatParameter(parameter, source);
+		return (T)Convert.ChangeType(f, typeof(T));
     }
 
-	public bool GetFloatParameter(SpatializerSourceParameter parameter, out float value, AudioSource source = null)
+	public bool SetParameter<T>(SpatializerParameter parameter, T value, AudioSource source = null)
     {
-        if (source == null)
-        {
-            throw new NotImplementedException("Default parameters not yet implemented");
-        }
-		return source.GetSpatializerFloat((int)parameter, out value);
+        SpatializerParameterAttribute attributes = parameter.GetAttribute<SpatializerParameterAttribute>();
+        Debug.Assert(typeof(T) == attributes.type);
+		return SetFloatParameter(parameter, Convert.ToSingle(value), source);
     }
 
 

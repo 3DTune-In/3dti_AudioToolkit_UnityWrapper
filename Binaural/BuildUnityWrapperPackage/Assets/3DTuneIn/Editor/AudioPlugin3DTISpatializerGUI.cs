@@ -242,7 +242,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     public void SliderHeadRadius()
     {
         //toolkit.SetFloatParameter(API_3DTI_Spatializer.FloatParameter.PARAM_HEAD_RADIUS, )
-        toolkit.SetHeadRadius(toolkit.listenerHeadRadius);
+        //toolkit.SetHeadRadius(toolkit.listenerHeadRadius);
     }
 
     /// <summary>
@@ -250,7 +250,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     /// </summary>
     public void InputResamplingStep()
     {
-        toolkit.SetHRTFResamplingStep(toolkit.HRTFstep);
+        //toolkit.SetHRTFResamplingStep(toolkit.HRTFstep);
     }
 
     /// <summary>
@@ -258,7 +258,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     /// </summary>
     public void SliderScale()
     {        
-        toolkit.SetScaleFactor(toolkit.scaleFactor);
+        //toolkit.SetScaleFactor(toolkit.scaleFactor);
     }
 
     /// <summary>
@@ -266,7 +266,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     /// </summary>
     public void SliderAnechoicAttenuation()
     {
-        toolkit.SetMagnitudeAnechoicAttenuation(toolkit.magAnechoicAttenuation);
+        //toolkit.SetMagnitudeAnechoicAttenuation(toolkit.magAnechoicAttenuation);
     }
 
     /// <summary>
@@ -274,7 +274,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     /// </summary>
     public void SliderSoundSpeed()
     {
-        toolkit.SetMagnitudeSoundSpeed(toolkit.magSoundSpeed);
+        //toolkit.SetMagnitudeSoundSpeed(toolkit.magSoundSpeed);
     }
 
     /// <summary>
@@ -282,7 +282,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     /// </summary>
     public void SliderHADirectionalityLeft()
     {
-        toolkit.SetHADirectionalityExtend(T_ear.LEFT, toolkit.HADirectionalityExtendLeft);
+        //toolkit.SetHADirectionalityExtend(T_ear.LEFT, toolkit.HADirectionalityExtendLeft);
     }
 
     /// <summary>
@@ -290,7 +290,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     /// </summary>
     public void SliderHADirectionalityRight()
     {
-        toolkit.SetHADirectionalityExtend(T_ear.RIGHT, toolkit.HADirectionalityExtendRight);
+        //toolkit.SetHADirectionalityExtend(T_ear.RIGHT, toolkit.HADirectionalityExtendRight);
     }
 
 

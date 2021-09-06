@@ -99,6 +99,14 @@ namespace SpatializerCore3DTI
 
 		switch (parameter)
 		{
+			case PARAM_HRTF_INTERPOLATION :
+			case PARAM_MOD_FARLPF:
+			case PARAM_MOD_DISTATT:
+			case PARAM_MOD_NEAR_FIELD_ILD:
+			case PARAM_SPATIALIZATION_MODE:
+				spatializer->perSourceInitialValues[parameter] = value;
+				return true;
+
 		case PARAM_HEAD_RADIUS:
 		{
 			const float min = 0.0f;
@@ -213,6 +221,13 @@ namespace SpatializerCore3DTI
 
 		switch (parameter)
 		{
+		case PARAM_HRTF_INTERPOLATION:
+		case PARAM_MOD_FARLPF:
+		case PARAM_MOD_DISTATT:
+		case PARAM_MOD_NEAR_FIELD_ILD:
+		case PARAM_SPATIALIZATION_MODE:
+			*value = spatializer->perSourceInitialValues[parameter];
+			return true;
 		case PARAM_HEAD_RADIUS:
 			*value = spatializer->listener->GetHeadRadius();
 			return true;
@@ -533,6 +548,11 @@ namespace SpatializerCore3DTI
 		: scaleFactor(1.0f)
 		, isLimiterEnabled(true)
 	{
+		perSourceInitialValues[PARAM_HRTF_INTERPOLATION] = 1.0f;
+		perSourceInitialValues[PARAM_MOD_FARLPF] = 1.0f;
+		perSourceInitialValues[PARAM_MOD_DISTATT] = 1.0f;
+		perSourceInitialValues[PARAM_MOD_NEAR_FIELD_ILD] = 1.0f;
+		perSourceInitialValues[PARAM_SPATIALIZATION_MODE] = 0.0f;
 
 		Common::TAudioStateStruct audioState;
 		audioState.sampleRate = sampleRate;

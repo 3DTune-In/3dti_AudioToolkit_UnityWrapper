@@ -125,15 +125,14 @@ enum SpatializationMode : int
 // These values are set explicitly as they need to correspond to values in the C# components.
 enum
 {
-	//PARAM_SOURCE_ID,    // DEBUG
+	// Per-source parameters. We store them in the core so we know what value to initialize the values to on a new source instance.
 	PARAM_HRTF_INTERPOLATION = 0, // ### SOURCE ####
 	PARAM_MOD_FARLPF = 1, // ### SOURCE ####
 	PARAM_MOD_DISTATT = 2, // ### SOURCE ####
 	PARAM_MOD_NEAR_FIELD_ILD = 3,// ### SOURCE ####
 	PARAM_SPATIALIZATION_MODE = 4,// ### SOURCE ####
+	NumSourceParameters = 5,
 
-
-	P_NUM
 };
 
 struct EffectData
@@ -141,7 +140,7 @@ struct EffectData
 	int sourceID;    // DEBUG
 	std::shared_ptr<Binaural::CSingleSourceDSP> audioSource;
 	SpatializerCore3DTI::SpatializerCore* spatializer;
-	float parameters[P_NUM];
+	float parameters[NumSourceParameters];
 };
 
 /////////////////////////////////////////////////////////////////////
@@ -206,7 +205,7 @@ struct EffectData
 
 int InternalRegisterEffectDefinition(UnityAudioEffectDefinition& definition)
 {
-	int numparams = P_NUM;
+	int numparams = NumSourceParameters;
 	definition.paramdefs = new UnityAudioParameterDefinition[numparams];
 	//RegisterParameter(definition, "SourceID", "", -1.0f, /*FLT_MAX*/ 1e20f, -1.0f, 1.0f, 1.0f, PARAM_SOURCE_ID, "Source ID for debug");
 	RegisterParameter(definition, "HRTFInterp", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_HRTF_INTERPOLATION, "HRTF Interpolation method");
@@ -537,21 +536,23 @@ static UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK DistanceAttenuationCallback
 
 UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectState* state)
 {
-
-
-
-
 	// CREATE Instance state and grab parameters
 
 	EffectData* effectdata = new EffectData;
 	{
+		effectdata->spatializer = SpatializerCore3DTI::SpatializerCore::instance();
+		static_assert(ARRAYSIZE(effectdata->spatializer->perSourceInitialValues) == NumSourceParameters, "NumSourceParameters should match the size of SpatializerCore::perSourceInitialValues array.");
+		for (int i = 0; i < NumSourceParameters; i++)
+		{
+			effectdata->parameters[i] = effectdata->spatializer->perSourceInitialValues[i];
+		}
+
 		state->effectdata = effectdata;
 		if (IsHostCompatible(state))
 		{
 			state->spatializerdata->distanceattenuationcallback = DistanceAttenuationCallback;
 		}
 		effectdata->sourceID = -1;
-		effectdata->spatializer = SpatializerCore3DTI::SpatializerCore::instance();
 
 		if (effectdata->spatializer == nullptr)
 		{
@@ -609,7 +610,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 	EffectData* data = state->GetEffectData<EffectData>();
 	SpatializerCore3DTI::SpatializerCore* spatializer = data->spatializer;
 	assert(data != nullptr && spatializer != nullptr);
-	if (index >= P_NUM)
+	if (index >= NumSourceParameters)
 		return UNITY_AUDIODSP_ERR_UNSUPPORTED;
 	data->parameters[index] = value;
 
@@ -908,7 +909,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK GetFloatParameterCallback(UnityAudioEffectState* state, int index, float* value, char* valuestr)
 {
 	EffectData* data = state->GetEffectData<EffectData>();
-	if (index < 0 || index >= P_NUM)
+	if (index < 0 || index >= NumSourceParameters)
 		return UNITY_AUDIODSP_ERR_UNSUPPORTED;
 	if (valuestr != NULL)
 		valuestr[0] = 0;
