@@ -109,13 +109,8 @@ public class AudioPlugin3DTISpatializerGUI : Editor
         Common3DTIGUI.ShowAboutButton();
 
         ////// LISTENER                
-        DrawListenerPanel();
+        DrawControls();
 
-        ////// ADVANCED SETUP
-        DrawAdvancedPanel();
-
-        ////// HEARING AID DIRECTIONALITY SETUP
-        DrawHADirectionalityPanel();
 
         // End starting play
         isStartingPlay = false;
@@ -314,7 +309,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     /// <summary>
     /// Draw panel with Listener configuration
     /// </summary>
-    public void DrawListenerPanel()
+    public void DrawControls()
     {
         Common3DTIGUI.BeginSection("DEFAULT SETTINGS FOR NEW SOUND SOURCES");
 
@@ -341,20 +336,13 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
         }
 
-
         Common3DTIGUI.EndSection();
 
 
 
         Common3DTIGUI.BeginSection("LISTENER SETUP");
-        SpatializationMode spatializationMode = toolkit.GetParameter<SpatializationMode>(SpatializerParameter.PARAM_SPATIALIZATION_MODE);
-
-
 
         // HIGH PERFORMANCE / HIGH QUALITY CHOICE:
-        //if (Common3DTIGUI.CreateRadioButtons(ref spatializationMode, new List<string>(new string[] { "High Quality mode", "High Performance mode", "No spatialization" }),
-        //new List<string>(new string[] { "Enable high quality (lower performance) mode", "Enable high performance (lower quality) mode", "Disable spatialization"})))                                                                              
-        //toolkit.SetParameter<int>(SpatializerParameter.PARAM_SPATIALIZATION_MODE, spatializationMode);
 
         Common3DTIGUI.SingleSpace();
 
@@ -365,7 +353,6 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
 
         // HIGH PERFORMANCE MODE CONTROLS
-        //if (spatializationMode == SpatializationMode.SPATIALIZATION_MODE_HIGH_PERFORMANCE)
         {            
             Common3DTIGUI.AddLabelToParameterGroup("High Performance ILD");
 
@@ -381,7 +368,6 @@ public class AudioPlugin3DTISpatializerGUI : Editor
         GUILayout.Label("These are required for AudioSources to be able to spatialize in High Quality mode.", Common3DTIGUI.commentStyle);
 
         // HIGH QUALITY MODE CONTROLS
-        //if (spatializationMode == SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY)
         {
             Common3DTIGUI.AddLabelToParameterGroup("HRTF");
             Common3DTIGUI.AddLabelToParameterGroup("Near Field Filter ILD");
@@ -408,9 +394,9 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
         Common3DTIGUI.SectionSpace();
 
+        // BRIR Reverb:
         GUILayout.Label("Binaries for Reverb", Common3DTIGUI.subtitleBoxStyle);
         GUILayout.Label("These are required to enable reverb processing.", Common3DTIGUI.commentStyle);
-        // BRIR Reverb:
 
         Common3DTIGUI.CreatePopupStringSelector("BRIR 44.1kHz", "Select the BRIR (impulse response) for reverb processing", GetFilterBinaryPaths(TSampleRateEnum.K44).reverbBRIRs, ref toolkit.BRIRFileName44, "Data/Reverb/BRIR/", ".bytes");
         Common3DTIGUI.CreatePopupStringSelector("BRIR 48kHz", "Select the BRIR (impulse response) for reverb processing", GetFilterBinaryPaths(TSampleRateEnum.K48).reverbBRIRs, ref toolkit.BRIRFileName48, "Data/Reverb/BRIR/", ".bytes");
@@ -420,14 +406,10 @@ public class AudioPlugin3DTISpatializerGUI : Editor
         Common3DTIGUI.SectionSpace();
 
         // ITD:    
-        //if (!(spatializationMode == SpatializationMode.SPATIALIZATION_MODE_NONE))
         {
             CreateControl(SpatializerParameter.PARAM_CUSTOM_ITD);
-            //if (Common3DTIGUI.CreateToggle(ref toolkit.customITDEnabled, "Custom ITD", "Enable Interaural Time Difference customization", isStartingPlay))
-                //toolkit.SetCustomITD(toolkit.customITDEnabled);
             if (toolkit.GetFloatParameter(SpatializerParameter.PARAM_CUSTOM_ITD) != 0.0f)
             {
-                //Common3DTIGUI.CreateFloatSlider(ref toolkit.listenerHeadRadius, "Head radius", "F4", "meters", "Set listener head radius", 0.0f, maxHeadRadius, SliderHeadRadius);
                 CreateControl(SpatializerParameter.PARAM_HEAD_RADIUS);
             }
         }
@@ -438,7 +420,6 @@ public class AudioPlugin3DTISpatializerGUI : Editor
         advancedSetup = Common3DTIGUI.CreateFoldoutToggle(ref advancedSetup, "Advanced Listener settings");
         if (advancedSetup)
         {
-            //GUILayout.BeginHorizontal();
             Common3DTIGUI.BeginSection();
 
             Common3DTIGUI.AddLabelToParameterGroup("Scale factor");
@@ -446,31 +427,12 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             CreateControl(SpatializerParameter.PARAM_SCALE_FACTOR);
 
             // HRTF interpolation
-            //SpatializationMode spatializationMode = toolkit.GetParameter<SpatializationMode>(SpatializerParameter.PARAM_SPATIALIZATION_MODE);
-            //if (spatializationMode == SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY)
-            {
-                Common3DTIGUI.BeginSubsection("HRTF Interpolation");
-                Common3DTIGUI.AddLabelToParameterGroup("Runtime interpolation");
-                Common3DTIGUI.AddLabelToParameterGroup("Resampling step");
-                CreateControl(SpatializerParameter.PARAM_HRTF_STEP);
-                Common3DTIGUI.EndSubsection();
-            }
+            Common3DTIGUI.BeginSubsection("HRTF Interpolation");
+            Common3DTIGUI.AddLabelToParameterGroup("Runtime interpolation");
+            Common3DTIGUI.AddLabelToParameterGroup("Resampling step");
+            CreateControl(SpatializerParameter.PARAM_HRTF_STEP);
+            Common3DTIGUI.EndSubsection();
 
-            //// Mod enabler
-            //Common3DTIGUI.BeginSubsection("Switch Spatialization Effects");
-            //if (spatializationMode == SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY)
-            //{
-            //    Common3DTIGUI.AddLabelToParameterGroup("ILD Near Field Filter");
-            //}
-
-            //if (spatializationMode == SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY)
-            //{
-            //    //if (Common3DTIGUI.CreateToggle(ref toolkit.modNearFieldILD, "ILD Near Field Filter", "Enable near field filter for sources very close to the listener", isStartingPlay))
-            //    //toolkit.SetModNearFieldILD(toolkit.modNearFieldILD);
-            //    //if (Common3DTIGUI.CreateToggle(ref toolkit.modHRTF, "HRTF convolution", "Enable HRTF convolution, the core of binaural spatialization"))
-            //    //    toolkit.SetModHRTF(toolkit.modHRTF);
-            //}
-            //Common3DTIGUI.EndSubsection();
 
             // Magnitudes
             Common3DTIGUI.BeginSubsection("Physical magnitudes");
@@ -494,7 +456,6 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             //Common3DTIGUI.EndSubsection();
 
             Common3DTIGUI.EndSection();
-            //GUILayout.EndHorizontal();
         }
 
 
@@ -514,9 +475,6 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             Common3DTIGUI.AddLabelToParameterGroup("Directionality extend");
             CreateControl(SpatializerParameter.PARAM_HA_DIRECTIONALITY_ON_LEFT);
             CreateControl(SpatializerParameter.PARAM_HA_DIRECTIONALITY_EXTEND_LEFT);
-            //if (Common3DTIGUI.CreateToggle(ref toolkit.doHADirectionalityLeft, "Switch Directionality", "Enable directionality for left ear", isStartingPlay))            
-            //toolkit.SwitchOnOffHADirectionality(T_ear.LEFT, toolkit.doHADirectionalityLeft);
-            //Common3DTIGUI.CreateFloatSlider(ref toolkit.HADirectionalityExtendLeft, "Directionality extend", "F2", "dB", "Set directionality extend for left ear; The value is the attenuation in decibels applied to sources placed behind the listener", minHADB, maxHADB, SliderHADirectionalityLeft);            
             Common3DTIGUI.EndSubsection();
 
             // Right ear
@@ -525,9 +483,6 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             Common3DTIGUI.AddLabelToParameterGroup("Directionality extend");
             CreateControl(SpatializerParameter.PARAM_HA_DIRECTIONALITY_ON_RIGHT);
             CreateControl(SpatializerParameter.PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT);
-            //if (Common3DTIGUI.CreateToggle(ref toolkit.doHADirectionalityRight, "Switch Directionality", "Enable directionality for right ear", isStartingPlay))
-            //toolkit.SwitchOnOffHADirectionality(T_ear.RIGHT, toolkit.doHADirectionalityRight);
-            //Common3DTIGUI.CreateFloatSlider(ref toolkit.HADirectionalityExtendRight, "Directionality extend", "F2", "dB", "Set directionality extend for right ear; The value is the attenuation in decibels applied to sources placed behind the listener", minHADB, maxHADB, SliderHADirectionalityRight);            
             Common3DTIGUI.EndSubsection();
             Common3DTIGUI.EndSection();
         }
@@ -535,23 +490,4 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
     }
 
-    /// <summary>
-    /// Draw panel with advanced configuration
-    /// </summary>
-    public void DrawAdvancedPanel()
-    {
-        //Common3DTIGUI.BeginSection("ADVANCED SETUP");
-
-        
-
-        //Common3DTIGUI.EndSection();
-    }
-
-    /// <summary>
-    /// Draw panel with Hearing Aid directionality configuration
-    /// </summary>
-    public void DrawHADirectionalityPanel()
-    {
-        
-    }
 }
