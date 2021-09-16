@@ -88,11 +88,10 @@ public class API_3DTI_Spatializer : MonoBehaviour
 		[SpatializerParameter(/*pluginName = "MODDistAtt",*/ label = "Enable distance attenuation", description = "Enable attenuation of sound depending on distance to listener", min = 0, max = 1, type = typeof(bool), defaultValue = 1.0f, isSourceParameter = true)]
 		PARAM_MOD_DISTATT = 2,
 
-		[SpatializerParameter(/*pluginName = "MODNFILD",*/ label = "Enable near distance ILD", description = "Enable near field filter for sources very close to the listener. High quality only. Depends on th" +
-			"e High Quality ILD binary being loaded.", min = 0, max = 1, type = typeof(bool), defaultValue = 1.0f, isSourceParameter = true)]
+		[SpatializerParameter(/*pluginName = "MODNFILD",*/ label = "Enable near distance ILD (High quality mode only)", description = "Enable near field filter for sources very close to the listener. Only available in high quality mode. Depends on the High Quality ILD binary being loaded.", min = 0, max = 1, type = typeof(bool), defaultValue = 1.0f, isSourceParameter = true)]
 		PARAM_MOD_NEAR_FIELD_ILD = 3,
 
-		[SpatializerParameter(/*pluginName = "SpatMode",*/ label = "Set spatialization mode (0=High quality, 1=High performance, 2=None)", description = "Set spatialization mode (0=High quality, 1=High performance, 2=None). Note, High quality depends on the HRTF binary being loaded and High Performance depends on the High Performance ILD binary being loaded.", min = 0, max = 2, type = typeof(SpatializationMode), defaultValue = 0.0f, isSourceParameter = true)]
+		[SpatializerParameter(/*pluginName = "SpatMode",*/ label = "Spatialization mode", description = "Set spatialization mode (0=High quality, 1=High performance, 2=None). Note, High quality depends on the HRTF binary being loaded and High Performance depends on the High Performance ILD binary being loaded.", min = 0, max = 2, type = typeof(SpatializationMode), defaultValue = 0.0f, isSourceParameter = true)]
 		PARAM_SPATIALIZATION_MODE = 4,
 
 		[SpatializerParameter(label = "Head radius", description = "Set listener head radius", units = "m", min = 0.0f, max = 1e20f, defaultValue = 0.0875f)]
@@ -126,7 +125,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
 		[SpatializerParameter(label = "Enable limiter", description = "Enable dynamics limiter after spatialization, to avoid potential saturation", type = typeof(bool), defaultValue = 1.0f)]
 		PARAM_LIMITER_SET_ON = 14,
 
-		[SpatializerParameter(label = "HRTF resampling step", description = "HRTF resampling step; Lower values give better quality at the cost of more memory usage", min = 1, max = 90, type = typeof(int), defaultValue =15)]
+		[SpatializerParameter(label = "HRTF resampling step (High Quality only)", description = "HRTF resampling step; Lower values give better quality at the cost of more memory usage. Only affects High Quality mode.", min = 1, max = 90, type = typeof(int), defaultValue =15)]
 		PARAM_HRTF_STEP = 15,
 	};
 

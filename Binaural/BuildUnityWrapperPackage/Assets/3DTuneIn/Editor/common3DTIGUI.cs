@@ -13,12 +13,12 @@ public static class Common3DTIGUI
     static int earsize = 40;
     static int mainTitleSize = 14;
     static float singleSpace = 5.0f;
-    static float spaceBetweenSections = 5.0f;
+    static float spaceBetweenSections = 10.0f;
     static float spaceBetweenColumns = 5.0f;
     static float parameterLabelWidth = 0.0f;    
     
     static GUIStyle titleBoxStyle;
-    static GUIStyle subtitleBoxStyle;
+    public static GUIStyle subtitleBoxStyle;
     static GUIStyle sectionStyle;
     static GUIStyle subsectionStyle;
     static GUIStyle dragdropStyle;
@@ -28,6 +28,7 @@ public static class Common3DTIGUI
     static GUIStyle intFieldStyle;
     static GUIStyle aboutButtonStyle;
     static GUIStyle bigTitleStyle;
+    public static GUIStyle commentStyle;
 
 	//public static void ListHRTFFiles()
 	//{
@@ -68,6 +69,10 @@ public static class Common3DTIGUI
 
         aboutButtonStyle = new GUIStyle(EditorStyles.toolbarButton);
         aboutButtonStyle.alignment = TextAnchor.MiddleCenter;
+
+        commentStyle = new GUIStyle(GUI.skin.label);
+        commentStyle.wordWrap = true;
+        commentStyle.fontStyle = FontStyle.Italic;
     }
 
     public static void SetInspectorIcon(GameObject go)
@@ -199,10 +204,13 @@ public static class Common3DTIGUI
     /// <summary>
     /// Auxiliary function for creating a new section with title for parameter groups
     /// </summary>    
-    public static void BeginSection(string titleText)
+    public static void BeginSection(string titleText = null)
     {
         GUILayout.BeginVertical(sectionStyle);
-        GUILayout.Box(titleText, titleBoxStyle, GUILayout.ExpandWidth(true));
+        if (titleText != null)
+        {
+            GUILayout.Box(titleText, titleBoxStyle, GUILayout.ExpandWidth(true));
+        }
         ResetParameterGroup();
     }
 
@@ -524,6 +532,11 @@ public static class Common3DTIGUI
     public static void SingleSpace()
     {
         GUILayout.Space(singleSpace);
+    }
+
+    public static void SectionSpace()
+    {
+        GUILayout.Space(spaceBetweenSections);
     }
 
 
