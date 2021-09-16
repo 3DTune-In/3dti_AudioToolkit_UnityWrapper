@@ -43,7 +43,7 @@ AudioMixerEffectController:
     m_GUID: 72a13b493e1f372439357468ac97c3f0
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
-  m_Bypass: 0
+  m_Bypass: 1
 --- !u!241 &24100000
 AudioMixerController:
   m_ObjectHideFlags: 0
@@ -740,7 +740,7 @@ AudioMixerEffectController:
     m_GUID: 1112fe27df5f4e14c876679bb95133b4
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
-  m_Bypass: 0
+  m_Bypass: 1
 --- !u!244 &244524980840744758
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
@@ -880,4 +880,4 @@ AudioMixerEffectController:
     m_GUID: 402289c894fc4904683731676549d724
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
-  m_Bypass: 0
+  m_Bypass: 1

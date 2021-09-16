@@ -79,54 +79,54 @@ public class API_3DTI_Spatializer : MonoBehaviour
 	// The int value of these enums may change in future versions. For compatibility, always use the enum value name rather than the int value (i.e. use SptaializerParameter.PARAM_HRTF_INTERPOLATION instead of 0).
 	public enum SpatializerParameter
 	{
-		[SpatializerParameter(/*pluginName="HRTFInterp",*/ label = "Enable HRTF interpolation", description = "Enable runtime interpolation of HRIRs, to allow for smoother transitions when moving listener and/or sources", min = 0, max = 1, type = typeof(bool), isSourceParameter = true)]
+		[SpatializerParameter(/*pluginName="HRTFInterp",*/ label = "Enable HRTF interpolation", description = "Enable runtime interpolation of HRIRs, to allow for smoother transitions when moving listener and/or sources", min = 0, max = 1, type = typeof(bool), defaultValue = 1.0f, isSourceParameter = true)]
 		PARAM_HRTF_INTERPOLATION = 0,
 
-		[SpatializerParameter(/*pluginName = "MODfarLPF",*/ label = "Enable far distance LPF", description = "Enable low pass filter to simulate sound coming from far distances", min = 0, max = 1, type = typeof(bool), isSourceParameter = true)]
+		[SpatializerParameter(/*pluginName = "MODfarLPF",*/ label = "Enable far distance LPF", description = "Enable low pass filter to simulate sound coming from far distances", min = 0, max = 1, type = typeof(bool), defaultValue = 1.0f, isSourceParameter = true)]
 		PARAM_MOD_FARLPF = 1,
 
-		[SpatializerParameter(/*pluginName = "MODDistAtt",*/ label = "Enable distance attenuation", description = "Enable attenuation of sound depending on distance to listener", min = 0, max = 1, type = typeof(bool), isSourceParameter = true)]
+		[SpatializerParameter(/*pluginName = "MODDistAtt",*/ label = "Enable distance attenuation", description = "Enable attenuation of sound depending on distance to listener", min = 0, max = 1, type = typeof(bool), defaultValue = 1.0f, isSourceParameter = true)]
 		PARAM_MOD_DISTATT = 2,
 
 		[SpatializerParameter(/*pluginName = "MODNFILD",*/ label = "Enable near distance ILD", description = "Enable near field filter for sources very close to the listener. High quality only. Depends on th" +
-			"e High Quality ILD binary being loaded.", min = 0, max = 1, type = typeof(bool), isSourceParameter = true)]
+			"e High Quality ILD binary being loaded.", min = 0, max = 1, type = typeof(bool), defaultValue = 1.0f, isSourceParameter = true)]
 		PARAM_MOD_NEAR_FIELD_ILD = 3,
 
-		[SpatializerParameter(/*pluginName = "SpatMode",*/ label = "Set spatialization mode (0=High quality, 1=High performance, 2=None)", description = "Set spatialization mode (0=High quality, 1=High performance, 2=None). Note, High quality depends on the HRTF binary being loaded and High Performance depends on the High Performance ILD binary being loaded.", min = 0, max = 2, type = typeof(SpatializationMode), isSourceParameter = true)]
+		[SpatializerParameter(/*pluginName = "SpatMode",*/ label = "Set spatialization mode (0=High quality, 1=High performance, 2=None)", description = "Set spatialization mode (0=High quality, 1=High performance, 2=None). Note, High quality depends on the HRTF binary being loaded and High Performance depends on the High Performance ILD binary being loaded.", min = 0, max = 2, type = typeof(SpatializationMode), defaultValue = 0.0f, isSourceParameter = true)]
 		PARAM_SPATIALIZATION_MODE = 4,
 
 		[SpatializerParameter(label = "Head radius", description = "Set listener head radius", units = "m", min = 0.0f, max = 1e20f, defaultValue = 0.0875f)]
 		PARAM_HEAD_RADIUS = 5,
 
 		// TODO: Add remaining default values
-		[SpatializerParameter(label = "Scale factor", description = "Set the proportion between metres and Unity scale units", min = 1e-20f, max = 1e20f)]
+		[SpatializerParameter(label = "Scale factor", description = "Set the proportion between metres and Unity scale units", min = 1e-20f, max = 1e20f, defaultValue = 1.0f)]
 		PARAM_SCALE_FACTOR = 6,
 
-		[SpatializerParameter(label = "Enable custom ITD", description = "Enable Interaural Time Difference customization", type = typeof(bool))]
+		[SpatializerParameter(label = "Enable custom ITD", description = "Enable Interaural Time Difference customization", type = typeof(bool), defaultValue = 0.0f)]
 		PARAM_CUSTOM_ITD = 7,
 
-		[SpatializerParameter(label = "Anechoic distance attenuation", description = "Set attenuation in dB for each double distance", min = -30.0f, max = 0.0f)]
+		[SpatializerParameter(label = "Anechoic distance attenuation", description = "Set attenuation in dB for each double distance", min = -30.0f, max = 0.0f, units="dB", defaultValue = -1.0f)]
 		PARAM_MAG_ANECHATT = 8,
 
-		[SpatializerParameter(label = "Sound speed", description = "Set sound speed, used for custom ITD computation", units = "m/s", min = 10.0f, max = 1000.0f)]
+		[SpatializerParameter(label = "Sound speed", description = "Set sound speed, used for custom ITD computation", units = "m/s", min = 10.0f, max = 1000.0f, defaultValue = 343.0f)]
 		PARAM_MAG_SOUNDSPEED = 9,
 
-		[SpatializerParameter(label = "Anechoic directionality attenuation for left ear", description = "Set directionality extend for left ear. The value is the attenuation in decibels applied to sources placed behind the listener", units = "dB", min = 0.0f, max = 30.0f)]
+		[SpatializerParameter(label = "Anechoic directionality attenuation for left ear", description = "Set directionality extend for left ear. The value is the attenuation in decibels applied to sources placed behind the listener", units = "dB", min = 0.0f, max = 30.0f, defaultValue =15.0f)]
 		PARAM_HA_DIRECTIONALITY_EXTEND_LEFT = 10,
 
-		[SpatializerParameter(label = "Anechoic directionality attenuation for right ear", description = "Set directionality extend for right ear. The value is the attenuation in decibels applied to sources placed behind the listener", units = "dB", min = 0.0f, max = 30.0f)]
+		[SpatializerParameter(label = "Anechoic directionality attenuation for right ear", description = "Set directionality extend for right ear. The value is the attenuation in decibels applied to sources placed behind the listener", units = "dB", min = 0.0f, max = 30.0f, defaultValue =15.0f)]
 		PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT = 11,
 
-		[SpatializerParameter(label = "Enable directionality simulation for left ear", type = typeof(bool))]
+		[SpatializerParameter(label = "Enable directionality simulation for left ear", type = typeof(bool), defaultValue = 0.0f)]
 		PARAM_HA_DIRECTIONALITY_ON_LEFT = 12,
 
-		[SpatializerParameter(label = "Enable directionality simulation for right ear", type = typeof(bool))]
+		[SpatializerParameter(label = "Enable directionality simulation for right ear", type = typeof(bool), defaultValue =0.0f)]
 		PARAM_HA_DIRECTIONALITY_ON_RIGHT = 13,
 
-		[SpatializerParameter(label = "Enable limiter", description = "Enable dynamics limiter after spatialization, to avoid potential saturation", type = typeof(bool))]
+		[SpatializerParameter(label = "Enable limiter", description = "Enable dynamics limiter after spatialization, to avoid potential saturation", type = typeof(bool), defaultValue = 1.0f)]
 		PARAM_LIMITER_SET_ON = 14,
 
-		[SpatializerParameter(label = "HRTF resampling step", description = "HRTF resampling step; Lower values give better quality at the cost of more memory usage", min = 1, max = 90, type = typeof(int))]
+		[SpatializerParameter(label = "HRTF resampling step", description = "HRTF resampling step; Lower values give better quality at the cost of more memory usage", min = 1, max = 90, type = typeof(int), defaultValue =15)]
 		PARAM_HRTF_STEP = 15,
 	};
 
@@ -163,10 +163,11 @@ public class API_3DTI_Spatializer : MonoBehaviour
 													//    HIGH_PERFORMANCE = 1,
 													//    NONE = 2
 													//}
+	// These values match Binaural::TSpatializationMode in 3DTI toolkit SingleSource.h.
 	public enum SpatializationMode : int {
-		SPATIALIZATION_MODE_HIGH_QUALITY = 0,
-		SPATIALIZATION_MODE_HIGH_PERFORMANCE = 1,
-		SPATIALIZATION_MODE_NONE = 2,
+        SPATIALIZATION_MODE_NONE = 0,
+        SPATIALIZATION_MODE_HIGH_PERFORMANCE = 1,
+        SPATIALIZATION_MODE_HIGH_QUALITY = 2,
 	}
 
 	// ===== These values are written to by the Editor GUI panel
@@ -331,6 +332,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
 		bool loadOK = false;
 
 		// TODO: Only enforce passing in required binaries given the setup (e.g. high performance/high quality)
+		// TODO: Ensure failure to load HRTF clears the previously loaded HRTF if any.
 		switch (AudioSettings.outputSampleRate)
 		{
 			case 44100:

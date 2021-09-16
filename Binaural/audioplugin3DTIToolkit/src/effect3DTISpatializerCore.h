@@ -9,12 +9,12 @@
 
 namespace SpatializerCore3DTI
 {
-	enum SpatializationMode : int
-	{
-		SPATIALIZATION_MODE_HIGH_QUALITY = 0,
-		SPATIALIZATION_MODE_HIGH_PERFORMANCE = 1,
-		SPATIALIZATION_MODE_NONE = 2,
-	};
+	//enum SpatializationMode : int
+	//{
+	//	SPATIALIZATION_MODE_HIGH_QUALITY = 0,
+	//	SPATIALIZATION_MODE_HIGH_PERFORMANCE = 1,
+	//	SPATIALIZATION_MODE_NONE = 2,
+	//};
 
 	// Parameters set outside of the unity Parameter system
 	enum FloatParameter : int

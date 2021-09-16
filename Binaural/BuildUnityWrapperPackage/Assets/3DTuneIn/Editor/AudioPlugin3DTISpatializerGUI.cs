@@ -46,7 +46,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     //////////////////////////////////////////////////////////////////////////////
 
 
-    public static (string[] highQualityHRTFs, string[] highQualityILDs, string[] highPerformanceILDs) GetFilterBinaryPaths(TSampleRateEnum sampleRate)
+    public static (string[] highQualityHRTFs, string[] highQualityILDs, string[] highPerformanceILDs, string[] reverbBRIRs) GetFilterBinaryPaths(TSampleRateEnum sampleRate)
     {
         string sampleRateLabel =
             sampleRate == TSampleRateEnum.K44 ? "44100"
@@ -66,7 +66,11 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             .Where(x => x.name.Contains(sampleRateLabel))
             .Select(item => item.name).ToArray();
 
-        return (highQualityHRTFs, highQualityILDs, highPerformanceILDs);
+        string[] reverbBRIRs = Resources.LoadAll<TextAsset>("Data/Reverb/BRIR")
+            .Where(x => x.name.Contains(sampleRateLabel))
+            .Select(item => item.name).ToArray();
+
+        return (highQualityHRTFs, highQualityILDs, highPerformanceILDs, reverbBRIRs);
     }
 
 
@@ -136,6 +140,14 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             throw new Exception($"Failed to find SpatializerParameterAttribute for parameter {parameter}");
         }
 
+        string label = p.label;
+        string description = p.description;
+        if (p.isSourceParameter)
+        {
+            //label += " (initial value)";
+            description += "\n\n(This parameter may be modified individually on instantiated audio sources. The value here is the default when creating a new source.)";
+        }
+
         Common3DTIGUI.SingleSpace();
 
         if (p.type == typeof(float) || p.type == typeof(int))
@@ -147,7 +159,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             {
                 GUILayout.BeginVertical(GUILayout.ExpandWidth(false));
                 GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));
-                GUILayout.Label(new GUIContent(p.label, p.description));
+                GUILayout.Label(new GUIContent(label, description));
                 valueString = GUILayout.TextField(oldValue.ToString(p.type == typeof(float) ? "F2" : "F0", System.Globalization.CultureInfo.InvariantCulture), GUILayout.ExpandWidth(false));
                 GUILayout.Label(p.units, GUILayout.ExpandWidth(false));
                 GUILayout.EndHorizontal();
@@ -158,8 +170,8 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             else
             {
                 GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));
-                Common3DTIGUI.AddLabelToParameterGroup(p.label);
-                GUILayout.Label(new GUIContent(p.label, p.description), Common3DTIGUI.parameterLabelStyle, GUILayout.Width(Common3DTIGUI.GetParameterLabelWidth()));
+                Common3DTIGUI.AddLabelToParameterGroup(label);
+                GUILayout.Label(new GUIContent(label, description), Common3DTIGUI.parameterLabelStyle, GUILayout.Width(Common3DTIGUI.GetParameterLabelWidth()));
                 newValue = GUILayout.HorizontalSlider(oldValue, p.min, p.max, GUILayout.ExpandWidth(true));
                 valueString = GUILayout.TextField(newValue.ToString(p.type == typeof(float) ? "F2" : "F0", System.Globalization.CultureInfo.InvariantCulture), GUILayout.ExpandWidth(false));
                 GUILayout.Label(p.units, GUILayout.ExpandWidth(false));
@@ -187,7 +199,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
         else if (p.type == typeof(bool))
         {
             bool oldValue = toolkit.GetFloatParameter(parameter) != 0.0f;
-            bool newValue = GUILayout.Toggle(oldValue, new GUIContent(p.label, p.description), GUILayout.ExpandWidth(false));
+            bool newValue = GUILayout.Toggle(oldValue, new GUIContent(label, description), GUILayout.ExpandWidth(false));
             if (newValue != oldValue)
             {
                 bool setOK = toolkit.SetFloatParameter(parameter, Convert.ToSingle(newValue));
@@ -209,7 +221,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
             int defaultValue = (int)Enum.GetValues(p.type).GetValue(0);
 
-            int newValue = (int)(object)EditorGUILayout.Popup(new GUIContent(p.label, p.description), values.Contains(oldValue) ? oldValue : defaultValue, Enum.GetNames(p.type));
+            int newValue = (int)(object)EditorGUILayout.Popup(new GUIContent(label, description), values.Contains(oldValue) ? oldValue : defaultValue, Enum.GetNames(p.type));
             Debug.Assert(Enum.IsDefined(p.type, newValue));
 
             if (newValue != oldValue)
@@ -354,6 +366,13 @@ public class AudioPlugin3DTISpatializerGUI : Editor
         {
             Debug.Log("NB: SOFA HRTF files are only supported on Windows x64.");
         }
+
+        // BRIR Reverb:
+
+        Common3DTIGUI.CreatePopupStringSelector("BRIR 44.1kHz", "Select the BRIR (impulse response) for reverb processing", GetFilterBinaryPaths(TSampleRateEnum.K44).reverbBRIRs, ref toolkit.BRIRFileName44, "Data/Reverb/BRIR/", ".bytes");
+        Common3DTIGUI.CreatePopupStringSelector("BRIR 48kHz", "Select the BRIR (impulse response) for reverb processing", GetFilterBinaryPaths(TSampleRateEnum.K48).reverbBRIRs, ref toolkit.BRIRFileName48, "Data/Reverb/BRIR/", ".bytes");
+        Common3DTIGUI.CreatePopupStringSelector("BRIR 96kHz", "Select the BRIR (impulse response) for reverb processing", GetFilterBinaryPaths(TSampleRateEnum.K96).reverbBRIRs, ref toolkit.BRIRFileName96, "Data/Reverb/BRIR/", ".bytes");
+
 
         // ITD:    
         if (!(spatializationMode == SpatializationMode.SPATIALIZATION_MODE_NONE))

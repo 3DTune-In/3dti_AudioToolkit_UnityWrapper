@@ -862,7 +862,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0b0b66fe32e6446a7e3cb6e903d1b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HRTFFileName44: Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_128s_44100Hz.3dti-hrtf.bytes
+  spatializereCoreMixer: {fileID: 0}
+  spatializerParameters:
+  - 1
+  - 1
+  - 1
+  - 1
+  - 2
+  - 0.09
+  - 1
+  - 0
+  - -6.02
+  - 343
+  - 0
+  - 0
+  - 0
+  - 0
+  - 1
+  - 15
+  HRTFFileName44: Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_512s_44100Hz.3dti-hrtf.bytes
   HRTFFileName48: Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_512s_48000Hz.3dti-hrtf.bytes
   HRTFFileName96: Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_512s_96000Hz.3dti-hrtf.bytes
   ILDNearFieldFileName44: Data/HighQuality/ILD/NearFieldCompensation_ILD_44100.3dti-ild.bytes
@@ -871,24 +889,9 @@ MonoBehaviour:
   ILDHighPerformanceFileName44: Data/HighPerformance/ILD/HRTF_ILD_44100.3dti-ild.bytes
   ILDHighPerformanceFileName48: Data/HighPerformance/ILD/HRTF_ILD_48000.3dti-ild.bytes
   ILDHighPerformanceFileName96: Data/HighPerformance/ILD/HRTF_ILD_96000.3dti-ild.bytes
-  customITDEnabled: 0
-  listenerHeadRadius: 0.0875
-  spatializationMode: 0
-  scaleFactor: 1
-  runtimeInterpolateHRTF: 1
-  HRTFstep: 15
-  modFarLPF: 1
-  modDistAtt: 0
-  modNearFieldILD: 1
-  modHRTF: 1
-  magAnechoicAttenuation: -3
-  magSoundSpeed: 343
-  debugLog: 0
-  doHADirectionalityLeft: 0
-  doHADirectionalityRight: 0
-  HADirectionalityExtendLeft: 15
-  HADirectionalityExtendRight: 15
-  doLimiter: 1
+  BRIRFileName44: Data/Reverb/BRIR/3DTI_BRIR_large_44100Hz.3dti-brir.bytes
+  BRIRFileName48: Data/Reverb/BRIR/3DTI_BRIR_medium_48000Hz.3dti-brir.bytes
+  BRIRFileName96: Data/Reverb/BRIR/3DTI_BRIR_large_96000Hz.3dti-brir.bytes
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
