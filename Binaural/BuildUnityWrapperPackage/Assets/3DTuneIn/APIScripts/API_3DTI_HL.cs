@@ -241,7 +241,7 @@ public class API_3DTI_HL : MonoBehaviour
                 return false;
             }
         }
-        if (ear == T_ear.RIGHT)
+        if (ear.HasFlag(T_ear.RIGHT))
         {
             if (!hlMixer.SetFloat(attributes.mixerNameRight, Convert.ToSingle(value)))
             {
