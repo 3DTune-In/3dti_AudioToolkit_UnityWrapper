@@ -122,26 +122,7 @@ void WriteLog(string logtext)
 //};
 
 
-// These values are set explicitly as they need to correspond to values in the C# components.
-enum
-{
-	// Per-source parameters. We store them in the core so we know what value to initialize the values to on a new source instance.
-	PARAM_HRTF_INTERPOLATION = 0, // ### SOURCE ####
-	PARAM_MOD_FARLPF = 1, // ### SOURCE ####
-	PARAM_MOD_DISTATT = 2, // ### SOURCE ####
-	PARAM_MOD_NEAR_FIELD_ILD = 3,// ### SOURCE ####
-	PARAM_SPATIALIZATION_MODE = 4,// ### SOURCE ####
-	NumSourceParameters = 5,
 
-};
-
-struct EffectData
-{
-	int sourceID;    // DEBUG
-	std::shared_ptr<Binaural::CSingleSourceDSP> audioSource;
-	SpatializerCore3DTI::SpatializerCore* spatializer;
-	float parameters[NumSourceParameters];
-};
 
 /////////////////////////////////////////////////////////////////////
 
@@ -542,10 +523,10 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectSta
 	{
 		effectdata->spatializer = SpatializerCore3DTI::SpatializerCore::instance();
 		static_assert(ARRAYSIZE(effectdata->spatializer->perSourceInitialValues) == NumSourceParameters, "NumSourceParameters should match the size of SpatializerCore::perSourceInitialValues array.");
-		for (int i = 0; i < NumSourceParameters; i++)
-		{
-			effectdata->parameters[i] = effectdata->spatializer->perSourceInitialValues[i];
-		}
+		//for (int i = 0; i < NumSourceParameters; i++)
+		//{
+		//	effectdata->parameters[i] = effectdata->spatializer->perSourceInitialValues[i];
+		//}
 
 		state->effectdata = effectdata;
 		if (IsHostCompatible(state))
@@ -612,7 +593,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 	assert(data != nullptr && spatializer != nullptr);
 	if (index >= NumSourceParameters)
 		return UNITY_AUDIODSP_ERR_UNSUPPORTED;
-	data->parameters[index] = value;
+	//data->parameters[index] = value;
 
 	//Common::CMagnitudes magnitudes;
 	//int loadResult;
@@ -855,7 +836,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 			if (spatializer->unityParameters[SpatializerCore3DTI::PARAM_IS_HIGH_QUALITY_HRTF_LOADED] == 0)
 			{
 				WriteLog("Error: Cannot set Spatialization mode to High Quality as no HRTF is loaded.");
-				data->parameters[PARAM_SPATIALIZATION_MODE] = Binaural::TSpatializationMode::NoSpatialization;
+				//data->parameters[PARAM_SPATIALIZATION_MODE] = Binaural::TSpatializationMode::NoSpatialization;
 				data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::NoSpatialization);
 				data->audioSource->DisableNearFieldEffect();
 			}
@@ -878,7 +859,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 			if (spatializer->unityParameters[SpatializerCore3DTI::PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED] == 0)
 			{
 				WriteLog("Error: Cannot set Spatialization mode to High Performance as no HRTF is loaded.");
-				data->parameters[PARAM_SPATIALIZATION_MODE] = Binaural::TSpatializationMode::NoSpatialization;
+				//data->parameters[PARAM_SPATIALIZATION_MODE] = Binaural::TSpatializationMode::NoSpatialization;
 				data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::NoSpatialization);
 			}
 			data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::HighPerformance);
@@ -951,9 +932,10 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK GetFloatParameterCallback(UnityAud
 			//	*value = spatializer().core.GetAudioState().sampleRate;
 			//	break;
 		//default:
-			*value = data->parameters[index];
+			//*value = data->parameters[index];
 			//break;
 		//}
+		return UNITY_AUDIODSP_ERR_UNSUPPORTED;
 	}
 	return UNITY_AUDIODSP_OK;
 }
