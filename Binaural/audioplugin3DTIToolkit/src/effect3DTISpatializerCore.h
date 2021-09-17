@@ -19,6 +19,8 @@ namespace SpatializerCore3DTI
 	// Parameters set outside of the unity Parameter system
 	enum FloatParameter : int
 	{
+		// Values here must be kept in sync with the corresponding enum in c# code.
+
 		// Per-source parameters. We store them in the core so we know what value to initialize the values to on a new source instance.
 		PARAM_HRTF_INTERPOLATION = 0, // ### SOURCE ####
 		PARAM_MOD_FARLPF = 1, // ### SOURCE ####
@@ -55,6 +57,14 @@ namespace SpatializerCore3DTI
 		P_NUM
 	};
 
+	enum BinaryRole
+	{
+		// Must be kept in sync with c# code
+		HighPerformanceILD = 0,
+		HighQualityHRTF = 1,
+		HighQualityILD = 2,
+		ReverbBRIR = 3,
+	};
 
 /////////////////////////////////////////////////////////////////////
 
@@ -77,7 +87,8 @@ namespace SpatializerCore3DTI
 	public:
 		~SpatializerCore();
 
-		bool loadBinaries(std::string hrtfPath,	std::string ildPath, std::string highPerformanceILDPath, std::string brirPath);
+		bool loadBinary(BinaryRole role, std::string path);
+		//bool loadBinaries(std::string hrtfPath,	std::string ildPath, std::string highPerformanceILDPath, std::string brirPath);
 
 
 		class TooManyInstancesException : public std::exception

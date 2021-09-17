@@ -77,7 +77,7 @@ namespace SpatializerCore3DTI
 	}
 
 
-	extern "C" UNITY_AUDIODSP_EXPORT_API bool Initialize3DTISpatializer(const char* hrtfPath, const char* ildPath, const char* highPerformanceILDPath, const char* brirPath) {
+	extern "C" UNITY_AUDIODSP_EXPORT_API bool Load3DTISpatializerBinary(BinaryRole role, const char* path) {
 
 		SpatializerCore* instance = SpatializerCore::instance();
 		if (instance == nullptr)
@@ -85,8 +85,25 @@ namespace SpatializerCore3DTI
 			WriteLog("Error: setup3DTISpatializer called before the Spatializer plugin was created.");
 			return false;
 		}
-		return instance->loadBinaries(hrtfPath, ildPath, highPerformanceILDPath, brirPath);
-
+		return instance->loadBinary(role, path);
+		//bool ok = true;
+		//if (hrtfPath != nullptr)
+		//{
+		//	ok = ok && instance->loadBinary(HighQualityHRTF, hrtfPath);
+		//}
+		//if (ildPath != nullptr)
+		//{
+		//	ok = ok && instance->loadBinary(HighQualityILD, ildPath);
+		//}
+		//if (highPerformanceILDPath != nullptr)
+		//{
+		//	ok = ok && instance->loadBinary(HighPerformanceILD, highPerformanceILDPath);
+		//}
+		//if (brirPath != nullptr)
+		//{
+		//	ok = ok && instance->loadBinary(ReverbBRIR, brirPath);
+		//}
+		//return ok;
 	}
 
 	extern "C" UNITY_AUDIODSP_EXPORT_API bool Set3DTISpatializerFloat(int parameter, float value)
@@ -577,48 +594,86 @@ namespace SpatializerCore3DTI
 	
 
 
-	bool SpatializerCore::loadBinaries(std::string hrtfPath, std::string ildPath, std::string highPerformanceILDPath, std::string brirPath)
+	bool SpatializerCore::loadBinary(BinaryRole role, std::string path)
 	{
 		std::lock_guard<std::mutex> lock(mutex);
 
-		if (!hrtfPath.empty())
+		const string sofaExtension = ".sofa"s;
+
+		switch (role)
 		{
+		case HighQualityHRTF:
 #ifdef UNITY_WIN
-			const string sofaExtension = ".sofa"s;
-			if (hrtfPath.size() >= sofaExtension.size() && hrtfPath.substr(hrtfPath.size() - sofaExtension.size()) == sofaExtension)
+			if (path.size() >= sofaExtension.size() && path.substr(path.size() - sofaExtension.size()) == sofaExtension)
 			{
 				// We assume an ILD file holds the delays, so our SOFA file does not specify delays
 				bool specifiedDelays = false;
-				unityParameters[PARAM_IS_HIGH_QUALITY_HRTF_LOADED] = HRTF::CreateFromSofa(hrtfPath, listener, specifiedDelays);
+				unityParameters[PARAM_IS_HIGH_QUALITY_HRTF_LOADED] = HRTF::CreateFromSofa(path, listener, specifiedDelays);
 			}
 			// If not sofa file then assume its a 3dti-hrtf file
 			else
 #endif
 			{
-				unityParameters[PARAM_IS_HIGH_QUALITY_HRTF_LOADED] = HRTF::CreateFrom3dti(hrtfPath, listener);
+				unityParameters[PARAM_IS_HIGH_QUALITY_HRTF_LOADED] = HRTF::CreateFrom3dti(path, listener);
 			}
-		}
-		if (!ildPath.empty())
-		{
-			unityParameters[PARAM_IS_HIGH_QUALITY_ILD_LOADED] = ILD::CreateFrom3dti_ILDNearFieldEffectTable(ildPath, listener);
-		}
-
-		if (!highPerformanceILDPath.empty())
-		{
-			unityParameters[PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED] = ILD::CreateFrom3dti_ILDSpatializationTable(highPerformanceILDPath, listener);
-		}
-
-		if (!brirPath.empty())
-		{
+			return unityParameters[PARAM_IS_HIGH_QUALITY_HRTF_LOADED] != 0.0f;
+		case HighQualityILD:
+			unityParameters[PARAM_IS_HIGH_QUALITY_ILD_LOADED] = ILD::CreateFrom3dti_ILDNearFieldEffectTable(path, listener);
+			return unityParameters[PARAM_IS_HIGH_QUALITY_ILD_LOADED] != 0.0f;
+		case HighPerformanceILD:
+			unityParameters[PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED] = ILD::CreateFrom3dti_ILDSpatializationTable(path, listener);
+			return unityParameters[PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED] != 0.f;
+		case ReverbBRIR:
 			environment = core.CreateEnvironment();
-			unityParameters[PARAM_IS_REVERB_BRIR_LOADED] = BRIR::CreateFrom3dti(brirPath, environment);
+			unityParameters[PARAM_IS_REVERB_BRIR_LOADED] = BRIR::CreateFrom3dti(path, environment);
+			return unityParameters[PARAM_IS_REVERB_BRIR_LOADED] != 0.0f;
+		default:
+			return false;
 		}
-
-		return (hrtfPath.empty() || unityParameters[PARAM_IS_HIGH_QUALITY_HRTF_LOADED])
-			&& (ildPath.empty() || unityParameters[PARAM_IS_HIGH_QUALITY_ILD_LOADED])
-			&& (highPerformanceILDPath.empty() || unityParameters[PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED])
-			&& (brirPath.empty() || unityParameters[PARAM_IS_REVERB_BRIR_LOADED]);
 	}
+
+//	bool SpatializerCore::loadBinaries(std::string hrtfPath, std::string ildPath, std::string highPerformanceILDPath, std::string brirPath)
+//	{
+//		std::lock_guard<std::mutex> lock(mutex);
+//
+//		if (!hrtfPath.empty())
+//		{
+//#ifdef UNITY_WIN
+//			const string sofaExtension = ".sofa"s;
+//			if (hrtfPath.size() >= sofaExtension.size() && hrtfPath.substr(hrtfPath.size() - sofaExtension.size()) == sofaExtension)
+//			{
+//				// We assume an ILD file holds the delays, so our SOFA file does not specify delays
+//				bool specifiedDelays = false;
+//				unityParameters[PARAM_IS_HIGH_QUALITY_HRTF_LOADED] = HRTF::CreateFromSofa(hrtfPath, listener, specifiedDelays);
+//			}
+//			// If not sofa file then assume its a 3dti-hrtf file
+//			else
+//#endif
+//			{
+//				unityParameters[PARAM_IS_HIGH_QUALITY_HRTF_LOADED] = HRTF::CreateFrom3dti(hrtfPath, listener);
+//			}
+//		}
+//		if (!ildPath.empty())
+//		{
+//			unityParameters[PARAM_IS_HIGH_QUALITY_ILD_LOADED] = ILD::CreateFrom3dti_ILDNearFieldEffectTable(ildPath, listener);
+//		}
+//
+//		if (!highPerformanceILDPath.empty())
+//		{
+//			unityParameters[PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED] = ILD::CreateFrom3dti_ILDSpatializationTable(highPerformanceILDPath, listener);
+//		}
+//
+//		if (!brirPath.empty())
+//		{
+//			environment = core.CreateEnvironment();
+//			unityParameters[PARAM_IS_REVERB_BRIR_LOADED] = BRIR::CreateFrom3dti(brirPath, environment);
+//		}
+//
+//		return (hrtfPath.empty() || unityParameters[PARAM_IS_HIGH_QUALITY_HRTF_LOADED])
+//			&& (ildPath.empty() || unityParameters[PARAM_IS_HIGH_QUALITY_ILD_LOADED])
+//			&& (highPerformanceILDPath.empty() || unityParameters[PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED])
+//			&& (brirPath.empty() || unityParameters[PARAM_IS_REVERB_BRIR_LOADED]);
+//	}
 
 
 	SpatializerCore3DTI::SpatializerCore* SpatializerCore::create(UInt32 sampleRate, UInt32 bufferSize)

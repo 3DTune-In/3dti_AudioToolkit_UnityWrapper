@@ -47,31 +47,65 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     //////////////////////////////////////////////////////////////////////////////
 
 
-    public static (string[] highQualityHRTFs, string[] highQualityILDs, string[] highPerformanceILDs, string[] reverbBRIRs) GetFilterBinaryPaths(TSampleRateEnum sampleRate)
+    //public static (string[] highQualityHRTFs, string[] highQualityILDs, string[] highPerformanceILDs, string[] reverbBRIRs) GetFilterBinaryPaths(TSampleRateEnum sampleRate)
+    //{
+    //    string sampleRateLabel =
+    //        sampleRate == TSampleRateEnum.K44 ? "44100"
+    //        : sampleRate == TSampleRateEnum.K48 ? "48000"
+    //        : sampleRate == TSampleRateEnum.K96 ? "96000"
+    //        : "(unknown sample rate)";
+
+    //    string[] highPerformanceILDs = Resources.LoadAll<TextAsset>("Data/HighPerformance/ILD")
+    //        .Where(x => x.name.Contains(sampleRateLabel))
+    //        .Select(item => item.name).ToArray();
+
+    //    string[] highQualityHRTFs = Resources.LoadAll<TextAsset>("Data/HighQuality/HRTF")
+    //        .Where(x => x.name.Contains(sampleRateLabel))
+    //        .Select(item => item.name).ToArray();
+
+    //    string[] highQualityILDs = Resources.LoadAll<TextAsset>("Data/HighQuality/ILD")
+    //        .Where(x => x.name.Contains(sampleRateLabel))
+    //        .Select(item => item.name).ToArray();
+
+    //    string[] reverbBRIRs = Resources.LoadAll<TextAsset>("Data/Reverb/BRIR")
+    //        .Where(x => x.name.Contains(sampleRateLabel))
+    //        .Select(item => item.name).ToArray();
+
+    //    return (highQualityHRTFs, highQualityILDs, highPerformanceILDs, reverbBRIRs);
+    //}
+
+    public static (string prefix, string[] paths, string suffix) GetBinaryPaths(SpatializerBinaryRole role, TSampleRateEnum sampleRate)
     {
+        
+
+        string prefix;
+        switch (role)
+        {
+            case SpatializerBinaryRole.HighQualityHRTF:
+                prefix = "Data/HighQuality/HRTF";
+                break;
+            case SpatializerBinaryRole.HighPerformanceILD:
+                prefix = "Data/HighPerformance/ILD";
+                break;
+            case SpatializerBinaryRole.HighQualityILD:
+                prefix = "Data/HighQuality/ILD";
+                break;
+            case SpatializerBinaryRole.ReverbBRIR:
+                prefix = "Data/Reverb/BRIR";
+                break;
+            default:
+                throw new Exception("Invalid value for SpatializerBinaryRole.");
+        }
+
         string sampleRateLabel =
             sampleRate == TSampleRateEnum.K44 ? "44100"
             : sampleRate == TSampleRateEnum.K48 ? "48000"
             : sampleRate == TSampleRateEnum.K96 ? "96000"
             : "(unknown sample rate)";
-
-        string[] highPerformanceILDs = Resources.LoadAll<TextAsset>("Data/HighPerformance/ILD")
-            .Where(x => x.name.Contains(sampleRateLabel))
-            .Select(item => item.name).ToArray();
-
-        string[] highQualityHRTFs = Resources.LoadAll<TextAsset>("Data/HighQuality/HRTF")
-            .Where(x => x.name.Contains(sampleRateLabel))
-            .Select(item => item.name).ToArray();
-
-        string[] highQualityILDs = Resources.LoadAll<TextAsset>("Data/HighQuality/ILD")
-            .Where(x => x.name.Contains(sampleRateLabel))
-            .Select(item => item.name).ToArray();
-
-        string[] reverbBRIRs = Resources.LoadAll<TextAsset>("Data/Reverb/BRIR")
-            .Where(x => x.name.Contains(sampleRateLabel))
-            .Select(item => item.name).ToArray();
-
-        return (highQualityHRTFs, highQualityILDs, highPerformanceILDs, reverbBRIRs);
+        string[] paths = Resources.LoadAll<TextAsset>(prefix)
+                    .Where(x => x.name.Contains(sampleRateLabel))
+                    .Select(item => item.name).ToArray();
+        return (prefix, paths, "bytes");
     }
 
 
@@ -237,6 +271,30 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
 
 
+    public static string CreateBinaryFileSelector(string currentSelection, string titleText, string tooltip, SpatializerBinaryRole role, TSampleRateEnum sampleRate)
+    {
+        (string prefix, string[] items, string suffix) = GetBinaryPaths(role, sampleRate);
+
+        EditorGUILayout.BeginHorizontal();
+        //EditorGUILayout.PrefixLabel(new GUIContent(titleText, tooltip), parameterLabelStyle, GUILayout.Width(GetParameterLabelWidth()));
+        int selectedIndex = -1;
+        if (currentSelection.Length > prefix.Length + suffix.Length && currentSelection.StartsWith(prefix) && currentSelection.EndsWith(suffix))
+        {
+            string trimmedTarget = currentSelection.Remove(currentSelection.Length - suffix.Length).Remove(0, prefix.Length);
+            selectedIndex = new List<string>(items).IndexOf(trimmedTarget);
+        }
+        else if (currentSelection != "")
+        {
+            Debug.LogWarning("Unable to find previously selected binary: " + currentSelection);
+        }
+        int newSelectedIndex = EditorGUILayout.Popup(new GUIContent(titleText, tooltip), selectedIndex, items);
+        EditorGUILayout.EndHorizontal();
+        return newSelectedIndex < 0 ? "" : (prefix + items[newSelectedIndex] + suffix);
+    }
+
+
+
+
     ///////////////////////////////////////////////////////////
     // GUI ELEMENT ACTIONS
     ///////////////////////////////////////////////////////////
@@ -344,23 +402,45 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
         // HIGH PERFORMANCE / HIGH QUALITY CHOICE:
 
-        Common3DTIGUI.SingleSpace();
+        void createDropdowns(SpatializerBinaryRole role, string label, string tooltip)
+        {
+            (TSampleRateEnum, string)[] AllSampleRates = {
+                (TSampleRateEnum.K44, "44.1 kHz"),
+                (TSampleRateEnum.K48, "48 kHz"),
+                (TSampleRateEnum.K96, "96 kHz")
+            };
+            foreach ((TSampleRateEnum sampleRate, string sampleRateLabel) in AllSampleRates)
+            {
+                // Paths should be relative to a Resources folder.
+                string oldPath = toolkit.GetBinaryPath(SpatializerBinaryRole.HighPerformanceILD, sampleRate);
+                string newPath = CreateBinaryFileSelector(oldPath, label + sampleRateLabel, tooltip, SpatializerBinaryRole.HighPerformanceILD, sampleRate);
+                if (oldPath != newPath)
+                {
+                    toolkit.SetBinaryPath(SpatializerBinaryRole.HighPerformanceILD, sampleRate, newPath);
+                }
+                if (newPath.EndsWith(".sofa.bytes"))
+                {
+                    Debug.Log("NB: SOFA HRTF files are only supported on Windows x64.");
+                }
+            }
+        }
 
-        bool wasSofaFileSelected = toolkit.HRTFFileName44.EndsWith(".sofa.bytes") || toolkit.HRTFFileName48.EndsWith(".sofa.bytes") || toolkit.HRTFFileName96.EndsWith(".sofa.bytes");
+        Common3DTIGUI.SingleSpace();
 
         GUILayout.Label("Binaries for High Performance mode", Common3DTIGUI.subtitleBoxStyle);
         GUILayout.Label("These are required for AudioSources to be able to spatialize in High Performance mode.", Common3DTIGUI.commentStyle);
 
+        
 
         // HIGH PERFORMANCE MODE CONTROLS
         {            
             Common3DTIGUI.AddLabelToParameterGroup("High Performance ILD");
 
-            // Paths should be relative to a Resources folder.
+            createDropdowns(SpatializerBinaryRole.HighPerformanceILD, "ILD", "Select the high performance ILD filter of the listener from a .3dti-ild file");
 
-            Common3DTIGUI.CreatePopupStringSelector("ILD 44.1kHz", "Select the high performance ILD filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K44).highPerformanceILDs, ref toolkit.ILDHighPerformanceFileName44, "Data/HighPerformance/ILD/", ".bytes");
-            Common3DTIGUI.CreatePopupStringSelector("ILD 48kHz", "Select the high performance ILD filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K48).highPerformanceILDs, ref toolkit.ILDHighPerformanceFileName48, "Data/HighPerformance/ILD/", ".bytes");
-            Common3DTIGUI.CreatePopupStringSelector("ILD 96kHz", "Select the high performance ILD filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K96).highPerformanceILDs, ref toolkit.ILDHighPerformanceFileName96, "Data/HighPerformance/ILD/", ".bytes");
+            //Common3DTIGUI.CreatePopupStringSelector("ILD 44.1kHz", "Select the high performance ILD filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K44).highPerformanceILDs, ref toolkit.ILDHighPerformanceFileName44, "Data/HighPerformance/ILD/", ".bytes");
+            //Common3DTIGUI.CreatePopupStringSelector("ILD 48kHz", "Select the high performance ILD filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K48).highPerformanceILDs, ref toolkit.ILDHighPerformanceFileName48, "Data/HighPerformance/ILD/", ".bytes");
+            //Common3DTIGUI.CreatePopupStringSelector("ILD 96kHz", "Select the high performance ILD filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K96).highPerformanceILDs, ref toolkit.ILDHighPerformanceFileName96, "Data/HighPerformance/ILD/", ".bytes");
         }
 
         Common3DTIGUI.SectionSpace();
@@ -372,23 +452,22 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             Common3DTIGUI.AddLabelToParameterGroup("HRTF");
             Common3DTIGUI.AddLabelToParameterGroup("Near Field Filter ILD");
 
+
             // HRTF:
-            Common3DTIGUI.CreatePopupStringSelector("HRTF 44.1kHz", "Select the HRTF of the listener from a .3dti-hrtf file", GetFilterBinaryPaths(TSampleRateEnum.K44).highQualityHRTFs, ref toolkit.HRTFFileName44, "Data/HighQuality/HRTF/", ".bytes");
-            Common3DTIGUI.CreatePopupStringSelector("HRTF 48kHz", "Select the HRTF of the listener from a .3dti-hrtf file", GetFilterBinaryPaths(TSampleRateEnum.K48).highQualityHRTFs, ref toolkit.HRTFFileName48, "Data/HighQuality/HRTF/", ".bytes");
-            Common3DTIGUI.CreatePopupStringSelector("HRTF 96kHz", "Select the HRTF of the listener from a .3dti-hrtf file", GetFilterBinaryPaths(TSampleRateEnum.K96).highQualityHRTFs, ref toolkit.HRTFFileName96, "Data/HighQuality/HRTF/", ".bytes");
+            //Common3DTIGUI.CreatePopupStringSelector("HRTF 44.1kHz", "Select the HRTF of the listener from a .3dti-hrtf file", GetFilterBinaryPaths(TSampleRateEnum.K44).highQualityHRTFs, ref toolkit.HRTFFileName44, "Data/HighQuality/HRTF/", ".bytes");
+            //Common3DTIGUI.CreatePopupStringSelector("HRTF 48kHz", "Select the HRTF of the listener from a .3dti-hrtf file", GetFilterBinaryPaths(TSampleRateEnum.K48).highQualityHRTFs, ref toolkit.HRTFFileName48, "Data/HighQuality/HRTF/", ".bytes");
+            //Common3DTIGUI.CreatePopupStringSelector("HRTF 96kHz", "Select the HRTF of the listener from a .3dti-hrtf file", GetFilterBinaryPaths(TSampleRateEnum.K96).highQualityHRTFs, ref toolkit.HRTFFileName96, "Data/HighQuality/HRTF/", ".bytes");
+            createDropdowns(SpatializerBinaryRole.HighQualityHRTF, "HRTF", "Select the HRTF of the listener from a .3dti-hrtf file");
 
             // ILD:
+
             Common3DTIGUI.SingleSpace();
-            Common3DTIGUI.CreatePopupStringSelector("ILD 44.1kHz", "Select the ILD near field filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K44).highQualityILDs, ref toolkit.ILDNearFieldFileName44, "Data/HighQuality/ILD/", ".bytes");
-            Common3DTIGUI.CreatePopupStringSelector("ILD 48kHz", "Select the ILD near field filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K48).highQualityILDs, ref toolkit.ILDNearFieldFileName48, "Data/HighQuality/ILD/", ".bytes");
-            Common3DTIGUI.CreatePopupStringSelector("ILD 96kHz", "Select the ILD near field filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K96).highQualityILDs, ref toolkit.ILDNearFieldFileName96, "Data/HighQuality/ILD/", ".bytes");
+            //Common3DTIGUI.CreatePopupStringSelector("ILD 44.1kHz", "Select the ILD near field filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K44).highQualityILDs, ref toolkit.ILDNearFieldFileName44, "Data/HighQuality/ILD/", ".bytes");
+            //Common3DTIGUI.CreatePopupStringSelector("ILD 48kHz", "Select the ILD near field filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K48).highQualityILDs, ref toolkit.ILDNearFieldFileName48, "Data/HighQuality/ILD/", ".bytes");
+            //Common3DTIGUI.CreatePopupStringSelector("ILD 96kHz", "Select the ILD near field filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K96).highQualityILDs, ref toolkit.ILDNearFieldFileName96, "Data/HighQuality/ILD/", ".bytes");
+            createDropdowns(SpatializerBinaryRole.HighQualityILD, "ILD", "Select the ILD near field filter of the listener from a .3dti-ild file");
 
-        }
-        bool isSofaFileSelected = toolkit.HRTFFileName44.EndsWith(".sofa.bytes") || toolkit.HRTFFileName48.EndsWith(".sofa.bytes") || toolkit.HRTFFileName96.EndsWith(".sofa.bytes");
 
-        if (!wasSofaFileSelected && isSofaFileSelected)
-        {
-            Debug.Log("NB: SOFA HRTF files are only supported on Windows x64.");
         }
 
 
@@ -398,9 +477,11 @@ public class AudioPlugin3DTISpatializerGUI : Editor
         GUILayout.Label("Binaries for Reverb", Common3DTIGUI.subtitleBoxStyle);
         GUILayout.Label("These are required to enable reverb processing.", Common3DTIGUI.commentStyle);
 
-        Common3DTIGUI.CreatePopupStringSelector("BRIR 44.1kHz", "Select the BRIR (impulse response) for reverb processing", GetFilterBinaryPaths(TSampleRateEnum.K44).reverbBRIRs, ref toolkit.BRIRFileName44, "Data/Reverb/BRIR/", ".bytes");
-        Common3DTIGUI.CreatePopupStringSelector("BRIR 48kHz", "Select the BRIR (impulse response) for reverb processing", GetFilterBinaryPaths(TSampleRateEnum.K48).reverbBRIRs, ref toolkit.BRIRFileName48, "Data/Reverb/BRIR/", ".bytes");
-        Common3DTIGUI.CreatePopupStringSelector("BRIR 96kHz", "Select the BRIR (impulse response) for reverb processing", GetFilterBinaryPaths(TSampleRateEnum.K96).reverbBRIRs, ref toolkit.BRIRFileName96, "Data/Reverb/BRIR/", ".bytes");
+        //Common3DTIGUI.CreatePopupStringSelector("BRIR 44.1kHz", "Select the BRIR (impulse response) for reverb processing", GetFilterBinaryPaths(TSampleRateEnum.K44).reverbBRIRs, ref toolkit.BRIRFileName44, "Data/Reverb/BRIR/", ".bytes");
+        //Common3DTIGUI.CreatePopupStringSelector("BRIR 48kHz", "Select the BRIR (impulse response) for reverb processing", GetFilterBinaryPaths(TSampleRateEnum.K48).reverbBRIRs, ref toolkit.BRIRFileName48, "Data/Reverb/BRIR/", ".bytes");
+        //Common3DTIGUI.CreatePopupStringSelector("BRIR 96kHz", "Select the BRIR (impulse response) for reverb processing", GetFilterBinaryPaths(TSampleRateEnum.K96).reverbBRIRs, ref toolkit.BRIRFileName96, "Data/Reverb/BRIR/", ".bytes");
+        createDropdowns(SpatializerBinaryRole.ReverbBRIR, "BRIR", "Select the BRIR (impulse response) for reverb processing");
+
 
 
         Common3DTIGUI.SectionSpace();

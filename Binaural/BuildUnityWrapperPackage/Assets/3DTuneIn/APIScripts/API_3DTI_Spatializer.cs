@@ -23,10 +23,7 @@ using UnityEngine.Audio;
 using UnityEngine;
 using System.Linq;
 
-public enum TSampleRateEnum
-{
-	K44, K48, K96
-};
+
 
 [System.AttributeUsage(System.AttributeTargets.Field)]
 public class SpatializerParameterAttribute : System.Attribute
@@ -48,25 +45,20 @@ public class SpatializerParameterAttribute : System.Attribute
 }
 
 
-//[System.AttributeUsage(System.AttributeTargets.Field)]
-//// TODO: Remove this and just use SpatializerParameterAttribute
-//public class SpatializerSourceParameterAttribute : System.Attribute
-//{
-//	// The name used to set using setSpatializerFloat
-//	public string pluginName;
-//    public Type type = typeof(float);
-//    // Tooltip for GUI
-//    public string description;
-//    // Label used in GUI
-//    public string label;
-//    // For numeric values, the units label, e.g. "dB"
-//    public string units;
-//    // For int/float parameters: limit to these discrete values. Leave as null for no limits.
-//    public float[] validValues;
-//    public float min;
-//    public float max;
-//    public float defaultValue;
-//}
+public enum TSampleRateEnum
+{
+    K44, K48, K96
+}
+
+
+public enum SpatializerBinaryRole
+{
+    // These values must match the C++ values
+    HighPerformanceILD,
+    HighQualityHRTF,
+    HighQualityILD,
+    ReverbBRIR,
+}
 
 
 public class API_3DTI_Spatializer : MonoBehaviour
@@ -104,28 +96,28 @@ public class API_3DTI_Spatializer : MonoBehaviour
 		[SpatializerParameter(label = "Enable custom ITD", description = "Enable Interaural Time Difference customization", type = typeof(bool), defaultValue = 0.0f)]
 		PARAM_CUSTOM_ITD = 7,
 
-		[SpatializerParameter(label = "Anechoic distance attenuation", description = "Set attenuation in dB for each double distance", min = -30.0f, max = 0.0f, units="dB", defaultValue = -1.0f)]
+		[SpatializerParameter(label = "Anechoic distance attenuation", description = "Set attenuation in dB for each double distance", min = -30.0f, max = 0.0f, units = "dB", defaultValue = -1.0f)]
 		PARAM_MAG_ANECHATT = 8,
 
 		[SpatializerParameter(label = "Sound speed", description = "Set sound speed, used for custom ITD computation", units = "m/s", min = 10.0f, max = 1000.0f, defaultValue = 343.0f)]
 		PARAM_MAG_SOUNDSPEED = 9,
 
-		[SpatializerParameter(label = "Anechoic directionality attenuation for left ear", description = "Set directionality extend for left ear. The value is the attenuation in decibels applied to sources placed behind the listener", units = "dB", min = 0.0f, max = 30.0f, defaultValue =15.0f)]
+		[SpatializerParameter(label = "Anechoic directionality attenuation for left ear", description = "Set directionality extend for left ear. The value is the attenuation in decibels applied to sources placed behind the listener", units = "dB", min = 0.0f, max = 30.0f, defaultValue = 15.0f)]
 		PARAM_HA_DIRECTIONALITY_EXTEND_LEFT = 10,
 
-		[SpatializerParameter(label = "Anechoic directionality attenuation for right ear", description = "Set directionality extend for right ear. The value is the attenuation in decibels applied to sources placed behind the listener", units = "dB", min = 0.0f, max = 30.0f, defaultValue =15.0f)]
+		[SpatializerParameter(label = "Anechoic directionality attenuation for right ear", description = "Set directionality extend for right ear. The value is the attenuation in decibels applied to sources placed behind the listener", units = "dB", min = 0.0f, max = 30.0f, defaultValue = 15.0f)]
 		PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT = 11,
 
 		[SpatializerParameter(label = "Enable directionality simulation for left ear", type = typeof(bool), defaultValue = 0.0f)]
 		PARAM_HA_DIRECTIONALITY_ON_LEFT = 12,
 
-		[SpatializerParameter(label = "Enable directionality simulation for right ear", type = typeof(bool), defaultValue =0.0f)]
+		[SpatializerParameter(label = "Enable directionality simulation for right ear", type = typeof(bool), defaultValue = 0.0f)]
 		PARAM_HA_DIRECTIONALITY_ON_RIGHT = 13,
 
 		[SpatializerParameter(label = "Enable limiter", description = "Enable dynamics limiter after spatialization, to avoid potential saturation", type = typeof(bool), defaultValue = 1.0f)]
 		PARAM_LIMITER_SET_ON = 14,
 
-		[SpatializerParameter(label = "HRTF resampling step (High Quality only)", description = "HRTF resampling step; Lower values give better quality at the cost of more memory usage. Only affects High Quality mode.", min = 1, max = 90, type = typeof(int), defaultValue =15)]
+		[SpatializerParameter(label = "HRTF resampling step (High Quality only)", description = "HRTF resampling step; Lower values give better quality at the cost of more memory usage. Only affects High Quality mode.", min = 1, max = 90, type = typeof(int), defaultValue = 15)]
 		PARAM_HRTF_STEP = 15,
 	};
 
@@ -138,19 +130,6 @@ public class API_3DTI_Spatializer : MonoBehaviour
 	private float[] spatializerParameters = Enumerable.Range(0, NumSpatializerParameters).Select(i => ((SpatializerParameter)i).GetAttribute<SpatializerParameterAttribute>().defaultValue).ToArray<float>();
 
 
-	///// <summary>
-	///// Parameters that can be set for each specific sound source using AudioSource.setSpatializerFloat
-	///// Note: I'm not sure the pluginName is relevant for these, but it's here for completeness.
-	///// </summary>
-	//public enum SpatializerSourceParameter
-	//   {
-
-	//   }
-	//public const int NumSpatializerSourceParameters = 5;
-	//   // Initialize to NaN so we know whether to override with default values from the plugin or whether Unity has serialized these
-	//   private float[] spatializerSourceParameterInitialValues = Enumerable.Range(0, NumSpatializerSourceParameters).Select(i => ((SpatializerParameter)i).GetAttribute<SpatializerParameterAttribute>().defaultValue).ToArray<float>();
-
-	// ======
 
 	TSampleRateEnum sampleRate;
 
@@ -162,27 +141,45 @@ public class API_3DTI_Spatializer : MonoBehaviour
 													//    HIGH_PERFORMANCE = 1,
 													//    NONE = 2
 													//}
-	// These values match Binaural::TSpatializationMode in 3DTI toolkit SingleSource.h.
+													// These values match Binaural::TSpatializationMode in 3DTI toolkit SingleSource.h.
 	public enum SpatializationMode : int {
-        SPATIALIZATION_MODE_NONE = 0,
-        SPATIALIZATION_MODE_HIGH_PERFORMANCE = 1,
-        SPATIALIZATION_MODE_HIGH_QUALITY = 2,
+		SPATIALIZATION_MODE_NONE = 0,
+		SPATIALIZATION_MODE_HIGH_PERFORMANCE = 1,
+		SPATIALIZATION_MODE_HIGH_QUALITY = 2,
 	}
 
-	// ===== These values are written to by the Editor GUI panel
-
-	public string HRTFFileName44 = "Assets/3DTuneIn/Resources/Data/HighQuality/HRTF/3DTI_HRTF_IRC1032_256s_44100Hz.3dti-hrtf.bytes";
-	public string HRTFFileName48 = "Assets/3DTuneIn/Resources/Data/HighQuality/HRTF/3DTI_HRTF_IRC1032_256s_48000Hz.3dti-hrtf.bytes";
-	public string HRTFFileName96 = "Assets/3DTuneIn/Resources/Data/HighQuality/HRTF/3DTI_HRTF_IRC1032_256s_96000Hz.3dti-hrtf.bytes";
-	public string ILDNearFieldFileName44 = "Assets/3DTuneIn/Resources/Data/HighQuality/ILD/NearFieldCompensation_ILD_44100.3dti-ild.bytes";
-	public string ILDNearFieldFileName48 = "Assets/3DTuneIn/Resources/Data/HighQuality/ILD/NearFieldCompensation_ILD_48000.3dti-ild.bytes";
-	public string ILDNearFieldFileName96 = "Assets/3DTuneIn/Resources/Data/HighQuality/ILD/NearFieldCompensation_ILD_96000.3dti-ild.bytes";
-	public string ILDHighPerformanceFileName44 = "Assets/3DTuneIn/Resources/Data/HighPerformance/ILD/HRTF_ILD_44100.3dti-ild.bytes";
-	public string ILDHighPerformanceFileName48 = "Assets/3DTuneIn/Resources/Data/HighPerformance/ILD/HRTF_ILD_48000.3dti-ild.bytes";
-	public string ILDHighPerformanceFileName96 = "Assets/3DTuneIn/Resources/Data/HighPerformance/ILD/HRTF_ILD_96000.3dti-ild.bytes";
-    public string BRIRFileName44 = "Assets/3DTuneIn/Resources/Data/Reverb/BRIR/3DTI_BRIR_large_44100.3dti-brir.bytes";
-    public string BRIRFileName48 = "Assets/3DTuneIn/Resources/Data/Reverb/BRIR/3DTI_BRIR_large_48000.3dti-brir.bytes";
-    public string BRIRFileName96 = "Assets/3DTuneIn/Resources/Data/Reverb/BRIR/3DTI_BRIR_large_96000.3dti-brir.bytes";
+    /// Array is for the three different sample rates
+    [SerializeField]
+    private string[] highQualityHRTFPaths =
+	{
+		"Assets/3DTuneIn/Resources/Data/HighQuality/HRTF/3DTI_HRTF_IRC1032_256s_44100Hz.3dti-hrtf.bytes",
+		"Assets/3DTuneIn/Resources/Data/HighQuality/HRTF/3DTI_HRTF_IRC1032_256s_48000Hz.3dti-hrtf.bytes",
+		"Assets/3DTuneIn/Resources/Data/HighQuality/HRTF/3DTI_HRTF_IRC1032_256s_96000Hz.3dti-hrtf.bytes",
+	};
+    [SerializeField]
+    private string[] highQualityILDPaths = {
+		"Assets/3DTuneIn/Resources/Data/HighQuality/ILD/NearFieldCompensation_ILD_44100.3dti-ild.bytes",
+		"Assets/3DTuneIn/Resources/Data/HighQuality/ILD/NearFieldCompensation_ILD_48000.3dti-ild.bytes",
+		"Assets/3DTuneIn/Resources/Data/HighQuality/ILD/NearFieldCompensation_ILD_96000.3dti-ild.bytes",
+	};
+    [SerializeField]
+    private string[] highPerformanceILDPaths = {
+        "Assets/3DTuneIn/Resources/Data/HighPerformance/ILD/HRTF_ILD_44100.3dti-ild.bytes",
+        "Assets/3DTuneIn/Resources/Data/HighPerformance/ILD/HRTF_ILD_48000.3dti-ild.bytes",
+        "Assets/3DTuneIn/Resources/Data/HighPerformance/ILD/HRTF_ILD_96000.3dti-ild.bytes",
+    };
+    [SerializeField]
+    private string[] reverbBRIRPaths = {
+		"Assets/3DTuneIn/Resources/Data/Reverb/BRIR/3DTI_BRIR_large_44100.3dti-brir.bytes",
+		"Assets/3DTuneIn/Resources/Data/Reverb/BRIR/3DTI_BRIR_large_48000.3dti-brir.bytes",
+		"Assets/3DTuneIn/Resources/Data/Reverb/BRIR/3DTI_BRIR_large_96000.3dti-brir.bytes",
+	};
+    // for convenience:
+    private string[][] binaryPaths
+    {
+        get => new string[][] { highQualityHRTFPaths, highQualityILDPaths, highPerformanceILDPaths, reverbBRIRPaths, };
+    }
+    
 
     //[SerializeField]
     //public string HRTFFileName44 = "";
@@ -271,116 +268,84 @@ public class API_3DTI_Spatializer : MonoBehaviour
 
 #if UNITY_IPHONE
     [DllImport ("__Internal")]
-
 #else
     [DllImport("AudioPlugin3DTIToolkit")]
 #endif
-    private static extern bool Initialize3DTISpatializer(string hrtfPath, string ildPath, string highPerformanceILDPath, string brirPath);
+    private static extern bool Load3DTISpatializerBinary(int role, string path);
+
 
 #if UNITY_IPHONE
     [DllImport ("__Internal")]
-
 #else
     [DllImport("AudioPlugin3DTIToolkit")]
 #endif
 	private static extern bool Set3DTISpatializerFloat(int parameterID, float value);
 
+
 #if UNITY_IPHONE
     [DllImport ("__Internal")]
-
 #else
     [DllImport("AudioPlugin3DTIToolkit")]
 #endif
 	private static extern bool Get3DTISpatializerFloat(int parameterID, out float value);
 
 
-
 	/// Test if a Spatializer instance has been created. This can only be done by adding the SpatializerCore 
 	/// effect to a mixer. Currently only one instance is supported
 #if UNITY_IPHONE
     [DllImport ("__Internal")]
-
 #else
 	[DllImport("AudioPlugin3DTIToolkit")]
 #endif
 	private static extern bool Is3DTISpatializerCreated();
 
 
-	/// <summary>
+    /// <summary>
 
-	/// Automatic setup of Toolkit Core (as read from custom GUI in Unity Inspector)
-	/// </summary>
-	void Start()
-	{
-		if (!Is3DTISpatializerCreated())
+    /// Automatic setup of Toolkit Core (as read from custom GUI in Unity Inspector)
+    /// </summary>
+    void Start()
+    {
+        if (!Is3DTISpatializerCreated())
         {
-			Debug.LogError("Cannot start 3DTI Spatializer as no instance has been created. Please ensure the SpatializerCore plugin has been added to a mixer in the scene.");
-			return;
+            Debug.LogError("Cannot start 3DTI Spatializer as no instance has been created. Please ensure the SpatializerCore plugin has been added to a mixer in the scene.");
+            return;
         }
 
-		for (int i=0; i<NumSpatializerParameters; i++)
+        for (int i = 0; i < NumSpatializerParameters; i++)
         {
-			if (!Set3DTISpatializerFloat(i, spatializerParameters[i]))
+            if (!Set3DTISpatializerFloat(i, spatializerParameters[i]))
             {
-				Debug.LogError($"Failed to set 3DTI parameter {i}.", this);
+                Debug.LogError($"Failed to set 3DTI parameter {i}.", this);
             }
         }
 
-		
-		//Debug.Assert(numBuffers == 2);
-		bool loadOK = false;
 
-		// TODO: Only enforce passing in required binaries given the setup (e.g. high performance/high quality)
-		// TODO: Ensure failure to load HRTF clears the previously loaded HRTF if any.
-		switch (AudioSettings.outputSampleRate)
-		{
-			case 44100:
-                {
-                    loadOK = (SaveResourceAsBinary(HRTFFileName44, out string hrtfPath) == 1)
-                        && (SaveResourceAsBinary(ILDNearFieldFileName44, out string ildPath) == 1)
-                        && (SaveResourceAsBinary(ILDHighPerformanceFileName44, out string ildHighPerformancePath) == 1)
-                        && (SaveResourceAsBinary(BRIRFileName44, out string brirPath) == 1)
-                        && Initialize3DTISpatializer(hrtfPath, ildPath, ildHighPerformancePath, brirPath);
-                }
-                break;
-            case 48000:
-                {
-                    loadOK = (SaveResourceAsBinary(HRTFFileName48, out string hrtfPath) == 1)
-                            && (SaveResourceAsBinary(ILDNearFieldFileName48, out string ildPath) == 1)
-                            && (SaveResourceAsBinary(ILDHighPerformanceFileName48, out string ildHighPerformancePath) == 1)
-                            && (SaveResourceAsBinary(BRIRFileName48, out string brirPath) == 1)
-                            && Initialize3DTISpatializer(hrtfPath, ildPath, ildHighPerformancePath, brirPath);
-                }
-                break;
-            case 96000:
-                {
-                    loadOK = (SaveResourceAsBinary(HRTFFileName96, out string hrtfPath) == 1)
-                            && (SaveResourceAsBinary(ILDNearFieldFileName96, out string ildPath) == 1)
-                            && (SaveResourceAsBinary(ILDHighPerformanceFileName96, out string ildHighPerformancePath) == 1)
-                            && (SaveResourceAsBinary(BRIRFileName96, out string brirPath) == 1)
-                            && Initialize3DTISpatializer(hrtfPath, ildPath, ildHighPerformancePath, brirPath);
-                }
-                break;
-            default:
-                Debug.LogError($"Unsupported sample rate for 3DTI Spatializer {AudioSettings.outputSampleRate}. Supported values are 44100, 48000 and 96000.");
-                break;
-        }
-        if (!loadOK)
+        //Debug.Assert(numBuffers == 2);
+        bool loadOK = false;
+
+        Debug.LogError($"Unsupported sample rate for 3DTI Spatializer {AudioSettings.outputSampleRate}. Supported values are 44100, 48000 and 96000.");
+
+        if (!GetSampleRate(out TSampleRateEnum sr))
         {
-			Debug.LogError("Failed to initialize Spatializer plugin");
+            Debug.LogError($"Unsupported sample rate for 3DTI Spatializer {AudioSettings.outputSampleRate}. Supported values are 44100, 48000 and 96000.");
         }
-		else
+        else
         {
-			Debug.Log("Spatializer plugin initialized.");
+            Debug.Assert(0 <= (int)sr && (int)sr < 3);
+            foreach (SpatializerBinaryRole role in Enum.GetValues(typeof(SpatializerBinaryRole)))
+            {
+                Debug.Assert(0 <= (int)role && (int)role < binaryPaths.Length);
+                string resourcePath = binaryPaths[(int)role][(int)sr];
+                SetBinaryPath(role, sr, resourcePath);
+
+            }
         }
+    }
 
-        //StartBinauralSpatializer();
+    // --- Spatializer Core parameters
 
-	}
-
-	// --- Spatializer Core parameters
-
-	public bool SetFloatParameter(SpatializerParameter parameter, float value, AudioSource source = null)
+    public bool SetFloatParameter(SpatializerParameter parameter, float value, AudioSource source = null)
     {
 		if (source != null)
 		{
@@ -482,6 +447,39 @@ public class API_3DTI_Spatializer : MonoBehaviour
         SpatializerParameterAttribute attributes = parameter.GetAttribute<SpatializerParameterAttribute>();
         Debug.Assert(typeof(T) == attributes.type);
 		return SetFloatParameter(parameter, Convert.ToSingle(value), source);
+    }
+
+
+    public string GetBinaryPath(SpatializerBinaryRole role, TSampleRateEnum sampleRate)
+    {
+        Debug.Assert(Enum.IsDefined(typeof(SpatializerBinaryRole), role));
+        Debug.Assert(Enum.IsDefined(typeof(TSampleRateEnum), sampleRate));
+
+        return binaryPaths[(int)role][(int)sampleRate];
+    }
+
+    /// <summary>
+    /// Sets the path of a binary file for the spatializer. If the path is not an empty string, and the target sample rate matches the current sample rate, then it requests the plugin to load the file.
+    /// </summary>
+    /// <param name="role"></param>
+    /// <param name="sampleRate">Sample rate the binary is intended to be used at.</param>
+    /// <param name="path">Leave empty to load no binary for this role at this sample rate.</param>
+    /// <returns>True if the file successfully loaded</returns>
+    public bool SetBinaryPath(SpatializerBinaryRole role, TSampleRateEnum sampleRate, string path)
+    {
+        Debug.Assert(Enum.IsDefined(typeof(SpatializerBinaryRole), role));
+        Debug.Assert(Enum.IsDefined(typeof(TSampleRateEnum), sampleRate));
+        binaryPaths[(int)role][(int)sampleRate] = path;
+        if (path.Length > 0 && GetSampleRate(out TSampleRateEnum currentSampleRate) && currentSampleRate == sampleRate)
+        {
+            // TODO: This extra save is for the sake of android which can't read the normal filesystem. But it might be possible to send the data directly as an array.
+            if (!(SaveResourceAsBinary(path, out string newPath) && Load3DTISpatializerBinary((int)role, newPath)))
+            {
+                Debug.LogError($"Failed to load Spatializer binary for {role} at sample rate {sampleRate}.");
+                return false;
+            }
+        }
+        return true;
     }
 
 
@@ -746,7 +744,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
 	/// <summary>
 	/// Load one file from resources and save it as a binary file (for Android)
 	/// </summary>    
-	private int SaveResourceAsBinary(string originalName, out string newFilename)
+	private bool SaveResourceAsBinary(string originalName, out string newFilename)
 	{
         // remove .bytes extension
         if (originalName.EndsWith(".bytes"))
@@ -762,7 +760,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
 		if (txtAsset == null)
 		{
 			Debug.LogError($"Could not load 3DTI resource {originalName}", this);
-			return -1;  // Could not load asset from resources
+			return false;  // Could not load asset from resources
 		}
 
         // Transform asset into stream and then into byte array
@@ -777,7 +775,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
 			writer.Write(dataArray);
 		}
 
-		return 1;
+		return true;
 	}
 
     ///// <summary>
@@ -1067,400 +1065,386 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <summary>
     /// Switch on/off far distance LPF
     /// </summary>        
- //   public bool SetModFarLPF(bool _enable, AudioSource source = null)
- //   {
- //       modFarLPF = _enable;
- //       return SendCommand(SET_MOD_FARLPF, CommonFunctions.Bool2Float(_enable), source);
- //   }
+    //   public bool SetModFarLPF(bool _enable, AudioSource source = null)
+    //   {
+    //       modFarLPF = _enable;
+    //       return SendCommand(SET_MOD_FARLPF, CommonFunctions.Bool2Float(_enable), source);
+    //   }
 
- //   /////////////////////////////////////////////////////////////////////
+    //   /////////////////////////////////////////////////////////////////////
 
- //   /// <summary>
- //   /// Switch on/off distance attenuation
- //   /// </summary>        
- //   public bool SetModDistanceAttenuation(bool _enable, AudioSource source = null)
- //   {
- //       modDistAtt = _enable;
- //       return SendCommand(SET_MOD_DISTATT, CommonFunctions.Bool2Float(_enable), source);
- //   }
+    //   /// <summary>
+    //   /// Switch on/off distance attenuation
+    //   /// </summary>        
+    //   public bool SetModDistanceAttenuation(bool _enable, AudioSource source = null)
+    //   {
+    //       modDistAtt = _enable;
+    //       return SendCommand(SET_MOD_DISTATT, CommonFunctions.Bool2Float(_enable), source);
+    //   }
 
- //   /////////////////////////////////////////////////////////////////////
+    //   /////////////////////////////////////////////////////////////////////
 
- //   /// <summary>
- //   /// Switch on/off near field ILD
- //   /// </summary>        
- //   public bool SetModNearFieldILD(bool _enable, AudioSource source = null)
- //   {
- //       modNearFieldILD = _enable;
- //       return SendCommand(SET_MOD_NEARFIELD_ILD, CommonFunctions.Bool2Float(_enable), source);
- //   }
+    //   /// <summary>
+    //   /// Switch on/off near field ILD
+    //   /// </summary>        
+    //   public bool SetModNearFieldILD(bool _enable, AudioSource source = null)
+    //   {
+    //       modNearFieldILD = _enable;
+    //       return SendCommand(SET_MOD_NEARFIELD_ILD, CommonFunctions.Bool2Float(_enable), source);
+    //   }
 
- //   /////////////////////////////////////////////////////////////////////
+    //   /////////////////////////////////////////////////////////////////////
 
- //   /// <summary>
- //   /// Set spatialization mode (high quality, high performance, or none)
- //   /// </summary>
- //   /// <param name="mode"></param>
- //   /// <returns></returns>
- //   public bool SetSpatializationMode(int mode)
-	//{
-	//	// SPATIALIZATION MODE IS COMMON FOR ALL SOURCES
+    //   /// <summary>
+    //   /// Set spatialization mode (high quality, high performance, or none)
+    //   /// </summary>
+    //   /// <param name="mode"></param>
+    //   /// <returns></returns>
+    //   public bool SetSpatializationMode(int mode)
+    //{
+    //	// SPATIALIZATION MODE IS COMMON FOR ALL SOURCES
 
-	//	spatializationMode = mode;
+    //	spatializationMode = mode;
 
-	//	// Load resources        
-	//	if (!SetupListener())
-	//	{
-	//		Debug.LogWarning("SetupListener returned false", this);
-	//	}
+    //	// Load resources        
+    //	if (!SetupListener())
+    //	{
+    //		Debug.LogWarning("SetupListener returned false", this);
+    //	}
 
-	//	// Send command to plugin        
-	//	return SendCommand(SET_SPATIALIZATION_MODE, (float)(mode), null);
-	//}
+    //	// Send command to plugin        
+    //	return SendCommand(SET_SPATIALIZATION_MODE, (float)(mode), null);
+    //}
 
-	/////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
 
-	///// <summary>
-	///// Set magnitude Anechoic Attenuation
-	///// </summary>    
-	//public bool SetMagnitudeAnechoicAttenuation(float value, AudioSource source = null)
-	//{
-	//	magAnechoicAttenuation = value;
-	//	return SendCommand(SET_MAG_ANECHATT, value, source);
-	//}
+    ///// <summary>
+    ///// Set magnitude Anechoic Attenuation
+    ///// </summary>    
+    //public bool SetMagnitudeAnechoicAttenuation(float value, AudioSource source = null)
+    //{
+    //	magAnechoicAttenuation = value;
+    //	return SendCommand(SET_MAG_ANECHATT, value, source);
+    //}
 
-	///// <summary>
-	///// Set magnitude Sound Speed
-	///// </summary>    
-	//public bool SetMagnitudeSoundSpeed(float value, AudioSource source = null)
-	//{
-	//	magSoundSpeed = value;
-	//	return SendCommand(SET_MAG_SOUNDSPEED, value, source);
-	//}
+    ///// <summary>
+    ///// Set magnitude Sound Speed
+    ///// </summary>    
+    //public bool SetMagnitudeSoundSpeed(float value, AudioSource source = null)
+    //{
+    //	magSoundSpeed = value;
+    //	return SendCommand(SET_MAG_SOUNDSPEED, value, source);
+    //}
 
-	///////////////////////////////////////////////////////////////////////
-	//// HA DIRECTIONALITY METHODS
-	///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    //// HA DIRECTIONALITY METHODS
+    ///////////////////////////////////////////////////////////////////////
 
-	///// <summary>
-	/////  Initial setup of HA directionality
-	///// </summary>
-	//public bool SetupHADirectionality(AudioSource source = null)
-	//{
-	//	//if (!SwitchOnOffHADirectionality(T_ear.LEFT, doHADirectionality.Get(T_ear.LEFT))) return false;
-	//	//if (!SwitchOnOffHADirectionality(T_ear.RIGHT, doHADirectionality.Get(T_ear.RIGHT))) return false;
-	//	if (!SwitchOnOffHADirectionality(T_ear.LEFT, doHADirectionalityLeft, source))
-	//	{
-	//		return false;
-	//	}
+    ///// <summary>
+    /////  Initial setup of HA directionality
+    ///// </summary>
+    //public bool SetupHADirectionality(AudioSource source = null)
+    //{
+    //	//if (!SwitchOnOffHADirectionality(T_ear.LEFT, doHADirectionality.Get(T_ear.LEFT))) return false;
+    //	//if (!SwitchOnOffHADirectionality(T_ear.RIGHT, doHADirectionality.Get(T_ear.RIGHT))) return false;
+    //	if (!SwitchOnOffHADirectionality(T_ear.LEFT, doHADirectionalityLeft, source))
+    //	{
+    //		return false;
+    //	}
 
-	//	if (!SwitchOnOffHADirectionality(T_ear.RIGHT, doHADirectionalityRight, source))
-	//	{
-	//		return false;
-	//	}
+    //	if (!SwitchOnOffHADirectionality(T_ear.RIGHT, doHADirectionalityRight, source))
+    //	{
+    //		return false;
+    //	}
 
-	//	if (!SetHADirectionalityExtend(T_ear.LEFT, HADirectionalityExtendLeft, source))
-	//	{
-	//		return false;
-	//	}
+    //	if (!SetHADirectionalityExtend(T_ear.LEFT, HADirectionalityExtendLeft, source))
+    //	{
+    //		return false;
+    //	}
 
-	//	if (!SetHADirectionalityExtend(T_ear.RIGHT, HADirectionalityExtendRight, source))
-	//	{
-	//		return false;
-	//	}
+    //	if (!SetHADirectionalityExtend(T_ear.RIGHT, HADirectionalityExtendRight, source))
+    //	{
+    //		return false;
+    //	}
 
-	//	return true;
-	//}
+    //	return true;
+    //}
 
-	///// <summary>
-	///// Switch on/off HA directionality for each ear
-	///// </summary>
-	///// <param name="ear"></param>
-	///// <param name="_enable"></param>
-	//public bool SwitchOnOffHADirectionality(T_ear ear, bool _enable, AudioSource source = null)
-	//{
-	//	if (ear == T_ear.BOTH)
-	//	{
-	//		SwitchOnOffHADirectionality(T_ear.LEFT, _enable, source);
-	//		SwitchOnOffHADirectionality(T_ear.RIGHT, _enable, source);
-	//	}
+    ///// <summary>
+    ///// Switch on/off HA directionality for each ear
+    ///// </summary>
+    ///// <param name="ear"></param>
+    ///// <param name="_enable"></param>
+    //public bool SwitchOnOffHADirectionality(T_ear ear, bool _enable, AudioSource source = null)
+    //{
+    //	if (ear == T_ear.BOTH)
+    //	{
+    //		SwitchOnOffHADirectionality(T_ear.LEFT, _enable, source);
+    //		SwitchOnOffHADirectionality(T_ear.RIGHT, _enable, source);
+    //	}
 
-	//	if (ear == T_ear.LEFT)
-	//	{
-	//		//doHADirectionality.Set(T_ear.LEFT, _enable);
-	//		doHADirectionalityLeft = _enable;
-	//		return SendCommand(SET_HA_DIRECTIONALITY_ON_LEFT, CommonFunctions.Bool2Float(_enable), source);
-	//	}
-	//	if (ear == T_ear.RIGHT)
-	//	{
-	//		//doHADirectionality.Set(T_ear.RIGHT, _enable);
-	//		doHADirectionalityRight = _enable;
-	//		return SendCommand(SET_HA_DIRECTIONALITY_ON_RIGHT, CommonFunctions.Bool2Float(_enable), source);
-	//	}
-	//	return false;
-	//}
+    //	if (ear == T_ear.LEFT)
+    //	{
+    //		//doHADirectionality.Set(T_ear.LEFT, _enable);
+    //		doHADirectionalityLeft = _enable;
+    //		return SendCommand(SET_HA_DIRECTIONALITY_ON_LEFT, CommonFunctions.Bool2Float(_enable), source);
+    //	}
+    //	if (ear == T_ear.RIGHT)
+    //	{
+    //		//doHADirectionality.Set(T_ear.RIGHT, _enable);
+    //		doHADirectionalityRight = _enable;
+    //		return SendCommand(SET_HA_DIRECTIONALITY_ON_RIGHT, CommonFunctions.Bool2Float(_enable), source);
+    //	}
+    //	return false;
+    //}
 
-	///// <summary>
-	///// Set HA directionality extend (in dB) for each ear
-	///// </summary>
-	///// <param name="ear"></param>
-	///// <param name="extendDB"></param>
-	//public bool SetHADirectionalityExtend(T_ear ear, float extendDB, AudioSource source = null)
-	//{
-	//	if (ear == T_ear.BOTH)
-	//	{
-	//		SetHADirectionalityExtend(T_ear.LEFT, extendDB, source);
-	//		SetHADirectionalityExtend(T_ear.RIGHT, extendDB, source);
-	//	}
+    ///// <summary>
+    ///// Set HA directionality extend (in dB) for each ear
+    ///// </summary>
+    ///// <param name="ear"></param>
+    ///// <param name="extendDB"></param>
+    //public bool SetHADirectionalityExtend(T_ear ear, float extendDB, AudioSource source = null)
+    //{
+    //	if (ear == T_ear.BOTH)
+    //	{
+    //		SetHADirectionalityExtend(T_ear.LEFT, extendDB, source);
+    //		SetHADirectionalityExtend(T_ear.RIGHT, extendDB, source);
+    //	}
 
-	//	if (ear == T_ear.LEFT)
-	//	{
-	//		HADirectionalityExtendLeft = extendDB;
-	//		return SendCommand(SET_HA_DIRECTIONALITY_EXTEND_LEFT, extendDB, source);
-	//	}
-	//	if (ear == T_ear.RIGHT)
-	//	{
-	//		HADirectionalityExtendRight = extendDB;
-	//		return SendCommand(SET_HA_DIRECTIONALITY_EXTEND_RIGHT, extendDB, source);
-	//	}
-	//	return false;
-	//}
+    //	if (ear == T_ear.LEFT)
+    //	{
+    //		HADirectionalityExtendLeft = extendDB;
+    //		return SendCommand(SET_HA_DIRECTIONALITY_EXTEND_LEFT, extendDB, source);
+    //	}
+    //	if (ear == T_ear.RIGHT)
+    //	{
+    //		HADirectionalityExtendRight = extendDB;
+    //		return SendCommand(SET_HA_DIRECTIONALITY_EXTEND_RIGHT, extendDB, source);
+    //	}
+    //	return false;
+    //}
 
-	///////////////////////////////////////////////////////////////////////
-	//// LIMITER METHODS
-	///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    //// LIMITER METHODS
+    ///////////////////////////////////////////////////////////////////////
 
-	///// <summary>
-	/////  Initial setup of limiter
-	///// </summary>
-	//public bool SetupLimiter(AudioSource source = null)
-	//{
-	//	if (!SwitchOnOffLimiter(doLimiter, source))
-	//	{
-	//		return false;
-	//	}
+    ///// <summary>
+    /////  Initial setup of limiter
+    ///// </summary>
+    //public bool SetupLimiter(AudioSource source = null)
+    //{
+    //	if (!SwitchOnOffLimiter(doLimiter, source))
+    //	{
+    //		return false;
+    //	}
 
-	//	return true;
-	//}
+    //	return true;
+    //}
 
-	///// <summary>
-	///// Switc on/off limiter after spatialization process
-	///// </summary>
-	///// <param name="value"></param>
-	///// <returns></returns>
-	//public bool SwitchOnOffLimiter(bool _enable, AudioSource source = null)
-	//{
-	//	doLimiter = _enable;
-	//	return SendCommand(SET_LIMITER_ON, CommonFunctions.Bool2Float(_enable), source);
-	//}
+    ///// <summary>
+    ///// Switc on/off limiter after spatialization process
+    ///// </summary>
+    ///// <param name="value"></param>
+    ///// <returns></returns>
+    //public bool SwitchOnOffLimiter(bool _enable, AudioSource source = null)
+    //{
+    //	doLimiter = _enable;
+    //	return SendCommand(SET_LIMITER_ON, CommonFunctions.Bool2Float(_enable), source);
+    //}
 
-	///// <summary>
-	///// Get state of limiter (currently compressing or not)
-	///// </summary>
-	///// <param name="_compressing"></param>
-	///// <returns></returns>
-	//public bool GetLimiterCompression(out bool _compressing, AudioSource source = null)
-	//{
-	//	return GetBoolParameter(GET_LIMITER_COMPRESSION, out _compressing, source);
-	//}
-	///////////////////////////////////////////////////////////////////////
-	//// SAMPLE RATE AND BUFFER SIZE GET METHODS
-	///////////////////////////////////////////////////////////////////////
-	///// <summary>
-	///// Get audio sample rate in hertzs (Unity's)
-	///// </summary>
-	///// <param name="_sampleRate"></param>
-	///// <returns></returns>
-	//public bool GetSampleRate(out float _sampleRate)
-	//{
-	//	return GetFloatParameter(GET_SAMPLE_RATE, out _sampleRate);
-	//}
+    ///// <summary>
+    ///// Get state of limiter (currently compressing or not)
+    ///// </summary>
+    ///// <param name="_compressing"></param>
+    ///// <returns></returns>
+    //public bool GetLimiterCompression(out bool _compressing, AudioSource source = null)
+    //{
+    //	return GetBoolParameter(GET_LIMITER_COMPRESSION, out _compressing, source);
+    //}
+    ///////////////////////////////////////////////////////////////////////
+    //// SAMPLE RATE AND BUFFER SIZE GET METHODS
+    ///////////////////////////////////////////////////////////////////////
+    ///// <summary>
+    ///// Get audio sample rate in hertzs (Unity's)
+    ///// </summary>
+    ///// <param name="_sampleRate"></param>
+    ///// <returns></returns>
+    //public bool GetSampleRate(out float _sampleRate)
+    //{
+    //	return GetFloatParameter(GET_SAMPLE_RATE, out _sampleRate);
+    //}
 
-	///// <summary>
-	///// Get audio buffer size in number of samples (Unity's)
-	///// </summary>
-	///// <param name="_bufferSize"></param>
-	///// <returns></returns>
-	//public bool GetBufferSize(out float _bufferSize)
-	//{
-	//	return GetFloatParameter(GET_BUFFER_SIZE, out _bufferSize);
-	//}
-	///// <summary>
-	///// Get audio sample rate in hertzs (Core's)
-	///// </summary>
-	///// <param name="_sampleRate"></param>
-	///// <returns></returns>
-	//public bool GetSampleRateCore(out float _sampleRate)
-	//{
-	//	return GetFloatParameter(GET_SAMPLE_RATE_CORE, out _sampleRate);
-	//}
+    ///// <summary>
+    ///// Get audio buffer size in number of samples (Unity's)
+    ///// </summary>
+    ///// <param name="_bufferSize"></param>
+    ///// <returns></returns>
+    //public bool GetBufferSize(out float _bufferSize)
+    //{
+    //	return GetFloatParameter(GET_BUFFER_SIZE, out _bufferSize);
+    //}
+    ///// <summary>
+    ///// Get audio sample rate in hertzs (Core's)
+    ///// </summary>
+    ///// <param name="_sampleRate"></param>
+    ///// <returns></returns>
+    //public bool GetSampleRateCore(out float _sampleRate)
+    //{
+    //	return GetFloatParameter(GET_SAMPLE_RATE_CORE, out _sampleRate);
+    //}
 
-	///// <summary>
-	///// Get audio buffer size in number of samples (Core's)
-	///// </summary>
-	///// <param name="_bufferSize"></param>
-	///// <returns></returns>
-	//public bool GetBufferSizeCore(out float _bufferSize)
-	//{
-	//	return GetFloatParameter(GET_BUFFER_SIZE_CORE, out _bufferSize);
-	//}
-	///////////////////////////////////////////////////////////////////////
-	//// AUXILIARY FUNCTIONS
-	///////////////////////////////////////////////////////////////////////
+    ///// <summary>
+    ///// Get audio buffer size in number of samples (Core's)
+    ///// </summary>
+    ///// <param name="_bufferSize"></param>
+    ///// <returns></returns>
+    //public bool GetBufferSizeCore(out float _bufferSize)
+    //{
+    //	return GetFloatParameter(GET_BUFFER_SIZE_CORE, out _bufferSize);
+    //}
+    ///////////////////////////////////////////////////////////////////////
+    //// AUXILIARY FUNCTIONS
+    ///////////////////////////////////////////////////////////////////////
 
-	///// <summary>
-	///// Get the value of one bool parameter from the first instance of the spatialization plugin
-	///// </summary>
-	///// <param name="parameter"></param>
-	///// <param name="value"></param>
-	///// <returns></returns>
-	//public bool GetBoolParameter(int parameter, out bool value, AudioSource source = null)
-	//{
-	//	value = false;
-	//	float floatValue;
-	//	if (!GetFloatParameter(parameter, out floatValue, source))
-	//	{
-	//		return false;
-	//	}
+    ///// <summary>
+    ///// Get the value of one bool parameter from the first instance of the spatialization plugin
+    ///// </summary>
+    ///// <param name="parameter"></param>
+    ///// <param name="value"></param>
+    ///// <returns></returns>
+    //public bool GetBoolParameter(int parameter, out bool value, AudioSource source = null)
+    //{
+    //	value = false;
+    //	float floatValue;
+    //	if (!GetFloatParameter(parameter, out floatValue, source))
+    //	{
+    //		return false;
+    //	}
 
-	//	value = CommonFunctions.Float2Bool(floatValue);
-	//	return true;
-	//}
+    //	value = CommonFunctions.Float2Bool(floatValue);
+    //	return true;
+    //}
 
-	///// <summary>
-	///// Get the value of one float parameter from the first instance of the spatialization plugin 
-	///// </summary>
-	///// <param name="parameter"></param>
-	///// <param name="value"></param>
-	///// <returns></returns>
-	//public bool GetFloatParameter(int parameter, out float value, AudioSource source = null)
-	//{
-	//	value = 0.0f;
+    ///// <summary>
+    ///// Get the value of one float parameter from the first instance of the spatialization plugin 
+    ///// </summary>
+    ///// <param name="parameter"></param>
+    ///// <param name="value"></param>
+    ///// <returns></returns>
+    //public bool GetFloatParameter(int parameter, out float value, AudioSource source = null)
+    //{
+    //	value = 0.0f;
 
-	//	AudioSource s = source;
+    //	AudioSource s = source;
 
-	//	// If no source is specified, we get value from the first spatialized source
-	//	if (source == null)
-	//	{
-	//		List<AudioSource> sources = GetAllSpatializedSources();
-	//		if (sources.Count > 0)
-	//		{
-	//			s = sources[0];
-	//		}
-	//		else
-	//		{
-	//			return false;
-	//		}
-	//	}
+    //	// If no source is specified, we get value from the first spatialized source
+    //	if (source == null)
+    //	{
+    //		List<AudioSource> sources = GetAllSpatializedSources();
+    //		if (sources.Count > 0)
+    //		{
+    //			s = sources[0];
+    //		}
+    //		else
+    //		{
+    //			return false;
+    //		}
+    //	}
 
-	//	// Send the command to get the value        
-	//	return (s.GetSpatializerFloat(parameter, out value));
-	//}
+    //	// Send the command to get the value        
+    //	return (s.GetSpatializerFloat(parameter, out value));
+    //}
 
-	//public bool IsCoreReadyToStart()
-	//{
-	//	// Test if the core has received the correct sample rate yet. This will happen after the first spatialized sound triggers the CreateCallback method
-	//	float sampleRateCore;
-	//	GetSampleRateCore(out sampleRateCore);
-	//	return (int)sampleRateCore == AudioSettings.outputSampleRate;
-	//}
+    //public bool IsCoreReadyToStart()
+    //{
+    //	// Test if the core has received the correct sample rate yet. This will happen after the first spatialized sound triggers the CreateCallback method
+    //	float sampleRateCore;
+    //	GetSampleRateCore(out sampleRateCore);
+    //	return (int)sampleRateCore == AudioSettings.outputSampleRate;
+    //}
 
-	public int GetSampleRateEnum()
-	{
-		int _index = 0;
-		int sampleRate = AudioSettings.outputSampleRate;
-		//float sampleRateWrapper, sampleRateCore;
-		//GetSampleRate(out sampleRateWrapper);
-		//GetSampleRateCore(out sampleRateCore);
-		//Debug.Log($"sampleRate: {sampleRate}, sampleRateWrapper: {sampleRateWrapper}, sampleRateCore: {sampleRateCore}");
-		//if (Application.isPlaying /*|| UnityEditor.EditorApplication.isPlaying*/)
-		//{
-		//	if (sampleRate != sampleRateWrapper || sampleRate != sampleRateCore || sampleRateWrapper != sampleRateCore)
-		//	{
-		//		Debug.LogError($"Sample Rate no coincidente entre AudioSettings ({sampleRate}), Wrapper ({sampleRateWrapper}) y Core ({sampleRateCore})");
-		//	}
-		//}
-		if (sampleRate > 0)
-		{
-			switch (sampleRate)
-			{
-				case 44100:
-					_index = (int)TSampleRateEnum.K44;
-					break;
-				case 48000:
-					_index = (int)TSampleRateEnum.K48;
-					break;
-				case 96000:
-					_index = (int)TSampleRateEnum.K96;
-					break;
-				default:
-					Debug.LogError("Sampling rates different than 44.1, 48 or 96kHz shall not be used." + Environment.NewLine + "Go to Edit -> Project Settings -> Audio and set System Sample Rate to a valid value.");
-					Debug.Break();
-					Debug.developerConsoleVisible = true;
 
+    public bool GetSampleRate(out TSampleRateEnum sampleRate)
+    {
+
+        switch (AudioSettings.outputSampleRate)
+        {
+            case 44100:
+                sampleRate =  TSampleRateEnum.K44;
+                return true;
+            case 48000:
+                sampleRate = TSampleRateEnum.K48;
+                return true; 
+            case 96000:
+                sampleRate = TSampleRateEnum.K96;
+                return true;
+            default:
+                Debug.LogError("Sampling rates different than 44.1, 48 or 96kHz are not supported." + Environment.NewLine + "Go to Edit -> Project Settings -> Audio and set System Sample Rate to a valid value.");
+                Debug.Break();
+                Debug.developerConsoleVisible = true;
 #if (UNITY_EDITOR)
-					UnityEditor.EditorApplication.isPlaying = false;
+                UnityEditor.EditorApplication.isPlaying = false;
 #else
                         Application.Quit();
 #endif
+                sampleRate = TSampleRateEnum.K44;
+                return false;
+        }
+    }
 
-					_index = (int)TSampleRateEnum.K48;
-					break;
-			}
-		}
-		return _index;
-	}
-	///// <summary>
-	///// Send command to plugin to switch on/off write to Debug Log file
-	///// </summary>
-	//public bool SendWriteDebugLog(bool _enable, AudioSource source = null)
-	//{
-	//	debugLog = _enable;
-	//	return SendCommand(SET_DEBUG_LOG, CommonFunctions.Bool2Float(_enable), source);
-	//}
 
-	///// <summary>
-	///// Send command to the DLL, for selected source or for all registered sources
-	///// </summary>
-	//public bool SendCommand(int command, float value, AudioSource source)
-	//{
-	//	if (source == null)
-	//	{
-	//		List<AudioSource> audioSources = GetAllSpatializedSources();
-	//		foreach (AudioSource s in audioSources)
-	//		{
-	//			if (!s.SetSpatializerFloat(command, value))
-	//			{
-	//				return false;
-	//			}
-	//		}
-	//		return true;
-	//	}
-	//	else
-	//	{
-	//		return source.SetSpatializerFloat(command, value);
-	//	}
-	//}
 
-	///// <summary>
-	///// Returns a list with all audio sources with the Spatialized toggle checked
-	///// </summary>
-	//public List<AudioSource> GetAllSpatializedSources()
-	//{
-	//	//GameObject[] audioSources = GameObject.FindGameObjectsWithTag("AudioSource");
+    ///// <summary>
+    ///// Send command to plugin to switch on/off write to Debug Log file
+    ///// </summary>
+    //public bool SendWriteDebugLog(bool _enable, AudioSource source = null)
+    //{
+    //	debugLog = _enable;
+    //	return SendCommand(SET_DEBUG_LOG, CommonFunctions.Bool2Float(_enable), source);
+    //}
 
-	//	List<AudioSource> spatializedSources = new List<AudioSource>();
+    ///// <summary>
+    ///// Send command to the DLL, for selected source or for all registered sources
+    ///// </summary>
+    //public bool SendCommand(int command, float value, AudioSource source)
+    //{
+    //	if (source == null)
+    //	{
+    //		List<AudioSource> audioSources = GetAllSpatializedSources();
+    //		foreach (AudioSource s in audioSources)
+    //		{
+    //			if (!s.SetSpatializerFloat(command, value))
+    //			{
+    //				return false;
+    //			}
+    //		}
+    //		return true;
+    //	}
+    //	else
+    //	{
+    //		return source.SetSpatializerFloat(command, value);
+    //	}
+    //}
 
-	//	AudioSource[] audioSources = UnityEngine.Object.FindObjectsOfType<AudioSource>();
-	//	foreach (AudioSource source in audioSources)
-	//	{
-	//		if (source.spatialize)
-	//		{
-	//			spatializedSources.Add(source);
-	//		}
-	//	}
+    ///// <summary>
+    ///// Returns a list with all audio sources with the Spatialized toggle checked
+    ///// </summary>
+    //public List<AudioSource> GetAllSpatializedSources()
+    //{
+    //	//GameObject[] audioSources = GameObject.FindGameObjectsWithTag("AudioSource");
 
-	//	return spatializedSources;
-	//}
+    //	List<AudioSource> spatializedSources = new List<AudioSource>();
+
+    //	AudioSource[] audioSources = UnityEngine.Object.FindObjectsOfType<AudioSource>();
+    //	foreach (AudioSource source in audioSources)
+    //	{
+    //		if (source.spatialize)
+    //		{
+    //			spatializedSources.Add(source);
+    //		}
+    //	}
+
+    //	return spatializedSources;
+    //}
 
 }
