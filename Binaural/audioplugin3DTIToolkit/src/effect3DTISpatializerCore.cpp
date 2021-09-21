@@ -114,6 +114,8 @@ namespace SpatializerCore3DTI
 			return false;
 		}
 
+		std::lock_guard<std::mutex> lock(spatializer->mutex);
+
 		switch (parameter)
 		{
 			case PARAM_HRTF_INTERPOLATION :
