@@ -9,6 +9,9 @@
 
 namespace SpatializerCore3DTI
 {
+
+	extern "C" UNITY_AUDIODSP_EXPORT_API bool Get3DTISpatializerFloat(int parameter, float* value);
+
 	//enum SpatializationMode : int
 	//{
 	//	SPATIALIZATION_MODE_HIGH_QUALITY = 0,
@@ -23,10 +26,13 @@ namespace SpatializerCore3DTI
 
 		// Per-source parameters. We store them in the core so we know what value to initialize the values to on a new source instance.
 		PARAM_HRTF_INTERPOLATION = 0, // ### SOURCE ####
+		FirstSourceParameter = PARAM_HRTF_INTERPOLATION,
 		PARAM_MOD_FARLPF = 1, // ### SOURCE ####
 		PARAM_MOD_DISTATT = 2, // ### SOURCE ####
 		PARAM_MOD_NEAR_FIELD_ILD = 3,// ### SOURCE ####
 		PARAM_SPATIALIZATION_MODE = 4,// ### SOURCE ####
+		//EnableReverb,
+
 		NumSourceParameters = 5,
 
 		// Core parameters

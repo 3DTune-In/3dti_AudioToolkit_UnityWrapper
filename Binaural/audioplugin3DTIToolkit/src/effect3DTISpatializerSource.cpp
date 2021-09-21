@@ -70,6 +70,20 @@ namespace SpatializerSource3DTI
 	//    return spatializer;
 	//}
 
+	using SpatializerCore3DTI::FloatParameter;
+
+
+
+
+	struct EffectData
+	{
+		int sourceID;    // DEBUG
+		std::shared_ptr<Binaural::CSingleSourceDSP> audioSource;
+		SpatializerCore3DTI::SpatializerCore* spatializer;
+		//float parameters[NumSourceParameters];
+	};
+
+
 
 	template <class T>
 	void WriteLog(string logText, const T& value, int sourceID = -1)
@@ -186,14 +200,14 @@ void WriteLog(string logtext)
 
 int InternalRegisterEffectDefinition(UnityAudioEffectDefinition& definition)
 {
-	int numparams = NumSourceParameters;
+	int numparams = FloatParameter::NumSourceParameters;
 	definition.paramdefs = new UnityAudioParameterDefinition[numparams];
 	//RegisterParameter(definition, "SourceID", "", -1.0f, /*FLT_MAX*/ 1e20f, -1.0f, 1.0f, 1.0f, PARAM_SOURCE_ID, "Source ID for debug");
-	RegisterParameter(definition, "HRTFInterp", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_HRTF_INTERPOLATION, "HRTF Interpolation method");
-	RegisterParameter(definition, "MODfarLPF", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_FARLPF, "Far distance LPF module enabler");
-	RegisterParameter(definition, "MODDistAtt", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_DISTATT, "Distance attenuation module enabler");
-	RegisterParameter(definition, "MODNFILD", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_NEAR_FIELD_ILD, "Near distance ILD module enabler");
-	RegisterParameter(definition, "SpatMode", "", 0.0f, 2.0f, 0.0f, 1.0f, 1.0f, PARAM_SPATIALIZATION_MODE, "Spatialization mode (0=High quality, 1=High performance, 2=None)");
+	RegisterParameter(definition, "HRTFInterp", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, FloatParameter::PARAM_HRTF_INTERPOLATION, "HRTF Interpolation method");
+	RegisterParameter(definition, "MODfarLPF", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, FloatParameter::PARAM_MOD_FARLPF, "Far distance LPF module enabler");
+	RegisterParameter(definition, "MODDistAtt", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, FloatParameter::PARAM_MOD_DISTATT, "Distance attenuation module enabler");
+	RegisterParameter(definition, "MODNFILD", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, FloatParameter::PARAM_MOD_NEAR_FIELD_ILD, "Near distance ILD module enabler");
+	RegisterParameter(definition, "SpatMode", "", 0.0f, 2.0f, 0.0f, 1.0f, 1.0f, FloatParameter::PARAM_SPATIALIZATION_MODE, "Spatialization mode (0=High quality, 1=High performance, 2=None)");
 	//Sample Rate and BufferSize
 	definition.flags |= UnityAudioEffectDefinitionFlags_IsSpatializer;
 	return numparams;
@@ -522,7 +536,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectSta
 	EffectData* effectdata = new EffectData;
 	{
 		effectdata->spatializer = SpatializerCore3DTI::SpatializerCore::instance();
-		static_assert(ARRAYSIZE(effectdata->spatializer->perSourceInitialValues) == NumSourceParameters, "NumSourceParameters should match the size of SpatializerCore::perSourceInitialValues array.");
+		static_assert(ARRAYSIZE(effectdata->spatializer->perSourceInitialValues) == FloatParameter::NumSourceParameters, "NumSourceParameters should match the size of SpatializerCore::perSourceInitialValues array.");
 		//for (int i = 0; i < NumSourceParameters; i++)
 		//{
 		//	effectdata->parameters[i] = effectdata->spatializer->perSourceInitialValues[i];
@@ -546,20 +560,21 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectSta
 	auto spatializer = effectdata->spatializer;
 
 
-	// Create source and set default interpolation method
-	effectdata->audioSource = spatializer->core.CreateSingleSourceDSP();
+	{
+		std::lock_guard<std::mutex> lock(spatializer->mutex);
+		// Create source and set default interpolation method
+		effectdata->audioSource = spatializer->core.CreateSingleSourceDSP();
+	}
 	if (effectdata->audioSource != nullptr)
 	{
-		effectdata->audioSource->EnableInterpolation();
-		//if (spatializer->spatializationMode == SPATIALIZATION_MODE_HIGH_QUALITY && spatializer->loadedHighPerformanceILD)
-		//{
-		//    effectdata->audioSource->EnableNearFieldEffect();
-		//}
-		//else
-		//{
-		//    effectdata->audioSource->DisableNearFieldEffect();    // ILD disabled before loading ILD data
-		//}
-
+		// Initialize with defaults
+		for (int i = FloatParameter::FirstSourceParameter; i < FloatParameter::NumSourceParameters; i++)
+		{
+			float value = 0;
+			bool valueReceived = SpatializerCore3DTI::Get3DTISpatializerFloat(i, &value);
+			assert(valueReceived);
+			SetFloatParameterCallback(state, i, value);
+		}
 	}
 
 
@@ -586,84 +601,23 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ReleaseCallback(UnityAudioEffectSt
 /////////////////////////////////////////////////////////////////////
 
 
+// lockMutex is not part of the unity callback but it has a default value set in the earlier declaration.
 UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAudioEffectState* state, int index, float value)
 {
 	EffectData* data = state->GetEffectData<EffectData>();
 	SpatializerCore3DTI::SpatializerCore* spatializer = data->spatializer;
 	assert(data != nullptr && spatializer != nullptr);
-	if (index >= NumSourceParameters)
+	if (index >= FloatParameter::NumSourceParameters)
 		return UNITY_AUDIODSP_ERR_UNSUPPORTED;
-	//data->parameters[index] = value;
-
-	//Common::CMagnitudes magnitudes;
-	//int loadResult;
 
 	std::lock_guard<std::mutex> lock(spatializer->mutex);
 
-	//spatializer().spatializerMutex.lock();
 
 	// Process command sent by C# API
 	switch (index)
 	{
-		//			case PARAM_HRTF_FILE_STRING:	// Load HRTF binary file (MANDATORY)
-		//				loadResult = BuildPathString(state, spatializer().strHRTFpath, spatializer().strHRTFserializing, spatializer().strHRTFlength, spatializer().strHRTFcount, value);
-		//				if (loadResult == TLoadResult::RESULT_LOAD_END)
-		//				{
-		//					loadResult = LoadHRTFBinaryFile(state);
-		//					if (loadResult == TLoadResult::RESULT_LOAD_OK)
-		//					{
-		//						spatializer().loadedHRTF = true;
-		////						UpdateCoreIsReady();
-		//					}
-		//				}
-		//				break;
-		//
-		//			case PARAM_NEAR_FIELD_ILD_FILE_STRING:	// Load ILD binary file (MANDATORY?)
-		//				loadResult = BuildPathString(state, spatializer().strNearFieldILDpath, spatializer().strNearFieldILDserializing, spatializer().strNearFieldILDlength, spatializer().strNearFieldILDcount, value);
-		//				if (loadResult == TLoadResult::RESULT_LOAD_END)
-		//				{
-		//					loadResult = LoadNearFieldILDBinaryFile(state);
-		//					if (loadResult == TLoadResult::RESULT_LOAD_OK)
-		//					{
-		//                        // This is now enabled when instantiating a new source
-		////						data->audioSource->EnableNearFieldEffect();
-		//						spatializer().loadedNearFieldILD = true;
-		//						WriteLog(state, "SET PARAMETER: Near Field ILD Enabled", "");
-		////						UpdateCoreIsReady();
-		//					}
-		//				}
-		//				break;
 
-					//case PARAM_HEAD_RADIUS:	// Set listener head radius (OPTIONAL)
-					//	spatializer().listener->SetHeadRadius(value);
-					//	WriteLog(state, "SET PARAMETER: Listener head radius changed to ", value);
-					//	break;
-
-					// FUNCTIONALITY TO BE IMPLEMENTED
-					//case PARAM_SCALE_FACTOR:	// Set scale factor (OPTIONAL)
-					//	// Used directly in the parameters array
-					//	WriteLog(state, "SET PARAMETER: Scale factor changed to ", value);
-					//	break;
-
-	//case PARAM_SOURCE_ID:	// DEBUG
-	//	data->sourceID = (int)value;
-	//	WriteLog(state, "SET PARAMETER: Source ID set to ", data->sourceID);
-	//	break;
-
-		//case PARAM_CUSTOM_ITD:	// Enable custom ITD (OPTIONAL)
-		//	if (value > 0.0f)
-		//	{
-		//		spatializer().listener->EnableCustomizedITD();
-		//		WriteLog(state, "SET PARAMETER: Custom ITD is ", "Enabled");
-		//	}
-		//	else
-		//	{
-		//		spatializer().listener->DisableCustomizedITD();
-		//		WriteLog(state, "SET PARAMETER: Custom ITD is ", "Disabled");
-		//	}
-		//	break;
-
-	case PARAM_HRTF_INTERPOLATION:	// Change interpolation method (OPTIONAL)
+	case FloatParameter::PARAM_HRTF_INTERPOLATION:	// Change interpolation method (OPTIONAL)
 		if (value != 0.0f)
 		{
 			data->audioSource->EnableInterpolation();
@@ -676,7 +630,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 		}
 		break;
 
-	case PARAM_MOD_FARLPF:
+	case FloatParameter::PARAM_MOD_FARLPF:
 		if (value > 0.0f)
 		{
 			data->audioSource->EnableFarDistanceEffect();
@@ -689,7 +643,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 		}
 		break;
 
-	case PARAM_MOD_DISTATT:
+	case FloatParameter::PARAM_MOD_DISTATT:
 		if (value > 0.0f)
 		{
 			data->audioSource->EnableDistanceAttenuationAnechoic();
@@ -702,7 +656,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 		}
 		break;
 
-	case PARAM_MOD_NEAR_FIELD_ILD:
+	case FloatParameter::PARAM_MOD_NEAR_FIELD_ILD:
 		if (value > 0.0f)
 		{
 			data->audioSource->EnableNearFieldEffect();
@@ -715,122 +669,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 		}
 		break;
 
-		//			case PARAM_MOD_HRTF:
-		//				// DEPRECATED. DO NOTHING
-		//				WriteLog(state, "SET PARAMETER: HRTF convolution on/off parameter is deprecated. There might be a mismatch between your 3DTI plugin and your 3DTI API.", "");
-		//				//if (value > 0.0f)
-		//				//{
-		//				//	data->audioSource->EnableHRTF();
-		//				//	WriteLog(state, "SET PARAMETER: HRTF convolution is ", "Enabled");
-		//				//}
-		//				//else
-		//				//{
-		//				//	data->audioSource->DisableHRTF();
-		//				//	WriteLog(state, "SET PARAMETER: HRTF convolution is ", "Disabled");
-		//				//}
-		//				break;
-		//
-		//			case PARAM_MAG_ANECHATT:
-		//                magnitudes = spatializer().core.GetMagnitudes();
-		//				magnitudes.SetAnechoicDistanceAttenuation(min(0.0f, max(-1.0e20f, value)));
-		//                spatializer().core.SetMagnitudes(magnitudes);
-		//				WriteLog(state, "SET PARAMETER: Anechoic distance attenuation set to (dB) ", value);
-		//				break;
-		//
-		//			case PARAM_MAG_SOUNDSPEED:
-		//                magnitudes = spatializer().core.GetMagnitudes();
-		//				magnitudes.SetSoundSpeed(value);
-		//                spatializer().core.SetMagnitudes(magnitudes);
-		//				WriteLog(state, "SET PARAMETER: Sound speed set to (m/s) ", value);
-		//				break;
-		//
-		//			case PARAM_DEBUG_LOG:
-		//				if (value != 0.0f)
-		//				{
-		//					spatializer().debugLog = true;
-		//					WriteLogHeader(state);
-		//#if defined (SWITCH_ON_3DTI_ERRORHANDLER) || defined (_3DTI_ANDROID_ERRORHANDLER)
-		//                    Common::CErrorHandler::Instance().SetErrorLogFile("3DTi_ErrorLog.txt");
-		//					Common::CErrorHandler::Instance().SetVerbosityMode(VERBOSITY_MODE_ONLYERRORS);
-		//					Common::CErrorHandler::Instance().SetAssertMode(ASSERT_MODE_CONTINUE);
-		//#endif
-		//				}
-		//				else
-		//					spatializer().debugLog = false;
-		//				break;
-		//
-		//			case PARAM_HA_DIRECTIONALITY_EXTEND_LEFT:
-		//				spatializer().listener->SetDirectionality_dB(Common::T_ear::LEFT, value);
-		//				WriteLog(state, "SET PARAMETER: HA Directionality for Left ear set to (dB) ", value);
-		//				break;
-		//
-		//			case PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT:
-		//				spatializer().listener->SetDirectionality_dB(Common::T_ear::RIGHT, value);
-		//				WriteLog(state, "SET PARAMETER: HA Directionality for Right ear set to (dB) ", value);
-		//				break;
-		//
-		//			case PARAM_HA_DIRECTIONALITY_ON_LEFT:
-		//				if (value > 0.0f)
-		//				{
-		//					spatializer().listener->EnableDirectionality(Common::T_ear::LEFT);
-		//					WriteLog(state, "SET PARAMETER: HA Directionality switched ON for Left ear", "");
-		//				}
-		//				else
-		//				{
-		//					spatializer().listener->DisableDirectionality(Common::T_ear::LEFT);
-		//					WriteLog(state, "SET PARAMETER: HA Directionality switched OFF for Left ear", "");
-		//				}
-		//				break;
-		//
-		//			case PARAM_HA_DIRECTIONALITY_ON_RIGHT:
-		//				if (value > 0.0f)
-		//				{
-		//					spatializer().listener->EnableDirectionality(Common::T_ear::RIGHT);
-		//					WriteLog(state, "SET PARAMETER: HA Directionality switched ON for Right ear", "");
-		//				}
-		//				else
-		//				{
-		//					spatializer().listener->DisableDirectionality(Common::T_ear::RIGHT);
-		//					WriteLog(state, "SET PARAMETER: HA Directionality switched OFF for Right ear", "");
-		//				}
-		//				break;
-		//
-		//			case PARAM_LIMITER_SET_ON:
-		//				if (value > 0.0f)
-		//				{
-		//					WriteLog(state, "SET PARAMETER: Limiter switched ON", "");
-		//				}
-		//				else
-		//				{
-		//					WriteLog(state, "SET PARAMETER: Limiter switched OFF", "");
-		//				}
-		//				break;
-		//
-		//			case PARAM_LIMITER_GET_COMPRESSION:
-		//				WriteLog(state, "SET PARAMETER: WARNING! PARAM_LIMIT_GET_COMPRESSION is read only", "");
-		//				break;
-		//
-		//			case PARAM_HRTF_STEP:
-		//                spatializer().core.SetHRTFResamplingStep((int)value);
-		//				WriteLog(state, "SET PARAMETER: HRTF resampling step set to (degrees) ", value);
-		//				break;
-		//
-		//			case PARAM_HIGH_PERFORMANCE_ILD_FILE_STRING:	// Load ILD binary file (MANDATORY?)
-		//				loadResult = BuildPathString(state, spatializer().strHighPerformanceILDpath, spatializer().strHighPerformanceILDserializing, spatializer().strHighPerformanceILDlength, spatializer().strHighPerformanceILDcount, value);
-		//				if (loadResult == TLoadResult::RESULT_LOAD_END)
-		//				{
-		//					loadResult = LoadHighPerformanceILDBinaryFile(state);
-		//					if (loadResult == TLoadResult::RESULT_LOAD_OK)
-		//					{
-		//						spatializer().loadedHighPerformanceILD = true;
-		////						UpdateCoreIsReady();
-		//						//data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::HighPerformance);
-		//						//WriteLog(state, "SET PARAMETER: High Performance ILD Enabled", "");
-		//					}
-		//				}
-		//				break;
-
-	case PARAM_SPATIALIZATION_MODE:
+	case FloatParameter::PARAM_SPATIALIZATION_MODE:
 		if (value == 0.0f)
 		{
 			if (spatializer->unityParameters[SpatializerCore3DTI::PARAM_IS_HIGH_QUALITY_HRTF_LOADED] == 0)
@@ -880,7 +719,6 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 		break;
 	}
 
-	//spatializer().spatializerMutex.unlock();
 
 	return UNITY_AUDIODSP_OK;
 }
@@ -890,7 +728,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK GetFloatParameterCallback(UnityAudioEffectState* state, int index, float* value, char* valuestr)
 {
 	EffectData* data = state->GetEffectData<EffectData>();
-	if (index < 0 || index >= NumSourceParameters)
+	if (index < 0 || index >= FloatParameter::NumSourceParameters)
 		return UNITY_AUDIODSP_ERR_UNSUPPORTED;
 	if (valuestr != NULL)
 		valuestr[0] = 0;
