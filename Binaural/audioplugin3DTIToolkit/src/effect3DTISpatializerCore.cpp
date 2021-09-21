@@ -118,15 +118,15 @@ namespace SpatializerCore3DTI
 
 		switch (parameter)
 		{
-			case PARAM_HRTF_INTERPOLATION :
-			case PARAM_MOD_FARLPF:
-			case PARAM_MOD_DISTATT:
-			case PARAM_MOD_NEAR_FIELD_ILD:
-			case PARAM_SPATIALIZATION_MODE:
+			case EnableHRTFInterpolation :
+			case EnableFarDistanceLPF:
+			case EnableDistanceAttenuation:
+			case EnableNearFieldILD:
+			case SpatializationMode:
 				spatializer->perSourceInitialValues[parameter] = value;
 				return true;
 
-		case PARAM_HEAD_RADIUS:
+		case HeadRadius:
 		{
 			const float min = 0.0f;
 			const float max = 1e20f;
@@ -134,7 +134,7 @@ namespace SpatializerCore3DTI
 			spatializer->listener->SetHeadRadius(clamp(value, min, max));
 			return true;
 		}
-		case PARAM_SCALE_FACTOR:
+		case ScaleFactor:
 		{
 			const float min = 1e-20f;
 			const float max = 1e20f;
@@ -142,7 +142,7 @@ namespace SpatializerCore3DTI
 			spatializer->scaleFactor = clamp(value, min, max);
 			return true;
 		}
-		case PARAM_CUSTOM_ITD:
+		case EnableCustomITD:
 		{
 			if (value == 0.0f)
 			{
@@ -154,7 +154,7 @@ namespace SpatializerCore3DTI
 			}
 			return true;
 		}
-		case PARAM_MAG_ANECHATT:
+		case AnechoicDistanceAttenuation:
 		{
 			const float min = -30.0f;
 			const float max = 0.0f;
@@ -163,7 +163,7 @@ namespace SpatializerCore3DTI
 			spatializer->core.SetMagnitudes(magnitudes);
 			return true;
 		}
-		case PARAM_MAG_SOUNDSPEED:
+		case SoundSpeed:
 		{
 			const float min = 10.0f;
 			const float max = 1000.0f;
@@ -172,21 +172,21 @@ namespace SpatializerCore3DTI
 			spatializer->core.SetMagnitudes(magnitudes);
 			return true;
 		}
-		case PARAM_HA_DIRECTIONALITY_EXTEND_LEFT:
+		case HearingAidDirectionalityAttenuationLeft:
 		{
 			const float min = 0.0f;
 			const float max = 30.0f;
 			spatializer->listener->SetDirectionality_dB(Common::T_ear::LEFT, clamp(value, min, max));
 			return true;
 		}
-		case PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT:
+		case HearingAidDirectionalityAttenuationRight:
 		{
 			const float min = 0.0f;
 			const float max = 30.0f;
 			spatializer->listener->SetDirectionality_dB(Common::T_ear::RIGHT, clamp(value, min, max));
 			return true;
 		}
-		case PARAM_HA_DIRECTIONALITY_ON_LEFT:
+		case EnableHearingAidDirectionalityLeft:
 		{
 			if (value == 0.0f)
 			{
@@ -198,7 +198,7 @@ namespace SpatializerCore3DTI
 			}
 			return true;
 		}
-		case PARAM_HA_DIRECTIONALITY_ON_RIGHT:
+		case EnableHearingAidDirectionalityRight:
 		{
 			if (value == 0.0f)
 			{
@@ -210,12 +210,12 @@ namespace SpatializerCore3DTI
 			}
 			return true;
 		}
-		case PARAM_LIMITER_SET_ON:
+		case EnableLimiter:
 		{
 			spatializer->isLimiterEnabled = value != 0.0;
 			return true;
 		}
-		case PARAM_HRTF_STEP:
+		case HRTFResamplingStep:
 		{
 			const float min = 1.0f;
 			const float max = 90.0f;
@@ -240,44 +240,44 @@ namespace SpatializerCore3DTI
 
 		switch (parameter)
 		{
-		case PARAM_HRTF_INTERPOLATION:
-		case PARAM_MOD_FARLPF:
-		case PARAM_MOD_DISTATT:
-		case PARAM_MOD_NEAR_FIELD_ILD:
-		case PARAM_SPATIALIZATION_MODE:
+		case EnableHRTFInterpolation:
+		case EnableFarDistanceLPF:
+		case EnableDistanceAttenuation:
+		case EnableNearFieldILD:
+		case SpatializationMode:
 			*value = spatializer->perSourceInitialValues[parameter];
 			return true;
-		case PARAM_HEAD_RADIUS:
+		case HeadRadius:
 			*value = spatializer->listener->GetHeadRadius();
 			return true;
-		case PARAM_SCALE_FACTOR:
+		case ScaleFactor:
 			*value = spatializer->scaleFactor;
 			return true;
-		case PARAM_CUSTOM_ITD:
+		case EnableCustomITD:
 			*value = spatializer->listener->IsCustomizedITDEnabled() ? 1.0f : 0.0f;
 			return true;
-		case PARAM_MAG_ANECHATT:
+		case AnechoicDistanceAttenuation:
 			*value = spatializer->core.GetMagnitudes().GetAnechoicDistanceAttenuation();
 			return true;
-		case PARAM_MAG_SOUNDSPEED:
+		case SoundSpeed:
 			*value = spatializer->core.GetMagnitudes().GetSoundSpeed();
 			return true;
-		case PARAM_HA_DIRECTIONALITY_EXTEND_LEFT:
+		case HearingAidDirectionalityAttenuationLeft:
 			*value = spatializer->listener->GetAnechoicDirectionalityAttenuation_dB(LEFT);
 			return true;
-		case PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT:
+		case HearingAidDirectionalityAttenuationRight:
 			*value = spatializer->listener->GetAnechoicDirectionalityAttenuation_dB(RIGHT);
 			return true;
-		case PARAM_HA_DIRECTIONALITY_ON_LEFT:
+		case EnableHearingAidDirectionalityLeft:
 			*value = spatializer->listener->IsDirectionalityEnabled(LEFT);
 			return true;
-		case PARAM_HA_DIRECTIONALITY_ON_RIGHT:
+		case EnableHearingAidDirectionalityRight:
 			*value = spatializer->listener->IsDirectionalityEnabled(RIGHT);
 			return true;
-		case PARAM_LIMITER_SET_ON:
+		case EnableLimiter:
 			*value = spatializer->isLimiterEnabled ? 1.0f : 0.0f;
 			return true;
-		case PARAM_HRTF_STEP:
+		case HRTFResamplingStep:
 			*value = (float) spatializer->core.GetHRTFResamplingStep();
 			return true;
 		default:
@@ -567,11 +567,11 @@ namespace SpatializerCore3DTI
 		: scaleFactor(1.0f)
 		, isLimiterEnabled(true)
 	{
-		perSourceInitialValues[PARAM_HRTF_INTERPOLATION] = 1.0f;
-		perSourceInitialValues[PARAM_MOD_FARLPF] = 1.0f;
-		perSourceInitialValues[PARAM_MOD_DISTATT] = 1.0f;
-		perSourceInitialValues[PARAM_MOD_NEAR_FIELD_ILD] = 1.0f;
-		perSourceInitialValues[PARAM_SPATIALIZATION_MODE] = 0.0f;
+		perSourceInitialValues[EnableHRTFInterpolation] = 1.0f;
+		perSourceInitialValues[EnableFarDistanceLPF] = 1.0f;
+		perSourceInitialValues[EnableDistanceAttenuation] = 1.0f;
+		perSourceInitialValues[EnableNearFieldILD] = 1.0f;
+		perSourceInitialValues[SpatializationMode] = 0.0f;
 
 		Common::TAudioStateStruct audioState;
 		audioState.sampleRate = sampleRate;

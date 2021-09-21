@@ -125,7 +125,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
             // Test for problematic config
             toolkit.GetSampleRate(out TSampleRateEnum currentSampleRate);
-            SpatializationMode currentSpatializationMode = toolkit.GetParameter<SpatializationMode>(SpatializerParameter.PARAM_SPATIALIZATION_MODE);
+            SpatializationMode currentSpatializationMode = toolkit.GetParameter<SpatializationMode>(SpatializerParameter.SpatializationMode);
             if (currentSpatializationMode == SpatializationMode.SPATIALIZATION_MODE_HIGH_PERFORMANCE && toolkit.GetBinaryPath(SpatializerBinaryRole.HighPerformanceILD, currentSampleRate).Length == 0)
             {
                 Debug.LogError($"Default spatialization mode set to {SpatializationMode.SPATIALIZATION_MODE_HIGH_PERFORMANCE} but no {SpatializerBinaryRole.HighPerformanceILD} resource is selected for the current sample rate ({currentSampleRate}).");
@@ -134,9 +134,9 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             {
                 Debug.LogError($"Default spatialization mode set to {SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY} but no {SpatializerBinaryRole.HighQualityHRTF} resource is selected for the current sample rate ({currentSampleRate}).");
             }
-            if (currentSpatializationMode == SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY && toolkit.GetParameter<bool>(SpatializerParameter.PARAM_MOD_NEAR_FIELD_ILD) && toolkit.GetBinaryPath(SpatializerBinaryRole.HighQualityILD, currentSampleRate).Length == 0)
+            if (currentSpatializationMode == SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY && toolkit.GetParameter<bool>(SpatializerParameter.EnableNearFieldILD) && toolkit.GetBinaryPath(SpatializerBinaryRole.HighQualityILD, currentSampleRate).Length == 0)
             {
-                Debug.LogError($"Default spatialization mode set to {SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY} with {SpatializerParameter.PARAM_MOD_NEAR_FIELD_ILD} enabled but no {SpatializerBinaryRole.HighQualityILD} resource is selected for the current sample rate ({currentSampleRate}).");
+                Debug.LogError($"Default spatialization mode set to {SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY} with {SpatializerParameter.EnableNearFieldILD} enabled but no {SpatializerBinaryRole.HighQualityILD} resource is selected for the current sample rate ({currentSampleRate}).");
             }
             // TODO: Reverb BRIR
 
@@ -340,7 +340,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     /// </summary>
     public void SliderHeadRadius()
     {
-        //toolkit.SetFloatParameter(API_3DTI_Spatializer.FloatParameter.PARAM_HEAD_RADIUS, )
+        //toolkit.SetFloatParameter(API_3DTI_Spatializer.FloatParameter.HeadRadius, )
         //toolkit.SetHeadRadius(toolkit.listenerHeadRadius);
     }
 
@@ -406,7 +406,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
         GUILayout.Label("These parameters may be set individually on each individual AudioSource component. The values here determine their default values for new AudioSources.\n\nPlease ensure you select binary resources below for the sample rates and spatialization mode combinations you intend to use.", Common3DTIGUI.commentStyle );
 
-        CreateControl(SpatializerParameter.PARAM_SPATIALIZATION_MODE);
+        CreateControl(SpatializerParameter.SpatializationMode);
 
         Common3DTIGUI.SingleSpace();
 
@@ -416,11 +416,11 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             Common3DTIGUI.BeginSection();
 
             //GUILayout.BeginHorizontal();
-            CreateControl(SpatializerParameter.PARAM_HRTF_INTERPOLATION);
-            CreateControl(SpatializerParameter.PARAM_MOD_FARLPF);
-            CreateControl(SpatializerParameter.PARAM_MOD_DISTATT);
+            CreateControl(SpatializerParameter.EnableHRTFInterpolation);
+            CreateControl(SpatializerParameter.EnableFarDistanceLPF);
+            CreateControl(SpatializerParameter.EnableDistsanceAttenuation);
             // For High Quality only
-            CreateControl(SpatializerParameter.PARAM_MOD_NEAR_FIELD_ILD);
+            CreateControl(SpatializerParameter.EnableNearFieldILD);
             //GUILayout.EndHorizontal();
 
             Common3DTIGUI.EndSection();
@@ -521,10 +521,10 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
         // ITD:    
         {
-            CreateControl(SpatializerParameter.PARAM_CUSTOM_ITD);
-            if (toolkit.GetFloatParameter(SpatializerParameter.PARAM_CUSTOM_ITD) != 0.0f)
+            CreateControl(SpatializerParameter.EnableCustomITD);
+            if (toolkit.GetFloatParameter(SpatializerParameter.EnableCustomITD) != 0.0f)
             {
-                CreateControl(SpatializerParameter.PARAM_HEAD_RADIUS);
+                CreateControl(SpatializerParameter.HeadRadius);
             }
         }
 
@@ -538,13 +538,13 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
             Common3DTIGUI.AddLabelToParameterGroup("Scale factor");
             Common3DTIGUI.SingleSpace();
-            CreateControl(SpatializerParameter.PARAM_SCALE_FACTOR);
+            CreateControl(SpatializerParameter.ScaleFactor);
 
             // HRTF interpolation
             Common3DTIGUI.BeginSubsection("HRTF Interpolation");
             Common3DTIGUI.AddLabelToParameterGroup("Runtime interpolation");
             Common3DTIGUI.AddLabelToParameterGroup("Resampling step");
-            CreateControl(SpatializerParameter.PARAM_HRTF_STEP);
+            CreateControl(SpatializerParameter.HRTFResamplingStep);
             Common3DTIGUI.EndSubsection();
 
 
@@ -552,14 +552,14 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             Common3DTIGUI.BeginSubsection("Physical magnitudes");
             Common3DTIGUI.AddLabelToParameterGroup("Anechoic distance attenuation");
             Common3DTIGUI.AddLabelToParameterGroup("Sound speed");
-            CreateControl(SpatializerParameter.PARAM_MAG_ANECHATT);
-            CreateControl(SpatializerParameter.PARAM_MAG_SOUNDSPEED);
+            CreateControl(SpatializerParameter.AnechoicDistanceAttenuation);
+            CreateControl(SpatializerParameter.SoundSpeed);
             Common3DTIGUI.EndSubsection();
 
             // Limiter
             Common3DTIGUI.BeginSubsection("Limiter");
             Common3DTIGUI.AddLabelToParameterGroup("Switch Limiter");
-            CreateControl(SpatializerParameter.PARAM_LIMITER_SET_ON);
+            CreateControl(SpatializerParameter.EnableLimiter);
             Common3DTIGUI.EndSubsection();
 
             //// Debug Log
@@ -587,16 +587,16 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             Common3DTIGUI.BeginSubsection("Left ear");
             Common3DTIGUI.AddLabelToParameterGroup("Switch Directionality");
             Common3DTIGUI.AddLabelToParameterGroup("Directionality extend");
-            CreateControl(SpatializerParameter.PARAM_HA_DIRECTIONALITY_ON_LEFT);
-            CreateControl(SpatializerParameter.PARAM_HA_DIRECTIONALITY_EXTEND_LEFT);
+            CreateControl(SpatializerParameter.EnableHearingAidDirectionalityLeft);
+            CreateControl(SpatializerParameter.HearingAidDirectionalityAttenuationLeft);
             Common3DTIGUI.EndSubsection();
 
             // Right ear
             Common3DTIGUI.BeginSubsection("Right ear");
             Common3DTIGUI.AddLabelToParameterGroup("Switch Directionality");
             Common3DTIGUI.AddLabelToParameterGroup("Directionality extend");
-            CreateControl(SpatializerParameter.PARAM_HA_DIRECTIONALITY_ON_RIGHT);
-            CreateControl(SpatializerParameter.PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT);
+            CreateControl(SpatializerParameter.EnableHearingAidDirectionalityRight);
+            CreateControl(SpatializerParameter.HearingAidDirectionalityAttenuationRight);
             Common3DTIGUI.EndSubsection();
             Common3DTIGUI.EndSection();
         }

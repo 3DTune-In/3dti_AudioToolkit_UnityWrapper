@@ -25,28 +25,28 @@ namespace SpatializerCore3DTI
 		// Values here must be kept in sync with the corresponding enum in c# code.
 
 		// Per-source parameters. We store them in the core so we know what value to initialize the values to on a new source instance.
-		PARAM_HRTF_INTERPOLATION = 0, // ### SOURCE ####
-		FirstSourceParameter = PARAM_HRTF_INTERPOLATION,
-		PARAM_MOD_FARLPF = 1, // ### SOURCE ####
-		PARAM_MOD_DISTATT = 2, // ### SOURCE ####
-		PARAM_MOD_NEAR_FIELD_ILD = 3,// ### SOURCE ####
-		PARAM_SPATIALIZATION_MODE = 4,// ### SOURCE ####
+		EnableHRTFInterpolation = 0, // ### SOURCE ####
+		FirstSourceParameter = EnableHRTFInterpolation,
+		EnableFarDistanceLPF = 1, // ### SOURCE ####
+		EnableDistanceAttenuation = 2, // ### SOURCE ####
+		EnableNearFieldILD = 3,// ### SOURCE ####
+		SpatializationMode = 4,// ### SOURCE ####
 		//EnableReverb,
 
 		NumSourceParameters = 5,
 
 		// Core parameters
-		PARAM_HEAD_RADIUS = 5,
-		PARAM_SCALE_FACTOR = 6,
-		PARAM_CUSTOM_ITD = 7,
-		PARAM_MAG_ANECHATT = 8,
-		PARAM_MAG_SOUNDSPEED = 9,
-		PARAM_HA_DIRECTIONALITY_EXTEND_LEFT = 10,
-		PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT = 11,
-		PARAM_HA_DIRECTIONALITY_ON_LEFT = 12,
-		PARAM_HA_DIRECTIONALITY_ON_RIGHT = 13,
-		PARAM_LIMITER_SET_ON = 14,
-		PARAM_HRTF_STEP = 15,
+		HeadRadius = 5,
+		ScaleFactor = 6,
+		EnableCustomITD = 7,
+		AnechoicDistanceAttenuation = 8,
+		SoundSpeed = 9,
+		HearingAidDirectionalityAttenuationLeft = 10,
+		HearingAidDirectionalityAttenuationRight = 11,
+		EnableHearingAidDirectionalityLeft = 12,
+		EnableHearingAidDirectionalityRight = 13,
+		EnableLimiter = 14,
+		HRTFResamplingStep = 15,
 		// The following are per-source parameters. We store their values on the SptializerCore plugin as initialization values for when a source is instantiated.
 		NumFloatParameters = 16,
 	};

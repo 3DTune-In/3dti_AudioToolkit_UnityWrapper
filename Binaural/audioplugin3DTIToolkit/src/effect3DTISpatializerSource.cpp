@@ -203,11 +203,11 @@ int InternalRegisterEffectDefinition(UnityAudioEffectDefinition& definition)
 	int numparams = FloatParameter::NumSourceParameters;
 	definition.paramdefs = new UnityAudioParameterDefinition[numparams];
 	//RegisterParameter(definition, "SourceID", "", -1.0f, /*FLT_MAX*/ 1e20f, -1.0f, 1.0f, 1.0f, PARAM_SOURCE_ID, "Source ID for debug");
-	RegisterParameter(definition, "HRTFInterp", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, FloatParameter::PARAM_HRTF_INTERPOLATION, "HRTF Interpolation method");
-	RegisterParameter(definition, "MODfarLPF", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, FloatParameter::PARAM_MOD_FARLPF, "Far distance LPF module enabler");
-	RegisterParameter(definition, "MODDistAtt", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, FloatParameter::PARAM_MOD_DISTATT, "Distance attenuation module enabler");
-	RegisterParameter(definition, "MODNFILD", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, FloatParameter::PARAM_MOD_NEAR_FIELD_ILD, "Near distance ILD module enabler");
-	RegisterParameter(definition, "SpatMode", "", 0.0f, 2.0f, 0.0f, 1.0f, 1.0f, FloatParameter::PARAM_SPATIALIZATION_MODE, "Spatialization mode (0=High quality, 1=High performance, 2=None)");
+	RegisterParameter(definition, "HRTFInterp", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, FloatParameter::EnableHRTFInterpolation, "HRTF Interpolation method");
+	RegisterParameter(definition, "MODfarLPF", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, FloatParameter::EnableFarDistanceLPF, "Far distance LPF module enabler");
+	RegisterParameter(definition, "MODDistAtt", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, FloatParameter::EnableDistanceAttenuation, "Distance attenuation module enabler");
+	RegisterParameter(definition, "MODNFILD", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, FloatParameter::EnableNearFieldILD, "Near distance ILD module enabler");
+	RegisterParameter(definition, "SpatMode", "", 0.0f, 2.0f, 0.0f, 1.0f, 1.0f, FloatParameter::SpatializationMode, "Spatialization mode (0=High quality, 1=High performance, 2=None)");
 	//Sample Rate and BufferSize
 	definition.flags |= UnityAudioEffectDefinitionFlags_IsSpatializer;
 	return numparams;
@@ -617,7 +617,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 	switch (index)
 	{
 
-	case FloatParameter::PARAM_HRTF_INTERPOLATION:	// Change interpolation method (OPTIONAL)
+	case FloatParameter::EnableHRTFInterpolation:	// Change interpolation method (OPTIONAL)
 		if (value != 0.0f)
 		{
 			data->audioSource->EnableInterpolation();
@@ -630,7 +630,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 		}
 		break;
 
-	case FloatParameter::PARAM_MOD_FARLPF:
+	case FloatParameter::EnableFarDistanceLPF:
 		if (value > 0.0f)
 		{
 			data->audioSource->EnableFarDistanceEffect();
@@ -643,7 +643,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 		}
 		break;
 
-	case FloatParameter::PARAM_MOD_DISTATT:
+	case FloatParameter::EnableDistanceAttenuation:
 		if (value > 0.0f)
 		{
 			data->audioSource->EnableDistanceAttenuationAnechoic();
@@ -656,7 +656,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 		}
 		break;
 
-	case FloatParameter::PARAM_MOD_NEAR_FIELD_ILD:
+	case FloatParameter::EnableNearFieldILD:
 		if (value > 0.0f)
 		{
 			data->audioSource->EnableNearFieldEffect();
@@ -669,7 +669,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 		}
 		break;
 
-	case FloatParameter::PARAM_SPATIALIZATION_MODE:
+	case FloatParameter::SpatializationMode:
 		if (value == 0.0f)
 		{
 			if (spatializer->unityParameters[SpatializerCore3DTI::PARAM_IS_HIGH_QUALITY_HRTF_LOADED] == 0)
