@@ -174,10 +174,19 @@ public class API_3DTI_Spatializer : MonoBehaviour
 		"Assets/3DTuneIn/Resources/Data/Reverb/BRIR/3DTI_BRIR_large_48000.3dti-brir.bytes",
 		"Assets/3DTuneIn/Resources/Data/Reverb/BRIR/3DTI_BRIR_large_96000.3dti-brir.bytes",
 	};
-    // for convenience:
-    private string[][] binaryPaths
+
+
+    // for convenience
+    private string[] binaryPaths(SpatializerBinaryRole role)
     {
-        get => new string[][] { highQualityHRTFPaths, highQualityILDPaths, highPerformanceILDPaths, reverbBRIRPaths, };
+        switch (role)
+        {
+            case SpatializerBinaryRole.HighPerformanceILD: return highPerformanceILDPaths;
+            case SpatializerBinaryRole.HighQualityHRTF: return highQualityHRTFPaths;
+            case SpatializerBinaryRole.HighQualityILD: return highQualityILDPaths;
+            case SpatializerBinaryRole.ReverbBRIR: return reverbBRIRPaths;
+            default: throw new Exception("Invalid value of enum SpatializerBinaryRole");
+        }
     }
     
 
@@ -335,8 +344,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
             Debug.Assert(0 <= (int)sr && (int)sr < 3);
             foreach (SpatializerBinaryRole role in Enum.GetValues(typeof(SpatializerBinaryRole)))
             {
-                Debug.Assert(0 <= (int)role && (int)role < binaryPaths.Length);
-                string resourcePath = binaryPaths[(int)role][(int)sr];
+                string resourcePath = binaryPaths(role)[(int)sr];
                 SetBinaryPath(role, sr, resourcePath);
 
             }
@@ -455,7 +463,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
         Debug.Assert(Enum.IsDefined(typeof(SpatializerBinaryRole), role));
         Debug.Assert(Enum.IsDefined(typeof(TSampleRateEnum), sampleRate));
 
-        return binaryPaths[(int)role][(int)sampleRate];
+        return binaryPaths(role)[(int)sampleRate];
     }
 
     /// <summary>
@@ -469,7 +477,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
     {
         Debug.Assert(Enum.IsDefined(typeof(SpatializerBinaryRole), role));
         Debug.Assert(Enum.IsDefined(typeof(TSampleRateEnum), sampleRate));
-        binaryPaths[(int)role][(int)sampleRate] = path;
+        binaryPaths(role)[(int)sampleRate] = path;
         if (path.Length > 0 && GetSampleRate(out TSampleRateEnum currentSampleRate) && currentSampleRate == sampleRate)
         {
             // TODO: This extra save is for the sake of android which can't read the normal filesystem. But it might be possible to send the data directly as an array.

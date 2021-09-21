@@ -76,22 +76,22 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
     public static (string prefix, string[] paths, string suffix) GetBinaryPaths(SpatializerBinaryRole role, TSampleRateEnum sampleRate)
     {
-        
-
+        // The DLL 
+        //string rootDirectory = "Assets/3DTuneIn/Resources/";
         string prefix;
         switch (role)
         {
-            case SpatializerBinaryRole.HighQualityHRTF:
-                prefix = "Data/HighQuality/HRTF";
-                break;
             case SpatializerBinaryRole.HighPerformanceILD:
-                prefix = "Data/HighPerformance/ILD";
+                prefix = "Data/HighPerformance/ILD/";
+                break;
+            case SpatializerBinaryRole.HighQualityHRTF:
+                prefix = "Data/HighQuality/HRTF/";
                 break;
             case SpatializerBinaryRole.HighQualityILD:
-                prefix = "Data/HighQuality/ILD";
+                prefix = "Data/HighQuality/ILD/";
                 break;
             case SpatializerBinaryRole.ReverbBRIR:
-                prefix = "Data/Reverb/BRIR";
+                prefix = "Data/Reverb/BRIR/";
                 break;
             default:
                 throw new Exception("Invalid value for SpatializerBinaryRole.");
@@ -102,10 +102,11 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             : sampleRate == TSampleRateEnum.K48 ? "48000"
             : sampleRate == TSampleRateEnum.K96 ? "96000"
             : "(unknown sample rate)";
+        // LoadAll searches relative to any "resources" folder in the project
         string[] paths = Resources.LoadAll<TextAsset>(prefix)
                     .Where(x => x.name.Contains(sampleRateLabel))
                     .Select(item => item.name).ToArray();
-        return (prefix, paths, "bytes");
+        return (prefix, paths, ".bytes");
     }
 
 
@@ -412,11 +413,11 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             foreach ((TSampleRateEnum sampleRate, string sampleRateLabel) in AllSampleRates)
             {
                 // Paths should be relative to a Resources folder.
-                string oldPath = toolkit.GetBinaryPath(SpatializerBinaryRole.HighPerformanceILD, sampleRate);
-                string newPath = CreateBinaryFileSelector(oldPath, label + sampleRateLabel, tooltip, SpatializerBinaryRole.HighPerformanceILD, sampleRate);
+                string oldPath = toolkit.GetBinaryPath(role, sampleRate);
+                string newPath = CreateBinaryFileSelector(oldPath, label + " " +sampleRateLabel, tooltip, role, sampleRate);
                 if (oldPath != newPath)
                 {
-                    toolkit.SetBinaryPath(SpatializerBinaryRole.HighPerformanceILD, sampleRate, newPath);
+                    toolkit.SetBinaryPath(role, sampleRate, newPath);
                 }
                 if (newPath.EndsWith(".sofa.bytes"))
                 {

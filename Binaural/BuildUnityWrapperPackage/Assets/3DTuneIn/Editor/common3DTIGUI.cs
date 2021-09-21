@@ -351,24 +351,24 @@ public static class Common3DTIGUI
     }
 
 
-	public static void CreatePopupStringSelector(string titleText, string tooltip, string[] items, ref string target, string prefix = "", string suffix = "")
-	{
-		EditorGUILayout.BeginHorizontal();
-		//EditorGUILayout.PrefixLabel(new GUIContent(titleText, tooltip), parameterLabelStyle, GUILayout.Width(GetParameterLabelWidth()));
-		int selectedIndex = -1;
-		if (target.Length > prefix.Length + suffix.Length && target.StartsWith(prefix) && target.EndsWith(suffix))
-		{
-			string trimmedTarget = target.Remove(target.Length - suffix.Length).Remove(0, prefix.Length);
-			selectedIndex = new List<string>(items).IndexOf(trimmedTarget);
-		}
-		else if (target != "")
-		{
-			Debug.LogWarning("Unable to find previously selection: " + target);
-		}
-		int newSelectedIndex = EditorGUILayout.Popup(new GUIContent(titleText, tooltip), selectedIndex, items);
-		target = newSelectedIndex < 0? "" : (prefix + items[newSelectedIndex] + suffix);
-		EditorGUILayout.EndHorizontal();
-	}
+	//public static void CreatePopupStringSelector(string titleText, string tooltip, string[] items, ref string target, string prefix = "", string suffix = "")
+	//{
+	//	EditorGUILayout.BeginHorizontal();
+	//	//EditorGUILayout.PrefixLabel(new GUIContent(titleText, tooltip), parameterLabelStyle, GUILayout.Width(GetParameterLabelWidth()));
+	//	int selectedIndex = -1;
+	//	if (target.Length > prefix.Length + suffix.Length && target.StartsWith(prefix) && target.EndsWith(suffix))
+	//	{
+	//		string trimmedTarget = target.Remove(target.Length - suffix.Length).Remove(0, prefix.Length);
+	//		selectedIndex = new List<string>(items).IndexOf(trimmedTarget);
+	//	}
+	//	else if (target != "")
+	//	{
+	//		Debug.LogWarning("Unable to find previously selection: " + target);
+	//	}
+	//	int newSelectedIndex = EditorGUILayout.Popup(new GUIContent(titleText, tooltip), selectedIndex, items);
+	//	target = newSelectedIndex < 0? "" : (prefix + items[newSelectedIndex] + suffix);
+	//	EditorGUILayout.EndHorizontal();
+	//}
 
     public static T PluginEnumSelector<T>(IAudioEffectPlugin plugin, string parameterName, string title, string tooltip) where T : Enum
     {
