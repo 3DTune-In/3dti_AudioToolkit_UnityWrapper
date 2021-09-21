@@ -74,40 +74,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     //    return (highQualityHRTFs, highQualityILDs, highPerformanceILDs, reverbBRIRs);
     //}
 
-    public static (string prefix, string[] paths, string suffix) GetBinaryPaths(SpatializerBinaryRole role, TSampleRateEnum sampleRate)
-    {
-        // The DLL 
-        //string rootDirectory = "Assets/3DTuneIn/Resources/";
-        string prefix;
-        switch (role)
-        {
-            case SpatializerBinaryRole.HighPerformanceILD:
-                prefix = "Data/HighPerformance/ILD/";
-                break;
-            case SpatializerBinaryRole.HighQualityHRTF:
-                prefix = "Data/HighQuality/HRTF/";
-                break;
-            case SpatializerBinaryRole.HighQualityILD:
-                prefix = "Data/HighQuality/ILD/";
-                break;
-            case SpatializerBinaryRole.ReverbBRIR:
-                prefix = "Data/Reverb/BRIR/";
-                break;
-            default:
-                throw new Exception("Invalid value for SpatializerBinaryRole.");
-        }
-
-        string sampleRateLabel =
-            sampleRate == TSampleRateEnum.K44 ? "44100"
-            : sampleRate == TSampleRateEnum.K48 ? "48000"
-            : sampleRate == TSampleRateEnum.K96 ? "96000"
-            : "(unknown sample rate)";
-        // LoadAll searches relative to any "resources" folder in the project
-        string[] paths = Resources.LoadAll<TextAsset>(prefix)
-                    .Where(x => x.name.Contains(sampleRateLabel))
-                    .Select(item => item.name).ToArray();
-        return (prefix, paths, ".bytes");
-    }
+    
 
 
 
@@ -147,11 +114,33 @@ public class AudioPlugin3DTISpatializerGUI : Editor
         DrawControls();
 
 
+        
+
+
         // End starting play
         isStartingPlay = false;
 
         if (GUI.changed)
         {
+
+            // Test for problematic config
+            toolkit.GetSampleRate(out TSampleRateEnum currentSampleRate);
+            SpatializationMode currentSpatializationMode = toolkit.GetParameter<SpatializationMode>(SpatializerParameter.PARAM_SPATIALIZATION_MODE);
+            if (currentSpatializationMode == SpatializationMode.SPATIALIZATION_MODE_HIGH_PERFORMANCE && toolkit.GetBinaryPath(SpatializerBinaryRole.HighPerformanceILD, currentSampleRate).Length == 0)
+            {
+                Debug.LogError($"Default spatialization mode set to {SpatializationMode.SPATIALIZATION_MODE_HIGH_PERFORMANCE} but no {SpatializerBinaryRole.HighPerformanceILD} resource is selected for the current sample rate ({currentSampleRate}).");
+            }
+            if (currentSpatializationMode == SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY && toolkit.GetBinaryPath(SpatializerBinaryRole.HighQualityHRTF, currentSampleRate).Length == 0)
+            {
+                Debug.LogError($"Default spatialization mode set to {SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY} but no {SpatializerBinaryRole.HighQualityHRTF} resource is selected for the current sample rate ({currentSampleRate}).");
+            }
+            if (currentSpatializationMode == SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY && toolkit.GetParameter<bool>(SpatializerParameter.PARAM_MOD_NEAR_FIELD_ILD) && toolkit.GetBinaryPath(SpatializerBinaryRole.HighQualityILD, currentSampleRate).Length == 0)
+            {
+                Debug.LogError($"Default spatialization mode set to {SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY} with {SpatializerParameter.PARAM_MOD_NEAR_FIELD_ILD} enabled but no {SpatializerBinaryRole.HighQualityILD} resource is selected for the current sample rate ({currentSampleRate}).");
+            }
+            // TODO: Reverb BRIR
+
+            // TODO: See if this results in unsynced state with DLL
             Undo.RecordObject(toolkit, "Modify 3DTI Spatializer parameter");
             EditorUtility.SetDirty(toolkit);
         }
@@ -271,10 +260,49 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
 
 
+    public static (string prefix, List<string> paths, string suffix) GetBinaryPaths(SpatializerBinaryRole role, TSampleRateEnum sampleRate)
+    {
+        // The DLL 
+        //string rootDirectory = "Assets/3DTuneIn/Resources/";
+        string prefix;
+        switch (role)
+        {
+            case SpatializerBinaryRole.HighPerformanceILD:
+                prefix = "Data/HighPerformance/ILD/";
+                break;
+            case SpatializerBinaryRole.HighQualityHRTF:
+                prefix = "Data/HighQuality/HRTF/";
+                break;
+            case SpatializerBinaryRole.HighQualityILD:
+                prefix = "Data/HighQuality/ILD/";
+                break;
+            case SpatializerBinaryRole.ReverbBRIR:
+                prefix = "Data/Reverb/BRIR/";
+                break;
+            default:
+                throw new Exception("Invalid value for SpatializerBinaryRole.");
+        }
+
+        string sampleRateLabel =
+            sampleRate == TSampleRateEnum.K44 ? "44100"
+            : sampleRate == TSampleRateEnum.K48 ? "48000"
+            : sampleRate == TSampleRateEnum.K96 ? "96000"
+            : "(unknown sample rate)";
+        // LoadAll searches relative to any "resources" folder in the project
+        List<string> paths = Resources.LoadAll<TextAsset>(prefix)
+                    .Where(x => x.name.Contains(sampleRateLabel))
+                    .Select(item => item.name).ToList();
+        return (prefix, paths, ".bytes");
+    }
+
 
     public static string CreateBinaryFileSelector(string currentSelection, string titleText, string tooltip, SpatializerBinaryRole role, TSampleRateEnum sampleRate)
     {
-        (string prefix, string[] items, string suffix) = GetBinaryPaths(role, sampleRate);
+        (string prefix, List<string> items, string suffix) = GetBinaryPaths(role, sampleRate);
+
+        // For no binary selected
+        const string NoneSelectedLabel = "(None)";
+        items.Insert(0, NoneSelectedLabel);
 
         EditorGUILayout.BeginHorizontal();
         //EditorGUILayout.PrefixLabel(new GUIContent(titleText, tooltip), parameterLabelStyle, GUILayout.Width(GetParameterLabelWidth()));
@@ -282,15 +310,19 @@ public class AudioPlugin3DTISpatializerGUI : Editor
         if (currentSelection.Length > prefix.Length + suffix.Length && currentSelection.StartsWith(prefix) && currentSelection.EndsWith(suffix))
         {
             string trimmedTarget = currentSelection.Remove(currentSelection.Length - suffix.Length).Remove(0, prefix.Length);
-            selectedIndex = new List<string>(items).IndexOf(trimmedTarget);
+            selectedIndex = items.IndexOf(trimmedTarget);
         }
-        else if (currentSelection != "")
+        else if (currentSelection == "")
+        {
+            selectedIndex = 0;
+        }
+        else
         {
             Debug.LogWarning("Unable to find previously selected binary: " + currentSelection);
         }
-        int newSelectedIndex = EditorGUILayout.Popup(new GUIContent(titleText, tooltip), selectedIndex, items);
+        int newSelectedIndex = EditorGUILayout.Popup(new GUIContent(titleText, tooltip), selectedIndex, items.ToArray());
         EditorGUILayout.EndHorizontal();
-        return newSelectedIndex < 0 ? "" : (prefix + items[newSelectedIndex] + suffix);
+        return newSelectedIndex <= 0 ? "" : (prefix + items[newSelectedIndex] + suffix);
     }
 
 
@@ -372,7 +404,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     {
         Common3DTIGUI.BeginSection("DEFAULT SETTINGS FOR NEW SOUND SOURCES");
 
-        GUILayout.Label("These parameters may be set individually on each individual AudioSource component. The values here determine their default values for new AudioSources.", Common3DTIGUI.commentStyle );
+        GUILayout.Label("These parameters may be set individually on each individual AudioSource component. The values here determine their default values for new AudioSources.\n\nPlease ensure you select binary resources below for the sample rates and spatialization mode combinations you intend to use.", Common3DTIGUI.commentStyle );
 
         CreateControl(SpatializerParameter.PARAM_SPATIALIZATION_MODE);
 

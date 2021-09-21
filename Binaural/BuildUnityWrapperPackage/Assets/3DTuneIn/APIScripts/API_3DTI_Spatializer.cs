@@ -333,8 +333,6 @@ public class API_3DTI_Spatializer : MonoBehaviour
         //Debug.Assert(numBuffers == 2);
         bool loadOK = false;
 
-        Debug.LogError($"Unsupported sample rate for 3DTI Spatializer {AudioSettings.outputSampleRate}. Supported values are 44100, 48000 and 96000.");
-
         if (!GetSampleRate(out TSampleRateEnum sr))
         {
             Debug.LogError($"Unsupported sample rate for 3DTI Spatializer {AudioSettings.outputSampleRate}. Supported values are 44100, 48000 and 96000.");

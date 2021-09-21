@@ -880,18 +880,22 @@ MonoBehaviour:
   - 0
   - 1
   - 15
-  HRTFFileName44: Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_512s_44100Hz.3dti-hrtf.bytes
-  HRTFFileName48: Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_512s_48000Hz.3dti-hrtf.bytes
-  HRTFFileName96: Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_512s_96000Hz.3dti-hrtf.bytes
-  ILDNearFieldFileName44: Data/HighQuality/ILD/NearFieldCompensation_ILD_44100.3dti-ild.bytes
-  ILDNearFieldFileName48: Data/HighQuality/ILD/NearFieldCompensation_ILD_48000.3dti-ild.bytes
-  ILDNearFieldFileName96: Data/HighQuality/ILD/NearFieldCompensation_ILD_96000.3dti-ild.bytes
-  ILDHighPerformanceFileName44: Data/HighPerformance/ILD/HRTF_ILD_44100.3dti-ild.bytes
-  ILDHighPerformanceFileName48: Data/HighPerformance/ILD/HRTF_ILD_48000.3dti-ild.bytes
-  ILDHighPerformanceFileName96: Data/HighPerformance/ILD/HRTF_ILD_96000.3dti-ild.bytes
-  BRIRFileName44: Data/Reverb/BRIR/3DTI_BRIR_large_44100Hz.3dti-brir.bytes
-  BRIRFileName48: Data/Reverb/BRIR/3DTI_BRIR_medium_48000Hz.3dti-brir.bytes
-  BRIRFileName96: Data/Reverb/BRIR/3DTI_BRIR_large_96000Hz.3dti-brir.bytes
+  highQualityHRTFPaths:
+  - Data/HighQuality/HRTF/3DTI_HRTF_IRC1053_512s_44100Hz.3dti-hrtf.bytes
+  - Data/HighQuality/HRTF/3DTI_HRTF_IRC1053_512s_48000Hz.3dti-hrtf.bytes
+  - Data/HighQuality/HRTF/3DTI_HRTF_IRC1053_512s_96000Hz.3dti-hrtf.bytes
+  highQualityILDPaths:
+  - Data/HighQuality/ILD/NearFieldCompensation_ILD_44100.3dti-ild.bytes
+  - 
+  - 
+  highPerformanceILDPaths:
+  - Data/HighPerformance/ILD/HRTF_ILD_44100.3dti-ild.bytes
+  - Data/HighPerformance/ILD/HRTF_ILD_48000.3dti-ild.bytes
+  - Data/HighPerformance/ILD/HRTF_ILD_96000.3dti-ild.bytes
+  reverbBRIRPaths:
+  - Data/Reverb/BRIR/3DTI_BRIR_large_44100Hz.3dti-brir.bytes
+  - 
+  - 
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
