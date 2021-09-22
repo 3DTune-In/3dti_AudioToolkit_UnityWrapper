@@ -9,6 +9,9 @@
 *
 * Project: 3DTI (3D-games for TUNing and lEarnINg about hearing aids)
 * Module: 3DTI Toolkit Unity Wrapper
+*
+* Updated: June 2020 onwards
+* by Tim Murray-Browne at the Dyson School of Engineering, Imperial College London.
 **/
 
 #include "AudioPluginUtil.h"
@@ -882,68 +885,6 @@ namespace HASimulation3DTI
 				WriteLog(state, "SET PARAMETER: High tone band Right set to (dB) ", value);
 				break;
 
-			//case PARAM_DEBUG_LOG:
-				//if (value != 0.0f)
-				//{
-				//	data->debugLog = true;
-				//	WriteLogHeader(state);
-				//}
-				//else
-				//	data->debugLog = false;				
-				//break;
-
-			//// Fig6
-			//case PARAM_FIG6_BAND_0_LEFT: 
-			//case PARAM_FIG6_BAND_1_LEFT:
-			//case PARAM_FIG6_BAND_2_LEFT:
-			//case PARAM_FIG6_BAND_3_LEFT:
-			//case PARAM_FIG6_BAND_4_LEFT:
-			//case PARAM_FIG6_BAND_5_LEFT:
-			//case PARAM_FIG6_BAND_6_LEFT:
-			//	data->settingFig6Left = true;
-			//	data->fig6ReceivedBandsLeft++;
-			//	if (data->fig6ReceivedBandsLeft == DEFAULT_FIG6_BANDS_PER_EAR)
-			//	{
-			//		vector<float> fig6InputVectorLeft;
-			//		fig6InputVectorLeft.push_back(data->parameters[PARAM_FIG6_BAND_0_LEFT]);
-			//		fig6InputVectorLeft.push_back(data->parameters[PARAM_FIG6_BAND_1_LEFT]);
-			//		fig6InputVectorLeft.push_back(data->parameters[PARAM_FIG6_BAND_2_LEFT]);
-			//		fig6InputVectorLeft.push_back(data->parameters[PARAM_FIG6_BAND_3_LEFT]);
-			//		fig6InputVectorLeft.push_back(data->parameters[PARAM_FIG6_BAND_4_LEFT]);
-			//		fig6InputVectorLeft.push_back(data->parameters[PARAM_FIG6_BAND_5_LEFT]);
-			//		fig6InputVectorLeft.push_back(data->parameters[PARAM_FIG6_BAND_6_LEFT]);
-			//		data->HA.ApplyFig6Alg(fig6InputVectorLeft, DEFAULT_DBSPL_FOR_0DBS, EAR_LEFT);
-			//		WriteLog(state, "Fig6 method applied to Left HA", "");
-			//		data->settingFig6Left = false;
-			//		data->fig6ReceivedBandsLeft = 0;
-			//	}
-			//	break;
-
-			//case PARAM_FIG6_BAND_0_RIGHT:
-			//case PARAM_FIG6_BAND_1_RIGHT:
-			//case PARAM_FIG6_BAND_2_RIGHT:
-			//case PARAM_FIG6_BAND_3_RIGHT:
-			//case PARAM_FIG6_BAND_4_RIGHT:
-			//case PARAM_FIG6_BAND_5_RIGHT:
-			//case PARAM_FIG6_BAND_6_RIGHT:
-			//	data->settingFig6Right = true;
-			//	data->fig6ReceivedBandsRight++;
-			//	if (data->fig6ReceivedBandsRight == DEFAULT_FIG6_BANDS_PER_EAR)
-			//	{
-			//		vector<float> fig6InputVectorRight;
-			//		fig6InputVectorRight.push_back(data->parameters[PARAM_FIG6_BAND_0_RIGHT]);
-			//		fig6InputVectorRight.push_back(data->parameters[PARAM_FIG6_BAND_1_RIGHT]);
-			//		fig6InputVectorRight.push_back(data->parameters[PARAM_FIG6_BAND_2_RIGHT]);
-			//		fig6InputVectorRight.push_back(data->parameters[PARAM_FIG6_BAND_3_RIGHT]);
-			//		fig6InputVectorRight.push_back(data->parameters[PARAM_FIG6_BAND_4_RIGHT]);
-			//		fig6InputVectorRight.push_back(data->parameters[PARAM_FIG6_BAND_5_RIGHT]);
-			//		fig6InputVectorRight.push_back(data->parameters[PARAM_FIG6_BAND_6_RIGHT]);
-			//		data->HA.ApplyFig6Alg(fig6InputVectorRight, DEFAULT_DBSPL_FOR_0DBS, EAR_RIGHT);
-			//		WriteLog(state, "Fig6 method applied to Right HA", "");
-			//		data->settingFig6Right = false;
-			//		data->fig6ReceivedBandsRight = 0;
-			//	}
-			//	break;
 
 			default:
 				WriteLog(state, "SET PARAMETER: ERROR!!!! Unknown float parameter received from API: ", index);

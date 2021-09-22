@@ -9,6 +9,9 @@
 *
 * Project: 3DTI (3D-games for TUNing and lEarnINg about hearing aids)
 * Module: 3DTI Toolkit Unity Wrapper
+*
+* Updated: June 2020 onwards
+* by Tim Murray-Browne at the Dyson School of Engineering, Imperial College London.
 **/
 
 //#include "stdafx.h"
@@ -86,24 +89,6 @@ namespace SpatializerCore3DTI
 			return false;
 		}
 		return instance->loadBinary(role, path);
-		//bool ok = true;
-		//if (hrtfPath != nullptr)
-		//{
-		//	ok = ok && instance->loadBinary(HighQualityHRTF, hrtfPath);
-		//}
-		//if (ildPath != nullptr)
-		//{
-		//	ok = ok && instance->loadBinary(HighQualityILD, ildPath);
-		//}
-		//if (highPerformanceILDPath != nullptr)
-		//{
-		//	ok = ok && instance->loadBinary(HighPerformanceILD, highPerformanceILDPath);
-		//}
-		//if (brirPath != nullptr)
-		//{
-		//	ok = ok && instance->loadBinary(ReverbBRIR, brirPath);
-		//}
-		//return ok;
 	}
 
 	extern "C" UNITY_AUDIODSP_EXPORT_API bool Set3DTISpatializerFloat(int parameter, float value)
@@ -346,45 +331,6 @@ namespace SpatializerCore3DTI
 
 /////////////////////////////////////////////////////////////////////
 
-	int InternalRegisterEffectDefinition(UnityAudioEffectDefinition& definition)
-	{
-		return 0;
-		//int numparams = P_NUM;
-		//definition.paramdefs = new UnityAudioParameterDefinition[numparams];				
-		////RegisterParameter(definition, "HeadRadius", "m", 0.0f, /*FLT_MAX*/ 1e20f, 0.0875f, 1.0f, 1.0f, PARAM_HEAD_RADIUS, "Listener head radius");
-		////RegisterParameter(definition, "ScaleFactor", "", 0.0f, /*FLT_MAX*/ 1e20f, 1.0f, 1.0f, 1.0f, PARAM_SCALE_FACTOR, "Scale factor for over/under sized scenes");
-		////RegisterParameter(definition, "CustomITD", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_CUSTOM_ITD, "Enabled custom ITD");
-		//////RegisterParameter(definition, "MODfarLPF", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_FARLPF, "Far distance LPF module enabler");
-		//////RegisterParameter(definition, "MODDistAtt", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_DISTATT, "Distance attenuation module enabler");
-		//////RegisterParameter(definition, "MODNFILD", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, PARAM_MOD_NEAR_FIELD_ILD, "Near distance ILD module enabler");
-		////// TODO: Change this default value to -1
-		////RegisterParameter(definition, "MAGAneAtt", "dB", -30.0f, 0.0f, -3.0f, 1.0f, 1.0f, PARAM_MAG_ANECHATT, "Anechoic distance attenuation");
-		////RegisterParameter(definition, "MAGSounSpd", "m/s", 10.0f, 1000.0f, 343.0f, 1.0f, 1.0f, PARAM_MAG_SOUNDSPEED, "Sound speed");
-
-		////// HA directionality
-		////RegisterParameter(definition, "HADirExtL", "dB", 0.0f, 30.0f, 15.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_EXTEND_LEFT, "HA directionality attenuation (in dB) for Left ear");
-		////RegisterParameter(definition, "HADirExtR", "dB", 0.0f, 30.0f, 15.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT, "HA directionality attenuation (in dB) for Right ear");
-		////RegisterParameter(definition, "HADirOnL", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_ON_LEFT, "HA directionality switch for Left ear");
-		////RegisterParameter(definition, "HADirOnR", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_HA_DIRECTIONALITY_ON_RIGHT, "HA directionality switch for Right ear");
-
-		////// Limiter
-		////RegisterParameter(definition, "LimitOn", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_LIMITER_SET_ON, "Limiter enabler for binaural spatializer");
-
-		////// HRTF resampling step
-		////RegisterParameter(definition, "HRTFstep", "deg", 1.0f, 90.0f, 15.0f, 1.0f, 1.0f, PARAM_HRTF_STEP, "HRTF resampling step (in degrees)");
-
-		//// High performance mode
-		////RegisterParameter(definition, "SpatMode", "", 0.0f, 2.0f, 0.0f, 1.0f, 1.0f, PARAM_SPATIALIZATION_MODE, "Spatialization mode (0=High quality, 1=High performance, 2=None)");
-		//// readonly
-		//RegisterParameter(definition, "SpatHQHRTFReady", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_IS_HIGH_QUALITY_HRTF_LOADED, "Is the HRTF loaded for High Quality mode");
-		//RegisterParameter(definition, "SpatHQILDReady", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_IS_HIGH_QUALITY_ILD_LOADED, "Is the ILD loaded for High Quality mode");
-		//RegisterParameter(definition, "SpatHPILDReady", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED, "Is the ILD loaded for High Performance mode");
-		//RegisterParameter(definition, "SpatRvBRIRReady", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, PARAM_IS_REVERB_BRIR_LOADED, "Is the BRIR loaded for Reverb");
-
-		//return numparams;
-	}
-
-
 /////////////////////////////////////////////////////////////////////
 
 	UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectState* state)
@@ -393,7 +339,6 @@ namespace SpatializerCore3DTI
 		{
 			auto spatializer = SpatializerCore::create(state->samplerate, state->dspbuffersize);
 			state->effectdata = spatializer;
-			//InitParametersFromDefinitions(InternalRegisterEffectDefinition, spatializer->unityParameters);
 		}
 		catch (const SpatializerCore::TooManyInstancesException&)
 		{
@@ -401,13 +346,17 @@ namespace SpatializerCore3DTI
 			return UNITY_AUDIODSP_ERR_UNSUPPORTED;
 		}
 
-
-		// Initialization will happen when the SPATIALIZATION_MODE parameter is set.
-
-
-	
 		return UNITY_AUDIODSP_OK;
 	}
+
+	/////////////////////////////////////////////////////////////////////
+
+
+	int InternalRegisterEffectDefinition(UnityAudioEffectDefinition& definition)
+	{
+		return 0;
+	}
+
 
 /////////////////////////////////////////////////////////////////////
 
@@ -424,112 +373,6 @@ namespace SpatializerCore3DTI
 	UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAudioEffectState* state, int index, float value)
 	{
 		return UNITY_AUDIODSP_ERR_UNSUPPORTED;
-
-		//SpatializerCore* spatializer = state->GetEffectData<SpatializerCore>();
-		//if (index >= P_NUM)
-		//{
-		//	return UNITY_AUDIODSP_ERR_UNSUPPORTED;
-		//}
-		////lock_guard<mutex> lock(spatializer->mutex);
-		////const float prevValue = spatializer->unityParameters[index];
-		////spatializer->unityParameters[index] = value;
-
-		//// Process command sent by C# API
-		//switch (index)
-		//{
-		////case PARAM_HEAD_RADIUS:	// Set listener head radius (OPTIONAL)
-		////	spatializer->listener->SetHeadRadius(value);
-		////	break;
-
-		////case PARAM_SCALE_FACTOR:
-		////	// this is read directly from parameters array
-		////	break;
-
-		////case PARAM_CUSTOM_ITD:	// Enable custom ITD (OPTIONAL)
-		////	if (value != 0.0f)
-		////	{
-		////		spatializer->listener->EnableCustomizedITD();
-		////	}
-		////	else
-		////	{
-		////		spatializer->listener->DisableCustomizedITD();
-		////	}
-		////	break;
-
-		////case PARAM_MAG_ANECHATT:
-		////{
-		////	Common::CMagnitudes magnitudes = spatializer->core.GetMagnitudes();
-		////	magnitudes.SetAnechoicDistanceAttenuation(min(0.0f, max(-1.0e20f, value)));
-		////	spatializer->core.SetMagnitudes(magnitudes);
-		////}
-		////	break;
-
-		////case PARAM_MAG_SOUNDSPEED:
-		////{
-		////	Common::CMagnitudes magnitudes = spatializer->core.GetMagnitudes();
-		////	magnitudes.SetSoundSpeed(value);
-		////	spatializer->core.SetMagnitudes(magnitudes);
-		////}
-		////	break;
-
-		////case PARAM_HA_DIRECTIONALITY_EXTEND_LEFT:
-		////	spatializer->listener->SetDirectionality_dB(Common::T_ear::LEFT, value);
-		////	break;
-
-		////case PARAM_HA_DIRECTIONALITY_EXTEND_RIGHT:
-		////	spatializer->listener->SetDirectionality_dB(Common::T_ear::RIGHT, value);
-		////	break;
-
-		////case PARAM_HA_DIRECTIONALITY_ON_LEFT:
-		////	if (value > 0.0f)
-		////	{
-		////		spatializer->listener->EnableDirectionality(Common::T_ear::LEFT);
-		////	}
-		////	else
-		////	{
-		////		spatializer->listener->DisableDirectionality(Common::T_ear::LEFT);
-		////	}
-		////	break;
-
-		////case PARAM_HA_DIRECTIONALITY_ON_RIGHT:
-		////	if (value > 0.0f)
-		////	{
-		////		spatializer->listener->EnableDirectionality(Common::T_ear::RIGHT);
-		////	}
-		////	else
-		////	{
-		////		spatializer->listener->DisableDirectionality(Common::T_ear::RIGHT);
-		////	}
-		////	break;
-
-		////case PARAM_LIMITER_SET_ON:
-		////	// read directly from the parameter
-		////	break;
-
-		////case PARAM_HRTF_STEP:
-		////	spatializer->core.SetHRTFResamplingStep((int)value);
-		////	break;
-
-		////case PARAM_SPATIALIZATION_MODE:
-		////	if (value != prevValue)
-		////	{
-		////		spatializer->loadBinaries();
-		////	}
-		////	break;
-
-		//case PARAM_IS_HIGH_QUALITY_HRTF_LOADED:
-		//case PARAM_IS_HIGH_QUALITY_ILD_LOADED:
-		//case PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED:
-		//case PARAM_IS_REVERB_BRIR_LOADED:
-		//	WriteLog("Error: Attempted to set read-only parameter "+to_string(index));
-		//	return UNITY_AUDIODSP_ERR_UNSUPPORTED;
-
-		//default:
-		//	WriteLog("SET PARAMETER: ERROR!!!! Unknown float parameter received from API: ");
-		//	return UNITY_AUDIODSP_ERR_UNSUPPORTED;
-		//}
-
-		//return UNITY_AUDIODSP_OK;
 	}
 
 /////////////////////////////////////////////////////////////////////
@@ -538,16 +381,6 @@ namespace SpatializerCore3DTI
 	{
 		return UNITY_AUDIODSP_ERR_UNSUPPORTED;
 
-		//SpatializerCore* spatializer = state->GetEffectData<SpatializerCore>();
-		//const lock_guard<mutex> lock(spatializer->mutex);
-
-		//if (index >= P_NUM)
-		//	return UNITY_AUDIODSP_ERR_UNSUPPORTED;
-		//if (value != NULL)
-		//	*value = spatializer->unityParameters[index];
-		//if (valuestr != NULL)
-		//	valuestr[0] = 0;
-		//return UNITY_AUDIODSP_OK;
 	}
 
 /////////////////////////////////////////////////////////////////////
@@ -681,49 +514,6 @@ namespace SpatializerCore3DTI
 			return false;
 		}
 	}
-
-//	bool SpatializerCore::loadBinaries(std::string hrtfPath, std::string ildPath, std::string highPerformanceILDPath, std::string brirPath)
-//	{
-//		std::lock_guard<std::mutex> lock(mutex);
-//
-//		if (!hrtfPath.empty())
-//		{
-//#ifdef UNITY_WIN
-//			const string sofaExtension = ".sofa"s;
-//			if (hrtfPath.size() >= sofaExtension.size() && hrtfPath.substr(hrtfPath.size() - sofaExtension.size()) == sofaExtension)
-//			{
-//				// We assume an ILD file holds the delays, so our SOFA file does not specify delays
-//				bool specifiedDelays = false;
-//				unityParameters[PARAM_IS_HIGH_QUALITY_HRTF_LOADED] = HRTF::CreateFromSofa(hrtfPath, listener, specifiedDelays);
-//			}
-//			// If not sofa file then assume its a 3dti-hrtf file
-//			else
-//#endif
-//			{
-//				unityParameters[PARAM_IS_HIGH_QUALITY_HRTF_LOADED] = HRTF::CreateFrom3dti(hrtfPath, listener);
-//			}
-//		}
-//		if (!ildPath.empty())
-//		{
-//			unityParameters[PARAM_IS_HIGH_QUALITY_ILD_LOADED] = ILD::CreateFrom3dti_ILDNearFieldEffectTable(ildPath, listener);
-//		}
-//
-//		if (!highPerformanceILDPath.empty())
-//		{
-//			unityParameters[PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED] = ILD::CreateFrom3dti_ILDSpatializationTable(highPerformanceILDPath, listener);
-//		}
-//
-//		if (!brirPath.empty())
-//		{
-//			environment = core.CreateEnvironment();
-//			unityParameters[PARAM_IS_REVERB_BRIR_LOADED] = BRIR::CreateFrom3dti(brirPath, environment);
-//		}
-//
-//		return (hrtfPath.empty() || unityParameters[PARAM_IS_HIGH_QUALITY_HRTF_LOADED])
-//			&& (ildPath.empty() || unityParameters[PARAM_IS_HIGH_QUALITY_ILD_LOADED])
-//			&& (highPerformanceILDPath.empty() || unityParameters[PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED])
-//			&& (brirPath.empty() || unityParameters[PARAM_IS_REVERB_BRIR_LOADED]);
-//	}
 
 
 	SpatializerCore3DTI::SpatializerCore* SpatializerCore::create(UInt32 sampleRate, UInt32 bufferSize)

@@ -1,7 +1,6 @@
 /**
 *** 3D-Tune-In Toolkit Unity Wrapper: Binaural Spatializer ***
 *
-* version 1.7
 * Created on: February 2017
 *
 * Author: 3DI-DIANA Research Group / University of Malaga / Spain
@@ -10,7 +9,7 @@
 * Project: 3DTI (3D-games for TUNing and lEarnINg about hearing aids)
 * Module: 3DTI Toolkit Unity Wrapper
 *
-* Updated: June - August 2020
+* Updated: June 2020 onwards
 * by Tim Murray-Browne at the Dyson School of Engineering, Imperial College London.
 **/
 
@@ -57,18 +56,6 @@ enum TLoadResult { RESULT_LOAD_WAITING = 0, RESULT_LOAD_CONTINUE = 1, RESULT_LOA
 namespace SpatializerSource3DTI
 {
 
-	//#define LIMITER_THRESHOLD	-30.0f
-	//#define LIMITER_ATTACK		500.0f
-	//#define LIMITER_RELEASE		500.0f
-	//#define LIMITER_RATIO		6
-
-
-	//// Single state instance shared across all audio sources
-	//Spatializer& spatializer()
-	//{
-	//    static Spatializer spatializer;
-	//    return spatializer;
-	//}
 
 	using SpatializerCore3DTI::FloatParameter;
 
@@ -80,7 +67,6 @@ namespace SpatializerSource3DTI
 		int sourceID;    // DEBUG
 		std::shared_ptr<Binaural::CSingleSourceDSP> audioSource;
 		SpatializerCore3DTI::SpatializerCore* spatializer;
-		//float parameters[NumSourceParameters];
 	};
 
 
@@ -127,67 +113,6 @@ void WriteLog(string logtext)
 	WriteLog(logtext, "");
 	//std::cerr << logtext << std::endl;
 }
-
-//enum SpatializationMode : int
-//{
-//	SPATIALIZATION_MODE_HIGH_QUALITY = 0,
-//	SPATIALIZATION_MODE_HIGH_PERFORMANCE = 1,
-//	SPATIALIZATION_MODE_NONE = 2,
-//};
-
-
-
-
-/////////////////////////////////////////////////////////////////////
-
-//    // Init parameters. Core is not ready until we load the HRTF. ILD will be disabled, so we don't need to worry yet
-//    Spatializer::Spatializer()
-//    : //coreReady(false)
-////    ,
-//loadedHRTF(false)
-//    , loadedNearFieldILD(false)
-//    , loadedHighPerformanceILD(false)
-//    , spatializationMode(SPATIALIZATION_MODE_NONE)
-//    , strHRTFpath(nullptr)
-//    , strHRTFserializing(false)
-//    , strHRTFcount(0)
-//    , strHRTFlength(0)
-//    , strNearFieldILDpath(nullptr)
-//    , strNearFieldILDserializing(false)
-//    , strNearFieldILDcount(0)
-//    , strNearFieldILDlength(0)
-//    , strHighPerformanceILDpath(nullptr)
-//    , strHighPerformanceILDserializing(false)
-//    , strHighPerformanceILDcount(0)
-//    , strHighPerformanceILDlength(0)
-//{
-//    
-//}
-//
-//    bool Spatializer::initialize(int sampleRate, int dspBufferSize)
-//    {
-//        WriteLog("Initializing 3DTI Spatializer...");
-//        
-//        InitParametersFromDefinitions(InternalRegisterEffectDefinition, parameters);
-//        parameters[PARAM_SCALE_FACTOR] = 1.0f;
-//
-//        // Set default audio state
-//        Common::TAudioStateStruct audioState;
-//        audioState.sampleRate = sampleRate;
-//        audioState.bufferSize = dspBufferSize;
-//        core.SetAudioState(audioState);
-//        listener = core.CreateListener();
-//        
-//        // Set default HRTF resampling step
-//        core.SetHRTFResamplingStep(parameters[PARAM_HRTF_STEP]);
-//
-//        limiter.Setup(sampleRate, LIMITER_RATIO, LIMITER_THRESHOLD, LIMITER_ATTACK, LIMITER_RELEASE);
-//
-//        WriteLog("3DTI Spatializer initialized but awaiting listener binaries (HRTF and ILD).");
-//
-//        return true;
-//    }
-
 
 
 
@@ -294,207 +219,12 @@ Common::CTransform ComputeSourceTransformFromMatrix(float* sourceMatrix, float s
 	return sourceTransform;
 }
 
-//	/////////////////////////////////////////////////////////////////////
-//
-//	bool LoadHRTFBinaryString(const std::basic_string<uint8_t>& hrtfData, std::shared_ptr<Binaural::CListener> listener)
-//	{
-//		std::istringstream stream(reinterpret_cast<const std::basic_string<char>&>(hrtfData));
-//		return HRTF::CreateFrom3dtiStream(stream, listener);
-//
-//	}
-//
-//	int LoadHRTFBinaryFile(UnityAudioEffectState* state)
-//	{
-//		// Load HRTF
-//		const string hrtfPath(spatializer().strHRTFpath);
-//#ifdef UNITY_WIN
-//		const string sofaExtension = ".sofa"s;
-//		if (hrtfPath.size() >= sofaExtension.size() && hrtfPath.substr(hrtfPath.size() - sofaExtension.size()) == sofaExtension)
-//		{
-//			// We assume an ILD file holds the delays, so our SOFA file does not specify delays
-//			bool specifiedDelays = false;
-//			if (!HRTF::CreateFromSofa(hrtfPath, spatializer().listener, specifiedDelays))
-//			{
-//				return TLoadResult::RESULT_LOAD_ERROR;
-//			}
-//		}
-//		// If not sofa file then assume its a 3dti-hrtf file
-//		else
-//#endif
-//			if (!HRTF::CreateFrom3dti(spatializer().strHRTFpath, spatializer().listener))
-//		{
-//			//TDebuggerResultStruct result = GET_LAST_RESULT_STRUCT();
-//			//WriteLog(state, "ERROR TRYING TO LOAD HRTF!!! ", result.suggestion);
-//			return TLoadResult::RESULT_LOAD_ERROR;
-//		}
-//
-//		if (spatializer().listener->GetHRTF()->GetHRIRLength() != 0)
-//		{
-//			//data->listener->LoadHRTF(std::move(myHead));
-//			WriteLog(state, "LOAD HRTF: HRTF loaded from binary 3DTI/sofa file: ", spatializer().strHRTFpath);
-//			WriteLog(state, "           HRIR length is ", spatializer().listener->GetHRTF()->GetHRIRLength());
-//			WriteLog(state, "           Sample rate is ", state->samplerate);
-//			WriteLog(state, "           Buffer size is ", state->dspbuffersize);
-//
-//			// Free memory
-//			free(spatializer().strHRTFpath);
-//
-//			return TLoadResult::RESULT_LOAD_OK;
-//		}
-//		else
-//		{
-//			WriteLog(state, "LOAD HRTF: ERROR!!! Could not create HRTF from path: ", spatializer().strHRTFpath);
-//			free(spatializer().strHRTFpath);
-//			return TLoadResult::RESULT_LOAD_ERROR;
-//		}
-//    }
-//
-//    /////////////////////////////////////////////////////////////////////
-//
-//    bool LoadHighPerformanceILDBinaryString(const std::basic_string<uint8_t>& ildData, std::shared_ptr<Binaural::CListener> listener)
-//    {
-//        std::istringstream stream(reinterpret_cast<const std::basic_string<char>&>(ildData));
-//        return ILD::CreateFrom3dtiStream(stream, listener, ILD::T_ILDTable::ILDSpatializationTable);
-//    }
-//
-//	int LoadHighPerformanceILDBinaryFile(UnityAudioEffectState* state)
-//	{
-//		/*int sampleRateInFile = ILD::GetSampleRateFrom3dti(data->strNearFieldILDpath);
-//		if (sampleRateInFile == (int)state->samplerate) {*/
-//
-//			// Get ILD
-//			//T_ILD_HashTable h;
-//			//h = ILD::CreateFrom3dti(data->strHighPerformanceILDpath);
-//			bool boolResult = ILD::CreateFrom3dti_ILDSpatializationTable(spatializer().strHighPerformanceILDpath, spatializer().listener);
-//
-//			// Check errors
-//			//TDebuggerResultStruct result = GET_LAST_RESULT_STRUCT();
-//			//if (result.id != RESULT_OK)
-//			//{
-//			//	WriteLog(state, "ERROR TRYING TO LOAD HIGH PERFORMANCE ILD!!! ", result.suggestion);
-//			//	return TLoadResult::RESULT_LOAD_ERROR;
-//			//}
-//
-//			//if (h.size() > 0)		// TO DO: Improve this error check
-//			if (boolResult)
-//			{
-//				///Binaural::CILD::SetILD_HashTable(std::move(h));
-//				WriteLog(state, "LOAD HIGH PERFORMANCE ILD: ILD loaded from binary 3DTI file: ", spatializer().strHighPerformanceILDpath);
-//				//WriteLog(state, "          Hash hable size is ", h.size());
-//				free(spatializer().strHighPerformanceILDpath);
-//				return TLoadResult::RESULT_LOAD_OK;
-//			}
-//			else
-//			{
-//				WriteLog(state, "LOAD HIGH PERFORMANCE ILD: ERROR!!! could not create ILD from path: ", spatializer().strHighPerformanceILDpath);
-//				free(spatializer().strHighPerformanceILDpath);
-//				return TLoadResult::RESULT_LOAD_ERROR;
-//			}
-//		/*}
-//		else
-//		{
-//			WriteLog(state, "LOAD NEAR FIELD ILD: ERROR!!! output sample rate is not the same as the ILD from path: ", data->strNearFieldILDpath);
-//			free(data->strNearFieldILDpath);
-//			return TLoadResult::RESULT_LOAD_ERROR;
-//		}*/
-//	}
-//
-//	/////////////////////////////////////////////////////////////////////
-//
-//    bool LoadNearFieldILDBinaryString(const std::basic_string<uint8_t>& ildData, std::shared_ptr<Binaural::CListener> listener)
-//    {
-//        std::istringstream stream(reinterpret_cast<const std::basic_string<char>&>(ildData));
-//        return ILD::CreateFrom3dtiStream(stream, listener, ILD::T_ILDTable::ILDNearFieldEffectTable);
-//    }
-//
-//	int LoadNearFieldILDBinaryFile(UnityAudioEffectState* state)
-//	{
-//		// Get ILD
-//		
-//		/*int sampleRateInFile = ILD::GetSampleRateFrom3dti(data->strNearFieldILDpath);
-//		if (sampleRateInFile == (int)state->samplerate)
-//		{*/
-//			bool boolResult = ILD::CreateFrom3dti_ILDNearFieldEffectTable(spatializer().strNearFieldILDpath, spatializer().listener);
-//			// Check errors
-//			//TResultStruct result = GET_LAST_RESULT_STRUCT();
-//			//if (result.id != RESULT_OK)
-//			//{
-//			//	WriteLog(state, "ERROR TRYING TO LOAD NEAR FIELD ILD!!! ", result.suggestion);
-//			//	return TLoadResult::RESULT_LOAD_ERROR;
-//			//}
-//
-//			//if (h.size() > 0)		// TO DO: Improve this error check
-//			if (boolResult)
-//			{
-//				//Binaural::CILD::SetILD_HashTable(std::move(h));
-//				WriteLog(state, "LOAD NEAR FIELD ILD: ILD loaded from binary 3DTI file: ", spatializer().strNearFieldILDpath);
-//				//WriteLog(state, "          Hash hable size is ", h.size());
-//				free(spatializer().strNearFieldILDpath);
-//				return TLoadResult::RESULT_LOAD_OK;
-//			}
-//			else
-//			{
-//				WriteLog(state, "LOAD NEAR FIELD ILD: ERROR!!! could not create ILD from path: ", spatializer().strNearFieldILDpath);
-//				free(spatializer().strNearFieldILDpath);
-//				return TLoadResult::RESULT_LOAD_ERROR;
-//			}
-//
-//		/*}
-//		else
-//		{
-//			WriteLog(state, "LOAD NEAR FIELD ILD: ERROR!!! output sample rate is not the same as the ILD from path: ", data->strNearFieldILDpath);
-//			free(data->strNearFieldILDpath);
-//			return TLoadResult::RESULT_LOAD_ERROR;
-//		}
-//		*/
-//
-//		
-//	}
-//
-//	/////////////////////////////////////////////////////////////////////
-//
-//	int BuildPathString(UnityAudioEffectState* state, char*& path, bool &serializing, int &length, int &count, float value)
-//	{
-//		// Check if serialization was not started
-//		if (!serializing)
-//		{
-//			// Receive string length
-//			
-//			length = static_cast<int>(value);
-//			path = (char*)malloc((length+1) * sizeof(char));
-//			count = 0;
-//			serializing = true;
-//            return RESULT_LOAD_WAITING;  // TODO: @cgarre please check!!
-//		}
-//		else
-//		{
-//			// Receive next character
-//
-//			// Concatenate char to string
-//			int valueInt = static_cast<int>(value);
-//			char valueChr = static_cast<char>(valueInt);
-//			path[count] = valueChr;
-//			++count;
-//
-//			// Check if string has ended
-//			if (count == length)
-//			{
-//				path[count] = 0;	// End character
-//				serializing = false;
-//				return RESULT_LOAD_END;
-//			}
-//			else
-//				return RESULT_LOAD_CONTINUE;
-//		}
-//	}
 
 	/////////////////////////////////////////////////////////////////////
 
 void WriteLogHeader(UnityAudioEffectState* state)
 {
 	EffectData* data = state->GetEffectData<EffectData>();
-
-	// TO DO: Change this for high performance / high quality modes
 
 	SpatializerCore3DTI::SpatializerCore* spatializer = data->spatializer;
 
@@ -674,42 +404,15 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 	case FloatParameter::SpatializationMode:
 		if (value == (float)Binaural::TSpatializationMode::HighQuality)
 		{
-			//if (!spatializer->isBinaryResourceLoaded[SpatializerCore3DTI::HighQualityHRTF])
-			//{
-			//	WriteLog("Error: Cannot set Spatialization mode to High Quality as no HRTF is loaded.");
-			//	//data->parameters[PARAM_SPATIALIZATION_MODE] = Binaural::TSpatializationMode::NoSpatialization;
-				//data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::NoSpatialization);
-			//	data->audioSource->DisableNearFieldEffect();
-			//}
-			//else
-			//{
-				data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::HighQuality);
-			//	WriteLog(state, "SET PARAMETER: High Quality spatialization mode is enabled", "");
-			//	if (spatializer->unityParameters[SpatializerCore3DTI::PARAM_IS_HIGH_QUALITY_ILD_LOADED])
-			//	{
-			//		data->audioSource->EnableNearFieldEffect();
-			//	}
-			//	else
-			//	{
-			//		data->audioSource->DisableNearFieldEffect();
-			//	}
-			//}
+			data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::HighQuality);
 		}
 		else if (value == (float)Binaural::TSpatializationMode::HighPerformance)
 		{
-			//if (spatializer->unityParameters[SpatializerCore3DTI::PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED] == 0)
-			//{
-			//	WriteLog("Error: Cannot set Spatialization mode to High Performance as no HRTF is loaded.");
-			//	//data->parameters[PARAM_SPATIALIZATION_MODE] = Binaural::TSpatializationMode::NoSpatialization;
-			//	data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::NoSpatialization);
-			//}
 			data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::HighPerformance);
-			//WriteLog(state, "SET PARAMETER: High performance spatialization mode is enabled", "");
 		}
 		else if (value == (float)Binaural::TSpatializationMode::NoSpatialization)
 		{
 			data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::NoSpatialization);
-			//data->audioSource->DisableNearFieldEffect();
 			WriteLog(state, "SET PARAMETER: No spatialization mode is enabled", "");
 		}
 		else
@@ -820,8 +523,6 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectSt
 		WriteLog(state, "         Host compatible = ", IsHostCompatible(state));
 		WriteLog(state, "         Spatializer data exists = ", (state->spatializerdata != NULL));
 		WriteLog(state, "         Buffer length = ", length);
-		//memcpy(outbuffer, inbuffer, length * (size_t) outchannels * sizeof(float));
-		//std::copy(inbuffer, inbuffer + length * (size_t)outchannels, outbuffer);
 		// Return silence on error.
 		std::fill(outbuffer, outbuffer + length * (size_t)outchannels, 0.0f);
 		return UNITY_AUDIODSP_OK;
@@ -844,6 +545,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectSt
 		)
 	{
 		WriteLog(state, "PROCESS: ERROR: The required binaries are not loaded.", "");
+		// Return silence on error.
 		std::fill(outbuffer, outbuffer + length * (size_t)outchannels, 0.0f);
 		return UNITY_AUDIODSP_OK;
 	}

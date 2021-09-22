@@ -13,13 +13,6 @@ namespace SpatializerCore3DTI
 
 	extern "C" UNITY_AUDIODSP_EXPORT_API bool Get3DTISpatializerFloat(int parameter, float* value);
 
-	//enum SpatializationMode : int
-	//{
-	//	SPATIALIZATION_MODE_HIGH_QUALITY = 0,
-	//	SPATIALIZATION_MODE_HIGH_PERFORMANCE = 1,
-	//	SPATIALIZATION_MODE_NONE = 2,
-	//};
-
 	// Parameters set outside of the unity Parameter system
 	enum FloatParameter : int
 	{
@@ -56,17 +49,6 @@ namespace SpatializerCore3DTI
 		NumFloatParameters = 20,
 	};
 
-	//	// Define unity parameters separately
-	//enum UnityParameters
-	//{
-	//	// Read only status parameters
-	//	PARAM_IS_HIGH_QUALITY_HRTF_LOADED,
-	//	PARAM_IS_HIGH_QUALITY_ILD_LOADED,
-	//	PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED,
-	//	PARAM_IS_REVERB_BRIR_LOADED,
-
-	//	P_NUM
-	//};
 
 	enum BinaryRole
 	{
