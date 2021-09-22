@@ -205,9 +205,11 @@ int InternalRegisterEffectDefinition(UnityAudioEffectDefinition& definition)
 	//RegisterParameter(definition, "SourceID", "", -1.0f, /*FLT_MAX*/ 1e20f, -1.0f, 1.0f, 1.0f, PARAM_SOURCE_ID, "Source ID for debug");
 	RegisterParameter(definition, "HRTFInterp", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, FloatParameter::EnableHRTFInterpolation, "HRTF Interpolation method");
 	RegisterParameter(definition, "MODfarLPF", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, FloatParameter::EnableFarDistanceLPF, "Far distance LPF module enabler");
-	RegisterParameter(definition, "MODDistAtt", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, FloatParameter::EnableDistanceAttenuation, "Distance attenuation module enabler");
-	RegisterParameter(definition, "MODNFILD", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, FloatParameter::EnableNearFieldILD, "Near distance ILD module enabler");
+	RegisterParameter(definition, "MODDistAtt", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, FloatParameter::EnableDistanceAttenuationAnechoic, "Enable distance attenuation for anechoic processing");
+	RegisterParameter(definition, "MODNFILD", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, FloatParameter::EnableNearFieldEffect, "Near distance ILD module enabler");
 	RegisterParameter(definition, "SpatMode", "", 0.0f, 2.0f, 0.0f, 1.0f, 1.0f, FloatParameter::SpatializationMode, "Spatialization mode (0=High quality, 1=High performance, 2=None)");
+	RegisterParameter(definition, "EnableReverb", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, FloatParameter::EnableReverb, "Enable reverb processing");
+	RegisterParameter(definition, "RevDistAtt", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, FloatParameter::EnableDistanceAttenuationReverb, "Enable distance attenuation for reverb processing");
 	//Sample Rate and BufferSize
 	definition.flags |= UnityAudioEffectDefinitionFlags_IsSpatializer;
 	return numparams;
@@ -643,7 +645,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 		}
 		break;
 
-	case FloatParameter::EnableDistanceAttenuation:
+	case FloatParameter::EnableDistanceAttenuationAnechoic:
 		if (value > 0.0f)
 		{
 			data->audioSource->EnableDistanceAttenuationAnechoic();
@@ -656,7 +658,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 		}
 		break;
 
-	case FloatParameter::EnableNearFieldILD:
+	case FloatParameter::EnableNearFieldEffect:
 		if (value > 0.0f)
 		{
 			data->audioSource->EnableNearFieldEffect();
@@ -670,7 +672,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 		break;
 
 	case FloatParameter::SpatializationMode:
-		if (value == 0.0f)
+		if (value == (float)Binaural::TSpatializationMode::HighQuality)
 		{
 			if (spatializer->unityParameters[SpatializerCore3DTI::PARAM_IS_HIGH_QUALITY_HRTF_LOADED] == 0)
 			{
@@ -693,7 +695,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 				}
 			}
 		}
-		else if (value == 1.0f)
+		else if (value == (float)Binaural::TSpatializationMode::HighPerformance)
 		{
 			if (spatializer->unityParameters[SpatializerCore3DTI::PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED] == 0)
 			{
@@ -705,14 +707,33 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 			data->audioSource->DisableNearFieldEffect();
 			WriteLog(state, "SET PARAMETER: High performance spatialization mode is enabled", "");
 		}
-		if (value == 2.0f)
+		if (value == (float)Binaural::TSpatializationMode::NoSpatialization)
 		{
 			data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::NoSpatialization);
 			data->audioSource->DisableNearFieldEffect();
 			WriteLog(state, "SET PARAMETER: No spatialization mode is enabled", "");
 		}
 		break;
-
+	case FloatParameter::EnableReverb:
+		if (value != 0.0f)
+		{
+			data->audioSource->EnableReverbProcess();
+		}
+		else
+		{
+			data->audioSource->DisableReverbProcess();
+		}
+		break;
+	case FloatParameter::EnableDistanceAttenuationReverb:
+		if (value != 0.0f)
+		{
+			data->audioSource->EnableDistanceAttenuationReverb();
+		}
+		else
+		{
+			data->audioSource->DisableDistanceAttenuationReverb();
+		}
+		break;
 	default:
 		WriteLog(state, "SET PARAMETER: ERROR!!!! Unknown float parameter received from API: ", index);
 		return UNITY_AUDIODSP_ERR_UNSUPPORTED;
@@ -728,52 +749,49 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK GetFloatParameterCallback(UnityAudioEffectState* state, int index, float* value, char* valuestr)
 {
 	EffectData* data = state->GetEffectData<EffectData>();
-	if (index < 0 || index >= FloatParameter::NumSourceParameters)
+	if (index < FloatParameter::FirstSourceParameter || index >= FloatParameter::NumSourceParameters)
+	{
 		return UNITY_AUDIODSP_ERR_UNSUPPORTED;
+	}
+	std::shared_ptr<Binaural::CSingleSourceDSP> source = data->audioSource;
+	assert(source != nullptr);
+	if (source == nullptr)
+	{
+		return UNITY_AUDIODSP_ERR_UNSUPPORTED;
+	}
 	if (valuestr != NULL)
-		valuestr[0] = 0;
+	{
+		valuestr[0] = '\0';
+	}
 
 	if (value != NULL)
 	{
-		//switch (index)
-		//{
-			//case PARAM_LIMITER_GET_COMPRESSION:
-			//	if (spatializer().limiter.IsDynamicProcessApplied())
-			//		*value = 1.0f;
-			//	else
-			//		*value = 0.0f;
-			//	break;
-
-			//case PARAM_IS_CORE_READY:
-			//	if (spatializer().isReady())
-			//		*value = 1.0f;
-			//	else
-			//		*value = 0.0f;
-			//	break;
-			//
-			//case PARAM_BUFFER_SIZE:
-			//	//*value = float(data->bufferSize);
-			//	*value = (int)state->dspbuffersize;
-			//	break;
-
-			//case PARAM_SAMPLE_RATE:
-			//	//*value = float(data->sampleRate);
-			//	*value = (int)state->samplerate;
-			//	break;
-			//case PARAM_BUFFER_SIZE_CORE:
-			//	//*value = float(data->bufferSize);
-//                *value = spatializer().core.GetAudioState().bufferSize;
-			//	break;
-
-			//case PARAM_SAMPLE_RATE_CORE:
-			//	//*value = float(data->sampleRate);
-			//	*value = spatializer().core.GetAudioState().sampleRate;
-			//	break;
-		//default:
-			//*value = data->parameters[index];
-			//break;
-		//}
-		return UNITY_AUDIODSP_ERR_UNSUPPORTED;
+		switch (index)
+		{
+		case FloatParameter::EnableHRTFInterpolation:
+			*value = (float) source->IsInterpolationEnabled();
+			break;
+		case FloatParameter::EnableFarDistanceLPF:
+			*value = (float)source->IsFarDistanceEffectEnabled();
+			break;
+		case FloatParameter::EnableDistanceAttenuationAnechoic:
+			*value = (float)source->IsDistanceAttenuationEnabledAnechoic();
+			break;
+		case FloatParameter::EnableNearFieldEffect:
+			*value = (float)source->IsNearFieldEffectEnabled();
+			break;
+		case FloatParameter::SpatializationMode:
+			*value = (float)source->GetSpatializationMode();
+			break;
+		case FloatParameter::EnableReverb:
+			*value = (float)source->IsReverbProcessEnabled();
+			break;
+		case FloatParameter::EnableDistanceAttenuationReverb:
+			*value = (float)source->IsDistanceAttenuationEnabledReverb();
+			break;
+		default:
+			return UNITY_AUDIODSP_ERR_UNSUPPORTED;
+		}
 	}
 	return UNITY_AUDIODSP_OK;
 }

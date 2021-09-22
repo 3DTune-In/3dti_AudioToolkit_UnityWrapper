@@ -868,22 +868,26 @@ MonoBehaviour:
   - 1
   - 1
   - 1
-  - 2
-  - 0.09
+  - 0
+  - 0
+  - 0
+  - 0.0875
   - 1
   - 0
-  - -6.02
+  - -1
+  - -6
   - 343
-  - 0
-  - 0
+  - 15
+  - 15
   - 0
   - 0
   - 1
   - 15
+  - 1
   highQualityHRTFPaths:
-  - Data/HighQuality/HRTF/3DTI_HRTF_IRC1053_512s_44100Hz.3dti-hrtf.bytes
-  - Data/HighQuality/HRTF/3DTI_HRTF_IRC1053_512s_48000Hz.3dti-hrtf.bytes
-  - Data/HighQuality/HRTF/3DTI_HRTF_IRC1053_512s_96000Hz.3dti-hrtf.bytes
+  - Data/HighQuality/HRTF/3DTI_HRTF_IRC1032_512s_44100Hz.3dti-hrtf.bytes
+  - 
+  - 
   highQualityILDPaths:
   - Data/HighQuality/ILD/NearFieldCompensation_ILD_44100.3dti-ild.bytes
   - 
@@ -893,7 +897,7 @@ MonoBehaviour:
   - Data/HighPerformance/ILD/HRTF_ILD_48000.3dti-ild.bytes
   - Data/HighPerformance/ILD/HRTF_ILD_96000.3dti-ild.bytes
   reverbBRIRPaths:
-  - Data/Reverb/BRIR/3DTI_BRIR_large_44100Hz.3dti-brir.bytes
+  - 
   - 
   - 
 --- !u!114 &963194230

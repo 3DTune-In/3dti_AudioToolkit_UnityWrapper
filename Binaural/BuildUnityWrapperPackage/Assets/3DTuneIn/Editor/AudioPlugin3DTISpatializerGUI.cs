@@ -407,6 +407,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
         GUILayout.Label("These parameters may be set individually on each individual AudioSource component. The values here determine their default values for new AudioSources.\n\nPlease ensure you select binary resources below for the sample rates and spatialization mode combinations you intend to use.", Common3DTIGUI.commentStyle );
 
         CreateControl(SpatializerParameter.SpatializationMode);
+        CreateControl(SpatializerParameter.EnableReverb);
 
         Common3DTIGUI.SingleSpace();
 
@@ -417,8 +418,9 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
             //GUILayout.BeginHorizontal();
             CreateControl(SpatializerParameter.EnableHRTFInterpolation);
-            CreateControl(SpatializerParameter.EnableFarDistanceLPF);
-            CreateControl(SpatializerParameter.EnableDistsanceAttenuation);
+            CreateControl(SpatializerParameter.EnableFarDistanceEffect);
+            CreateControl(SpatializerParameter.EnableDistanceAttenuationAnechoic);
+            CreateControl(SpatializerParameter.EnableDistanceAttenuationReverb);
             // For High Quality only
             CreateControl(SpatializerParameter.EnableNearFieldILD);
             //GUILayout.EndHorizontal();
@@ -553,6 +555,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             Common3DTIGUI.AddLabelToParameterGroup("Anechoic distance attenuation");
             Common3DTIGUI.AddLabelToParameterGroup("Sound speed");
             CreateControl(SpatializerParameter.AnechoicDistanceAttenuation);
+            CreateControl(SpatializerParameter.ILDAttenuation);
             CreateControl(SpatializerParameter.SoundSpeed);
             Common3DTIGUI.EndSubsection();
 
@@ -560,6 +563,10 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             Common3DTIGUI.BeginSubsection("Limiter");
             Common3DTIGUI.AddLabelToParameterGroup("Switch Limiter");
             CreateControl(SpatializerParameter.EnableLimiter);
+            Common3DTIGUI.EndSubsection();
+
+            Common3DTIGUI.BeginSubsection("Reverb");
+            CreateControl(SpatializerParameter.ReverbOrder);
             Common3DTIGUI.EndSubsection();
 
             //// Debug Log

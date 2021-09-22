@@ -28,27 +28,31 @@ namespace SpatializerCore3DTI
 		EnableHRTFInterpolation = 0, // ### SOURCE ####
 		FirstSourceParameter = EnableHRTFInterpolation,
 		EnableFarDistanceLPF = 1, // ### SOURCE ####
-		EnableDistanceAttenuation = 2, // ### SOURCE ####
-		EnableNearFieldILD = 3,// ### SOURCE ####
+		EnableDistanceAttenuationAnechoic = 2, // ### SOURCE ####
+		EnableNearFieldEffect = 3,// ### SOURCE ####
 		SpatializationMode = 4,// ### SOURCE ####
-		//EnableReverb,
+		EnableReverb = 5,
+		EnableDistanceAttenuationReverb = 6,
 
-		NumSourceParameters = 5,
+		NumSourceParameters = 7,
 
-		// Core parameters
-		HeadRadius = 5,
-		ScaleFactor = 6,
-		EnableCustomITD = 7,
-		AnechoicDistanceAttenuation = 8,
-		SoundSpeed = 9,
-		HearingAidDirectionalityAttenuationLeft = 10,
-		HearingAidDirectionalityAttenuationRight = 11,
-		EnableHearingAidDirectionalityLeft = 12,
-		EnableHearingAidDirectionalityRight = 13,
-		EnableLimiter = 14,
-		HRTFResamplingStep = 15,
-		// The following are per-source parameters. We store their values on the SptializerCore plugin as initialization values for when a source is instantiated.
-		NumFloatParameters = 16,
+		// Listener parameters
+		HeadRadius = 7,
+		FirstListenerParameter = HeadRadius,
+		ScaleFactor = 8,
+		EnableCustomITD = 9,
+		AnechoicDistanceAttenuation = 10,
+		ILDAttenuation = 11,
+		SoundSpeed = 12,
+		HearingAidDirectionalityAttenuationLeft = 13,
+		HearingAidDirectionalityAttenuationRight = 14,
+		EnableHearingAidDirectionalityLeft = 15,
+		EnableHearingAidDirectionalityRight = 16,
+		EnableLimiter = 17,
+		HRTFResamplingStep = 18,
+		ReverbOrder = 19,
+
+		NumFloatParameters = 20,
 	};
 
 		// Define unity parameters separately

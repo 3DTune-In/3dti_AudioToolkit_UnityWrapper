@@ -108,6 +108,11 @@ namespace SpatializerCore3DTI
 
 	extern "C" UNITY_AUDIODSP_EXPORT_API bool Set3DTISpatializerFloat(int parameter, float value)
 	{
+		if (parameter < 0 || NumFloatParameters <= parameter)
+		{
+			return false;
+		}
+
 		SpatializerCore* spatializer = SpatializerCore::instance();
 		if (spatializer == nullptr)
 		{
@@ -120,9 +125,11 @@ namespace SpatializerCore3DTI
 		{
 			case EnableHRTFInterpolation :
 			case EnableFarDistanceLPF:
-			case EnableDistanceAttenuation:
-			case EnableNearFieldILD:
+			case EnableDistanceAttenuationAnechoic:
+			case EnableNearFieldEffect:
 			case SpatializationMode:
+			case EnableReverb:
+			case EnableDistanceAttenuationReverb:
 				spatializer->perSourceInitialValues[parameter] = value;
 				return true;
 
@@ -161,6 +168,13 @@ namespace SpatializerCore3DTI
 			Common::CMagnitudes magnitudes = spatializer->core.GetMagnitudes();
 			magnitudes.SetAnechoicDistanceAttenuation(clamp(value, min, max));
 			spatializer->core.SetMagnitudes(magnitudes);
+			return true;
+		}
+		case ILDAttenuation:
+		{
+			const float min = 0.0f;
+			const float max = 30.0f;
+			spatializer->listener->SetILDAttenutaion(clamp(value, min, max));
 			return true;
 		}
 		case SoundSpeed:
@@ -222,6 +236,27 @@ namespace SpatializerCore3DTI
 			spatializer->core.SetHRTFResamplingStep((int)clamp(value, min, max));
 			return true;
 		}
+		case ReverbOrder:
+			static_assert((float)ADIMENSIONAL == 0.0f && (float)BIDIMENSIONAL == 1.0f && (float)THREEDIMENSIONAL == 2.0f, "These values are assumed by this code and the correspond c# enumerations.");
+			if (value == (float)ADIMENSIONAL)
+			{
+				spatializer->environment->SetReverberationOrder(ADIMENSIONAL);
+			}
+			else if (value == (float)BIDIMENSIONAL)
+			{
+				spatializer->environment->SetReverberationOrder(BIDIMENSIONAL);
+			}
+			else if (value == (float)THREEDIMENSIONAL)
+			{
+				spatializer->environment->SetReverberationOrder(THREEDIMENSIONAL);
+			}
+			else
+			{
+				WriteLog("ERROR: Set3DTISpatializerFloat with parameter ReverbOrder only supports values 0.0, 1.0 and 2.0. Value received: " + to_string(value));
+				return false;
+			}
+			return true;
+
 		default:
 			return false;
 		}
@@ -242,9 +277,11 @@ namespace SpatializerCore3DTI
 		{
 		case EnableHRTFInterpolation:
 		case EnableFarDistanceLPF:
-		case EnableDistanceAttenuation:
-		case EnableNearFieldILD:
+		case EnableDistanceAttenuationAnechoic:
+		case EnableNearFieldEffect:
 		case SpatializationMode:
+		case EnableReverb:
+		case EnableDistanceAttenuationReverb:
 			*value = spatializer->perSourceInitialValues[parameter];
 			return true;
 		case HeadRadius:
@@ -258,6 +295,9 @@ namespace SpatializerCore3DTI
 			return true;
 		case AnechoicDistanceAttenuation:
 			*value = spatializer->core.GetMagnitudes().GetAnechoicDistanceAttenuation();
+			return true;
+		case ILDAttenuation:
+			*value = spatializer->listener->GetILDAttenutaion();
 			return true;
 		case SoundSpeed:
 			*value = spatializer->core.GetMagnitudes().GetSoundSpeed();
@@ -279,6 +319,9 @@ namespace SpatializerCore3DTI
 			return true;
 		case HRTFResamplingStep:
 			*value = (float) spatializer->core.GetHRTFResamplingStep();
+			return true;
+		case ReverbOrder:
+			*value = (float)spatializer->environment->GetReverberationOrder();
 			return true;
 		default:
 			*value = std::numeric_limits<float>::quiet_NaN();
@@ -516,7 +559,7 @@ namespace SpatializerCore3DTI
 	{	
 		SpatializerCore* spatializer = state->GetEffectData<SpatializerCore>();
 
-		if (inchannels != 2 || outchannels != 2 || spatializer->environment == nullptr)
+		if (inchannels != 2 || outchannels != 2)
 		{
 			return UNITY_AUDIODSP_ERR_UNSUPPORTED;
 		}
@@ -534,10 +577,10 @@ namespace SpatializerCore3DTI
 		Common::CEarPair<CMonoBuffer<float>> bReverbOutput;
 		bReverbOutput.left.resize(bufferSize);
 		bReverbOutput.right.resize(bufferSize);
-		//auto environment = std::atomic_load(&Spatializer3DTI::spatializer().environment);
 		assert(bReverbOutput.left.size() == length && bReverbOutput.right.size() == length);
-		if (spatializer->environment != nullptr)
+		if (spatializer->unityParameters[PARAM_IS_REVERB_BRIR_LOADED] != 0.0f)
 		{
+			assert(const_cast<CABIR&>(spatializer->environment->GetABIR()).IsInitialized());
 			spatializer->environment->ProcessVirtualAmbisonicReverb(bReverbOutput.left, bReverbOutput.right);
 
 			for (size_t i = 0; i < length; i++)
@@ -569,8 +612,8 @@ namespace SpatializerCore3DTI
 	{
 		perSourceInitialValues[EnableHRTFInterpolation] = 1.0f;
 		perSourceInitialValues[EnableFarDistanceLPF] = 1.0f;
-		perSourceInitialValues[EnableDistanceAttenuation] = 1.0f;
-		perSourceInitialValues[EnableNearFieldILD] = 1.0f;
+		perSourceInitialValues[EnableDistanceAttenuationAnechoic] = 1.0f;
+		perSourceInitialValues[EnableNearFieldEffect] = 1.0f;
 		perSourceInitialValues[SpatializationMode] = 0.0f;
 
 		Common::TAudioStateStruct audioState;
@@ -584,6 +627,8 @@ namespace SpatializerCore3DTI
 		const float LimiterRelease = 500.0f;
 		const float LimiterRatio = 6;
 		limiter.Setup(sampleRate, LimiterRatio, LimiterThreshold, LimiterAttack, LimiterRelease);
+
+		environment = core.CreateEnvironment();
 	}
 
 
@@ -626,7 +671,6 @@ namespace SpatializerCore3DTI
 			unityParameters[PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED] = ILD::CreateFrom3dti_ILDSpatializationTable(path, listener);
 			return unityParameters[PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED] != 0.f;
 		case ReverbBRIR:
-			environment = core.CreateEnvironment();
 			unityParameters[PARAM_IS_REVERB_BRIR_LOADED] = BRIR::CreateFrom3dti(path, environment);
 			return unityParameters[PARAM_IS_REVERB_BRIR_LOADED] != 0.0f;
 		default:
