@@ -29,53 +29,8 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     bool advancedSetup = false;
     bool haSetup = false;
 
-    // Limit possible values of sliders    
-    float maxHeadRadius = 1.0f;
-    float minScale = 0.1f;      
-    float maxScale = 10.0f;
-    float minDB = -30.0f;
-    float maxDB = 0.0f;
-    float minHADB = 0.0f;
-    float maxHADB = 30.0f;
-    float maxSoundSpeed = 1000.0f;
-
-    // Start Play control
-    bool isStartingPlay = false;
-    bool playWasStarted = false;
-
 
     //////////////////////////////////////////////////////////////////////////////
-
-
-    //public static (string[] highQualityHRTFs, string[] highQualityILDs, string[] highPerformanceILDs, string[] reverbBRIRs) GetFilterBinaryPaths(TSampleRateEnum sampleRate)
-    //{
-    //    string sampleRateLabel =
-    //        sampleRate == TSampleRateEnum.K44 ? "44100"
-    //        : sampleRate == TSampleRateEnum.K48 ? "48000"
-    //        : sampleRate == TSampleRateEnum.K96 ? "96000"
-    //        : "(unknown sample rate)";
-
-    //    string[] highPerformanceILDs = Resources.LoadAll<TextAsset>("Data/HighPerformance/ILD")
-    //        .Where(x => x.name.Contains(sampleRateLabel))
-    //        .Select(item => item.name).ToArray();
-
-    //    string[] highQualityHRTFs = Resources.LoadAll<TextAsset>("Data/HighQuality/HRTF")
-    //        .Where(x => x.name.Contains(sampleRateLabel))
-    //        .Select(item => item.name).ToArray();
-
-    //    string[] highQualityILDs = Resources.LoadAll<TextAsset>("Data/HighQuality/ILD")
-    //        .Where(x => x.name.Contains(sampleRateLabel))
-    //        .Select(item => item.name).ToArray();
-
-    //    string[] reverbBRIRs = Resources.LoadAll<TextAsset>("Data/Reverb/BRIR")
-    //        .Where(x => x.name.Contains(sampleRateLabel))
-    //        .Select(item => item.name).ToArray();
-
-    //    return (highQualityHRTFs, highQualityILDs, highPerformanceILDs, reverbBRIRs);
-    //}
-
-    
-
 
 
     /// <summary>
@@ -86,23 +41,8 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
 
 
-        // Init on first pass
-        //if (!initDone)
-        //{
         toolkit = (API_3DTI_Spatializer)target; // Get access to API script       
             Common3DTIGUI.InitStyles(); // Init styles
-        //Debug.Log($"HRTFFileName44 = {toolkit.HRTFFileName44}, HRTFFileName48 = {toolkit.HRTFFileName48}");
-
-        // Check starting play
-        if (EditorApplication.isPlaying && !playWasStarted)
-        {
-            isStartingPlay = true;
-            playWasStarted = true;
-        }
-        if (!EditorApplication.isPlaying && playWasStarted)
-        {
-            playWasStarted = false;
-        }
 
         // Show 3D-Tune-In logo         
         Common3DTIGUI.Show3DTILogo();
@@ -116,9 +56,6 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
         
 
-
-        // End starting play
-        isStartingPlay = false;
 
         if (GUI.changed)
         {
@@ -151,8 +88,9 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
 
 
+
     // Create a control for a SpatializerParameter parameter. Returns true if the value changed
-    public bool CreateControl(SpatializerParameter parameter, bool isCompact = false)
+    public bool CreateControl(SpatializerParameter parameter, float overrideMin=float.NaN, float overrideMax=float.NaN)
     {
         SpatializerParameterAttribute p = parameter.GetAttribute<SpatializerParameterAttribute>();
         if (p == null)
@@ -175,28 +113,16 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             toolkit.GetFloatParameter(parameter, out float oldValue);
             float newValue;
             string valueString;
-            if (isCompact)
-            {
-                GUILayout.BeginVertical(GUILayout.ExpandWidth(false));
-                GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));
-                GUILayout.Label(new GUIContent(label, description));
-                valueString = GUILayout.TextField(oldValue.ToString(p.type == typeof(float) ? "F2" : "F0", System.Globalization.CultureInfo.InvariantCulture), GUILayout.ExpandWidth(false));
-                GUILayout.Label(p.units, GUILayout.ExpandWidth(false));
-                GUILayout.EndHorizontal();
-                // TODO: I Think this will have a bug where newValue gets overwritten by oldvalue in the parse below
-                newValue = GUILayout.HorizontalSlider(oldValue, p.min, p.max);
-                GUILayout.EndVertical();
-            }
-            else
-            {
-                GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));
-                Common3DTIGUI.AddLabelToParameterGroup(label);
-                GUILayout.Label(new GUIContent(label, description), Common3DTIGUI.parameterLabelStyle, GUILayout.Width(Common3DTIGUI.GetParameterLabelWidth()));
-                newValue = GUILayout.HorizontalSlider(oldValue, p.min, p.max, GUILayout.ExpandWidth(true));
-                valueString = GUILayout.TextField(newValue.ToString(p.type == typeof(float) ? "F2" : "F0", System.Globalization.CultureInfo.InvariantCulture), GUILayout.ExpandWidth(false));
-                GUILayout.Label(p.units, GUILayout.ExpandWidth(false));
-                GUILayout.EndHorizontal();
-            }
+
+            GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));
+            Common3DTIGUI.AddLabelToParameterGroup(label);
+            GUILayout.Label(new GUIContent(label, description), Common3DTIGUI.parameterLabelStyle, GUILayout.Width(Common3DTIGUI.GetParameterLabelWidth()));
+            float min = float.IsNaN(overrideMin) ? p.min : overrideMin;
+            float max = float.IsNaN(overrideMax) ? p.max : overrideMax;
+            newValue = GUILayout.HorizontalSlider(oldValue, min, max, GUILayout.ExpandWidth(true));
+            valueString = GUILayout.TextField(newValue.ToString(p.type == typeof(float) ? "F2" : "F0", System.Globalization.CultureInfo.InvariantCulture), GUILayout.ExpandWidth(false));
+            GUILayout.Label(p.units, GUILayout.ExpandWidth(false));
+            GUILayout.EndHorizontal();
 
             bool parseOk = float.TryParse(valueString, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float parsedValueString);
             if (parseOk)
@@ -416,14 +342,12 @@ public class AudioPlugin3DTISpatializerGUI : Editor
         {
             Common3DTIGUI.BeginSection();
 
-            //GUILayout.BeginHorizontal();
             CreateControl(SpatializerParameter.EnableHRTFInterpolation);
             CreateControl(SpatializerParameter.EnableFarDistanceEffect);
             CreateControl(SpatializerParameter.EnableDistanceAttenuationAnechoic);
             CreateControl(SpatializerParameter.EnableDistanceAttenuationReverb);
             // For High Quality only
             CreateControl(SpatializerParameter.EnableNearFieldILD);
-            //GUILayout.EndHorizontal();
 
             Common3DTIGUI.EndSection();
 
@@ -472,10 +396,6 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             Common3DTIGUI.AddLabelToParameterGroup("High Performance ILD");
 
             createDropdowns(SpatializerBinaryRole.HighPerformanceILD, "ILD", "Select the high performance ILD filter of the listener from a .3dti-ild file");
-
-            //Common3DTIGUI.CreatePopupStringSelector("ILD 44.1kHz", "Select the high performance ILD filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K44).highPerformanceILDs, ref toolkit.ILDHighPerformanceFileName44, "Data/HighPerformance/ILD/", ".bytes");
-            //Common3DTIGUI.CreatePopupStringSelector("ILD 48kHz", "Select the high performance ILD filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K48).highPerformanceILDs, ref toolkit.ILDHighPerformanceFileName48, "Data/HighPerformance/ILD/", ".bytes");
-            //Common3DTIGUI.CreatePopupStringSelector("ILD 96kHz", "Select the high performance ILD filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K96).highPerformanceILDs, ref toolkit.ILDHighPerformanceFileName96, "Data/HighPerformance/ILD/", ".bytes");
         }
 
         Common3DTIGUI.SectionSpace();
@@ -489,17 +409,10 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
 
             // HRTF:
-            //Common3DTIGUI.CreatePopupStringSelector("HRTF 44.1kHz", "Select the HRTF of the listener from a .3dti-hrtf file", GetFilterBinaryPaths(TSampleRateEnum.K44).highQualityHRTFs, ref toolkit.HRTFFileName44, "Data/HighQuality/HRTF/", ".bytes");
-            //Common3DTIGUI.CreatePopupStringSelector("HRTF 48kHz", "Select the HRTF of the listener from a .3dti-hrtf file", GetFilterBinaryPaths(TSampleRateEnum.K48).highQualityHRTFs, ref toolkit.HRTFFileName48, "Data/HighQuality/HRTF/", ".bytes");
-            //Common3DTIGUI.CreatePopupStringSelector("HRTF 96kHz", "Select the HRTF of the listener from a .3dti-hrtf file", GetFilterBinaryPaths(TSampleRateEnum.K96).highQualityHRTFs, ref toolkit.HRTFFileName96, "Data/HighQuality/HRTF/", ".bytes");
             createDropdowns(SpatializerBinaryRole.HighQualityHRTF, "HRTF", "Select the HRTF of the listener from a .3dti-hrtf file");
 
             // ILD:
-
             Common3DTIGUI.SingleSpace();
-            //Common3DTIGUI.CreatePopupStringSelector("ILD 44.1kHz", "Select the ILD near field filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K44).highQualityILDs, ref toolkit.ILDNearFieldFileName44, "Data/HighQuality/ILD/", ".bytes");
-            //Common3DTIGUI.CreatePopupStringSelector("ILD 48kHz", "Select the ILD near field filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K48).highQualityILDs, ref toolkit.ILDNearFieldFileName48, "Data/HighQuality/ILD/", ".bytes");
-            //Common3DTIGUI.CreatePopupStringSelector("ILD 96kHz", "Select the ILD near field filter of the listener from a .3dti-ild file", GetFilterBinaryPaths(TSampleRateEnum.K96).highQualityILDs, ref toolkit.ILDNearFieldFileName96, "Data/HighQuality/ILD/", ".bytes");
             createDropdowns(SpatializerBinaryRole.HighQualityILD, "ILD", "Select the ILD near field filter of the listener from a .3dti-ild file");
 
 
@@ -512,9 +425,6 @@ public class AudioPlugin3DTISpatializerGUI : Editor
         GUILayout.Label("Binaries for Reverb", Common3DTIGUI.subtitleBoxStyle);
         GUILayout.Label("These are required to enable reverb processing.", Common3DTIGUI.commentStyle);
 
-        //Common3DTIGUI.CreatePopupStringSelector("BRIR 44.1kHz", "Select the BRIR (impulse response) for reverb processing", GetFilterBinaryPaths(TSampleRateEnum.K44).reverbBRIRs, ref toolkit.BRIRFileName44, "Data/Reverb/BRIR/", ".bytes");
-        //Common3DTIGUI.CreatePopupStringSelector("BRIR 48kHz", "Select the BRIR (impulse response) for reverb processing", GetFilterBinaryPaths(TSampleRateEnum.K48).reverbBRIRs, ref toolkit.BRIRFileName48, "Data/Reverb/BRIR/", ".bytes");
-        //Common3DTIGUI.CreatePopupStringSelector("BRIR 96kHz", "Select the BRIR (impulse response) for reverb processing", GetFilterBinaryPaths(TSampleRateEnum.K96).reverbBRIRs, ref toolkit.BRIRFileName96, "Data/Reverb/BRIR/", ".bytes");
         createDropdowns(SpatializerBinaryRole.ReverbBRIR, "BRIR", "Select the BRIR (impulse response) for reverb processing");
 
 
@@ -540,7 +450,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
             Common3DTIGUI.AddLabelToParameterGroup("Scale factor");
             Common3DTIGUI.SingleSpace();
-            CreateControl(SpatializerParameter.ScaleFactor);
+            CreateControl(SpatializerParameter.ScaleFactor, 0.1f, 10.0f);
 
             // HRTF interpolation
             Common3DTIGUI.BeginSubsection("HRTF Interpolation");
