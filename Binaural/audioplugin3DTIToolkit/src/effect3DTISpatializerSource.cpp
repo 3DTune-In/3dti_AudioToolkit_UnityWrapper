@@ -674,44 +674,47 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 	case FloatParameter::SpatializationMode:
 		if (value == (float)Binaural::TSpatializationMode::HighQuality)
 		{
-			if (spatializer->unityParameters[SpatializerCore3DTI::PARAM_IS_HIGH_QUALITY_HRTF_LOADED] == 0)
-			{
-				WriteLog("Error: Cannot set Spatialization mode to High Quality as no HRTF is loaded.");
-				//data->parameters[PARAM_SPATIALIZATION_MODE] = Binaural::TSpatializationMode::NoSpatialization;
-				data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::NoSpatialization);
-				data->audioSource->DisableNearFieldEffect();
-			}
-			else
-			{
+			//if (!spatializer->isBinaryResourceLoaded[SpatializerCore3DTI::HighQualityHRTF])
+			//{
+			//	WriteLog("Error: Cannot set Spatialization mode to High Quality as no HRTF is loaded.");
+			//	//data->parameters[PARAM_SPATIALIZATION_MODE] = Binaural::TSpatializationMode::NoSpatialization;
+				//data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::NoSpatialization);
+			//	data->audioSource->DisableNearFieldEffect();
+			//}
+			//else
+			//{
 				data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::HighQuality);
-				WriteLog(state, "SET PARAMETER: High Quality spatialization mode is enabled", "");
-				if (spatializer->unityParameters[SpatializerCore3DTI::PARAM_IS_HIGH_QUALITY_ILD_LOADED])
-				{
-					data->audioSource->EnableNearFieldEffect();
-				}
-				else
-				{
-					data->audioSource->DisableNearFieldEffect();
-				}
-			}
+			//	WriteLog(state, "SET PARAMETER: High Quality spatialization mode is enabled", "");
+			//	if (spatializer->unityParameters[SpatializerCore3DTI::PARAM_IS_HIGH_QUALITY_ILD_LOADED])
+			//	{
+			//		data->audioSource->EnableNearFieldEffect();
+			//	}
+			//	else
+			//	{
+			//		data->audioSource->DisableNearFieldEffect();
+			//	}
+			//}
 		}
 		else if (value == (float)Binaural::TSpatializationMode::HighPerformance)
 		{
-			if (spatializer->unityParameters[SpatializerCore3DTI::PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED] == 0)
-			{
-				WriteLog("Error: Cannot set Spatialization mode to High Performance as no HRTF is loaded.");
-				//data->parameters[PARAM_SPATIALIZATION_MODE] = Binaural::TSpatializationMode::NoSpatialization;
-				data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::NoSpatialization);
-			}
+			//if (spatializer->unityParameters[SpatializerCore3DTI::PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED] == 0)
+			//{
+			//	WriteLog("Error: Cannot set Spatialization mode to High Performance as no HRTF is loaded.");
+			//	//data->parameters[PARAM_SPATIALIZATION_MODE] = Binaural::TSpatializationMode::NoSpatialization;
+			//	data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::NoSpatialization);
+			//}
 			data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::HighPerformance);
-			data->audioSource->DisableNearFieldEffect();
-			WriteLog(state, "SET PARAMETER: High performance spatialization mode is enabled", "");
+			//WriteLog(state, "SET PARAMETER: High performance spatialization mode is enabled", "");
 		}
-		if (value == (float)Binaural::TSpatializationMode::NoSpatialization)
+		else if (value == (float)Binaural::TSpatializationMode::NoSpatialization)
 		{
 			data->audioSource->SetSpatializationMode(Binaural::TSpatializationMode::NoSpatialization);
-			data->audioSource->DisableNearFieldEffect();
+			//data->audioSource->DisableNearFieldEffect();
 			WriteLog(state, "SET PARAMETER: No spatialization mode is enabled", "");
+		}
+		else
+		{
+			return UNITY_AUDIODSP_ERR_UNSUPPORTED;
 		}
 		break;
 	case FloatParameter::EnableReverb:
@@ -820,7 +823,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectSt
 		//memcpy(outbuffer, inbuffer, length * (size_t) outchannels * sizeof(float));
 		//std::copy(inbuffer, inbuffer + length * (size_t)outchannels, outbuffer);
 		// Return silence on error.
-		std::fill(inbuffer, inbuffer + length * (size_t)outchannels, 0.0f);
+		std::fill(outbuffer, outbuffer + length * (size_t)outchannels, 0.0f);
 		return UNITY_AUDIODSP_OK;
 	}
 
@@ -831,57 +834,26 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectSt
 
 	std::lock_guard<std::mutex> lock(spatializer->mutex);
 
-	//spatializer.spatializerMutex.lock();
+	
 
-	if (data->audioSource->GetSpatializationMode() == Binaural::HighQuality && spatializer->unityParameters[SpatializerCore3DTI::PARAM_IS_HIGH_QUALITY_HRTF_LOADED] == 0.0f)
+	if ((data->audioSource->GetSpatializationMode() == Binaural::HighQuality && !spatializer->isBinaryResourceLoaded[SpatializerCore3DTI::HighQualityHRTF])
+		||
+		(data->audioSource->GetSpatializationMode() == Binaural::HighPerformance && !spatializer->isBinaryResourceLoaded[SpatializerCore3DTI::HighPerformanceILD])
+		||
+		(data->audioSource->IsNearFieldEffectEnabled() && !spatializer->isBinaryResourceLoaded[SpatializerCore3DTI::HighQualityILD])
+		)
 	{
-		//std::copy(inbuffer, inbuffer + length * (size_t)outchannels, outbuffer);
-		//memset(outbuffer, 0.0f, length * (size_t)outchannels * sizeof(float));
-		std::fill(inbuffer, inbuffer + length * (size_t)outchannels, 0.0f);
+		WriteLog(state, "PROCESS: ERROR: The required binaries are not loaded.", "");
+		std::fill(outbuffer, outbuffer + length * (size_t)outchannels, 0.0f);
 		return UNITY_AUDIODSP_OK;
 	}
-	else if (data->audioSource->GetSpatializationMode() == Binaural::HighPerformance && spatializer->unityParameters[SpatializerCore3DTI::PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED] == 0.0f)
-	{
-		//std::copy(inbuffer, inbuffer + length * (size_t)outchannels, outbuffer);
-		//memset(outbuffer, 0.0f, length * (size_t)outchannels * sizeof(float));
-		std::fill(inbuffer, inbuffer + length * (size_t)outchannels, 0.0f);
-		return UNITY_AUDIODSP_OK;
-	}
-
-
-	//// Before doing anything, check that the core is ready
-	//if (!spatializer->isReady())
-	//{
-	//	//WriteLog(state, "PROCESS: Core is not ready yet...", "");
-	//	memset(outbuffer, 0.0f, length * outchannels * sizeof(float));
-//          // TODO: Use a lock guard instead of manual locking/unlocking
-	  //	//spatializer->spatializerMutex.unlock();
-	  //	return UNITY_AUDIODSP_OK;
-	  //}
 
 	  // Set source and listener transforms
 	data->audioSource->SetSourceTransform(ComputeSourceTransformFromMatrix(state->spatializerdata->sourcematrix, spatializer->scaleFactor));
 	spatializer->listener->SetListenerTransform(ComputeListenerTransformFromMatrix(state->spatializerdata->listenermatrix, spatializer->scaleFactor));
 
-	// Now check that listener and source are not in the same position.
-	// This might happens in some weird cases, such as when trying to process a source with no clip
-	//if (spatializer->listener->GetListenerTransform().GetVectorTo(data->audioSource->GetSourceTransform()).GetSqrDistance() < 0.0001f)
-	//{
-	//	WriteLog(state, "WARNING during Process! AudioSource and Listener positions are the same (do you have a source with no clip?)", "");
-	//	spatializer->spatializerMutex.unlock();
-	//	return UNITY_AUDIODSP_OK;
-	//}
-
 	// Transform input buffer
 	CMonoBuffer<float> inMonoBuffer(length);
-	//for (int i = 0; i < length; i++)
-	//{
-	//	inMonoBuffer[i] = inbuffer[i * 2]; // We take only the left channel
-	//}
-	//for (int i = 0; i < length; i++)
-	//{
-	//	inMonoBuffer[i] = inbuffer[(i*2)+1]; // We take only the right channel
-	//}
 	size_t j = 0;
 	for (size_t i = 0; i < length; i++)
 	{
@@ -909,8 +881,6 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectSt
 	{
 		outbuffer[i++] = *it;
 	}
-
-	//spatializer->spatializerMutex.unlock();
 
 	return UNITY_AUDIODSP_OK;
 }

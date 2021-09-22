@@ -4,6 +4,7 @@
 #include "BinauralSpatializer/Environment.h"
 #include "Common/DynamicCompressorStereo.h"
 #include "AudioPluginInterface.h"
+#include <array>
 
 
 
@@ -55,17 +56,17 @@ namespace SpatializerCore3DTI
 		NumFloatParameters = 20,
 	};
 
-		// Define unity parameters separately
-	enum UnityParameters
-	{
-		// Read only status parameters
-		PARAM_IS_HIGH_QUALITY_HRTF_LOADED,
-		PARAM_IS_HIGH_QUALITY_ILD_LOADED,
-		PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED,
-		PARAM_IS_REVERB_BRIR_LOADED,
+	//	// Define unity parameters separately
+	//enum UnityParameters
+	//{
+	//	// Read only status parameters
+	//	PARAM_IS_HIGH_QUALITY_HRTF_LOADED,
+	//	PARAM_IS_HIGH_QUALITY_ILD_LOADED,
+	//	PARAM_IS_HIGH_PERFORMANCE_ILD_LOADED,
+	//	PARAM_IS_REVERB_BRIR_LOADED,
 
-		P_NUM
-	};
+	//	P_NUM
+	//};
 
 	enum BinaryRole
 	{
@@ -74,6 +75,7 @@ namespace SpatializerCore3DTI
 		HighQualityHRTF = 1,
 		HighQualityILD = 2,
 		ReverbBRIR = 3,
+		NumBinaryRoles = 4,
 	};
 
 /////////////////////////////////////////////////////////////////////
@@ -86,10 +88,13 @@ namespace SpatializerCore3DTI
 		std::shared_ptr<Binaural::CEnvironment> environment;
 		Common::CDynamicCompressorStereo limiter;
 		float perSourceInitialValues[NumSourceParameters];
-		float unityParameters[P_NUM];
+		//float unityParameters[P_NUM];
 		float scaleFactor;
 		bool isLimiterEnabled;
 		std::mutex mutex;
+
+		// Status
+		std::array<bool, NumBinaryRoles> isBinaryResourceLoaded = { false, false, false, false };
 
 	protected:
 		SpatializerCore(UInt32 sampleRate, UInt32 bufferSize);

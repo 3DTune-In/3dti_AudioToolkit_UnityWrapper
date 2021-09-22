@@ -251,6 +251,17 @@ namespace API_3DTI
                     }
                 }
             }
+
+            if (Is3DTISpatializerCreated())
+            {
+                for (int i = 0; i < NumParameters; i++)
+                {
+                    if (!Set3DTISpatializerFloat(i, spatializerParameters[i]))
+                    {
+                        Debug.LogError($"Failed to set 3DTI parameter {i}.", this);
+                    }
+                }
+            }
         }
 
         void Start()
@@ -454,11 +465,16 @@ namespace API_3DTI
             Debug.Assert(Enum.IsDefined(typeof(BinaryResourceRole), role));
             Debug.Assert(Enum.IsDefined(typeof(TSampleRateEnum), sampleRate));
             binaryResourcePaths(role)[(int)sampleRate] = path;
-            if (path.Length > 0 && GetSampleRate(out TSampleRateEnum currentSampleRate) && currentSampleRate == sampleRate)
+            if (GetSampleRate(out TSampleRateEnum currentSampleRate) && currentSampleRate == sampleRate)
             {
-                if (!(SaveResourceAsFile(path, out string newPath) && Load3DTISpatializerBinary((int)role, newPath)))
+                if (path.Length == 0)
                 {
-                    Debug.LogError($"Failed to load Spatializer binary for {role} at sample rate {sampleRate}.");
+                    Load3DTISpatializerBinary((int)role, path);
+
+                }
+                else if (!(SaveResourceAsFile(path, out string newPath) && Load3DTISpatializerBinary((int)role, newPath)))
+                {
+                    Debug.LogError($"Failed to load Spatializer binary resource {path} for {role} at sample rate {sampleRate}.");
                     return false;
                 }
             }
