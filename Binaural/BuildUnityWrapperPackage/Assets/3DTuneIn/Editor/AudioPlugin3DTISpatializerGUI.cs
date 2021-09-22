@@ -63,19 +63,22 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             // Test for problematic config
             toolkit.GetSampleRate(out TSampleRateEnum currentSampleRate);
             SpatializationMode currentSpatializationMode = toolkit.GetParameter<SpatializationMode>(SpatializerParameter.SpatializationMode);
-            if (currentSpatializationMode == SpatializationMode.SPATIALIZATION_MODE_HIGH_PERFORMANCE && toolkit.GetBinaryPath(SpatializerBinaryRole.HighPerformanceILD, currentSampleRate).Length == 0)
+            if (currentSpatializationMode == SpatializationMode.SPATIALIZATION_MODE_HIGH_PERFORMANCE && toolkit.GetBinaryResourcePath(BinaryResourceRole.HighPerformanceILD, currentSampleRate).Length == 0)
             {
-                Debug.LogError($"Default spatialization mode set to {SpatializationMode.SPATIALIZATION_MODE_HIGH_PERFORMANCE} but no {SpatializerBinaryRole.HighPerformanceILD} resource is selected for the current sample rate ({currentSampleRate}).");
+                Debug.LogError($"Default spatialization mode set to {SpatializationMode.SPATIALIZATION_MODE_HIGH_PERFORMANCE} but no {BinaryResourceRole.HighPerformanceILD} resource is loaded for the current sample rate ({currentSampleRate}).");
             }
-            if (currentSpatializationMode == SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY && toolkit.GetBinaryPath(SpatializerBinaryRole.HighQualityHRTF, currentSampleRate).Length == 0)
+            if (currentSpatializationMode == SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY && toolkit.GetBinaryResourcePath(BinaryResourceRole.HighQualityHRTF, currentSampleRate).Length == 0)
             {
-                Debug.LogError($"Default spatialization mode set to {SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY} but no {SpatializerBinaryRole.HighQualityHRTF} resource is selected for the current sample rate ({currentSampleRate}).");
+                Debug.LogError($"Default spatialization mode set to {SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY} but no {BinaryResourceRole.HighQualityHRTF} resource is loaded for the current sample rate ({currentSampleRate}).");
             }
-            if (currentSpatializationMode == SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY && toolkit.GetParameter<bool>(SpatializerParameter.EnableNearFieldILD) && toolkit.GetBinaryPath(SpatializerBinaryRole.HighQualityILD, currentSampleRate).Length == 0)
+            if (currentSpatializationMode == SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY && toolkit.GetParameter<bool>(SpatializerParameter.EnableNearFieldILD) && toolkit.GetBinaryResourcePath(BinaryResourceRole.HighQualityILD, currentSampleRate).Length == 0)
             {
-                Debug.LogError($"Default spatialization mode set to {SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY} with {SpatializerParameter.EnableNearFieldILD} enabled but no {SpatializerBinaryRole.HighQualityILD} resource is selected for the current sample rate ({currentSampleRate}).");
+                Debug.LogError($"Default spatialization mode set to {SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY} with {SpatializerParameter.EnableNearFieldILD} enabled but no {BinaryResourceRole.HighQualityILD} resource is loaded for the current sample rate ({currentSampleRate}).");
             }
-            // TODO: Reverb BRIR
+            if (toolkit.GetParameter<bool>(SpatializerParameter.EnableReverb) && toolkit.GetBinaryResourcePath(BinaryResourceRole.ReverbBRIR, currentSampleRate).Length == 0)
+            {
+                Debug.LogError($"{SpatializerParameter.EnableReverb} is set to true but no {BinaryResourceRole.ReverbBRIR} resource is loaded for the current sample rate ({currentSampleRate}).");
+            }
 
             // TODO: See if this results in unsynced state with DLL
             Undo.RecordObject(toolkit, "Modify 3DTI Spatializer parameter");
@@ -186,27 +189,27 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
 
 
-    public static (string prefix, List<string> paths, string suffix) GetBinaryPaths(SpatializerBinaryRole role, TSampleRateEnum sampleRate)
+    public static (string prefix, List<string> paths, string suffix) GetBinaryResourcePaths(BinaryResourceRole role, TSampleRateEnum sampleRate)
     {
         // The DLL 
         //string rootDirectory = "Assets/3DTuneIn/Resources/";
         string prefix;
         switch (role)
         {
-            case SpatializerBinaryRole.HighPerformanceILD:
+            case BinaryResourceRole.HighPerformanceILD:
                 prefix = "Data/HighPerformance/ILD/";
                 break;
-            case SpatializerBinaryRole.HighQualityHRTF:
+            case BinaryResourceRole.HighQualityHRTF:
                 prefix = "Data/HighQuality/HRTF/";
                 break;
-            case SpatializerBinaryRole.HighQualityILD:
+            case BinaryResourceRole.HighQualityILD:
                 prefix = "Data/HighQuality/ILD/";
                 break;
-            case SpatializerBinaryRole.ReverbBRIR:
+            case BinaryResourceRole.ReverbBRIR:
                 prefix = "Data/Reverb/BRIR/";
                 break;
             default:
-                throw new Exception("Invalid value for SpatializerBinaryRole.");
+                throw new Exception("Invalid value for BinaryResourceRole.");
         }
 
         string sampleRateLabel =
@@ -222,9 +225,9 @@ public class AudioPlugin3DTISpatializerGUI : Editor
     }
 
 
-    public static string CreateBinaryFileSelector(string currentSelection, string titleText, string tooltip, SpatializerBinaryRole role, TSampleRateEnum sampleRate)
+    public static string CreateBinaryResourceSelector(string currentSelection, string titleText, string tooltip, BinaryResourceRole role, TSampleRateEnum sampleRate)
     {
-        (string prefix, List<string> items, string suffix) = GetBinaryPaths(role, sampleRate);
+        (string prefix, List<string> items, string suffix) = GetBinaryResourcePaths(role, sampleRate);
 
         // For no binary selected
         const string NoneSelectedLabel = "(None)";
@@ -244,7 +247,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
         }
         else
         {
-            Debug.LogWarning("Unable to find previously selected binary: " + currentSelection);
+            Debug.LogWarning("Unable to find previously selected binary resource: " + currentSelection);
         }
         int newSelectedIndex = EditorGUILayout.Popup(new GUIContent(titleText, tooltip), selectedIndex, items.ToArray());
         EditorGUILayout.EndHorizontal();
@@ -361,7 +364,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
         // HIGH PERFORMANCE / HIGH QUALITY CHOICE:
 
-        void createDropdowns(SpatializerBinaryRole role, string label, string tooltip)
+        void createDropdowns(BinaryResourceRole role, string label, string tooltip)
         {
             (TSampleRateEnum, string)[] AllSampleRates = {
                 (TSampleRateEnum.K44, "44.1 kHz"),
@@ -371,11 +374,11 @@ public class AudioPlugin3DTISpatializerGUI : Editor
             foreach ((TSampleRateEnum sampleRate, string sampleRateLabel) in AllSampleRates)
             {
                 // Paths should be relative to a Resources folder.
-                string oldPath = toolkit.GetBinaryPath(role, sampleRate);
-                string newPath = CreateBinaryFileSelector(oldPath, label + " " +sampleRateLabel, tooltip, role, sampleRate);
+                string oldPath = toolkit.GetBinaryResourcePath(role, sampleRate);
+                string newPath = CreateBinaryResourceSelector(oldPath, label + " " +sampleRateLabel, tooltip, role, sampleRate);
                 if (oldPath != newPath)
                 {
-                    toolkit.SetBinaryPath(role, sampleRate, newPath);
+                    toolkit.SetBinaryResourcePath(role, sampleRate, newPath);
                 }
                 if (newPath.EndsWith(".sofa.bytes"))
                 {
@@ -395,7 +398,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
         {            
             Common3DTIGUI.AddLabelToParameterGroup("High Performance ILD");
 
-            createDropdowns(SpatializerBinaryRole.HighPerformanceILD, "ILD", "Select the high performance ILD filter of the listener from a .3dti-ild file");
+            createDropdowns(BinaryResourceRole.HighPerformanceILD, "ILD", "Select the high performance ILD filter of the listener from a .3dti-ild file");
         }
 
         Common3DTIGUI.SectionSpace();
@@ -409,11 +412,11 @@ public class AudioPlugin3DTISpatializerGUI : Editor
 
 
             // HRTF:
-            createDropdowns(SpatializerBinaryRole.HighQualityHRTF, "HRTF", "Select the HRTF of the listener from a .3dti-hrtf file");
+            createDropdowns(BinaryResourceRole.HighQualityHRTF, "HRTF", "Select the HRTF of the listener from a .3dti-hrtf file");
 
             // ILD:
             Common3DTIGUI.SingleSpace();
-            createDropdowns(SpatializerBinaryRole.HighQualityILD, "ILD", "Select the ILD near field filter of the listener from a .3dti-ild file");
+            createDropdowns(BinaryResourceRole.HighQualityILD, "ILD", "Select the ILD near field filter of the listener from a .3dti-ild file");
 
 
         }
@@ -425,7 +428,7 @@ public class AudioPlugin3DTISpatializerGUI : Editor
         GUILayout.Label("Binaries for Reverb", Common3DTIGUI.subtitleBoxStyle);
         GUILayout.Label("These are required to enable reverb processing.", Common3DTIGUI.commentStyle);
 
-        createDropdowns(SpatializerBinaryRole.ReverbBRIR, "BRIR", "Select the BRIR (impulse response) for reverb processing");
+        createDropdowns(BinaryResourceRole.ReverbBRIR, "BRIR", "Select the BRIR (impulse response) for reverb processing");
 
 
 

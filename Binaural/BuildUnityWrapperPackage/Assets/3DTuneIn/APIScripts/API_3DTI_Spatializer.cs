@@ -50,8 +50,7 @@ public enum TSampleRateEnum
     K44, K48, K96
 }
 
-
-public enum SpatializerBinaryRole
+public enum BinaryResourceRole
 {
     // These values must match the C++ values
     HighPerformanceILD,
@@ -60,6 +59,21 @@ public enum SpatializerBinaryRole
     ReverbBRIR,
 }
 
+public enum SpatializationMode : int
+{
+    SPATIALIZATION_MODE_NONE = 0,
+    SPATIALIZATION_MODE_HIGH_PERFORMANCE = 1,
+    SPATIALIZATION_MODE_HIGH_QUALITY = 2,
+}
+
+public enum ReverbOrder : int
+{
+    Adimensional,
+    Bidimensional,
+    ThreeDimensional,
+}
+
+
 
 public class API_3DTI_Spatializer : MonoBehaviour
 {
@@ -67,19 +81,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
 	// Set this to the 3DTI mixer containing the SpatializerCore3DTI effect.
 	public AudioMixer spatializereCoreMixer;
 
-    public enum SpatializationMode : int
-    {
-        SPATIALIZATION_MODE_NONE = 0,
-        SPATIALIZATION_MODE_HIGH_PERFORMANCE = 1,
-        SPATIALIZATION_MODE_HIGH_QUALITY = 2,
-    }
 
-    public enum ReverbOrder : int
-    {
-        Adimensional,
-        Bidimensional,
-        ThreeDimensional,
-    }
 
 
     // Note: The numbering of these parameters must be kept in sync with the C++ plugin source code. Per-source parameters must appear first for compatibility with the plugin.
@@ -98,7 +100,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
 		[SpatializerParameter(/*pluginName = "MODNFILD",*/ label = "Enable near distance ILD (High quality mode only)", description = "Enable near field filter for sources very close to the listener. Only available in high quality mode. Depends on the High Quality ILD binary being loaded.", min = 0, max = 1, type = typeof(bool), defaultValue = 1.0f, isSourceParameter = true)]
 		EnableNearFieldILD = 3,
 
-		[SpatializerParameter(/*pluginName = "SpatMode",*/ label = "Spatialization mode", description = "Set spatialization mode (0=High quality, 1=High performance, 2=None). Note, High quality depends on the HRTF binary being loaded and High Performance depends on the High Performance ILD binary being loaded.", min = 0, max = 2, type = typeof(API_3DTI_Spatializer.SpatializationMode), defaultValue = 0.0f, isSourceParameter = true)]
+		[SpatializerParameter(/*pluginName = "SpatMode",*/ label = "Spatialization mode", description = "Set spatialization mode (0=High quality, 1=High performance, 2=None). Note, High quality depends on the HRTF binary being loaded and High Performance depends on the High Performance ILD binary being loaded.", min = 0, max = 2, type = typeof(SpatializationMode), defaultValue = 0.0f, isSourceParameter = true)]
 		SpatializationMode = 4,
 
         [SpatializerParameter(label = "Enable reverb processing", description = "Enable reverb processing", min = 0.0f, max = 1.0f, type = typeof(bool), defaultValue = 0, isSourceParameter = true)]
@@ -144,7 +146,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
         [SpatializerParameter(label = "HRTF resampling step (High Quality only)", description = "HRTF resampling step; Lower values give better quality at the cost of more memory usage. Only affects High Quality mode.", min = 1, max = 90, type = typeof(int), defaultValue = 15)]
 		HRTFResamplingStep = 18,
 
-        [SpatializerParameter(label = "Reverb order", description = "Configures the number of channels of the first-order ambisonic reverb processing. The options are: W, X, Y and Z (ThreeDimensional); W, X and Y (Bidimensional); only W (Adimensional)", min = 0.0f, max = 2.0f, type = typeof(API_3DTI_Spatializer.ReverbOrder), defaultValue = (float)API_3DTI_Spatializer.ReverbOrder.Bidimensional, isSourceParameter = true)]
+        [SpatializerParameter(label = "Reverb order", description = "Configures the number of channels of the first-order ambisonic reverb processing. The options are: W, X, Y and Z (ThreeDimensional); W, X and Y (Bidimensional); only W (Adimensional)", min = 0.0f, max = 2.0f, type = typeof(ReverbOrder), defaultValue = (float)global::ReverbOrder.Bidimensional, isSourceParameter = true)]
         ReverbOrder = 19,
     };
     public const int NumSourceParameters = (int)SpatializerParameter.EnableDistanceAttenuationReverb + 1;
@@ -184,14 +186,14 @@ public class API_3DTI_Spatializer : MonoBehaviour
 
 
     // for convenience
-    private string[] binaryPaths(SpatializerBinaryRole role)
+    private string[] binaryResourcePaths(BinaryResourceRole role)
     {
         switch (role)
         {
-            case SpatializerBinaryRole.HighPerformanceILD: return highPerformanceILDPaths;
-            case SpatializerBinaryRole.HighQualityHRTF: return highQualityHRTFPaths;
-            case SpatializerBinaryRole.HighQualityILD: return highQualityILDPaths;
-            case SpatializerBinaryRole.ReverbBRIR: return reverbBRIRPaths;
+            case BinaryResourceRole.HighPerformanceILD: return highPerformanceILDPaths;
+            case BinaryResourceRole.HighQualityHRTF: return highQualityHRTFPaths;
+            case BinaryResourceRole.HighQualityILD: return highQualityILDPaths;
+            case BinaryResourceRole.ReverbBRIR: return reverbBRIRPaths;
             default: throw new Exception("Invalid value of enum SpatializerBinaryRole");
         }
     }
@@ -248,10 +250,6 @@ public class API_3DTI_Spatializer : MonoBehaviour
         }
     }
 
-    /// <summary>
-
-    /// Automatic setup of Toolkit Core (as read from custom GUI in Unity Inspector)
-    /// </summary>
     void Start()
     {
         if (!Is3DTISpatializerCreated())
@@ -276,10 +274,10 @@ public class API_3DTI_Spatializer : MonoBehaviour
         else
         {
             Debug.Assert(0 <= (int)sr && (int)sr < 3);
-            foreach (SpatializerBinaryRole role in Enum.GetValues(typeof(SpatializerBinaryRole)))
+            foreach (BinaryResourceRole role in Enum.GetValues(typeof(BinaryResourceRole)))
             {
-                string resourcePath = binaryPaths(role)[(int)sr];
-                SetBinaryPath(role, sr, resourcePath);
+                string resourcePath = binaryResourcePaths(role)[(int)sr];
+                SetBinaryResourcePath(role, sr, resourcePath);
 
             }
         }
@@ -287,6 +285,13 @@ public class API_3DTI_Spatializer : MonoBehaviour
 
     // --- Spatializer Core parameters
 
+    /// <summary>
+    /// Directly set a parameter using a raw float value
+    /// </summary>
+    /// <param name="parameter"></param>
+    /// <param name="value"></param>
+    /// <param name="source">See note at <see cref="SetParameter{T}(SpatializerParameter, T, AudioSource)"/></param>
+    /// <returns>True if the parameter was successfully set</returns>
     public bool SetFloatParameter(SpatializerParameter parameter, float value, AudioSource source = null)
     {
 		if (source != null)
@@ -331,7 +336,14 @@ public class API_3DTI_Spatializer : MonoBehaviour
 		return true;
     }
 
-	public bool GetFloatParameter(SpatializerParameter parameter, out float value, AudioSource source=null)
+    /// <summary>
+    /// Gets the value of a parameter in its raw float form.
+    /// </summary>
+    /// <param name="parameter">The parameter to get</param>
+    /// <param name="value">Variable in which to store the retrieved value</param>
+    /// <param name="source">See note at <see cref="SetParameter{T}(SpatializerParameter, T, AudioSource)"/></param>
+    /// <returns>True if the parameter was successfully retrieved</returns>
+    public bool GetFloatParameter(SpatializerParameter parameter, out float value, AudioSource source=null)
     {
 		if (source != null)
         {
@@ -358,7 +370,12 @@ public class API_3DTI_Spatializer : MonoBehaviour
 		return true;
     }
 
-    // Throws exception on failure
+    /// <summary>
+    /// Gets a parameter value in its raw float form and return it directly. Throws exception if the function fails to retrieve the value.
+    /// </summary>
+    /// <param name="parameter">The parameter to get</param>
+    /// <param name="source">See note at <see cref="SetParameter{T}(SpatializerParameter, T, AudioSource)"/></param>
+    /// <returns>The value of the parameter</returns>
     public float GetFloatParameter(SpatializerParameter parameter, AudioSource source=null)
     {
         if (!GetFloatParameter(parameter, out float value, source))
@@ -368,6 +385,13 @@ public class API_3DTI_Spatializer : MonoBehaviour
         return value;
     }
 
+    /// <summary>
+    /// Get the value of a parameter directly. Throws exception if the function fails to retrieve the value.
+    /// </summary>
+    /// <typeparam name="T">The value type of the parameter being queried. See the parameter's type attribute.</typeparam>
+    /// <param name="parameter">The parameter to get</param>
+    /// <param name="source">See note at <see cref="SetParameter{T}(SpatializerParameter, T, AudioSource)"/></param>
+    /// <returns></returns>
 	public T GetParameter<T>(SpatializerParameter parameter, AudioSource source = null)
     {
 		SpatializerParameterAttribute attributes = parameter.GetAttribute<SpatializerParameterAttribute>();
@@ -384,6 +408,16 @@ public class API_3DTI_Spatializer : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Set the value of a parameter on the spatializer plugin.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="parameter">The parameter to set</param>
+    /// <param name="value">The value of the parameter, which should match the type attribute of the parameter.</param>
+    /// <param name="source">If the parameter is marked as isSourceParameter then the specific AudioSource that it should be modified for can be provided here. If it is marked as isSourceParameter but no source is provided then the default value for new sources will be set.
+    /// 
+    /// If the parameter is not marked as isSourceParameter then this must be null.</param>
+    /// <returns></returns>
 	public bool SetParameter<T>(SpatializerParameter parameter, T value, AudioSource source = null)
     {
         SpatializerParameterAttribute attributes = parameter.GetAttribute<SpatializerParameterAttribute>();
@@ -391,13 +425,18 @@ public class API_3DTI_Spatializer : MonoBehaviour
 		return SetFloatParameter(parameter, Convert.ToSingle(value), source);
     }
 
-
-    public string GetBinaryPath(SpatializerBinaryRole role, TSampleRateEnum sampleRate)
+    /// <summary>
+    /// Get the path of the binary resource file loaded for the given role and sample rate.
+    /// </summary>
+    /// <param name="role"></param>
+    /// <param name="sampleRate"></param>
+    /// <returns></returns>
+    public string GetBinaryResourcePath(BinaryResourceRole role, TSampleRateEnum sampleRate)
     {
-        Debug.Assert(Enum.IsDefined(typeof(SpatializerBinaryRole), role));
+        Debug.Assert(Enum.IsDefined(typeof(BinaryResourceRole), role));
         Debug.Assert(Enum.IsDefined(typeof(TSampleRateEnum), sampleRate));
 
-        return binaryPaths(role)[(int)sampleRate];
+        return binaryResourcePaths(role)[(int)sampleRate];
     }
 
     /// <summary>
@@ -407,15 +446,14 @@ public class API_3DTI_Spatializer : MonoBehaviour
     /// <param name="sampleRate">Sample rate the binary is intended to be used at.</param>
     /// <param name="path">Leave empty to load no binary for this role at this sample rate.</param>
     /// <returns>True if the file successfully loaded</returns>
-    public bool SetBinaryPath(SpatializerBinaryRole role, TSampleRateEnum sampleRate, string path)
+    public bool SetBinaryResourcePath(BinaryResourceRole role, TSampleRateEnum sampleRate, string path)
     {
-        Debug.Assert(Enum.IsDefined(typeof(SpatializerBinaryRole), role));
+        Debug.Assert(Enum.IsDefined(typeof(BinaryResourceRole), role));
         Debug.Assert(Enum.IsDefined(typeof(TSampleRateEnum), sampleRate));
-        binaryPaths(role)[(int)sampleRate] = path;
+        binaryResourcePaths(role)[(int)sampleRate] = path;
         if (path.Length > 0 && GetSampleRate(out TSampleRateEnum currentSampleRate) && currentSampleRate == sampleRate)
         {
-            // TODO: This extra save is for the sake of android which can't read the normal filesystem. But it might be possible to send the data directly as an array.
-            if (!(SaveResourceAsBinary(path, out string newPath) && Load3DTISpatializerBinary((int)role, newPath)))
+            if (!(SaveResourceAsFile(path, out string newPath) && Load3DTISpatializerBinary((int)role, newPath)))
             {
                 Debug.LogError($"Failed to load Spatializer binary for {role} at sample rate {sampleRate}.");
                 return false;
@@ -428,7 +466,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
 	/// <summary>
 	/// Load one file from resources and save it as a binary file (for Android)
 	/// </summary>    
-	private bool SaveResourceAsBinary(string originalName, out string newFilename)
+	private bool SaveResourceAsFile(string originalName, out string newFilename)
 	{
         // remove .bytes extension
         if (originalName.EndsWith(".bytes"))
@@ -463,7 +501,11 @@ public class API_3DTI_Spatializer : MonoBehaviour
 	}
 
  
-
+    /// <summary>
+    /// Gets the current Unity sample rate in the form of TSampleRateEnum
+    /// </summary>
+    /// <param name="sampleRate"></param>
+    /// <returns></returns>
     public bool GetSampleRate(out TSampleRateEnum sampleRate)
     {
 
