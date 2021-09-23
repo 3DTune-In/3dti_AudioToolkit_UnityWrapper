@@ -15,7 +15,7 @@
 		3429A30426384A9A00964E9E /* HearingLossSim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2EF26384A9900964E9E /* HearingLossSim.cpp */; };
 		3429A30526384A9A00964E9E /* ButterworthMultibandExpander.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2F526384A9A00964E9E /* ButterworthMultibandExpander.cpp */; };
 		3429A30626384A9A00964E9E /* HearingAidSim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2F826384A9A00964E9E /* HearingAidSim.cpp */; };
-		3429A30726384A9A00964E9E /* BaerMooreFrequencySmearing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2F926384A9A00964E9E /* BaerMooreFrequencySmearing.cpp */; };
+		3429A30726384A9A00964E9E /* BaerMooreFrequencySmearing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2F926384A9A00964E9E /* BaerMooreFrequencySmearing.cpp */; settings = {COMPILER_FLAGS = "-Os"; }; };
 		3429A30826384A9A00964E9E /* DynamicEqualizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2FA26384A9A00964E9E /* DynamicEqualizer.cpp */; };
 		3429A30926384A9A00964E9E /* Fig6Algorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2FD26384A9A00964E9E /* Fig6Algorithm.cpp */; };
 		3429A38726384AB400964E9E /* Vector3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A35726384AB200964E9E /* Vector3.cpp */; };
@@ -48,7 +48,6 @@
 		3429A3B526384ABE00964E9E /* Environment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3AA26384ABE00964E9E /* Environment.cpp */; };
 		3429A3B626384ABE00964E9E /* Core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3AD26384ABE00964E9E /* Core.cpp */; };
 		3429A3B726384ABE00964E9E /* HRTF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3AE26384ABE00964E9E /* HRTF.cpp */; };
-		3429A3BB26384B4800964E9E /* HRTFFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3BA26384B4800964E9E /* HRTFFactory.cpp */; };
 		3429A3F426384B8200964E9E /* SOFADate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3C226384B7F00964E9E /* SOFADate.cpp */; };
 		3429A3F526384B8200964E9E /* SOFAUnits.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3C326384B7F00964E9E /* SOFAUnits.cpp */; };
 		3429A3F626384B8200964E9E /* SOFASimpleFreeFieldSOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3C426384B7F00964E9E /* SOFASimpleFreeFieldSOS.cpp */; };
@@ -99,12 +98,15 @@
 		3429A45C26384BD100964E9E /* ncString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A43C26384BD100964E9E /* ncString.cpp */; };
 		3429A45D26384BD100964E9E /* ncType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A44126384BD100964E9E /* ncType.cpp */; };
 		3429A45E26384BD100964E9E /* ncVar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A44426384BD100964E9E /* ncVar.cpp */; };
-		AF157008203347DC00D93A9F /* HRTFCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF157004203347DC00D93A9F /* HRTFCereal.cpp */; };
-		AF15700C203347F800D93A9F /* ILDCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF15700A203347F800D93A9F /* ILDCereal.cpp */; };
+		34FEE2D826FCBF560094E18F /* effect3DTISpatializerCore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34FEE2D626FCBF420094E18F /* effect3DTISpatializerCore.cpp */; };
+		34FEE2D926FCBF560094E18F /* effect3DTISpatializerSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34FEE2D726FCBF420094E18F /* effect3DTISpatializerSource.cpp */; };
+		34FEE2E726FCBF9E0094E18F /* HRTFFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34FEE2DB26FCBF9E0094E18F /* HRTFFactory.cpp */; };
+		34FEE2E826FCBF9E0094E18F /* HRTFCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34FEE2DC26FCBF9E0094E18F /* HRTFCereal.cpp */; };
+		34FEE2E926FCBF9E0094E18F /* ILDCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34FEE2E026FCBF9E0094E18F /* ILDCereal.cpp */; };
+		34FEE2EA26FCBF9E0094E18F /* BRIRCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34FEE2E426FCBF9E0094E18F /* BRIRCereal.cpp */; };
 		AF391F8A1E55F12800EB4AC6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AF391F891E55F12800EB4AC6 /* Info.plist */; };
 		AF391F8E1E55F14200EB4AC6 /* effect3DTIHA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF391F8B1E55F14200EB4AC6 /* effect3DTIHA.cpp */; };
 		AF391F8F1E55F14200EB4AC6 /* effect3DTIHL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF391F8C1E55F14200EB4AC6 /* effect3DTIHL.cpp */; };
-		AF391F901E55F14200EB4AC6 /* effect3DTISpatializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF391F8D1E55F14200EB4AC6 /* effect3DTISpatializer.cpp */; };
 		AFE890AC1DCCB3CF003505EF /* AudioPluginUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFE890A81DCCB3CF003505EF /* AudioPluginUtil.cpp */; };
 /* End PBXBuildFile section */
 
@@ -201,8 +203,6 @@
 		3429A3AD26384ABE00964E9E /* Core.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Core.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/Core.cpp; sourceTree = "<group>"; };
 		3429A3AE26384ABE00964E9E /* HRTF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HRTF.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/HRTF.cpp; sourceTree = "<group>"; };
 		3429A3AF26384ABE00964E9E /* ILD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ILD.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/ILD.h; sourceTree = "<group>"; };
-		3429A3B926384B4800964E9E /* HRTFFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HRTFFactory.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/HRTF/HRTFFactory.h; sourceTree = "<group>"; };
-		3429A3BA26384B4800964E9E /* HRTFFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HRTFFactory.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/HRTF/HRTFFactory.cpp; sourceTree = "<group>"; };
 		3429A3BE26384B7F00964E9E /* SOFA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFA.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFA.h; sourceTree = "<group>"; };
 		3429A3BF26384B7F00964E9E /* SOFASingleRoomDRIR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFASingleRoomDRIR.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFASingleRoomDRIR.h; sourceTree = "<group>"; };
 		3429A3C026384B7F00964E9E /* SOFAExceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFAExceptions.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAExceptions.h; sourceTree = "<group>"; };
@@ -312,15 +312,21 @@
 		3429A44226384BD100964E9E /* ncGroupAtt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncGroupAtt.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncGroupAtt.h; sourceTree = "<group>"; };
 		3429A44326384BD100964E9E /* ncUint64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncUint64.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncUint64.h; sourceTree = "<group>"; };
 		3429A44426384BD100964E9E /* ncVar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncVar.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncVar.cpp; sourceTree = "<group>"; };
-		34EE30A224DB46C400321BD3 /* effect3DTISpatializer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = effect3DTISpatializer.h; path = ../src/effect3DTISpatializer.h; sourceTree = "<group>"; };
-		AF157004203347DC00D93A9F /* HRTFCereal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HRTFCereal.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/HRTF/HRTFCereal.cpp; sourceTree = "<group>"; };
-		AF157005203347DC00D93A9F /* HRTFCereal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HRTFCereal.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/HRTF/HRTFCereal.h; sourceTree = "<group>"; };
-		AF15700A203347F800D93A9F /* ILDCereal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ILDCereal.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/ILD/ILDCereal.cpp; sourceTree = "<group>"; };
-		AF15700B203347F800D93A9F /* ILDCereal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ILDCereal.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/ILD/ILDCereal.h; sourceTree = "<group>"; };
+		34FEE2D426FCBF420094E18F /* effect3DTISpatializerCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = effect3DTISpatializerCore.h; path = ../src/effect3DTISpatializerCore.h; sourceTree = "<group>"; };
+		34FEE2D526FCBF420094E18F /* effect3DTISpatializerSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = effect3DTISpatializerSource.h; path = ../src/effect3DTISpatializerSource.h; sourceTree = "<group>"; };
+		34FEE2D626FCBF420094E18F /* effect3DTISpatializerCore.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = effect3DTISpatializerCore.cpp; path = ../src/effect3DTISpatializerCore.cpp; sourceTree = "<group>"; };
+		34FEE2D726FCBF420094E18F /* effect3DTISpatializerSource.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = effect3DTISpatializerSource.cpp; path = ../src/effect3DTISpatializerSource.cpp; sourceTree = "<group>"; };
+		34FEE2DB26FCBF9E0094E18F /* HRTFFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HRTFFactory.cpp; sourceTree = "<group>"; };
+		34FEE2DC26FCBF9E0094E18F /* HRTFCereal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HRTFCereal.cpp; sourceTree = "<group>"; };
+		34FEE2DD26FCBF9E0094E18F /* HRTFFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRTFFactory.h; sourceTree = "<group>"; };
+		34FEE2DE26FCBF9E0094E18F /* HRTFCereal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRTFCereal.h; sourceTree = "<group>"; };
+		34FEE2E026FCBF9E0094E18F /* ILDCereal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ILDCereal.cpp; sourceTree = "<group>"; };
+		34FEE2E126FCBF9E0094E18F /* ILDCereal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILDCereal.h; sourceTree = "<group>"; };
+		34FEE2E326FCBF9E0094E18F /* BRIRCereal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRIRCereal.h; sourceTree = "<group>"; };
+		34FEE2E426FCBF9E0094E18F /* BRIRCereal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BRIRCereal.cpp; sourceTree = "<group>"; };
 		AF391F891E55F12800EB4AC6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AF391F8B1E55F14200EB4AC6 /* effect3DTIHA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = effect3DTIHA.cpp; path = ../src/effect3DTIHA.cpp; sourceTree = "<group>"; };
 		AF391F8C1E55F14200EB4AC6 /* effect3DTIHL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = effect3DTIHL.cpp; path = ../src/effect3DTIHL.cpp; sourceTree = "<group>"; };
-		AF391F8D1E55F14200EB4AC6 /* effect3DTISpatializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = effect3DTISpatializer.cpp; path = ../src/effect3DTISpatializer.cpp; sourceTree = "<group>"; };
 		AF766FED1DE9F8690003ED20 /* Config.Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.Common.xcconfig; sourceTree = "<group>"; };
 		AF766FEE1DE9F99C0003ED20 /* Config.Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.Debug.xcconfig; sourceTree = "<group>"; };
 		AFE8837F1DCCA8F6003505EF /* AudioPlugin3DTIToolkit.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AudioPlugin3DTIToolkit.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -466,6 +472,38 @@
 			path = netcdf;
 			sourceTree = "<group>";
 		};
+		34FEE2DA26FCBF9E0094E18F /* HRTF */ = {
+			isa = PBXGroup;
+			children = (
+				34FEE2DB26FCBF9E0094E18F /* HRTFFactory.cpp */,
+				34FEE2DC26FCBF9E0094E18F /* HRTFCereal.cpp */,
+				34FEE2DD26FCBF9E0094E18F /* HRTFFactory.h */,
+				34FEE2DE26FCBF9E0094E18F /* HRTFCereal.h */,
+			);
+			name = HRTF;
+			path = ../../3dti_AudioToolkit/3dti_ResourceManager/HRTF;
+			sourceTree = "<group>";
+		};
+		34FEE2DF26FCBF9E0094E18F /* ILD */ = {
+			isa = PBXGroup;
+			children = (
+				34FEE2E026FCBF9E0094E18F /* ILDCereal.cpp */,
+				34FEE2E126FCBF9E0094E18F /* ILDCereal.h */,
+			);
+			name = ILD;
+			path = ../../3dti_AudioToolkit/3dti_ResourceManager/ILD;
+			sourceTree = "<group>";
+		};
+		34FEE2E226FCBF9E0094E18F /* BRIR */ = {
+			isa = PBXGroup;
+			children = (
+				34FEE2E326FCBF9E0094E18F /* BRIRCereal.h */,
+				34FEE2E426FCBF9E0094E18F /* BRIRCereal.cpp */,
+			);
+			name = BRIR;
+			path = ../../3dti_AudioToolkit/3dti_ResourceManager/BRIR;
+			sourceTree = "<group>";
+		};
 		AF391F881E55F12800EB4AC6 /* AudioPlugin3DTIToolkit */ = {
 			isa = PBXGroup;
 			children = (
@@ -477,10 +515,12 @@
 		AF6FAA481E3A16140035B40E /* src */ = {
 			isa = PBXGroup;
 			children = (
+				34FEE2D626FCBF420094E18F /* effect3DTISpatializerCore.cpp */,
+				34FEE2D426FCBF420094E18F /* effect3DTISpatializerCore.h */,
+				34FEE2D726FCBF420094E18F /* effect3DTISpatializerSource.cpp */,
+				34FEE2D526FCBF420094E18F /* effect3DTISpatializerSource.h */,
 				AF391F8B1E55F14200EB4AC6 /* effect3DTIHA.cpp */,
 				AF391F8C1E55F14200EB4AC6 /* effect3DTIHL.cpp */,
-				34EE30A224DB46C400321BD3 /* effect3DTISpatializer.h */,
-				AF391F8D1E55F14200EB4AC6 /* effect3DTISpatializer.cpp */,
 				AFE890A71DCCB3CF003505EF /* AudioPluginInterface.h */,
 				AFE890A81DCCB3CF003505EF /* AudioPluginUtil.cpp */,
 				AFE890A91DCCB3CF003505EF /* AudioPluginUtil.h */,
@@ -638,32 +678,13 @@
 		AFE88A331DCCB223003505EF /* 3DTI_Toolkit_Modules */ = {
 			isa = PBXGroup;
 			children = (
+				34FEE2E226FCBF9E0094E18F /* BRIR */,
+				34FEE2DA26FCBF9E0094E18F /* HRTF */,
+				34FEE2DF26FCBF9E0094E18F /* ILD */,
 				3429A3BD26384B5500964E9E /* sofa */,
-				AFE88A361DCCB223003505EF /* HRTF */,
-				AFE88D5F1DCCB226003505EF /* ILD */,
 			);
 			name = 3DTI_Toolkit_Modules;
 			path = ../../3DTI_Toolkit_Modules;
-			sourceTree = "<group>";
-		};
-		AFE88A361DCCB223003505EF /* HRTF */ = {
-			isa = PBXGroup;
-			children = (
-				AF157004203347DC00D93A9F /* HRTFCereal.cpp */,
-				3429A3BA26384B4800964E9E /* HRTFFactory.cpp */,
-				3429A3B926384B4800964E9E /* HRTFFactory.h */,
-				AF157005203347DC00D93A9F /* HRTFCereal.h */,
-			);
-			path = HRTF;
-			sourceTree = "<group>";
-		};
-		AFE88D5F1DCCB226003505EF /* ILD */ = {
-			isa = PBXGroup;
-			children = (
-				AF15700A203347F800D93A9F /* ILDCereal.cpp */,
-				AF15700B203347F800D93A9F /* ILDCereal.h */,
-			);
-			path = ILD;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -765,14 +786,15 @@
 				3429A40A26384B8200964E9E /* SOFASimpleHeadphoneIR.cpp in Sources */,
 				3429A44B26384BD100964E9E /* ncVarAtt.cpp in Sources */,
 				3429A39926384AB400964E9E /* UPCEnvironment.cpp in Sources */,
-				AF15700C203347F800D93A9F /* ILDCereal.cpp in Sources */,
 				3429A30426384A9A00964E9E /* HearingLossSim.cpp in Sources */,
 				3429A39B26384AB400964E9E /* FarDistanceEffects.cpp in Sources */,
+				34FEE2EA26FCBF9E0094E18F /* BRIRCereal.cpp in Sources */,
 				3429A44A26384BD100964E9E /* ncEnumType.cpp in Sources */,
 				3429A40526384B8200964E9E /* SOFAString.cpp in Sources */,
 				3429A3F726384B8200964E9E /* SOFAFile.cpp in Sources */,
 				3429A39A26384AB400964E9E /* Delay.cpp in Sources */,
 				3429A30026384A9A00964E9E /* HighOrderButteworthFilter.cpp in Sources */,
+				34FEE2D826FCBF560094E18F /* effect3DTISpatializerCore.cpp in Sources */,
 				3429A3F926384B8200964E9E /* SOFAGeneralFIR.cpp in Sources */,
 				3429A3B026384ABE00964E9E /* SingleSourceDSP.cpp in Sources */,
 				3429A3FE26384B8200964E9E /* SOFAAttributes.cpp in Sources */,
@@ -780,10 +802,10 @@
 				3429A44926384BD100964E9E /* ncUbyte.cpp in Sources */,
 				3429A39726384AB400964E9E /* Quaternion.cpp in Sources */,
 				3429A44D26384BD100964E9E /* ncFile.cpp in Sources */,
+				34FEE2D926FCBF560094E18F /* effect3DTISpatializerSource.cpp in Sources */,
 				AF391F8E1E55F14200EB4AC6 /* effect3DTIHA.cpp in Sources */,
 				3429A39626384AB400964E9E /* Fprocessor.cpp in Sources */,
 				3429A45426384BD100964E9E /* ncDouble.cpp in Sources */,
-				3429A3BB26384B4800964E9E /* HRTFFactory.cpp in Sources */,
 				3429A40026384B8200964E9E /* SOFAPosition.cpp in Sources */,
 				AFE890AC1DCCB3CF003505EF /* AudioPluginUtil.cpp in Sources */,
 				3429A3F426384B8200964E9E /* SOFADate.cpp in Sources */,
@@ -792,6 +814,7 @@
 				3429A30626384A9A00964E9E /* HearingAidSim.cpp in Sources */,
 				3429A45A26384BD100964E9E /* ncCheck.cpp in Sources */,
 				3429A30326384A9A00964E9E /* GammatoneMultibandExpander.cpp in Sources */,
+				34FEE2E826FCBF9E0094E18F /* HRTFCereal.cpp in Sources */,
 				3429A44526384BD100964E9E /* ncCompoundType.cpp in Sources */,
 				3429A40626384B8200964E9E /* SOFAGeneralFIRE.cpp in Sources */,
 				3429A39C26384AB400964E9E /* DynamicExpanderMono.cpp in Sources */,
@@ -819,6 +842,7 @@
 				3429A3B426384ABE00964E9E /* BRIR.cpp in Sources */,
 				3429A30126384A9A00964E9E /* Graf3DTIFrequencySmearing.cpp in Sources */,
 				3429A44F26384BD100964E9E /* ncInt64.cpp in Sources */,
+				34FEE2E926FCBF9E0094E18F /* ILDCereal.cpp in Sources */,
 				3429A39026384AB400964E9E /* EnvelopeDetector.cpp in Sources */,
 				3429A45D26384BD100964E9E /* ncType.cpp in Sources */,
 				3429A3FC26384B8200964E9E /* SOFAListener.cpp in Sources */,
@@ -829,6 +853,7 @@
 				3429A3F526384B8200964E9E /* SOFAUnits.cpp in Sources */,
 				3429A45126384BD100964E9E /* ncAtt.cpp in Sources */,
 				3429A45C26384BD100964E9E /* ncString.cpp in Sources */,
+				34FEE2E726FCBF9E0094E18F /* HRTFFactory.cpp in Sources */,
 				3429A39226384AB400964E9E /* FiltersChain.cpp in Sources */,
 				3429A40826384B8200964E9E /* SOFAReceiver.cpp in Sources */,
 				3429A40726384B8200964E9E /* SOFAGeneralTF.cpp in Sources */,
@@ -839,7 +864,6 @@
 				3429A45026384BD100964E9E /* ncUint64.cpp in Sources */,
 				3429A3FB26384B8200964E9E /* SOFAExceptions.cpp in Sources */,
 				3429A3FA26384B8200964E9E /* SOFAAPI.cpp in Sources */,
-				AF157008203347DC00D93A9F /* HRTFCereal.cpp in Sources */,
 				AF391F8F1E55F14200EB4AC6 /* effect3DTIHL.cpp in Sources */,
 				3429A40326384B8200964E9E /* SOFAMultiSpeakerBRIR.cpp in Sources */,
 				3429A45B26384BD100964E9E /* ncFloat.cpp in Sources */,
@@ -848,7 +872,6 @@
 				3429A3F826384B8200964E9E /* SOFAEmitter.cpp in Sources */,
 				3429A45326384BD100964E9E /* ncDim.cpp in Sources */,
 				3429A3FD26384B8200964E9E /* SOFANcFile.cpp in Sources */,
-				AF391F901E55F14200EB4AC6 /* effect3DTISpatializer.cpp in Sources */,
 				3429A44726384BD100964E9E /* ncOpaqueType.cpp in Sources */,
 				3429A38F26384AB400964E9E /* NoiseGenerator.cpp in Sources */,
 				3429A3FF26384B8200964E9E /* SOFASource.cpp in Sources */,

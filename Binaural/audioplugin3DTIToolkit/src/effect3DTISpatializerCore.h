@@ -69,7 +69,7 @@ namespace SpatializerCore3DTI
 		std::shared_ptr<Binaural::CListener> listener;
 		std::shared_ptr<Binaural::CEnvironment> environment;
 		Common::CDynamicCompressorStereo limiter;
-		float perSourceInitialValues[NumSourceParameters];
+        std::array<float, NumSourceParameters> perSourceInitialValues;
 		//float unityParameters[P_NUM];
 		float scaleFactor;
 		bool isLimiterEnabled;
@@ -88,10 +88,12 @@ namespace SpatializerCore3DTI
 		//bool loadBinaries(std::string hrtfPath,	std::string ildPath, std::string highPerformanceILDPath, std::string brirPath);
 
 
-		class TooManyInstancesException : public std::exception
+		class TooManyInstancesException : public std::runtime_error
 		{
-		public:
-			virtual char const* what() const;
+        public:
+            TooManyInstancesException()
+            : std::runtime_error("SpatializerCore already exists. Only one SpatializerCore instance is currently supported.")
+            {}
 		};
 
 		/// Create instance. Throws TooManyInstancesException if instance already exists.

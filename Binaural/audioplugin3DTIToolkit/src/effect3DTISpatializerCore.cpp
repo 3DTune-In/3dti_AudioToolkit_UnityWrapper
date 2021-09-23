@@ -520,7 +520,7 @@ namespace SpatializerCore3DTI
 	{
 		if (instancePtr() != nullptr)
 		{
-			throw std::exception("Only one SpatializerCore can be created at once.");
+			throw TooManyInstancesException();
 		}
 		instancePtr() = new SpatializerCore(sampleRate, bufferSize);
 		return instancePtr();
@@ -539,9 +539,4 @@ namespace SpatializerCore3DTI
 		return s;
 	}
 
-}
-
-char const* SpatializerCore3DTI::SpatializerCore::TooManyInstancesException::what() const
-{
-	return "SpatializerCore already exists. Only one SpatializerCore instance is currently supported.";
 }
