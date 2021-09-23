@@ -582,6 +582,7 @@
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
+				EIGEN_HEADERS = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/eigen;
 				INFOPLIST_FILE = "$(SRCROOT)/AudioPlugin3DTIToolkit/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				PRODUCT_BUNDLE_IDENTIFIER = es.uma.diana.AudioPlugin3DTIWrapper;
@@ -590,6 +591,7 @@
 				SKIP_INSTALL = YES;
 				"USER_HEADER_SEARCH_PATHS[arch=*]" = "";
 				WRAPPER_EXTENSION = bundle;
+				_3DTI_HEADERS = "$(_3DTI_RESUORCE_MGR) $(_3DTI_TOOLKIT) $(CEREAL_HEADERS) $(EIGEN_HEADERS)";
 			};
 			name = Debug;
 		};
@@ -600,6 +602,7 @@
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
+				EIGEN_HEADERS = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/eigen;
 				INFOPLIST_FILE = "$(SRCROOT)/AudioPlugin3DTIToolkit/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				PRODUCT_BUNDLE_IDENTIFIER = es.uma.diana.AudioPlugin3DTIWrapper;
@@ -608,6 +611,7 @@
 				SKIP_INSTALL = YES;
 				"USER_HEADER_SEARCH_PATHS[arch=*]" = "";
 				WRAPPER_EXTENSION = bundle;
+				_3DTI_HEADERS = "$(_3DTI_RESUORCE_MGR) $(_3DTI_TOOLKIT) $(CEREAL_HEADERS) $(EIGEN_HEADERS)";
 			};
 			name = Release;
 		};
