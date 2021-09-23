@@ -7,43 +7,98 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AF156F9E2033472800D93A9F /* BRIR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156F8E2033472800D93A9F /* BRIR.cpp */; };
-		AF156F9F2033472800D93A9F /* Core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156F902033472800D93A9F /* Core.cpp */; };
-		AF156FA02033472800D93A9F /* Environment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156F922033472800D93A9F /* Environment.cpp */; };
-		AF156FA12033472800D93A9F /* HRTF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156F942033472800D93A9F /* HRTF.cpp */; };
-		AF156FA22033472800D93A9F /* ILD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156F962033472800D93A9F /* ILD.cpp */; };
-		AF156FA32033472800D93A9F /* Listener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156F982033472800D93A9F /* Listener.cpp */; };
-		AF156FA42033472800D93A9F /* SingleSourceDSP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156F9A2033472800D93A9F /* SingleSourceDSP.cpp */; };
-		AF156FA52033472800D93A9F /* UPCAnechoic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156F9C2033472800D93A9F /* UPCAnechoic.cpp */; };
-		AF156FD42033479A00D93A9F /* BiquadFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FA82033479A00D93A9F /* BiquadFilter.cpp */; };
-		AF156FD52033479A00D93A9F /* Delay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FAD2033479A00D93A9F /* Delay.cpp */; };
-		AF156FD62033479A00D93A9F /* DistanceAttenuator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FAF2033479A00D93A9F /* DistanceAttenuator.cpp */; };
-		AF156FD72033479A00D93A9F /* DynamicCompressorMono.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FB12033479A00D93A9F /* DynamicCompressorMono.cpp */; };
-		AF156FD82033479A00D93A9F /* DynamicCompressorStereo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FB32033479A00D93A9F /* DynamicCompressorStereo.cpp */; };
-		AF156FD92033479A00D93A9F /* DynamicExpanderMono.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FB52033479A00D93A9F /* DynamicExpanderMono.cpp */; };
-		AF156FDA2033479A00D93A9F /* EnvelopeDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FB82033479A00D93A9F /* EnvelopeDetector.cpp */; };
-		AF156FDB2033479A00D93A9F /* ErrorHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FBA2033479A00D93A9F /* ErrorHandler.cpp */; };
-		AF156FDC2033479A00D93A9F /* FarDistanceEffects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FBC2033479A00D93A9F /* FarDistanceEffects.cpp */; };
-		AF156FDD2033479A00D93A9F /* fftsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FBE2033479A00D93A9F /* fftsg.cpp */; };
-		AF156FDE2033479A00D93A9F /* FiltersBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FC02033479A00D93A9F /* FiltersBank.cpp */; };
-		AF156FDF2033479A00D93A9F /* FiltersChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FC22033479A00D93A9F /* FiltersChain.cpp */; };
-		AF156FE02033479A00D93A9F /* Fprocessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FC42033479A00D93A9F /* Fprocessor.cpp */; };
-		AF156FE12033479A00D93A9F /* Magnitudes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FC62033479A00D93A9F /* Magnitudes.cpp */; };
-		AF156FE22033479A00D93A9F /* NoiseGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FC82033479A00D93A9F /* NoiseGenerator.cpp */; };
-		AF156FE32033479A00D93A9F /* Profiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FCA2033479A00D93A9F /* Profiler.cpp */; };
-		AF156FE42033479A00D93A9F /* Quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FCC2033479A00D93A9F /* Quaternion.cpp */; };
-		AF156FE52033479A00D93A9F /* Transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FCE2033479A00D93A9F /* Transform.cpp */; };
-		AF156FE62033479A00D93A9F /* UPCEnvironment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FD02033479A00D93A9F /* UPCEnvironment.cpp */; };
-		AF156FE72033479A00D93A9F /* Vector3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FD22033479A00D93A9F /* Vector3.cpp */; };
-		AF156FFB203347B600D93A9F /* ClassificationScaleHL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FE9203347B600D93A9F /* ClassificationScaleHL.cpp */; };
-		AF156FFC203347B600D93A9F /* DynamicEqualizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FEB203347B600D93A9F /* DynamicEqualizer.cpp */; };
-		AF156FFD203347B600D93A9F /* Fig6Algorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FED203347B600D93A9F /* Fig6Algorithm.cpp */; };
-		AF156FFE203347B600D93A9F /* FrequencySmearing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FEF203347B600D93A9F /* FrequencySmearing.cpp */; };
-		AF156FFF203347B600D93A9F /* HearingAidSim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FF1203347B600D93A9F /* HearingAidSim.cpp */; };
-		AF157000203347B600D93A9F /* HearingLossSim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FF3203347B600D93A9F /* HearingLossSim.cpp */; };
-		AF157001203347B600D93A9F /* HighOrderButteworthFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FF6203347B600D93A9F /* HighOrderButteworthFilter.cpp */; };
-		AF157002203347B600D93A9F /* MultibandExpander.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FF7203347B600D93A9F /* MultibandExpander.cpp */; };
-		AF157003203347B600D93A9F /* TemporalDistortionSimulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF156FF9203347B600D93A9F /* TemporalDistortionSimulator.cpp */; };
+		3429A2FF26384A9A00964E9E /* TemporalDistortionSimulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2E726384A9900964E9E /* TemporalDistortionSimulator.cpp */; };
+		3429A30026384A9A00964E9E /* HighOrderButteworthFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2E926384A9900964E9E /* HighOrderButteworthFilter.cpp */; };
+		3429A30126384A9A00964E9E /* Graf3DTIFrequencySmearing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2EA26384A9900964E9E /* Graf3DTIFrequencySmearing.cpp */; };
+		3429A30226384A9A00964E9E /* ClassificationScaleHL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2EC26384A9900964E9E /* ClassificationScaleHL.cpp */; };
+		3429A30326384A9A00964E9E /* GammatoneMultibandExpander.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2EE26384A9900964E9E /* GammatoneMultibandExpander.cpp */; };
+		3429A30426384A9A00964E9E /* HearingLossSim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2EF26384A9900964E9E /* HearingLossSim.cpp */; };
+		3429A30526384A9A00964E9E /* ButterworthMultibandExpander.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2F526384A9A00964E9E /* ButterworthMultibandExpander.cpp */; };
+		3429A30626384A9A00964E9E /* HearingAidSim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2F826384A9A00964E9E /* HearingAidSim.cpp */; };
+		3429A30726384A9A00964E9E /* BaerMooreFrequencySmearing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2F926384A9A00964E9E /* BaerMooreFrequencySmearing.cpp */; };
+		3429A30826384A9A00964E9E /* DynamicEqualizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2FA26384A9A00964E9E /* DynamicEqualizer.cpp */; };
+		3429A30926384A9A00964E9E /* Fig6Algorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2FD26384A9A00964E9E /* Fig6Algorithm.cpp */; };
+		3429A38726384AB400964E9E /* Vector3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A35726384AB200964E9E /* Vector3.cpp */; };
+		3429A38826384AB400964E9E /* GammatoneFilterBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A35926384AB200964E9E /* GammatoneFilterBank.cpp */; };
+		3429A38926384AB400964E9E /* FiltersBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A35A26384AB200964E9E /* FiltersBank.cpp */; };
+		3429A38A26384AB400964E9E /* GammatoneFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A35B26384AB200964E9E /* GammatoneFilter.cpp */; };
+		3429A38B26384AB400964E9E /* BiquadFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A35E26384AB200964E9E /* BiquadFilter.cpp */; };
+		3429A38C26384AB400964E9E /* Transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A35F26384AB300964E9E /* Transform.cpp */; };
+		3429A38D26384AB400964E9E /* fftsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A36426384AB300964E9E /* fftsg.cpp */; };
+		3429A38E26384AB400964E9E /* Profiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A36626384AB300964E9E /* Profiler.cpp */; };
+		3429A38F26384AB400964E9E /* NoiseGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A36726384AB300964E9E /* NoiseGenerator.cpp */; };
+		3429A39026384AB400964E9E /* EnvelopeDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A36A26384AB300964E9E /* EnvelopeDetector.cpp */; };
+		3429A39126384AB400964E9E /* DynamicCompressorMono.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A36C26384AB300964E9E /* DynamicCompressorMono.cpp */; };
+		3429A39226384AB400964E9E /* FiltersChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A36D26384AB300964E9E /* FiltersChain.cpp */; };
+		3429A39326384AB400964E9E /* DynamicCompressorStereo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A36E26384AB300964E9E /* DynamicCompressorStereo.cpp */; };
+		3429A39426384AB400964E9E /* DistanceAttenuator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A37326384AB300964E9E /* DistanceAttenuator.cpp */; };
+		3429A39526384AB400964E9E /* Magnitudes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A37526384AB300964E9E /* Magnitudes.cpp */; };
+		3429A39626384AB400964E9E /* Fprocessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A37626384AB300964E9E /* Fprocessor.cpp */; };
+		3429A39726384AB400964E9E /* Quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A37726384AB300964E9E /* Quaternion.cpp */; };
+		3429A39826384AB400964E9E /* ErrorHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A37826384AB400964E9E /* ErrorHandler.cpp */; };
+		3429A39926384AB400964E9E /* UPCEnvironment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A37D26384AB400964E9E /* UPCEnvironment.cpp */; };
+		3429A39A26384AB400964E9E /* Delay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A38026384AB400964E9E /* Delay.cpp */; };
+		3429A39B26384AB400964E9E /* FarDistanceEffects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A38126384AB400964E9E /* FarDistanceEffects.cpp */; };
+		3429A39C26384AB400964E9E /* DynamicExpanderMono.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A38326384AB400964E9E /* DynamicExpanderMono.cpp */; };
+		3429A3B026384ABE00964E9E /* SingleSourceDSP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A39F26384ABD00964E9E /* SingleSourceDSP.cpp */; };
+		3429A3B126384ABE00964E9E /* Listener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3A126384ABD00964E9E /* Listener.cpp */; };
+		3429A3B226384ABE00964E9E /* UPCAnechoic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3A226384ABD00964E9E /* UPCAnechoic.cpp */; };
+		3429A3B326384ABE00964E9E /* ILD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3A326384ABE00964E9E /* ILD.cpp */; };
+		3429A3B426384ABE00964E9E /* BRIR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3A726384ABE00964E9E /* BRIR.cpp */; };
+		3429A3B526384ABE00964E9E /* Environment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3AA26384ABE00964E9E /* Environment.cpp */; };
+		3429A3B626384ABE00964E9E /* Core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3AD26384ABE00964E9E /* Core.cpp */; };
+		3429A3B726384ABE00964E9E /* HRTF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3AE26384ABE00964E9E /* HRTF.cpp */; };
+		3429A3BB26384B4800964E9E /* HRTFFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3BA26384B4800964E9E /* HRTFFactory.cpp */; };
+		3429A3F426384B8200964E9E /* SOFADate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3C226384B7F00964E9E /* SOFADate.cpp */; };
+		3429A3F526384B8200964E9E /* SOFAUnits.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3C326384B7F00964E9E /* SOFAUnits.cpp */; };
+		3429A3F626384B8200964E9E /* SOFASimpleFreeFieldSOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3C426384B7F00964E9E /* SOFASimpleFreeFieldSOS.cpp */; };
+		3429A3F726384B8200964E9E /* SOFAFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3C526384B7F00964E9E /* SOFAFile.cpp */; };
+		3429A3F826384B8200964E9E /* SOFAEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3C926384B8000964E9E /* SOFAEmitter.cpp */; };
+		3429A3F926384B8200964E9E /* SOFAGeneralFIR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3CA26384B8000964E9E /* SOFAGeneralFIR.cpp */; };
+		3429A3FA26384B8200964E9E /* SOFAAPI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3CC26384B8000964E9E /* SOFAAPI.cpp */; };
+		3429A3FB26384B8200964E9E /* SOFAExceptions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3CE26384B8000964E9E /* SOFAExceptions.cpp */; };
+		3429A3FC26384B8200964E9E /* SOFAListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3CF26384B8000964E9E /* SOFAListener.cpp */; };
+		3429A3FD26384B8200964E9E /* SOFANcFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3D026384B8000964E9E /* SOFANcFile.cpp */; };
+		3429A3FE26384B8200964E9E /* SOFAAttributes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3D126384B8000964E9E /* SOFAAttributes.cpp */; };
+		3429A3FF26384B8200964E9E /* SOFASource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3D726384B8100964E9E /* SOFASource.cpp */; };
+		3429A40026384B8200964E9E /* SOFAPosition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3D826384B8100964E9E /* SOFAPosition.cpp */; };
+		3429A40126384B8200964E9E /* SOFACoordinates.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3DB26384B8100964E9E /* SOFACoordinates.cpp */; };
+		3429A40226384B8200964E9E /* SOFAHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3DD26384B8100964E9E /* SOFAHelper.cpp */; };
+		3429A40326384B8200964E9E /* SOFAMultiSpeakerBRIR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3DE26384B8100964E9E /* SOFAMultiSpeakerBRIR.cpp */; };
+		3429A40426384B8200964E9E /* SOFAPoint3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3E026384B8100964E9E /* SOFAPoint3.cpp */; };
+		3429A40526384B8200964E9E /* SOFAString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3E326384B8100964E9E /* SOFAString.cpp */; };
+		3429A40626384B8200964E9E /* SOFAGeneralFIRE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3E426384B8100964E9E /* SOFAGeneralFIRE.cpp */; };
+		3429A40726384B8200964E9E /* SOFAGeneralTF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3E626384B8200964E9E /* SOFAGeneralTF.cpp */; };
+		3429A40826384B8200964E9E /* SOFAReceiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3E826384B8200964E9E /* SOFAReceiver.cpp */; };
+		3429A40926384B8200964E9E /* SOFASimpleFreeFieldHRIR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3E926384B8200964E9E /* SOFASimpleFreeFieldHRIR.cpp */; };
+		3429A40A26384B8200964E9E /* SOFASimpleHeadphoneIR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3EA26384B8200964E9E /* SOFASimpleHeadphoneIR.cpp */; };
+		3429A40B26384B8200964E9E /* SOFASingleRoomDRIR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A3F226384B8200964E9E /* SOFASingleRoomDRIR.cpp */; };
+		3429A44526384BD100964E9E /* ncCompoundType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A40E26384BCE00964E9E /* ncCompoundType.cpp */; };
+		3429A44626384BD100964E9E /* ncGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A40F26384BCE00964E9E /* ncGroup.cpp */; };
+		3429A44726384BD100964E9E /* ncOpaqueType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A41126384BCE00964E9E /* ncOpaqueType.cpp */; };
+		3429A44826384BD100964E9E /* ncGroupAtt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A41226384BCF00964E9E /* ncGroupAtt.cpp */; };
+		3429A44926384BD100964E9E /* ncUbyte.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A41326384BCF00964E9E /* ncUbyte.cpp */; };
+		3429A44A26384BD100964E9E /* ncEnumType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A41426384BCF00964E9E /* ncEnumType.cpp */; };
+		3429A44B26384BD100964E9E /* ncVarAtt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A41626384BCF00964E9E /* ncVarAtt.cpp */; };
+		3429A44C26384BD100964E9E /* ncException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A41926384BCF00964E9E /* ncException.cpp */; };
+		3429A44D26384BD100964E9E /* ncFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A41A26384BCF00964E9E /* ncFile.cpp */; };
+		3429A44E26384BD100964E9E /* ncUshort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A41C26384BCF00964E9E /* ncUshort.cpp */; };
+		3429A44F26384BD100964E9E /* ncInt64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A41D26384BCF00964E9E /* ncInt64.cpp */; };
+		3429A45026384BD100964E9E /* ncUint64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A41F26384BCF00964E9E /* ncUint64.cpp */; };
+		3429A45126384BD100964E9E /* ncAtt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A42626384BD000964E9E /* ncAtt.cpp */; };
+		3429A45226384BD100964E9E /* ncInt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A42726384BD000964E9E /* ncInt.cpp */; };
+		3429A45326384BD100964E9E /* ncDim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A42826384BD000964E9E /* ncDim.cpp */; };
+		3429A45426384BD100964E9E /* ncDouble.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A42926384BD000964E9E /* ncDouble.cpp */; };
+		3429A45526384BD100964E9E /* ncChar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A42E26384BD000964E9E /* ncChar.cpp */; };
+		3429A45626384BD100964E9E /* ncVlenType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A43126384BD000964E9E /* ncVlenType.cpp */; };
+		3429A45726384BD100964E9E /* ncShort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A43226384BD000964E9E /* ncShort.cpp */; };
+		3429A45826384BD100964E9E /* ncByte.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A43326384BD100964E9E /* ncByte.cpp */; };
+		3429A45926384BD100964E9E /* ncUint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A43726384BD100964E9E /* ncUint.cpp */; };
+		3429A45A26384BD100964E9E /* ncCheck.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A43A26384BD100964E9E /* ncCheck.cpp */; };
+		3429A45B26384BD100964E9E /* ncFloat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A43B26384BD100964E9E /* ncFloat.cpp */; };
+		3429A45C26384BD100964E9E /* ncString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A43C26384BD100964E9E /* ncString.cpp */; };
+		3429A45D26384BD100964E9E /* ncType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A44126384BD100964E9E /* ncType.cpp */; };
+		3429A45E26384BD100964E9E /* ncVar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A44426384BD100964E9E /* ncVar.cpp */; };
 		AF157008203347DC00D93A9F /* HRTFCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF157004203347DC00D93A9F /* HRTFCereal.cpp */; };
 		AF15700C203347F800D93A9F /* ILDCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF15700A203347F800D93A9F /* ILDCereal.cpp */; };
 		AF391F8A1E55F12800EB4AC6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AF391F891E55F12800EB4AC6 /* Info.plist */; };
@@ -54,89 +109,210 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3429A2E626384A9900964E9E /* FrequencySmearing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FrequencySmearing.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/FrequencySmearing.h; sourceTree = "<group>"; };
+		3429A2E726384A9900964E9E /* TemporalDistortionSimulator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TemporalDistortionSimulator.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/TemporalDistortionSimulator.cpp; sourceTree = "<group>"; };
+		3429A2E826384A9900964E9E /* MultibandExpander.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MultibandExpander.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/MultibandExpander.h; sourceTree = "<group>"; };
+		3429A2E926384A9900964E9E /* HighOrderButteworthFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HighOrderButteworthFilter.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/HighOrderButteworthFilter.cpp; sourceTree = "<group>"; };
+		3429A2EA26384A9900964E9E /* Graf3DTIFrequencySmearing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Graf3DTIFrequencySmearing.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/Graf3DTIFrequencySmearing.cpp; sourceTree = "<group>"; };
+		3429A2EB26384A9900964E9E /* DynamicEqualizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DynamicEqualizer.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/DynamicEqualizer.h; sourceTree = "<group>"; };
+		3429A2EC26384A9900964E9E /* ClassificationScaleHL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ClassificationScaleHL.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/ClassificationScaleHL.cpp; sourceTree = "<group>"; };
+		3429A2ED26384A9900964E9E /* TemporalDistortionSimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TemporalDistortionSimulator.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/TemporalDistortionSimulator.h; sourceTree = "<group>"; };
+		3429A2EE26384A9900964E9E /* GammatoneMultibandExpander.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GammatoneMultibandExpander.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/GammatoneMultibandExpander.cpp; sourceTree = "<group>"; };
+		3429A2EF26384A9900964E9E /* HearingLossSim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HearingLossSim.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/HearingLossSim.cpp; sourceTree = "<group>"; };
+		3429A2F026384A9900964E9E /* ClassificationScaleHL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ClassificationScaleHL.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/ClassificationScaleHL.h; sourceTree = "<group>"; };
+		3429A2F126384A9A00964E9E /* Graf3DTIFrequencySmearing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Graf3DTIFrequencySmearing.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/Graf3DTIFrequencySmearing.h; sourceTree = "<group>"; };
+		3429A2F226384A9A00964E9E /* GammatoneMultibandExpander.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GammatoneMultibandExpander.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/GammatoneMultibandExpander.h; sourceTree = "<group>"; };
+		3429A2F326384A9A00964E9E /* HearingAidSim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HearingAidSim.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/HearingAidSim.h; sourceTree = "<group>"; };
+		3429A2F426384A9A00964E9E /* BaerMooreFrequencySmearing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaerMooreFrequencySmearing.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/BaerMooreFrequencySmearing.h; sourceTree = "<group>"; };
+		3429A2F526384A9A00964E9E /* ButterworthMultibandExpander.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ButterworthMultibandExpander.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/ButterworthMultibandExpander.cpp; sourceTree = "<group>"; };
+		3429A2F626384A9A00964E9E /* ButterworthMultibandExpander.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ButterworthMultibandExpander.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/ButterworthMultibandExpander.h; sourceTree = "<group>"; };
+		3429A2F726384A9A00964E9E /* Fig6Algorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Fig6Algorithm.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/Fig6Algorithm.h; sourceTree = "<group>"; };
+		3429A2F826384A9A00964E9E /* HearingAidSim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HearingAidSim.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/HearingAidSim.cpp; sourceTree = "<group>"; };
+		3429A2F926384A9A00964E9E /* BaerMooreFrequencySmearing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BaerMooreFrequencySmearing.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/BaerMooreFrequencySmearing.cpp; sourceTree = "<group>"; };
+		3429A2FA26384A9A00964E9E /* DynamicEqualizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DynamicEqualizer.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/DynamicEqualizer.cpp; sourceTree = "<group>"; };
+		3429A2FB26384A9A00964E9E /* HearingLossSim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HearingLossSim.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/HearingLossSim.h; sourceTree = "<group>"; };
+		3429A2FC26384A9A00964E9E /* 3DTI_HAHLSimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = 3DTI_HAHLSimulator.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/3DTI_HAHLSimulator.h; sourceTree = "<group>"; };
+		3429A2FD26384A9A00964E9E /* Fig6Algorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fig6Algorithm.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/Fig6Algorithm.cpp; sourceTree = "<group>"; };
+		3429A2FE26384A9A00964E9E /* HighOrderButterworthFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HighOrderButterworthFilter.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/HighOrderButterworthFilter.h; sourceTree = "<group>"; };
+		3429A35526384AB200964E9E /* Delay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Delay.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Delay.h; sourceTree = "<group>"; };
+		3429A35626384AB200964E9E /* Fprocessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Fprocessor.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Fprocessor.h; sourceTree = "<group>"; };
+		3429A35726384AB200964E9E /* Vector3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vector3.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Vector3.cpp; sourceTree = "<group>"; };
+		3429A35826384AB200964E9E /* EnvelopeDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EnvelopeDetector.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/EnvelopeDetector.h; sourceTree = "<group>"; };
+		3429A35926384AB200964E9E /* GammatoneFilterBank.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GammatoneFilterBank.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/GammatoneFilterBank.cpp; sourceTree = "<group>"; };
+		3429A35A26384AB200964E9E /* FiltersBank.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FiltersBank.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/FiltersBank.cpp; sourceTree = "<group>"; };
+		3429A35B26384AB200964E9E /* GammatoneFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GammatoneFilter.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/GammatoneFilter.cpp; sourceTree = "<group>"; };
+		3429A35C26384AB200964E9E /* FarDistanceEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FarDistanceEffects.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/FarDistanceEffects.h; sourceTree = "<group>"; };
+		3429A35D26384AB200964E9E /* DynamicCompressorStereo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DynamicCompressorStereo.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DynamicCompressorStereo.h; sourceTree = "<group>"; };
+		3429A35E26384AB200964E9E /* BiquadFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BiquadFilter.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/BiquadFilter.cpp; sourceTree = "<group>"; };
+		3429A35F26384AB300964E9E /* Transform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Transform.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Transform.cpp; sourceTree = "<group>"; };
+		3429A36026384AB300964E9E /* DynamicProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DynamicProcessor.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DynamicProcessor.h; sourceTree = "<group>"; };
+		3429A36126384AB300964E9E /* GammatoneFilterBank.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GammatoneFilterBank.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/GammatoneFilterBank.h; sourceTree = "<group>"; };
+		3429A36226384AB300964E9E /* BiquadFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BiquadFilter.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/BiquadFilter.h; sourceTree = "<group>"; };
+		3429A36326384AB300964E9E /* DynamicCompressorMono.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DynamicCompressorMono.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DynamicCompressorMono.h; sourceTree = "<group>"; };
+		3429A36426384AB300964E9E /* fftsg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fftsg.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/fftsg.cpp; sourceTree = "<group>"; };
+		3429A36526384AB300964E9E /* UPCEnvironment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPCEnvironment.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/UPCEnvironment.h; sourceTree = "<group>"; };
+		3429A36626384AB300964E9E /* Profiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Profiler.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Profiler.cpp; sourceTree = "<group>"; };
+		3429A36726384AB300964E9E /* NoiseGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NoiseGenerator.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/NoiseGenerator.cpp; sourceTree = "<group>"; };
+		3429A36826384AB300964E9E /* DistanceAttenuator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DistanceAttenuator.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DistanceAttenuator.h; sourceTree = "<group>"; };
+		3429A36926384AB300964E9E /* GammatoneFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GammatoneFilter.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/GammatoneFilter.h; sourceTree = "<group>"; };
+		3429A36A26384AB300964E9E /* EnvelopeDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EnvelopeDetector.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/EnvelopeDetector.cpp; sourceTree = "<group>"; };
+		3429A36B26384AB300964E9E /* ErrorHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ErrorHandler.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/ErrorHandler.h; sourceTree = "<group>"; };
+		3429A36C26384AB300964E9E /* DynamicCompressorMono.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DynamicCompressorMono.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DynamicCompressorMono.cpp; sourceTree = "<group>"; };
+		3429A36D26384AB300964E9E /* FiltersChain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FiltersChain.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/FiltersChain.cpp; sourceTree = "<group>"; };
+		3429A36E26384AB300964E9E /* DynamicCompressorStereo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DynamicCompressorStereo.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DynamicCompressorStereo.cpp; sourceTree = "<group>"; };
+		3429A36F26384AB300964E9E /* Transform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Transform.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Transform.h; sourceTree = "<group>"; };
+		3429A37026384AB300964E9E /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Buffer.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Buffer.h; sourceTree = "<group>"; };
+		3429A37126384AB300964E9E /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quaternion.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Quaternion.h; sourceTree = "<group>"; };
+		3429A37226384AB300964E9E /* Magnitudes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Magnitudes.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Magnitudes.h; sourceTree = "<group>"; };
+		3429A37326384AB300964E9E /* DistanceAttenuator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DistanceAttenuator.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DistanceAttenuator.cpp; sourceTree = "<group>"; };
+		3429A37426384AB300964E9E /* Profiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Profiler.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Profiler.h; sourceTree = "<group>"; };
+		3429A37526384AB300964E9E /* Magnitudes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Magnitudes.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Magnitudes.cpp; sourceTree = "<group>"; };
+		3429A37626384AB300964E9E /* Fprocessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fprocessor.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Fprocessor.cpp; sourceTree = "<group>"; };
+		3429A37726384AB300964E9E /* Quaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Quaternion.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Quaternion.cpp; sourceTree = "<group>"; };
+		3429A37826384AB400964E9E /* ErrorHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ErrorHandler.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/ErrorHandler.cpp; sourceTree = "<group>"; };
+		3429A37926384AB400964E9E /* Vector3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector3.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Vector3.h; sourceTree = "<group>"; };
+		3429A37A26384AB400964E9E /* FiltersBank.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FiltersBank.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/FiltersBank.h; sourceTree = "<group>"; };
+		3429A37B26384AB400964E9E /* AudioState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioState.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/AudioState.h; sourceTree = "<group>"; };
+		3429A37C26384AB400964E9E /* AIR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AIR.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/AIR.h; sourceTree = "<group>"; };
+		3429A37D26384AB400964E9E /* UPCEnvironment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UPCEnvironment.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/UPCEnvironment.cpp; sourceTree = "<group>"; };
+		3429A37E26384AB400964E9E /* NoiseGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NoiseGenerator.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/NoiseGenerator.h; sourceTree = "<group>"; };
+		3429A37F26384AB400964E9E /* FiltersChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FiltersChain.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/FiltersChain.h; sourceTree = "<group>"; };
+		3429A38026384AB400964E9E /* Delay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Delay.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Delay.cpp; sourceTree = "<group>"; };
+		3429A38126384AB400964E9E /* FarDistanceEffects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FarDistanceEffects.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/FarDistanceEffects.cpp; sourceTree = "<group>"; };
+		3429A38226384AB400964E9E /* fftsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fftsg.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/fftsg.h; sourceTree = "<group>"; };
+		3429A38326384AB400964E9E /* DynamicExpanderMono.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DynamicExpanderMono.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DynamicExpanderMono.cpp; sourceTree = "<group>"; };
+		3429A38426384AB400964E9E /* CommonDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommonDefinitions.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/CommonDefinitions.h; sourceTree = "<group>"; };
+		3429A38526384AB400964E9E /* DynamicExpanderMono.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DynamicExpanderMono.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DynamicExpanderMono.h; sourceTree = "<group>"; };
+		3429A38626384AB400964E9E /* Conventions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Conventions.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Conventions.h; sourceTree = "<group>"; };
+		3429A39F26384ABD00964E9E /* SingleSourceDSP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SingleSourceDSP.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/SingleSourceDSP.cpp; sourceTree = "<group>"; };
+		3429A3A026384ABD00964E9E /* Listener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Listener.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/Listener.h; sourceTree = "<group>"; };
+		3429A3A126384ABD00964E9E /* Listener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Listener.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/Listener.cpp; sourceTree = "<group>"; };
+		3429A3A226384ABD00964E9E /* UPCAnechoic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UPCAnechoic.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/UPCAnechoic.cpp; sourceTree = "<group>"; };
+		3429A3A326384ABE00964E9E /* ILD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ILD.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/ILD.cpp; sourceTree = "<group>"; };
+		3429A3A426384ABE00964E9E /* UPCAnechoic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPCAnechoic.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/UPCAnechoic.h; sourceTree = "<group>"; };
+		3429A3A526384ABE00964E9E /* Environment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Environment.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/Environment.h; sourceTree = "<group>"; };
+		3429A3A626384ABE00964E9E /* 3DTI_BinauralSpatializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = 3DTI_BinauralSpatializer.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/3DTI_BinauralSpatializer.h; sourceTree = "<group>"; };
+		3429A3A726384ABE00964E9E /* BRIR.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BRIR.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/BRIR.cpp; sourceTree = "<group>"; };
+		3429A3A826384ABE00964E9E /* SingleSourceDSP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SingleSourceDSP.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/SingleSourceDSP.h; sourceTree = "<group>"; };
+		3429A3A926384ABE00964E9E /* BRIR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRIR.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/BRIR.h; sourceTree = "<group>"; };
+		3429A3AA26384ABE00964E9E /* Environment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Environment.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/Environment.cpp; sourceTree = "<group>"; };
+		3429A3AB26384ABE00964E9E /* HRTF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HRTF.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/HRTF.h; sourceTree = "<group>"; };
+		3429A3AC26384ABE00964E9E /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Core.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/Core.h; sourceTree = "<group>"; };
+		3429A3AD26384ABE00964E9E /* Core.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Core.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/Core.cpp; sourceTree = "<group>"; };
+		3429A3AE26384ABE00964E9E /* HRTF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HRTF.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/HRTF.cpp; sourceTree = "<group>"; };
+		3429A3AF26384ABE00964E9E /* ILD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ILD.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/ILD.h; sourceTree = "<group>"; };
+		3429A3B926384B4800964E9E /* HRTFFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HRTFFactory.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/HRTF/HRTFFactory.h; sourceTree = "<group>"; };
+		3429A3BA26384B4800964E9E /* HRTFFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HRTFFactory.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/HRTF/HRTFFactory.cpp; sourceTree = "<group>"; };
+		3429A3BE26384B7F00964E9E /* SOFA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFA.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFA.h; sourceTree = "<group>"; };
+		3429A3BF26384B7F00964E9E /* SOFASingleRoomDRIR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFASingleRoomDRIR.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFASingleRoomDRIR.h; sourceTree = "<group>"; };
+		3429A3C026384B7F00964E9E /* SOFAExceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFAExceptions.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAExceptions.h; sourceTree = "<group>"; };
+		3429A3C126384B7F00964E9E /* SOFASimpleFreeFieldSOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFASimpleFreeFieldSOS.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFASimpleFreeFieldSOS.h; sourceTree = "<group>"; };
+		3429A3C226384B7F00964E9E /* SOFADate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFADate.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFADate.cpp; sourceTree = "<group>"; };
+		3429A3C326384B7F00964E9E /* SOFAUnits.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFAUnits.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAUnits.cpp; sourceTree = "<group>"; };
+		3429A3C426384B7F00964E9E /* SOFASimpleFreeFieldSOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFASimpleFreeFieldSOS.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFASimpleFreeFieldSOS.cpp; sourceTree = "<group>"; };
+		3429A3C526384B7F00964E9E /* SOFAFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFAFile.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAFile.cpp; sourceTree = "<group>"; };
+		3429A3C626384B7F00964E9E /* SOFANcFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFANcFile.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFANcFile.h; sourceTree = "<group>"; };
+		3429A3C726384B7F00964E9E /* SOFASource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFASource.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFASource.h; sourceTree = "<group>"; };
+		3429A3C826384B7F00964E9E /* SOFANcUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFANcUtils.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFANcUtils.h; sourceTree = "<group>"; };
+		3429A3C926384B8000964E9E /* SOFAEmitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFAEmitter.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAEmitter.cpp; sourceTree = "<group>"; };
+		3429A3CA26384B8000964E9E /* SOFAGeneralFIR.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFAGeneralFIR.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAGeneralFIR.cpp; sourceTree = "<group>"; };
+		3429A3CB26384B8000964E9E /* SOFAPoint3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFAPoint3.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAPoint3.h; sourceTree = "<group>"; };
+		3429A3CC26384B8000964E9E /* SOFAAPI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFAAPI.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAAPI.cpp; sourceTree = "<group>"; };
+		3429A3CD26384B8000964E9E /* SOFAUnits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFAUnits.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAUnits.h; sourceTree = "<group>"; };
+		3429A3CE26384B8000964E9E /* SOFAExceptions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFAExceptions.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAExceptions.cpp; sourceTree = "<group>"; };
+		3429A3CF26384B8000964E9E /* SOFAListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFAListener.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAListener.cpp; sourceTree = "<group>"; };
+		3429A3D026384B8000964E9E /* SOFANcFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFANcFile.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFANcFile.cpp; sourceTree = "<group>"; };
+		3429A3D126384B8000964E9E /* SOFAAttributes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFAAttributes.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAAttributes.cpp; sourceTree = "<group>"; };
+		3429A3D226384B8000964E9E /* SOFAAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFAAPI.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAAPI.h; sourceTree = "<group>"; };
+		3429A3D326384B8000964E9E /* SOFAListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFAListener.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAListener.h; sourceTree = "<group>"; };
+		3429A3D426384B8000964E9E /* SOFAGeneralTF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFAGeneralTF.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAGeneralTF.h; sourceTree = "<group>"; };
+		3429A3D526384B8000964E9E /* SOFASimpleFreeFieldHRIR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFASimpleFreeFieldHRIR.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFASimpleFreeFieldHRIR.h; sourceTree = "<group>"; };
+		3429A3D626384B8000964E9E /* SOFASimpleHeadphoneIR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFASimpleHeadphoneIR.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFASimpleHeadphoneIR.h; sourceTree = "<group>"; };
+		3429A3D726384B8100964E9E /* SOFASource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFASource.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFASource.cpp; sourceTree = "<group>"; };
+		3429A3D826384B8100964E9E /* SOFAPosition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFAPosition.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAPosition.cpp; sourceTree = "<group>"; };
+		3429A3D926384B8100964E9E /* SOFAGeneralFIRE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFAGeneralFIRE.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAGeneralFIRE.h; sourceTree = "<group>"; };
+		3429A3DA26384B8100964E9E /* SOFAFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFAFile.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAFile.h; sourceTree = "<group>"; };
+		3429A3DB26384B8100964E9E /* SOFACoordinates.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFACoordinates.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFACoordinates.cpp; sourceTree = "<group>"; };
+		3429A3DC26384B8100964E9E /* SOFAGeneralFIR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFAGeneralFIR.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAGeneralFIR.h; sourceTree = "<group>"; };
+		3429A3DD26384B8100964E9E /* SOFAHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFAHelper.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAHelper.cpp; sourceTree = "<group>"; };
+		3429A3DE26384B8100964E9E /* SOFAMultiSpeakerBRIR.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFAMultiSpeakerBRIR.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAMultiSpeakerBRIR.cpp; sourceTree = "<group>"; };
+		3429A3DF26384B8100964E9E /* SOFAAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFAAttributes.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAAttributes.h; sourceTree = "<group>"; };
+		3429A3E026384B8100964E9E /* SOFAPoint3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFAPoint3.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAPoint3.cpp; sourceTree = "<group>"; };
+		3429A3E126384B8100964E9E /* SOFAVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFAVersion.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAVersion.h; sourceTree = "<group>"; };
+		3429A3E226384B8100964E9E /* SOFAPlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFAPlatform.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAPlatform.h; sourceTree = "<group>"; };
+		3429A3E326384B8100964E9E /* SOFAString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFAString.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAString.cpp; sourceTree = "<group>"; };
+		3429A3E426384B8100964E9E /* SOFAGeneralFIRE.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFAGeneralFIRE.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAGeneralFIRE.cpp; sourceTree = "<group>"; };
+		3429A3E526384B8200964E9E /* SOFAHostArchitecture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFAHostArchitecture.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAHostArchitecture.h; sourceTree = "<group>"; };
+		3429A3E626384B8200964E9E /* SOFAGeneralTF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFAGeneralTF.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAGeneralTF.cpp; sourceTree = "<group>"; };
+		3429A3E726384B8200964E9E /* SOFACoordinates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFACoordinates.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFACoordinates.h; sourceTree = "<group>"; };
+		3429A3E826384B8200964E9E /* SOFAReceiver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFAReceiver.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAReceiver.cpp; sourceTree = "<group>"; };
+		3429A3E926384B8200964E9E /* SOFASimpleFreeFieldHRIR.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFASimpleFreeFieldHRIR.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFASimpleFreeFieldHRIR.cpp; sourceTree = "<group>"; };
+		3429A3EA26384B8200964E9E /* SOFASimpleHeadphoneIR.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFASimpleHeadphoneIR.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFASimpleHeadphoneIR.cpp; sourceTree = "<group>"; };
+		3429A3EB26384B8200964E9E /* SOFAString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFAString.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAString.h; sourceTree = "<group>"; };
+		3429A3EC26384B8200964E9E /* SOFAEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFAEmitter.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAEmitter.h; sourceTree = "<group>"; };
+		3429A3ED26384B8200964E9E /* SOFAMultiSpeakerBRIR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFAMultiSpeakerBRIR.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAMultiSpeakerBRIR.h; sourceTree = "<group>"; };
+		3429A3EE26384B8200964E9E /* SOFAPosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFAPosition.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAPosition.h; sourceTree = "<group>"; };
+		3429A3EF26384B8200964E9E /* SOFADate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFADate.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFADate.h; sourceTree = "<group>"; };
+		3429A3F026384B8200964E9E /* SOFAHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFAHelper.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAHelper.h; sourceTree = "<group>"; };
+		3429A3F126384B8200964E9E /* SOFAReceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFAReceiver.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAReceiver.h; sourceTree = "<group>"; };
+		3429A3F226384B8200964E9E /* SOFASingleRoomDRIR.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SOFASingleRoomDRIR.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFASingleRoomDRIR.cpp; sourceTree = "<group>"; };
+		3429A3F326384B8200964E9E /* SOFAUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOFAUtils.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/src/SOFAUtils.h; sourceTree = "<group>"; };
+		3429A40E26384BCE00964E9E /* ncCompoundType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncCompoundType.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncCompoundType.cpp; sourceTree = "<group>"; };
+		3429A40F26384BCE00964E9E /* ncGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncGroup.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncGroup.cpp; sourceTree = "<group>"; };
+		3429A41026384BCE00964E9E /* ncVarAtt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncVarAtt.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncVarAtt.h; sourceTree = "<group>"; };
+		3429A41126384BCE00964E9E /* ncOpaqueType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncOpaqueType.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncOpaqueType.cpp; sourceTree = "<group>"; };
+		3429A41226384BCF00964E9E /* ncGroupAtt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncGroupAtt.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncGroupAtt.cpp; sourceTree = "<group>"; };
+		3429A41326384BCF00964E9E /* ncUbyte.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncUbyte.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncUbyte.cpp; sourceTree = "<group>"; };
+		3429A41426384BCF00964E9E /* ncEnumType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncEnumType.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncEnumType.cpp; sourceTree = "<group>"; };
+		3429A41526384BCF00964E9E /* ncGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncGroup.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncGroup.h; sourceTree = "<group>"; };
+		3429A41626384BCF00964E9E /* ncVarAtt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncVarAtt.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncVarAtt.cpp; sourceTree = "<group>"; };
+		3429A41726384BCF00964E9E /* ncFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncFile.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncFile.h; sourceTree = "<group>"; };
+		3429A41826384BCF00964E9E /* ncShort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncShort.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncShort.h; sourceTree = "<group>"; };
+		3429A41926384BCF00964E9E /* ncException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncException.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncException.cpp; sourceTree = "<group>"; };
+		3429A41A26384BCF00964E9E /* ncFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncFile.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncFile.cpp; sourceTree = "<group>"; };
+		3429A41B26384BCF00964E9E /* ncUbyte.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncUbyte.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncUbyte.h; sourceTree = "<group>"; };
+		3429A41C26384BCF00964E9E /* ncUshort.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncUshort.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncUshort.cpp; sourceTree = "<group>"; };
+		3429A41D26384BCF00964E9E /* ncInt64.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncInt64.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncInt64.cpp; sourceTree = "<group>"; };
+		3429A41E26384BCF00964E9E /* ncChar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncChar.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncChar.h; sourceTree = "<group>"; };
+		3429A41F26384BCF00964E9E /* ncUint64.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncUint64.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncUint64.cpp; sourceTree = "<group>"; };
+		3429A42026384BCF00964E9E /* ncDouble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncDouble.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncDouble.h; sourceTree = "<group>"; };
+		3429A42126384BCF00964E9E /* ncString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncString.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncString.h; sourceTree = "<group>"; };
+		3429A42226384BD000964E9E /* ncVar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncVar.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncVar.h; sourceTree = "<group>"; };
+		3429A42326384BD000964E9E /* ncOpaqueType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncOpaqueType.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncOpaqueType.h; sourceTree = "<group>"; };
+		3429A42426384BD000964E9E /* ncAtt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncAtt.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncAtt.h; sourceTree = "<group>"; };
+		3429A42526384BD000964E9E /* ncException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncException.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncException.h; sourceTree = "<group>"; };
+		3429A42626384BD000964E9E /* ncAtt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncAtt.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncAtt.cpp; sourceTree = "<group>"; };
+		3429A42726384BD000964E9E /* ncInt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncInt.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncInt.cpp; sourceTree = "<group>"; };
+		3429A42826384BD000964E9E /* ncDim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncDim.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncDim.cpp; sourceTree = "<group>"; };
+		3429A42926384BD000964E9E /* ncDouble.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncDouble.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncDouble.cpp; sourceTree = "<group>"; };
+		3429A42A26384BD000964E9E /* ncCompoundType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncCompoundType.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncCompoundType.h; sourceTree = "<group>"; };
+		3429A42B26384BD000964E9E /* ncInt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncInt.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncInt.h; sourceTree = "<group>"; };
+		3429A42C26384BD000964E9E /* ncEnumType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncEnumType.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncEnumType.h; sourceTree = "<group>"; };
+		3429A42D26384BD000964E9E /* ncCheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncCheck.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncCheck.h; sourceTree = "<group>"; };
+		3429A42E26384BD000964E9E /* ncChar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncChar.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncChar.cpp; sourceTree = "<group>"; };
+		3429A42F26384BD000964E9E /* ncUshort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncUshort.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncUshort.h; sourceTree = "<group>"; };
+		3429A43026384BD000964E9E /* ncFloat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncFloat.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncFloat.h; sourceTree = "<group>"; };
+		3429A43126384BD000964E9E /* ncVlenType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncVlenType.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncVlenType.cpp; sourceTree = "<group>"; };
+		3429A43226384BD000964E9E /* ncShort.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncShort.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncShort.cpp; sourceTree = "<group>"; };
+		3429A43326384BD100964E9E /* ncByte.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncByte.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncByte.cpp; sourceTree = "<group>"; };
+		3429A43426384BD100964E9E /* netcdf_meta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = netcdf_meta.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/netcdf_meta.h; sourceTree = "<group>"; };
+		3429A43526384BD100964E9E /* ncInt64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncInt64.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncInt64.h; sourceTree = "<group>"; };
+		3429A43626384BD100964E9E /* ncByte.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncByte.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncByte.h; sourceTree = "<group>"; };
+		3429A43726384BD100964E9E /* ncUint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncUint.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncUint.cpp; sourceTree = "<group>"; };
+		3429A43826384BD100964E9E /* ncDim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncDim.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncDim.h; sourceTree = "<group>"; };
+		3429A43926384BD100964E9E /* netcdf_mem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = netcdf_mem.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/netcdf_mem.h; sourceTree = "<group>"; };
+		3429A43A26384BD100964E9E /* ncCheck.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncCheck.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncCheck.cpp; sourceTree = "<group>"; };
+		3429A43B26384BD100964E9E /* ncFloat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncFloat.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncFloat.cpp; sourceTree = "<group>"; };
+		3429A43C26384BD100964E9E /* ncString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncString.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncString.cpp; sourceTree = "<group>"; };
+		3429A43D26384BD100964E9E /* ncType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncType.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncType.h; sourceTree = "<group>"; };
+		3429A43E26384BD100964E9E /* ncUint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncUint.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncUint.h; sourceTree = "<group>"; };
+		3429A43F26384BD100964E9E /* netcdf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = netcdf.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/netcdf.h; sourceTree = "<group>"; };
+		3429A44026384BD100964E9E /* ncVlenType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncVlenType.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncVlenType.h; sourceTree = "<group>"; };
+		3429A44126384BD100964E9E /* ncType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncType.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncType.cpp; sourceTree = "<group>"; };
+		3429A44226384BD100964E9E /* ncGroupAtt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncGroupAtt.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncGroupAtt.h; sourceTree = "<group>"; };
+		3429A44326384BD100964E9E /* ncUint64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncUint64.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncUint64.h; sourceTree = "<group>"; };
+		3429A44426384BD100964E9E /* ncVar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncVar.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncVar.cpp; sourceTree = "<group>"; };
 		34EE30A224DB46C400321BD3 /* effect3DTISpatializer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = effect3DTISpatializer.h; path = ../src/effect3DTISpatializer.h; sourceTree = "<group>"; };
-		AF156F8D2033472800D93A9F /* 3DTI_BinauralSpatializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = 3DTI_BinauralSpatializer.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/3DTI_BinauralSpatializer.h; sourceTree = "<group>"; };
-		AF156F8E2033472800D93A9F /* BRIR.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BRIR.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/BRIR.cpp; sourceTree = "<group>"; };
-		AF156F8F2033472800D93A9F /* BRIR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRIR.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/BRIR.h; sourceTree = "<group>"; };
-		AF156F902033472800D93A9F /* Core.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Core.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/Core.cpp; sourceTree = "<group>"; };
-		AF156F912033472800D93A9F /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Core.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/Core.h; sourceTree = "<group>"; };
-		AF156F922033472800D93A9F /* Environment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Environment.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/Environment.cpp; sourceTree = "<group>"; };
-		AF156F932033472800D93A9F /* Environment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Environment.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/Environment.h; sourceTree = "<group>"; };
-		AF156F942033472800D93A9F /* HRTF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HRTF.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/HRTF.cpp; sourceTree = "<group>"; };
-		AF156F952033472800D93A9F /* HRTF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HRTF.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/HRTF.h; sourceTree = "<group>"; };
-		AF156F962033472800D93A9F /* ILD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ILD.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/ILD.cpp; sourceTree = "<group>"; };
-		AF156F972033472800D93A9F /* ILD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ILD.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/ILD.h; sourceTree = "<group>"; };
-		AF156F982033472800D93A9F /* Listener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Listener.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/Listener.cpp; sourceTree = "<group>"; };
-		AF156F992033472800D93A9F /* Listener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Listener.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/Listener.h; sourceTree = "<group>"; };
-		AF156F9A2033472800D93A9F /* SingleSourceDSP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SingleSourceDSP.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/SingleSourceDSP.cpp; sourceTree = "<group>"; };
-		AF156F9B2033472800D93A9F /* SingleSourceDSP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SingleSourceDSP.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/SingleSourceDSP.h; sourceTree = "<group>"; };
-		AF156F9C2033472800D93A9F /* UPCAnechoic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UPCAnechoic.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/UPCAnechoic.cpp; sourceTree = "<group>"; };
-		AF156F9D2033472800D93A9F /* UPCAnechoic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPCAnechoic.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/BinauralSpatializer/UPCAnechoic.h; sourceTree = "<group>"; };
-		AF156FA62033479A00D93A9F /* AIR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AIR.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/AIR.h; sourceTree = "<group>"; };
-		AF156FA72033479A00D93A9F /* AudioState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioState.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/AudioState.h; sourceTree = "<group>"; };
-		AF156FA82033479A00D93A9F /* BiquadFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BiquadFilter.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/BiquadFilter.cpp; sourceTree = "<group>"; };
-		AF156FA92033479A00D93A9F /* BiquadFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BiquadFilter.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/BiquadFilter.h; sourceTree = "<group>"; };
-		AF156FAA2033479A00D93A9F /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Buffer.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Buffer.h; sourceTree = "<group>"; };
-		AF156FAB2033479A00D93A9F /* CommonDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommonDefinitions.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/CommonDefinitions.h; sourceTree = "<group>"; };
-		AF156FAC2033479A00D93A9F /* Conventions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Conventions.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Conventions.h; sourceTree = "<group>"; };
-		AF156FAD2033479A00D93A9F /* Delay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Delay.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Delay.cpp; sourceTree = "<group>"; };
-		AF156FAE2033479A00D93A9F /* Delay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Delay.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Delay.h; sourceTree = "<group>"; };
-		AF156FAF2033479A00D93A9F /* DistanceAttenuator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DistanceAttenuator.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DistanceAttenuator.cpp; sourceTree = "<group>"; };
-		AF156FB02033479A00D93A9F /* DistanceAttenuator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DistanceAttenuator.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DistanceAttenuator.h; sourceTree = "<group>"; };
-		AF156FB12033479A00D93A9F /* DynamicCompressorMono.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DynamicCompressorMono.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DynamicCompressorMono.cpp; sourceTree = "<group>"; };
-		AF156FB22033479A00D93A9F /* DynamicCompressorMono.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DynamicCompressorMono.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DynamicCompressorMono.h; sourceTree = "<group>"; };
-		AF156FB32033479A00D93A9F /* DynamicCompressorStereo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DynamicCompressorStereo.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DynamicCompressorStereo.cpp; sourceTree = "<group>"; };
-		AF156FB42033479A00D93A9F /* DynamicCompressorStereo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DynamicCompressorStereo.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DynamicCompressorStereo.h; sourceTree = "<group>"; };
-		AF156FB52033479A00D93A9F /* DynamicExpanderMono.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DynamicExpanderMono.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DynamicExpanderMono.cpp; sourceTree = "<group>"; };
-		AF156FB62033479A00D93A9F /* DynamicExpanderMono.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DynamicExpanderMono.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DynamicExpanderMono.h; sourceTree = "<group>"; };
-		AF156FB72033479A00D93A9F /* DynamicProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DynamicProcessor.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/DynamicProcessor.h; sourceTree = "<group>"; };
-		AF156FB82033479A00D93A9F /* EnvelopeDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EnvelopeDetector.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/EnvelopeDetector.cpp; sourceTree = "<group>"; };
-		AF156FB92033479A00D93A9F /* EnvelopeDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EnvelopeDetector.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/EnvelopeDetector.h; sourceTree = "<group>"; };
-		AF156FBA2033479A00D93A9F /* ErrorHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ErrorHandler.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/ErrorHandler.cpp; sourceTree = "<group>"; };
-		AF156FBB2033479A00D93A9F /* ErrorHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ErrorHandler.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/ErrorHandler.h; sourceTree = "<group>"; };
-		AF156FBC2033479A00D93A9F /* FarDistanceEffects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FarDistanceEffects.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/FarDistanceEffects.cpp; sourceTree = "<group>"; };
-		AF156FBD2033479A00D93A9F /* FarDistanceEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FarDistanceEffects.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/FarDistanceEffects.h; sourceTree = "<group>"; };
-		AF156FBE2033479A00D93A9F /* fftsg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fftsg.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/fftsg.cpp; sourceTree = "<group>"; };
-		AF156FBF2033479A00D93A9F /* fftsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fftsg.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/fftsg.h; sourceTree = "<group>"; };
-		AF156FC02033479A00D93A9F /* FiltersBank.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FiltersBank.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/FiltersBank.cpp; sourceTree = "<group>"; };
-		AF156FC12033479A00D93A9F /* FiltersBank.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FiltersBank.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/FiltersBank.h; sourceTree = "<group>"; };
-		AF156FC22033479A00D93A9F /* FiltersChain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FiltersChain.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/FiltersChain.cpp; sourceTree = "<group>"; };
-		AF156FC32033479A00D93A9F /* FiltersChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FiltersChain.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/FiltersChain.h; sourceTree = "<group>"; };
-		AF156FC42033479A00D93A9F /* Fprocessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fprocessor.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Fprocessor.cpp; sourceTree = "<group>"; };
-		AF156FC52033479A00D93A9F /* Fprocessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Fprocessor.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Fprocessor.h; sourceTree = "<group>"; };
-		AF156FC62033479A00D93A9F /* Magnitudes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Magnitudes.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Magnitudes.cpp; sourceTree = "<group>"; };
-		AF156FC72033479A00D93A9F /* Magnitudes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Magnitudes.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Magnitudes.h; sourceTree = "<group>"; };
-		AF156FC82033479A00D93A9F /* NoiseGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NoiseGenerator.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/NoiseGenerator.cpp; sourceTree = "<group>"; };
-		AF156FC92033479A00D93A9F /* NoiseGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NoiseGenerator.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/NoiseGenerator.h; sourceTree = "<group>"; };
-		AF156FCA2033479A00D93A9F /* Profiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Profiler.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Profiler.cpp; sourceTree = "<group>"; };
-		AF156FCB2033479A00D93A9F /* Profiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Profiler.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Profiler.h; sourceTree = "<group>"; };
-		AF156FCC2033479A00D93A9F /* Quaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Quaternion.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Quaternion.cpp; sourceTree = "<group>"; };
-		AF156FCD2033479A00D93A9F /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quaternion.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Quaternion.h; sourceTree = "<group>"; };
-		AF156FCE2033479A00D93A9F /* Transform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Transform.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Transform.cpp; sourceTree = "<group>"; };
-		AF156FCF2033479A00D93A9F /* Transform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Transform.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Transform.h; sourceTree = "<group>"; };
-		AF156FD02033479A00D93A9F /* UPCEnvironment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UPCEnvironment.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/UPCEnvironment.cpp; sourceTree = "<group>"; };
-		AF156FD12033479A00D93A9F /* UPCEnvironment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UPCEnvironment.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/UPCEnvironment.h; sourceTree = "<group>"; };
-		AF156FD22033479A00D93A9F /* Vector3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vector3.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Vector3.cpp; sourceTree = "<group>"; };
-		AF156FD32033479A00D93A9F /* Vector3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector3.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/Common/Vector3.h; sourceTree = "<group>"; };
-		AF156FE8203347B600D93A9F /* 3DTI_HAHLSimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = 3DTI_HAHLSimulator.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/3DTI_HAHLSimulator.h; sourceTree = "<group>"; };
-		AF156FE9203347B600D93A9F /* ClassificationScaleHL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ClassificationScaleHL.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/ClassificationScaleHL.cpp; sourceTree = "<group>"; };
-		AF156FEA203347B600D93A9F /* ClassificationScaleHL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ClassificationScaleHL.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/ClassificationScaleHL.h; sourceTree = "<group>"; };
-		AF156FEB203347B600D93A9F /* DynamicEqualizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DynamicEqualizer.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/DynamicEqualizer.cpp; sourceTree = "<group>"; };
-		AF156FEC203347B600D93A9F /* DynamicEqualizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DynamicEqualizer.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/DynamicEqualizer.h; sourceTree = "<group>"; };
-		AF156FED203347B600D93A9F /* Fig6Algorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fig6Algorithm.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/Fig6Algorithm.cpp; sourceTree = "<group>"; };
-		AF156FEE203347B600D93A9F /* Fig6Algorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Fig6Algorithm.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/Fig6Algorithm.h; sourceTree = "<group>"; };
-		AF156FEF203347B600D93A9F /* FrequencySmearing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FrequencySmearing.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/FrequencySmearing.cpp; sourceTree = "<group>"; };
-		AF156FF0203347B600D93A9F /* FrequencySmearing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FrequencySmearing.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/FrequencySmearing.h; sourceTree = "<group>"; };
-		AF156FF1203347B600D93A9F /* HearingAidSim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HearingAidSim.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/HearingAidSim.cpp; sourceTree = "<group>"; };
-		AF156FF2203347B600D93A9F /* HearingAidSim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HearingAidSim.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/HearingAidSim.h; sourceTree = "<group>"; };
-		AF156FF3203347B600D93A9F /* HearingLossSim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HearingLossSim.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/HearingLossSim.cpp; sourceTree = "<group>"; };
-		AF156FF4203347B600D93A9F /* HearingLossSim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HearingLossSim.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/HearingLossSim.h; sourceTree = "<group>"; };
-		AF156FF5203347B600D93A9F /* HighOrderButterworthFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HighOrderButterworthFilter.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/HighOrderButterworthFilter.h; sourceTree = "<group>"; };
-		AF156FF6203347B600D93A9F /* HighOrderButteworthFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HighOrderButteworthFilter.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/HighOrderButteworthFilter.cpp; sourceTree = "<group>"; };
-		AF156FF7203347B600D93A9F /* MultibandExpander.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MultibandExpander.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/MultibandExpander.cpp; sourceTree = "<group>"; };
-		AF156FF8203347B600D93A9F /* MultibandExpander.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MultibandExpander.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/MultibandExpander.h; sourceTree = "<group>"; };
-		AF156FF9203347B600D93A9F /* TemporalDistortionSimulator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TemporalDistortionSimulator.cpp; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/TemporalDistortionSimulator.cpp; sourceTree = "<group>"; };
-		AF156FFA203347B600D93A9F /* TemporalDistortionSimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TemporalDistortionSimulator.h; path = ../../../3dti_AudioToolkit/3dti_Toolkit/HAHLSimulation/TemporalDistortionSimulator.h; sourceTree = "<group>"; };
 		AF157004203347DC00D93A9F /* HRTFCereal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HRTFCereal.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/HRTF/HRTFCereal.cpp; sourceTree = "<group>"; };
 		AF157005203347DC00D93A9F /* HRTFCereal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HRTFCereal.h; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/HRTF/HRTFCereal.h; sourceTree = "<group>"; };
 		AF15700A203347F800D93A9F /* ILDCereal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ILDCereal.cpp; path = ../../../3dti_AudioToolkit/3dti_ResourceManager/ILD/ILDCereal.cpp; sourceTree = "<group>"; };
@@ -166,6 +342,130 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3429A3BD26384B5500964E9E /* sofa */ = {
+			isa = PBXGroup;
+			children = (
+				3429A40D26384BAF00964E9E /* netcdf */,
+				3429A3BE26384B7F00964E9E /* SOFA.h */,
+				3429A3CC26384B8000964E9E /* SOFAAPI.cpp */,
+				3429A3D226384B8000964E9E /* SOFAAPI.h */,
+				3429A3D126384B8000964E9E /* SOFAAttributes.cpp */,
+				3429A3DF26384B8100964E9E /* SOFAAttributes.h */,
+				3429A3DB26384B8100964E9E /* SOFACoordinates.cpp */,
+				3429A3E726384B8200964E9E /* SOFACoordinates.h */,
+				3429A3C226384B7F00964E9E /* SOFADate.cpp */,
+				3429A3EF26384B8200964E9E /* SOFADate.h */,
+				3429A3C926384B8000964E9E /* SOFAEmitter.cpp */,
+				3429A3EC26384B8200964E9E /* SOFAEmitter.h */,
+				3429A3CE26384B8000964E9E /* SOFAExceptions.cpp */,
+				3429A3C026384B7F00964E9E /* SOFAExceptions.h */,
+				3429A3C526384B7F00964E9E /* SOFAFile.cpp */,
+				3429A3DA26384B8100964E9E /* SOFAFile.h */,
+				3429A3CA26384B8000964E9E /* SOFAGeneralFIR.cpp */,
+				3429A3DC26384B8100964E9E /* SOFAGeneralFIR.h */,
+				3429A3E426384B8100964E9E /* SOFAGeneralFIRE.cpp */,
+				3429A3D926384B8100964E9E /* SOFAGeneralFIRE.h */,
+				3429A3E626384B8200964E9E /* SOFAGeneralTF.cpp */,
+				3429A3D426384B8000964E9E /* SOFAGeneralTF.h */,
+				3429A3DD26384B8100964E9E /* SOFAHelper.cpp */,
+				3429A3F026384B8200964E9E /* SOFAHelper.h */,
+				3429A3E526384B8200964E9E /* SOFAHostArchitecture.h */,
+				3429A3CF26384B8000964E9E /* SOFAListener.cpp */,
+				3429A3D326384B8000964E9E /* SOFAListener.h */,
+				3429A3DE26384B8100964E9E /* SOFAMultiSpeakerBRIR.cpp */,
+				3429A3ED26384B8200964E9E /* SOFAMultiSpeakerBRIR.h */,
+				3429A3D026384B8000964E9E /* SOFANcFile.cpp */,
+				3429A3C626384B7F00964E9E /* SOFANcFile.h */,
+				3429A3C826384B7F00964E9E /* SOFANcUtils.h */,
+				3429A3E226384B8100964E9E /* SOFAPlatform.h */,
+				3429A3E026384B8100964E9E /* SOFAPoint3.cpp */,
+				3429A3CB26384B8000964E9E /* SOFAPoint3.h */,
+				3429A3D826384B8100964E9E /* SOFAPosition.cpp */,
+				3429A3EE26384B8200964E9E /* SOFAPosition.h */,
+				3429A3E826384B8200964E9E /* SOFAReceiver.cpp */,
+				3429A3F126384B8200964E9E /* SOFAReceiver.h */,
+				3429A3E926384B8200964E9E /* SOFASimpleFreeFieldHRIR.cpp */,
+				3429A3D526384B8000964E9E /* SOFASimpleFreeFieldHRIR.h */,
+				3429A3C426384B7F00964E9E /* SOFASimpleFreeFieldSOS.cpp */,
+				3429A3C126384B7F00964E9E /* SOFASimpleFreeFieldSOS.h */,
+				3429A3EA26384B8200964E9E /* SOFASimpleHeadphoneIR.cpp */,
+				3429A3D626384B8000964E9E /* SOFASimpleHeadphoneIR.h */,
+				3429A3F226384B8200964E9E /* SOFASingleRoomDRIR.cpp */,
+				3429A3BF26384B7F00964E9E /* SOFASingleRoomDRIR.h */,
+				3429A3D726384B8100964E9E /* SOFASource.cpp */,
+				3429A3C726384B7F00964E9E /* SOFASource.h */,
+				3429A3E326384B8100964E9E /* SOFAString.cpp */,
+				3429A3EB26384B8200964E9E /* SOFAString.h */,
+				3429A3C326384B7F00964E9E /* SOFAUnits.cpp */,
+				3429A3CD26384B8000964E9E /* SOFAUnits.h */,
+				3429A3F326384B8200964E9E /* SOFAUtils.h */,
+				3429A3E126384B8100964E9E /* SOFAVersion.h */,
+			);
+			path = sofa;
+			sourceTree = "<group>";
+		};
+		3429A40D26384BAF00964E9E /* netcdf */ = {
+			isa = PBXGroup;
+			children = (
+				3429A42626384BD000964E9E /* ncAtt.cpp */,
+				3429A42426384BD000964E9E /* ncAtt.h */,
+				3429A43326384BD100964E9E /* ncByte.cpp */,
+				3429A43626384BD100964E9E /* ncByte.h */,
+				3429A42E26384BD000964E9E /* ncChar.cpp */,
+				3429A41E26384BCF00964E9E /* ncChar.h */,
+				3429A43A26384BD100964E9E /* ncCheck.cpp */,
+				3429A42D26384BD000964E9E /* ncCheck.h */,
+				3429A40E26384BCE00964E9E /* ncCompoundType.cpp */,
+				3429A42A26384BD000964E9E /* ncCompoundType.h */,
+				3429A42826384BD000964E9E /* ncDim.cpp */,
+				3429A43826384BD100964E9E /* ncDim.h */,
+				3429A42926384BD000964E9E /* ncDouble.cpp */,
+				3429A42026384BCF00964E9E /* ncDouble.h */,
+				3429A41426384BCF00964E9E /* ncEnumType.cpp */,
+				3429A42C26384BD000964E9E /* ncEnumType.h */,
+				3429A41926384BCF00964E9E /* ncException.cpp */,
+				3429A42526384BD000964E9E /* ncException.h */,
+				3429A41A26384BCF00964E9E /* ncFile.cpp */,
+				3429A41726384BCF00964E9E /* ncFile.h */,
+				3429A43B26384BD100964E9E /* ncFloat.cpp */,
+				3429A43026384BD000964E9E /* ncFloat.h */,
+				3429A40F26384BCE00964E9E /* ncGroup.cpp */,
+				3429A41526384BCF00964E9E /* ncGroup.h */,
+				3429A41226384BCF00964E9E /* ncGroupAtt.cpp */,
+				3429A44226384BD100964E9E /* ncGroupAtt.h */,
+				3429A42726384BD000964E9E /* ncInt.cpp */,
+				3429A42B26384BD000964E9E /* ncInt.h */,
+				3429A41D26384BCF00964E9E /* ncInt64.cpp */,
+				3429A43526384BD100964E9E /* ncInt64.h */,
+				3429A41126384BCE00964E9E /* ncOpaqueType.cpp */,
+				3429A42326384BD000964E9E /* ncOpaqueType.h */,
+				3429A43226384BD000964E9E /* ncShort.cpp */,
+				3429A41826384BCF00964E9E /* ncShort.h */,
+				3429A43C26384BD100964E9E /* ncString.cpp */,
+				3429A42126384BCF00964E9E /* ncString.h */,
+				3429A44126384BD100964E9E /* ncType.cpp */,
+				3429A43D26384BD100964E9E /* ncType.h */,
+				3429A41326384BCF00964E9E /* ncUbyte.cpp */,
+				3429A41B26384BCF00964E9E /* ncUbyte.h */,
+				3429A43726384BD100964E9E /* ncUint.cpp */,
+				3429A43E26384BD100964E9E /* ncUint.h */,
+				3429A41F26384BCF00964E9E /* ncUint64.cpp */,
+				3429A44326384BD100964E9E /* ncUint64.h */,
+				3429A41C26384BCF00964E9E /* ncUshort.cpp */,
+				3429A42F26384BD000964E9E /* ncUshort.h */,
+				3429A44426384BD100964E9E /* ncVar.cpp */,
+				3429A42226384BD000964E9E /* ncVar.h */,
+				3429A41626384BCF00964E9E /* ncVarAtt.cpp */,
+				3429A41026384BCE00964E9E /* ncVarAtt.h */,
+				3429A43126384BD000964E9E /* ncVlenType.cpp */,
+				3429A44026384BD100964E9E /* ncVlenType.h */,
+				3429A43926384BD100964E9E /* netcdf_mem.h */,
+				3429A43426384BD100964E9E /* netcdf_meta.h */,
+				3429A43F26384BD100964E9E /* netcdf.h */,
+			);
+			path = netcdf;
+			sourceTree = "<group>";
+		};
 		AF391F881E55F12800EB4AC6 /* AudioPlugin3DTIToolkit */ = {
 			isa = PBXGroup;
 			children = (
@@ -203,23 +503,23 @@
 		AFD67CB21E978F80000F4387 /* BinauralSpatializer */ = {
 			isa = PBXGroup;
 			children = (
-				AF156F8D2033472800D93A9F /* 3DTI_BinauralSpatializer.h */,
-				AF156F8E2033472800D93A9F /* BRIR.cpp */,
-				AF156F8F2033472800D93A9F /* BRIR.h */,
-				AF156F902033472800D93A9F /* Core.cpp */,
-				AF156F912033472800D93A9F /* Core.h */,
-				AF156F922033472800D93A9F /* Environment.cpp */,
-				AF156F932033472800D93A9F /* Environment.h */,
-				AF156F942033472800D93A9F /* HRTF.cpp */,
-				AF156F952033472800D93A9F /* HRTF.h */,
-				AF156F962033472800D93A9F /* ILD.cpp */,
-				AF156F972033472800D93A9F /* ILD.h */,
-				AF156F982033472800D93A9F /* Listener.cpp */,
-				AF156F992033472800D93A9F /* Listener.h */,
-				AF156F9A2033472800D93A9F /* SingleSourceDSP.cpp */,
-				AF156F9B2033472800D93A9F /* SingleSourceDSP.h */,
-				AF156F9C2033472800D93A9F /* UPCAnechoic.cpp */,
-				AF156F9D2033472800D93A9F /* UPCAnechoic.h */,
+				3429A3A626384ABE00964E9E /* 3DTI_BinauralSpatializer.h */,
+				3429A3A726384ABE00964E9E /* BRIR.cpp */,
+				3429A3A926384ABE00964E9E /* BRIR.h */,
+				3429A3AD26384ABE00964E9E /* Core.cpp */,
+				3429A3AC26384ABE00964E9E /* Core.h */,
+				3429A3AA26384ABE00964E9E /* Environment.cpp */,
+				3429A3A526384ABE00964E9E /* Environment.h */,
+				3429A3AE26384ABE00964E9E /* HRTF.cpp */,
+				3429A3AB26384ABE00964E9E /* HRTF.h */,
+				3429A3A326384ABE00964E9E /* ILD.cpp */,
+				3429A3AF26384ABE00964E9E /* ILD.h */,
+				3429A3A126384ABD00964E9E /* Listener.cpp */,
+				3429A3A026384ABD00964E9E /* Listener.h */,
+				3429A39F26384ABD00964E9E /* SingleSourceDSP.cpp */,
+				3429A3A826384ABE00964E9E /* SingleSourceDSP.h */,
+				3429A3A226384ABD00964E9E /* UPCAnechoic.cpp */,
+				3429A3A426384ABE00964E9E /* UPCAnechoic.h */,
 			);
 			path = BinauralSpatializer;
 			sourceTree = "<group>";
@@ -227,52 +527,56 @@
 		AFD67CC61E978F80000F4387 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				AF156FA62033479A00D93A9F /* AIR.h */,
-				AF156FA72033479A00D93A9F /* AudioState.h */,
-				AF156FA82033479A00D93A9F /* BiquadFilter.cpp */,
-				AF156FA92033479A00D93A9F /* BiquadFilter.h */,
-				AF156FAA2033479A00D93A9F /* Buffer.h */,
-				AF156FAB2033479A00D93A9F /* CommonDefinitions.h */,
-				AF156FAC2033479A00D93A9F /* Conventions.h */,
-				AF156FAD2033479A00D93A9F /* Delay.cpp */,
-				AF156FAE2033479A00D93A9F /* Delay.h */,
-				AF156FAF2033479A00D93A9F /* DistanceAttenuator.cpp */,
-				AF156FB02033479A00D93A9F /* DistanceAttenuator.h */,
-				AF156FB12033479A00D93A9F /* DynamicCompressorMono.cpp */,
-				AF156FB22033479A00D93A9F /* DynamicCompressorMono.h */,
-				AF156FB32033479A00D93A9F /* DynamicCompressorStereo.cpp */,
-				AF156FB42033479A00D93A9F /* DynamicCompressorStereo.h */,
-				AF156FB52033479A00D93A9F /* DynamicExpanderMono.cpp */,
-				AF156FB62033479A00D93A9F /* DynamicExpanderMono.h */,
-				AF156FB72033479A00D93A9F /* DynamicProcessor.h */,
-				AF156FB82033479A00D93A9F /* EnvelopeDetector.cpp */,
-				AF156FB92033479A00D93A9F /* EnvelopeDetector.h */,
-				AF156FBA2033479A00D93A9F /* ErrorHandler.cpp */,
-				AF156FBB2033479A00D93A9F /* ErrorHandler.h */,
-				AF156FBC2033479A00D93A9F /* FarDistanceEffects.cpp */,
-				AF156FBD2033479A00D93A9F /* FarDistanceEffects.h */,
-				AF156FBE2033479A00D93A9F /* fftsg.cpp */,
-				AF156FBF2033479A00D93A9F /* fftsg.h */,
-				AF156FC02033479A00D93A9F /* FiltersBank.cpp */,
-				AF156FC12033479A00D93A9F /* FiltersBank.h */,
-				AF156FC22033479A00D93A9F /* FiltersChain.cpp */,
-				AF156FC32033479A00D93A9F /* FiltersChain.h */,
-				AF156FC42033479A00D93A9F /* Fprocessor.cpp */,
-				AF156FC52033479A00D93A9F /* Fprocessor.h */,
-				AF156FC62033479A00D93A9F /* Magnitudes.cpp */,
-				AF156FC72033479A00D93A9F /* Magnitudes.h */,
-				AF156FC82033479A00D93A9F /* NoiseGenerator.cpp */,
-				AF156FC92033479A00D93A9F /* NoiseGenerator.h */,
-				AF156FCA2033479A00D93A9F /* Profiler.cpp */,
-				AF156FCB2033479A00D93A9F /* Profiler.h */,
-				AF156FCC2033479A00D93A9F /* Quaternion.cpp */,
-				AF156FCD2033479A00D93A9F /* Quaternion.h */,
-				AF156FCE2033479A00D93A9F /* Transform.cpp */,
-				AF156FCF2033479A00D93A9F /* Transform.h */,
-				AF156FD02033479A00D93A9F /* UPCEnvironment.cpp */,
-				AF156FD12033479A00D93A9F /* UPCEnvironment.h */,
-				AF156FD22033479A00D93A9F /* Vector3.cpp */,
-				AF156FD32033479A00D93A9F /* Vector3.h */,
+				3429A37C26384AB400964E9E /* AIR.h */,
+				3429A37B26384AB400964E9E /* AudioState.h */,
+				3429A35E26384AB200964E9E /* BiquadFilter.cpp */,
+				3429A36226384AB300964E9E /* BiquadFilter.h */,
+				3429A37026384AB300964E9E /* Buffer.h */,
+				3429A38426384AB400964E9E /* CommonDefinitions.h */,
+				3429A38626384AB400964E9E /* Conventions.h */,
+				3429A38026384AB400964E9E /* Delay.cpp */,
+				3429A35526384AB200964E9E /* Delay.h */,
+				3429A37326384AB300964E9E /* DistanceAttenuator.cpp */,
+				3429A36826384AB300964E9E /* DistanceAttenuator.h */,
+				3429A36C26384AB300964E9E /* DynamicCompressorMono.cpp */,
+				3429A36326384AB300964E9E /* DynamicCompressorMono.h */,
+				3429A36E26384AB300964E9E /* DynamicCompressorStereo.cpp */,
+				3429A35D26384AB200964E9E /* DynamicCompressorStereo.h */,
+				3429A38326384AB400964E9E /* DynamicExpanderMono.cpp */,
+				3429A38526384AB400964E9E /* DynamicExpanderMono.h */,
+				3429A36026384AB300964E9E /* DynamicProcessor.h */,
+				3429A36A26384AB300964E9E /* EnvelopeDetector.cpp */,
+				3429A35826384AB200964E9E /* EnvelopeDetector.h */,
+				3429A37826384AB400964E9E /* ErrorHandler.cpp */,
+				3429A36B26384AB300964E9E /* ErrorHandler.h */,
+				3429A38126384AB400964E9E /* FarDistanceEffects.cpp */,
+				3429A35C26384AB200964E9E /* FarDistanceEffects.h */,
+				3429A36426384AB300964E9E /* fftsg.cpp */,
+				3429A38226384AB400964E9E /* fftsg.h */,
+				3429A35A26384AB200964E9E /* FiltersBank.cpp */,
+				3429A37A26384AB400964E9E /* FiltersBank.h */,
+				3429A36D26384AB300964E9E /* FiltersChain.cpp */,
+				3429A37F26384AB400964E9E /* FiltersChain.h */,
+				3429A37626384AB300964E9E /* Fprocessor.cpp */,
+				3429A35626384AB200964E9E /* Fprocessor.h */,
+				3429A35B26384AB200964E9E /* GammatoneFilter.cpp */,
+				3429A36926384AB300964E9E /* GammatoneFilter.h */,
+				3429A35926384AB200964E9E /* GammatoneFilterBank.cpp */,
+				3429A36126384AB300964E9E /* GammatoneFilterBank.h */,
+				3429A37526384AB300964E9E /* Magnitudes.cpp */,
+				3429A37226384AB300964E9E /* Magnitudes.h */,
+				3429A36726384AB300964E9E /* NoiseGenerator.cpp */,
+				3429A37E26384AB400964E9E /* NoiseGenerator.h */,
+				3429A36626384AB300964E9E /* Profiler.cpp */,
+				3429A37426384AB300964E9E /* Profiler.h */,
+				3429A37726384AB300964E9E /* Quaternion.cpp */,
+				3429A37126384AB300964E9E /* Quaternion.h */,
+				3429A35F26384AB300964E9E /* Transform.cpp */,
+				3429A36F26384AB300964E9E /* Transform.h */,
+				3429A37D26384AB400964E9E /* UPCEnvironment.cpp */,
+				3429A36526384AB300964E9E /* UPCEnvironment.h */,
+				3429A35726384AB200964E9E /* Vector3.cpp */,
+				3429A37926384AB400964E9E /* Vector3.h */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -280,25 +584,31 @@
 		AFD67CEF1E978F80000F4387 /* HAHLSimulation */ = {
 			isa = PBXGroup;
 			children = (
-				AF156FE8203347B600D93A9F /* 3DTI_HAHLSimulator.h */,
-				AF156FE9203347B600D93A9F /* ClassificationScaleHL.cpp */,
-				AF156FEA203347B600D93A9F /* ClassificationScaleHL.h */,
-				AF156FEB203347B600D93A9F /* DynamicEqualizer.cpp */,
-				AF156FEC203347B600D93A9F /* DynamicEqualizer.h */,
-				AF156FED203347B600D93A9F /* Fig6Algorithm.cpp */,
-				AF156FEE203347B600D93A9F /* Fig6Algorithm.h */,
-				AF156FEF203347B600D93A9F /* FrequencySmearing.cpp */,
-				AF156FF0203347B600D93A9F /* FrequencySmearing.h */,
-				AF156FF1203347B600D93A9F /* HearingAidSim.cpp */,
-				AF156FF2203347B600D93A9F /* HearingAidSim.h */,
-				AF156FF3203347B600D93A9F /* HearingLossSim.cpp */,
-				AF156FF4203347B600D93A9F /* HearingLossSim.h */,
-				AF156FF5203347B600D93A9F /* HighOrderButterworthFilter.h */,
-				AF156FF6203347B600D93A9F /* HighOrderButteworthFilter.cpp */,
-				AF156FF7203347B600D93A9F /* MultibandExpander.cpp */,
-				AF156FF8203347B600D93A9F /* MultibandExpander.h */,
-				AF156FF9203347B600D93A9F /* TemporalDistortionSimulator.cpp */,
-				AF156FFA203347B600D93A9F /* TemporalDistortionSimulator.h */,
+				3429A2FC26384A9A00964E9E /* 3DTI_HAHLSimulator.h */,
+				3429A2F926384A9A00964E9E /* BaerMooreFrequencySmearing.cpp */,
+				3429A2F426384A9A00964E9E /* BaerMooreFrequencySmearing.h */,
+				3429A2F526384A9A00964E9E /* ButterworthMultibandExpander.cpp */,
+				3429A2F626384A9A00964E9E /* ButterworthMultibandExpander.h */,
+				3429A2EC26384A9900964E9E /* ClassificationScaleHL.cpp */,
+				3429A2F026384A9900964E9E /* ClassificationScaleHL.h */,
+				3429A2FA26384A9A00964E9E /* DynamicEqualizer.cpp */,
+				3429A2EB26384A9900964E9E /* DynamicEqualizer.h */,
+				3429A2FD26384A9A00964E9E /* Fig6Algorithm.cpp */,
+				3429A2F726384A9A00964E9E /* Fig6Algorithm.h */,
+				3429A2E626384A9900964E9E /* FrequencySmearing.h */,
+				3429A2EE26384A9900964E9E /* GammatoneMultibandExpander.cpp */,
+				3429A2F226384A9A00964E9E /* GammatoneMultibandExpander.h */,
+				3429A2EA26384A9900964E9E /* Graf3DTIFrequencySmearing.cpp */,
+				3429A2F126384A9A00964E9E /* Graf3DTIFrequencySmearing.h */,
+				3429A2F826384A9A00964E9E /* HearingAidSim.cpp */,
+				3429A2F326384A9A00964E9E /* HearingAidSim.h */,
+				3429A2EF26384A9900964E9E /* HearingLossSim.cpp */,
+				3429A2FB26384A9A00964E9E /* HearingLossSim.h */,
+				3429A2FE26384A9A00964E9E /* HighOrderButterworthFilter.h */,
+				3429A2E926384A9900964E9E /* HighOrderButteworthFilter.cpp */,
+				3429A2E826384A9900964E9E /* MultibandExpander.h */,
+				3429A2E726384A9900964E9E /* TemporalDistortionSimulator.cpp */,
+				3429A2ED26384A9900964E9E /* TemporalDistortionSimulator.h */,
 			);
 			path = HAHLSimulation;
 			sourceTree = "<group>";
@@ -328,6 +638,7 @@
 		AFE88A331DCCB223003505EF /* 3DTI_Toolkit_Modules */ = {
 			isa = PBXGroup;
 			children = (
+				3429A3BD26384B5500964E9E /* sofa */,
 				AFE88A361DCCB223003505EF /* HRTF */,
 				AFE88D5F1DCCB226003505EF /* ILD */,
 			);
@@ -339,6 +650,8 @@
 			isa = PBXGroup;
 			children = (
 				AF157004203347DC00D93A9F /* HRTFCereal.cpp */,
+				3429A3BA26384B4800964E9E /* HRTFFactory.cpp */,
+				3429A3B926384B4800964E9E /* HRTFFactory.h */,
 				AF157005203347DC00D93A9F /* HRTFCereal.h */,
 			);
 			path = HRTF;
@@ -435,7 +748,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nrsync -av --delete ~/Documents/dev/3DTI_UnityWrapper/Binaural/audioplugin3DTIToolkit/MACOSX/build/Debug/AudioPlugin3DTIToolkit.bundle/ ~/Documents/dev/SpatialisationToolkitTestbed/Assets/Plugins/MacOS/AudioPlugin3DTIToolkit.bundle/\n";
+			shellScript = "rsync -av --delete \"${TARGET_BUILD_DIR}/AudioPlugin3DTIToolkit.bundle/\" \"${TARGET_BUILD_DIR}/../../../../BuildUnityWrapperPackage/Assets/Plugins/MacOS/AudioPlugin3DTIToolkit.bundle/\" \n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -444,49 +757,104 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3429A44C26384BD100964E9E /* ncException.cpp in Sources */,
+				3429A40926384B8200964E9E /* SOFASimpleFreeFieldHRIR.cpp in Sources */,
+				3429A3B626384ABE00964E9E /* Core.cpp in Sources */,
+				3429A3B326384ABE00964E9E /* ILD.cpp in Sources */,
+				3429A40226384B8200964E9E /* SOFAHelper.cpp in Sources */,
+				3429A40A26384B8200964E9E /* SOFASimpleHeadphoneIR.cpp in Sources */,
+				3429A44B26384BD100964E9E /* ncVarAtt.cpp in Sources */,
+				3429A39926384AB400964E9E /* UPCEnvironment.cpp in Sources */,
 				AF15700C203347F800D93A9F /* ILDCereal.cpp in Sources */,
-				AF156FA22033472800D93A9F /* ILD.cpp in Sources */,
-				AF156FA42033472800D93A9F /* SingleSourceDSP.cpp in Sources */,
-				AF156FD82033479A00D93A9F /* DynamicCompressorStereo.cpp in Sources */,
-				AF157000203347B600D93A9F /* HearingLossSim.cpp in Sources */,
-				AF156FE72033479A00D93A9F /* Vector3.cpp in Sources */,
-				AF156FDE2033479A00D93A9F /* FiltersBank.cpp in Sources */,
+				3429A30426384A9A00964E9E /* HearingLossSim.cpp in Sources */,
+				3429A39B26384AB400964E9E /* FarDistanceEffects.cpp in Sources */,
+				3429A44A26384BD100964E9E /* ncEnumType.cpp in Sources */,
+				3429A40526384B8200964E9E /* SOFAString.cpp in Sources */,
+				3429A3F726384B8200964E9E /* SOFAFile.cpp in Sources */,
+				3429A39A26384AB400964E9E /* Delay.cpp in Sources */,
+				3429A30026384A9A00964E9E /* HighOrderButteworthFilter.cpp in Sources */,
+				3429A3F926384B8200964E9E /* SOFAGeneralFIR.cpp in Sources */,
+				3429A3B026384ABE00964E9E /* SingleSourceDSP.cpp in Sources */,
+				3429A3FE26384B8200964E9E /* SOFAAttributes.cpp in Sources */,
+				3429A40B26384B8200964E9E /* SOFASingleRoomDRIR.cpp in Sources */,
+				3429A44926384BD100964E9E /* ncUbyte.cpp in Sources */,
+				3429A39726384AB400964E9E /* Quaternion.cpp in Sources */,
+				3429A44D26384BD100964E9E /* ncFile.cpp in Sources */,
 				AF391F8E1E55F14200EB4AC6 /* effect3DTIHA.cpp in Sources */,
-				AF156FE52033479A00D93A9F /* Transform.cpp in Sources */,
-				AF156FFC203347B600D93A9F /* DynamicEqualizer.cpp in Sources */,
-				AF156F9E2033472800D93A9F /* BRIR.cpp in Sources */,
-				AF156FFF203347B600D93A9F /* HearingAidSim.cpp in Sources */,
-				AF156FA12033472800D93A9F /* HRTF.cpp in Sources */,
-				AF156FFB203347B600D93A9F /* ClassificationScaleHL.cpp in Sources */,
+				3429A39626384AB400964E9E /* Fprocessor.cpp in Sources */,
+				3429A45426384BD100964E9E /* ncDouble.cpp in Sources */,
+				3429A3BB26384B4800964E9E /* HRTFFactory.cpp in Sources */,
+				3429A40026384B8200964E9E /* SOFAPosition.cpp in Sources */,
 				AFE890AC1DCCB3CF003505EF /* AudioPluginUtil.cpp in Sources */,
-				AF157002203347B600D93A9F /* MultibandExpander.cpp in Sources */,
-				AF156FDA2033479A00D93A9F /* EnvelopeDetector.cpp in Sources */,
-				AF156FFE203347B600D93A9F /* FrequencySmearing.cpp in Sources */,
-				AF156FA02033472800D93A9F /* Environment.cpp in Sources */,
-				AF156FE22033479A00D93A9F /* NoiseGenerator.cpp in Sources */,
-				AF156FE12033479A00D93A9F /* Magnitudes.cpp in Sources */,
-				AF156FA32033472800D93A9F /* Listener.cpp in Sources */,
-				AF156FD62033479A00D93A9F /* DistanceAttenuator.cpp in Sources */,
-				AF156FDC2033479A00D93A9F /* FarDistanceEffects.cpp in Sources */,
-				AF156FDD2033479A00D93A9F /* fftsg.cpp in Sources */,
-				AF156F9F2033472800D93A9F /* Core.cpp in Sources */,
-				AF156FD52033479A00D93A9F /* Delay.cpp in Sources */,
-				AF156FDB2033479A00D93A9F /* ErrorHandler.cpp in Sources */,
-				AF156FA52033472800D93A9F /* UPCAnechoic.cpp in Sources */,
-				AF156FD92033479A00D93A9F /* DynamicExpanderMono.cpp in Sources */,
-				AF157003203347B600D93A9F /* TemporalDistortionSimulator.cpp in Sources */,
-				AF156FE42033479A00D93A9F /* Quaternion.cpp in Sources */,
-				AF156FE62033479A00D93A9F /* UPCEnvironment.cpp in Sources */,
+				3429A3F426384B8200964E9E /* SOFADate.cpp in Sources */,
+				3429A3B526384ABE00964E9E /* Environment.cpp in Sources */,
+				3429A3F626384B8200964E9E /* SOFASimpleFreeFieldSOS.cpp in Sources */,
+				3429A30626384A9A00964E9E /* HearingAidSim.cpp in Sources */,
+				3429A45A26384BD100964E9E /* ncCheck.cpp in Sources */,
+				3429A30326384A9A00964E9E /* GammatoneMultibandExpander.cpp in Sources */,
+				3429A44526384BD100964E9E /* ncCompoundType.cpp in Sources */,
+				3429A40626384B8200964E9E /* SOFAGeneralFIRE.cpp in Sources */,
+				3429A39C26384AB400964E9E /* DynamicExpanderMono.cpp in Sources */,
+				3429A45726384BD100964E9E /* ncShort.cpp in Sources */,
+				3429A45526384BD100964E9E /* ncChar.cpp in Sources */,
+				3429A39826384AB400964E9E /* ErrorHandler.cpp in Sources */,
+				3429A45626384BD100964E9E /* ncVlenType.cpp in Sources */,
+				3429A30726384A9A00964E9E /* BaerMooreFrequencySmearing.cpp in Sources */,
+				3429A30526384A9A00964E9E /* ButterworthMultibandExpander.cpp in Sources */,
+				3429A44826384BD100964E9E /* ncGroupAtt.cpp in Sources */,
+				3429A45826384BD100964E9E /* ncByte.cpp in Sources */,
+				3429A38926384AB400964E9E /* FiltersBank.cpp in Sources */,
+				3429A40126384B8200964E9E /* SOFACoordinates.cpp in Sources */,
+				3429A38C26384AB400964E9E /* Transform.cpp in Sources */,
+				3429A39526384AB400964E9E /* Magnitudes.cpp in Sources */,
+				3429A30826384A9A00964E9E /* DynamicEqualizer.cpp in Sources */,
+				3429A45926384BD100964E9E /* ncUint.cpp in Sources */,
+				3429A39426384AB400964E9E /* DistanceAttenuator.cpp in Sources */,
+				3429A38E26384AB400964E9E /* Profiler.cpp in Sources */,
+				3429A45E26384BD100964E9E /* ncVar.cpp in Sources */,
+				3429A30926384A9A00964E9E /* Fig6Algorithm.cpp in Sources */,
+				3429A38A26384AB400964E9E /* GammatoneFilter.cpp in Sources */,
+				3429A38726384AB400964E9E /* Vector3.cpp in Sources */,
+				3429A38D26384AB400964E9E /* fftsg.cpp in Sources */,
+				3429A3B426384ABE00964E9E /* BRIR.cpp in Sources */,
+				3429A30126384A9A00964E9E /* Graf3DTIFrequencySmearing.cpp in Sources */,
+				3429A44F26384BD100964E9E /* ncInt64.cpp in Sources */,
+				3429A39026384AB400964E9E /* EnvelopeDetector.cpp in Sources */,
+				3429A45D26384BD100964E9E /* ncType.cpp in Sources */,
+				3429A3FC26384B8200964E9E /* SOFAListener.cpp in Sources */,
+				3429A40426384B8200964E9E /* SOFAPoint3.cpp in Sources */,
+				3429A2FF26384A9A00964E9E /* TemporalDistortionSimulator.cpp in Sources */,
+				3429A38826384AB400964E9E /* GammatoneFilterBank.cpp in Sources */,
+				3429A39126384AB400964E9E /* DynamicCompressorMono.cpp in Sources */,
+				3429A3F526384B8200964E9E /* SOFAUnits.cpp in Sources */,
+				3429A45126384BD100964E9E /* ncAtt.cpp in Sources */,
+				3429A45C26384BD100964E9E /* ncString.cpp in Sources */,
+				3429A39226384AB400964E9E /* FiltersChain.cpp in Sources */,
+				3429A40826384B8200964E9E /* SOFAReceiver.cpp in Sources */,
+				3429A40726384B8200964E9E /* SOFAGeneralTF.cpp in Sources */,
+				3429A38B26384AB400964E9E /* BiquadFilter.cpp in Sources */,
+				3429A44626384BD100964E9E /* ncGroup.cpp in Sources */,
+				3429A39326384AB400964E9E /* DynamicCompressorStereo.cpp in Sources */,
+				3429A3B126384ABE00964E9E /* Listener.cpp in Sources */,
+				3429A45026384BD100964E9E /* ncUint64.cpp in Sources */,
+				3429A3FB26384B8200964E9E /* SOFAExceptions.cpp in Sources */,
+				3429A3FA26384B8200964E9E /* SOFAAPI.cpp in Sources */,
 				AF157008203347DC00D93A9F /* HRTFCereal.cpp in Sources */,
 				AF391F8F1E55F14200EB4AC6 /* effect3DTIHL.cpp in Sources */,
-				AF156FD72033479A00D93A9F /* DynamicCompressorMono.cpp in Sources */,
-				AF156FE32033479A00D93A9F /* Profiler.cpp in Sources */,
-				AF157001203347B600D93A9F /* HighOrderButteworthFilter.cpp in Sources */,
+				3429A40326384B8200964E9E /* SOFAMultiSpeakerBRIR.cpp in Sources */,
+				3429A45B26384BD100964E9E /* ncFloat.cpp in Sources */,
+				3429A3B226384ABE00964E9E /* UPCAnechoic.cpp in Sources */,
+				3429A44E26384BD100964E9E /* ncUshort.cpp in Sources */,
+				3429A3F826384B8200964E9E /* SOFAEmitter.cpp in Sources */,
+				3429A45326384BD100964E9E /* ncDim.cpp in Sources */,
+				3429A3FD26384B8200964E9E /* SOFANcFile.cpp in Sources */,
 				AF391F901E55F14200EB4AC6 /* effect3DTISpatializer.cpp in Sources */,
-				AF156FFD203347B600D93A9F /* Fig6Algorithm.cpp in Sources */,
-				AF156FE02033479A00D93A9F /* Fprocessor.cpp in Sources */,
-				AF156FD42033479A00D93A9F /* BiquadFilter.cpp in Sources */,
-				AF156FDF2033479A00D93A9F /* FiltersChain.cpp in Sources */,
+				3429A44726384BD100964E9E /* ncOpaqueType.cpp in Sources */,
+				3429A38F26384AB400964E9E /* NoiseGenerator.cpp in Sources */,
+				3429A3FF26384B8200964E9E /* SOFASource.cpp in Sources */,
+				3429A3B726384ABE00964E9E /* HRTF.cpp in Sources */,
+				3429A45226384BD100964E9E /* ncInt.cpp in Sources */,
+				3429A30226384A9A00964E9E /* ClassificationScaleHL.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -579,19 +947,26 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = AF766FEE1DE9F99C0003ED20 /* Config.Debug.xcconfig */;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
-				EIGEN_HEADERS = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/eigen;
 				INFOPLIST_FILE = "$(SRCROOT)/AudioPlugin3DTIToolkit/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"$(_3DTI_THIRD_PARTY)/sofacoustics/libsofa/dependencies/lib/macos/libz.a",
+					"$(_3DTI_THIRD_PARTY)/sofacoustics/libsofa/dependencies/lib/macos/libnetcdf.a",
+					"$(_3DTI_THIRD_PARTY)/sofacoustics/libsofa/dependencies/lib/macos/libhdf5.a",
+					"$(_3DTI_THIRD_PARTY)/sofacoustics/libsofa/dependencies/lib/macos/libhdf5_hl.a",
+					"$(_3DTI_THIRD_PARTY)/sofacoustics/libsofa/dependencies/lib/macos/libcurl.a",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = es.uma.diana.AudioPlugin3DTIWrapper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				"USER_HEADER_SEARCH_PATHS[arch=*]" = "";
 				WRAPPER_EXTENSION = bundle;
-				_3DTI_HEADERS = "$(_3DTI_RESUORCE_MGR) $(_3DTI_TOOLKIT) $(CEREAL_HEADERS) $(EIGEN_HEADERS)";
+				_3DTI_HEADERS = "$(_3DTI_RESUORCE_MGR) $(_3DTI_TOOLKIT) $(CEREAL_HEADERS) $(_3DTI_THIRD_PARTY)/eigen $(_3DTI_THIRD_PARTY)/sofacoustics/libsofa/src $(_3DTI_THIRD_PARTY)/sofacoustics/libsofa/dependencies/include";
 			};
 			name = Debug;
 		};
@@ -599,19 +974,27 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = AFE889EC1DCCAC7E003505EF /* Config.Release.xcconfig */;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
-				EIGEN_HEADERS = ../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/eigen;
 				INFOPLIST_FILE = "$(SRCROOT)/AudioPlugin3DTIToolkit/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(_3DTI_THIRD_PARTY)/sofacoustics/libsofa/dependencies/lib/macos/libz.a",
+					"$(_3DTI_THIRD_PARTY)/sofacoustics/libsofa/dependencies/lib/macos/libnetcdf.a",
+					"$(_3DTI_THIRD_PARTY)/sofacoustics/libsofa/dependencies/lib/macos/libhdf5.a",
+					"$(_3DTI_THIRD_PARTY)/sofacoustics/libsofa/dependencies/lib/macos/libhdf5_hl.a",
+					"$(_3DTI_THIRD_PARTY)/sofacoustics/libsofa/dependencies/lib/macos/libcurl.a",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = es.uma.diana.AudioPlugin3DTIWrapper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				"USER_HEADER_SEARCH_PATHS[arch=*]" = "";
 				WRAPPER_EXTENSION = bundle;
-				_3DTI_HEADERS = "$(_3DTI_RESUORCE_MGR) $(_3DTI_TOOLKIT) $(CEREAL_HEADERS) $(EIGEN_HEADERS)";
+				_3DTI_HEADERS = "$(_3DTI_RESUORCE_MGR) $(_3DTI_TOOLKIT) $(CEREAL_HEADERS) $(_3DTI_THIRD_PARTY)/eigen $(_3DTI_THIRD_PARTY)/sofacoustics/libsofa/src $(_3DTI_THIRD_PARTY)/sofacoustics/libsofa/dependencies/include";
 			};
 			name = Release;
 		};

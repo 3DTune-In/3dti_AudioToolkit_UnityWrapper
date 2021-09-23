@@ -18,16 +18,10 @@ PluginImporter:
       settings:
         Exclude Android: 1
         Exclude Editor: 0
-        Exclude Linux: 0
         Exclude Linux64: 0
-        Exclude LinuxUniversal: 0
-        Exclude OSXIntel: 0
-        Exclude OSXIntel64: 0
         Exclude OSXUniversal: 0
-        Exclude WebGL: 0
-        Exclude Win: 1
+        Exclude Win: 0
         Exclude Win64: 0
-        Exclude iOS: 1
   - first:
       Android: Android
     second:
@@ -48,43 +42,7 @@ PluginImporter:
         DefaultValueInitialized: true
         OS: Windows
   - first:
-      Facebook: Win
-    second:
-      enabled: 0
-      settings:
-        CPU: None
-  - first:
-      Facebook: Win64
-    second:
-      enabled: 1
-      settings:
-        CPU: AnyCPU
-  - first:
-      Standalone: Linux
-    second:
-      enabled: 1
-      settings:
-        CPU: None
-  - first:
       Standalone: Linux64
-    second:
-      enabled: 1
-      settings:
-        CPU: AnyCPU
-  - first:
-      Standalone: LinuxUniversal
-    second:
-      enabled: 1
-      settings:
-        CPU: AnyCPU
-  - first:
-      Standalone: OSXIntel
-    second:
-      enabled: 1
-      settings:
-        CPU: None
-  - first:
-      Standalone: OSXIntel64
     second:
       enabled: 1
       settings:
@@ -94,11 +52,11 @@ PluginImporter:
     second:
       enabled: 1
       settings:
-        CPU: AnyCPU
+        CPU: x86_64
   - first:
       Standalone: Win
     second:
-      enabled: 0
+      enabled: 1
       settings:
         CPU: None
   - first:
@@ -107,20 +65,6 @@ PluginImporter:
       enabled: 1
       settings:
         CPU: AnyCPU
-  - first:
-      WebGL: WebGL
-    second:
-      enabled: 1
-      settings: {}
-  - first:
-      iPhone: iOS
-    second:
-      enabled: 0
-      settings:
-        AddToEmbeddedBinaries: false
-        CPU: AnyCPU
-        CompileFlags: 
-        FrameworkDependencies: 
   userData: 
   assetBundleName: 
   assetBundleVariant: 

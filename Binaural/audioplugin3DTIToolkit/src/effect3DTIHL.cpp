@@ -9,6 +9,9 @@
 *
 * Project: 3DTI (3D-games for TUNing and lEarnINg about hearing aids)
 * Module: 3DTI Toolkit Unity Wrapper
+*
+* Updated: June 2020 onwards
+* by Tim Murray-Browne at the Dyson School of Engineering, Imperial College London.
 **/
 
 #include "AudioPluginUtil.h"
@@ -35,6 +38,11 @@ using namespace std;
 #include <string>
 #include <sstream>
 #endif
+#include "Common/CommonDefinitions.h"
+#include "HAHLSimulation/ButterworthMultibandExpander.h"
+#include "HAHLSimulation/FrequencySmearing.h"
+#include <mutex>
+#include "HAHLSimulation/GammatoneMultibandExpander.h"
 
 //enum THLClassificationScaleCurve { HL_CS_ERROR =-1, HL_CS_NOLOSS =0, 
 //								   HL_CS_A =1, HL_CS_B =2, HL_CS_C =3, HL_CS_D =4, HL_CS_E =5, HL_CS_F =6,
@@ -46,6 +54,22 @@ using namespace std;
 namespace HLSimulation3DTI
 {
 
+	using namespace Common;
+
+	enum FrequencySmearingApproach : int
+	{
+		FREQUENCYSMEARING_APPROACH_BAERMOORE = 0,
+		FREQUENCYSMEARING_APPROACH_GRAF,
+		FREQUENCYSMEARING_APPROACH_COUNT
+	};
+
+	enum MultibandExpanderApproach : int
+	{
+		BUTTERWORTH = 0,
+		GAMMATONE = 1,
+		MBE_APPROACH_COUNT,
+	};
+
 //////////////////////////////////////////////////////
 
 // Default values for parameters
@@ -53,8 +77,12 @@ namespace HLSimulation3DTI
 #define DEFAULT_HL_ON				false
 #define DEFAULT_HL_ON				false
 #define DEFAULT_MULTIBANDEXPANDER_ON	true
+#define DEFAULT_MULTIBANDEXPANDER_FILTER_GROUPING false
+#define DEFAULT_MULTIBANDEXPANDER_NUM_FILTERS_PER_BAND 3
+#define DEFAULT_MULTIBANDEXPANDER_APPROACH BUTTERWORTH
 #define DEFAULT_TEMPORALDISTORTION_ON	false
 #define DEFAULT_FREQUENCYSMEARING_ON	false
+#define DEFAULT_FREQUENCYSMEARING_APPROACH FrequencySmearingApproach::FREQUENCYSMEARING_APPROACH_BAERMOORE
 // Multiband expander:
 #define DEFAULT_INIFREQ				62.5
 #define DEFAULT_BANDSNUMBER			9
@@ -142,10 +170,19 @@ enum
 	// Calibration
 	PARAM_CALIBRATION_DBSPL_FOR_0DBFS,
 
+	// Multiband expander approaches
+	PARAM_MBE_APPROACH_LEFT,
+	PARAM_MBE_APPROACH_RIGHT,
+	PARAM_MBE_FILTER_GROUPING_LEFT,
+	PARAM_MBE_FILTER_GROUPING_RIGHT,
+	PARAM_MBE_NUM_FILTERS_PER_BAND_LEFT, // Butterworth only
+	PARAM_MBE_NUM_FILTERS_PER_BAND_RIGHT, // Butterworth only
+
+
 	// Multiband expander envelope detectors
 	PARAM_MBE_ATTACK_LEFT,
-	PARAM_MBE_RELEASE_LEFT,
 	PARAM_MBE_ATTACK_RIGHT,
+	PARAM_MBE_RELEASE_LEFT,
 	PARAM_MBE_RELEASE_RIGHT,
 	
 	// Switch on/off multiband expander for each ear
@@ -169,6 +206,8 @@ enum
 	PARAM_TA_AUTOCORR1_GET_RIGHT,
 
 	// Frequency smearing
+	PARAM_FREQUENCYSMEARING_APPROACH_LEFT,
+	PARAM_FREQUENCYSMEARING_APPROACH_RIGHT,
 	PARAM_FREQUENCYSMEARING_ON_LEFT,
 	PARAM_FREQUENCYSMEARING_ON_RIGHT,
 	PARAM_FS_DOWN_SIZE_LEFT,
@@ -179,6 +218,7 @@ enum
 	PARAM_FS_DOWN_HZ_RIGHT,
 	PARAM_FS_UP_HZ_LEFT,
 	PARAM_FS_UP_HZ_RIGHT,
+
 
 	// Classification scale
 	//PARAM_CLASSIFICATION_CURVE_LEFT,
@@ -205,6 +245,7 @@ enum
 
 		// DEBUG LOG
 		//bool debugLog = true;
+		std::mutex mutex;
 	};
 
 	/////////////////////////////////////////////////////////////////////
@@ -387,56 +428,56 @@ enum
 	//	return result;
 	//}
 
-	void SetNewAudiometry(UnityAudioEffectState* state, Common::T_ear ear, TAudiometry& audiometry)
-	{
-		// Resize audiometry if needed
-		if (audiometry.size() == 7)
-		{
-			audiometry.insert(audiometry.begin(), audiometry[0]);						// Copy first value, to have 9 bands from 7
-			audiometry.insert(audiometry.end(), audiometry[audiometry.size() - 1]);	// Copy last value, to have 9 bands from 7
-		}
+	//void SetNewAudiometry(UnityAudioEffectState* state, Common::T_ear ear, TAudiometry& audiometry)
+	//{
+	//	// Resize audiometry if needed
+	//	if (audiometry.size() == 7)
+	//	{
+	//		audiometry.insert(audiometry.begin(), audiometry[0]);						// Copy first value, to have 9 bands from 7
+	//		audiometry.insert(audiometry.end(), audiometry[audiometry.size() - 1]);	// Copy last value, to have 9 bands from 7
+	//	}
 
-		// Set audiometry in HL simulator
-		EffectData* data = state->GetEffectData<EffectData>();
-		data->HL.SetFromAudiometry_dBHL(ear, audiometry);
+	//	// Set audiometry in HL simulator
+	//	EffectData* data = state->GetEffectData<EffectData>();
+	//	data->HL.SetFromAudiometry_dBHL(ear, audiometry);
 
-		// Set all audiometry (hearing loss levels) parameters to keep coherency
-		if (ear == Common::T_ear::LEFT)
-		{
-			data->parameters[PARAM_MBE_BAND_0_LEFT] = audiometry[0];
-			data->parameters[PARAM_MBE_BAND_1_LEFT] = audiometry[1];
-			data->parameters[PARAM_MBE_BAND_2_LEFT] = audiometry[2];
-			data->parameters[PARAM_MBE_BAND_3_LEFT] = audiometry[3];
-			data->parameters[PARAM_MBE_BAND_4_LEFT] = audiometry[4];
-			data->parameters[PARAM_MBE_BAND_5_LEFT] = audiometry[5];
-			data->parameters[PARAM_MBE_BAND_6_LEFT] = audiometry[6];
-			data->parameters[PARAM_MBE_BAND_7_LEFT] = audiometry[7];
-			data->parameters[PARAM_MBE_BAND_8_LEFT] = audiometry[8];
-		}
-		else
-		{
-			data->parameters[PARAM_MBE_BAND_0_RIGHT] = audiometry[0];
-			data->parameters[PARAM_MBE_BAND_1_RIGHT] = audiometry[1];
-			data->parameters[PARAM_MBE_BAND_2_RIGHT] = audiometry[2];
-			data->parameters[PARAM_MBE_BAND_3_RIGHT] = audiometry[3];
-			data->parameters[PARAM_MBE_BAND_4_RIGHT] = audiometry[4];
-			data->parameters[PARAM_MBE_BAND_5_RIGHT] = audiometry[5];
-			data->parameters[PARAM_MBE_BAND_6_RIGHT] = audiometry[6];
-			data->parameters[PARAM_MBE_BAND_7_RIGHT] = audiometry[7];
-			data->parameters[PARAM_MBE_BAND_8_RIGHT] = audiometry[8];
-		}
-	}
+	//	// Set all audiometry (hearing loss levels) parameters to keep coherency
+	//	if (ear == Common::T_ear::LEFT)
+	//	{
+	//		data->parameters[PARAM_MBE_BAND_0_LEFT] = audiometry[0];
+	//		data->parameters[PARAM_MBE_BAND_1_LEFT] = audiometry[1];
+	//		data->parameters[PARAM_MBE_BAND_2_LEFT] = audiometry[2];
+	//		data->parameters[PARAM_MBE_BAND_3_LEFT] = audiometry[3];
+	//		data->parameters[PARAM_MBE_BAND_4_LEFT] = audiometry[4];
+	//		data->parameters[PARAM_MBE_BAND_5_LEFT] = audiometry[5];
+	//		data->parameters[PARAM_MBE_BAND_6_LEFT] = audiometry[6];
+	//		data->parameters[PARAM_MBE_BAND_7_LEFT] = audiometry[7];
+	//		data->parameters[PARAM_MBE_BAND_8_LEFT] = audiometry[8];
+	//	}
+	//	else
+	//	{
+	//		data->parameters[PARAM_MBE_BAND_0_RIGHT] = audiometry[0];
+	//		data->parameters[PARAM_MBE_BAND_1_RIGHT] = audiometry[1];
+	//		data->parameters[PARAM_MBE_BAND_2_RIGHT] = audiometry[2];
+	//		data->parameters[PARAM_MBE_BAND_3_RIGHT] = audiometry[3];
+	//		data->parameters[PARAM_MBE_BAND_4_RIGHT] = audiometry[4];
+	//		data->parameters[PARAM_MBE_BAND_5_RIGHT] = audiometry[5];
+	//		data->parameters[PARAM_MBE_BAND_6_RIGHT] = audiometry[6];
+	//		data->parameters[PARAM_MBE_BAND_7_RIGHT] = audiometry[7];
+	//		data->parameters[PARAM_MBE_BAND_8_RIGHT] = audiometry[8];
+	//	}
+	//}
 
 	/////////////////////////////////////////////////////////////////////
 
 
-    inline bool IsHostCompatible(UnityAudioEffectState* state)
-    {
-        // Somewhat convoluted error checking here because hostapiversion is only supported from SDK version 1.03 (i.e. Unity 5.2) and onwards.
-        return
-            state->structsize >= sizeof(UnityAudioEffectState) &&
-            state->hostapiversion >= UNITY_AUDIO_PLUGIN_API_VERSION;
-    }
+    //inline bool IsHostCompatible(UnityAudioEffectState* state)
+    //{
+    //    // Somewhat convoluted error checking here because hostapiversion is only supported from SDK version 1.03 (i.e. Unity 5.2) and onwards.
+    //    return
+    //        state->structsize >= sizeof(UnityAudioEffectState) &&
+    //        state->hostapiversion >= UNITY_AUDIO_PLUGIN_API_VERSION;
+    //}
 
 	/////////////////////////////////////////////////////////////////////
 
@@ -472,6 +513,15 @@ enum
 		// Calibration
 		RegisterParameter(definition, "HLCAL", "dBSPL", 0.0f, MAX_CALIBRATION_DBSPL, DEFAULT_CALIBRATION_DBSPL, 1.0f, 1.0f, PARAM_CALIBRATION_DBSPL_FOR_0DBFS, "Calibration: dBSPL equivalent to 0 dBFS");	
 
+		// Multiband expander approaches
+
+		RegisterParameter(definition, "HLMBEAPPROACHL", "", 0.0f, MBE_APPROACH_COUNT, DEFAULT_MULTIBANDEXPANDER_APPROACH, 1.0f, 1.0f, PARAM_MBE_APPROACH_LEFT, "Multiband expander algorithm for left ear");
+		RegisterParameter(definition, "HLMBEAPPROACHR", "", 0.0f, MBE_APPROACH_COUNT, DEFAULT_MULTIBANDEXPANDER_APPROACH, 1.0f, 1.0f, PARAM_MBE_APPROACH_RIGHT, "Multiband expander algorithm for right ear");
+		RegisterParameter(definition, "HLMBEFGL", "", 0.0f, 1.0f, Bool2Float(DEFAULT_MULTIBANDEXPANDER_FILTER_GROUPING), 1.0f, 1.0f, PARAM_MBE_FILTER_GROUPING_LEFT, "Multiband expander filter grouping for left ear");
+		RegisterParameter(definition, "HLMBEFGR", "", 0.0f, 1.0f, Bool2Float(DEFAULT_MULTIBANDEXPANDER_FILTER_GROUPING), 1.0f, 1.0f, PARAM_MBE_FILTER_GROUPING_RIGHT, "Multiband expander filter grouping for right ear");
+		RegisterParameter(definition, "HLMBEFPBL", "", 1.0f, 9.0f, DEFAULT_MULTIBANDEXPANDER_NUM_FILTERS_PER_BAND, 1.0f, 1.0f, PARAM_MBE_NUM_FILTERS_PER_BAND_LEFT, "Multiband expander number of filters per band for left ear (odd number)");
+		RegisterParameter(definition, "HLMBEFPBR", "", 1.0f, 9.0f, DEFAULT_MULTIBANDEXPANDER_NUM_FILTERS_PER_BAND, 1.0f, 1.0f, PARAM_MBE_NUM_FILTERS_PER_BAND_RIGHT, "Multiband expander number of filters per band for right ear (odd number)");
+
 		// Multiband expander envelope detectors
 		RegisterParameter(definition, "HLATKL", "ms", 0.0f, MAX_ATTACK, DEFAULT_ATTACK, 1.0f, 1.0f, PARAM_MBE_ATTACK_LEFT, "Attack time for left ear envelope detectors (ms)");
 		RegisterParameter(definition, "HLRELL", "ms", 0.0f, MAX_RELEASE, DEFAULT_RELEASE, 1.0f, 1.0f, PARAM_MBE_RELEASE_LEFT, "Release time for left ear envelope detectors (ms)");
@@ -499,8 +549,10 @@ enum
 		RegisterParameter(definition, "HLTA1GR", "", MIN_TAAUTOCORRELATION, MAX_TAAUTOCORRELATION, 0.0f, 1.0f, 1.0f, PARAM_TA_AUTOCORR1_GET_RIGHT, "Autocorrelation coefficient one in right temporal distortion noise source?");
 
 		// Frequency smearing
-		RegisterParameter(definition, "HLFSONL", "", 0.0f, 1.0f, Bool2Float(DEFAULT_FREQUENCYSMEARING_ON), 1.0f, 1.0f, PARAM_FREQUENCYSMEARING_ON_LEFT, "Switch on frequency smearing simulation for left ear");
-		RegisterParameter(definition, "HLFSONR", "", 0.0f, 1.0f, Bool2Float(DEFAULT_FREQUENCYSMEARING_ON), 1.0f, 1.0f, PARAM_FREQUENCYSMEARING_ON_RIGHT, "Switch on frequency smearing simulation for right ear");
+		RegisterParameter(definition, "HLFSONL", "", 0.0f, 1.0f, DEFAULT_FREQUENCYSMEARING_ON, 1.0f, 1.0f, PARAM_FREQUENCYSMEARING_ON_LEFT, "Switch on frequency smearing simulation for left ear");
+		RegisterParameter(definition, "HLFSONR", "", 0.0f, 1.0f, DEFAULT_FREQUENCYSMEARING_ON, 1.0f, 1.0f, PARAM_FREQUENCYSMEARING_ON_RIGHT, "Switch on frequency smearing simulation for right ear");
+		RegisterParameter(definition, "HLFSAPPROACHL", "", 0.0f, FREQUENCYSMEARING_APPROACH_COUNT, DEFAULT_FREQUENCYSMEARING_APPROACH, 1.0f, 1.0f, PARAM_FREQUENCYSMEARING_APPROACH_LEFT, "Approach used for Frequency smearing");
+		RegisterParameter(definition, "HLFSAPPROACHR", "", 0.0f, FREQUENCYSMEARING_APPROACH_COUNT, DEFAULT_FREQUENCYSMEARING_APPROACH, 1.0f, 1.0f, PARAM_FREQUENCYSMEARING_APPROACH_RIGHT, "Approach used for Frequency smearing");
 		RegisterParameter(definition, "HLFSDOWNSZL", "", MIN_FSSIZE, MAX_FSSIZE, DEFAULT_FSSIZE, 1.0f, 1.0f, PARAM_FS_DOWN_SIZE_LEFT, "Size of downward section of smearing window for left ear");
 		RegisterParameter(definition, "HLFSDOWNSZR", "", MIN_FSSIZE, MAX_FSSIZE, DEFAULT_FSSIZE, 1.0f, 1.0f, PARAM_FS_DOWN_SIZE_RIGHT, "Size of downward section of smearing window for right ear");
 		RegisterParameter(definition, "HLFSUPSZL", "", MIN_FSSIZE, MAX_FSSIZE, DEFAULT_FSSIZE, 1.0f, 1.0f, PARAM_FS_UP_SIZE_LEFT, "Size of upward section of smearing window for left ear");
@@ -536,8 +588,8 @@ enum
 		WriteLog(state, "        Non-linear attenuation Right = ", DEFAULT_MULTIBANDEXPANDER_ON);
 		WriteLog(state, "        Temporal Distortion Left = ", DEFAULT_TEMPORALDISTORTION_ON);
 		WriteLog(state, "        Temporal Distortion Right = ", DEFAULT_TEMPORALDISTORTION_ON);
-		WriteLog(state, "        Frequency Smearing Left = ",  DEFAULT_FREQUENCYSMEARING_ON);
-		WriteLog(state, "        Frequency Smearing Right = ", DEFAULT_FREQUENCYSMEARING_ON);
+		WriteLog(state, "        Frequency Smearing Left = ",  DEFAULT_FREQUENCYSMEARING_APPROACH);
+		WriteLog(state, "        Frequency Smearing Right = ", DEFAULT_FREQUENCYSMEARING_APPROACH);
 		//WriteLog(state, "        HL Classification scale curve (might by overriden) = ", FromClassificationScaleCurveToString(DEFAULT_CS_CURVE));
 		//WriteLog(state, "        HL Classification scale severity (might by overriden) = ", DEFAULT_CS_SEVERITY);
 
@@ -594,17 +646,155 @@ enum
 
 	/////////////////////////////////////////////////////////////////////	
 
-    UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectState* state)
-    {
-        EffectData* effectdata = new EffectData;
-        //memset(effectdata, 0, sizeof(EffectData));
-        state->effectdata = effectdata;
-        InitParametersFromDefinitions(InternalRegisterEffectDefinition, effectdata->parameters);
-		
+
+	void SetOneHearingLossLevel(UnityAudioEffectState* state, Common::T_ear ear, int bandIndex, float valueDBHL)
+	{
+		// Check errors
+		if ((bandIndex > DEFAULT_BANDSNUMBER) || (bandIndex < 0))
+		{
+			WriteLog(state, "SET PARAMETER: ERROR!!!! Attempt to set hearing level for an incorrect band index: ", bandIndex);
+			return;
+		}
+		if ((valueDBHL < MIN_HEARINGLOSS) || (valueDBHL > MAX_HEARINGLOSS))
+		{
+			WriteLog(state, "SET PARAMETER: ERROR!!!! Attempt to set a wrong dBHL value for hearing loss level: ", valueDBHL);
+			return;
+		}
+
+		// Set hearing loss level
+		HAHLSimulation::CHearingLossSim& HL = state->GetEffectData<EffectData>()->HL;
+		HL.SetHearingLevel_dBHL(ear, bandIndex, valueDBHL);
+
+		// Debug log output
+		string earStr = "Unknown";
+		if (ear == Common::T_ear::LEFT)
+			earStr = "Left";
+		if (ear == Common::T_ear::RIGHT)
+			earStr = "Right";
+#ifndef UNITY_ANDROID
+		string logOutput = "SET PARAMETER: Hearing loss of band " + std::to_string(bandIndex) + " for " + earStr + " ear set to " + std::to_string(valueDBHL) + " dBHL";
+#else
+		string logOutput = "SET PARAMETER: Hearing loss changed for" + earStr + " ear"; //???
+#endif
+		WriteLog(state, logOutput, "");
+	}
+
+	/////////////////////////////////////////////////////////////////////
+
+	void updateMultibandExpander(UnityAudioEffectState* state, Common::T_ear ear)
+	{
+		assert(ear == LEFT || ear == RIGHT);
+		static_assert(LEFT == 0 && RIGHT == 1, "This assumption allows us to add the ear to parameter enum");
+		EffectData* data = state->GetEffectData<EffectData>();
+
+		MultibandExpanderApproach newApproach = (MultibandExpanderApproach) max(0, min(MBE_APPROACH_COUNT - 1, int(data->parameters[PARAM_MBE_APPROACH_LEFT + ear])));
+		bool filterGrouping = data->parameters[PARAM_MBE_FILTER_GROUPING_LEFT + ear] > 0.0f;
+		int filtersPerBand = static_cast<int>(data->parameters[PARAM_MBE_NUM_FILTERS_PER_BAND_LEFT + ear]);
+		// ensure odd number
+		filtersPerBand = filtersPerBand / 2 * 2 + 1;
+		filtersPerBand = max(filtersPerBand, 1);
+
+		std::shared_ptr<HAHLSimulation::CMultibandExpander> expander;
+		// keep a specific pointer to butterworth as there is a class-specific function to call later on
+		std::shared_ptr<HAHLSimulation::CButterworthMultibandExpander> butterworthExpander;
+		if (newApproach == BUTTERWORTH)
+		{
+			expander = butterworthExpander = std::make_shared<HAHLSimulation::CButterworthMultibandExpander>();
+		}
+		else
+		{
+			assert(newApproach == GAMMATONE);
+			expander = std::make_shared<HAHLSimulation::CGammatoneMultibandExpander>();
+		}
+		expander->Setup(state->samplerate, DEFAULT_INIFREQ, data->HL.GetNumberOfBands(), filterGrouping);
+		if (newApproach == BUTTERWORTH)
+		{
+			butterworthExpander->SetNumberOfFiltersPerBand(filtersPerBand);
+		}
+		data->HL.SetMultibandExpander(ear, expander);
+
+		// Refresh audiometry
+		if (ear == LEFT)
+		{
+			SetOneHearingLossLevel(state, Common::T_ear::LEFT, 0, data->parameters[PARAM_MBE_BAND_0_LEFT]);
+			SetOneHearingLossLevel(state, Common::T_ear::LEFT, 1, data->parameters[PARAM_MBE_BAND_1_LEFT]);
+			SetOneHearingLossLevel(state, Common::T_ear::LEFT, 2, data->parameters[PARAM_MBE_BAND_2_LEFT]);
+			SetOneHearingLossLevel(state, Common::T_ear::LEFT, 3, data->parameters[PARAM_MBE_BAND_3_LEFT]);
+			SetOneHearingLossLevel(state, Common::T_ear::LEFT, 4, data->parameters[PARAM_MBE_BAND_4_LEFT]);
+			SetOneHearingLossLevel(state, Common::T_ear::LEFT, 5, data->parameters[PARAM_MBE_BAND_5_LEFT]);
+			SetOneHearingLossLevel(state, Common::T_ear::LEFT, 6, data->parameters[PARAM_MBE_BAND_6_LEFT]);
+			SetOneHearingLossLevel(state, Common::T_ear::LEFT, 7, data->parameters[PARAM_MBE_BAND_7_LEFT]);
+			SetOneHearingLossLevel(state, Common::T_ear::LEFT, 8, data->parameters[PARAM_MBE_BAND_8_LEFT]);
+		}
+		else
+		{
+			assert(ear == RIGHT);
+			SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 0, data->parameters[PARAM_MBE_BAND_0_RIGHT]);
+			SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 1, data->parameters[PARAM_MBE_BAND_1_RIGHT]);
+			SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 2, data->parameters[PARAM_MBE_BAND_2_RIGHT]);
+			SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 3, data->parameters[PARAM_MBE_BAND_3_RIGHT]);
+			SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 4, data->parameters[PARAM_MBE_BAND_4_RIGHT]);
+			SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 5, data->parameters[PARAM_MBE_BAND_5_RIGHT]);
+			SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 6, data->parameters[PARAM_MBE_BAND_6_RIGHT]);
+			SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 7, data->parameters[PARAM_MBE_BAND_7_RIGHT]);
+			SetOneHearingLossLevel(state, Common::T_ear::RIGHT, 8, data->parameters[PARAM_MBE_BAND_8_RIGHT]);
+		}
+	}
+
+
+	/////////////////////////////////////////////////////////////////////	
+
+	void updateFrequencySmearer(UnityAudioEffectState* state, Common::T_ear ear)
+	{
+		assert(ear == LEFT || ear == RIGHT);
+		static_assert(LEFT == 0 && RIGHT == 1, "This assumption allows us to add the ear to parameter enum");
+
+		EffectData* data = state->GetEffectData<EffectData>();
+		FrequencySmearingApproach approach = data->parameters[PARAM_FREQUENCYSMEARING_APPROACH_LEFT + ear] == FREQUENCYSMEARING_APPROACH_BAERMOORE? FREQUENCYSMEARING_APPROACH_BAERMOORE  : FREQUENCYSMEARING_APPROACH_GRAF;
+		if (data->parameters[PARAM_FREQUENCYSMEARING_ON_LEFT + ear])
+		{
+			data->HL.EnableFrequencySmearing(ear);
+		}
+		else
+		{
+			data->HL.DisableFrequencySmearing(ear);
+		}
+
+		if (approach == FREQUENCYSMEARING_APPROACH_BAERMOORE)
+		{
+			auto frequencySmearer = std::make_shared<HAHLSimulation::CBaerMooreFrequencySmearing>();
+			frequencySmearer->Setup(state->dspbuffersize, state->samplerate);
+			frequencySmearer->SetDownwardBroadeningFactor(data->parameters[PARAM_FS_DOWN_HZ_LEFT+ear]);
+			frequencySmearer->SetUpwardBroadeningFactor(data->parameters[PARAM_FS_UP_HZ_LEFT+ear]);
+			data->HL.SetFrequencySmearer(ear, frequencySmearer);
+		}
+		else
+		{
+			assert(approach == FREQUENCYSMEARING_APPROACH_GRAF);
+			auto frequencySmearer = std::make_shared<HAHLSimulation::CGraf3DTIFrequencySmearing>();
+			frequencySmearer->Setup(state->dspbuffersize, state->samplerate);
+			frequencySmearer->SetDownwardSmearingBufferSize((int) data->parameters[PARAM_FS_DOWN_SIZE_LEFT + ear]);
+			frequencySmearer->SetUpwardSmearingBufferSize((int) data->parameters[PARAM_FS_UP_SIZE_LEFT + ear]);
+			frequencySmearer->SetDownwardSmearing_Hz(data->parameters[PARAM_FS_DOWN_HZ_LEFT + ear]);
+			frequencySmearer->SetUpwardSmearing_Hz(data->parameters[PARAM_FS_UP_HZ_LEFT + ear]);
+			data->HL.SetFrequencySmearer(ear, frequencySmearer);
+		}
+	}
+
+
+	UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectState* state)
+	{
+		EffectData* effectdata = new EffectData;
+		//memset(effectdata, 0, sizeof(EffectData));
+		state->effectdata = effectdata;
+		InitParametersFromDefinitions(InternalRegisterEffectDefinition, effectdata->parameters);
+
 		// TO DO: check errors with debugger
 
+#pragma message(": warning: todo: I think we should be reading these defaults from effectdata->parameters rather than reusing the default values, to ensure parameters remains consistent with the state of HL")
+
 		// Module switches
-		if (DEFAULT_HL_ON)		
+		if (DEFAULT_HL_ON)
 			effectdata->HL.EnableHearingLossSimulation(Common::T_ear::BOTH);
 		else
 			effectdata->HL.DisableHearingLossSimulation(Common::T_ear::BOTH);
@@ -622,7 +812,26 @@ enum
 			effectdata->HL.DisableFrequencySmearing(Common::T_ear::BOTH);
 
 		// Hearing loss simulator Setup		
-		effectdata->HL.Setup(state->samplerate, DEFAULT_CALIBRATION_DBSPL, DEFAULT_INIFREQ, DEFAULT_BANDSNUMBER, DEFAULT_FILTERSPERBAND, state->dspbuffersize);		
+		//effectdata->HL.Setup(state->samplerate, DEFAULT_CALIBRATION_DBSPL, DEFAULT_INIFREQ, DEFAULT_BANDSNUMBER, DEFAULT_FILTERSPERBAND, state->dspbuffersize);
+		effectdata->HL.Setup(state->samplerate, DEFAULT_CALIBRATION_DBSPL, DEFAULT_BANDSNUMBER, state->dspbuffersize);
+
+		// Tim: We now need to manually create multiband expanders before calling SetFromAudiometry
+		for (auto ear : { Common::T_ear::LEFT, Common::T_ear::RIGHT })
+		{
+			updateMultibandExpander(state, ear);
+			//auto multibandExpander = std::make_shared<HAHLSimulation::CButterworthMultibandExpander>();
+			//const bool TEMP_DEFAULT_FILTER_GROUPING = false;
+			//multibandExpander->Setup(state->samplerate, DEFAULT_INIFREQ, effectdata->HL.GetNumberOfBands(), TEMP_DEFAULT_FILTER_GROUPING);
+			//const int TEMP_DEFAULT_NUM_FILTERS_PER_BAND = 3;
+			//multibandExpander->SetNumberOfFiltersPerBand(TEMP_DEFAULT_NUM_FILTERS_PER_BAND);
+			//effectdata->HL.SetMultibandExpander(ear, multibandExpander);
+			assert(effectdata->HL.GetMultibandExpander(ear)->IsReady());
+
+			updateFrequencySmearer(state, ear);
+		}
+
+
+
 
 		// Initial setup of hearing loss levels
 		effectdata->HL.SetFromAudiometry_dBHL(Common::T_ear::BOTH, DEFAULT_AUDIOMETRY);
@@ -631,8 +840,11 @@ enum
 		effectdata->HL.SetCalibration(DEFAULT_CALIBRATION_DBSPL);
 
 		// Setup of envelope detectors
-		effectdata->HL.SetAttackForAllBands(Common::T_ear::BOTH, DEFAULT_ATTACK);
-		effectdata->HL.SetReleaseForAllBands(Common::T_ear::BOTH, DEFAULT_RELEASE);
+		for (bool filterGrouping : {false, true})
+		{
+			effectdata->HL.SetAttackForAllBands(Common::T_ear::BOTH, DEFAULT_ATTACK, filterGrouping);
+			effectdata->HL.SetReleaseForAllBands(Common::T_ear::BOTH, DEFAULT_RELEASE, filterGrouping);
+		}
 
 		// Initial setup of temporal distortion simulator
 		effectdata->HL.GetTemporalDistortionSimulator()->SetBandUpperLimit(Common::T_ear::BOTH, DEFAULT_TABAND);
@@ -673,39 +885,7 @@ enum
         return UNITY_AUDIODSP_OK;
     }
 
-	/////////////////////////////////////////////////////////////////////
-
-	void SetOneHearingLossLevel(UnityAudioEffectState* state, Common::T_ear ear, int bandIndex, float valueDBHL)
-	{
-		// Check errors
-		if ((bandIndex > DEFAULT_BANDSNUMBER) || (bandIndex < 0))
-		{
-			WriteLog(state, "SET PARAMETER: ERROR!!!! Attempt to set hearing level for an incorrect band index: ", bandIndex);
-			return;
-		}
-		if ((valueDBHL < MIN_HEARINGLOSS) || (valueDBHL > MAX_HEARINGLOSS))
-		{
-			WriteLog(state, "SET PARAMETER: ERROR!!!! Attempt to set a wrong dBHL value for hearing loss level: ", valueDBHL);
-			return;
-		}
-		
-		// Set hearing loss level
-		HAHLSimulation::CHearingLossSim HL = state->GetEffectData<EffectData>()->HL;
-		HL.SetHearingLevel_dBHL(ear, bandIndex, valueDBHL);
-					
-		// Debug log output
-		string earStr = "Unknown";
-		if (ear == Common::T_ear::LEFT)
-			earStr = "Left";
-		if (ear == Common::T_ear::RIGHT)
-			earStr = "Right";
-		#ifndef UNITY_ANDROID
-		string logOutput = "SET PARAMETER: Hearing loss of band " + std::to_string(bandIndex) + " for " + earStr + " ear set to " + std::to_string(valueDBHL) + " dBHL";
-		#else
-		string logOutput = "SET PARAMETER: Hearing loss changed for" + earStr + " ear"; //???
-		#endif
-		WriteLog(state, logOutput, "");		
-	}
+	
 
 	/////////////////////////////////////////////////////////////////////
 
@@ -714,7 +894,12 @@ enum
         EffectData* data = state->GetEffectData<EffectData>();
         if (index >= P_NUM)
             return UNITY_AUDIODSP_ERR_UNSUPPORTED;
+
+		// Note that as parameters are stored in here then for some updates we can delegate to another function, such as updateFrequencySmearer(..)
         data->parameters[index] = value;
+
+		std::lock_guard<std::mutex> lock(data->mutex);
+
 
 		//THLClassificationScaleCurve curve;
 		//int severity;		
@@ -858,55 +1043,119 @@ enum
 				WriteLog(state, "SET PARAMETER: Calibration (dBSPL for 0dBFS) set to: ", value);
 				break;
 
+			//case PARAM_MBE_APPROACH_LEFT:
+			//{
+			//	MultibandExpanderApproach approach = (MultibandExpanderApproach) max(0, min(MBE_APPROACH_COUNT - 1, int(value)));
+
+			//}
+
+			//case PARAM_MBE_FILTER_GROUPING_LEFT:
+			//{
+			//	bool filterGrouping = Float2Bool(value);
+			//	data->HL.GetMultibandExpander(LEFT)->Setup(state->samplerate, DEFAULT_INIFREQ, data->HL.GetNumberOfBands(), filterGrouping);
+			//}
+			//break;
+
+			case PARAM_MBE_APPROACH_LEFT:
+			case PARAM_MBE_FILTER_GROUPING_LEFT:
+			case PARAM_MBE_NUM_FILTERS_PER_BAND_LEFT:
+				updateMultibandExpander(state, LEFT);
+				break;
+
+			case PARAM_MBE_APPROACH_RIGHT:
+			case PARAM_MBE_FILTER_GROUPING_RIGHT:
+			case PARAM_MBE_NUM_FILTERS_PER_BAND_RIGHT:
+				updateMultibandExpander(state, RIGHT);
+				break;
+
 			// ENVELOPE DETECTORS:
 			case PARAM_MBE_ATTACK_LEFT:
-				data->HL.SetAttackForAllBands(Common::T_ear::LEFT, value);
+#pragma message(": warning: todo - make separate parameters for the two filter grouping options")
+				for (bool filterGrouping : {false, true})
+					data->HL.SetAttackForAllBands(Common::T_ear::LEFT, value, filterGrouping);
 				WriteLog(state, "SET PARAMETER: Attack time (ms) for Left envelope detectors set to: ", value);				
 				break;
 
 			case PARAM_MBE_ATTACK_RIGHT:
-				data->HL.SetAttackForAllBands(Common::T_ear::RIGHT, value);
+#pragma message(": warning: todo - make separate parameters for the two filter grouping options")
+				for (bool filterGrouping : {false, true})
+					data->HL.SetAttackForAllBands(Common::T_ear::RIGHT, value, filterGrouping);
 				WriteLog(state, "SET PARAMETER: Attack time (ms) for Right envelope detectors set to: ", value);
 				break;
 
 			case PARAM_MBE_RELEASE_LEFT:
-				data->HL.SetReleaseForAllBands(Common::T_ear::LEFT, value);
+#pragma message(": warning: todo - make separate parameters for the two filter grouping options")
+				for (bool filterGrouping : {false, true})
+					data->HL.SetReleaseForAllBands(Common::T_ear::LEFT, value, filterGrouping);
 				WriteLog(state, "SET PARAMETER: Release time (ms) for Left envelope detectors set to: ", value);
 				break;
 
 			case PARAM_MBE_RELEASE_RIGHT:
-				data->HL.SetReleaseForAllBands(Common::T_ear::RIGHT, value);
+#pragma message(": warning: todo - make separate parameters for the two filter grouping options")
+				for (bool filterGrouping : {false, true})
+					data->HL.SetReleaseForAllBands(Common::T_ear::RIGHT, value, filterGrouping);
 				WriteLog(state, "SET PARAMETER: Release time (ms) for Right envelope detectors set to: ", value);
 				break;
 
 			// TEMPORAL DISTORTION SIMULATION:
 			case PARAM_TA_BAND_LEFT:
 				data->HL.GetTemporalDistortionSimulator()->SetBandUpperLimit(Common::T_ear::LEFT, value);
+				if (data->parameters[PARAM_TA_LRSYNC_ON])
+				{
+					// to keep us in sync with the TemporalDistortionSimulator internal variables.
+					data->parameters[PARAM_TA_BAND_RIGHT] = value;
+				}
 				WriteLog(state, "SET PARAMETER: Band upper limit (Hz) for Left temporal distortion simulator set to: ", value);
 				break;
 
 			case PARAM_TA_BAND_RIGHT:
 				data->HL.GetTemporalDistortionSimulator()->SetBandUpperLimit(Common::T_ear::RIGHT, value);
+				if (data->parameters[PARAM_TA_LRSYNC_ON])
+				{
+					// to keep us in sync with the TemporalDistortionSimulator internal variables.
+					data->parameters[PARAM_TA_BAND_LEFT] = value;
+				}
+
 				WriteLog(state, "SET PARAMETER: Band upper limit (Hz) for Right temporal distortion simulator set to: ", value);
 				break;
 
 			case PARAM_TA_NOISELPF_LEFT:
 				data->HL.GetTemporalDistortionSimulator()->SetNoiseAutocorrelationFilterCutoffFrequency(Common::T_ear::LEFT, value);
+				if (data->parameters[PARAM_TA_LRSYNC_ON])
+				{
+					// to keep us in sync with the TemporalDistortionSimulator internal variables.
+					data->parameters[PARAM_TA_NOISELPF_RIGHT] = value;
+				}
 				WriteLog(state, "SET PARAMETER: Noise autocorrelation LPF cutoff (Hz) for Left temporal distortion simulator set to: ", value);
 				break;
 
 			case PARAM_TA_NOISELPF_RIGHT:
 				data->HL.GetTemporalDistortionSimulator()->SetNoiseAutocorrelationFilterCutoffFrequency(Common::T_ear::RIGHT, value);
+				if (data->parameters[PARAM_TA_LRSYNC_ON])
+				{
+					// to keep us in sync with the TemporalDistortionSimulator internal variables.
+					data->parameters[PARAM_TA_NOISELPF_LEFT] = value;
+				}
 				WriteLog(state, "SET PARAMETER: Noise autocorrelation LPF cutoff (Hz) for Right temporal Distortion simulator set to: ", value);
 				break;
 
 			case PARAM_TA_NOISEPOWER_LEFT:
 				data->HL.GetTemporalDistortionSimulator()->SetWhiteNoisePower(Common::T_ear::LEFT, value);
+				if (data->parameters[PARAM_TA_LRSYNC_ON])
+				{
+					// to keep us in sync with the TemporalDistortionSimulator internal variables.
+					data->parameters[PARAM_TA_NOISEPOWER_RIGHT] = value;
+				}
 				WriteLog(state, "SET PARAMETER: White noise power (ms) for Left temporal Distortion simulator set to: ", value);
 				break;
 
 			case PARAM_TA_NOISEPOWER_RIGHT:
 				data->HL.GetTemporalDistortionSimulator()->SetWhiteNoisePower(Common::T_ear::RIGHT, value);
+				if (data->parameters[PARAM_TA_LRSYNC_ON])
+				{
+					// to keep us in sync with the TemporalDistortionSimulator internal variables.
+					data->parameters[PARAM_TA_NOISEPOWER_LEFT] = value;
+				}
 				WriteLog(state, "SET PARAMETER: White noise power (ms) for Right temporal distortion simulator set to: ", value);
 				break;
 
@@ -934,6 +1183,11 @@ enum
 					{
 						data->HL.GetTemporalDistortionSimulator()->EnableLeftRightNoiseSynchronicity();
 						WriteLog(state, "SET PARAMETER: Left-right ear synchronicity in temporal distortion simulator switched ON", "");
+
+						// LR Sync causes the temporal distortion to copy parameters from left to right
+						data->parameters[PARAM_TA_BAND_RIGHT] = data->parameters[PARAM_TA_BAND_LEFT];
+						data->parameters[PARAM_TA_NOISELPF_RIGHT] = data->parameters[PARAM_TA_NOISELPF_LEFT];
+						data->parameters[PARAM_TA_NOISEPOWER_RIGHT] = data->parameters[PARAM_TA_NOISEPOWER_LEFT];
 					}
 				}
 				break;
@@ -953,236 +1207,21 @@ enum
 
 			// FREQUENCY SMEARING:
 			case PARAM_FREQUENCYSMEARING_ON_LEFT:
-				if (((int)value != 0) && ((int)value != 1))
-					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to switch on/off frequency smearing in left ear with non boolean value ", value);
-				else
-				{
-					if (!Float2Bool(value))
-					{
-						data->HL.DisableFrequencySmearing(Common::T_ear::LEFT);
-						WriteLog(state, "SET PARAMETER: Frequency smearing in left ear switched OFF", "");
-					}
-					if (Float2Bool(value))
-					{
-						data->HL.EnableFrequencySmearing(Common::T_ear::LEFT);
-						WriteLog(state, "SET PARAMETER: Frequency smearing in left ear switched ON", "");
-					}
-				}
-				break;
-
-			case PARAM_FREQUENCYSMEARING_ON_RIGHT:
-				if (((int)value != 0) && ((int)value != 1))
-					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to switch on/off frequency smearing in right ear with non boolean value ", value);
-				else
-				{
-					if (!Float2Bool(value))
-					{
-						data->HL.DisableFrequencySmearing(Common::T_ear::RIGHT);
-						WriteLog(state, "SET PARAMETER: Frequency smearing in right ear switched OFF", "");
-					}
-					if (Float2Bool(value))
-					{
-						data->HL.EnableFrequencySmearing(Common::T_ear::RIGHT);
-						WriteLog(state, "SET PARAMETER: Frequency smearing in right ear switched ON", "");
-					}
-				}
-				break;
-
+			case PARAM_FREQUENCYSMEARING_APPROACH_LEFT:
 			case PARAM_FS_DOWN_SIZE_LEFT:
-				if ((int)value > 0)
-				{
-					data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetDownwardSmearingBufferSize((int)value);
-					WriteLog(state, "SET PARAMETER: Downward smearing buffer size for left ear = ", (int)value);
-				}
-				else
-					WriteLog(state, "SET PARAMETER: ERROR!!! Wrong size for downward smearing buffer in left ear = ", (int)value);
-				break;
-
-			case PARAM_FS_DOWN_SIZE_RIGHT:
-				if ((int)value > 0)
-				{
-					data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetDownwardSmearingBufferSize((int)value);
-					WriteLog(state, "SET PARAMETER: Downward smearing buffer size for right ear = ", (int)value);
-				}
-				else
-					WriteLog(state, "SET PARAMETER: ERROR!!! Wrong size for downward smearing buffer in right ear = ", (int)value);
-				break;
-
 			case PARAM_FS_UP_SIZE_LEFT:
-				if ((int)value > 0)
-				{
-					data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetUpwardSmearingBufferSize((int)value);
-					WriteLog(state, "SET PARAMETER: Upward smearing buffer size for left ear = ", (int)value);
-				}
-				else
-					WriteLog(state, "SET PARAMETER: ERROR!!! Wrong size for upward smearing buffer in left ear = ", (int)value);
-				break;
-
-			case PARAM_FS_UP_SIZE_RIGHT:
-				if ((int)value > 0)
-				{
-					data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetUpwardSmearingBufferSize((int)value);
-					WriteLog(state, "SET PARAMETER: Upward smearing buffer size for right ear = ", (int)value);
-				}
-				else
-					WriteLog(state, "SET PARAMETER: ERROR!!! Wrong size for upward smearing buffer in right ear = ", (int)value);
-				break;
-
 			case PARAM_FS_DOWN_HZ_LEFT:
-				if (value >= 0.0f)
-				{
-					data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetDownwardSmearing_Hz(value);
-					WriteLog(state, "SET PARAMETER: Downward smearing amount (in Hz) for left ear = ", value);
-				}
-				else
-					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to set a negative downward smearing amount (in Hz) for left ear = ", value);
-				break;
-
-			case PARAM_FS_DOWN_HZ_RIGHT:
-				if (value >= 0.0f)
-				{
-					data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetDownwardSmearing_Hz(value);
-					WriteLog(state, "SET PARAMETER: Downward smearing amount (in Hz) for right ear = ", value);
-				}
-				else
-					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to set a negative downward smearing amount (in Hz) for right ear = ", value);
-				break;
-
 			case PARAM_FS_UP_HZ_LEFT:
-				if (value >= 0.0f)
-				{
-					data->HL.GetFrequencySmearingSimulator(Common::T_ear::LEFT)->SetUpwardSmearing_Hz(value);
-					WriteLog(state, "SET PARAMETER: Upward smearing amount (in Hz) for left ear = ", value);
-				}
-				else
-					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to set a negative upward smearing amount (in Hz) for left ear = ", value);
+				updateFrequencySmearer(state, LEFT);
 				break;
-
+			case PARAM_FREQUENCYSMEARING_ON_RIGHT:
+			case PARAM_FREQUENCYSMEARING_APPROACH_RIGHT:
+			case PARAM_FS_DOWN_SIZE_RIGHT:
+			case PARAM_FS_UP_SIZE_RIGHT:
+			case PARAM_FS_DOWN_HZ_RIGHT:
 			case PARAM_FS_UP_HZ_RIGHT:
-				if (value >= 0.0f)
-				{
-					data->HL.GetFrequencySmearingSimulator(Common::T_ear::RIGHT)->SetUpwardSmearing_Hz(value);
-					WriteLog(state, "SET PARAMETER: Upward smearing amount (in Hz) for right ear = ", value);
-				}
-				else
-					WriteLog(state, "SET PARAMETER: ERROR!!! Attempt to set a negative upward smearing amount (in Hz) for right ear = ", value);
+				updateFrequencySmearer(state, RIGHT);
 				break;
-
-			// CLASSIFICATION SCALE:
-
-			//case PARAM_CLASSIFICATION_CURVE_LEFT:
-			//	curve = FromFloatToClassificationScaleCurve(value);
-			//	
-			//	if (curve == THLClassificationScaleCurve::HL_CS_ERROR)
-			//	{
-			//		WriteLog(state, "SET PARAMETER: ERROR!!! Unknown curve in HL classification scale for left ear = ", value);
-			//		break;
-			//	}
-
-			//	data->csCurve.left = curve;
-
-			//	if (curve == THLClassificationScaleCurve::HL_CS_NOLOSS)
-			//	{
-			//		TAudiometry flatAudiometry;
-			//		flatAudiometry.assign(data->HL.GetNumberOfBands(), 0.0f);
-			//		SetNewAudiometry(state, Common::T_ear::LEFT, flatAudiometry);					
-			//		WriteLog(state, "SET PARAMETER: HL classification scale set to No Hearing Loss in left ear ", "");
-			//		break;
-			//	}
-			//	else
-			//	{
-			//		TAudiometry csAudiometry;
-			//		HAHLSimulation::GetClassificationScaleHL(FromClassificationScaleCurveToChar(data->csCurve.left), data->csSeverity.left, csAudiometry);
-			//		SetNewAudiometry(state, Common::T_ear::LEFT, csAudiometry);
-			//		WriteLog(state, "SET PARAMETER: HL classification scale curve in left ear set to: ", FromClassificationScaleCurveToString(curve));
-			//	}
-			//	break;
-
-			//case PARAM_CLASSIFICATION_CURVE_RIGHT:
-			//	curve = FromFloatToClassificationScaleCurve(value);
-
-			//	if (curve == THLClassificationScaleCurve::HL_CS_ERROR)
-			//	{
-			//		WriteLog(state, "SET PARAMETER: ERROR!!! Unknown curve in HL classification scale for right ear = ", value);
-			//		break;
-			//	}
-
-			//	data->csCurve.right = curve;
-
-			//	if (curve == THLClassificationScaleCurve::HL_CS_NOLOSS)
-			//	{
-			//		TAudiometry flatAudiometry;
-			//		flatAudiometry.assign(data->HL.GetNumberOfBands(), 0.0f);
-			//		SetNewAudiometry(state, Common::T_ear::RIGHT, flatAudiometry);
-			//		WriteLog(state, "SET PARAMETER: HL classification scale set to No Hearing Loss in right ear ", "");
-			//		break;
-			//	}
-			//	else
-			//	{
-			//		TAudiometry csAudiometry;
-			//		HAHLSimulation::GetClassificationScaleHL(FromClassificationScaleCurveToChar(data->csCurve.right), data->csSeverity.right, csAudiometry);
-			//		SetNewAudiometry(state, Common::T_ear::RIGHT, csAudiometry);
-			//		WriteLog(state, "SET PARAMETER: HL classification scale curve in right ear set to: ", FromClassificationScaleCurveToString(curve));
-			//	}
-			//	break;
-
-			//case PARAM_CLASSIFICATION_SEVERITY_LEFT:
-			//	severity = (int)value;
-
-			//	if (severity < 0 || severity > MAX_CS_SEVERITY)
-			//	{
-			//		WriteLog(state, "SET PARAMETER: ERROR!!! Wrong severity value in HL classification scale for left ear = ", (int)value);				
-			//	}
-			//	else
-			//	{
-			//		data->csSeverity.left = severity;
-			//		if (data->csCurve.left == THLClassificationScaleCurve::HL_CS_NOLOSS)
-			//		{
-			//			WriteLog(state, "SET PARAMETER: WARNING! Changing severity of HL classification scale with No Hearing Loss curve will have no immediate effect in left ear: ", severity);
-			//		}					
-			//		else
-			//		{
-			//			TAudiometry csAudiometry;
-			//			HAHLSimulation::GetClassificationScaleHL(FromClassificationScaleCurveToChar(data->csCurve.left), data->csSeverity.left, csAudiometry);
-			//			SetNewAudiometry(state, Common::T_ear::LEFT, csAudiometry);
-			//			WriteLog(state, "SET PARAMETER: HL classification scale severity in left ear set to ", severity);
-			//		}
-			//	}
-			//	break;
-
-			//case PARAM_CLASSIFICATION_SEVERITY_RIGHT:
-			//	severity = (int)value;
-
-			//	if (severity < 0 || severity > MAX_CS_SEVERITY)
-			//	{
-			//		WriteLog(state, "SET PARAMETER: ERROR!!! Wrong severity value in HL classification scale for right ear = ", (int)value);
-			//	}
-			//	else
-			//	{
-			//		data->csSeverity.right = severity;
-			//		if (data->csCurve.right == THLClassificationScaleCurve::HL_CS_NOLOSS)
-			//		{
-			//			WriteLog(state, "SET PARAMETER: WARNING! Changing severity of HL classification scale with No Hearing Loss curve will have no immediate effect in right ear: ", severity);
-			//		}
-			//		else
-			//		{
-			//			TAudiometry csAudiometry;
-			//			HAHLSimulation::GetClassificationScaleHL(FromClassificationScaleCurveToChar(data->csCurve.right), data->csSeverity.right, csAudiometry);
-			//			SetNewAudiometry(state, Common::T_ear::RIGHT, csAudiometry);
-			//			WriteLog(state, "SET PARAMETER: HL classification scale severity in right ear set to ", severity);
-			//		}
-			//	}
-			//	break;
-
-			//case PARAM_DEBUG_LOG:
-			//	if (value != 0.0f)
-			//	{
-			//		data->debugLog = true;
-			//		WriteLogHeader(state);
-			//	}
-			//	else
-			//		data->debugLog = false;
-			//	break;
 
 			default:
 				WriteLog(state, "SET PARAMETER: ERROR!!!! Unknown float parameter received from API: ", index);
@@ -1279,7 +1318,12 @@ enum
 		Common::CEarPair<CMonoBuffer<float>> outBufferPair;
 		outBufferPair.left.Fill(length, 0.0f);
 		outBufferPair.right.Fill(length, 0.0f);
-		data->HL.Process(inBufferPair, outBufferPair);		
+
+		{
+			std::lock_guard<std::mutex> lock(data->mutex);
+			data->HL.Process(inBufferPair, outBufferPair);
+
+		}
 
 		data->parameters[PARAM_TA_AUTOCORR0_GET_LEFT] = data->HL.GetTemporalDistortionSimulator()->GetPower(Common::T_ear::LEFT);
 		data->parameters[PARAM_TA_AUTOCORR1_GET_LEFT] = data->HL.GetTemporalDistortionSimulator()->GetNormalizedAutocorrelation(Common::T_ear::LEFT);
@@ -1302,3 +1346,12 @@ enum
         return UNITY_AUDIODSP_OK;
     }
 }
+
+
+//extern "C" UNITY_AUDIODSP_EXPORT_API bool HasSofaSupport() {
+//#ifdef UNITY_WIN
+//	return true;
+//#else
+//	return false;
+//#endif
+//}
