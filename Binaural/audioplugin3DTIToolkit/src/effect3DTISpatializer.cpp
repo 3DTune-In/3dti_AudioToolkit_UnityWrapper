@@ -48,6 +48,7 @@ enum TLoadResult { RESULT_LOAD_WAITING = 0, RESULT_LOAD_CONTINUE=1, RESULT_LOAD_
 #endif
 
 #include <cfloat>
+#include "HRTF/HRTFFactory.h"
 
 /////////////////////////////////////////////////////////////////////
 
@@ -220,7 +221,7 @@ loadedHRTF(false)
 		RegisterParameter(definition, "SampleRateCore", "", 0.0f, FLT_MAX, 1.0f, 1.0f, 1.0f, PARAM_SAMPLE_RATE_CORE, "Buffer size used by Core");
         definition.flags |= UnityAudioEffectDefinitionFlags_IsSpatializer;
         return numparams;
-    }
+	}
 
 	/////////////////////////////////////////////////////////////////////
 
@@ -252,10 +253,10 @@ loadedHRTF(false)
 		// http://forum.unity3d.com/threads/how-to-assign-matrix4x4-to-transform.121966/
 		float tr = L[0] + L[5] + L[10];
 		float w, qw, qx, qy, qz;
-		if (tr>0.0f)			// General case
+		if (tr > 0.0f)			// General case
 		{
 			w = sqrt(1.0f + tr) * 2.0f;
-			qw = 0.25f*w;
+			qw = 0.25f * w;
 			qx = (L[6] - L[9]) / w;
 			qy = (L[8] - L[2]) / w;
 			qz = (L[1] - L[4]) / w;
@@ -265,7 +266,7 @@ loadedHRTF(false)
 		{
 			w = sqrt(1.0f + L[0] - L[5] - L[10]) * 2.0f;
 			qw = (L[6] - L[9]) / w;
-			qx = 0.25f*w;
+			qx = 0.25f * w;
 			qy = -(L[1] + L[4]) / w;
 			qz = -(L[8] + L[2]) / w;
 		}
@@ -274,7 +275,7 @@ loadedHRTF(false)
 			w = sqrt(1.0f + L[5] - L[0] - L[10]) * 2.0f;
 			qw = (L[8] - L[2]) / w;
 			qx = -(L[1] + L[4]) / w;
-			qy = 0.25f*w;
+			qy = 0.25f * w;
 			qz = -(L[6] + L[9]) / w;
 		}
 		else
@@ -283,7 +284,7 @@ loadedHRTF(false)
 			qw = (L[1] - L[4]) / w;
 			qx = -(L[8] + L[2]) / w;
 			qy = -(L[6] + L[9]) / w;
-			qz = 0.25f*w;
+			qz = 0.25f * w;
 		}
 
 		Common::CQuaternion unityQuaternion = Common::CQuaternion(qw, qx, qy, qz);
@@ -303,19 +304,27 @@ loadedHRTF(false)
 
 	/////////////////////////////////////////////////////////////////////
 
-    bool LoadHRTFBinaryString(const std::basic_string<uint8_t>& hrtfData, std::shared_ptr<Binaural::CListener> listener)
-    {
-        std::istringstream stream(reinterpret_cast<const std::basic_string<char>&>(hrtfData));
-        return HRTF::CreateFrom3dtiStream(stream, listener);
+	bool LoadHRTFBinaryString(const std::basic_string<uint8_t>& hrtfData, std::shared_ptr<Binaural::CListener> listener)
+	{
+		std::istringstream stream(reinterpret_cast<const std::basic_string<char>&>(hrtfData));
+		return HRTF::CreateFrom3dtiStream(stream, listener);
 
-    }
+	}
 
 	int LoadHRTFBinaryFile(UnityAudioEffectState* state)
 	{
-//		EffectData* data = state->GetEffectData<EffectData>();
-
 		// Load HRTF
-		if (!HRTF::CreateFrom3dti(spatializer().strHRTFpath, spatializer().listener))
+		const string hrtfPath(spatializer().strHRTFpath);
+		const string sofaExtension = ".sofa"s;
+		if (hrtfPath.size() >= sofaExtension.size() && hrtfPath.substr(hrtfPath.size() - sofaExtension.size()) == sofaExtension)
+		{
+			if (!HRTF::CreateFromSofa(hrtfPath, spatializer().listener))
+			{
+				return TLoadResult::RESULT_LOAD_ERROR;
+			}
+		}
+		// If not sofa file then assume its a 3dti-hrtf file
+		else if (!HRTF::CreateFrom3dti(spatializer().strHRTFpath, spatializer().listener))
 		{
 			//TDebuggerResultStruct result = GET_LAST_RESULT_STRUCT();
 			//WriteLog(state, "ERROR TRYING TO LOAD HRTF!!! ", result.suggestion);
@@ -325,7 +334,7 @@ loadedHRTF(false)
 		if (spatializer().listener->GetHRTF()->GetHRIRLength() != 0)
 		{
 			//data->listener->LoadHRTF(std::move(myHead));
-			WriteLog(state, "LOAD HRTF: HRTF loaded from binary 3DTI file: ", spatializer().strHRTFpath);
+			WriteLog(state, "LOAD HRTF: HRTF loaded from binary 3DTI/sofa file: ", spatializer().strHRTFpath);
 			WriteLog(state, "           HRIR length is ", spatializer().listener->GetHRTF()->GetHRIRLength());
 			WriteLog(state, "           Sample rate is ", state->samplerate);
 			WriteLog(state, "           Buffer size is ", state->dspbuffersize);

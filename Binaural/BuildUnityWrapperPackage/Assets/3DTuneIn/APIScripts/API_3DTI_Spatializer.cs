@@ -354,7 +354,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
 				{
 					//#if (!UNITY_EDITOR)
 					string binaryPath;
-                    if (SaveResourceAsBinary(ILDNearFieldFileName, ".3dti-ild", out binaryPath) != 1) return false;
+                    if (SaveResourceAsBinary(ILDNearFieldFileName, out binaryPath) != 1) return false;
 //#endif
 					if (!LoadILDNearFieldBinary(binaryPath, source))
 					{
@@ -384,7 +384,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
 				{
 					//#if (!UNITY_EDITOR)
 					string binaryPath;
-                    if (SaveResourceAsBinary(HRTFFileName, ".3dti-hrtf", out binaryPath) != 1) return false; 
+                    if (SaveResourceAsBinary(HRTFFileName, out binaryPath) != 1) return false; 
 //#endif
 					if (!LoadHRTFBinary(binaryPath, source))
 					{
@@ -420,7 +420,7 @@ public class API_3DTI_Spatializer : MonoBehaviour
 				{
 					string filePath;
 //#if (!UNITY_EDITOR)
-                    if (SaveResourceAsBinary(ILDHighPerformanceFileName, ".3dti-ild", out filePath) != 1) return false;
+                    if (SaveResourceAsBinary(ILDHighPerformanceFileName, out filePath) != 1) return false;
 //#endif
 					if (!LoadILDHighPerformanceBinary(filePath, source))
 					{
@@ -436,32 +436,33 @@ public class API_3DTI_Spatializer : MonoBehaviour
 	/// <summary>
 	/// Load one file from resources and save it as a binary file (for Android)
 	/// </summary>    
-	public int SaveResourceAsBinary(string originalname, string extension, out string filename)
+	public int SaveResourceAsBinary(string originalName, out string newFilename)
 	{
-		// Remove extension. NB we keep the path as the file may be in a subfolder of our Resources folder
-		//string namewithoutextension = Path.GetFileNameWithoutExtension(originalname);
-		string namewithoutextension = Path.ChangeExtension(originalname, null);
+        // remove .bytes extension
+        if (originalName.EndsWith(".bytes"))
+        {
+			originalName = originalName.Substring(0, originalName.Length - ".bytes".Length);
+        }
 
-		// Setup name for new file
-		string dataPath = Application.persistentDataPath;
-		string newfilename = dataPath + "/" + namewithoutextension + extension;
-		filename = newfilename;
+        // Setup name for new file
+        newFilename = Application.persistentDataPath + "/" + originalName;
 
 		// Load as asset from resources 
-		TextAsset txtAsset = Resources.Load(namewithoutextension) as TextAsset;
+		TextAsset txtAsset = Resources.Load(originalName) as TextAsset;
 		if (txtAsset == null)
 		{
+			Debug.LogError($"Could not load 3DTI resource {originalName}", this);
 			return -1;  // Could not load asset from resources
 		}
 
-		// Transform asset into stream and then into byte array
-		MemoryStream streamData = new MemoryStream(txtAsset.bytes);
+        // Transform asset into stream and then into byte array
+        MemoryStream streamData = new MemoryStream(txtAsset.bytes);
 		byte[] dataArray = streamData.ToArray();
 
 
 		// Write binary data to binary file        
-		Directory.CreateDirectory(Path.GetDirectoryName(newfilename));
-		using (BinaryWriter writer = new BinaryWriter(File.Open(newfilename, FileMode.Create)))
+		Directory.CreateDirectory(Path.GetDirectoryName(newFilename));
+		using (BinaryWriter writer = new BinaryWriter(File.Open(newFilename, FileMode.Create)))
 		{
 			writer.Write(dataArray);
 		}
