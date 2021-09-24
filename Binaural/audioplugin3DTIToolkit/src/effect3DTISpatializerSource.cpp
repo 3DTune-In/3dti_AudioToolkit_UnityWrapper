@@ -133,7 +133,7 @@ int InternalRegisterEffectDefinition(UnityAudioEffectDefinition& definition)
 	RegisterParameter(definition, "MODDistAtt", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, FloatParameter::EnableDistanceAttenuationAnechoic, "Enable distance attenuation for anechoic processing");
 	RegisterParameter(definition, "MODNFILD", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, FloatParameter::EnableNearFieldEffect, "Near distance ILD module enabler");
 	RegisterParameter(definition, "SpatMode", "", 0.0f, 2.0f, 0.0f, 1.0f, 1.0f, FloatParameter::SpatializationMode, "Spatialization mode (0=High quality, 1=High performance, 2=None)");
-	RegisterParameter(definition, "EnableReverb", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, FloatParameter::EnableReverb, "Enable reverb processing");
+	RegisterParameter(definition, "EnableReverb", "", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, FloatParameter::EnableReverbSend, "Enable reverb processing");
 	RegisterParameter(definition, "RevDistAtt", "", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, FloatParameter::EnableDistanceAttenuationReverb, "Enable distance attenuation for reverb processing");
 	//Sample Rate and BufferSize
 	definition.flags |= UnityAudioEffectDefinitionFlags_IsSpatializer;
@@ -420,7 +420,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 			return UNITY_AUDIODSP_ERR_UNSUPPORTED;
 		}
 		break;
-	case FloatParameter::EnableReverb:
+	case FloatParameter::EnableReverbSend:
 		if (value != 0.0f)
 		{
 			data->audioSource->EnableReverbProcess();
@@ -489,7 +489,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK GetFloatParameterCallback(UnityAud
 		case FloatParameter::SpatializationMode:
 			*value = (float)source->GetSpatializationMode();
 			break;
-		case FloatParameter::EnableReverb:
+		case FloatParameter::EnableReverbSend:
 			*value = (float)source->IsReverbProcessEnabled();
 			break;
 		case FloatParameter::EnableDistanceAttenuationReverb:

@@ -79,9 +79,13 @@ namespace API_3DTI
                 {
                     Debug.LogError($"Default spatialization mode set to {SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY} with {SpatializerParameter.EnableNearFieldILD} enabled but no {BinaryResourceRole.HighQualityILD} resource is loaded for the current sample rate ({currentSampleRate}).");
                 }
-                if (toolkit.GetParameter<bool>(SpatializerParameter.EnableReverb) && toolkit.GetBinaryResourcePath(BinaryResourceRole.ReverbBRIR, currentSampleRate).Length == 0)
+                if (toolkit.GetParameter<bool>(SpatializerParameter.EnableReverbSend) && toolkit.GetBinaryResourcePath(BinaryResourceRole.ReverbBRIR, currentSampleRate).Length == 0)
                 {
-                    Debug.LogError($"{SpatializerParameter.EnableReverb} is set to true but no {BinaryResourceRole.ReverbBRIR} resource is loaded for the current sample rate ({currentSampleRate}).");
+                    Debug.LogError($"{SpatializerParameter.EnableReverbSend} is set to true but no {BinaryResourceRole.ReverbBRIR} resource is loaded for the current sample rate ({currentSampleRate}).");
+                }
+                if (toolkit.GetParameter<bool>(SpatializerParameter.EnableReverbProcessing) && toolkit.GetBinaryResourcePath(BinaryResourceRole.ReverbBRIR, currentSampleRate).Length == 0)
+                {
+                    Debug.LogError($"{SpatializerParameter.EnableReverbProcessing} is set to true but no {BinaryResourceRole.ReverbBRIR} resource is loaded for the current sample rate ({currentSampleRate}).");
                 }
 
                 // TODO: See if this results in unsynced state with DLL
@@ -340,7 +344,7 @@ namespace API_3DTI
             GUILayout.Label("These parameters may be set individually on each individual AudioSource component. The values here determine their default values for new AudioSources.\n\nPlease ensure you select binary resources below for the sample rates and spatialization mode combinations you intend to use.", Common3DTIGUI.commentStyle);
 
             CreateControl(SpatializerParameter.SpatializationMode);
-            CreateControl(SpatializerParameter.EnableReverb);
+            CreateControl(SpatializerParameter.EnableReverbSend);
 
             Common3DTIGUI.SingleSpace();
 
@@ -393,7 +397,7 @@ namespace API_3DTI
 
             Common3DTIGUI.SingleSpace();
 
-            GUILayout.Label("Binaries for High Performance mode", Common3DTIGUI.subtitleBoxStyle);
+            GUILayout.Label("Binary resources for High Performance mode", Common3DTIGUI.subtitleBoxStyle);
             GUILayout.Label("These are required for AudioSources to be able to spatialize in High Performance mode.", Common3DTIGUI.commentStyle);
 
 
@@ -406,7 +410,7 @@ namespace API_3DTI
             }
 
             Common3DTIGUI.SectionSpace();
-            GUILayout.Label("Binaries for High Quality mode", Common3DTIGUI.subtitleBoxStyle);
+            GUILayout.Label("Binary resources for High Quality mode", Common3DTIGUI.subtitleBoxStyle);
             GUILayout.Label("These are required for AudioSources to be able to spatialize in High Quality mode.", Common3DTIGUI.commentStyle);
 
             // HIGH QUALITY MODE CONTROLS
@@ -429,7 +433,7 @@ namespace API_3DTI
             Common3DTIGUI.SectionSpace();
 
             // BRIR Reverb:
-            GUILayout.Label("Binaries for Reverb", Common3DTIGUI.subtitleBoxStyle);
+            GUILayout.Label("Binary resources for Reverb", Common3DTIGUI.subtitleBoxStyle);
             GUILayout.Label("These are required to enable reverb processing.", Common3DTIGUI.commentStyle);
 
             createDropdowns(BinaryResourceRole.ReverbBRIR, "BRIR", "Select the BRIR (impulse response) for reverb processing");
@@ -437,6 +441,9 @@ namespace API_3DTI
 
 
             Common3DTIGUI.SectionSpace();
+
+            CreateControl(SpatializerParameter.EnableReverbProcessing);
+            CreateControl(SpatializerParameter.ReverbWetness);
 
             // ITD:    
             {
@@ -449,20 +456,19 @@ namespace API_3DTI
 
             Common3DTIGUI.SectionSpace();
 
+            
+
 
             advancedSetup = Common3DTIGUI.CreateFoldoutToggle(ref advancedSetup, "Advanced Listener settings");
             if (advancedSetup)
             {
                 Common3DTIGUI.BeginSection();
 
-                Common3DTIGUI.AddLabelToParameterGroup("Scale factor");
                 Common3DTIGUI.SingleSpace();
                 CreateControl(SpatializerParameter.ScaleFactor, 0.1f, 10.0f);
 
                 // HRTF interpolation
                 Common3DTIGUI.BeginSubsection("HRTF Interpolation");
-                Common3DTIGUI.AddLabelToParameterGroup("Runtime interpolation");
-                Common3DTIGUI.AddLabelToParameterGroup("Resampling step");
                 CreateControl(SpatializerParameter.HRTFResamplingStep);
                 Common3DTIGUI.EndSubsection();
 

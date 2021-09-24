@@ -113,7 +113,7 @@ namespace SpatializerCore3DTI
 			case EnableDistanceAttenuationAnechoic:
 			case EnableNearFieldEffect:
 			case SpatializationMode:
-			case EnableReverb:
+			case EnableReverbSend:
 			case EnableDistanceAttenuationReverb:
 				spatializer->perSourceInitialValues[parameter] = value;
 				return true;
@@ -211,7 +211,7 @@ namespace SpatializerCore3DTI
 		}
 		case EnableLimiter:
 		{
-			spatializer->isLimiterEnabled = value != 0.0;
+			spatializer->isLimiterEnabled = value != 0.0f;
 			return true;
 		}
 		case HRTFResamplingStep:
@@ -221,6 +221,12 @@ namespace SpatializerCore3DTI
 			spatializer->core.SetHRTFResamplingStep((int)clamp(value, min, max));
 			return true;
 		}
+		case EnableReverbProcessing:
+			spatializer->isReverbProcessingEnabled = value != 0.0f;
+			return true;
+		case ReverbWetness:
+			spatializer->reverbWetness = value;
+			return true;
 		case ReverbOrder:
 			static_assert((float)ADIMENSIONAL == 0.0f && (float)BIDIMENSIONAL == 1.0f && (float)THREEDIMENSIONAL == 2.0f, "These values are assumed by this code and the correspond c# enumerations.");
 			if (value == (float)ADIMENSIONAL)
@@ -265,7 +271,7 @@ namespace SpatializerCore3DTI
 		case EnableDistanceAttenuationAnechoic:
 		case EnableNearFieldEffect:
 		case SpatializationMode:
-		case EnableReverb:
+		case EnableReverbSend:
 		case EnableDistanceAttenuationReverb:
 			*value = spatializer->perSourceInitialValues[parameter];
 			return true;
@@ -304,6 +310,12 @@ namespace SpatializerCore3DTI
 			return true;
 		case HRTFResamplingStep:
 			*value = (float) spatializer->core.GetHRTFResamplingStep();
+			return true;
+		case EnableReverbProcessing:
+			*value = (float)spatializer->isReverbProcessingEnabled;
+			return true;
+		case ReverbWetness:
+			*value = spatializer->reverbWetness;
 			return true;
 		case ReverbOrder:
 			*value = (float)spatializer->environment->GetReverberationOrder();
@@ -411,19 +423,22 @@ namespace SpatializerCore3DTI
 		const lock_guard<mutex> lock(spatializer->mutex);
 
 		// 7. Process reverb and generate the reverb output
-		Common::CEarPair<CMonoBuffer<float>> bReverbOutput;
-		bReverbOutput.left.resize(bufferSize);
-		bReverbOutput.right.resize(bufferSize);
-		assert(bReverbOutput.left.size() == length && bReverbOutput.right.size() == length);
-		if (spatializer->isBinaryResourceLoaded[ReverbBRIR])
+		if (spatializer->isReverbProcessingEnabled && spatializer->isBinaryResourceLoaded[ReverbBRIR])
 		{
 			assert(const_cast<CABIR&>(spatializer->environment->GetABIR()).IsInitialized());
+
+			Common::CEarPair<CMonoBuffer<float>> bReverbOutput;
+			bReverbOutput.left.resize(bufferSize);
+			bReverbOutput.right.resize(bufferSize);
+			assert(bReverbOutput.left.size() == length && bReverbOutput.right.size() == length);
 			spatializer->environment->ProcessVirtualAmbisonicReverb(bReverbOutput.left, bReverbOutput.right);
 
+			const float wet = spatializer->reverbWetness;
+			const float dry = 1 - wet;
 			for (size_t i = 0; i < length; i++)
 			{
-				outbuffer[i * 2 + 0] = bReverbOutput.left[i];
-				outbuffer[i * 2 + 1] = bReverbOutput.right[i];
+				outbuffer[i * 2 + 0] = dry * inbuffer[i*2+0] + wet * bReverbOutput.left[i];
+				outbuffer[i * 2 + 1] = dry * inbuffer[i*2+1] + wet * bReverbOutput.right[i];
 			}
 		}
 		else
@@ -446,6 +461,8 @@ namespace SpatializerCore3DTI
 	SpatializerCore::SpatializerCore(UInt32 sampleRate, UInt32 bufferSize)
 		: scaleFactor(1.0f)
 		, isLimiterEnabled(true)
+		, isReverbProcessingEnabled(true)
+		, reverbWetness(0.5f)
 	{
 		perSourceInitialValues[EnableHRTFInterpolation] = 1.0f;
 		perSourceInitialValues[EnableFarDistanceLPF] = 1.0f;

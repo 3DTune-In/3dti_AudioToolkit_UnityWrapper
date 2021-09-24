@@ -106,8 +106,8 @@ namespace API_3DTI
             [SpatializerParameter(/*pluginName = "SpatMode",*/ label = "Spatialization mode", description = "Set spatialization mode (0=High quality, 1=High performance, 2=None). Note, High quality depends on the HRTF binary being loaded and High Performance depends on the High Performance ILD binary being loaded.", min = 0, max = 2, type = typeof(SpatializationMode), defaultValue = 0.0f, isSourceParameter = true)]
             SpatializationMode = 4,
 
-            [SpatializerParameter(label = "Enable reverb processing", description = "Enable reverb processing", min = 0.0f, max = 1.0f, type = typeof(bool), defaultValue = 0, isSourceParameter = true)]
-            EnableReverb = 5,
+            [SpatializerParameter(label = "Send to reverb processor", description = "Whether to send audio from a single source to the reverb processor (i.e. enable reverb for this source).", min = 0.0f, max = 1.0f, type = typeof(bool), defaultValue = 0, isSourceParameter = true)]
+            EnableReverbSend = 5,
 
             [SpatializerParameter(label = "Enable reverb distance attenuation", description = "Enable attenuation of sound depending on distance to listener for reverb processing", min = 0.0f, max = 1.0f, type = typeof(bool), defaultValue = 0, isSourceParameter = true)]
             EnableDistanceAttenuationReverb = 6,
@@ -149,11 +149,18 @@ namespace API_3DTI
             [SpatializerParameter(label = "HRTF resampling step (High Quality only)", description = "HRTF resampling step; Lower values give better quality at the cost of more memory usage. Only affects High Quality mode.", min = 1, max = 90, type = typeof(int), defaultValue = 15)]
             HRTFResamplingStep = 18,
 
+            [SpatializerParameter(label = "Enable Reverb processing", description = "Enable the reverb environment processing. In addition, reverb also needs to be enabled on at least one source. Reverb output returns on the plugin corresponding to this component on Unity's audio mixer.", min = 0, max = 1, type = typeof(bool), defaultValue = 1)]
+            EnableReverbProcessing = 19,
+
+            [SpatializerParameter(label = "Reverb wet/dry", description = "Set the mix between dry (i.e. anechoic) and reverberated audio.", min = 0.0f, max = 1.0f, type = typeof(float), defaultValue = 0.5f)]
+            ReverbWetness = 20,
+
             [SpatializerParameter(label = "Reverb order", description = "Configures the number of channels of the first-order ambisonic reverb processing. The options are: W, X, Y and Z (ThreeDimensional); W, X and Y (Bidimensional); only W (Adimensional)", min = 0.0f, max = 2.0f, type = typeof(ReverbOrder), defaultValue = (float)API_3DTI.ReverbOrder.Bidimensional, isSourceParameter = true)]
-            ReverbOrder = 19,
+            ReverbOrder = 21,
         };
+        public const int NumParameters = 22;
+
         public const int NumSourceParameters = (int)SpatializerParameter.EnableDistanceAttenuationReverb + 1;
-        public const int NumParameters = 20;
 
         // Store the parameter values here for Unity to serialize. We initialize them to their default values. This is private and clients should use the accessor/getter methods below which will ensure the plugin is kept in sync with these values.
         // NB, per-source parameters may be set on individual sources but they are also set on the core which defines their initial value.

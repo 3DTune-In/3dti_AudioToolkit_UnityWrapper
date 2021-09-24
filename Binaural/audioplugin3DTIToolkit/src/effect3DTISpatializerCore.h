@@ -25,8 +25,8 @@ namespace SpatializerCore3DTI
 		EnableDistanceAttenuationAnechoic = 2, // ### SOURCE ####
 		EnableNearFieldEffect = 3,// ### SOURCE ####
 		SpatializationMode = 4,// ### SOURCE ####
-		EnableReverb = 5,
-		EnableDistanceAttenuationReverb = 6,
+		EnableReverbSend = 5,// ### SOURCE ####
+		EnableDistanceAttenuationReverb = 6,// ### SOURCE ####
 
 		NumSourceParameters = 7,
 
@@ -44,9 +44,11 @@ namespace SpatializerCore3DTI
 		EnableHearingAidDirectionalityRight = 16,
 		EnableLimiter = 17,
 		HRTFResamplingStep = 18,
-		ReverbOrder = 19,
+		EnableReverbProcessing = 19,
+		ReverbWetness = 20,
+		ReverbOrder = 21,
 
-		NumFloatParameters = 20,
+		NumFloatParameters = 22,
 	};
 
 
@@ -73,6 +75,8 @@ namespace SpatializerCore3DTI
 		//float unityParameters[P_NUM];
 		float scaleFactor;
 		bool isLimiterEnabled;
+		bool isReverbProcessingEnabled;
+		float reverbWetness;
 		std::mutex mutex;
 
 		// Status
