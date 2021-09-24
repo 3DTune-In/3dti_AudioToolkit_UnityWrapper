@@ -415,7 +415,7 @@ namespace SpatializerCore3DTI
 		bReverbOutput.left.resize(bufferSize);
 		bReverbOutput.right.resize(bufferSize);
 		assert(bReverbOutput.left.size() == length && bReverbOutput.right.size() == length);
-		if (spatializer->isBinaryResourceLoaded[ReverbBRIR] != 0.0f)
+		if (spatializer->isBinaryResourceLoaded[ReverbBRIR])
 		{
 			assert(const_cast<CABIR&>(spatializer->environment->GetABIR()).IsInitialized());
 			spatializer->environment->ProcessVirtualAmbisonicReverb(bReverbOutput.left, bReverbOutput.right);
