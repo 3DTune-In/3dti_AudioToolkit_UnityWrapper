@@ -278,11 +278,6 @@ public class API_3DTI_HL : MonoBehaviour
         return (T)Convert.ChangeType(fValue, typeof(T));
     }
 
-    // Convenience method that avoids custom type allowing it to be connected to a UI element in the Editor.
-    public void EnableHearingLossInBothEars(bool isEnabled)
-    {
-        SetParameter(Parameter.HLOn, isEnabled, T_ear.BOTH);
-    }
 
     ///////////////////////////////////////
     // GLOBAL CONTROLS

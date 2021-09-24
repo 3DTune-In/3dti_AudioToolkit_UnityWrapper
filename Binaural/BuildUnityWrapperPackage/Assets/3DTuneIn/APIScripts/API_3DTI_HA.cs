@@ -251,11 +251,7 @@ public class API_3DTI_HA : MonoBehaviour
     // GLOBAL METHODS
     //////////////////////////////////////////////////////////////
 
-    // Convenience method that avoids custom type allowing it to be connected to a UI element in the Editor.
-    public void EnableHAInBothEars(bool isEnabled)
-    {
-        SwitchHAOnOff(T_ear.BOTH, isEnabled);
-    }
+
 
     /// <summary>
     /// Switch on/off whole HA process

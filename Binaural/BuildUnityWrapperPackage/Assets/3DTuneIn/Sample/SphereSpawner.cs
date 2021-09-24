@@ -16,6 +16,8 @@ public class SphereSpawner : MonoBehaviour, IPointerClickHandler
 
     private List<GameObject> spawnedSphereEmitters = new List<GameObject>();
 
+    public int Count => spawnedSphereEmitters.Count;
+
     public void Awake()
     {
         if (spawnOnAwake)

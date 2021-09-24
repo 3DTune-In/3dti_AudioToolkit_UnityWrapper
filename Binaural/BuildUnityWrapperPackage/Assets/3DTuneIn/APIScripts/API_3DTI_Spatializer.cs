@@ -149,7 +149,7 @@ namespace API_3DTI
             [SpatializerParameter(label = "HRTF resampling step (High Quality only)", description = "HRTF resampling step; Lower values give better quality at the cost of more memory usage. Only affects High Quality mode.", min = 1, max = 90, type = typeof(int), defaultValue = 15)]
             HRTFResamplingStep = 18,
 
-            [SpatializerParameter(label = "Enable Reverb processing", description = "Enable the reverb environment processing. In addition, reverb also needs to be enabled on at least one source. Reverb output returns on the plugin corresponding to this component on Unity's audio mixer.", min = 0, max = 1, type = typeof(bool), defaultValue = 1)]
+            [SpatializerParameter(label = "Enable reverb processing", description = "Enable the reverb environment processing. In addition, reverb also needs to be enabled on at least one source. Reverb output returns on the plugin corresponding to this component on Unity's audio mixer.", min = 0, max = 1, type = typeof(bool), defaultValue = 1)]
             EnableReverbProcessing = 19,
 
             [SpatializerParameter(label = "Reverb wet/dry", description = "Set the mix between dry (i.e. anechoic) and reverberated audio.", min = 0.0f, max = 1.0f, type = typeof(float), defaultValue = 0.5f)]
