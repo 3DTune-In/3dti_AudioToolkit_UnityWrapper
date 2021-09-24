@@ -268,7 +268,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectSta
 	EffectData* effectdata = new EffectData;
 	{
 		effectdata->spatializer = SpatializerCore3DTI::SpatializerCore::instance();
-		static_assert(std::tuple_size<typeof(effectdata->spatializer->perSourceInitialValues)>::value == FloatParameter::NumSourceParameters, "NumSourceParameters should match the size of SpatializerCore::perSourceInitialValues array.");
+		static_assert(std::tuple_size<decltype(effectdata->spatializer->perSourceInitialValues)>::value == FloatParameter::NumSourceParameters, "NumSourceParameters should match the size of SpatializerCore::perSourceInitialValues array.");
 		//for (int i = 0; i < NumSourceParameters; i++)
 		//{
 		//	effectdata->parameters[i] = effectdata->spatializer->perSourceInitialValues[i];
