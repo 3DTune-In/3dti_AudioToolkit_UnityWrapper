@@ -10,10 +10,6 @@
     </ClCompile>
     <ClCompile Include="..\src\effect3DTIHA.cpp" />
     <ClCompile Include="..\src\effect3DTIHL.cpp" />
-    <ClCompile Include="..\src\effect3DTISpatializer.cpp" />
-    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\DynamicEqualizer.cpp">
-      <Filter>3dti_Toolkit\HAHLSimulation</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\Fig6Algorithm.cpp">
       <Filter>3dti_Toolkit\HAHLSimulation</Filter>
     </ClCompile>
@@ -42,6 +38,9 @@
       <Filter>3dti_Toolkit\HAHLSimulation</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\ClassificationScaleHL.cpp">
+      <Filter>3dti_Toolkit\HAHLSimulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\DynamicEqualizer.cpp">
       <Filter>3dti_Toolkit\HAHLSimulation</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Delay.cpp">
@@ -110,6 +109,15 @@
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\BiquadFilter.cpp">
       <Filter>3dti_Toolkit\Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\BinauralSpatializer\Core.cpp">
+      <Filter>3dti_Toolkit\BinauralSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\BinauralSpatializer\Environment.cpp">
+      <Filter>3dti_Toolkit\BinauralSpatializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\BinauralSpatializer\HRTF.cpp">
+      <Filter>3dti_Toolkit\BinauralSpatializer</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\BinauralSpatializer\ILD.cpp">
       <Filter>3dti_Toolkit\BinauralSpatializer</Filter>
     </ClCompile>
@@ -125,15 +133,11 @@
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\BinauralSpatializer\BRIR.cpp">
       <Filter>3dti_Toolkit\BinauralSpatializer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\BinauralSpatializer\Core.cpp">
-      <Filter>3dti_Toolkit\BinauralSpatializer</Filter>
+    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\BRIR\BRIRCereal.cpp">
+      <Filter>3dti_ResourceManager\BRIR</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\BinauralSpatializer\Environment.cpp">
-      <Filter>3dti_Toolkit\BinauralSpatializer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\BinauralSpatializer\HRTF.cpp">
-      <Filter>3dti_Toolkit\BinauralSpatializer</Filter>
-    </ClCompile>
+    <ClCompile Include="..\src\effect3DTISpatializerSource.cpp" />
+    <ClCompile Include="..\src\effect3DTISpatializerCore.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -189,12 +193,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\ClassificationScaleHL.h">
       <Filter>3dti_Toolkit\HAHLSimulation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\BiquadFilter.h">
-      <Filter>3dti_Toolkit\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Buffer.h">
-      <Filter>3dti_Toolkit\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\CommonDefinitions.h">
       <Filter>3dti_Toolkit\Common</Filter>
@@ -274,6 +272,21 @@
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\AudioState.h">
       <Filter>3dti_Toolkit\Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\BiquadFilter.h">
+      <Filter>3dti_Toolkit\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\Common\Buffer.h">
+      <Filter>3dti_Toolkit\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\BinauralSpatializer\BRIR.h">
+      <Filter>3dti_Toolkit\BinauralSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\BinauralSpatializer\Core.h">
+      <Filter>3dti_Toolkit\BinauralSpatializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\BinauralSpatializer\Environment.h">
+      <Filter>3dti_Toolkit\BinauralSpatializer</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\BinauralSpatializer\HRTF.h">
       <Filter>3dti_Toolkit\BinauralSpatializer</Filter>
     </ClInclude>
@@ -292,15 +305,11 @@
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\BinauralSpatializer\3DTI_BinauralSpatializer.h">
       <Filter>3dti_Toolkit\BinauralSpatializer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\BinauralSpatializer\BRIR.h">
-      <Filter>3dti_Toolkit\BinauralSpatializer</Filter>
+    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\BRIR\BRIRCereal.h">
+      <Filter>3dti_ResourceManager\BRIR</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\BinauralSpatializer\Core.h">
-      <Filter>3dti_Toolkit\BinauralSpatializer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\BinauralSpatializer\Environment.h">
-      <Filter>3dti_Toolkit\BinauralSpatializer</Filter>
-    </ClInclude>
+    <ClInclude Include="..\src\effect3DTISpatializerCore.h" />
+    <ClInclude Include="..\src\effect3DTISpatializerSource.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="3dti_Toolkit">
@@ -323,6 +332,9 @@
     </Filter>
     <Filter Include="3dti_Toolkit\HAHLSimulation">
       <UniqueIdentifier>{ea88e744-3b83-4431-a63c-e7791d2ac0c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3dti_ResourceManager\BRIR">
+      <UniqueIdentifier>{e2cb3ec2-da4b-423d-8537-ee8f42e33c7a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
