@@ -98,7 +98,8 @@
 		3429A45C26384BD100964E9E /* ncString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A43C26384BD100964E9E /* ncString.cpp */; };
 		3429A45D26384BD100964E9E /* ncType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A44126384BD100964E9E /* ncType.cpp */; };
 		3429A45E26384BD100964E9E /* ncVar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A44426384BD100964E9E /* ncVar.cpp */; };
-		34FEE2D826FCBF560094E18F /* effect3DTISpatializerCore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34FEE2D626FCBF420094E18F /* effect3DTISpatializerCore.cpp */; };
+		34BB9EEC27025207005BF419 /* effect3DTISpatializerReverb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34BB9EE827025200005BF419 /* effect3DTISpatializerReverb.cpp */; };
+		34BB9EED27025207005BF419 /* SpatializerCore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34BB9EE927025200005BF419 /* SpatializerCore.cpp */; };
 		34FEE2D926FCBF560094E18F /* effect3DTISpatializerSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34FEE2D726FCBF420094E18F /* effect3DTISpatializerSource.cpp */; };
 		34FEE2E726FCBF9E0094E18F /* HRTFFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34FEE2DB26FCBF9E0094E18F /* HRTFFactory.cpp */; };
 		34FEE2E826FCBF9E0094E18F /* HRTFCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34FEE2DC26FCBF9E0094E18F /* HRTFCereal.cpp */; };
@@ -312,9 +313,11 @@
 		3429A44226384BD100964E9E /* ncGroupAtt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncGroupAtt.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncGroupAtt.h; sourceTree = "<group>"; };
 		3429A44326384BD100964E9E /* ncUint64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncUint64.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncUint64.h; sourceTree = "<group>"; };
 		3429A44426384BD100964E9E /* ncVar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncVar.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncVar.cpp; sourceTree = "<group>"; };
-		34FEE2D426FCBF420094E18F /* effect3DTISpatializerCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = effect3DTISpatializerCore.h; path = ../src/effect3DTISpatializerCore.h; sourceTree = "<group>"; };
+		34BB9EE827025200005BF419 /* effect3DTISpatializerReverb.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = effect3DTISpatializerReverb.cpp; path = ../src/effect3DTISpatializerReverb.cpp; sourceTree = "<group>"; };
+		34BB9EE927025200005BF419 /* SpatializerCore.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SpatializerCore.cpp; path = ../src/SpatializerCore.cpp; sourceTree = "<group>"; };
+		34BB9EEA27025200005BF419 /* effect3DTISpatializerReverb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = effect3DTISpatializerReverb.h; path = ../src/effect3DTISpatializerReverb.h; sourceTree = "<group>"; };
+		34BB9EEB27025200005BF419 /* SpatializerCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SpatializerCore.h; path = ../src/SpatializerCore.h; sourceTree = "<group>"; };
 		34FEE2D526FCBF420094E18F /* effect3DTISpatializerSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = effect3DTISpatializerSource.h; path = ../src/effect3DTISpatializerSource.h; sourceTree = "<group>"; };
-		34FEE2D626FCBF420094E18F /* effect3DTISpatializerCore.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = effect3DTISpatializerCore.cpp; path = ../src/effect3DTISpatializerCore.cpp; sourceTree = "<group>"; };
 		34FEE2D726FCBF420094E18F /* effect3DTISpatializerSource.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = effect3DTISpatializerSource.cpp; path = ../src/effect3DTISpatializerSource.cpp; sourceTree = "<group>"; };
 		34FEE2DB26FCBF9E0094E18F /* HRTFFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HRTFFactory.cpp; sourceTree = "<group>"; };
 		34FEE2DC26FCBF9E0094E18F /* HRTFCereal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HRTFCereal.cpp; sourceTree = "<group>"; };
@@ -515,8 +518,10 @@
 		AF6FAA481E3A16140035B40E /* src */ = {
 			isa = PBXGroup;
 			children = (
-				34FEE2D626FCBF420094E18F /* effect3DTISpatializerCore.cpp */,
-				34FEE2D426FCBF420094E18F /* effect3DTISpatializerCore.h */,
+				34BB9EE827025200005BF419 /* effect3DTISpatializerReverb.cpp */,
+				34BB9EEA27025200005BF419 /* effect3DTISpatializerReverb.h */,
+				34BB9EE927025200005BF419 /* SpatializerCore.cpp */,
+				34BB9EEB27025200005BF419 /* SpatializerCore.h */,
 				34FEE2D726FCBF420094E18F /* effect3DTISpatializerSource.cpp */,
 				34FEE2D526FCBF420094E18F /* effect3DTISpatializerSource.h */,
 				AF391F8B1E55F14200EB4AC6 /* effect3DTIHA.cpp */,
@@ -794,7 +799,6 @@
 				3429A3F726384B8200964E9E /* SOFAFile.cpp in Sources */,
 				3429A39A26384AB400964E9E /* Delay.cpp in Sources */,
 				3429A30026384A9A00964E9E /* HighOrderButteworthFilter.cpp in Sources */,
-				34FEE2D826FCBF560094E18F /* effect3DTISpatializerCore.cpp in Sources */,
 				3429A3F926384B8200964E9E /* SOFAGeneralFIR.cpp in Sources */,
 				3429A3B026384ABE00964E9E /* SingleSourceDSP.cpp in Sources */,
 				3429A3FE26384B8200964E9E /* SOFAAttributes.cpp in Sources */,
@@ -822,6 +826,7 @@
 				3429A45526384BD100964E9E /* ncChar.cpp in Sources */,
 				3429A39826384AB400964E9E /* ErrorHandler.cpp in Sources */,
 				3429A45626384BD100964E9E /* ncVlenType.cpp in Sources */,
+				34BB9EEC27025207005BF419 /* effect3DTISpatializerReverb.cpp in Sources */,
 				3429A30726384A9A00964E9E /* BaerMooreFrequencySmearing.cpp in Sources */,
 				3429A30526384A9A00964E9E /* ButterworthMultibandExpander.cpp in Sources */,
 				3429A44826384BD100964E9E /* ncGroupAtt.cpp in Sources */,
@@ -874,6 +879,7 @@
 				3429A3FD26384B8200964E9E /* SOFANcFile.cpp in Sources */,
 				3429A44726384BD100964E9E /* ncOpaqueType.cpp in Sources */,
 				3429A38F26384AB400964E9E /* NoiseGenerator.cpp in Sources */,
+				34BB9EED27025207005BF419 /* SpatializerCore.cpp in Sources */,
 				3429A3FF26384B8200964E9E /* SOFASource.cpp in Sources */,
 				3429A3B726384ABE00964E9E /* HRTF.cpp in Sources */,
 				3429A45226384BD100964E9E /* ncInt.cpp in Sources */,
