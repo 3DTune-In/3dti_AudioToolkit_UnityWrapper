@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657868, g: 0.4964124, b: 0.574817, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1078,8 +1078,8 @@ MonoBehaviour:
   - 15
   - 0
   highQualityHRTFPaths:
-  - Data/HighQuality/HRTF/3DTI_HRTF_IRC1013_128s_44100Hz.3dti-hrtf.bytes
-  - Data/HighQuality/HRTF/3DTI_HRTF_IRC1013_256s_48000Hz.3dti-hrtf.bytes
+  - Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_128s_44100Hz.3dti-hrtf.bytes
+  - Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_128s_48000Hz.3dti-hrtf.bytes
   - Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_256s_96000Hz.3dti-hrtf.bytes
   highQualityILDPaths:
   - Data/HighQuality/ILD/NearFieldCompensation_ILD_44100.3dti-ild.bytes
@@ -1090,9 +1090,9 @@ MonoBehaviour:
   - Data/HighPerformance/ILD/HRTF_ILD_48000.3dti-ild.bytes
   - Data/HighPerformance/ILD/HRTF_ILD_96000.3dti-ild.bytes
   reverbBRIRPaths:
-  - Data/Reverb/BRIR/3DTI_BRIR_medium_44100Hz.3dti-brir.bytes
-  - Data/Reverb/BRIR/3DTI_BRIR_medium_48000Hz.3dti-brir.bytes
-  - Data/Reverb/BRIR/3DTI_BRIR_small_96000Hz.3dti-brir.bytes
+  - Data/Reverb/BRIR/3DTI_BRIR_large_44100Hz.3dti-brir.bytes
+  - Data/Reverb/BRIR/3DTI_BRIR_large_48000Hz.3dti-brir.bytes
+  - Data/Reverb/BRIR/3DTI_BRIR_large_96000Hz.3dti-brir.bytes
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
