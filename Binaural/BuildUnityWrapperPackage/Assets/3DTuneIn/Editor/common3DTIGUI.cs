@@ -5,28 +5,30 @@ using UnityEditor;
 using UnityEngine;
 using System.Reflection;
 using API_3DTI_Common;
+using System.Linq;
 
-public class Common3DTIGUI
+public static class Common3DTIGUI
 {
     static int logoheight = 59;
     static int earsize = 40;
     static int mainTitleSize = 14;
     static float singleSpace = 5.0f;
-    static float spaceBetweenSections = 5.0f;
+    static float spaceBetweenSections = 10.0f;
     static float spaceBetweenColumns = 5.0f;
     static float parameterLabelWidth = 0.0f;    
     
     static GUIStyle titleBoxStyle;
-    static GUIStyle subtitleBoxStyle;
+    public static GUIStyle subtitleBoxStyle;
     static GUIStyle sectionStyle;
     static GUIStyle subsectionStyle;
     static GUIStyle dragdropStyle;
-    static GUIStyle parameterLabelStyle;
+    public static GUIStyle parameterLabelStyle;
     static GUIStyle leftColumnStyle;
     static GUIStyle rightColumnStyle;
     static GUIStyle intFieldStyle;
     static GUIStyle aboutButtonStyle;
     static GUIStyle bigTitleStyle;
+    public static GUIStyle commentStyle;
 
 	//public static void ListHRTFFiles()
 	//{
@@ -67,6 +69,10 @@ public class Common3DTIGUI
 
         aboutButtonStyle = new GUIStyle(EditorStyles.toolbarButton);
         aboutButtonStyle.alignment = TextAnchor.MiddleCenter;
+
+        commentStyle = new GUIStyle(GUI.skin.label);
+        commentStyle.wordWrap = true;
+        commentStyle.fontStyle = FontStyle.Italic;
     }
 
     public static void SetInspectorIcon(GameObject go)
@@ -198,10 +204,13 @@ public class Common3DTIGUI
     /// <summary>
     /// Auxiliary function for creating a new section with title for parameter groups
     /// </summary>    
-    public static void BeginSection(string titleText)
+    public static void BeginSection(string titleText = null)
     {
         GUILayout.BeginVertical(sectionStyle);
-        GUILayout.Box(titleText, titleBoxStyle, GUILayout.ExpandWidth(true));
+        if (titleText != null)
+        {
+            GUILayout.Box(titleText, titleBoxStyle, GUILayout.ExpandWidth(true));
+        }
         ResetParameterGroup();
     }
 
@@ -342,24 +351,73 @@ public class Common3DTIGUI
     }
 
 
-	public static void CreatePopupStringSelector(string titleText, string tooltip, string[] items, ref string target, string prefix = "", string suffix = "")
-	{
-		EditorGUILayout.BeginHorizontal();
-		//EditorGUILayout.PrefixLabel(new GUIContent(titleText, tooltip), parameterLabelStyle, GUILayout.Width(GetParameterLabelWidth()));
-		int selectedIndex = -1;
-		if (target.Length > prefix.Length + suffix.Length && target.StartsWith(prefix) && target.EndsWith(suffix))
-		{
-			string trimmedTarget = target.Remove(target.Length - suffix.Length).Remove(0, prefix.Length);
-			selectedIndex = new List<string>(items).IndexOf(trimmedTarget);
-		}
-		else if (target != "")
-		{
-			Debug.LogWarning("Unable to find previously selection: " + target);
-		}
-		int newSelectedIndex = EditorGUILayout.Popup(new GUIContent(titleText, tooltip), selectedIndex, items);
-		target = newSelectedIndex < 0? "" : (prefix + items[newSelectedIndex] + suffix);
-		EditorGUILayout.EndHorizontal();
-	}
+	//public static void CreatePopupStringSelector(string titleText, string tooltip, string[] items, ref string target, string prefix = "", string suffix = "")
+	//{
+	//	EditorGUILayout.BeginHorizontal();
+	//	//EditorGUILayout.PrefixLabel(new GUIContent(titleText, tooltip), parameterLabelStyle, GUILayout.Width(GetParameterLabelWidth()));
+	//	int selectedIndex = -1;
+	//	if (target.Length > prefix.Length + suffix.Length && target.StartsWith(prefix) && target.EndsWith(suffix))
+	//	{
+	//		string trimmedTarget = target.Remove(target.Length - suffix.Length).Remove(0, prefix.Length);
+	//		selectedIndex = new List<string>(items).IndexOf(trimmedTarget);
+	//	}
+	//	else if (target != "")
+	//	{
+	//		Debug.LogWarning("Unable to find previously selection: " + target);
+	//	}
+	//	int newSelectedIndex = EditorGUILayout.Popup(new GUIContent(titleText, tooltip), selectedIndex, items);
+	//	target = newSelectedIndex < 0? "" : (prefix + items[newSelectedIndex] + suffix);
+	//	EditorGUILayout.EndHorizontal();
+	//}
+
+    public static T PluginEnumSelector<T>(IAudioEffectPlugin plugin, string parameterName, string title, string tooltip) where T : Enum
+    {
+        int value = plugin.GetIntParameter(parameterName);
+        Debug.Assert(Enum.GetUnderlyingType(typeof(T)) == typeof(int));
+        int[] values = (int[])Enum.GetValues(typeof(T));
+        if (!values.Contains(value))
+        {
+            Debug.LogWarning($"Plugin returned invalid value for {parameterName}: {value}");
+        }
+
+        int defaultValue = (int)Enum.GetValues(typeof(T)).GetValue(0);
+
+
+        int newValue = (int)(object) EditorGUILayout.Popup(new GUIContent(title, tooltip), values.Contains(value)? value : defaultValue, Enum.GetNames(typeof(T)));
+        if (!Enum.IsDefined(typeof(T), newValue))
+        {
+            Debug.LogError($"Invalid value for {typeof(T)} received from popup: {newValue}.");
+        }
+
+        if (value != newValue)
+        {
+            plugin.SetFloatParameter(parameterName, newValue);
+        }
+
+        return (T)(object)newValue;
+    }
+
+
+    public static void CreatePopupStringSelector<T>(string titleText, string tooltip, ref T target) where T : System.Enum
+    {
+        EditorGUILayout.BeginHorizontal();
+        Array valueObjects = Enum.GetValues(typeof(T));
+        var values = new T[valueObjects.Length];
+        var labels = new string[valueObjects.Length];
+        int currentIndex = 0;
+        for (int i=0; i<valueObjects.Length; i++)
+        {
+            values[i] = (T)(object)valueObjects.GetValue(i);
+            labels[i] = values[i].ToString();
+            if (EqualityComparer<T>.Default.Equals(values[i], target))
+            {
+                currentIndex = i;
+            }
+        }
+
+        int newIndex = EditorGUILayout.Popup(new GUIContent(titleText, tooltip), currentIndex, labels);
+        target = values[newIndex];
+    }
 
 
     /// <summary>
@@ -476,6 +534,83 @@ public class Common3DTIGUI
         GUILayout.Space(singleSpace);
     }
 
+    public static void SectionSpace()
+    {
+        GUILayout.Space(spaceBetweenSections);
+    }
+
+
+    // Draw two columns, one for each ear, and use the provided function to populate with controls.
+    // If any of enablerParameters is false then the contents will be disabled. enablerParameters
+    // should all have bool as their underlying type.
+    // If toggleParameter is non-null then it should be a bool parameter. A toggle will be drawn and when unchecked
+    // the callback will be called in a disabled group
+    // perEarCallback is drawn for each ear in its respective column
+    // bothEarsCallback is drawn after everything at full width
+    // returns true if perEarCallback ever returns true
+    public static bool DrawColumnForEachEar<ParameterT>(IAudioEffectPlugin plugin, string title, ParameterT[] enablerParameters, ParameterT? groupEnabledToggleParameter, Func<T_ear, bool> perEarCallback, Func<bool> bothEarsCallback = null) 
+        where ParameterT : struct, Enum
+    {
+        bool returnValue = false;
+
+        if (title != null)
+        {
+            Common3DTIGUI.BeginSection(title);
+        }
+        GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));                     // Begin section (ear pair)
+        {
+            foreach (T_ear ear in new T_ear[] { T_ear.LEFT, T_ear.RIGHT })
+            {
+                bool isEnabled = true;
+                foreach (ParameterT p in enablerParameters)
+                {
+                    isEnabled = isEnabled && plugin.GetParameter<ParameterT, bool>(p, ear);
+                }
+                EditorGUI.BeginDisabledGroup(!isEnabled);
+                {
+                    //-
+                    ResetParameterGroup();
+                    if (ear == T_ear.LEFT)
+                    {
+                        GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(false));  // Begin column (left ear)
+                    }
+                    else
+                    {
+                        ResetParameterGroup();
+                        GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(false));  // Begin column (right ear)
+                    }
+                    //-
+                    float isGroupToggleEnabled = 1.0f;
+                    if (groupEnabledToggleParameter.HasValue)
+                    {
+                        Convert.ToBoolean(CreateControl(plugin, groupEnabledToggleParameter.Value, out isGroupToggleEnabled, ear));
+                    }
+                    EditorGUI.BeginDisabledGroup(isGroupToggleEnabled == 0.0f); // Begin DisabledGroup
+                    {
+                        returnValue = perEarCallback(ear) || returnValue;
+                    }
+                    EditorGUI.EndDisabledGroup();
+                    //-
+                    GUILayout.EndVertical();            // End column
+                    GUILayout.Space(spaceBetweenColumns);   // Space between columns 
+                    //-
+                }
+                EditorGUI.EndDisabledGroup();
+            }
+        }
+        GUILayout.EndHorizontal();                      // End section (ear pair)        
+
+        if (bothEarsCallback != null)
+        {
+            returnValue = bothEarsCallback() || returnValue;
+        }
+
+        Common3DTIGUI.EndSection();
+
+        return returnValue;
+    }
+
+
     /// <summary>
     /// Begin column for left ear
     /// </summary>
@@ -501,15 +636,44 @@ public class Common3DTIGUI
         return changed;
     }
 
-    /// <summary>
-    /// End column for left ear
-    /// </summary>
-    /// <param name="endToogleGroup"></param>
+    // Start a column with a toggle control controlling the given parameter.
+    public static void BeginColumn<ParameterT>(IAudioEffectPlugin plugin, T_ear ear, ParameterT toggleBoxParameter) where ParameterT : struct, Enum
+    {
+        ResetParameterGroup();
+        if (ear == T_ear.LEFT)
+        {
+            GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));                     // Begin section (ear pair)
+            GUILayout.BeginVertical(leftColumnStyle, GUILayout.ExpandWidth(false));  // Begin column (left ear)                               
+
+        }
+        else
+        {
+            ResetParameterGroup();
+            GUILayout.BeginVertical(rightColumnStyle, GUILayout.ExpandWidth(false));  // Begin column (right ear)
+        }
+
+        Convert.ToBoolean(CreateControl(plugin, toggleBoxParameter, out float isEnabled, ear));
+        EditorGUI.BeginDisabledGroup(isEnabled == 0.0f); // Begin DisabledGroup
+    }
+
     public static void EndLeftColumn()
     {
                 EditorGUI.EndDisabledGroup();   // End DisabledGroup 
             GUILayout.EndVertical();            // End column
             GUILayout.Space(spaceBetweenColumns);   // Space between columns        
+    }
+
+    public static void EndColumn(T_ear ear)
+    {
+        EditorGUI.EndDisabledGroup();   // End DisabledGroup 
+        GUILayout.EndVertical();            // End column
+        if (ear == T_ear.RIGHT)
+        {
+            GUILayout.EndHorizontal();                      // End section (ear pair)        
+        }
+        GUILayout.Space(spaceBetweenColumns);   // Space between columns  
+
+
     }
 
     /// <summary>
@@ -680,53 +844,155 @@ public class Common3DTIGUI
         return false;
     }
 
-    /// <summary>
-    /// Create a slider associated to a parameter of an audio plugin, which accepts only a set of discrete values
-    /// </summary>
-    /// <param name="plugin"></param>
-    /// <param name="parameterName"></param>
-    /// <param name="parameterText"></param>
-    /// <param name="isFloat"></param>
-    /// <param name="units"></param>
-    /// <returns>True if slider value has changed</returns>
-    public static bool CreatePluginParameterDiscreteSlider(IAudioEffectPlugin plugin, ref float APIparam, string parameterName, string parameterText, string units, string tooltip, List<float> discreteValues)
+    // Create a group of controls with the labels aligned. Returns true if any control changed
+    public static bool CreateControls<T>(IAudioEffectPlugin plugin, T_ear ear, bool isCompact, params T[] parameters)
+        where T : Enum
     {
-        // TO DO: print marks with discrete values
-
-        // Get parameter info
-        float newValue;
-        float minValue, maxValue;
-        plugin.GetFloatParameterInfo(parameterName, out minValue, out maxValue, out newValue);
-
-        // Create slider and set value
-        plugin.GetFloatParameter(parameterName, out newValue);
-        bool valueChanged;
-        valueChanged = CreateFloatSlider(ref newValue, parameterText, "F0", units, tooltip, minValue, maxValue);
-
-        if (valueChanged)
+        foreach (T parameter in parameters)
         {
-            // Snap to closest discrete value            
-            float minDistance = Mathf.Abs(newValue - discreteValues[0]); // Warning! this does not work with negative valu
-            float closestValue = discreteValues[0];
-            foreach (int discreteValue in discreteValues)
+            ParameterAttribute p = parameter.GetAttribute<ParameterAttribute>();
+            if (p == null)
             {
-                float distance = Mathf.Abs(newValue - discreteValue);
-                if (distance < minDistance)
-                {
-                    minDistance = distance;
-                    closestValue = discreteValue;
-                }
+                throw new Exception($"Failed to find ParameterAttribute for parameter {parameter}");
             }
-            newValue = closestValue;
+            AddLabelToParameterGroup(p.label);
+        }
+        bool didChange = false;
+        foreach (T parameter in parameters)
+        {
+            ParameterAttribute p = parameter.GetAttribute<ParameterAttribute>();
+            Debug.Assert(p != null);
+            didChange = CreateControl(plugin, parameter, ear, isCompact) || didChange;
+        }
+        return didChange;
+    }
 
-            // Set value
-            plugin.SetFloatParameter(parameterName, newValue);
-            APIparam = newValue;
-            return true;
+    // Create a control for a parameter. Returns true if the value has changed
+    public static bool CreateControl<T>(IAudioEffectPlugin plugin, T parameter, T_ear ear, bool isCompact = false) where T : Enum
+    {
+        return CreateControl(plugin, parameter, out float _, ear, isCompact);
+    }
+
+
+    // Create a control for a parameter. Returns true if the value has changed. Use this version if you need to grab a copy of the updated value. The updated value is always represented as a float as received directly from the plugin.
+    public static bool CreateControl<ParameterEnum>(IAudioEffectPlugin plugin, ParameterEnum parameter, out float value, T_ear ear, bool isCompact=false) 
+        where ParameterEnum : Enum 
+    {
+        ParameterAttribute p = parameter.GetAttribute<ParameterAttribute>();
+        if (p == null)
+        {
+            throw new Exception($"Failed to find ParameterAttribute for parameter {parameter}");
         }
 
-        return false;
+        SingleSpace();
+
+        if (p.type == typeof(float) || p.type==typeof(int))
+        {
+            // Get parameter info
+            plugin.GetFloatParameterInfo(p.pluginName(ear), out float minValue, out float maxValue, out float _);
+
+            //float oldValue = plugin.GetFloatParameter(p.pluginName(ear));
+            float oldValue = plugin.GetParameter<ParameterEnum, float>(parameter, ear);
+            float newValue;
+            string valueString;
+            if (isCompact)
+            {
+                GUILayout.BeginVertical(GUILayout.ExpandWidth(false));
+                GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));
+                GUILayout.Label(new GUIContent(p.label, p.description));
+                valueString = GUILayout.TextField(oldValue.ToString(p.type==typeof(float) ? "F2" : "F0", System.Globalization.CultureInfo.InvariantCulture), GUILayout.ExpandWidth(false));
+                GUILayout.Label(p.units, GUILayout.ExpandWidth(false));
+                GUILayout.EndHorizontal();
+                // TODO: I Think this will have a bug where newValue gets overwritten by oldvalue in the parse below
+                newValue = GUILayout.HorizontalSlider(oldValue, minValue, maxValue);
+                GUILayout.EndVertical();
+            }
+            else
+            {
+                GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));
+                AddLabelToParameterGroup(p.label);
+                GUILayout.Label(new GUIContent(p.label, p.description), parameterLabelStyle, GUILayout.Width(GetParameterLabelWidth()));
+                newValue = GUILayout.HorizontalSlider(oldValue, minValue, maxValue, GUILayout.ExpandWidth(true));
+                valueString = GUILayout.TextField(newValue.ToString(p.type==typeof(float) ? "F2" : "F0", System.Globalization.CultureInfo.InvariantCulture), GUILayout.ExpandWidth(false));
+                GUILayout.Label(p.units, GUILayout.ExpandWidth(false));
+                GUILayout.EndHorizontal();
+            }
+
+            bool parseOk = float.TryParse(valueString, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out float parsedValueString);
+            if (parseOk)
+            {
+                newValue = parsedValueString;
+            }
+            if (p.validValues != null && p.validValues.Length > 0)
+            {
+                // Lock to nearest valid value
+                newValue = p.validValues.OrderBy(x => Math.Abs(x - newValue)).First();
+            }
+            value = Convert.ToSingle(newValue);
+
+            if (newValue != oldValue)
+            {
+                plugin.SetFloatParameter(p.pluginName(ear), newValue);
+                return true;
+            }
+            return false;
+        }
+        else if (p.type == typeof(bool))
+        {
+            bool oldValue = plugin.GetParameter<ParameterEnum, bool>(parameter, ear);
+            bool newValue = GUILayout.Toggle(oldValue, new GUIContent(p.label, p.description), GUILayout.ExpandWidth(false));
+            value = Convert.ToSingle(newValue);
+            if (newValue != oldValue)
+            {
+                bool setOK = plugin.SetFloatParameter(p.pluginName(ear), Convert.ToSingle(newValue));
+                Debug.Assert(setOK);
+                return true;
+            }
+            return false;
+        }
+        else if (p.type.IsEnum)
+        {
+            int oldValue = plugin.GetParameter<ParameterEnum, int>(parameter, ear);
+            Debug.Assert(Enum.GetUnderlyingType(p.type) == typeof(int));
+            int[] values = (int[])Enum.GetValues(p.type);
+            if (!values.Contains(oldValue))
+            {
+                Debug.LogWarning($"Plugin returned invalid value for {p.label}: {oldValue}");
+            }
+
+            int defaultValue = (int)Enum.GetValues(p.type).GetValue(0);
+
+            int newValue = (int)(object)EditorGUILayout.Popup(new GUIContent(p.label, p.description), values.Contains(oldValue) ? oldValue : defaultValue, Enum.GetNames(p.type));
+            Debug.Assert(Enum.IsDefined(p.type, newValue));
+            value = Convert.ToSingle(newValue);
+
+            if (newValue != oldValue)
+            {
+                bool setOK = plugin.SetFloatParameter(p.pluginName(ear), newValue);
+                Debug.Assert(setOK);
+                return true;
+            }
+            return false;
+        }
+        else
+        {
+            throw new Exception($"Cannot create GUI control for Parameter of type {p.type}.");
+        }
     }
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
 
     /// <summary>
     /// Auxiliary function for creating sliders for float variables with specific format
@@ -753,14 +1019,16 @@ public class Common3DTIGUI
             GUILayout.EndHorizontal();
             
             variable = GUILayout.HorizontalSlider(variable, minValue, maxValue);
+            GUILayout.Space(singleSpace * 3);
         }
+
         GUILayout.EndVertical();
 
         return (variable != previousVar);
     }
 
     /// <summary>
-    ///  Auxiliary function for creating toogle input
+    ///  Auxiliary function for creating toggle input
     /// </summary>    
     public static void CreatePluginToggle(IAudioEffectPlugin plugin, ref bool boolvar, string toggleText, string switchParameter, string tooltip, bool forceChange)
     {        
@@ -817,4 +1085,5 @@ public class Common3DTIGUI
             return "both";
         return "unknown";
     }
+
 }
