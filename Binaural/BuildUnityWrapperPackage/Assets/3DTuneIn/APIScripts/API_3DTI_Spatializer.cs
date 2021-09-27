@@ -207,7 +207,7 @@ namespace API_3DTI
                 default: throw new Exception("Invalid value of enum SpatializerBinaryRole");
             }
         }
-
+        private bool haveBinariesBeenSet = false;
 
 #if UNITY_IPHONE
     [DllImport ("__Internal")]
@@ -261,6 +261,13 @@ namespace API_3DTI
 
             if (Is3DTISpatializerCreated())
             {
+                if (!haveBinariesBeenSet)
+                {
+                    sendAllBinaryResourcePathsToPlugin();
+                    haveBinariesBeenSet = true;
+                }
+
+
                 for (int i = 0; i < NumParameters; i++)
                 {
                     if (!Set3DTISpatializerFloat(i, spatializerParameters[i]))
@@ -287,20 +294,10 @@ namespace API_3DTI
                 }
             }
 
-
-            if (!GetSampleRate(out TSampleRateEnum sr))
+            if (!haveBinariesBeenSet)
             {
-                Debug.LogError($"Unsupported sample rate for 3DTI Spatializer {AudioSettings.outputSampleRate}. Supported values are 44100, 48000 and 96000.");
-            }
-            else
-            {
-                Debug.Assert(0 <= (int)sr && (int)sr < 3);
-                foreach (BinaryResourceRole role in Enum.GetValues(typeof(BinaryResourceRole)))
-                {
-                    string resourcePath = binaryResourcePaths(role)[(int)sr];
-                    SetBinaryResourcePath(role, sr, resourcePath);
-
-                }
+                sendAllBinaryResourcePathsToPlugin();
+                haveBinariesBeenSet = true;
             }
         }
 
@@ -474,18 +471,40 @@ namespace API_3DTI
             binaryResourcePaths(role)[(int)sampleRate] = path;
             if (GetSampleRate(out TSampleRateEnum currentSampleRate) && currentSampleRate == sampleRate)
             {
-                if (path.Length == 0)
-                {
-                    Load3DTISpatializerBinary((int)role, path);
-
-                }
-                else if (!(SaveResourceAsFile(path, out string newPath) && Load3DTISpatializerBinary((int)role, newPath)))
-                {
-                    Debug.LogError($"Failed to load Spatializer binary resource {path} for {role} at sample rate {sampleRate}.");
-                    return false;
-                }
+                return sendBinaryResourcePathToPlugin(role, sampleRate, path);
             }
             return true;
+        }
+
+
+        private bool sendBinaryResourcePathToPlugin(BinaryResourceRole role, TSampleRateEnum sampleRate, string path)
+        {
+            if (path.Length == 0)
+            {
+                Load3DTISpatializerBinary((int)role, path);
+            }
+            else if (!(SaveResourceAsFile(path, out string newPath) && Load3DTISpatializerBinary((int)role, newPath)))
+            {
+                Debug.LogError($"Failed to load Spatializer binary resource {path} for {role} at sample rate {sampleRate}.");
+                return false;
+            }
+            return true;
+        }
+
+
+        private bool sendAllBinaryResourcePathsToPlugin()
+        {
+            if (!GetSampleRate(out TSampleRateEnum sr))
+            {
+                return false;
+            }
+            Debug.Assert(0 <= (int)sr && (int)sr < 3);
+            bool ok = true;
+            foreach (BinaryResourceRole role in Enum.GetValues(typeof(BinaryResourceRole)))
+            {
+               ok = ok && sendBinaryResourcePathToPlugin(role, sr, binaryResourcePaths(role)[(int)sr]);
+            }
+            return ok;
         }
 
 
