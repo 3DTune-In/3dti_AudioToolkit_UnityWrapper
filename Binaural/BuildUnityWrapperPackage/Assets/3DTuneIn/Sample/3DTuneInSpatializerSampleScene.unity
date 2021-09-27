@@ -1090,9 +1090,9 @@ MonoBehaviour:
   - Data/HighPerformance/ILD/HRTF_ILD_48000.3dti-ild.bytes
   - Data/HighPerformance/ILD/HRTF_ILD_96000.3dti-ild.bytes
   reverbBRIRPaths:
-  - Data/Reverb/BRIR/3DTI_BRIR_large_44100Hz.3dti-brir.bytes
-  - Data/Reverb/BRIR/3DTI_BRIR_large_48000Hz.3dti-brir.bytes
-  - Data/Reverb/BRIR/3DTI_BRIR_large_96000Hz.3dti-brir.bytes
+  - Data/Reverb/BRIR/3DTI_BRIR_small_44100Hz.3dti-brir.bytes
+  - Data/Reverb/BRIR/3DTI_BRIR_small_48000Hz.3dti-brir.bytes
+  - Data/Reverb/BRIR/3DTI_BRIR_small_96000Hz.3dti-brir.bytes
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
