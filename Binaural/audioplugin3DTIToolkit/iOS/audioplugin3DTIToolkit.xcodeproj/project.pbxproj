@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		343BC1F226FE262A0008C1F4 /* effect3DTISpatializerCore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 348569CA26FE2044004CEFE8 /* effect3DTISpatializerCore.cpp */; };
 		343BC1F326FE262A0008C1F4 /* effect3DTISpatializerSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 348569CB26FE2044004CEFE8 /* effect3DTISpatializerSource.cpp */; };
 		34856A2C26FE2112004CEFE8 /* Environment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 348569D326FE2111004CEFE8 /* Environment.cpp */; };
 		34856A2D26FE2112004CEFE8 /* Core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 348569D426FE2111004CEFE8 /* Core.cpp */; };
@@ -53,6 +52,8 @@
 		34856A6226FE2131004CEFE8 /* ILDCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34856A5626FE2131004CEFE8 /* ILDCereal.cpp */; };
 		34856A6426FE2131004CEFE8 /* HRTFCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34856A5A26FE2131004CEFE8 /* HRTFCereal.cpp */; };
 		34856A6526FE2131004CEFE8 /* BRIRCereal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34856A5F26FE2131004CEFE8 /* BRIRCereal.cpp */; };
+		34BB9EE6270251F0005BF419 /* SpatializerCore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34BB9EE3270251F0005BF419 /* SpatializerCore.cpp */; };
+		34BB9EE7270251F0005BF419 /* effect3DTISpatializerReverb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34BB9EE4270251F0005BF419 /* effect3DTISpatializerReverb.cpp */; };
 		AFA2D2D61E570B480078DEEF /* effect3DTIHA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFA2D2D31E570B480078DEEF /* effect3DTIHA.cpp */; };
 		AFA2D2D71E570B480078DEEF /* effect3DTIHL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFA2D2D41E570B480078DEEF /* effect3DTIHL.cpp */; };
 		AFD34E361E51D99A007810A6 /* AudioPluginUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFD34E321E51D99A007810A6 /* AudioPluginUtil.cpp */; };
@@ -72,8 +73,6 @@
 
 /* Begin PBXFileReference section */
 		348569C826FE2043004CEFE8 /* effect3DTISpatializerSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = effect3DTISpatializerSource.h; sourceTree = "<group>"; };
-		348569C926FE2044004CEFE8 /* effect3DTISpatializerCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = effect3DTISpatializerCore.h; sourceTree = "<group>"; };
-		348569CA26FE2044004CEFE8 /* effect3DTISpatializerCore.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = effect3DTISpatializerCore.cpp; sourceTree = "<group>"; };
 		348569CB26FE2044004CEFE8 /* effect3DTISpatializerSource.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = effect3DTISpatializerSource.cpp; sourceTree = "<group>"; };
 		348569CE26FE2111004CEFE8 /* ILD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILD.h; sourceTree = "<group>"; };
 		348569CF26FE2111004CEFE8 /* UPCAnechoic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPCAnechoic.h; sourceTree = "<group>"; };
@@ -173,6 +172,10 @@
 		34856A5C26FE2131004CEFE8 /* HRTFCereal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRTFCereal.h; sourceTree = "<group>"; };
 		34856A5E26FE2131004CEFE8 /* BRIRCereal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRIRCereal.h; sourceTree = "<group>"; };
 		34856A5F26FE2131004CEFE8 /* BRIRCereal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BRIRCereal.cpp; sourceTree = "<group>"; };
+		34BB9EE2270251F0005BF419 /* effect3DTISpatializerReverb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = effect3DTISpatializerReverb.h; sourceTree = "<group>"; };
+		34BB9EE3270251F0005BF419 /* SpatializerCore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpatializerCore.cpp; sourceTree = "<group>"; };
+		34BB9EE4270251F0005BF419 /* effect3DTISpatializerReverb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = effect3DTISpatializerReverb.cpp; sourceTree = "<group>"; };
+		34BB9EE5270251F0005BF419 /* SpatializerCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpatializerCore.h; sourceTree = "<group>"; };
 		AF63299F1E376BA5000B40E8 /* libaudioplugin3DTIToolkit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libaudioplugin3DTIToolkit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFA2D2D31E570B480078DEEF /* effect3DTIHA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = effect3DTIHA.cpp; sourceTree = "<group>"; };
 		AFA2D2D41E570B480078DEEF /* effect3DTIHL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = effect3DTIHL.cpp; sourceTree = "<group>"; };
@@ -374,10 +377,12 @@
 		AFD34E2F1E51D99A007810A6 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				34BB9EE4270251F0005BF419 /* effect3DTISpatializerReverb.cpp */,
+				34BB9EE2270251F0005BF419 /* effect3DTISpatializerReverb.h */,
+				34BB9EE3270251F0005BF419 /* SpatializerCore.cpp */,
+				34BB9EE5270251F0005BF419 /* SpatializerCore.h */,
 				AFA2D2D31E570B480078DEEF /* effect3DTIHA.cpp */,
 				AFA2D2D41E570B480078DEEF /* effect3DTIHL.cpp */,
-				348569CA26FE2044004CEFE8 /* effect3DTISpatializerCore.cpp */,
-				348569C926FE2044004CEFE8 /* effect3DTISpatializerCore.h */,
 				348569CB26FE2044004CEFE8 /* effect3DTISpatializerSource.cpp */,
 				348569C826FE2043004CEFE8 /* effect3DTISpatializerSource.h */,
 				AFD34E311E51D99A007810A6 /* AudioPluginInterface.h */,
@@ -410,7 +415,7 @@
 				AF63299B1E376BA4000B40E8 /* Sources */,
 				AF63299C1E376BA4000B40E8 /* Frameworks */,
 				AF63299D1E376BA4000B40E8 /* CopyFiles */,
-				3497D04024C9915D00C6BF37 /* ShellScript */,
+				3497D04024C9915D00C6BF37 /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -456,7 +461,7 @@
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3497D04024C9915D00C6BF37 /* ShellScript */ = {
+		3497D04024C9915D00C6BF37 /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -465,13 +470,14 @@
 			);
 			inputPaths = (
 			);
+			name = "Run Script";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncp ~/Documents/dev/3DTI_UnityWrapper/Binaural/audioplugin3DTIToolkit/iOS/build/Debug-iphoneos/libaudioplugin3DTIToolkit.a ~/Documents/dev/SpatialisationToolkitTestbed/Assets/Plugins/iOS/libaudioplugin3DTIToolkit.a\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncp ~/Documents/dev/3DTI_UnityWrapper/Binaural/audioplugin3DTIToolkit/iOS/build/Release-iphoneos/libaudioplugin3DTIToolkit.a ~/Documents/dev/SpatialisationToolkitTestbed/Assets/Plugins/iOS/libaudioplugin3DTIToolkit.a\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -513,8 +519,8 @@
 				34856A4C26FE2112004CEFE8 /* FiltersBank.cpp in Sources */,
 				34856A2C26FE2112004CEFE8 /* Environment.cpp in Sources */,
 				34856A3B26FE2112004CEFE8 /* TemporalDistortionSimulator.cpp in Sources */,
-				343BC1F226FE262A0008C1F4 /* effect3DTISpatializerCore.cpp in Sources */,
 				AFA2D2D71E570B480078DEEF /* effect3DTIHL.cpp in Sources */,
+				34BB9EE6270251F0005BF419 /* SpatializerCore.cpp in Sources */,
 				34856A4F26FE2112004CEFE8 /* Delay.cpp in Sources */,
 				34856A4826FE2112004CEFE8 /* GammatoneFilterBank.cpp in Sources */,
 				34856A3626FE2112004CEFE8 /* HearingLossSim.cpp in Sources */,
@@ -523,6 +529,7 @@
 				34856A4326FE2112004CEFE8 /* ErrorHandler.cpp in Sources */,
 				34856A4B26FE2112004CEFE8 /* fftsg.cpp in Sources */,
 				34856A3926FE2112004CEFE8 /* GammatoneMultibandExpander.cpp in Sources */,
+				34BB9EE7270251F0005BF419 /* effect3DTISpatializerReverb.cpp in Sources */,
 				34856A3D26FE2112004CEFE8 /* DynamicEqualizer.cpp in Sources */,
 				34856A4926FE2112004CEFE8 /* DynamicCompressorMono.cpp in Sources */,
 				34856A5026FE2112004CEFE8 /* Magnitudes.cpp in Sources */,
