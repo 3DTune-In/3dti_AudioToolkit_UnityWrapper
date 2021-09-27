@@ -15,7 +15,7 @@
 		3429A30426384A9A00964E9E /* HearingLossSim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2EF26384A9900964E9E /* HearingLossSim.cpp */; };
 		3429A30526384A9A00964E9E /* ButterworthMultibandExpander.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2F526384A9A00964E9E /* ButterworthMultibandExpander.cpp */; };
 		3429A30626384A9A00964E9E /* HearingAidSim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2F826384A9A00964E9E /* HearingAidSim.cpp */; };
-		3429A30726384A9A00964E9E /* BaerMooreFrequencySmearing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2F926384A9A00964E9E /* BaerMooreFrequencySmearing.cpp */; settings = {COMPILER_FLAGS = "-Os"; }; };
+		3429A30726384A9A00964E9E /* BaerMooreFrequencySmearing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2F926384A9A00964E9E /* BaerMooreFrequencySmearing.cpp */; settings = {COMPILER_FLAGS = "-O3"; }; };
 		3429A30826384A9A00964E9E /* DynamicEqualizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2FA26384A9A00964E9E /* DynamicEqualizer.cpp */; };
 		3429A30926384A9A00964E9E /* Fig6Algorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A2FD26384A9A00964E9E /* Fig6Algorithm.cpp */; };
 		3429A38726384AB400964E9E /* Vector3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A35726384AB200964E9E /* Vector3.cpp */; };
