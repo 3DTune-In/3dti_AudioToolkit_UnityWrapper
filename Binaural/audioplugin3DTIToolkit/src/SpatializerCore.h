@@ -7,6 +7,7 @@
 #include "BinauralSpatializer/Core.h"
 #include "BinauralSpatializer/Listener.h"
 #include "BinauralSpatializer/Environment.h"
+#include "HRTF/HRTFCereal.h"
 #include "Common/DynamicCompressorStereo.h"
 #include <array>
 #include "AudioPluginInterface.h"

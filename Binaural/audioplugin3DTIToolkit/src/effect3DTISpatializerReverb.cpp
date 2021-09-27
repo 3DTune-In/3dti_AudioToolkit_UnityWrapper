@@ -66,7 +66,7 @@ namespace SpatializerReverb3DTI
 		std::array<float, NumParameters> parameters;
 	};
 
-	std::atomic<bool> doesReverbInstanceExist = false;
+	std::atomic<bool> doesReverbInstanceExist(false);
 
 
 

@@ -3,7 +3,6 @@
 #include "BRIR/BRIRCereal.h"
 #include "HRTF/HRTFFactory.h"
 #include "ILD/ILDCereal.h"
-#include "HRTF/HRTFCereal.h"
 
 using Common::T_ear;
 

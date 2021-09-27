@@ -137,7 +137,8 @@
       <Filter>3dti_ResourceManager\BRIR</Filter>
     </ClCompile>
     <ClCompile Include="..\src\effect3DTISpatializerSource.cpp" />
-    <ClCompile Include="..\src\effect3DTISpatializerCore.cpp" />
+    <ClCompile Include="..\src\effect3DTISpatializerReverb.cpp" />
+    <ClCompile Include="..\src\SpatializerCore.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -308,8 +309,9 @@
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\BRIR\BRIRCereal.h">
       <Filter>3dti_ResourceManager\BRIR</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\effect3DTISpatializerCore.h" />
     <ClInclude Include="..\src\effect3DTISpatializerSource.h" />
+    <ClInclude Include="..\src\SpatializerCore.h" />
+    <ClInclude Include="..\src\effect3DTISpatializerReverb.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="3dti_Toolkit">

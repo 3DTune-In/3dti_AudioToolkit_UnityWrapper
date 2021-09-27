@@ -314,9 +314,10 @@
     <ClInclude Include="..\src\AudioPluginInterface.h" />
     <ClInclude Include="..\src\AudioPluginUtil.h" />
     <ClInclude Include="..\src\CommonUtils.h" />
-    <ClInclude Include="..\src\effect3DTISpatializerCore.h" />
+    <ClInclude Include="..\src\effect3DTISpatializerReverb.h" />
     <ClInclude Include="..\src\effect3DTISpatializerSource.h" />
     <ClInclude Include="..\src\PluginList.h" />
+    <ClInclude Include="..\src\SpatializerCore.h" />
     <ClInclude Include="..\src\to_string.hpp" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
@@ -368,8 +369,9 @@
     <ClCompile Include="..\src\AudioPluginUtil.cpp" />
     <ClCompile Include="..\src\effect3DTIHA.cpp" />
     <ClCompile Include="..\src\effect3DTIHL.cpp" />
-    <ClCompile Include="..\src\effect3DTISpatializerCore.cpp" />
+    <ClCompile Include="..\src\effect3DTISpatializerReverb.cpp" />
     <ClCompile Include="..\src\effect3DTISpatializerSource.cpp" />
+    <ClCompile Include="..\src\SpatializerCore.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
