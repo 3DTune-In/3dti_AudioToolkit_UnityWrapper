@@ -123,9 +123,10 @@
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_Toolkit\HAHLSimulation\TemporalDistortionSimulator.cpp" />
     <ClCompile Include="..\src\effect3DTIHA.cpp" />
     <ClCompile Include="..\src\effect3DTIHL.cpp" />
-    <ClCompile Include="..\src\effect3DTISpatializerCore.cpp" />
+    <ClCompile Include="..\src\effect3DTISpatializerReverb.cpp" />
     <ClCompile Include="..\src\effect3DTISpatializerSource.cpp" />
     <ClCompile Include="..\src\AudioPluginUtil.cpp" />
+    <ClCompile Include="..\src\SpatializerCore.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\BRIR\BRIRCereal.h" />
@@ -244,9 +245,10 @@
     <ClInclude Include="..\src\AudioPluginInterface.h" />
     <ClInclude Include="..\src\AudioPluginUtil.h" />
     <ClInclude Include="..\src\CommonUtils.h" />
-    <ClInclude Include="..\src\effect3DTISpatializerCore.h" />
+    <ClInclude Include="..\src\effect3DTISpatializerReverb.h" />
     <ClInclude Include="..\src\effect3DTISpatializerSource.h" />
     <ClInclude Include="..\src\PluginList.h" />
+    <ClInclude Include="..\src\SpatializerCore.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F7CFEF5A-54BD-42E8-A59E-54ABAEB4EA9C}</ProjectGuid>

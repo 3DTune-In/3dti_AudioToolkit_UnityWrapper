@@ -41,6 +41,8 @@ AudioMixerEffectController:
     m_GUID: 56def3158bf5d9e46a8dc2bb261f920f
   - m_ParameterName: SpatRvBRIRReady
     m_GUID: 72a13b493e1f372439357468ac97c3f0
+  - m_ParameterName: Wetness
+    m_GUID: 70b9e1df818265641a417bd4f185550e
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
   m_Bypass: 0
@@ -343,9 +345,9 @@ AudioMixerGroupController:
   m_Send: 00000000000000000000000000000000
   m_Effects:
   - {fileID: 24400002}
+  - {fileID: -6638725248553237813}
   - {fileID: 244524980840744758}
   - {fileID: 244000013307562236}
-  - {fileID: -6638725248553237813}
   m_UserColorIndex: 0
   m_Mute: 0
   m_Solo: 0
@@ -443,7 +445,7 @@ AudioMixerSnapshotController:
     0a43bc45f3eedca4b999a42353b07021: -15
     d0acd355ae23f4743bc331f61267ac66: 8
     fdc66585e1b4adb46a234fe26a46e668: 0
-    dc6a0aa54cb2c664cb359239fbc6abea: 1
+    dc6a0aa54cb2c664cb359239fbc6abea: 0
     163240d50b578d444b4331c8f96d8394: 15
     d2628ad51ac6aa248ac489f455c29982: 15
     520272f519143b648a79bf7db786ce43: 3593
@@ -478,7 +480,7 @@ AudioMixerSnapshotController:
     b449c1885198abd45b212f0f8638ce28: -83
     77a83b88a7eeecd42b5b25ca84a1b38d: 0
     ca926d88a01189e4f8ebfc126cc4c3e4: 0
-    608e569862f5b0d4888cc4ff951ff722: 1
+    608e569862f5b0d4888cc4ff951ff722: 0
     3e367aa8a4fb6674e959e3df12054c15: 0
     9f89a8b8fa077ff4ead05be0710a24be: 15
     d9da3ab8457b9e24383b5ecba9087b52: 15
@@ -567,6 +569,7 @@ AudioMixerSnapshotController:
     2711405f9fe3b54479d2d77bdc1ffc90: -52.6
     8872c47f05dc6ed488c517ee45e87a9e: 0
     c08fcd7feb3e47647bd7bcfeb1e1124a: 17
+    70b9e1df818265641a417bd4f185550e: 0.501
     7f0c47efaa7a4fd499e1211b7fdc5176: 814
     d46ff6ff969bc2b4294cc2f5fe152bee: 1465
     4bc479ff96250054bad361801f1a2277: 1018

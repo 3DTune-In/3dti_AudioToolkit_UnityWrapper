@@ -152,13 +152,13 @@ namespace API_3DTI
             [SpatializerParameter(label = "Enable reverb processing", description = "Enable the reverb environment processing. In addition, reverb also needs to be enabled on at least one source. Reverb output returns on the plugin corresponding to this component on Unity's audio mixer.", min = 0, max = 1, type = typeof(bool), defaultValue = 1)]
             EnableReverbProcessing = 19,
 
-            [SpatializerParameter(label = "Reverb wet/dry", description = "Set the mix between dry (i.e. anechoic) and reverberated audio.", min = 0.0f, max = 1.0f, type = typeof(float), defaultValue = 0.5f)]
-            ReverbWetness = 20,
+            //[SpatializerParameter(label = "Reverb wet/dry", description = "Set the mix between dry (i.e. anechoic) and reverberated audio.", min = 0.0f, max = 1.0f, type = typeof(float), defaultValue = 0.5f)]
+            //ReverbWetness = 20,
 
             [SpatializerParameter(label = "Reverb order", description = "Configures the number of channels of the first-order ambisonic reverb processing. The options are: W, X, Y and Z (ThreeDimensional); W, X and Y (Bidimensional); only W (Adimensional)", min = 0.0f, max = 2.0f, type = typeof(ReverbOrder), defaultValue = (float)API_3DTI.ReverbOrder.Bidimensional, isSourceParameter = true)]
-            ReverbOrder = 21,
+            ReverbOrder = 20,
         };
-        public const int NumParameters = 22;
+        public const int NumParameters = 21;
 
         public const int NumSourceParameters = (int)SpatializerParameter.EnableDistanceAttenuationReverb + 1;
 
@@ -207,14 +207,13 @@ namespace API_3DTI
                 default: throw new Exception("Invalid value of enum SpatializerBinaryRole");
             }
         }
-        private bool haveBinariesBeenSet = false;
 
 #if UNITY_IPHONE
     [DllImport ("__Internal")]
 #else
         [DllImport("AudioPlugin3DTIToolkit")]
 #endif
-        private static extern bool Load3DTISpatializerBinary(int role, string path);
+        private static extern bool Load3DTISpatializerBinary(int role, string path, int sampleRate, int dspBufferSize);
 
 
 #if UNITY_IPHONE
@@ -240,7 +239,7 @@ namespace API_3DTI
 #else
         [DllImport("AudioPlugin3DTIToolkit")]
 #endif
-        private static extern bool Is3DTISpatializerCreated();
+        private static extern bool Reset3DTISpatializerIfNeeded(int sampleRate, int dspBufferSize);
 
 
         private void Awake()
@@ -259,33 +258,9 @@ namespace API_3DTI
                 }
             }
 
-            if (Is3DTISpatializerCreated())
-            {
-                if (!haveBinariesBeenSet)
-                {
-                    sendAllBinaryResourcePathsToPlugin();
-                    haveBinariesBeenSet = true;
-                }
-
-
-                for (int i = 0; i < NumParameters; i++)
-                {
-                    if (!Set3DTISpatializerFloat(i, spatializerParameters[i]))
-                    {
-                        Debug.LogError($"Failed to set 3DTI parameter {i}.", this);
-                    }
-                }
-            }
-        }
-
-        void Start()
-        {
-            if (!Is3DTISpatializerCreated())
-            {
-                Debug.LogError("Cannot start 3DTI Spatializer as no instance has been created. Please ensure the SpatializerCore plugin has been added to a mixer in the scene.");
-                return;
-            }
-
+            AudioSettings.GetDSPBufferSize(out int dspBufferSize, out _);
+            Reset3DTISpatializerIfNeeded(AudioSettings.outputSampleRate, dspBufferSize);
+            sendAllBinaryResourcePathsToPlugin();
             for (int i = 0; i < NumParameters; i++)
             {
                 if (!Set3DTISpatializerFloat(i, spatializerParameters[i]))
@@ -293,12 +268,24 @@ namespace API_3DTI
                     Debug.LogError($"Failed to set 3DTI parameter {i}.", this);
                 }
             }
+        }
 
-            if (!haveBinariesBeenSet)
+        void Start()
+        {
+            AudioSettings.GetDSPBufferSize(out int dspBufferSize, out _);
+            if (Reset3DTISpatializerIfNeeded(AudioSettings.outputSampleRate, dspBufferSize))
             {
+                for (int i = 0; i < NumParameters; i++)
+                {
+                    if (!Set3DTISpatializerFloat(i, spatializerParameters[i]))
+                    {
+                        Debug.LogError($"Failed to set 3DTI parameter {i}.", this);
+                    }
+                }
                 sendAllBinaryResourcePathsToPlugin();
-                haveBinariesBeenSet = true;
             }
+
+            
         }
 
         // --- Spatializer Core parameters
@@ -471,21 +458,23 @@ namespace API_3DTI
             binaryResourcePaths(role)[(int)sampleRate] = path;
             if (GetSampleRate(out TSampleRateEnum currentSampleRate) && currentSampleRate == sampleRate)
             {
-                return sendBinaryResourcePathToPlugin(role, sampleRate, path);
+                return sendBinaryResourcePathToPlugin(role, path);
             }
             return true;
         }
 
 
-        private bool sendBinaryResourcePathToPlugin(BinaryResourceRole role, TSampleRateEnum sampleRate, string path)
+        private bool sendBinaryResourcePathToPlugin(BinaryResourceRole role, string path)
         {
+            AudioSettings.GetDSPBufferSize(out int dspBufferSize, out _);
+
             if (path.Length == 0)
             {
-                Load3DTISpatializerBinary((int)role, path);
+                Load3DTISpatializerBinary((int)role, path, AudioSettings.outputSampleRate, dspBufferSize);
             }
-            else if (!(SaveResourceAsFile(path, out string newPath) && Load3DTISpatializerBinary((int)role, newPath)))
+            else if (!(SaveResourceAsFile(path, out string newPath) && Load3DTISpatializerBinary((int)role, newPath, AudioSettings.outputSampleRate, dspBufferSize)))
             {
-                Debug.LogError($"Failed to load Spatializer binary resource {path} for {role} at sample rate {sampleRate}.");
+                Debug.LogError($"Failed to load Spatializer binary resource {path} for {role} at sample rate {AudioSettings.outputSampleRate}.");
                 return false;
             }
             return true;
@@ -502,7 +491,7 @@ namespace API_3DTI
             bool ok = true;
             foreach (BinaryResourceRole role in Enum.GetValues(typeof(BinaryResourceRole)))
             {
-               ok = ok && sendBinaryResourcePathToPlugin(role, sr, binaryResourcePaths(role)[(int)sr]);
+               ok = ok && sendBinaryResourcePathToPlugin(role, binaryResourcePaths(role)[(int)sr]);
             }
             return ok;
         }

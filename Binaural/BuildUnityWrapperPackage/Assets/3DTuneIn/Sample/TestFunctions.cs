@@ -62,7 +62,10 @@ public class TestFunctions : MonoBehaviour
 
     public void EnableReverb(bool isEnabled)
     {
-        Spatializer.SetParameter(API_3DTI_Spatializer.SpatializerParameter.EnableReverbProcessing, isEnabled);
+        if (Spatializer != null)
+        {
+            Spatializer.SetParameter(API_3DTI_Spatializer.SpatializerParameter.EnableReverbProcessing, isEnabled);
+        }
     }
 
     public void EnableSoakTest(bool isEnabled)

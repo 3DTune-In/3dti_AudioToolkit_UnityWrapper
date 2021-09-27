@@ -28,8 +28,8 @@
 #include <sstream>
 #include <cstdint>
 
-#include <HRTF/HRTFCereal.h>
-#include <ILD/ILDCereal.h>
+//#include <HRTF/HRTFCereal.h>
+//#include <ILD/ILDCereal.h>
 
 enum TLoadResult { RESULT_LOAD_WAITING = 0, RESULT_LOAD_CONTINUE = 1, RESULT_LOAD_END = 2, RESULT_LOAD_OK = 3, RESULT_LOAD_ERROR = -1 };
 
@@ -48,7 +48,7 @@ enum TLoadResult { RESULT_LOAD_WAITING = 0, RESULT_LOAD_CONTINUE = 1, RESULT_LOA
 
 #include <cfloat>
 #include "HRTF/HRTFFactory.h"
-#include "effect3DTISpatializerCore.h"
+#include "SpatializerCore.h"
 #include "CommonUtils.h"
 
 /////////////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ namespace SpatializerSource3DTI
 {
 
 
-	using SpatializerCore3DTI::FloatParameter;
+	using namespace SpatializerCore3DTI;
 
 
 
@@ -66,7 +66,7 @@ namespace SpatializerSource3DTI
 	{
 		int sourceID;    // DEBUG
 		std::shared_ptr<Binaural::CSingleSourceDSP> audioSource;
-		SpatializerCore3DTI::SpatializerCore* spatializer;
+		//SpatializerCore* spatializer;
 	};
 
 
@@ -226,20 +226,28 @@ void WriteLogHeader(UnityAudioEffectState* state)
 {
 	EffectData* data = state->GetEffectData<EffectData>();
 
-	SpatializerCore3DTI::SpatializerCore* spatializer = data->spatializer;
+	std::lock_guard<std::mutex> lock(SpatializerCore::mutex());
 
-	// Audio state:
-	Common::TAudioStateStruct audioState = spatializer->core.GetAudioState();
-	WriteLog(state, "CREATE: Sample rate set to ", audioState.sampleRate);
-	WriteLog(state, "CREATE: Buffer size set to ", audioState.bufferSize);
-	WriteLog(state, "CREATE: HRTF resampling step set to ", spatializer->core.GetHRTFResamplingStep());
+	SpatializerCore* spatializer = SpatializerCore::instance();
 
-	// Listener:
-	if (spatializer->listener != nullptr)
-		WriteLog(state, "CREATE: Listener created successfully", "");
+	if (spatializer == nullptr)
+	{
+		WriteLog(state, "CREATE: ERROR!!!! Spatializer has not bee instantiated!", "");
+	}
 	else
-		WriteLog(state, "CREATE: ERROR!!!! Listener creation returned null pointer!", "");
+	{
+		// Audio state:
+		Common::TAudioStateStruct audioState = spatializer->core.GetAudioState();
+		WriteLog(state, "CREATE: Sample rate set to ", audioState.sampleRate);
+		WriteLog(state, "CREATE: Buffer size set to ", audioState.bufferSize);
+		WriteLog(state, "CREATE: HRTF resampling step set to ", spatializer->core.GetHRTFResamplingStep());
 
+		// Listener:
+		if (spatializer->listener != nullptr)
+			WriteLog(state, "CREATE: Listener created successfully", "");
+		else
+			WriteLog(state, "CREATE: ERROR!!!! Listener creation returned null pointer!", "");
+	}
 	// Source:
 	if (data->audioSource != nullptr)
 		WriteLog(state, "CREATE: Source created successfully", "");
@@ -263,49 +271,46 @@ static UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK DistanceAttenuationCallback
 
 UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK CreateCallback(UnityAudioEffectState* state)
 {
+	if (!IsHostCompatible(state))
+	{
+		return UNITY_AUDIODSP_ERR_UNSUPPORTED;
+	}
+
+	std::lock_guard<std::mutex> lock(SpatializerCore::mutex());
+	SpatializerCore* spatializer;
+	try
+	{
+		spatializer = SpatializerCore::instance(state->samplerate, state->dspbuffersize);
+	}
+	catch (const SpatializerCore::IncorrectAudioStateException& e)
+	{
+		WriteLog(std::string("Error: Reverb ProcessCallback called with incorrect audio state. ") + e.what());
+		return UNITY_AUDIODSP_ERR_UNSUPPORTED;
+	}
+
 	// CREATE Instance state and grab parameters
 
 	EffectData* effectdata = new EffectData;
 	{
-		effectdata->spatializer = SpatializerCore3DTI::SpatializerCore::instance();
-		static_assert(std::tuple_size<decltype(effectdata->spatializer->perSourceInitialValues)>::value == FloatParameter::NumSourceParameters, "NumSourceParameters should match the size of SpatializerCore::perSourceInitialValues array.");
-		//for (int i = 0; i < NumSourceParameters; i++)
-		//{
-		//	effectdata->parameters[i] = effectdata->spatializer->perSourceInitialValues[i];
-		//}
-
 		state->effectdata = effectdata;
-		if (IsHostCompatible(state))
-		{
-			state->spatializerdata->distanceattenuationcallback = DistanceAttenuationCallback;
-		}
+		state->spatializerdata->distanceattenuationcallback = DistanceAttenuationCallback;
 		effectdata->sourceID = -1;
-
-		if (effectdata->spatializer == nullptr)
-		{
-			WriteLog("Error: Created spatialized audio source but there no SpatializerCore plugin has been created yet.");
-			delete state->effectdata;
-			state->effectdata = nullptr;
-			return UNITY_AUDIODSP_ERR_UNSUPPORTED;
-		}
 	}
-	auto spatializer = effectdata->spatializer;
 
-
-	{
-		std::lock_guard<std::mutex> lock(spatializer->mutex);
-		// Create source and set default interpolation method
-		effectdata->audioSource = spatializer->core.CreateSingleSourceDSP();
-	}
+	// Create source and set default interpolation method
+	effectdata->audioSource = spatializer->core.CreateSingleSourceDSP();
 	if (effectdata->audioSource != nullptr)
 	{
+
+		static_assert(std::tuple_size<decltype(SpatializerCore::perSourceInitialValues)>::value == FloatParameter::NumSourceParameters, "NumSourceParameters should match the size of SpatializerCore::perSourceInitialValues array.");
+
 		// Initialize with defaults
 		for (int i = FloatParameter::FirstSourceParameter; i < FloatParameter::NumSourceParameters; i++)
 		{
 			float value = 0;
-			bool valueReceived = SpatializerCore3DTI::Get3DTISpatializerFloat(i, &value);
+			bool valueReceived = spatializer->GetFloat(i, &value);
 			assert(valueReceived);
-			SetFloatParameterCallback(state, i, value);
+			SetFloatParameter(spatializer, state, i, value);
 		}
 	}
 
@@ -333,17 +338,28 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ReleaseCallback(UnityAudioEffectSt
 /////////////////////////////////////////////////////////////////////
 
 
-// lockMutex is not part of the unity callback but it has a default value set in the earlier declaration.
 UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAudioEffectState* state, int index, float value)
 {
-	EffectData* data = state->GetEffectData<EffectData>();
-	SpatializerCore3DTI::SpatializerCore* spatializer = data->spatializer;
-	assert(data != nullptr && spatializer != nullptr);
-	if (index >= FloatParameter::NumSourceParameters)
+	std::lock_guard<std::mutex> lock(SpatializerCore::mutex());
+	SpatializerCore* spatializer;
+	try
+	{
+		spatializer = SpatializerCore::instance(state->samplerate, state->dspbuffersize);
+	}
+	catch (const SpatializerCore::IncorrectAudioStateException& e)
+	{
+		WriteLog(std::string("Error: Reverb ProcessCallback called with incorrect audio state. ") + e.what());
 		return UNITY_AUDIODSP_ERR_UNSUPPORTED;
+	}
+	assert(spatializer != nullptr);
+	return SetFloatParameter(spatializer, state, index, value);
+}
 
-	std::lock_guard<std::mutex> lock(spatializer->mutex);
-
+// Mutex must be locked when calling this
+UNITY_AUDIODSP_RESULT SetFloatParameter(SpatializerCore* spatializer, UnityAudioEffectState* state, int index, float value)
+{
+	EffectData* data = state->GetEffectData<EffectData>();
+	assert(data != nullptr && spatializer != nullptr);
 
 	// Process command sent by C# API
 	switch (index)
@@ -455,10 +471,19 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK SetFloatParameterCallback(UnityAud
 UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK GetFloatParameterCallback(UnityAudioEffectState* state, int index, float* value, char* valuestr)
 {
 	EffectData* data = state->GetEffectData<EffectData>();
-	if (index < FloatParameter::FirstSourceParameter || index >= FloatParameter::NumSourceParameters)
+
+	std::lock_guard<std::mutex> lock(SpatializerCore::mutex());
+	SpatializerCore* spatializer;
+	try
 	{
+		spatializer = SpatializerCore::instance(state->samplerate, state->dspbuffersize);
+	}
+	catch (const SpatializerCore::IncorrectAudioStateException& e)
+	{
+		WriteLog(std::string("Error: Reverb ProcessCallback called with incorrect audio state. ") + e.what());
 		return UNITY_AUDIODSP_ERR_UNSUPPORTED;
 	}
+
 	std::shared_ptr<Binaural::CSingleSourceDSP> source = data->audioSource;
 	assert(source != nullptr);
 	if (source == nullptr)
@@ -513,6 +538,18 @@ int UNITY_AUDIODSP_CALLBACK GetFloatBufferCallback(UnityAudioEffectState* state,
 
 UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectState* state, float* inbuffer, float* outbuffer, unsigned int length, int inchannels, int outchannels)
 {
+	std::lock_guard<std::mutex> lock(SpatializerCore::mutex());
+	SpatializerCore* spatializer;
+	try
+	{
+		spatializer = SpatializerCore::instance(state->samplerate, state->dspbuffersize);
+	}
+	catch (const SpatializerCore::IncorrectAudioStateException& e)
+	{
+		WriteLog(std::string("Error: Reverb ProcessCallback called with incorrect audio state. ") + e.what());
+		return UNITY_AUDIODSP_ERR_UNSUPPORTED;
+	}
+
 	// Check that I/O formats are right and that the host API supports this feature
 	if (inchannels != 2 || outchannels != 2 ||
 		!IsHostCompatible(state) || state->spatializerdata == NULL)
@@ -529,19 +566,13 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ProcessCallback(UnityAudioEffectSt
 	}
 
 	EffectData* data = state->GetEffectData<EffectData>();
-
-	SpatializerCore3DTI::SpatializerCore* spatializer = data->spatializer;
 	assert(spatializer != nullptr);
 
-	std::lock_guard<std::mutex> lock(spatializer->mutex);
-
-	
-
-	if ((data->audioSource->GetSpatializationMode() == Binaural::HighQuality && !spatializer->isBinaryResourceLoaded[SpatializerCore3DTI::HighQualityHRTF])
+	if ((data->audioSource->GetSpatializationMode() == Binaural::HighQuality && !spatializer->isBinaryResourceLoaded[HighQualityHRTF])
 		||
-		(data->audioSource->GetSpatializationMode() == Binaural::HighPerformance && !spatializer->isBinaryResourceLoaded[SpatializerCore3DTI::HighPerformanceILD])
+		(data->audioSource->GetSpatializationMode() == Binaural::HighPerformance && !spatializer->isBinaryResourceLoaded[HighPerformanceILD])
 		||
-		(data->audioSource->IsNearFieldEffectEnabled() && !spatializer->isBinaryResourceLoaded[SpatializerCore3DTI::HighQualityILD])
+		(data->audioSource->IsNearFieldEffectEnabled() && !spatializer->isBinaryResourceLoaded[HighQualityILD])
 		)
 	{
 		WriteLog(state, "PROCESS: ERROR: The required binaries are not loaded.", "");

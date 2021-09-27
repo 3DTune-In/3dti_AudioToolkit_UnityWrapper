@@ -290,10 +290,11 @@
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\HRTF\HRTFFactory.cpp">
       <Filter>3dti_ResourceManager\HRTF</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\effect3DTISpatializerCore.cpp" />
     <ClCompile Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\BRIR\BRIRCereal.cpp">
       <Filter>3dti_ResourceManager\BRIR</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\SpatializerCore.cpp" />
+    <ClCompile Include="..\src\effect3DTISpatializerReverb.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\HRTF\HRTFCereal.h">
@@ -640,7 +641,8 @@
     <ClInclude Include="..\..\..\3dti_AudioToolkit\3dti_ResourceManager\BRIR\BRIRCereal.h">
       <Filter>3dti_ResourceManager\BRIR</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\effect3DTISpatializerCore.h" />
+    <ClInclude Include="..\src\SpatializerCore.h" />
+    <ClInclude Include="..\src\effect3DTISpatializerReverb.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="3dti_Toolkit">

@@ -344,7 +344,6 @@ namespace API_3DTI
             GUILayout.Label("These parameters may be set individually on each individual AudioSource component. The values here determine their default values for new AudioSources.\n\nPlease ensure you select binary resources below for the sample rates and spatialization mode combinations you intend to use.", Common3DTIGUI.commentStyle);
 
             CreateControl(SpatializerParameter.SpatializationMode);
-            CreateControl(SpatializerParameter.EnableReverbSend);
 
             Common3DTIGUI.SingleSpace();
 
@@ -353,6 +352,7 @@ namespace API_3DTI
             {
                 Common3DTIGUI.BeginSection();
 
+                CreateControl(SpatializerParameter.EnableReverbSend);
                 CreateControl(SpatializerParameter.EnableHRTFInterpolation);
                 CreateControl(SpatializerParameter.EnableFarDistanceEffect);
                 CreateControl(SpatializerParameter.EnableDistanceAttenuationAnechoic);
@@ -440,10 +440,6 @@ namespace API_3DTI
 
 
 
-            Common3DTIGUI.SectionSpace();
-
-            CreateControl(SpatializerParameter.EnableReverbProcessing);
-            CreateControl(SpatializerParameter.ReverbWetness);
 
             // ITD:    
             {

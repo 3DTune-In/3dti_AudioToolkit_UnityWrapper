@@ -1099,7 +1099,7 @@ enum
 
 			// TEMPORAL DISTORTION SIMULATION:
 			case PARAM_TA_BAND_LEFT:
-				data->HL.GetTemporalDistortionSimulator()->SetBandUpperLimit(Common::T_ear::LEFT, value);
+				data->HL.GetTemporalDistortionSimulator()->SetBandUpperLimit(Common::T_ear::LEFT, (int)value);
 				if (data->parameters[PARAM_TA_LRSYNC_ON])
 				{
 					// to keep us in sync with the TemporalDistortionSimulator internal variables.
@@ -1109,7 +1109,7 @@ enum
 				break;
 
 			case PARAM_TA_BAND_RIGHT:
-				data->HL.GetTemporalDistortionSimulator()->SetBandUpperLimit(Common::T_ear::RIGHT, value);
+				data->HL.GetTemporalDistortionSimulator()->SetBandUpperLimit(Common::T_ear::RIGHT, (int)value);
 				if (data->parameters[PARAM_TA_LRSYNC_ON])
 				{
 					// to keep us in sync with the TemporalDistortionSimulator internal variables.
@@ -1306,7 +1306,7 @@ enum
 		inBufferPair.left.Fill(length, 0.0f);
 		inBufferPair.right.Fill(length, 0.0f);
 		int monoIndex = 0;
-		for (int stereoIndex = 0; stereoIndex < length*outchannels; stereoIndex += 2)
+		for (unsigned int stereoIndex = 0; stereoIndex < length*outchannels; stereoIndex += 2)
 		{
 			inBufferPair.left[monoIndex] = inbuffer[stereoIndex];
 			inBufferPair.right[monoIndex] = inbuffer[stereoIndex + 1];
@@ -1336,7 +1336,7 @@ enum
 		//	outbuffer[i] = outputBuffer[i];
 		//}		
 		monoIndex = 0;
-		for (int stereoIndex = 0; stereoIndex < length * outchannels; stereoIndex += 2)
+		for (unsigned int stereoIndex = 0; stereoIndex < length * outchannels; stereoIndex += 2)
 		{
 			outbuffer[stereoIndex] = outBufferPair.left[monoIndex];
 			outbuffer[stereoIndex + 1] = outBufferPair.right[monoIndex];
