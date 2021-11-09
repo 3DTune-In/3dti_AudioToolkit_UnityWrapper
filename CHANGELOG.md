@@ -1,6 +1,39 @@
 # Change Log
 All notable changes to the 3DTuneIn Toolkit will be documented in this file.
 
+## v3.0:
+**General:**
+- **Warning**: Version 3.0 introduces a new API and is not backwards compatible with scripts controlling the toolkit with version 2.0. However, the new API is lightweight and, particularly for the Spatializer, requires much less work to integrate.
+- A new API for parameters has been introduced with the aim of reducing the maintenance overhead of exposing 3DTI Toolkit features:
+	- Currently this is implemented for HearingLoss (and the Spatializer - see below). HearingAid is yet to be updated.
+	- Parameters are defined by a single enum in the effects component script:	`API_3DTI_HL.Parameter` and `API_3DTI_Spatializer.SpatializerParameter`.
+	- The parameter enums have attributes which declares all required properties. The components have generic functions SetParameter and GetParameter. E.g.,
+		- to turn on hearing loss: `SetParameter(API_3DTI_HL.Parameter.HLOn, true, T_ear.BOTH)`
+		- to get the multiband expansion attack in the left ear: `GetParameter<float>(API_3DTI_HL.Parameter.MultibandExpansionNumFiltersPerBand, T_ear.LEFT)`
+	- There is a big reduction in variables within the C# code that duplicate the state of the audio plugins, opting instead to read these values from the plugins where needed. In the spatializer where this isn't possible, parameter values are stored in a single serialized array.
+  
+
+**Binaural spatializer and reverb:**
+- The API has been rewritten following a similar pattern to that introduced for Hearing Loss.
+- SOFA format HRTF files are now supported (Windows x64 / MacOS only).
+- Binaural reverb is now supported. Reverb is calculated for all spatialized audio sources in a single pass. Add the SpatializerReverb audio plugin to a mixer strip to get the reverberation signal. 
+  - AudioSources may be individually set in terms of whether their signal is sent to the reverb.
+- The Spatializer has been split into two effects:
+	- SpatializerSource is attached to each spatialized audio source
+	- SpatializerReverb is a mixer effect which handles spatialization parameters and processes the return of the binaural reverb
+- The Spatializer scripts now communicate directly with the native audio plugin code, rather than going through the Unity AudioMixer interface. This greatly simplifies passing complex parameters such as paths for binary resource files.
+	- Spatializer parameters follow a similar patterns as the new HearingLoss parameters but without the pluginName and mixerName attributes which are no longer needed, and with additional parameters: min, max, defaultValue, isSourceParameter 
+	- Spatializer parameters where `isSourceParameter` is true may be set individually on specific audio sources. The `API_3DTI_SpatializerSetParameter` has an extra argument to specify the audio source. This may only be specified for parameters where `isSourceParameter` is true. If `isSourceParameter` is true but the source is left as `null` then the default value for this parameter used on new audio sources is set.
+	- The GUI for the Spatializer has been redesigned with an aim to clarify which parameters are per-source and which are global.
+	- Spatializer binary resources such as impulse responses are no longer defined using the Parameter enums. There are now specific functions:
+	- `public bool SetBinaryResourcePath(BinaryResourceRole role, TSampleRateEnum sampleRate, string path)`
+	- `public string GetBinaryResourcePath(BinaryResourceRole role, TSampleRateEnum sampleRate)`
+- Debug logging to text files is being phased out as it had a huge overhead of code to maintain. If you need details of what's happening in the native plugin, you can build from source and attach the debugger to Unity. For mobile, the error console can be accessed using `adb` on Android and Xcode on iOS.
+- Many bugs have been fixed through the above simplification, including the following (thanks to Kevin for reporting these):
+    - Glitching noises when replaying a scene after a source had previously had Stop() called on it.
+    - Comb filtering effect on an audio source when another source is loaded to play on awake but has no AudioClip loaded.
+    - Incorrect amplitude (and otherwise incorrect values) of AudioSources when PlayOnAwake is set which is corrected when a subsequent source is played.
+
 ## v2.0:
 **General:**
 
