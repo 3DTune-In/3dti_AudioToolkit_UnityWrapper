@@ -44,8 +44,9 @@ namespace API_3DTI
         {
 
 
-
             toolkit = (API_3DTI_Spatializer)target; // Get access to API script       
+            toolkit.initialize();
+
             Common3DTIGUI.InitStyles(); // Init styles
 
             // Show 3D-Tune-In logo         

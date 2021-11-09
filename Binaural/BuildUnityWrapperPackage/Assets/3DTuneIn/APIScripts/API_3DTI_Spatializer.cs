@@ -83,7 +83,7 @@ namespace API_3DTI
 
         // Set this to the 3DTI mixer containing the SpatializerCore3DTI effect.
         public AudioMixer spatializereCoreMixer;
-
+        private bool isInitialized = false;
 
 
 
@@ -242,30 +242,40 @@ namespace API_3DTI
         private static extern bool Reset3DTISpatializerIfNeeded(int sampleRate, int dspBufferSize);
 
 
+
         private void Awake()
         {
-            // Check a missized array hasn't been saved from a previous version
-            if (spatializerParameters.Length != NumParameters)
+            initialize();
+        }
+
+        // This function is called automatically when the scene starts. It is made public so the Inspector GUI can call it.
+        public void initialize()
+        {
+            if (!isInitialized)
             {
-                int originalLength = spatializerParameters.Length;
-                Array.Resize(ref spatializerParameters, NumParameters);
-                if (spatializerParameters.Length > originalLength)
+                // Check a missized array hasn't been saved from a previous version
+                if (spatializerParameters.Length != NumParameters)
                 {
-                    for (int i = originalLength; i < spatializerParameters.Length; i++)
+                    int originalLength = spatializerParameters.Length;
+                    Array.Resize(ref spatializerParameters, NumParameters);
+                    if (spatializerParameters.Length > originalLength)
                     {
-                        spatializerParameters[i] = ((SpatializerParameter)i).GetAttribute<SpatializerParameterAttribute>().defaultValue;
+                        for (int i = originalLength; i < spatializerParameters.Length; i++)
+                        {
+                            spatializerParameters[i] = ((SpatializerParameter)i).GetAttribute<SpatializerParameterAttribute>().defaultValue;
+                        }
                     }
                 }
-            }
 
-            AudioSettings.GetDSPBufferSize(out int dspBufferSize, out _);
-            Reset3DTISpatializerIfNeeded(AudioSettings.outputSampleRate, dspBufferSize);
-            sendAllBinaryResourcePathsToPlugin();
-            for (int i = 0; i < NumParameters; i++)
-            {
-                if (!Set3DTISpatializerFloat(i, spatializerParameters[i]))
+                AudioSettings.GetDSPBufferSize(out int dspBufferSize, out _);
+                Reset3DTISpatializerIfNeeded(AudioSettings.outputSampleRate, dspBufferSize);
+                sendAllBinaryResourcePathsToPlugin();
+                for (int i = 0; i < NumParameters; i++)
                 {
-                    Debug.LogError($"Failed to set 3DTI parameter {i}.", this);
+                    if (!Set3DTISpatializerFloat(i, spatializerParameters[i]))
+                    {
+                        Debug.LogError($"Failed to set 3DTI parameter {i}.", this);
+                    }
                 }
             }
         }
