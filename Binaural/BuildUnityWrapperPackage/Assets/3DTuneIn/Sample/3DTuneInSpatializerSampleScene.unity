@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657868, g: 0.4964124, b: 0.574817, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1062,7 +1062,7 @@ MonoBehaviour:
   - 1
   - 1
   - 2
-  - 1
+  - 0
   - 0
   - 0.0875
   - 1
@@ -1078,9 +1078,9 @@ MonoBehaviour:
   - 15
   - 0
   highQualityHRTFPaths:
-  - Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_128s_44100Hz.3dti-hrtf.bytes
-  - Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_128s_48000Hz.3dti-hrtf.bytes
-  - Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_256s_96000Hz.3dti-hrtf.bytes
+  - Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_512s_44100Hz.sofa.bytes
+  - Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_512s_48000Hz.sofa.bytes
+  - Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_512s_96000Hz.sofa.bytes
   highQualityILDPaths:
   - Data/HighQuality/ILD/NearFieldCompensation_ILD_44100.3dti-ild.bytes
   - Data/HighQuality/ILD/NearFieldCompensation_ILD_48000.3dti-ild.bytes

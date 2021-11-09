@@ -334,7 +334,7 @@ namespace SpatializerCore3DTI
 			*value = (float)core.GetHRTFResamplingStep();
 			return true;
 		case EnableReverbProcessing:
-			*value = (float)EnableReverbProcessing;
+			*value = (float)enableReverbProcessing;
 			return true;
 		case ReverbOrder:
 			*value = (float)environment->GetReverberationOrder();
