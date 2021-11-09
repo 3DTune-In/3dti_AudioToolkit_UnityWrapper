@@ -389,7 +389,7 @@ namespace API_3DTI
                         toolkit.SetBinaryResourcePath(role, sampleRate, newPath);
                         if (newPath.EndsWith(".sofa.bytes"))
                         {
-                            Debug.Log("NB: SOFA HRTF files are only supported on Windows x64.");
+                            Debug.Log("Notice: SOFA HRTF files are only supported on Windows x64 and Mac OS.");
                         }
                     }
                 }

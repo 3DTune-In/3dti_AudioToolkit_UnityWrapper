@@ -6,6 +6,10 @@
 
 using Common::T_ear;
 
+#if defined(UNITY_WIN) || defined(UNITY_OSX)
+#define ENABLE_SOFA_SUPPORT
+#endif
+
 namespace SpatializerCore3DTI
 {
 	extern "C" UNITY_AUDIODSP_EXPORT_API bool Reset3DTISpatializerIfNeeded(int sampleRate, int dspBufferSize)
@@ -99,7 +103,7 @@ namespace SpatializerCore3DTI
 		switch (role)
 		{
 		case HighQualityHRTF:
-#ifdef UNITY_WIN
+#ifdef ENABLE_SOFA_SUPPORT
 			if (path.size() >= sofaExtension.size() && path.substr(path.size() - sofaExtension.size()) == sofaExtension)
 			{
 				// We assume an ILD file holds the delays, so our SOFA file does not specify delays
