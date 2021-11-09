@@ -1,12 +1,16 @@
 #include "SpatializerCore.h"
 #include "CommonUtils.h"
 #include "BRIR/BRIRCereal.h"
-#include "HRTF/HRTFFactory.h"
 #include "ILD/ILDCereal.h"
 
 using Common::T_ear;
 
-#if defined(UNITY_WIN) || defined(UNITY_OSX)
+#if defined(__MACH__) || defined(__APPLE__)
+#include "TargetConditionals.h"
+#endif
+
+#if defined(UNITY_WIN) || (defined(TARGET_OS_OSX) && !defined(TARGET_OS_IOS))
+#include "HRTF/HRTFFactory.h"
 #define ENABLE_SOFA_SUPPORT
 #endif
 

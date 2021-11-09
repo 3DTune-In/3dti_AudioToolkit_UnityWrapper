@@ -72,8 +72,6 @@ Each platform contains a separate IDE project to build the native binary files f
 
 Each project will output the binary plugin for its own platform. These binaries should be copied into the appropriate location within the *BuildUnityWrapperPackage/Assets/Plugins* folder.
 
-An exception is iOS. So that the plugin works both in the iOS simluator and also on the device, two different versions need to be built. You can select these two different versions within Xocde in the Device dropdown menu in the toolbar. You should build once with _Generic iOS Device_ selected and once with a simulator selected. This will result in two bundles being created. There is then a shell script in the Binaural folder which will combine both of these into a single bundle and copy it into the Plugins folder. For convenience it will also copy the MacOS bundle as well (it doesn't copy Windows/Android as the script is assumed just to be run when you're working on a Mac).
-
 Once all of the binaries are updated, you can then export the BuildUnityWrapperPackage project by opening it in Unity and choosing from the menu *Assets > Export package*.
 
 ## Known issues
