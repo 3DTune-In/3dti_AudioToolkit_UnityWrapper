@@ -1125,7 +1125,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   haMixer: {fileID: 24100000, guid: 02d04237d0308a14ea0c3b720849faae, type: 2}
-  PARAM_PROCESS_LEFT_ON: 0
+  PARAM_PROCESS_LEFT_ON: 1
   PARAM_PROCESS_RIGHT_ON: 0
   PARAM_VOLUME_L_DB: 2
   PARAM_VOLUME_R_DB: 0
@@ -2313,6 +2313,9 @@ MonoBehaviour:
   HearingLoss: {fileID: 963194230}
   Spatializer: {fileID: 963194229}
   SphereSpawner: {fileID: 769662297}
+  HearingAidToggle: {fileID: 1426890340}
+  HearingLossToggle: {fileID: 1705920704}
+  ReverbToggle: {fileID: 504459197}
   SoakTestMaxNumSources: 50
 --- !u!4 &1902003436
 Transform:
