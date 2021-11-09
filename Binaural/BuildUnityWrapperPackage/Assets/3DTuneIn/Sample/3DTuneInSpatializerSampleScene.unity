@@ -1077,10 +1077,11 @@ MonoBehaviour:
   - 1
   - 15
   - 0
+  - 1
   highQualityHRTFPaths:
-  - Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_512s_44100Hz.sofa.bytes
-  - Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_512s_48000Hz.sofa.bytes
-  - Data/HighQuality/HRTF/3DTI_HRTF_IRC1008_512s_96000Hz.sofa.bytes
+  - Data/HighQuality/HRTF/3DTI_HRTF_IRC1053_512s_44100Hz.3dti-hrtf.bytes
+  - Data/HighQuality/HRTF/3DTI_HRTF_IRC1053_512s_48000Hz.3dti-hrtf.bytes
+  - Data/HighQuality/HRTF/3DTI_HRTF_IRC1053_512s_96000Hz.3dti-hrtf.bytes
   highQualityILDPaths:
   - Data/HighQuality/ILD/NearFieldCompensation_ILD_44100.3dti-ild.bytes
   - Data/HighQuality/ILD/NearFieldCompensation_ILD_48000.3dti-ild.bytes
