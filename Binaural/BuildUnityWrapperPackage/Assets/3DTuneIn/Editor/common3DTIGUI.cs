@@ -4,7 +4,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using System.Reflection;
-using API_3DTI_Common;
+using API_3DTI;
 using System.Linq;
 
 public static class Common3DTIGUI

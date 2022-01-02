@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;   // For ReadOnlyCollection
 
 using UnityEditor;
 using UnityEngine;
-using API_3DTI_Common;
+using API_3DTI;
 
 public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;       // List
 using System.Collections.ObjectModel;   // ReadOnlyCollection
 using UnityEngine;
 
-namespace API_3DTI_Common
+namespace API_3DTI
 {
     //////////////////////////////////////////////////////////////
     // PUBLIC TYPE DEFINITIONS

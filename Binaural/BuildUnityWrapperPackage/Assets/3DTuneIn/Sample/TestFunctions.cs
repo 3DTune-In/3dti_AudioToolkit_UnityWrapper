@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using API_3DTI;
-using API_3DTI_Common;
 using UnityEngine.UI;
 
 public class TestFunctions : MonoBehaviour
 {
     public API_3DTI_HA HearingAid;
     public API_3DTI_HL HearingLoss;
-    public API_3DTI_Spatializer Spatializer;
+    public Spatializer Spatializer;
     public SphereSpawner SphereSpawner;
 
     public Toggle HearingAidToggle;
@@ -28,7 +27,7 @@ public class TestFunctions : MonoBehaviour
         }
         // HL and Spatializer use the new API
         HearingLossToggle.SetIsOnWithoutNotify(HearingLoss.GetParameter<bool>(API_3DTI_HL.Parameter.HLOn, T_ear.LEFT) || HearingLoss.GetParameter<bool>(API_3DTI_HL.Parameter.HLOn, T_ear.RIGHT));
-        ReverbToggle.SetIsOnWithoutNotify(Spatializer.GetParameter<bool>(API_3DTI_Spatializer.SpatializerParameter.EnableReverbProcessing));
+        ReverbToggle.SetIsOnWithoutNotify(Spatializer.GetParameter<bool>(Spatializer.SpatializerParameter.EnableReverbProcessing));
     }
 
     // Start is called before the first frame update
@@ -81,7 +80,7 @@ public class TestFunctions : MonoBehaviour
     {
         if (Spatializer != null)
         {
-            Spatializer.SetParameter(API_3DTI_Spatializer.SpatializerParameter.EnableReverbProcessing, isEnabled);
+            Spatializer.SetParameter(Spatializer.SpatializerParameter.EnableReverbProcessing, isEnabled);
         }
     }
 

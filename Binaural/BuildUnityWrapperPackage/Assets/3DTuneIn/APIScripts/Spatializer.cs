@@ -1,4 +1,4 @@
-﻿using API_3DTI_Common;
+﻿using API_3DTI;
 using System;
 using System.Collections.Generic;
 using System.IO;            // Needed for FileStream
@@ -78,7 +78,7 @@ namespace API_3DTI
 
 
 
-    public class API_3DTI_Spatializer : MonoBehaviour
+    public class Spatializer : MonoBehaviour
     {
 
         // Set this to the 3DTI mixer containing the SpatializerCore3DTI effect.

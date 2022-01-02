@@ -14,21 +14,21 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEditor;
-using API_3DTI_Common;
+using API_3DTI;
 using System;
 using System.Linq;
 
 namespace API_3DTI
 {
 
-    using static API_3DTI_Spatializer;
+    using static Spatializer;
 
-    [CustomEditor(typeof(API_3DTI_Spatializer))]
+    [CustomEditor(typeof(Spatializer))]
     public class AudioPlugin3DTISpatializerGUI : Editor
     {
 
 
-        API_3DTI_Spatializer toolkit;
+        Spatializer toolkit;
         bool perSourceAdvancedSetup = false;
         bool advancedSetup = false;
         bool haSetup = false;
@@ -44,7 +44,7 @@ namespace API_3DTI
         {
 
 
-            toolkit = (API_3DTI_Spatializer)target; // Get access to API script       
+            toolkit = (Spatializer)target; // Get access to API script       
             toolkit.initialize();
 
             Common3DTIGUI.InitStyles(); // Init styles
@@ -278,7 +278,7 @@ namespace API_3DTI
         /// </summary>
         public void SliderHeadRadius()
         {
-            //toolkit.SetFloatParameter(API_3DTI_Spatializer.FloatParameter.HeadRadius, )
+            //toolkit.SetFloatParameter(Spatializer.FloatParameter.HeadRadius, )
             //toolkit.SetHeadRadius(toolkit.listenerHeadRadius);
         }
 

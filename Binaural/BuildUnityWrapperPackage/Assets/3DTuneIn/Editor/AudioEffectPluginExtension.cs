@@ -4,9 +4,9 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using System.Reflection;
-using API_3DTI_Common;
+using API_3DTI;
 
-namespace API_3DTI_Common
+namespace API_3DTI
 {
     public static class AudioEffectPluginExtensions
     {

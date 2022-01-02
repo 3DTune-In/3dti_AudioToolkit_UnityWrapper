@@ -16,7 +16,7 @@ using UnityEngine.Audio;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;   // For ReadOnlyCollection
-using API_3DTI_Common;
+using API_3DTI;
 //using UnityEditor;
 
 public class API_3DTI_HA : MonoBehaviour
