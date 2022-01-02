@@ -67,7 +67,7 @@ namespace API_3DTI
 
                 // Test for problematic config
                 toolkit.GetSampleRate(out TSampleRateEnum currentSampleRate);
-                SpatializationMode currentSpatializationMode = toolkit.GetParameter<SpatializationMode>(SpatializerParameter.SpatializationMode);
+                SpatializationMode currentSpatializationMode = toolkit.GetParameter<SpatializationMode>(Parameter.SpatializationMode);
                 if (currentSpatializationMode == SpatializationMode.SPATIALIZATION_MODE_HIGH_PERFORMANCE && toolkit.GetBinaryResourcePath(BinaryResourceRole.HighPerformanceILD, currentSampleRate).Length == 0)
                 {
                     Debug.LogError($"Default spatialization mode set to {SpatializationMode.SPATIALIZATION_MODE_HIGH_PERFORMANCE} but no {BinaryResourceRole.HighPerformanceILD} resource is loaded for the current sample rate ({currentSampleRate}).");
@@ -76,17 +76,17 @@ namespace API_3DTI
                 {
                     Debug.LogError($"Default spatialization mode set to {SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY} but no {BinaryResourceRole.HighQualityHRTF} resource is loaded for the current sample rate ({currentSampleRate}).");
                 }
-                if (currentSpatializationMode == SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY && toolkit.GetParameter<bool>(SpatializerParameter.EnableNearFieldILD) && toolkit.GetBinaryResourcePath(BinaryResourceRole.HighQualityILD, currentSampleRate).Length == 0)
+                if (currentSpatializationMode == SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY && toolkit.GetParameter<bool>(Parameter.EnableNearFieldILD) && toolkit.GetBinaryResourcePath(BinaryResourceRole.HighQualityILD, currentSampleRate).Length == 0)
                 {
-                    Debug.LogError($"Default spatialization mode set to {SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY} with {SpatializerParameter.EnableNearFieldILD} enabled but no {BinaryResourceRole.HighQualityILD} resource is loaded for the current sample rate ({currentSampleRate}).");
+                    Debug.LogError($"Default spatialization mode set to {SpatializationMode.SPATIALIZATION_MODE_HIGH_QUALITY} with {Parameter.EnableNearFieldILD} enabled but no {BinaryResourceRole.HighQualityILD} resource is loaded for the current sample rate ({currentSampleRate}).");
                 }
-                if (toolkit.GetParameter<bool>(SpatializerParameter.EnableReverbSend) && toolkit.GetBinaryResourcePath(BinaryResourceRole.ReverbBRIR, currentSampleRate).Length == 0)
+                if (toolkit.GetParameter<bool>(Parameter.EnableReverbSend) && toolkit.GetBinaryResourcePath(BinaryResourceRole.ReverbBRIR, currentSampleRate).Length == 0)
                 {
-                    Debug.LogError($"{SpatializerParameter.EnableReverbSend} is set to true but no {BinaryResourceRole.ReverbBRIR} resource is loaded for the current sample rate ({currentSampleRate}).");
+                    Debug.LogError($"{Parameter.EnableReverbSend} is set to true but no {BinaryResourceRole.ReverbBRIR} resource is loaded for the current sample rate ({currentSampleRate}).");
                 }
-                if (toolkit.GetParameter<bool>(SpatializerParameter.EnableReverbProcessing) && toolkit.GetBinaryResourcePath(BinaryResourceRole.ReverbBRIR, currentSampleRate).Length == 0)
+                if (toolkit.GetParameter<bool>(Parameter.EnableReverbProcessing) && toolkit.GetBinaryResourcePath(BinaryResourceRole.ReverbBRIR, currentSampleRate).Length == 0)
                 {
-                    Debug.LogError($"{SpatializerParameter.EnableReverbProcessing} is set to true but no {BinaryResourceRole.ReverbBRIR} resource is loaded for the current sample rate ({currentSampleRate}).");
+                    Debug.LogError($"{Parameter.EnableReverbProcessing} is set to true but no {BinaryResourceRole.ReverbBRIR} resource is loaded for the current sample rate ({currentSampleRate}).");
                 }
 
                 // TODO: See if this results in unsynced state with DLL
@@ -101,8 +101,8 @@ namespace API_3DTI
 
 
 
-        // Create a control for a SpatializerParameter parameter. Returns true if the value changed
-        public bool CreateControl(SpatializerParameter parameter, float overrideMin = float.NaN, float overrideMax = float.NaN)
+        // Create a control for a Parameter parameter. Returns true if the value changed
+        public bool CreateControl(Parameter parameter, float overrideMin = float.NaN, float overrideMax = float.NaN)
         {
             SpatializerParameterAttribute p = parameter.GetAttribute<SpatializerParameterAttribute>();
             if (p == null)
@@ -344,7 +344,7 @@ namespace API_3DTI
 
             GUILayout.Label("These parameters may be set individually on each individual AudioSource component. The values here determine their default values for new AudioSources.\n\nPlease ensure you select binary resources below for the sample rates and spatialization mode combinations you intend to use.", Common3DTIGUI.commentStyle);
 
-            CreateControl(SpatializerParameter.SpatializationMode);
+            CreateControl(Parameter.SpatializationMode);
 
             Common3DTIGUI.SingleSpace();
 
@@ -353,13 +353,13 @@ namespace API_3DTI
             {
                 Common3DTIGUI.BeginSection();
 
-                CreateControl(SpatializerParameter.EnableReverbSend);
-                CreateControl(SpatializerParameter.EnableHRTFInterpolation);
-                CreateControl(SpatializerParameter.EnableFarDistanceEffect);
-                CreateControl(SpatializerParameter.EnableDistanceAttenuationAnechoic);
-                CreateControl(SpatializerParameter.EnableDistanceAttenuationReverb);
+                CreateControl(Parameter.EnableReverbSend);
+                CreateControl(Parameter.EnableHRTFInterpolation);
+                CreateControl(Parameter.EnableFarDistanceEffect);
+                CreateControl(Parameter.EnableDistanceAttenuationAnechoic);
+                CreateControl(Parameter.EnableDistanceAttenuationReverb);
                 // For High Quality only
-                CreateControl(SpatializerParameter.EnableNearFieldILD);
+                CreateControl(Parameter.EnableNearFieldILD);
 
                 Common3DTIGUI.EndSection();
 
@@ -444,10 +444,10 @@ namespace API_3DTI
 
             // ITD:    
             {
-                CreateControl(SpatializerParameter.EnableCustomITD);
-                if (toolkit.GetFloatParameter(SpatializerParameter.EnableCustomITD) != 0.0f)
+                CreateControl(Parameter.EnableCustomITD);
+                if (toolkit.GetFloatParameter(Parameter.EnableCustomITD) != 0.0f)
                 {
-                    CreateControl(SpatializerParameter.HeadRadius);
+                    CreateControl(Parameter.HeadRadius);
                 }
             }
 
@@ -462,11 +462,11 @@ namespace API_3DTI
                 Common3DTIGUI.BeginSection();
 
                 Common3DTIGUI.SingleSpace();
-                CreateControl(SpatializerParameter.ScaleFactor, 0.1f, 10.0f);
+                CreateControl(Parameter.ScaleFactor, 0.1f, 10.0f);
 
                 // HRTF interpolation
                 Common3DTIGUI.BeginSubsection("HRTF Interpolation");
-                CreateControl(SpatializerParameter.HRTFResamplingStep);
+                CreateControl(Parameter.HRTFResamplingStep);
                 Common3DTIGUI.EndSubsection();
 
 
@@ -474,19 +474,19 @@ namespace API_3DTI
                 Common3DTIGUI.BeginSubsection("Physical magnitudes");
                 Common3DTIGUI.AddLabelToParameterGroup("Anechoic distance attenuation");
                 Common3DTIGUI.AddLabelToParameterGroup("Sound speed");
-                CreateControl(SpatializerParameter.AnechoicDistanceAttenuation);
-                CreateControl(SpatializerParameter.ILDAttenuation);
-                CreateControl(SpatializerParameter.SoundSpeed);
+                CreateControl(Parameter.AnechoicDistanceAttenuation);
+                CreateControl(Parameter.ILDAttenuation);
+                CreateControl(Parameter.SoundSpeed);
                 Common3DTIGUI.EndSubsection();
 
                 // Limiter
                 Common3DTIGUI.BeginSubsection("Limiter");
                 Common3DTIGUI.AddLabelToParameterGroup("Switch Limiter");
-                CreateControl(SpatializerParameter.EnableLimiter);
+                CreateControl(Parameter.EnableLimiter);
                 Common3DTIGUI.EndSubsection();
 
                 Common3DTIGUI.BeginSubsection("Reverb");
-                CreateControl(SpatializerParameter.ReverbOrder);
+                CreateControl(Parameter.ReverbOrder);
                 Common3DTIGUI.EndSubsection();
 
                 //// Debug Log
@@ -514,16 +514,16 @@ namespace API_3DTI
                 Common3DTIGUI.BeginSubsection("Left ear");
                 Common3DTIGUI.AddLabelToParameterGroup("Switch Directionality");
                 Common3DTIGUI.AddLabelToParameterGroup("Directionality extend");
-                CreateControl(SpatializerParameter.EnableHearingAidDirectionalityLeft);
-                CreateControl(SpatializerParameter.HearingAidDirectionalityAttenuationLeft);
+                CreateControl(Parameter.EnableHearingAidDirectionalityLeft);
+                CreateControl(Parameter.HearingAidDirectionalityAttenuationLeft);
                 Common3DTIGUI.EndSubsection();
 
                 // Right ear
                 Common3DTIGUI.BeginSubsection("Right ear");
                 Common3DTIGUI.AddLabelToParameterGroup("Switch Directionality");
                 Common3DTIGUI.AddLabelToParameterGroup("Directionality extend");
-                CreateControl(SpatializerParameter.EnableHearingAidDirectionalityRight);
-                CreateControl(SpatializerParameter.HearingAidDirectionalityAttenuationRight);
+                CreateControl(Parameter.EnableHearingAidDirectionalityRight);
+                CreateControl(Parameter.HearingAidDirectionalityAttenuationRight);
                 Common3DTIGUI.EndSubsection();
                 Common3DTIGUI.EndSection();
             }

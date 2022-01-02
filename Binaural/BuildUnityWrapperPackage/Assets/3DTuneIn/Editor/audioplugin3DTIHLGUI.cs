@@ -10,8 +10,8 @@ using API_3DTI;
 using UnityEngine.Audio;
 
 using static Common3DTIGUI;
-using static API_3DTI_HL;
-using static API_3DTI_HL.Parameter;
+using static API_3DTI.HearingLoss;
+using static API_3DTI.HearingLoss.Parameter;
 public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
 {
 
@@ -23,7 +23,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     bool showRawParameters = false;
 
     // Access to the HL API
-    API_3DTI_HL HLAPI;
+    HearingLoss HLAPI;
 
     // Look and feel parameters
     Color selectedColor = Color.gray;
@@ -34,29 +34,29 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     float csSlopeHeight = 10.0f;     // Height of blank space before classification scale slope buttons
 
     // Global variables for preset buttons activation
-    //API_3DTI_HL.T_HLPreset selectedAudiometryPresetLeft = API_3DTI_HL.T_HLPreset.HL_PRESET_CUSTOM;
+    //HearingLoss.T_HLPreset selectedAudiometryPresetLeft = HearingLoss.T_HLPreset.HL_PRESET_CUSTOM;
     //bool changingAudiometryPresetLeft = false;
-    //API_3DTI_HL.T_HLPreset selectedAudiometryPresetRight = API_3DTI_HL.T_HLPreset.HL_PRESET_CUSTOM;
+    //HearingLoss.T_HLPreset selectedAudiometryPresetRight = HearingLoss.T_HLPreset.HL_PRESET_CUSTOM;
     //bool changingAudiometryPresetRight = false;    
-    API_3DTI_HL.T_HLClassificationScaleCurve selectedCurveLeft = API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_UNDEFINED;
+    HearingLoss.T_HLClassificationScaleCurve selectedCurveLeft = HearingLoss.T_HLClassificationScaleCurve.HL_CS_UNDEFINED;
     int selectedSlopeLeft = -1;
-    API_3DTI_HL.T_HLClassificationScaleSeverity selectedSeverityLeft = API_3DTI_HL.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_UNDEFINED;
+    HearingLoss.T_HLClassificationScaleSeverity selectedSeverityLeft = HearingLoss.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_UNDEFINED;
     bool changingCSLeft = false;
-    API_3DTI_HL.T_HLClassificationScaleCurve selectedCurveRight = API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_UNDEFINED;
+    HearingLoss.T_HLClassificationScaleCurve selectedCurveRight = HearingLoss.T_HLClassificationScaleCurve.HL_CS_UNDEFINED;
     int selectedSlopeRight = -1;
-    API_3DTI_HL.T_HLClassificationScaleSeverity selectedSeverityRight = API_3DTI_HL.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_UNDEFINED;
+    HearingLoss.T_HLClassificationScaleSeverity selectedSeverityRight = HearingLoss.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_UNDEFINED;
     bool changingCSRight = false;
     [SerializeField]
-    API_3DTI_HL.T_HLPreset selectedTDPresetLeft = API_3DTI_HL.T_HLPreset.HL_PRESET_CUSTOM;
+    HearingLoss.T_HLPreset selectedTDPresetLeft = HearingLoss.T_HLPreset.HL_PRESET_CUSTOM;
     bool changingTDPresetLeft = false;
     [SerializeField]
-    API_3DTI_HL.T_HLPreset selectedTDPresetRight = API_3DTI_HL.T_HLPreset.HL_PRESET_CUSTOM;
+    HearingLoss.T_HLPreset selectedTDPresetRight = HearingLoss.T_HLPreset.HL_PRESET_CUSTOM;
     bool changingTDPresetRight = false;
     [SerializeField]
-    API_3DTI_HL.T_HLPreset selectedFSPresetLeft = API_3DTI_HL.T_HLPreset.HL_PRESET_CUSTOM;
+    HearingLoss.T_HLPreset selectedFSPresetLeft = HearingLoss.T_HLPreset.HL_PRESET_CUSTOM;
     bool changingFSPresetLeft = false;
     [SerializeField]
-    API_3DTI_HL.T_HLPreset selectedFSPresetRight = API_3DTI_HL.T_HLPreset.HL_PRESET_CUSTOM;
+    HearingLoss.T_HLPreset selectedFSPresetRight = HearingLoss.T_HLPreset.HL_PRESET_CUSTOM;
     bool changingFSPresetRight = false;
 
 
@@ -115,10 +115,10 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         //if (!initDone)
         //{
             // Get HL API instance (TO DO: Error check)
-            HLAPI = GameObject.FindObjectOfType<API_3DTI_HL>();
+            HLAPI = GameObject.FindObjectOfType<HearingLoss>();
         if (HLAPI == null)
         {
-            GUILayout.Label("Please create an instance of API_3DTI_HL in the scene hierarchy to use this effect.");
+            GUILayout.Label("Please create an instance of HearingLoss in the scene hierarchy to use this effect.");
             return false;
         }
 
@@ -252,17 +252,17 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                         GUILayout.BeginVertical();
                         {
                             GUILayout.Label("Curve:");
-                            DrawOneClassificationScaleCurveControl(plugin, T_ear.LEFT, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_A);
-                            DrawOneClassificationScaleCurveControl(plugin, T_ear.LEFT, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_B);
-                            DrawOneClassificationScaleCurveControl(plugin, T_ear.LEFT, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_C);
-                            DrawOneClassificationScaleCurveControl(plugin, T_ear.LEFT, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_D);
-                            DrawOneClassificationScaleCurveControl(plugin, T_ear.LEFT, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_E);
-                            DrawOneClassificationScaleCurveControl(plugin, T_ear.LEFT, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_F);
-                            DrawOneClassificationScaleCurveControl(plugin, T_ear.LEFT, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_G);
-                            DrawOneClassificationScaleCurveControl(plugin, T_ear.LEFT, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_H);
-                            DrawOneClassificationScaleCurveControl(plugin, T_ear.LEFT, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_I);
-                            DrawOneClassificationScaleCurveControl(plugin, T_ear.LEFT, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_J);
-                            DrawOneClassificationScaleCurveControl(plugin, T_ear.LEFT, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_K);
+                            DrawOneClassificationScaleCurveControl(plugin, T_ear.LEFT, HearingLoss.T_HLClassificationScaleCurve.HL_CS_A);
+                            DrawOneClassificationScaleCurveControl(plugin, T_ear.LEFT, HearingLoss.T_HLClassificationScaleCurve.HL_CS_B);
+                            DrawOneClassificationScaleCurveControl(plugin, T_ear.LEFT, HearingLoss.T_HLClassificationScaleCurve.HL_CS_C);
+                            DrawOneClassificationScaleCurveControl(plugin, T_ear.LEFT, HearingLoss.T_HLClassificationScaleCurve.HL_CS_D);
+                            DrawOneClassificationScaleCurveControl(plugin, T_ear.LEFT, HearingLoss.T_HLClassificationScaleCurve.HL_CS_E);
+                            DrawOneClassificationScaleCurveControl(plugin, T_ear.LEFT, HearingLoss.T_HLClassificationScaleCurve.HL_CS_F);
+                            DrawOneClassificationScaleCurveControl(plugin, T_ear.LEFT, HearingLoss.T_HLClassificationScaleCurve.HL_CS_G);
+                            DrawOneClassificationScaleCurveControl(plugin, T_ear.LEFT, HearingLoss.T_HLClassificationScaleCurve.HL_CS_H);
+                            DrawOneClassificationScaleCurveControl(plugin, T_ear.LEFT, HearingLoss.T_HLClassificationScaleCurve.HL_CS_I);
+                            DrawOneClassificationScaleCurveControl(plugin, T_ear.LEFT, HearingLoss.T_HLClassificationScaleCurve.HL_CS_J);
+                            DrawOneClassificationScaleCurveControl(plugin, T_ear.LEFT, HearingLoss.T_HLClassificationScaleCurve.HL_CS_K);
                         }
                         GUILayout.EndVertical();
 
@@ -284,13 +284,13 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                         GUILayout.BeginVertical();
                         {
                             GUILayout.Label("Severity:");
-                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.LEFT, API_3DTI_HL.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_NOLOSS);
-                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.LEFT, API_3DTI_HL.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_MILD);
-                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.LEFT, API_3DTI_HL.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_MILDMODERATE);
-                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.LEFT, API_3DTI_HL.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_MODERATE);
-                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.LEFT, API_3DTI_HL.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_MODERATESEVERE);
-                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.LEFT, API_3DTI_HL.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_SEVERE);
-                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.LEFT, API_3DTI_HL.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_PROFOUND);
+                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.LEFT, HearingLoss.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_NOLOSS);
+                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.LEFT, HearingLoss.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_MILD);
+                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.LEFT, HearingLoss.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_MILDMODERATE);
+                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.LEFT, HearingLoss.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_MODERATE);
+                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.LEFT, HearingLoss.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_MODERATESEVERE);
+                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.LEFT, HearingLoss.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_SEVERE);
+                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.LEFT, HearingLoss.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_PROFOUND);
                         }
                         GUILayout.EndVertical();
                     }
@@ -318,17 +318,17 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                         GUILayout.BeginVertical();
                         {
                             GUILayout.Label("Curve:");
-                            DrawOneClassificationScaleCurveControl(plugin, T_ear.RIGHT, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_A);
-                            DrawOneClassificationScaleCurveControl(plugin, T_ear.RIGHT, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_B);
-                            DrawOneClassificationScaleCurveControl(plugin, T_ear.RIGHT, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_C);
-                            DrawOneClassificationScaleCurveControl(plugin, T_ear.RIGHT, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_D);
-                            DrawOneClassificationScaleCurveControl(plugin, T_ear.RIGHT, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_E);
-                            DrawOneClassificationScaleCurveControl(plugin, T_ear.RIGHT, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_F);
-                            DrawOneClassificationScaleCurveControl(plugin, T_ear.RIGHT, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_G);
-                            DrawOneClassificationScaleCurveControl(plugin, T_ear.RIGHT, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_H);
-                            DrawOneClassificationScaleCurveControl(plugin, T_ear.RIGHT, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_I);
-                            DrawOneClassificationScaleCurveControl(plugin, T_ear.RIGHT, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_J);
-                            DrawOneClassificationScaleCurveControl(plugin, T_ear.RIGHT, API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_K);
+                            DrawOneClassificationScaleCurveControl(plugin, T_ear.RIGHT, HearingLoss.T_HLClassificationScaleCurve.HL_CS_A);
+                            DrawOneClassificationScaleCurveControl(plugin, T_ear.RIGHT, HearingLoss.T_HLClassificationScaleCurve.HL_CS_B);
+                            DrawOneClassificationScaleCurveControl(plugin, T_ear.RIGHT, HearingLoss.T_HLClassificationScaleCurve.HL_CS_C);
+                            DrawOneClassificationScaleCurveControl(plugin, T_ear.RIGHT, HearingLoss.T_HLClassificationScaleCurve.HL_CS_D);
+                            DrawOneClassificationScaleCurveControl(plugin, T_ear.RIGHT, HearingLoss.T_HLClassificationScaleCurve.HL_CS_E);
+                            DrawOneClassificationScaleCurveControl(plugin, T_ear.RIGHT, HearingLoss.T_HLClassificationScaleCurve.HL_CS_F);
+                            DrawOneClassificationScaleCurveControl(plugin, T_ear.RIGHT, HearingLoss.T_HLClassificationScaleCurve.HL_CS_G);
+                            DrawOneClassificationScaleCurveControl(plugin, T_ear.RIGHT, HearingLoss.T_HLClassificationScaleCurve.HL_CS_H);
+                            DrawOneClassificationScaleCurveControl(plugin, T_ear.RIGHT, HearingLoss.T_HLClassificationScaleCurve.HL_CS_I);
+                            DrawOneClassificationScaleCurveControl(plugin, T_ear.RIGHT, HearingLoss.T_HLClassificationScaleCurve.HL_CS_J);
+                            DrawOneClassificationScaleCurveControl(plugin, T_ear.RIGHT, HearingLoss.T_HLClassificationScaleCurve.HL_CS_K);
                         }
                         GUILayout.EndVertical();
 
@@ -350,13 +350,13 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                         GUILayout.BeginVertical();
                         {
                             GUILayout.Label("Severity:");
-                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.RIGHT, API_3DTI_HL.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_NOLOSS);
-                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.RIGHT, API_3DTI_HL.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_MILD);
-                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.RIGHT, API_3DTI_HL.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_MILDMODERATE);
-                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.RIGHT, API_3DTI_HL.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_MODERATE);
-                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.RIGHT, API_3DTI_HL.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_MODERATESEVERE);
-                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.RIGHT, API_3DTI_HL.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_SEVERE);
-                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.RIGHT, API_3DTI_HL.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_PROFOUND);
+                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.RIGHT, HearingLoss.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_NOLOSS);
+                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.RIGHT, HearingLoss.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_MILD);
+                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.RIGHT, HearingLoss.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_MILDMODERATE);
+                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.RIGHT, HearingLoss.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_MODERATE);
+                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.RIGHT, HearingLoss.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_MODERATESEVERE);
+                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.RIGHT, HearingLoss.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_SEVERE);
+                            DrawOneClassificationScaleSeverityControl(plugin, T_ear.RIGHT, HearingLoss.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_PROFOUND);
                         }
                         GUILayout.EndVertical();
                     }
@@ -404,7 +404,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                     Common3DTIGUI.AddLabelToParameterGroup("4 KHz");
                     Common3DTIGUI.AddLabelToParameterGroup("8 KHz");
                     Common3DTIGUI.AddLabelToParameterGroup("16 KHz");
-                    for (int i = 0; i < API_3DTI_HL.NumMultibandExpansionBands; i++)
+                    for (int i = 0; i < HearingLoss.NumMultibandExpansionBands; i++)
                     {
                         if (CreateControl(plugin, MultibandExpansionBand0 + i, ear))
                         {
@@ -430,7 +430,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             //    Common3DTIGUI.AddLabelToParameterGroup("4 KHz");
             //    Common3DTIGUI.AddLabelToParameterGroup("8 KHz");
             //    Common3DTIGUI.AddLabelToParameterGroup("16 KHz");
-            //    for (int i = 0; i < API_3DTI_HL.NumMultibandExpansionBands; i++)
+            //    for (int i = 0; i < HearingLoss.NumMultibandExpansionBands; i++)
             //    {
             //        if (CreateControl(plugin, MultibandExpansionBand0 + i, T_ear.RIGHT))
             //        {
@@ -454,7 +454,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
    
 
         // LEFT EAR
-        Common3DTIGUI.BeginColumn(plugin, T_ear.LEFT, API_3DTI_HL.Parameter.HLOn);
+        Common3DTIGUI.BeginColumn(plugin, T_ear.LEFT, HearingLoss.Parameter.HLOn);
         {
             // Draw ear icon
             GUILayout.BeginHorizontal();
@@ -465,7 +465,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         Common3DTIGUI.EndColumn(T_ear.LEFT);
 
         // RIGHT EAR
-        Common3DTIGUI.BeginColumn(plugin, T_ear.RIGHT, API_3DTI_HL.Parameter.HLOn);
+        Common3DTIGUI.BeginColumn(plugin, T_ear.RIGHT, HearingLoss.Parameter.HLOn);
         {
             // Draw ear icon
             GUILayout.BeginHorizontal();
@@ -613,7 +613,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     /// </summary>
     /// <param name="plugin"></param>
     /// <returns>true if one button is pressed</returns>
-    public bool DrawPresetButtonsForOneEar(IAudioEffectPlugin plugin, T_ear ear, string moduleName, ref API_3DTI_HL.T_HLPreset selectedPreset, bool includeNormal = true)
+    public bool DrawPresetButtonsForOneEar(IAudioEffectPlugin plugin, T_ear ear, string moduleName, ref HearingLoss.T_HLPreset selectedPreset, bool includeNormal = true)
     {
         bool result = false;
         string earStr;
@@ -625,44 +625,44 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
 
         if (includeNormal)
         {
-            if (selectedPreset == API_3DTI_HL.T_HLPreset.HL_PRESET_NORMAL)
+            if (selectedPreset == HearingLoss.T_HLPreset.HL_PRESET_NORMAL)
                 GUI.color = selectedColor;
             else
                 GUI.color = baseColor;
             if (GUILayout.Button(new GUIContent("Normal", "Set " + moduleName + " parameters for Normal Hearing in" + earStr + " ear"), GUILayout.ExpandWidth(false)))
             {
-                selectedPreset = API_3DTI_HL.T_HLPreset.HL_PRESET_NORMAL;
+                selectedPreset = HearingLoss.T_HLPreset.HL_PRESET_NORMAL;
                 result = true;
             }
         }
 
-        if (selectedPreset == API_3DTI_HL.T_HLPreset.HL_PRESET_MILD)
+        if (selectedPreset == HearingLoss.T_HLPreset.HL_PRESET_MILD)
             GUI.color = selectedColor;
         else
             GUI.color = baseColor;
         if (GUILayout.Button(new GUIContent("Mild", "Set " + moduleName + " parameters for Mild hearing loss in" + earStr + " ear"), GUILayout.ExpandWidth(false)))
         {
-            selectedPreset = API_3DTI_HL.T_HLPreset.HL_PRESET_MILD;
+            selectedPreset = HearingLoss.T_HLPreset.HL_PRESET_MILD;
             result = true;
         }
 
-        if (selectedPreset == API_3DTI_HL.T_HLPreset.HL_PRESET_MODERATE)
+        if (selectedPreset == HearingLoss.T_HLPreset.HL_PRESET_MODERATE)
             GUI.color = selectedColor;
         else
             GUI.color = baseColor;
         if (GUILayout.Button(new GUIContent("Moderate", "Set " + moduleName + " parameters for Moderate hearing loss in" + earStr + " ear"), GUILayout.ExpandWidth(false)))
         {
-            selectedPreset = API_3DTI_HL.T_HLPreset.HL_PRESET_MODERATE;
+            selectedPreset = HearingLoss.T_HLPreset.HL_PRESET_MODERATE;
             result = true;
         }
 
-        if (selectedPreset == API_3DTI_HL.T_HLPreset.HL_PRESET_SEVERE)
+        if (selectedPreset == HearingLoss.T_HLPreset.HL_PRESET_SEVERE)
             GUI.color = selectedColor;
         else
             GUI.color = baseColor;
         if (GUILayout.Button(new GUIContent("Severe", "Set " + moduleName + " parameters for Severe hearing loss in" + earStr + " ear"), GUILayout.ExpandWidth(false)))
         {
-            selectedPreset = API_3DTI_HL.T_HLPreset.HL_PRESET_SEVERE;
+            selectedPreset = HearingLoss.T_HLPreset.HL_PRESET_SEVERE;
             result = true;
         }
         GUI.color = baseColor;
@@ -673,10 +673,10 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     /// Draw controls for one curve (letter) of audiometry classification scale
     /// </summary>
     /// <param name="letter"></param>
-    public void DrawOneClassificationScaleCurveControl(IAudioEffectPlugin plugin, T_ear ear, API_3DTI_HL.T_HLClassificationScaleCurve curve)
+    public void DrawOneClassificationScaleCurveControl(IAudioEffectPlugin plugin, T_ear ear, HearingLoss.T_HLClassificationScaleCurve curve)
     {
         string earName = "";
-        API_3DTI_HL.T_HLClassificationScaleCurve selectedCurve;
+        HearingLoss.T_HLClassificationScaleCurve selectedCurve;
         if (ear == T_ear.LEFT)
         {
             earName = "left";
@@ -688,7 +688,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             selectedCurve = selectedCurveRight;
         }
 
-        char letter = API_3DTI_HL.FromClassificationScaleCurveToChar(curve);
+        char letter = HearingLoss.FromClassificationScaleCurveToChar(curve);
 
         GUILayout.BeginHorizontal();
         {
@@ -702,7 +702,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                 GUI.color = baseColor;
 
             // Create button with letter and do action if pressed
-            if (Common3DTIGUI.CreateButton(letter.ToString(), "Select " + API_3DTI_HL.FromClassificationScaleCurveToString(curve) + " curve of HL classification scale for " + earName + " ear"))
+            if (Common3DTIGUI.CreateButton(letter.ToString(), "Select " + HearingLoss.FromClassificationScaleCurveToString(curve) + " curve of HL classification scale for " + earName + " ear"))
             {
                 SetClassificationScaleCurve(plugin, ear, curve);
                 if (ear == T_ear.LEFT)
@@ -767,10 +767,10 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     /// <param name="plugin"></param>
     /// <param name="ear"></param>
     /// <param name="severity"></param>
-    public void DrawOneClassificationScaleSeverityControl(IAudioEffectPlugin plugin, T_ear ear, API_3DTI_HL.T_HLClassificationScaleSeverity severity)
+    public void DrawOneClassificationScaleSeverityControl(IAudioEffectPlugin plugin, T_ear ear, HearingLoss.T_HLClassificationScaleSeverity severity)
     {
         string earName = "";
-        API_3DTI_HL.T_HLClassificationScaleSeverity selectedSeverity;
+        HearingLoss.T_HLClassificationScaleSeverity selectedSeverity;
         if (ear == T_ear.LEFT)
         {
             earName = "left";
@@ -789,8 +789,8 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             GUI.color = baseColor;
 
         // Create button with severity level and do action if pressed
-        string severityStr = API_3DTI_HL.FromClassificationScaleSeverityToString(severity);
-        if (Common3DTIGUI.CreateButton(severityStr, "Select " + severityStr + " (" + API_3DTI_HL.FromClassificationScaleSeverityToInt(severity) + ") severity of HL classification scale for " + earName + " ear"))
+        string severityStr = HearingLoss.FromClassificationScaleSeverityToString(severity);
+        if (Common3DTIGUI.CreateButton(severityStr, "Select " + severityStr + " (" + HearingLoss.FromClassificationScaleSeverityToInt(severity) + ") severity of HL classification scale for " + earName + " ear"))
         {
             SetClassificationScaleSeverity(plugin, ear, severity);
             if (ear == T_ear.LEFT)
@@ -802,10 +802,10 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     }
 
 
-    public void SetClassificationScale(IAudioEffectPlugin plugin, T_ear ear, API_3DTI_HL.T_HLClassificationScaleCurve curve, int slope, API_3DTI_HL.T_HLClassificationScaleSeverity severity)
+    public void SetClassificationScale(IAudioEffectPlugin plugin, T_ear ear, HearingLoss.T_HLClassificationScaleCurve curve, int slope, HearingLoss.T_HLClassificationScaleSeverity severity)
     {        
         List<float> hl;
-        API_3DTI_HL.GetClassificationScaleHL(curve, slope, severity, out hl);
+        HearingLoss.GetClassificationScaleHL(curve, slope, severity, out hl);
         for (int i=0; i< Math.Min(NumMultibandExpansionBands, hl.Count); i++)
         {
             plugin.SetParameter(MultibandExpansionBand0 + i, hl[i], ear);
@@ -829,7 +829,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     /// </summary>
     /// <param name="ear"></param>
     /// <param name="letter"></param>
-    public void SetClassificationScaleCurve(IAudioEffectPlugin plugin, T_ear ear, API_3DTI_HL.T_HLClassificationScaleCurve curve)
+    public void SetClassificationScaleCurve(IAudioEffectPlugin plugin, T_ear ear, HearingLoss.T_HLClassificationScaleCurve curve)
     {
         if (ear == T_ear.LEFT)
         {
@@ -872,7 +872,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     /// </summary>
     /// <param name="ear"></param>
     /// <param name="severity"></param>
-    public void SetClassificationScaleSeverity(IAudioEffectPlugin plugin, T_ear ear, API_3DTI_HL.T_HLClassificationScaleSeverity severity)
+    public void SetClassificationScaleSeverity(IAudioEffectPlugin plugin, T_ear ear, HearingLoss.T_HLClassificationScaleSeverity severity)
     {
         if (ear == T_ear.LEFT)
         {
@@ -899,23 +899,23 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         if (ear == T_ear.LEFT)
         {
             //if (!changingAudiometryPresetLeft)
-            //    selectedAudiometryPresetLeft = API_3DTI_HL.T_HLPreset.HL_PRESET_CUSTOM;
+            //    selectedAudiometryPresetLeft = HearingLoss.T_HLPreset.HL_PRESET_CUSTOM;
             if (!changingCSLeft)
             {
-                selectedCurveLeft = API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_UNDEFINED;
+                selectedCurveLeft = HearingLoss.T_HLClassificationScaleCurve.HL_CS_UNDEFINED;
                 selectedSlopeLeft = -1;
-                selectedSeverityLeft = API_3DTI_HL.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_UNDEFINED;
+                selectedSeverityLeft = HearingLoss.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_UNDEFINED;
             }
         }
         else
         {
             //if (!changingAudiometryPresetRight)
-            //    selectedAudiometryPresetRight = API_3DTI_HL.T_HLPreset.HL_PRESET_CUSTOM;
+            //    selectedAudiometryPresetRight = HearingLoss.T_HLPreset.HL_PRESET_CUSTOM;
             if (!changingCSRight)
             {
-                selectedCurveRight = API_3DTI_HL.T_HLClassificationScaleCurve.HL_CS_UNDEFINED;
+                selectedCurveRight = HearingLoss.T_HLClassificationScaleCurve.HL_CS_UNDEFINED;
                 selectedSlopeRight = -1;
-                selectedSeverityRight = API_3DTI_HL.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_UNDEFINED;
+                selectedSeverityRight = HearingLoss.T_HLClassificationScaleSeverity.HL_CS_SEVERITY_UNDEFINED;
             }
         }
     }
@@ -929,12 +929,12 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         if (ear == T_ear.LEFT)
         {
             if (!changingTDPresetLeft)
-                selectedTDPresetLeft = API_3DTI_HL.T_HLPreset.HL_PRESET_CUSTOM;
+                selectedTDPresetLeft = HearingLoss.T_HLPreset.HL_PRESET_CUSTOM;
         }
         else
         {
             if (!changingTDPresetRight)
-                selectedTDPresetRight= API_3DTI_HL.T_HLPreset.HL_PRESET_CUSTOM;
+                selectedTDPresetRight= HearingLoss.T_HLPreset.HL_PRESET_CUSTOM;
         }
     }
 
@@ -944,15 +944,15 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     /// <param name="plugin"></param>
     /// <param name="ear"></param>
     /// <param name="preset"></param>
-    public void SetTemporalDistortionPreset(IAudioEffectPlugin plugin, T_ear ear, API_3DTI_HL.T_HLPreset preset)
+    public void SetTemporalDistortionPreset(IAudioEffectPlugin plugin, T_ear ear, HearingLoss.T_HLPreset preset)
     {
         Debug.Assert(ear != T_ear.BOTH);
 
-        API_3DTI_HL.T_HLTemporalDistortionBandUpperLimit bandUpperLimit;
+        HearingLoss.T_HLTemporalDistortionBandUpperLimit bandUpperLimit;
         float whiteNoisePower;
         float bandwidth;
         float LRSync; 
-        API_3DTI_HL.GetTemporalDistortionPresetValues(preset, out bandUpperLimit, out whiteNoisePower, out bandwidth, out LRSync);
+        HearingLoss.GetTemporalDistortionPresetValues(preset, out bandUpperLimit, out whiteNoisePower, out bandwidth, out LRSync);
 
         if (plugin.GetParameter<Parameter, bool>(TemporalDistortionOn, ear))
         {
@@ -988,12 +988,12 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         if (ear == T_ear.LEFT)
         {
             if (!changingFSPresetLeft)
-                selectedFSPresetLeft = API_3DTI_HL.T_HLPreset.HL_PRESET_CUSTOM;
+                selectedFSPresetLeft = HearingLoss.T_HLPreset.HL_PRESET_CUSTOM;
         }
         else
         {
             if (!changingFSPresetRight)
-                selectedFSPresetRight = API_3DTI_HL.T_HLPreset.HL_PRESET_CUSTOM;
+                selectedFSPresetRight = HearingLoss.T_HLPreset.HL_PRESET_CUSTOM;
         }
     }
 
@@ -1003,11 +1003,11 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     /// <param name="plugin"></param>
     /// <param name="ear"></param>
     /// <param name="preset"></param>
-    public void SetFrequencySmearingPreset(IAudioEffectPlugin plugin, T_ear ear, API_3DTI_HL.T_HLPreset preset)
+    public void SetFrequencySmearingPreset(IAudioEffectPlugin plugin, T_ear ear, HearingLoss.T_HLPreset preset)
     {
         int downSize, upSize;
         float downHz, upHz;
-        API_3DTI_HL.GetFrequencySmearingPresetValues(preset, out downSize, out upSize, out downHz, out upHz);
+        HearingLoss.GetFrequencySmearingPresetValues(preset, out downSize, out upSize, out downHz, out upHz);
 
         plugin.SetParameter(FrequencySmearingDownSize, downSize, ear);
         plugin.SetParameter(FrequencySmearingDownHz, downHz, ear);

@@ -89,7 +89,7 @@ namespace API_3DTI
 
         // Note: The numbering of these parameters must be kept in sync with the C++ plugin source code. Per-source parameters must appear first for compatibility with the plugin.
         // The int value of these enums may change in future versions. For compatibility, always use the enum value name rather than the int value (i.e. use SptaializerParameter.PARAM_HRTF_INTERPOLATION instead of 0).
-        public enum SpatializerParameter
+        public enum Parameter
         {
             [SpatializerParameter(/*pluginName="HRTFInterp",*/ label = "Enable HRTF interpolation", description = "Enable runtime interpolation of HRIRs, to allow for smoother transitions when moving listener and/or sources", min = 0, max = 1, type = typeof(bool), defaultValue = 1.0f, isSourceParameter = true)]
             EnableHRTFInterpolation = 0,
@@ -160,12 +160,12 @@ namespace API_3DTI
         };
         public const int NumParameters = 21;
 
-        public const int NumSourceParameters = (int)SpatializerParameter.EnableDistanceAttenuationReverb + 1;
+        public const int NumSourceParameters = (int)Parameter.EnableDistanceAttenuationReverb + 1;
 
         // Store the parameter values here for Unity to serialize. We initialize them to their default values. This is private and clients should use the accessor/getter methods below which will ensure the plugin is kept in sync with these values.
         // NB, per-source parameters may be set on individual sources but they are also set on the core which defines their initial value.
         [SerializeField]
-        private float[] spatializerParameters = Enumerable.Range(0, NumParameters).Select(i => ((SpatializerParameter)i).GetAttribute<SpatializerParameterAttribute>().defaultValue).ToArray<float>();
+        private float[] spatializerParameters = Enumerable.Range(0, NumParameters).Select(i => ((Parameter)i).GetAttribute<SpatializerParameterAttribute>().defaultValue).ToArray<float>();
 
         /// Array is for the three different sample rates
         [SerializeField]
@@ -262,7 +262,7 @@ namespace API_3DTI
                     {
                         for (int i = originalLength; i < spatializerParameters.Length; i++)
                         {
-                            spatializerParameters[i] = ((SpatializerParameter)i).GetAttribute<SpatializerParameterAttribute>().defaultValue;
+                        spatializerParameters[i] = ((Parameter)i).GetAttribute<SpatializerParameterAttribute>().defaultValue;
                         }
                     }
                 }
@@ -307,7 +307,7 @@ namespace API_3DTI
         /// <param name="value"></param>
         /// <param name="source">See note at <see cref="SetParameter{T}(SpatializerParameter, T, AudioSource)"/></param>
         /// <returns>True if the parameter was successfully set</returns>
-        public bool SetFloatParameter(SpatializerParameter parameter, float value, AudioSource source = null)
+        public bool SetFloatParameter(Parameter parameter, float value, AudioSource source = null)
         {
             if (source != null)
             {
@@ -358,7 +358,7 @@ namespace API_3DTI
         /// <param name="value">Variable in which to store the retrieved value</param>
         /// <param name="source">See note at <see cref="SetParameter{T}(SpatializerParameter, T, AudioSource)"/></param>
         /// <returns>True if the parameter was successfully retrieved</returns>
-        public bool GetFloatParameter(SpatializerParameter parameter, out float value, AudioSource source = null)
+        public bool GetFloatParameter(Parameter parameter, out float value, AudioSource source = null)
         {
             if (source != null)
             {
@@ -391,7 +391,7 @@ namespace API_3DTI
         /// <param name="parameter">The parameter to get</param>
         /// <param name="source">See note at <see cref="SetParameter{T}(SpatializerParameter, T, AudioSource)"/></param>
         /// <returns>The value of the parameter</returns>
-        public float GetFloatParameter(SpatializerParameter parameter, AudioSource source = null)
+        public float GetFloatParameter(Parameter parameter, AudioSource source = null)
         {
             if (!GetFloatParameter(parameter, out float value, source))
             {
@@ -407,7 +407,7 @@ namespace API_3DTI
         /// <param name="parameter">The parameter to get</param>
         /// <param name="source">See note at <see cref="SetParameter{T}(SpatializerParameter, T, AudioSource)"/></param>
         /// <returns></returns>
-        public T GetParameter<T>(SpatializerParameter parameter, AudioSource source = null)
+        public T GetParameter<T>(Parameter parameter, AudioSource source = null)
         {
             SpatializerParameterAttribute attributes = parameter.GetAttribute<SpatializerParameterAttribute>();
             Debug.Assert(typeof(T) == attributes.type);
@@ -433,7 +433,7 @@ namespace API_3DTI
         /// 
         /// If the parameter is not marked as isSourceParameter then this must be null.</param>
         /// <returns></returns>
-        public bool SetParameter<T>(SpatializerParameter parameter, T value, AudioSource source = null)
+        public bool SetParameter<T>(Parameter parameter, T value, AudioSource source = null)
         {
             SpatializerParameterAttribute attributes = parameter.GetAttribute<SpatializerParameterAttribute>();
             Debug.Assert(typeof(T) == attributes.type);

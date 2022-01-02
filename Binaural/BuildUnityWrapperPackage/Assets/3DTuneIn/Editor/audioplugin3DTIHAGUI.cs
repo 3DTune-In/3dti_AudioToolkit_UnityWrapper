@@ -15,8 +15,8 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     bool showRawParameters = false;
 
     // Access to the HA API
-    API_3DTI_HA HAAPI;
-    API_3DTI_HL HLAPI;
+    HearingAid HAAPI;
+    HearingLoss HLAPI;
 
     // Internal use constants
     const float FIG6_THRESHOLD_0_DBSPL = 40.0f; // TO DO: consistent numbering
@@ -56,17 +56,17 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
         //if (!initDone)
         //{
             // Get HA API instance (TO DO: Error check)            
-            HAAPI = GameObject.FindObjectOfType<API_3DTI_HA>();
+            HAAPI = GameObject.FindObjectOfType<HearingAid>();
             if (HAAPI == null)
         {
                 GUILayout.Label("Please create an instance of API_3DTI_HA in the scene hierarchy to use this effect.");
                 return false;
         }
         // Get HA API instance (TO DO: Error check)            
-        HLAPI = GameObject.FindObjectOfType<API_3DTI_HL>();
+        HLAPI = GameObject.FindObjectOfType<HearingLoss>();
         if (HLAPI == null)
         {
-            GUILayout.Label("In addition to the API_3DTI_HA component, the Hearing Aid simulator also depends on API_3DTI_HL. Please create an instance of API_3DTI_HL in the scene hierarchy to use this effect.");
+            GUILayout.Label("In addition to the API_3DTI_HA component, the Hearing Aid simulator also depends on HearingLoss. Please create an instance of HearingLoss in the scene hierarchy to use this effect.");
             return false;
         }
         // Setup styles
@@ -202,9 +202,9 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
             //if (ear == T_ear.LEFT)
             //{
                 var audiometry = new List<float>();
-                for (int i=0; i<API_3DTI_HL.NumMultibandExpansionBands; i++)
+                for (int i=0; i<HearingLoss.NumMultibandExpansionBands; i++)
                 {
-                    audiometry.Add(HLAPI.GetParameter<float>(API_3DTI_HL.Parameter.MultibandExpansionBand0 + i, ear));
+                    audiometry.Add(HLAPI.GetParameter<float>(HearingLoss.Parameter.MultibandExpansionBand0 + i, ear));
                 }
                 if (!HAAPI.SetEQFromFig6(/*plugin,*/ear, audiometry, out calculatedGains))
                 {
@@ -214,9 +214,9 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
             //else if (ear == T_ear.RIGHT)
             //{
             //    var audiometry = new List<float>();
-            //    for (int i = 0; i < API_3DTI_HL.NumMultibandExpansionBands; i++)
+            //    for (int i = 0; i < HearingLoss.NumMultibandExpansionBands; i++)
             //    {
-            //        audiometry.Add(HLAPI.GetParameter<float>(API_3DTI_HL.Parameter.MultibandExpansionBand0 + i, ear));
+            //        audiometry.Add(HLAPI.GetParameter<float>(HearingLoss.Parameter.MultibandExpansionBand0 + i, ear));
             //    }
             //    if (!HAAPI.SetEQFromFig6(ear, audiometry, out calculatedGains))
             //    {
@@ -262,7 +262,7 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     {
         GUILayout.BeginHorizontal();        
         {
-            for (int i = 0; i < API_3DTI_HA.NUM_EQ_CURVES; i++)
+            for (int i = 0; i < HearingAid.NUM_EQ_CURVES; i++)
             {
                 Common3DTIGUI.BeginSubColumn("Curve " + (i+1).ToString());
                 {
@@ -289,11 +289,11 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
     {
         Common3DTIGUI.BeginSubColumn("Level Thresholds");        
         {
-            for (int i = 0; i < API_3DTI_HA.NUM_EQ_CURVES; i++)
+            for (int i = 0; i < HearingAid.NUM_EQ_CURVES; i++)
             {
                 Common3DTIGUI.AddLabelToParameterGroup("Threshold " + (i + 1).ToString());
             }
-            for (int i = 0; i < API_3DTI_HA.NUM_EQ_CURVES; i++)
+            for (int i = 0; i < HearingAid.NUM_EQ_CURVES; i++)
             {
                 Common3DTIGUI.CreatePluginParameterSlider(plugin, ref PARAM_ARRAY[i], "THR" + Common3DTIGUI.GetEarLetter(whichear) + i.ToString(), "Threshold " + (i + 1).ToString(), false, "dBfs", "Set level threshold for curve " + (i + 1).ToString() + " of the dynamic equalizer in " + Common3DTIGUI.GetEarName(whichear) + " ear");
             }

@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 public class TestFunctions : MonoBehaviour
 {
-    public API_3DTI_HA HearingAid;
-    public API_3DTI_HL HearingLoss;
+    public HearingAid HearingAid;
+    public HearingLoss HearingLoss;
     public Spatializer Spatializer;
     public SphereSpawner SphereSpawner;
 
@@ -26,8 +26,8 @@ public class TestFunctions : MonoBehaviour
             HearingAidToggle.SetIsOnWithoutNotify(isLeftOnF != 0.0f || isRightOnF != 0.0f);
         }
         // HL and Spatializer use the new API
-        HearingLossToggle.SetIsOnWithoutNotify(HearingLoss.GetParameter<bool>(API_3DTI_HL.Parameter.HLOn, T_ear.LEFT) || HearingLoss.GetParameter<bool>(API_3DTI_HL.Parameter.HLOn, T_ear.RIGHT));
-        ReverbToggle.SetIsOnWithoutNotify(Spatializer.GetParameter<bool>(Spatializer.SpatializerParameter.EnableReverbProcessing));
+        HearingLossToggle.SetIsOnWithoutNotify(HearingLoss.GetParameter<bool>(HearingLoss.Parameter.HLOn, T_ear.LEFT) || HearingLoss.GetParameter<bool>(HearingLoss.Parameter.HLOn, T_ear.RIGHT));
+        ReverbToggle.SetIsOnWithoutNotify(Spatializer.GetParameter<bool>(Spatializer.Parameter.EnableReverbProcessing));
     }
 
     // Start is called before the first frame update
@@ -69,7 +69,7 @@ public class TestFunctions : MonoBehaviour
 
     public void EnableHearingLossInBothEars(bool isEnabled)
     {
-        HearingLoss.SetParameter(API_3DTI_HL.Parameter.HLOn, isEnabled, T_ear.BOTH);
+        HearingLoss.SetParameter(HearingLoss.Parameter.HLOn, isEnabled, T_ear.BOTH);
     }
     public void EnableHAInBothEars(bool isEnabled)
     {
@@ -80,7 +80,7 @@ public class TestFunctions : MonoBehaviour
     {
         if (Spatializer != null)
         {
-            Spatializer.SetParameter(Spatializer.SpatializerParameter.EnableReverbProcessing, isEnabled);
+            Spatializer.SetParameter(Spatializer.Parameter.EnableReverbProcessing, isEnabled);
         }
     }
 
