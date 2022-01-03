@@ -439,7 +439,7 @@ namespace API_3DTI
 
             createDropdowns(BinaryResourceRole.ReverbBRIR, "BRIR", "Select the BRIR (impulse response) for reverb processing");
 
-            CreateControl(SpatializerParameter.EnableReverbProcessing);
+            CreateControl(Parameter.EnableReverbProcessing);
 
 
             // ITD:    
