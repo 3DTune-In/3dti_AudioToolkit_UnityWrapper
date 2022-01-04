@@ -415,7 +415,6 @@
 				AF63299B1E376BA4000B40E8 /* Sources */,
 				AF63299C1E376BA4000B40E8 /* Frameworks */,
 				AF63299D1E376BA4000B40E8 /* CopyFiles */,
-				3497D04024C9915D00C6BF37 /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -459,27 +458,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		3497D04024C9915D00C6BF37 /* Run Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Run Script";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncp ~/Documents/dev/3DTI_UnityWrapper/Binaural/audioplugin3DTIToolkit/iOS/build/Release-iphoneos/libaudioplugin3DTIToolkit.a ~/Documents/dev/SpatialisationToolkitTestbed/Assets/Plugins/iOS/libaudioplugin3DTIToolkit.a\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		AF63299B1E376BA4000B40E8 /* Sources */ = {
@@ -650,6 +628,11 @@
 			baseConfigurationReference = AFD34E391E51DA10007810A6 /* Config.Release.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = 4QC5SRCTN7;
+				OTHER_CFLAGS = (
+					"-D_3DTI_AXIS_CONVENTION_UNITY",
+					"-D_3DTI_ANGLE_CONVENTION_LISTEN",
+					"-fembed-bitcode",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
