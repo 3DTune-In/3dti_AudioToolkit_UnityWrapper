@@ -27,8 +27,8 @@ Cuevas-Rodríguez M, Picinali L, González-Toledo D, Garre C, de la Rubia-Cuesta
 
 The current version of the package is built to support the following platforms:
 
-- As Host: Microsoft Windows 10, MacOS.
-- As Target: Microsoft Windows x64, MacOS, Android x64 (4.4 or above), iOS. (We also include binaries for Windows x86 but they are not tested on a 32 bit computer so are not officially supported.)
+- As Host: Microsoft Windows 10, MacOS (Intel).
+- As Target: Microsoft Windows x64, MacOS (Intel), Android x64 (4.4 or above), iOS. (We also include binaries for Windows x86 but they are not tested on a 32 bit computer so are not officially supported.)
 
 In its current version, the following parts of the 3DTI Toolkit are made available to a Unity application:
 

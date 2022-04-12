@@ -11,6 +11,7 @@ All notable changes to the 3DTuneIn Toolkit will be documented in this file.
 		- to turn on hearing loss: `SetParameter(API_3DTI_HL.Parameter.HLOn, true, T_ear.BOTH)`
 		- to get the multiband expansion attack in the left ear: `GetParameter<float>(API_3DTI_HL.Parameter.MultibandExpansionNumFiltersPerBand, T_ear.LEFT)`
 	- There is a big reduction in variables within the C# code that duplicate the state of the audio plugins, opting instead to read these values from the plugins where needed. In the spatializer where this isn't possible, parameter values are stored in a single serialized array.
+- We've removed the build script that bundles both ARM And x64 builds of the iOS plugin into a single dylib binary. The x86 build was previously necessary in order to use the iPhone simulator in Xcode but newer versions of Xcode seem to be able to work with just the ARM build.
   
 
 **Binaural spatializer and reverb:**
