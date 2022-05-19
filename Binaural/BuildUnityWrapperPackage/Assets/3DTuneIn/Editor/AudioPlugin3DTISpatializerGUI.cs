@@ -226,9 +226,14 @@ namespace API_3DTI
                 : sampleRate == TSampleRateEnum.K48 ? "48000"
                 : sampleRate == TSampleRateEnum.K96 ? "96000"
                 : "(unknown sample rate)";
+            string sampleRateLabelShort =
+                sampleRate == TSampleRateEnum.K44 ? "44kHz"
+                : sampleRate == TSampleRateEnum.K48 ? "48kHz"
+                : sampleRate == TSampleRateEnum.K96 ? "96kHz"
+                : "(unknown sample rate)";
             // LoadAll searches relative to any "resources" folder in the project
             List<string> paths = Resources.LoadAll<TextAsset>(prefix)
-                        .Where(x => x.name.Contains(sampleRateLabel))
+                        .Where(x => (x.name.Contains(sampleRateLabel) || x.name.Contains(sampleRateLabelShort)))
                         .Select(item => item.name).ToList();
             return (prefix, paths, ".bytes");
         }
