@@ -99,7 +99,7 @@ In our testing, we have found one quirk when combining the toolkit in a Unity VR
 
 A build is included for iOS simulator but at present we haven't got a process to combine it with the iOS build. (Previously we merged the binaries, but our approach no longer works as simulator builds now include arm64 architecture to support M1 Macs.)
 
-If you need to work with the iOS simulator, then you will need to enable the simulator binary and disable the regular iOS binary by finding these files in the Unity Editor and checking/unchecking the iOS platform in the inspector.
+If you need to work with the iOS simulator, then you will need to enable the simulator plugin files (in the `Assets/Plugins/iOS_Simulator` folder) and disable the regular iOS plugin files (in the `Assets/Plugins/iOS` folder) by selecting these files in the Project panel in Unity and checking/unchecking the iOS platform in the inspector.
 
 ## Build instructions
 
