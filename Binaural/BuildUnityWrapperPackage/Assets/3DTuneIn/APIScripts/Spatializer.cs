@@ -122,7 +122,7 @@ namespace API_3DTI
             [SpatializerParameter(label = "Enable custom ITD", description = "Enable Interaural Time Difference customization", type = typeof(bool), defaultValue = 0.0f)]
             EnableCustomITD = 9,
 
-            [SpatializerParameter(label = "Anechoic distance attenuation", description = "Set attenuation in dB for each double distance", min = -30.0f, max = 0.0f, units = "dB", defaultValue = -1.0f)]
+            [SpatializerParameter(label = "Anechoic distance attenuation", description = "Set attenuation in dB for each double distance", min = -30.0f, max = 0.0f, units = "dB", defaultValue = -6.0206f)]
             AnechoicDistanceAttenuation = 10,
 
             [SpatializerParameter(label = "ILD Attenuation", description = "Attenuation in dB applied before ILD (interaural level difference) processing", min = 0.0f, max = 30.0f, units = "dB", defaultValue = -6.0f)]
@@ -157,8 +157,12 @@ namespace API_3DTI
 
             [SpatializerParameter(label = "Reverb order", description = "Configures the number of channels of the first-order ambisonic reverb processing. The options are: W, X, Y and Z (ThreeDimensional); W, X and Y (Bidimensional); only W (Adimensional)", min = 0.0f, max = 2.0f, type = typeof(ReverbOrder), defaultValue = (float)API_3DTI.ReverbOrder.Bidimensional, isSourceParameter = true)]
             ReverbOrder = 20,
+
+            [SpatializerParameter(label = "Reverb distance attenuation", description = "Set attenuation for reverb calculation in dB for each double distance", min = -30.0f, max = 0.0f, units = "dB", defaultValue = -3.01f)]
+            ReverbDistanceAttenuation = 21,
+
         };
-        public const int NumParameters = 21;
+        public const int NumParameters = 22;
 
         public const int NumSourceParameters = (int)Parameter.EnableDistanceAttenuationReverb + 1;
 

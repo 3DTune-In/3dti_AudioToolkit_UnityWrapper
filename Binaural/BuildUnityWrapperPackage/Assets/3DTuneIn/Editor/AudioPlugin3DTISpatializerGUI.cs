@@ -440,6 +440,11 @@ namespace API_3DTI
             createDropdowns(BinaryResourceRole.ReverbBRIR, "BRIR", "Select the BRIR (impulse response) for reverb processing");
 
             CreateControl(Parameter.EnableReverbProcessing);
+            CreateControl(Parameter.ReverbDistanceAttenuation);
+            if (!toolkit.GetParameter<bool>(Parameter.EnableDistanceAttenuationReverb))
+            {
+                GUILayout.Label("Note: Reverb Distance Attenuation is enabled/disabled at a Per-Source level. Currently, the default setting for new sound sources is to disable reverb attenuation (see above).", Common3DTIGUI.commentStyle);
+            }
 
 
             // ITD:    

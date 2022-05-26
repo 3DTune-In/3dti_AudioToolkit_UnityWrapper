@@ -51,8 +51,9 @@ namespace SpatializerCore3DTI
 		HRTFResamplingStep = 18,
 		EnableReverbProcessing = 19,
 		ReverbOrder = 20,
+		ReverbDistanceAttenuation = 21,
 
-		NumFloatParameters = 21,
+		NumFloatParameters = 22,
 	};
 
 

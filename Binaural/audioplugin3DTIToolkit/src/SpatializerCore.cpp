@@ -275,7 +275,15 @@ namespace SpatializerCore3DTI
 				return false;
 			}
 			return true;
-
+		case ReverbDistanceAttenuation:
+		{
+			const float min = -90.0f;
+			const float max = 0.0f;
+			Common::CMagnitudes magnitudes = core.GetMagnitudes();
+			magnitudes.SetReverbDistanceAttenuation(clamp(value, min, max));
+			core.SetMagnitudes(magnitudes);
+			return true;
+		}
 		default:
 			return false;
 		}
@@ -342,6 +350,9 @@ namespace SpatializerCore3DTI
 			return true;
 		case ReverbOrder:
 			*value = (float)environment->GetReverberationOrder();
+			return true;
+		case ReverbDistanceAttenuation:
+			*value = core.GetMagnitudes().GetReverbDistanceAttenuation();
 			return true;
 		default:
 			*value = std::numeric_limits<float>::quiet_NaN();
