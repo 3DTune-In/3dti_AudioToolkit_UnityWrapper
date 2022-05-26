@@ -95,6 +95,12 @@ The package includes binary files for the four supported end platforms (MacOS, i
 
 In our testing, we have found one quirk when combining the toolkit in a Unity VR application on iOS that depends on `libvrunity.a`. There appears to be a conflict between two possible audio engines that can cause no audio to appear on the iOS application. This can be fixed within your app's Xcode project which is automatically created by Unity as part of the process of building for iOS. In the project settings under the tab *Build Phases* you should see *libaudioplugin3DTIToolkit.a* (our binary file) but also *libvrunity.a* (part of Unity's VR system). If you do then you need to ensure the files are ordered so that *libaudioplugin3DTIToolkit.a* appears before *libvrunity.a* on this list.
 
+### iOS Simulator
+
+A build is included for iOS simulator but at present we haven't got a process to combine it with the iOS build. (Previously we merged the binaries, but our approach no longer works as simulator builds now include arm64 architecture to support M1 Macs.)
+
+If you need to work with the iOS simulator, then you will need to enable the simulator binary and disable the regular iOS binary by finding these files in the Unity Editor and checking/unchecking the iOS platform in the inspector.
+
 ## Build instructions
 
 The reposity includes the binaries for each platform ready built so it is not necessary to build them yourself.
