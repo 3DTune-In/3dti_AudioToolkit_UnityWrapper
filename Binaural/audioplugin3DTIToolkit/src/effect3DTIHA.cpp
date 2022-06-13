@@ -23,6 +23,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <map>
 using namespace std;
 
 // DEBUG LOG 
@@ -206,6 +207,9 @@ namespace HASimulation3DTI
 		// Debug log
 		//PARAM_DEBUG_LOG,
 
+		// A readonly handle for this plugin instance used to refer to it when using static DLL functions
+		PARAM_HANDLE,
+
 		//// Fig6
 		//PARAM_FIG6_BAND_0_LEFT,
 		//PARAM_FIG6_BAND_1_LEFT,
@@ -224,6 +228,14 @@ namespace HASimulation3DTI
 
 		P_NUM
 	};
+
+	/////////////////////////////////////////////////////////////////////
+	extern "C" UNITY_AUDIODSP_EXPORT_API void SetDynamicEqualizerUsingFig6(Common::T_ear ear, float* earLosses, int earLossesSize, float dBs_SPL_for_0_dBs_fs)
+	{
+		assert(earLossesSize > 0);
+		vector<float> losses(earLosses, earLosses + (size_t)earLossesSize);
+
+	}
 
 	/////////////////////////////////////////////////////////////////////
 
@@ -253,6 +265,9 @@ namespace HASimulation3DTI
 		//bool settingFig6Right;
 		//int fig6ReceivedBandsRight;	// TO DO: check each individual band
 	};
+
+	// map from PARAM_HANDLE -> plugin instance
+	std::map<int, EffectData*> instances;
 
 	/////////////////////////////////////////////////////////////////////
 
@@ -387,6 +402,11 @@ namespace HASimulation3DTI
 		RegisterParameter(definition, "TONLOR", "dB", MIN_TONECONTROL, MAX_TONECONTROL, 0.0f, 1.0f, 1.0f, PARAM_TONE_LOW_RIGHT, "Right tone control for low band (dB)");
 		RegisterParameter(definition, "TONMIR", "dB", MIN_TONECONTROL, MAX_TONECONTROL, 0.0f, 1.0f, 1.0f, PARAM_TONE_MID_RIGHT, "Right tone control for mid band (dB)");
 		RegisterParameter(definition, "TONHIR", "dB", MIN_TONECONTROL, MAX_TONECONTROL, 0.0f, 1.0f, 1.0f, PARAM_TONE_HIGH_RIGHT, "Right tone control for high band (dB)");
+
+		// Handle
+#define MAX_INTEGER_REPRESENTABLE_AS_FLOAT (std::numeric_limits<float>::radix / std::numeric_limits<float>::epsilon())
+		RegisterParameter(definition, "HANDLE", "", 0, MAX_INTEGER_REPRESENTABLE_AS_FLOAT, 0.0f, 1.0f, 1.0f, PARAM_HANDLE, "Read-only handle identifying this plugin instance");
+
 
 		// Debug log
 		//RegisterParameter(definition, "DebugLogHA", "", 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, PARAM_DEBUG_LOG, "Generate debug log for HA");
@@ -528,6 +548,18 @@ namespace HASimulation3DTI
         //memset(effectdata, 0, sizeof(EffectData));
         state->effectdata = effectdata;
         InitParametersFromDefinitions(InternalRegisterEffectDefinition, effectdata->parameters);
+
+		// Create handle
+		int handle = 0;
+		while (instances.count(handle) > 0)
+		{
+			handle++;
+		}
+		assert(instances.count(handle) == 0);
+		effectdata->parameters[PARAM_HANDLE] = (float)handle;
+		// check casting did not change value
+		assert((int)effectdata->parameters[PARAM_HANDLE] == handle);
+		instances[handle] = effectdata;
 		
 		// TO DO: check errors with debugger
 		// TO DO: add more WriteLog
@@ -627,6 +659,14 @@ namespace HASimulation3DTI
     UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ReleaseCallback(UnityAudioEffectState* state)
     {
         EffectData* data = state->GetEffectData<EffectData>();
+		auto it = instances.find(data->parameters[PARAM_HANDLE]);
+		assert(it != instances.end());
+		assert(it->second == data);
+		if (it != instances.end())
+		{
+			instances.erase(it);
+		}
+		assert(instances.find(data->parameters[PARAM_HANDLE]) == instances.end());
         delete data;
         return UNITY_AUDIODSP_OK;
     }
@@ -638,7 +678,7 @@ namespace HASimulation3DTI
 		// TO DO: improve writelog
 
         EffectData* data = state->GetEffectData<EffectData>();
-        if (index >= P_NUM)
+        if (index >= P_NUM || index==PARAM_HANDLE)
             return UNITY_AUDIODSP_ERR_UNSUPPORTED;
         data->parameters[index] = value;
 		//WriteLog(state, "SET PARAMETER: ", "");
@@ -885,6 +925,9 @@ namespace HASimulation3DTI
 				WriteLog(state, "SET PARAMETER: High tone band Right set to (dB) ", value);
 				break;
 
+			case PARAM_HANDLE:
+				assert(false); // should be unreachable
+				return UNITY_AUDIODSP_ERR_UNSUPPORTED;
 
 			default:
 				WriteLog(state, "SET PARAMETER: ERROR!!!! Unknown float parameter received from API: ", index);
