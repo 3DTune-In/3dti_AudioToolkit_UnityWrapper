@@ -17,6 +17,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;   // For ReadOnlyCollection
 using API_3DTI;
+using System.Runtime.InteropServices;
+using System;
 //using UnityEditor;
 
 namespace API_3DTI
@@ -485,49 +487,90 @@ namespace API_3DTI
             return HASetFloat(ear, "HA3DTI_AttackRelease_", attackRelease, ref PARAM_DYNAMICEQ_ATTACKRELEASE_LEFT_MS, ref PARAM_DYNAMICEQ_ATTACKRELEASE_RIGHT_MS);
         }
 
+
+#if UNITY_IPHONE
+    [DllImport ("__Internal")]
+#else
+        [DllImport("AudioPlugin3DTIToolkit")]
+#endif
+        private static extern bool SetDynamicEqualizerUsingFig6(int effectHandle, int C_Ear, float[] earLosses, int earLossesSize, float dBs_SPL_for_0_dBs_fs, out float[] calculatedGains, int calculatedGainsLength);
+        //bool SetDynamicEqualizerUsingFig6(int effectHandle, Common::T_ear ear, float* earLosses, int earLossesSize, float dBs_SPL_for_0_dBs_fs)
+
+#if UNITY_IPHONE
+    [DllImport ("__Internal")]
+#else
+        [DllImport("AudioPlugin3DTIToolkit")]
+#endif
+        private static extern bool GetHADynamicEqGain(int effectHandle, int level, int band, out float leftGain, out float rightGain);
+
         /// <summary>
         /// Configure dynamic equalizer using Fig6 method
         /// </summary>
         /// <param name="ear"></param>
-        /// <param name="earLossList (dB[])"></param>
+        /// <param name="earLossList (dB[])">Losses for the 7 bands supported by HA</param>
         /// <returns></returns>
-        public bool SetEQFromFig6(T_ear ear, List<float> earLossInput, out List<float> calculatedGains)
+        public bool SetEQFromFig6(T_ear ear, List<float> earLossInput)
         {
-            // Both ears
-            if (ear == T_ear.BOTH)
+            int c_ear = ear == T_ear.LEFT ? 0 : ear == T_ear.RIGHT ? 1 : ear == T_ear.BOTH ? 2 : 3;
+            float[] calculatedGains = new float[2 * 3 * 7]; // 2 ears, 3 bands, 7 levels
+            bool ok = SetDynamicEqualizerUsingFig6(GetPluginHandle(), c_ear, earLossInput.ToArray(), earLossInput.Count, DBSPL_FOR_0_DBFS, out calculatedGains, calculatedGains.Length);
+            // values are updated in the plugin but we need to poke unity to update its cache of them.
+            foreach (T_HADynamicEQBand band in Enum.GetValues(typeof(T_HADynamicEQLevel)))
             {
-                if (!SetEQFromFig6(T_ear.LEFT, earLossInput, out calculatedGains))
-                    return false;
-                return SetEQFromFig6(T_ear.RIGHT, earLossInput, out calculatedGains);
-            }
-
-            // Init gains
-            calculatedGains = new List<float>();
-            for (int band = 0; band < NUM_EQ_BANDS; band++)
-            {
-                for (int level = 0; level < NUM_EQ_CURVES; level++)
+                foreach (T_HADynamicEQLevel level in Enum.GetValues(typeof(T_HADynamicEQLevel)))
                 {
-                    calculatedGains.Add(0.0f);
+                    if (!GetHADynamicEqGain(GetPluginHandle(), (int)level, (int)band, out float leftGain, out float rightGain))
+                        {
+                        Debug.LogError("Failed to get gain from HA Dll.");
+                    }
+                    bool temp = haMixer.GetFloat($"HA3DTI_Gain_Level_{(int)level}_Band_{(int)band}_Left", out float tmp2);
+                    if (!haMixer.SetFloat($"HA3DTI_Gain_Level_{(int)level}_Band_{(int)band}_Left", leftGain))
+                    {
+                        Debug.LogError($"Failed to set gain parameter HA3DTI_Gain_Level_{(int)level}_Band_{(int)band}_Left on mixer.");
+                    }
+                    if (!haMixer.SetFloat($"HA3DTI_Gain_Level_{(int)level}_Band_{(int)band}_Right", rightGain))
+                    {
+                        Debug.LogError($"Failed to set gain parameter HA3DTI_Gain_Level_{(int)level}_Band_{(int)band}_Right on mixer.");
+                    }
                 }
             }
+            return ok;
 
-            // Set level thresholds        
-            SetDynamicEQLevelThreshold(ear, T_HADynamicEQLevel.LEVEL_0, FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS);// TO DO: consistent numbering
-            SetDynamicEQLevelThreshold(ear, T_HADynamicEQLevel.LEVEL_2, FIG6_THRESHOLD_2_DBSPL - DBSPL_FOR_0_DBFS);
-            SetDynamicEQLevelThreshold(ear, T_HADynamicEQLevel.LEVEL_1, FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS);// TO DO: consistent numbering
+            //// Both ears
+            //if (ear == T_ear.BOTH)
+            //{
+            //    if (!SetEQFromFig6(T_ear.LEFT, earLossInput, out calculatedGains))
+            //        return false;
+            //    return SetEQFromFig6(T_ear.RIGHT, earLossInput, out calculatedGains);
+            //}
 
-            // Set band gains        
-            foreach (T_HADynamicEQBand bandIndex in T_HADynamicEQBand.GetValues(typeof(T_HADynamicEQBand)))
-            {
-                float gain0, gain1, gain2;
-                SetEQBandFromFig6(ear, bandIndex, earLossInput[(int)bandIndex], out gain0, out gain1, out gain2);
+            //// Init gains
+            //calculatedGains = new List<float>();
+            //for (int band = 0; band < NUM_EQ_BANDS; band++)
+            //{
+            //    for (int level = 0; level < NUM_EQ_CURVES; level++)
+            //    {
+            //        calculatedGains.Add(0.0f);
+            //    }
+            //}
 
-                calculatedGains[(int)bandIndex * NUM_EQ_CURVES] = gain0;
-                calculatedGains[(int)bandIndex * NUM_EQ_CURVES + 1] = gain1;
-                calculatedGains[(int)bandIndex * NUM_EQ_CURVES + 2] = gain2;
-            }
+            //// Set level thresholds        
+            //SetDynamicEQLevelThreshold(ear, T_HADynamicEQLevel.LEVEL_0, FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS);// TO DO: consistent numbering
+            //SetDynamicEQLevelThreshold(ear, T_HADynamicEQLevel.LEVEL_2, FIG6_THRESHOLD_2_DBSPL - DBSPL_FOR_0_DBFS);
+            //SetDynamicEQLevelThreshold(ear, T_HADynamicEQLevel.LEVEL_1, FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS);// TO DO: consistent numbering
 
-            return true;
+            //// Set band gains        
+            //foreach (T_HADynamicEQBand bandIndex in T_HADynamicEQBand.GetValues(typeof(T_HADynamicEQBand)))
+            //{
+            //    float gain0, gain1, gain2;
+            //    SetEQBandFromFig6(ear, bandIndex, earLossInput[(int)bandIndex], out gain0, out gain1, out gain2);
+
+            //    calculatedGains[(int)bandIndex * NUM_EQ_CURVES] = gain0;
+            //    calculatedGains[(int)bandIndex * NUM_EQ_CURVES + 1] = gain1;
+            //    calculatedGains[(int)bandIndex * NUM_EQ_CURVES + 2] = gain2;
+            //}
+
+            //return true;
         }
 
         //////////////////////////////////////////////////////////////
@@ -726,6 +769,19 @@ namespace API_3DTI
 
             // Set value
             return haMixer.SetFloat(paramName, CommonFunctions.Bool2Float(value));
+        }
+
+        // Returns the plugin's native handle. This integer is unique per plugin instance and is needed to the Fig6 method so the native code knows which plugin instance to apply it to.
+        private int GetPluginHandle()
+        {
+            if (haMixer.GetFloat("HA3DTI_Handle", out float fHandle))
+            {
+                return (int)fHandle;
+            }
+            else
+            {
+                return -1;
+            }
         }
     }
 }

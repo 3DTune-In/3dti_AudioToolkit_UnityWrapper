@@ -130,6 +130,7 @@ namespace HASimulation3DTI
 		PARAM_DYNAMICEQ_LEVELTHRESHOLD_0_RIGHT_DBFS,
 		PARAM_DYNAMICEQ_LEVELTHRESHOLD_1_RIGHT_DBFS,
 		PARAM_DYNAMICEQ_LEVELTHRESHOLD_2_RIGHT_DBFS,
+		// NB ** Do not reorder. Add new parameters to end These enum values are referenced directly by HearingAid.cs in SetEQFromFig6 **
 		PARAM_DYNAMICEQ_LEVEL_0_BAND_0_LEFT_DB,
 		PARAM_DYNAMICEQ_LEVEL_0_BAND_1_LEFT_DB,
 		PARAM_DYNAMICEQ_LEVEL_0_BAND_2_LEFT_DB,
@@ -229,13 +230,7 @@ namespace HASimulation3DTI
 		P_NUM
 	};
 
-	/////////////////////////////////////////////////////////////////////
-	extern "C" UNITY_AUDIODSP_EXPORT_API void SetDynamicEqualizerUsingFig6(Common::T_ear ear, float* earLosses, int earLossesSize, float dBs_SPL_for_0_dBs_fs)
-	{
-		assert(earLossesSize > 0);
-		vector<float> losses(earLosses, earLosses + (size_t)earLossesSize);
 
-	}
 
 	/////////////////////////////////////////////////////////////////////
 
@@ -268,6 +263,120 @@ namespace HASimulation3DTI
 
 	// map from PARAM_HANDLE -> plugin instance
 	std::map<int, EffectData*> instances;
+	std::mutex instancesMutex;
+
+	/////////////////////////////////////////////////////////////////////
+	extern "C" UNITY_AUDIODSP_EXPORT_API bool SetDynamicEqualizerUsingFig6(int effectHandle, Common::T_ear ear, float* earLosses, int earLossesSize, float dBs_SPL_for_0_dBs_fs)
+	{
+		assert(earLossesSize > 0);
+		using namespace Common;
+		
+		vector<float> losses(earLosses, earLosses + (size_t)earLossesSize);
+		std::lock_guard<std::mutex> lock(instancesMutex);
+		if (instances.count(effectHandle) == 0)
+		{
+			return false;
+		}
+		EffectData* effect = instances.at(effectHandle);
+		if (ear == LEFT || ear == BOTH)
+		{
+			if (effect->HA.GetDynamicEqualizer(LEFT)->GetNumLevels() != 3 || effect->HA.GetDynamicEqualizer(LEFT)->GetNumBands() != losses.size())
+			{
+				return false;
+			}
+		}
+		if (ear == RIGHT || ear == BOTH)
+		{
+			if (effect->HA.GetDynamicEqualizer(RIGHT)->GetNumLevels() != 3 || effect->HA.GetDynamicEqualizer(RIGHT)->GetNumBands() != losses.size())
+			{
+				return false;
+			}
+		}
+		if (ear != LEFT && ear != RIGHT && ear != BOTH)
+		{
+			return false;
+		}
+		//const int NumGainParameters = 2 * 3 * 7;
+		//static_assert((PARAM_DYNAMICEQ_LEVEL_2_BAND_6_RIGHT_DB + 1) - PARAM_DYNAMICEQ_LEVEL_0_BAND_0_LEFT_DB == NumGainParameters, "Code assumes gain parameters are contiguous");
+		//if (NumGainParameters != out_calculatedGainsLength)
+		//{
+		//	return false;
+		//}
+
+
+		effect->HA.SetDynamicEqualizerUsingFig6(ear, losses, dBs_SPL_for_0_dBs_fs);
+
+		// update param mirror in EffectData
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_0_BAND_0_LEFT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->GetLevelBandGain_dB(0, 0);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_0_BAND_1_LEFT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->GetLevelBandGain_dB(0, 1);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_0_BAND_2_LEFT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->GetLevelBandGain_dB(0, 2);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_0_BAND_3_LEFT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->GetLevelBandGain_dB(0, 3);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_0_BAND_4_LEFT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->GetLevelBandGain_dB(0, 4);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_0_BAND_5_LEFT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->GetLevelBandGain_dB(0, 5);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_0_BAND_6_LEFT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->GetLevelBandGain_dB(0, 6);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_1_BAND_0_LEFT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->GetLevelBandGain_dB(1, 0);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_1_BAND_1_LEFT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->GetLevelBandGain_dB(1, 1);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_1_BAND_2_LEFT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->GetLevelBandGain_dB(1, 2);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_1_BAND_3_LEFT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->GetLevelBandGain_dB(1, 3);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_1_BAND_4_LEFT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->GetLevelBandGain_dB(1, 4);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_1_BAND_5_LEFT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->GetLevelBandGain_dB(1, 5);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_1_BAND_6_LEFT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->GetLevelBandGain_dB(1, 6);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_2_BAND_0_LEFT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->GetLevelBandGain_dB(2, 0);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_2_BAND_1_LEFT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->GetLevelBandGain_dB(2, 1);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_2_BAND_2_LEFT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->GetLevelBandGain_dB(2, 2);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_2_BAND_3_LEFT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->GetLevelBandGain_dB(2, 3);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_2_BAND_4_LEFT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->GetLevelBandGain_dB(2, 4);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_2_BAND_5_LEFT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->GetLevelBandGain_dB(2, 5);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_2_BAND_6_LEFT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->GetLevelBandGain_dB(2, 6);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_0_BAND_0_RIGHT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->GetLevelBandGain_dB(0, 0);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_0_BAND_1_RIGHT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->GetLevelBandGain_dB(0, 1);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_0_BAND_2_RIGHT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->GetLevelBandGain_dB(0, 2);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_0_BAND_3_RIGHT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->GetLevelBandGain_dB(0, 3);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_0_BAND_4_RIGHT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->GetLevelBandGain_dB(0, 4);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_0_BAND_5_RIGHT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->GetLevelBandGain_dB(0, 5);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_0_BAND_6_RIGHT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->GetLevelBandGain_dB(0, 6);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_1_BAND_0_RIGHT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->GetLevelBandGain_dB(1, 0);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_1_BAND_1_RIGHT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->GetLevelBandGain_dB(1, 1);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_1_BAND_2_RIGHT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->GetLevelBandGain_dB(1, 2);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_1_BAND_3_RIGHT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->GetLevelBandGain_dB(1, 3);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_1_BAND_4_RIGHT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->GetLevelBandGain_dB(1, 4);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_1_BAND_5_RIGHT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->GetLevelBandGain_dB(1, 5);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_1_BAND_6_RIGHT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->GetLevelBandGain_dB(1, 6);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_2_BAND_0_RIGHT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->GetLevelBandGain_dB(2, 0);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_2_BAND_1_RIGHT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->GetLevelBandGain_dB(2, 1);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_2_BAND_2_RIGHT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->GetLevelBandGain_dB(2, 2);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_2_BAND_3_RIGHT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->GetLevelBandGain_dB(2, 3);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_2_BAND_4_RIGHT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->GetLevelBandGain_dB(2, 4);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_2_BAND_5_RIGHT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->GetLevelBandGain_dB(2, 5);
+		effect->parameters[PARAM_DYNAMICEQ_LEVEL_2_BAND_6_RIGHT_DB] = effect->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->GetLevelBandGain_dB(2, 6);
+
+		//assert(NumGainParameters <= out_calculatedGainsLength);
+		//for (int i = 0; i < NumGainParameters; i++)
+		//{
+		//	out_calculatedGains[i] = effect->parameters[PARAM_DYNAMICEQ_LEVEL_0_BAND_0_LEFT_DB + i];
+		//}
+
+		return true;
+	}
+
+	// To bypass Unity caching of exposed mixer parameters, we need this so the c# code can grab the calculated fig6 values
+	extern "C" UNITY_AUDIODSP_EXPORT_API bool GetHADynamicEqGain(int effectHandle, int level, int band, float* out_left, float* out_right)
+	{
+		if (level < 0 || level >= 3 || band < 0 || band >= 7)
+		{
+			return false;
+		}
+		std::lock_guard<std::mutex> lock(instancesMutex);
+		if (instances.count(effectHandle) == 0)
+		{
+			return false;
+		}
+		*out_left = instances.at(effectHandle)->HA.GetDynamicEqualizer(Common::T_ear::LEFT)->GetLevelBandGain_dB(level, band);
+		*out_right = instances.at(effectHandle)->HA.GetDynamicEqualizer(Common::T_ear::RIGHT)->GetLevelBandGain_dB(level, band);
+		return true;
+
+	}
+
 
 	/////////////////////////////////////////////////////////////////////
 
@@ -549,17 +658,20 @@ namespace HASimulation3DTI
         state->effectdata = effectdata;
         InitParametersFromDefinitions(InternalRegisterEffectDefinition, effectdata->parameters);
 
-		// Create handle
-		int handle = 0;
-		while (instances.count(handle) > 0)
 		{
-			handle++;
+			std::lock_guard<std::mutex> lock(instancesMutex);
+			// Create handle
+			int handle = 0;
+			while (instances.count(handle) > 0)
+			{
+				handle++;
+			}
+			assert(instances.count(handle) == 0);
+			effectdata->parameters[PARAM_HANDLE] = (float)handle;
+			// check casting did not change value
+			assert((int)effectdata->parameters[PARAM_HANDLE] == handle);
+			instances[handle] = effectdata;
 		}
-		assert(instances.count(handle) == 0);
-		effectdata->parameters[PARAM_HANDLE] = (float)handle;
-		// check casting did not change value
-		assert((int)effectdata->parameters[PARAM_HANDLE] == handle);
-		instances[handle] = effectdata;
 		
 		// TO DO: check errors with debugger
 		// TO DO: add more WriteLog
@@ -659,14 +771,17 @@ namespace HASimulation3DTI
     UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK ReleaseCallback(UnityAudioEffectState* state)
     {
         EffectData* data = state->GetEffectData<EffectData>();
-		auto it = instances.find(data->parameters[PARAM_HANDLE]);
-		assert(it != instances.end());
-		assert(it->second == data);
-		if (it != instances.end())
 		{
-			instances.erase(it);
+			std::lock_guard<std::mutex> lock(instancesMutex);
+			auto it = instances.find(data->parameters[PARAM_HANDLE]);
+			assert(it != instances.end());
+			assert(it->second == data);
+			if (it != instances.end())
+			{
+				instances.erase(it);
+			}
+			assert(instances.find(data->parameters[PARAM_HANDLE]) == instances.end());
 		}
-		assert(instances.find(data->parameters[PARAM_HANDLE]) == instances.end());
         delete data;
         return UNITY_AUDIODSP_OK;
     }
@@ -678,8 +793,15 @@ namespace HASimulation3DTI
 		// TO DO: improve writelog
 
         EffectData* data = state->GetEffectData<EffectData>();
-        if (index >= P_NUM || index==PARAM_HANDLE)
-            return UNITY_AUDIODSP_ERR_UNSUPPORTED;
+		if (index >= P_NUM)
+		{
+			return UNITY_AUDIODSP_ERR_UNSUPPORTED;
+		}
+		if (index == PARAM_HANDLE)
+		{
+			// if unity tries to set the HANDLE parameter then we just ignore it as it's readonly.
+			return UNITY_AUDIODSP_OK;
+		}
         data->parameters[index] = value;
 		//WriteLog(state, "SET PARAMETER: ", "");
 		//WriteLog(state, "               Index = ", index);

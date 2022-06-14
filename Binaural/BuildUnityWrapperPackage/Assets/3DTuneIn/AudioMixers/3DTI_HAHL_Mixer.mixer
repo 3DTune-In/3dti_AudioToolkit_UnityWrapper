@@ -62,6 +62,8 @@ AudioMixerController:
   m_EnableSuspend: 1
   m_UpdateMode: 0
   m_ExposedParameters:
+  - guid: 13ad0181dc824b339f2a1d3c631550e4
+    name: HA3DTI_Handle
   - guid: 4ad0cee9d5bfc504eb48b50a2f88c279
     name: HA3DTI_Gain_Level_0_Band_0_Right
   - guid: 7b3b691359a58c740891bc10a177b354
@@ -463,6 +465,7 @@ AudioMixerSnapshotController:
     a8752327aa6aa3d4889a9dfaa064f2d6: -7
     394e9727f5df4a8458211f2b68527119: 42.1
     1112fe27df5f4e14c876679bb95133b4: 0
+    13ad0181dc824b339f2a1d3c631550e4: 0
     2102c837277715c4b929ad6564956744: 0
     e2243e475fb7a984eb1ba1e1aca74118: 1
     a9f594777b5bcf54f8de1ee8c2ae698d: 1
@@ -743,6 +746,8 @@ AudioMixerEffectController:
     m_GUID: ca926d88a01189e4f8ebfc126cc4c3e4
   - m_ParameterName: TONLOL
     m_GUID: 1112fe27df5f4e14c876679bb95133b4
+  - m_ParameterName: HANDLE
+    m_GUID: 13ad0181dc824b339f2a1d3c631550e4
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
   m_Bypass: 0

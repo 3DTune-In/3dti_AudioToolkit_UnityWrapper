@@ -196,61 +196,59 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
 
         if(Common3DTIGUI.CreateButton("Fig6", "Adjusts the Dynamic Equalizer to the current audiometry settings"))
         {
-            List<float> calculatedGains;
-            //float gain0, gain1, gain2;
-            //HAAPI.SetEQBandFromFig6(ear, bandIndex, earLossInput[(int)bandIndex], out gain0, out gain1, out gain2);
-            //if (ear == T_ear.LEFT)
-            //{
+            //List<float> calculatedGains;
                 var audiometry = new List<float>();
-                for (int i=0; i<HearingLoss.NumMultibandExpansionBands; i++)
-                {
-                    audiometry.Add(HLAPI.GetParameter<float>(HearingLoss.Parameter.MultibandExpansionBand0 + i, ear));
-                }
-                if (!HAAPI.SetEQFromFig6(/*plugin,*/ear, audiometry, out calculatedGains))
-                {
-                    //Debug.LogWarning("error fig6 left");
-                }
-            //}
-            //else if (ear == T_ear.RIGHT)
-            //{
-            //    var audiometry = new List<float>();
-            //    for (int i = 0; i < HearingLoss.NumMultibandExpansionBands; i++)
-            //    {
-            //        audiometry.Add(HLAPI.GetParameter<float>(HearingLoss.Parameter.MultibandExpansionBand0 + i, ear));
-            //    }
-            //    if (!HAAPI.SetEQFromFig6(ear, audiometry, out calculatedGains))
-            //    {
-            //        //Debug.LogWarning("error fig6 right");
-            //    }
-            //}
-            //else return;
+            HearingLoss.T_HLBand[] audiometryBands = {
+                // top and bottom band not in HA:
 
-            plugin.SetFloatParameter("THR0", FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS);
-            plugin.SetFloatParameter("THR1", FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS);
-            plugin.SetFloatParameter("THR2", FIG6_THRESHOLD_2_DBSPL - DBSPL_FOR_0_DBFS);
-
-            for (int i = 0; i < HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT.GetLength(0); i++)
+                //HearingLoss.T_HLBand.HZ_62,
+                HearingLoss.T_HLBand.HZ_125,
+                HearingLoss.T_HLBand.HZ_250,
+                HearingLoss.T_HLBand.HZ_500,
+                HearingLoss.T_HLBand.HZ_1K,
+                HearingLoss.T_HLBand.HZ_2K,
+                HearingLoss.T_HLBand.HZ_4K,
+                HearingLoss.T_HLBand.HZ_8K,
+                //HearingLoss.T_HLBand.HZ_16K,
+            };
+            foreach (HearingLoss.T_HLBand band in audiometryBands)
             {
-                for (int j = 0; j < HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT.GetLength(1); j++)
-                {
-                    float gain = calculatedGains[HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT.GetLength(1) * i + j];
-                    string paramName = "DEQL" + i.ToString() + "B" + j.ToString();
-                    if (ear == T_ear.LEFT)
-                    {
-                        paramName += "L";
-                        HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[i, j] = gain;
-                    }
-                    else
-                    {
-                        paramName += "R";
-                        HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[i, j] = gain;
-                    }
-
-                    plugin.SetFloatParameter(paramName, gain);
-                }
+                int index = (int) band;
+                audiometry.Add(HLAPI.GetParameter<float>(HearingLoss.Parameter.MultibandExpansionBand0 + index, ear));
+            }
+            //for (int i=0; i<HearingLoss.NumMultibandExpansionBands; i++)
+            //{
+            //    audiometry.Add(HLAPI.GetParameter<float>(HearingLoss.Parameter.MultibandExpansionBand0 + i, ear));
+            //}
+            if (!HAAPI.SetEQFromFig6(/*plugin,*/ear, audiometry))
+            {
+                //Debug.LogWarning("error fig6 left");
             }
 
-            //foreach (float g in calculatedGains) Debug.Log(g.ToString());
+            //plugin.SetFloatParameter("THR0", FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS);
+            //plugin.SetFloatParameter("THR1", FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS);
+            //plugin.SetFloatParameter("THR2", FIG6_THRESHOLD_2_DBSPL - DBSPL_FOR_0_DBFS);
+
+            //for (int i = 0; i < HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT.GetLength(0); i++)
+            //{
+            //    for (int j = 0; j < HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT.GetLength(1); j++)
+            //    {
+            //        float gain = calculatedGains[HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT.GetLength(1) * i + j];
+            //        string paramName = "DEQL" + i.ToString() + "B" + j.ToString();
+            //        if (ear == T_ear.LEFT)
+            //        {
+            //            paramName += "L";
+            //            HAAPI.PARAM_DYNAMICEQ_GAINS_LEFT[i, j] = gain;
+            //        }
+            //        else
+            //        {
+            //            paramName += "R";
+            //            HAAPI.PARAM_DYNAMICEQ_GAINS_RIGHT[i, j] = gain;
+            //        }
+
+            //        plugin.SetFloatParameter(paramName, gain);
+            //    }
+            //}
         }
     }
 
