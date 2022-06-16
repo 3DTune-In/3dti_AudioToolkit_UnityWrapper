@@ -21,9 +21,11 @@ using System.Runtime.InteropServices;
 using System;
 //using UnityEditor;
 
+using static API_3DTI.HearingAid.Parameter;
+
 namespace API_3DTI
 {
-    public class HearingAid : MonoBehaviour
+    public class HearingAid : AbstractMixerEffect
     {
         //private API_3DTI_HL HLAPI;
         // Global variables
@@ -36,91 +38,91 @@ namespace API_3DTI
 
         public enum Parameter
         {
-            [Parameter(pluginNameLeft = "HAL", pluginNameRight = "HAR", units = "", type = typeof(bool), defaultValue = 0.0f, label = "Enable", description = "Switch HA On/Off")]
+            [Parameter(mixerNameLeft = "HA3DTI_Process_LeftOn", mixerNameRight = "HA3DTI_Process_RightOn", pluginNameLeft = "HAL", pluginNameRight = "HAR", units = "", type = typeof(bool), defaultValue = 0.0f, label = "Enable", description = "Switch HA On/Off")]
             ProcessOn,
-            [Parameter(pluginNameLeft = "VOLL", pluginNameRight = "VOLR", units = "dB", type = typeof(float), min = -24.0f, max = 24.0f, defaultValue = 0.0f, label = "Volume", description = "HA volume (dB)")]
+            [Parameter(mixerNameLeft = "HA3DTI_Volume_Left", mixerNameRight = "HA3DTI_Volume_Right", pluginNameLeft = "VOLL", pluginNameRight = "VOLR", units = "dB", type = typeof(float), min = -24.0f, max = 24.0f, defaultValue = 0.0f, label = "Volume", description = "HA volume (dB)")]
             VolumeDb,
-            [Parameter(pluginNameLeft = "LPF", pluginNameRight = "LPF", units = "Hz", type = typeof(float), min = 62.5f, max = 16000.0f, defaultValue = 3000.0f, label = "LPF cutoff", description = "Cutoff frequency of LPF")]
+            [Parameter(mixerNameLeft = "HA3DTI_LPF_Cutoff", mixerNameRight = "HA3DTI_LPF_Cutoff", pluginNameLeft = "LPF", pluginNameRight = "LPF", units = "Hz", type = typeof(float), min = 62.5f, max = 16000.0f, defaultValue = 3000.0f, label = "LPF cutoff", description = "Cutoff frequency of LPF")]
             EqLpfCutoffHz,
-            [Parameter(pluginNameLeft = "HPF", pluginNameRight = "HPF", units = "Hz", type = typeof(float), min = 62.5f, max = 16000.0f, defaultValue = 500.0f, label = "HPF cutoff", description = "Cutoff frequency of HPF")]
+            [Parameter(mixerNameLeft = "HA3DTI_HPF_Cutoff", mixerNameRight = "HA3DTI_HPF_Cutoff", pluginNameLeft = "HPF", pluginNameRight = "HPF", units = "Hz", type = typeof(float), min = 62.5f, max = 16000.0f, defaultValue = 500.0f, label = "HPF cutoff", description = "Cutoff frequency of HPF")]
             EqHpfCutoffHz,
-            [Parameter(pluginNameLeft = "EQINT", pluginNameRight = "EQINT", units = "", type = typeof(bool), defaultValue = 1.0f, label = "EQ Level interpolation", description = "Switch On/Off Dynamic EQ Level interpolation")]
+            [Parameter(mixerNameLeft = "HA3DTI_Interpolation_On", mixerNameRight = "HA3DTI_Interpolation_On", pluginNameLeft = "EQINT", pluginNameRight = "EQINT", units = "", type = typeof(bool), defaultValue = 1.0f, label = "EQ Level interpolation", description = "Switch On/Off Dynamic EQ Level interpolation")]
             DynamicEqInterpolationOn,
-            [Parameter(pluginNameLeft = "THR0L", pluginNameRight = "THR0R", units = "dBfs", type = typeof(float), min = -80.0f, max = 0.0f, defaultValue = -20.0f, label = "EQ level 1 threshold", description = "Dynamic EQ first level threshold")]
+            [Parameter(mixerNameLeft = "HA3DTI_Threshold_0_Left", mixerNameRight = "HA3DTI_Threshold_0_Right", pluginNameLeft = "THR0L", pluginNameRight = "THR0R", units = "dBfs", type = typeof(float), min = -80.0f, max = 0.0f, defaultValue = -20.0f, label = "EQ level 1 threshold", description = "Dynamic EQ first level threshold")]
             DynamicEqLevelThreshold0Dbfs,
-            [Parameter(pluginNameLeft = "THR1L", pluginNameRight = "THR1R", units = "dBfs", type = typeof(float), min = -80.0f, max = 0.0f, defaultValue = -40.0f, label = "EQ level 2 threshold", description = "Dynamic EQ second level threshold")]
+            [Parameter(mixerNameLeft = "HA3DTI_Threshold_1_Left", mixerNameRight = "HA3DTI_Threshold_1_Right", pluginNameLeft = "THR1L", pluginNameRight = "THR1R", units = "dBfs", type = typeof(float), min = -80.0f, max = 0.0f, defaultValue = -40.0f, label = "EQ level 2 threshold", description = "Dynamic EQ second level threshold")]
             DynamicEqLevelThreshold1Dbfs,
-            [Parameter(pluginNameLeft = "THR2L", pluginNameRight = "THR2R", units = "dBfs", type = typeof(float), min = -80.0f, max = 0.0f, defaultValue = -60.0f, label = "EQ level 3 threshold", description = "Dynamic EQ third level threshold")]
+            [Parameter(mixerNameLeft = "HA3DTI_Threshold_2_Left", mixerNameRight = "HA3DTI_Threshold_2_Right", pluginNameLeft = "THR2L", pluginNameRight = "THR2R", units = "dBfs", type = typeof(float), min = -80.0f, max = 0.0f, defaultValue = -60.0f, label = "EQ level 3 threshold", description = "Dynamic EQ third level threshold")]
             DynamicEqLevelThreshold2Dbfs,
-            [Parameter(pluginNameLeft = "DEQL0B0L", pluginNameRight = "DEQL0B0R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 1 Gain 125 Hz band", description = "EQ 125 Hz band gain (dB) for first level")]
+            [Parameter(mixerNameLeft = "HA3DTI_Gain_Level_0_Band_0_Left", mixerNameRight = "HA3DTI_Gain_Level_0_Band_0_Right", pluginNameLeft = "DEQL0B0L", pluginNameRight = "DEQL0B0R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 1 Gain 125 Hz band", description = "EQ 125 Hz band gain (dB) for first level")]
             DynamicEqLevel0Band0Db,
-            [Parameter(pluginNameLeft = "DEQL0B1L", pluginNameRight = "DEQL0B1R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 1 Gain 250 Hz band", description = "EQ 250 Hz band gain (dB) for first level")]
+            [Parameter(mixerNameLeft = "HA3DTI_Gain_Level_0_Band_1_Left", mixerNameRight = "HA3DTI_Gain_Level_0_Band_1_Right", pluginNameLeft = "DEQL0B1L", pluginNameRight = "DEQL0B1R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 1 Gain 250 Hz band", description = "EQ 250 Hz band gain (dB) for first level")]
             DynamicEqLevel0Band1Db,
-            [Parameter(pluginNameLeft = "DEQL0B2L", pluginNameRight = "DEQL0B2R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 1 Gain 500 Hz band", description = "EQ 500 Hz band gain (dB) for first level")]
+            [Parameter(mixerNameLeft = "HA3DTI_Gain_Level_0_Band_2_Left", mixerNameRight = "HA3DTI_Gain_Level_0_Band_2_Right", pluginNameLeft = "DEQL0B2L", pluginNameRight = "DEQL0B2R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 1 Gain 500 Hz band", description = "EQ 500 Hz band gain (dB) for first level")]
             DynamicEqLevel0Band2Db,
-            [Parameter(pluginNameLeft = "DEQL0B3L", pluginNameRight = "DEQL0B3R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 1 Gain 1 KHz band", description = "EQ 1 KHz band gain (dB) for first level")]
+            [Parameter(mixerNameLeft = "HA3DTI_Gain_Level_0_Band_3_Left", mixerNameRight = "HA3DTI_Gain_Level_0_Band_3_Right", pluginNameLeft = "DEQL0B3L", pluginNameRight = "DEQL0B3R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 1 Gain 1 KHz band", description = "EQ 1 KHz band gain (dB) for first level")]
             DynamicEqLevel0Band3Db,
-            [Parameter(pluginNameLeft = "DEQL0B4L", pluginNameRight = "DEQL0B4R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 1 Gain 2 KHz band", description = "EQ 2 KHz band gain (dB) for first level")]
+            [Parameter(mixerNameLeft = "HA3DTI_Gain_Level_0_Band_4_Left", mixerNameRight = "HA3DTI_Gain_Level_0_Band_4_Right", pluginNameLeft = "DEQL0B4L", pluginNameRight = "DEQL0B4R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 1 Gain 2 KHz band", description = "EQ 2 KHz band gain (dB) for first level")]
             DynamicEqLevel0Band4Db,
-            [Parameter(pluginNameLeft = "DEQL0B5L", pluginNameRight = "DEQL0B5R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 1 Gain 4 KHz band", description = "EQ 4 KHz band gain (dB) for first level")]
+            [Parameter(mixerNameLeft = "HA3DTI_Gain_Level_0_Band_5_Left", mixerNameRight = "HA3DTI_Gain_Level_0_Band_5_Right", pluginNameLeft = "DEQL0B5L", pluginNameRight = "DEQL0B5R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 1 Gain 4 KHz band", description = "EQ 4 KHz band gain (dB) for first level")]
             DynamicEqLevel0Band5Db,
-            [Parameter(pluginNameLeft = "DEQL0B6L", pluginNameRight = "DEQL0B6R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 1 Gain 8 KHz band", description = "EQ 8 KHz band gain (dB) for first level")]
+            [Parameter(mixerNameLeft = "HA3DTI_Gain_Level_0_Band_6_Left", mixerNameRight = "HA3DTI_Gain_Level_0_Band_6_Right", pluginNameLeft = "DEQL0B6L", pluginNameRight = "DEQL0B6R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 1 Gain 8 KHz band", description = "EQ 8 KHz band gain (dB) for first level")]
             DynamicEqLevel0Band6Db,
-            [Parameter(pluginNameLeft = "DEQL1B0L", pluginNameRight = "DEQL1B0R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 2 Gain 125 Hz band", description = "EQ 125 Hz band gain (dB) for second level")]
+            [Parameter(mixerNameLeft = "HA3DTI_Gain_Level_1_Band_0_Left", mixerNameRight = "HA3DTI_Gain_Level_1_Band_0_Right", pluginNameLeft = "DEQL1B0L", pluginNameRight = "DEQL1B0R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 2 Gain 125 Hz band", description = "EQ 125 Hz band gain (dB) for second level")]
             DynamicEqLevel1Band0Db,
-            [Parameter(pluginNameLeft = "DEQL1B1L", pluginNameRight = "DEQL1B1R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 2 Gain 250 Hz band", description = "EQ 250 Hz band gain (dB) for second level")]
+            [Parameter(mixerNameLeft = "HA3DTI_Gain_Level_1_Band_1_Left", mixerNameRight = "HA3DTI_Gain_Level_1_Band_1_Right", pluginNameLeft = "DEQL1B1L", pluginNameRight = "DEQL1B1R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 2 Gain 250 Hz band", description = "EQ 250 Hz band gain (dB) for second level")]
             DynamicEqLevel1Band1Db,
-            [Parameter(pluginNameLeft = "DEQL1B2L", pluginNameRight = "DEQL1B2R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 2 Gain 500 Hz band", description = "EQ 500 Hz band gain (dB) for second level")]
+            [Parameter(mixerNameLeft = "HA3DTI_Gain_Level_1_Band_2_Left", mixerNameRight = "HA3DTI_Gain_Level_1_Band_2_Right", pluginNameLeft = "DEQL1B2L", pluginNameRight = "DEQL1B2R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 2 Gain 500 Hz band", description = "EQ 500 Hz band gain (dB) for second level")]
             DynamicEqLevel1Band2Db,
-            [Parameter(pluginNameLeft = "DEQL1B3L", pluginNameRight = "DEQL1B3R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 2 Gain 1 KHz band", description = "EQ 1 KHz band gain (dB) for second level")]
+            [Parameter(mixerNameLeft = "HA3DTI_Gain_Level_1_Band_3_Left", mixerNameRight = "HA3DTI_Gain_Level_1_Band_3_Right", pluginNameLeft = "DEQL1B3L", pluginNameRight = "DEQL1B3R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 2 Gain 1 KHz band", description = "EQ 1 KHz band gain (dB) for second level")]
             DynamicEqLevel1Band3Db,
-            [Parameter(pluginNameLeft = "DEQL1B4L", pluginNameRight = "DEQL1B4R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 2 Gain 2 KHz band", description = "EQ 2 KHz band gain (dB) for second level")]
+            [Parameter(mixerNameLeft = "HA3DTI_Gain_Level_1_Band_4_Left", mixerNameRight = "HA3DTI_Gain_Level_1_Band_4_Right", pluginNameLeft = "DEQL1B4L", pluginNameRight = "DEQL1B4R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 2 Gain 2 KHz band", description = "EQ 2 KHz band gain (dB) for second level")]
             DynamicEqLevel1Band4Db,
-            [Parameter(pluginNameLeft = "DEQL1B5L", pluginNameRight = "DEQL1B5R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 2 Gain 4 KHz band", description = "EQ 4 KHz band gain (dB) for second level")]
+            [Parameter(mixerNameLeft = "HA3DTI_Gain_Level_1_Band_5_Left", mixerNameRight = "HA3DTI_Gain_Level_1_Band_5_Right", pluginNameLeft = "DEQL1B5L", pluginNameRight = "DEQL1B5R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 2 Gain 4 KHz band", description = "EQ 4 KHz band gain (dB) for second level")]
             DynamicEqLevel1Band5Db,
-            [Parameter(pluginNameLeft = "DEQL1B6L", pluginNameRight = "DEQL1B6R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 2 Gain 8 KHz band", description = "EQ 8 KHz band gain (dB) for second level")]
+            [Parameter(mixerNameLeft = "HA3DTI_Gain_Level_1_Band_6_Left", mixerNameRight = "HA3DTI_Gain_Level_1_Band_6_Right", pluginNameLeft = "DEQL1B6L", pluginNameRight = "DEQL1B6R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 2 Gain 8 KHz band", description = "EQ 8 KHz band gain (dB) for second level")]
             DynamicEqLevel1Band6Db,
-            [Parameter(pluginNameLeft = "DEQL2B0L", pluginNameRight = "DEQL2B0R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 3 Gain 125 Hz band", description = "EQ 125 Hz band gain (dB) for third level")]
+            [Parameter(mixerNameLeft = "HA3DTI_Gain_Level_2_Band_0_Left", mixerNameRight = "HA3DTI_Gain_Level_2_Band_0_Right", pluginNameLeft = "DEQL2B0L", pluginNameRight = "DEQL2B0R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 3 Gain 125 Hz band", description = "EQ 125 Hz band gain (dB) for third level")]
             DynamicEqLevel2Band0Db,
-            [Parameter(pluginNameLeft = "DEQL2B1L", pluginNameRight = "DEQL2B1R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 3 Gain 250 Hz band", description = "EQ 250 Hz band gain (dB) for third level")]
+            [Parameter(mixerNameLeft = "HA3DTI_Gain_Level_2_Band_1_Left", mixerNameRight = "HA3DTI_Gain_Level_2_Band_1_Right", pluginNameLeft = "DEQL2B1L", pluginNameRight = "DEQL2B1R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 3 Gain 250 Hz band", description = "EQ 250 Hz band gain (dB) for third level")]
             DynamicEqLevel2Band1Db,
-            [Parameter(pluginNameLeft = "DEQL2B2L", pluginNameRight = "DEQL2B2R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 3 Gain 500 Hz band", description = "EQ 500 Hz band gain (dB) for third level")]
+            [Parameter(mixerNameLeft = "HA3DTI_Gain_Level_2_Band_2_Left", mixerNameRight = "HA3DTI_Gain_Level_2_Band_2_Right", pluginNameLeft = "DEQL2B2L", pluginNameRight = "DEQL2B2R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 3 Gain 500 Hz band", description = "EQ 500 Hz band gain (dB) for third level")]
             DynamicEqLevel2Band2Db,
-            [Parameter(pluginNameLeft = "DEQL2B3L", pluginNameRight = "DEQL2B3R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 3 Gain 1 KHz band", description = "EQ 1 KHz band gain (dB) for third level")]
+            [Parameter(mixerNameLeft = "HA3DTI_Gain_Level_2_Band_3_Left", mixerNameRight = "HA3DTI_Gain_Level_2_Band_3_Right", pluginNameLeft = "DEQL2B3L", pluginNameRight = "DEQL2B3R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 3 Gain 1 KHz band", description = "EQ 1 KHz band gain (dB) for third level")]
             DynamicEqLevel2Band3Db,
-            [Parameter(pluginNameLeft = "DEQL2B4L", pluginNameRight = "DEQL2B4R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 3 Gain 2 KHz band", description = "EQ 2 KHz band gain (dB) for third level")]
+            [Parameter(mixerNameLeft = "HA3DTI_Gain_Level_2_Band_4_Left", mixerNameRight = "HA3DTI_Gain_Level_2_Band_4_Right", pluginNameLeft = "DEQL2B4L", pluginNameRight = "DEQL2B4R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 3 Gain 2 KHz band", description = "EQ 2 KHz band gain (dB) for third level")]
             DynamicEqLevel2Band4Db,
-            [Parameter(pluginNameLeft = "DEQL2B5L", pluginNameRight = "DEQL2B5R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 3 Gain 4 KHz band", description = "EQ 4 KHz band gain (dB) for third level")]
+            [Parameter(mixerNameLeft = "HA3DTI_Gain_Level_2_Band_5_Left", mixerNameRight = "HA3DTI_Gain_Level_2_Band_5_Right", pluginNameLeft = "DEQL2B5L", pluginNameRight = "DEQL2B5R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 3 Gain 4 KHz band", description = "EQ 4 KHz band gain (dB) for third level")]
             DynamicEqLevel2Band5Db,
-            [Parameter(pluginNameLeft = "DEQL2B6L", pluginNameRight = "DEQL2B6R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 3 Gain 8 KHz band", description = "EQ 8 KHz band gain (dB) for third level")]
+            [Parameter(mixerNameLeft = "HA3DTI_Gain_Level_2_Band_6_Left", mixerNameRight = "HA3DTI_Gain_Level_2_Band_6_Right", pluginNameLeft = "DEQL2B6L", pluginNameRight = "DEQL2B6R", units = "dB", type = typeof(float), min = 0.0f, max = 60.0f, defaultValue = 0.0f, label = "EQ Level 3 Gain 8 KHz band", description = "EQ 8 KHz band gain (dB) for third level")]
             DynamicEqLevel2Band6Db,
-            [Parameter(pluginNameLeft = "ATREL", pluginNameRight = "ATRER", units = "ms", type = typeof(float), min = 10.0f, max = 2000.0f, defaultValue = 1000.0f, label = "Attack/release", description = "Attack/release (ms)")]
+            [Parameter(mixerNameLeft = "HA3DTI_AttackRelease_Left", mixerNameRight = "HA3DTI_AttackRelease_Right", pluginNameLeft = "ATREL", pluginNameRight = "ATRER", units = "ms", type = typeof(float), min = 10.0f, max = 2000.0f, defaultValue = 1000.0f, label = "Attack/release", description = "Attack/release (ms)")]
             DynamicEqAttackreleaseMs,
-            [Parameter(pluginNameLeft = "NOISEBEF", pluginNameRight = "NOISEBEF", units = "", type = typeof(bool), defaultValue = 0.0f, label = "Quantization noise at start", description = "Apply quantization noise On/Off at the start of the process chain")]
+            [Parameter(mixerNameLeft = "HA3DTI_NoiseBefore_On", mixerNameRight = "HA3DTI_NoiseBefore_On", pluginNameLeft = "NOISEBEF", pluginNameRight = "NOISEBEF", units = "", type = typeof(bool), defaultValue = 0.0f, label = "Quantization noise at start", description = "Apply quantization noise On/Off at the start of the process chain")]
             NoiseBeforeOn,
-            [Parameter(pluginNameLeft = "NOISEAFT", pluginNameRight = "NOISEAFT", units = "", type = typeof(bool), defaultValue = 0.0f, label = "Quantization noise at end", description = "Apply quantization noise On/Off at the end of the process chain")]
+            [Parameter(mixerNameLeft = "HA3DTI_NoiseAfter_On", mixerNameRight = "HA3DTI_NoiseAfter_On", pluginNameLeft = "NOISEAFT", pluginNameRight = "NOISEAFT", units = "", type = typeof(bool), defaultValue = 0.0f, label = "Quantization noise at end", description = "Apply quantization noise On/Off at the end of the process chain")]
             NoiseAfterOn,
-            [Parameter(pluginNameLeft = "NOISEBITS", pluginNameRight = "NOISEBITS", units = "bits", min = 6, max = 24, defaultValue = 16, label = "Quantization bits", description = "Number of bits of quantization noise")]
+            [Parameter(mixerNameLeft = "HA3DTI_NoiseBits", mixerNameRight = "HA3DTI_NoiseBits", pluginNameLeft = "NOISEBITS", pluginNameRight = "NOISEBITS", units = "bits", min = 6, max = 24, defaultValue = 16, label = "Quantization bits", description = "Number of bits of quantization noise")]
             NoiseNumbits,
-            [Parameter(pluginNameLeft = "COMPRL", pluginNameRight = "COMPRR", units = "%", type = typeof(float), min = 0.0f, max = 120.0f, defaultValue = 100.0f, label = "Compression", description = "Amount of compression")]
+            [Parameter(mixerNameLeft = "HA3DTI_Compression_Left", mixerNameRight = "HA3DTI_Compression_Right", pluginNameLeft = "COMPRL", pluginNameRight = "COMPRR", units = "%", type = typeof(float), min = 0.0f, max = 120.0f, defaultValue = 100.0f, label = "Compression", description = "Amount of compression")]
             CompressionPercentage,
-            [Parameter(pluginNameLeft = "LIMITON", pluginNameRight = "LIMITON", units = "", type = typeof(bool), defaultValue = 0.0f, label = "Limiter", description = "Enable Limiter for HA")]
+            [Parameter(mixerNameLeft = "HA3DTI_Limiter_On", mixerNameRight = "HA3DTI_Limiter_On", pluginNameLeft = "LIMITON", pluginNameRight = "LIMITON", units = "", type = typeof(bool), defaultValue = 0.0f, label = "Limiter", description = "Enable Limiter for HA")]
             LimiterSetOn,
-            [Parameter(pluginNameLeft = "LIMITGET", pluginNameRight = "LIMITGET", units = "", type = typeof(bool), defaultValue = 0.0f, label = "Is limiter compressing?", description = "Is HA limiter compressing?")]
+            [Parameter(mixerNameLeft = "HA3DTI_Get_Limiter_Compression", mixerNameRight = "HA3DTI_Get_Limiter_Compression", pluginNameLeft = "LIMITGET", pluginNameRight = "LIMITGET", units = "", type = typeof(bool), defaultValue = 0.0f, label = "Is limiter compressing?", description = "Is HA limiter compressing?")]
             LimiterGetCompression,
-            [Parameter(pluginNameLeft = "NORMONL", pluginNameRight = "NORMONR", units = "", type = typeof(bool), defaultValue = 0.0f, label = "Normalization", description = "Enable normalization")]
+            [Parameter(mixerNameLeft = "HA3DTI_Normalization_LeftOn", mixerNameRight = "HA3DTI_Normalization_RightOn", pluginNameLeft = "NORMONL", pluginNameRight = "NORMONR", units = "", type = typeof(bool), defaultValue = 0.0f, label = "Normalization", description = "Enable normalization")]
             NormalizationOn,
-            [Parameter(pluginNameLeft = "NORMDBL", pluginNameRight = "NORMDBR", units = "dBs", type = typeof(float), min = 1.0f, max = 40.0f, defaultValue = 20.0f, label = "Normalization amount", description = "Amount of normalization (in dBs)")]
+            [Parameter(mixerNameLeft = "HA3DTI_Normalization_DB_Left", mixerNameRight = "HA3DTI_Normalization_DB_Right", pluginNameLeft = "NORMDBL", pluginNameRight = "NORMDBR", units = "dBs", type = typeof(float), min = 1.0f, max = 40.0f, defaultValue = 20.0f, label = "Normalization amount", description = "Amount of normalization (in dBs)")]
             NormalizationDbs,
-            [Parameter(pluginNameLeft = "NORMGL", pluginNameRight = "NORMGR", units = "", type = typeof(bool), defaultValue = 0.0f, label = "Is normalization applying offset?", description = "Is normalization applying offset?")]
+            [Parameter(mixerNameLeft = "HA3DTI_Normalization_Get_Left", mixerNameRight = "HA3DTI_Normalization_Get_Right", pluginNameLeft = "NORMGL", pluginNameRight = "NORMGR", units = "", type = typeof(bool), defaultValue = 0.0f, label = "Is normalization applying offset?", description = "Is normalization applying offset?")]
             NormalizationGet,
-            [Parameter(pluginNameLeft = "TONLOL", pluginNameRight = "TONLOR", units = "dB", type = typeof(float), min = -10.0f, max = 10.0f, defaultValue = 0.0f, label = "Low band tone control", description = "Left tone control for low band (dB)")]
+            [Parameter(mixerNameLeft = "HA3DTI_Tone_High_Left", mixerNameRight = "HA3DTI_Tone_High_Right", pluginNameLeft = "TONLOL", pluginNameRight = "TONLOR", units = "dB", type = typeof(float), min = -10.0f, max = 10.0f, defaultValue = 0.0f, label = "Low band tone control", description = "Left tone control for low band (dB)")]
             ToneLow,
-            [Parameter(pluginNameLeft = "TONMIL", pluginNameRight = "TONMIR", units = "dB", type = typeof(float), min = -10.0f, max = 10.0f, defaultValue = 0.0f, label = "Mid band tone control", description = "Left tone control for mid band (dB)")]
+            [Parameter(mixerNameLeft = "HA3DTI_Tone_Low_Left", mixerNameRight = "HA3DTI_Tone_Low_Right", pluginNameLeft = "TONMIL", pluginNameRight = "TONMIR", units = "dB", type = typeof(float), min = -10.0f, max = 10.0f, defaultValue = 0.0f, label = "Mid band tone control", description = "Left tone control for mid band (dB)")]
             ToneMid,
-            [Parameter(pluginNameLeft = "TONHIL", pluginNameRight = "TONHIR", units = "dB", type = typeof(float), min = -10.0f, max = 10.0f, defaultValue = 0.0f, label = "High band tone control", description = "Left tone control for high band (dB)")]
+            [Parameter(mixerNameLeft = "HA3DTI_Tone_Mid_Left", mixerNameRight = "HA3DTI_Tone_Mid_Right", pluginNameLeft = "TONHIL", pluginNameRight = "TONHIR", units = "dB", type = typeof(float), min = -10.0f, max = 10.0f, defaultValue = 0.0f, label = "High band tone control", description = "Left tone control for high band (dB)")]
             ToneHigh,
-            [Parameter(pluginNameLeft = "HANDLE", pluginNameRight = "HANDLE", units = "", type = typeof(int), min = 0, max = 16777216, defaultValue = 0, label = "Handle", description = "Read-only handle identifying this plugin instance")]
+            [Parameter(mixerNameLeft = "HA3DTI_Handle", mixerNameRight = "HA3DTI_Handle", pluginNameLeft = "HANDLE", pluginNameRight = "HANDLE", units = "", type = typeof(int), min = 0, max = 16777216, defaultValue = 0, label = "Handle", description = "Read-only handle identifying this plugin instance")]
             Handle,
         }
 
@@ -137,7 +139,6 @@ namespace API_3DTI
         const float DBSPL_FOR_0_DBFS = 100.0f;
 
         // Internal use variables
-        //public float [,] tone = new float[2, 3] { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } };    // Tone values for each EAR and each tone BAND
 
         // Internal parameters for consistency with GUI
         [HideInInspector]
@@ -220,6 +221,17 @@ namespace API_3DTI
         //////////////////////////////////////////////////////////////
         // GET METHODS
         //////////////////////////////////////////////////////////////
+
+
+        public bool SetParameter<T>(Parameter p, T value, T_ear ear = T_ear.BOTH) where T : IConvertible
+        {
+            return _SetParameter(haMixer, p, value, ear);
+        }
+
+        public T GetParameter<T>(Parameter p, T_ear ear)
+        {
+            return _GetParameter<Parameter, T>(haMixer, p, ear);
+        }
 
         /// <summary>
         /// Gets the current state of the limiter (compressing or not)
