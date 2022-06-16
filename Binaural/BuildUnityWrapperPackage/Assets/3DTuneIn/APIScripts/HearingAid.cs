@@ -571,56 +571,6 @@ namespace API_3DTI
                 }
             }
             return ok ? gainsByEarBandLevel : null;
-            //if (!ok)
-            //{
-            //    return null;
-            //}
-            //else
-            //{
-            //    for (int i = 0; i < 2; i++)
-            //        for (int j = 0; j < 3; j++)
-            //            for (int k = 0; k < 7; k++)
-            //            {
-            //                gainsByEarBandLevel[i, j, k] = calculatedGains[i * (3 * 7) + j * 7 + k];
-            //            }
-            //    return gainsByEarBandLevel;
-            //}
-
-            //// Both ears
-            //if (ear == T_ear.BOTH)
-            //{
-            //    if (!SetEQFromFig6(T_ear.LEFT, earLossInput, out calculatedGains))
-            //        return false;
-            //    return SetEQFromFig6(T_ear.RIGHT, earLossInput, out calculatedGains);
-            //}
-
-            //// Init gains
-            //calculatedGains = new List<float>();
-            //for (int band = 0; band < NUM_EQ_BANDS; band++)
-            //{
-            //    for (int level = 0; level < NUM_EQ_CURVES; level++)
-            //    {
-            //        calculatedGains.Add(0.0f);
-            //    }
-            //}
-
-            //// Set level thresholds        
-            //SetDynamicEQLevelThreshold(ear, T_HADynamicEQLevel.LEVEL_0, FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS);// TO DO: consistent numbering
-            //SetDynamicEQLevelThreshold(ear, T_HADynamicEQLevel.LEVEL_2, FIG6_THRESHOLD_2_DBSPL - DBSPL_FOR_0_DBFS);
-            //SetDynamicEQLevelThreshold(ear, T_HADynamicEQLevel.LEVEL_1, FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS);// TO DO: consistent numbering
-
-            //// Set band gains        
-            //foreach (T_HADynamicEQBand bandIndex in T_HADynamicEQBand.GetValues(typeof(T_HADynamicEQBand)))
-            //{
-            //    float gain0, gain1, gain2;
-            //    SetEQBandFromFig6(ear, bandIndex, earLossInput[(int)bandIndex], out gain0, out gain1, out gain2);
-
-            //    calculatedGains[(int)bandIndex * NUM_EQ_CURVES] = gain0;
-            //    calculatedGains[(int)bandIndex * NUM_EQ_CURVES + 1] = gain1;
-            //    calculatedGains[(int)bandIndex * NUM_EQ_CURVES + 2] = gain2;
-            //}
-
-            //return true;
         }
 
         //////////////////////////////////////////////////////////////

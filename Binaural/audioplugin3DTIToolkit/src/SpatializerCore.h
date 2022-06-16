@@ -14,6 +14,10 @@
 #include "CommonUtils.h"
 
 
+#if defined(UNITY_WIN) || (defined(TARGET_OS_OSX) && !defined(TARGET_OS_IOS))
+#define ENABLE_SOFA_SUPPORT
+#endif
+
 namespace SpatializerCore3DTI
 {
 	extern "C" UNITY_AUDIODSP_EXPORT_API bool Get3DTISpatializerFloat(int parameter, float* value);
