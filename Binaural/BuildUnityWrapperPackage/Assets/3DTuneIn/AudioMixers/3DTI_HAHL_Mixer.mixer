@@ -606,17 +606,17 @@ AudioMixerEffectController:
     m_GUID: 4395774b6a7122f449b9be4b15354550
   - m_ParameterName: EQINT
     m_GUID: 99d9527a835c86c4091e7c19bc5134d0
-  - m_ParameterName: THRL0
+  - m_ParameterName: THR0L
     m_GUID: 4722b2f6419fc1b42b53db70b6c5bad8
-  - m_ParameterName: THRL1
+  - m_ParameterName: THR1L
     m_GUID: 7b3b691359a58c740891bc10a177b354
-  - m_ParameterName: THRL2
+  - m_ParameterName: THR2L
     m_GUID: 3f4942121342bec45a878656c25772cb
-  - m_ParameterName: THRR0
+  - m_ParameterName: THR0R
     m_GUID: 136448d0d70e0c544b5d0c82fbf407bb
-  - m_ParameterName: THRR1
+  - m_ParameterName: THR1R
     m_GUID: ba3499114b43b2d49a5f906d383d4edc
-  - m_ParameterName: THRR2
+  - m_ParameterName: THR2R
     m_GUID: 8487a293de34bb54182163e56dc2ced8
   - m_ParameterName: DEQL0B0L
     m_GUID: f7d18904a3c439e478e0736fc3b44779
