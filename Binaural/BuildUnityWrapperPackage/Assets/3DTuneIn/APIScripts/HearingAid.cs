@@ -493,8 +493,7 @@ namespace API_3DTI
 #else
         [DllImport("AudioPlugin3DTIToolkit")]
 #endif
-        private static extern bool SetDynamicEqualizerUsingFig6(int effectHandle, int C_Ear, float[] earLosses, int earLossesSize, float dBs_SPL_for_0_dBs_fs, out float[] calculatedGains, int calculatedGainsLength);
-        //bool SetDynamicEqualizerUsingFig6(int effectHandle, Common::T_ear ear, float* earLosses, int earLossesSize, float dBs_SPL_for_0_dBs_fs)
+        private static extern bool SetDynamicEqualizerUsingFig6(int effectHandle, int C_Ear, float[] earLosses, int earLossesSize, float dBs_SPL_for_0_dBs_fs);
 
 #if UNITY_IPHONE
     [DllImport ("__Internal")]
@@ -503,38 +502,89 @@ namespace API_3DTI
 #endif
         private static extern bool GetHADynamicEqGain(int effectHandle, int level, int band, out float leftGain, out float rightGain);
 
+
+        /// <summary>
+        /// Grab audiometry from HearingLoss and use it to set the gains using FIG6.
+        /// </summary>
+        /// <param name="ear"></param>
+        /// <param name="hearingLoss">An instance of HearingLoss component</param>
+        /// <returns>The applied gains for both ears: ear -> level -> band. Or null if the set failed</returns>
+        public float[,,] SetEQFromFig6(T_ear ear, HearingLoss hearingLoss)
+        {
+            var audiometry = new List<float>();
+            HearingLoss.T_HLBand[] audiometryBands = {
+                // top and bottom band not in HA:
+
+                //HearingLoss.T_HLBand.HZ_62,
+                HearingLoss.T_HLBand.HZ_125,
+                HearingLoss.T_HLBand.HZ_250,
+                HearingLoss.T_HLBand.HZ_500,
+                HearingLoss.T_HLBand.HZ_1K,
+                HearingLoss.T_HLBand.HZ_2K,
+                HearingLoss.T_HLBand.HZ_4K,
+                HearingLoss.T_HLBand.HZ_8K,
+                //HearingLoss.T_HLBand.HZ_16K,
+            };
+            foreach (HearingLoss.T_HLBand band in audiometryBands)
+            {
+                int index = (int)band;
+                audiometry.Add(hearingLoss.GetParameter<float>(HearingLoss.Parameter.MultibandExpansionBand0 + index, ear));
+            }
+            return SetEQFromFig6(ear, audiometry);
+        }
+
         /// <summary>
         /// Configure dynamic equalizer using Fig6 method
         /// </summary>
         /// <param name="ear"></param>
         /// <param name="earLossList (dB[])">Losses for the 7 bands supported by HA</param>
-        /// <returns></returns>
-        public bool SetEQFromFig6(T_ear ear, List<float> earLossInput)
+        /// <returns>The applied gains for both ears: ear -> level -> band. Or null if the set failed</returns>
+        public float[,,] SetEQFromFig6(T_ear ear, List<float> earLossInput)
         {
             int c_ear = ear == T_ear.LEFT ? 0 : ear == T_ear.RIGHT ? 1 : ear == T_ear.BOTH ? 2 : 3;
-            float[] calculatedGains = new float[2 * 3 * 7]; // 2 ears, 3 bands, 7 levels
-            bool ok = SetDynamicEqualizerUsingFig6(GetPluginHandle(), c_ear, earLossInput.ToArray(), earLossInput.Count, DBSPL_FOR_0_DBFS, out calculatedGains, calculatedGains.Length);
+            bool ok = SetDynamicEqualizerUsingFig6(GetPluginHandle(), c_ear, earLossInput.ToArray(), earLossInput.Count, DBSPL_FOR_0_DBFS);
             // values are updated in the plugin but we need to poke unity to update its cache of them.
-            foreach (T_HADynamicEQBand band in Enum.GetValues(typeof(T_HADynamicEQLevel)))
+            // We will store the gains in this
+            float[,,] gainsByEarBandLevel = new float[2, 3, 7];
+            foreach (T_HADynamicEQLevel level in Enum.GetValues(typeof(T_HADynamicEQLevel)))
             {
-                foreach (T_HADynamicEQLevel level in Enum.GetValues(typeof(T_HADynamicEQLevel)))
+                foreach (T_HADynamicEQBand band in Enum.GetValues(typeof(T_HADynamicEQBand)))
                 {
-                    if (!GetHADynamicEqGain(GetPluginHandle(), (int)level, (int)band, out float leftGain, out float rightGain))
-                        {
+                    if (!GetHADynamicEqGain(GetPluginHandle(), (int)level, (int)band, out gainsByEarBandLevel[0, (int)level, (int)band], out gainsByEarBandLevel[1, (int)level, (int)band]))
+                    {
                         Debug.LogError("Failed to get gain from HA Dll.");
+                        ok = false;
                     }
-                    bool temp = haMixer.GetFloat($"HA3DTI_Gain_Level_{(int)level}_Band_{(int)band}_Left", out float tmp2);
-                    if (!haMixer.SetFloat($"HA3DTI_Gain_Level_{(int)level}_Band_{(int)band}_Left", leftGain))
+                    // If we are in play mode then we need to use the mixer to set these gains to make sure the cached exposed parameter values match the (now updated) values in the plugin.
+                    // If we are in edit mode, then it is up to the inspector to update its UI by querying the plugin.
+                    if (Application.isPlaying)
                     {
-                        Debug.LogError($"Failed to set gain parameter HA3DTI_Gain_Level_{(int)level}_Band_{(int)band}_Left on mixer.");
-                    }
-                    if (!haMixer.SetFloat($"HA3DTI_Gain_Level_{(int)level}_Band_{(int)band}_Right", rightGain))
-                    {
-                        Debug.LogError($"Failed to set gain parameter HA3DTI_Gain_Level_{(int)level}_Band_{(int)band}_Right on mixer.");
+                        if (!haMixer.SetFloat($"HA3DTI_Gain_Level_{(int)level}_Band_{(int)band}_Left", gainsByEarBandLevel[0, (int)level, (int)band]))
+                        {
+                            Debug.LogError($"Failed to set gain parameter HA3DTI_Gain_Level_{(int)level}_Band_{(int)band}_Left on mixer.");
+                        }
+                        if (!haMixer.SetFloat($"HA3DTI_Gain_Level_{(int)level}_Band_{(int)band}_Right", gainsByEarBandLevel[1, (int)level, (int)band]))
+                        {
+                            Debug.LogError($"Failed to set gain parameter HA3DTI_Gain_Level_{(int)level}_Band_{(int)band}_Right on mixer.");
+                        }
                     }
                 }
             }
-            return ok;
+            return ok ? gainsByEarBandLevel : null;
+            //if (!ok)
+            //{
+            //    return null;
+            //}
+            //else
+            //{
+            //    for (int i = 0; i < 2; i++)
+            //        for (int j = 0; j < 3; j++)
+            //            for (int k = 0; k < 7; k++)
+            //            {
+            //                gainsByEarBandLevel[i, j, k] = calculatedGains[i * (3 * 7) + j * 7 + k];
+            //            }
+            //    return gainsByEarBandLevel;
+            //}
 
             //// Both ears
             //if (ear == T_ear.BOTH)

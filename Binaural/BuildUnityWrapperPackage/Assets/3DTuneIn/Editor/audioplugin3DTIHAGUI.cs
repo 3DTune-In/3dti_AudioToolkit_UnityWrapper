@@ -196,34 +196,54 @@ public class audioplugin3DTIHAGUI : IAudioEffectPluginGUI
 
         if(Common3DTIGUI.CreateButton("Fig6", "Adjusts the Dynamic Equalizer to the current audiometry settings"))
         {
-            //List<float> calculatedGains;
-                var audiometry = new List<float>();
-            HearingLoss.T_HLBand[] audiometryBands = {
-                // top and bottom band not in HA:
+            float[,,] calculatedGains = HAAPI.SetEQFromFig6(ear, HLAPI);
+            // need to manually update plugin otherwise Unity doesn't update the GUI.
+            Debug.Assert(calculatedGains.GetLength(0) == 2 && calculatedGains.GetLength(1) == 3 && calculatedGains.GetLength(2) == 7);
+            for (int i = 0; i < 2; i++)
+            {
+                if ((i == 0 && ear.HasFlag(T_ear.LEFT)) || (i == 1 && ear.HasFlag(T_ear.RIGHT)))
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        for (int k = 0; k < 7; k++)
+                        {
+                            // DEQL1B0L for level 1, band 0, Left. All 0-indexed
+                            string param = $"DEQL{j}B{k}{(i == 0 ? 'L' : 'R')}";
+                            plugin.SetFloatParameter(param, calculatedGains[i, j, k]);
+                        }
+                    }
 
-                //HearingLoss.T_HLBand.HZ_62,
-                HearingLoss.T_HLBand.HZ_125,
-                HearingLoss.T_HLBand.HZ_250,
-                HearingLoss.T_HLBand.HZ_500,
-                HearingLoss.T_HLBand.HZ_1K,
-                HearingLoss.T_HLBand.HZ_2K,
-                HearingLoss.T_HLBand.HZ_4K,
-                HearingLoss.T_HLBand.HZ_8K,
-                //HearingLoss.T_HLBand.HZ_16K,
-            };
-            foreach (HearingLoss.T_HLBand band in audiometryBands)
-            {
-                int index = (int) band;
-                audiometry.Add(HLAPI.GetParameter<float>(HearingLoss.Parameter.MultibandExpansionBand0 + index, ear));
+                }
             }
-            //for (int i=0; i<HearingLoss.NumMultibandExpansionBands; i++)
+
+            ////List<float> calculatedGains;
+            //var audiometry = new List<float>();
+            //HearingLoss.T_HLBand[] audiometryBands = {
+            //    // top and bottom band not in HA:
+
+            //    //HearingLoss.T_HLBand.HZ_62,
+            //    HearingLoss.T_HLBand.HZ_125,
+            //    HearingLoss.T_HLBand.HZ_250,
+            //    HearingLoss.T_HLBand.HZ_500,
+            //    HearingLoss.T_HLBand.HZ_1K,
+            //    HearingLoss.T_HLBand.HZ_2K,
+            //    HearingLoss.T_HLBand.HZ_4K,
+            //    HearingLoss.T_HLBand.HZ_8K,
+            //    //HearingLoss.T_HLBand.HZ_16K,
+            //};
+            //foreach (HearingLoss.T_HLBand band in audiometryBands)
             //{
-            //    audiometry.Add(HLAPI.GetParameter<float>(HearingLoss.Parameter.MultibandExpansionBand0 + i, ear));
+            //    int index = (int) band;
+            //    audiometry.Add(HLAPI.GetParameter<float>(HearingLoss.Parameter.MultibandExpansionBand0 + index, ear));
             //}
-            if (!HAAPI.SetEQFromFig6(/*plugin,*/ear, audiometry))
-            {
-                //Debug.LogWarning("error fig6 left");
-            }
+            ////for (int i=0; i<HearingLoss.NumMultibandExpansionBands; i++)
+            ////{
+            ////    audiometry.Add(HLAPI.GetParameter<float>(HearingLoss.Parameter.MultibandExpansionBand0 + i, ear));
+            ////}
+            //if (!HAAPI.SetEQFromFig6(/*plugin,*/ear, audiometry))
+            //{
+            //    //Debug.LogWarning("error fig6 left");
+            //}
 
             //plugin.SetFloatParameter("THR0", FIG6_THRESHOLD_1_DBSPL - DBSPL_FOR_0_DBFS);
             //plugin.SetFloatParameter("THR1", FIG6_THRESHOLD_0_DBSPL - DBSPL_FOR_0_DBFS);
