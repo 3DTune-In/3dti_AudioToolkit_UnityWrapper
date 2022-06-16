@@ -515,7 +515,7 @@ namespace HASimulation3DTI
 		// Handle
 #define MAX_INTEGER_REPRESENTABLE_AS_FLOAT (std::numeric_limits<float>::radix / std::numeric_limits<float>::epsilon())
 		RegisterParameter(definition, "HANDLE", "", 0, MAX_INTEGER_REPRESENTABLE_AS_FLOAT, 0.0f, 1.0f, 1.0f, PARAM_HANDLE, "Read-only handle identifying this plugin instance");
-
+		
 
 		// Debug log
 		//RegisterParameter(definition, "DebugLogHA", "", 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, PARAM_DEBUG_LOG, "Generate debug log for HA");

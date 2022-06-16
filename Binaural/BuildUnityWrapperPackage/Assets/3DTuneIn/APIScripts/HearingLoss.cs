@@ -23,7 +23,7 @@ using static API_3DTI.HearingLoss.Parameter;
 
 namespace API_3DTI
 {
-    public class HearingLoss : MonoBehaviour
+    public class HearingLoss : AbstractMixerEffect
     {
         // Global variables
         public AudioMixer hlMixer;  // Drag&drop here the HAHL_3DTI_Mixer
@@ -230,62 +230,64 @@ namespace API_3DTI
 
         public bool SetParameter<T>(Parameter p, T value, T_ear ear = T_ear.BOTH) where T : IConvertible
         {
-            ParameterAttribute attributes = p.GetAttribute<ParameterAttribute>();
-            Debug.Assert(value.GetType() == attributes.type);
+            return _SetParameter(hlMixer, p, value, ear);
+            //ParameterAttribute attributes = p.GetAttribute<ParameterAttribute>();
+            //Debug.Assert(value.GetType() == attributes.type);
 
-            if (attributes.isSharedBetweenEars())
-            {
-                // Single parameter for both ears
-                if (ear != T_ear.BOTH)
-                {
-                    Debug.LogWarning($"Parameter {p} cannot be set for an individual ear. It must be set with ear == {T_ear.BOTH}.");
-                    ear = T_ear.BOTH;
-                }
-            }
+            //if (attributes.isSharedBetweenEars())
+            //{
+            //    // Single parameter for both ears
+            //    if (ear != T_ear.BOTH)
+            //    {
+            //        Debug.LogWarning($"Parameter {p} cannot be set for an individual ear. It must be set with ear == {T_ear.BOTH}.");
+            //        ear = T_ear.BOTH;
+            //    }
+            //}
 
-            if (ear.HasFlag(T_ear.LEFT))
-            {
-                if (!hlMixer.SetFloat(attributes.mixerNameLeft, Convert.ToSingle(value)))
-                {
-                    Debug.LogError($"Failed to set parameter {attributes.mixerNameLeft} on mixer {hlMixer}", this);
-                    return false;
-                }
-            }
-            if (ear.HasFlag(T_ear.RIGHT))
-            {
-                if (!hlMixer.SetFloat(attributes.mixerNameRight, Convert.ToSingle(value)))
-                {
-                    Debug.LogError($"Failed to set parameter {attributes.mixerNameRight} on mixer {hlMixer}", this);
-                    return false;
-                }
-            }
-            return true;
+            //if (ear.HasFlag(T_ear.LEFT))
+            //{
+            //    if (!hlMixer.SetFloat(attributes.mixerNameLeft, Convert.ToSingle(value)))
+            //    {
+            //        Debug.LogError($"Failed to set parameter {attributes.mixerNameLeft} on mixer {hlMixer}", this);
+            //        return false;
+            //    }
+            //}
+            //if (ear.HasFlag(T_ear.RIGHT))
+            //{
+            //    if (!hlMixer.SetFloat(attributes.mixerNameRight, Convert.ToSingle(value)))
+            //    {
+            //        Debug.LogError($"Failed to set parameter {attributes.mixerNameRight} on mixer {hlMixer}", this);
+            //        return false;
+            //    }
+            //}
+            //return true;
         }
 
         public T GetParameter<T>(Parameter p, T_ear ear)
         {
-            ParameterAttribute attributes = p.GetAttribute<ParameterAttribute>();
-            Debug.Assert(typeof(T) == attributes.type);
+            return _GetParameter<Parameter, T>(hlMixer, p, ear);
+            //ParameterAttribute attributes = p.GetAttribute<ParameterAttribute>();
+            //Debug.Assert(typeof(T) == attributes.type);
 
-            if (attributes.isSharedBetweenEars() && ear != T_ear.BOTH)
-            {
-                Debug.LogWarning($"Parameter {p} cannot be retrieved for an individual ear. It must be retrieved with ear == {T_ear.BOTH}.");
-                ear = T_ear.BOTH;
-            }
-            else if (!attributes.isSharedBetweenEars() && ear == T_ear.BOTH)
-            {
-                throw new Exception($"Cannot get parameter {p} for both ears. Choose wither {T_ear.LEFT} or {T_ear.RIGHT}.");
-            }
+            //if (attributes.isSharedBetweenEars() && ear != T_ear.BOTH)
+            //{
+            //    Debug.LogWarning($"Parameter {p} cannot be retrieved for an individual ear. It must be retrieved with ear == {T_ear.BOTH}.");
+            //    ear = T_ear.BOTH;
+            //}
+            //else if (!attributes.isSharedBetweenEars() && ear == T_ear.BOTH)
+            //{
+            //    throw new Exception($"Cannot get parameter {p} for both ears. Choose wither {T_ear.LEFT} or {T_ear.RIGHT}.");
+            //}
 
-            float fValue;
-            string mixerName = attributes.mixerName(ear);
-            if (!hlMixer.GetFloat(mixerName, out fValue))
-            {
-                Debug.LogError($"Failed to get parameter {mixerName} from mixer {hlMixer}", this);
-                return default(T);
-            }
+            //float fValue;
+            //string mixerName = attributes.mixerName(ear);
+            //if (!hlMixer.GetFloat(mixerName, out fValue))
+            //{
+            //    Debug.LogError($"Failed to get parameter {mixerName} from mixer {hlMixer}", this);
+            //    return default(T);
+            //}
 
-            return (T)Convert.ChangeType(fValue, typeof(T));
+            //return (T)Convert.ChangeType(fValue, typeof(T));
         }
 
 
