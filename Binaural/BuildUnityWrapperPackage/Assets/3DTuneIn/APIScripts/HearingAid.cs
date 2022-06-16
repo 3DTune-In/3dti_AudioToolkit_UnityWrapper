@@ -127,47 +127,6 @@ namespace API_3DTI
         // INITIALIZATION
         //////////////////////////////////////////////////////////////
 
-        //private void Start()
-        //{
-        //    Initialize();
-        //}
-
-        ///// <summary>
-        ///// Set all parameters to their default values
-        ///// </summary>
-        //public void Initialize()
-        //{
-        //    SwitchHAOnOff(T_ear.LEFT, PARAM_PROCESS_LEFT_ON);
-        //    SwitchHAOnOff(T_ear.RIGHT, PARAM_PROCESS_RIGHT_ON);
-        //    SetVolume(T_ear.LEFT, PARAM_VOLUME_L_DB);
-        //    SetVolume(T_ear.RIGHT, PARAM_VOLUME_R_DB);
-        //    SetLPFCutoff(PARAM_EQ_LPFCUTOFF_HZ);
-        //    SetHPFCutoff(PARAM_EQ_HPFCUTOFF_HZ);
-        //    SwitchDynamicEQInterpolationOnOff(PARAM_DYNAMICEQ_INTERPOLATION_ON);
-        //    for (int level = 0; level < NUM_EQ_CURVES; level++)
-        //    {
-        //        SetDynamicEQLevelThreshold(T_ear.LEFT, level, PARAM_DYNAMICEQ_LEVELTHRESHOLDS_LEFT_DBFS[level]);
-        //        SetDynamicEQLevelThreshold(T_ear.RIGHT, level, PARAM_DYNAMICEQ_LEVELTHRESHOLDS_RIGHT_DBFS[level]);
-        //        for (int band = 0; band < FIG6_NUMBANDS; band++)
-        //        {
-        //            SetDynamicEQBandLevelGain(T_ear.LEFT, band, level, PARAM_DYNAMICEQ_GAINS_LEFT[level, band]);
-        //            SetDynamicEQBandLevelGain(T_ear.RIGHT, band, level, PARAM_DYNAMICEQ_GAINS_RIGHT[level, band]);
-        //        }                        
-        //    }
-        //    SetDynamicEQAttackRelease(T_ear.LEFT, PARAM_DYNAMICEQ_ATTACKRELEASE_LEFT_MS);
-        //    SetDynamicEQAttackRelease(T_ear.RIGHT, PARAM_DYNAMICEQ_ATTACKRELEASE_RIGHT_MS);
-        //    SetQuantizationNoiseInChain(PARAM_NOISE_BEFORE_ON, PARAM_NOISE_AFTER_ON);
-        //    SetQuantizationNoiseBits(PARAM_NOISE_NUMBITS);
-        //    SetCompressionPercentage(T_ear.LEFT, PARAM_COMPRESSION_PERCENTAGE_LEFT);
-        //    SetCompressionPercentage(T_ear.RIGHT, PARAM_COMPRESSION_PERCENTAGE_RIGHT);
-        //    SwitchLimiterOnOff(PARAM_LIMITER_ON);
-        //    SwitchNormalizationOnOff(T_ear.LEFT, PARAM_NORMALIZATION_SET_ON_LEFT);
-        //    SwitchNormalizationOnOff(T_ear.RIGHT, PARAM_NORMALIZATION_SET_ON_RIGHT);
-        //    SetNormalizationLevel(T_ear.LEFT, PARAM_NORMALIZATION_DBS_LEFT);
-        //    SetNormalizationLevel(T_ear.RIGHT, PARAM_NORMALIZATION_DBS_RIGHT);
-        //    //public bool PARAM_DEBUG_LOG = false;
-        //}
-
         //////////////////////////////////////////////////////////////
         // GET METHODS
         //////////////////////////////////////////////////////////////
@@ -680,63 +639,6 @@ namespace API_3DTI
             // Set value
             return haMixer.SetFloat(paramName, value);
         }
-
-        ///// <summary>
-        ///// Method for adding a (positive/negative) increment to a band in a curve of the dynamic eq
-        ///// The actual increment applied is newIncrement - oldIncrement.
-        ///// </summary>
-        ///// <param name="ear"></param>    
-        ///// <param name="eqband"></param>
-        ///// <param name="oldIncrement"></param>
-        ///// <param name="newIncrement"></param>
-        ///// <returns></returns>
-        //public bool AddToHABand(T_ear ear, T_HADynamicEQBand eqband, T_HAToneBand toneBand, float newIncrement)
-        //{        
-        //    // Both ears
-        //    if (ear == T_ear.BOTH)
-        //    {
-        //        if (!AddToHABand(T_ear.LEFT, eqband, toneBand, newIncrement)) return false;
-        //        return AddToHABand(T_ear.RIGHT, eqband, toneBand, newIncrement);
-        //    }
-
-        //    // Go through all dynamic eq levels        
-        //    foreach (T_HADynamicEQLevel eqlevel in T_HADynamicEQLevel.GetValues(typeof(T_HADynamicEQLevel)))
-        //    {
-        //        // Build exposed parameter name string 
-        //        string paramName = "HA3DTI_Gain_Level_" + ((int)eqlevel).ToString() + "_Band_" + ((int)eqband).ToString() + "_";
-        //        if (ear == T_ear.LEFT)
-        //        {
-        //            paramName += "Left";
-        //        }
-        //        else
-        //        {
-        //            paramName += "Right";
-        //        }
-
-        //        // Get current value, considering oldIncrement
-        //        float currentValue;
-        //        float oldIncrement = tone[(int)ear, (int)toneBand];
-        //        if (!haMixer.GetFloat(paramName, out currentValue)) return false;
-        //        currentValue = currentValue - oldIncrement;
-
-        //        // Set new value, with newIncrement    
-        //        //if (!haMixer.SetFloat(paramName, currentValue + newIncrement))
-        //        //    return false;
-
-        //        //// Set internal API parameters
-        //        //if (ear == T_ear.LEFT)
-        //        //{
-        //        //    PARAM_DYNAMICEQ_GAINS_LEFT[level, band] = currentValue + newIncrement;
-        //        //}
-        //        //else
-        //        //{
-        //        //    PARAM_DYNAMICEQ_GAINS_RIGHT[level, band] = currentValue + newIncrement;
-        //        //}
-        //        if (!SetDynamicEQBandLevelGain(ear, eqband, eqlevel, currentValue + newIncrement))
-        //            return false;
-        //    }
-        //    return true;
-        //}
 
         /// <summary>
         /// Generic Switch method
