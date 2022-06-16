@@ -98,6 +98,7 @@
 		3429A45C26384BD100964E9E /* ncString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A43C26384BD100964E9E /* ncString.cpp */; };
 		3429A45D26384BD100964E9E /* ncType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A44126384BD100964E9E /* ncType.cpp */; };
 		3429A45E26384BD100964E9E /* ncVar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3429A44426384BD100964E9E /* ncVar.cpp */; };
+		34A8B6AA285B819800453B01 /* BRIRFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34A8B6A8285B819800453B01 /* BRIRFactory.cpp */; };
 		34BB9EEC27025207005BF419 /* effect3DTISpatializerReverb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34BB9EE827025200005BF419 /* effect3DTISpatializerReverb.cpp */; };
 		34BB9EED27025207005BF419 /* SpatializerCore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34BB9EE927025200005BF419 /* SpatializerCore.cpp */; };
 		34FEE2D926FCBF560094E18F /* effect3DTISpatializerSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34FEE2D726FCBF420094E18F /* effect3DTISpatializerSource.cpp */; };
@@ -313,6 +314,8 @@
 		3429A44226384BD100964E9E /* ncGroupAtt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncGroupAtt.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncGroupAtt.h; sourceTree = "<group>"; };
 		3429A44326384BD100964E9E /* ncUint64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ncUint64.h; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncUint64.h; sourceTree = "<group>"; };
 		3429A44426384BD100964E9E /* ncVar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ncVar.cpp; path = ../../../../3dti_AudioToolkit/3dti_ResourceManager/third_party_libraries/sofacoustics/libsofa/dependencies/include/ncVar.cpp; sourceTree = "<group>"; };
+		34A8B6A8285B819800453B01 /* BRIRFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BRIRFactory.cpp; sourceTree = "<group>"; };
+		34A8B6A9285B819800453B01 /* BRIRFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRIRFactory.h; sourceTree = "<group>"; };
 		34BB9EE827025200005BF419 /* effect3DTISpatializerReverb.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = effect3DTISpatializerReverb.cpp; path = ../src/effect3DTISpatializerReverb.cpp; sourceTree = "<group>"; };
 		34BB9EE927025200005BF419 /* SpatializerCore.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SpatializerCore.cpp; path = ../src/SpatializerCore.cpp; sourceTree = "<group>"; };
 		34BB9EEA27025200005BF419 /* effect3DTISpatializerReverb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = effect3DTISpatializerReverb.h; path = ../src/effect3DTISpatializerReverb.h; sourceTree = "<group>"; };
@@ -500,6 +503,8 @@
 		34FEE2E226FCBF9E0094E18F /* BRIR */ = {
 			isa = PBXGroup;
 			children = (
+				34A8B6A8285B819800453B01 /* BRIRFactory.cpp */,
+				34A8B6A9285B819800453B01 /* BRIRFactory.h */,
 				34FEE2E326FCBF9E0094E18F /* BRIRCereal.h */,
 				34FEE2E426FCBF9E0094E18F /* BRIRCereal.cpp */,
 			);
@@ -848,6 +853,7 @@
 				3429A30126384A9A00964E9E /* Graf3DTIFrequencySmearing.cpp in Sources */,
 				3429A44F26384BD100964E9E /* ncInt64.cpp in Sources */,
 				34FEE2E926FCBF9E0094E18F /* ILDCereal.cpp in Sources */,
+				34A8B6AA285B819800453B01 /* BRIRFactory.cpp in Sources */,
 				3429A39026384AB400964E9E /* EnvelopeDetector.cpp in Sources */,
 				3429A45D26384BD100964E9E /* ncType.cpp in Sources */,
 				3429A3FC26384B8200964E9E /* SOFAListener.cpp in Sources */,
