@@ -9,9 +9,11 @@ using Common::T_ear;
 #include "TargetConditionals.h"
 #endif
 
-#if defined(UNITY_WIN) || (defined(TARGET_OS_OSX) && !defined(TARGET_OS_IOS))
+
+
+#ifdef ENABLE_SOFA_SUPPORT
 #include "HRTF/HRTFFactory.h"
-#define ENABLE_SOFA_SUPPORT
+#include "BRIR/BRIRFactory.h"
 #endif
 
 namespace SpatializerCore3DTI
@@ -103,12 +105,13 @@ namespace SpatializerCore3DTI
 	bool SpatializerCore::loadBinary(BinaryRole role, std::string path)
 	{
 		const string sofaExtension = ".sofa"s;
+		const bool hasSofaExtension = path.size() >= sofaExtension.size() && path.substr(path.size() - sofaExtension.size()) == sofaExtension;
 
 		switch (role)
 		{
 		case HighQualityHRTF:
 #ifdef ENABLE_SOFA_SUPPORT
-			if (path.size() >= sofaExtension.size() && path.substr(path.size() - sofaExtension.size()) == sofaExtension)
+			if (hasSofaExtension)
 			{
 				// We assume an ILD file holds the delays, so our SOFA file does not specify delays
 				bool specifiedDelays = false;
@@ -128,7 +131,17 @@ namespace SpatializerCore3DTI
 			isBinaryResourceLoaded[HighPerformanceILD] = ILD::CreateFrom3dti_ILDSpatializationTable(path, listener);
 			return isBinaryResourceLoaded[HighPerformanceILD];
 		case ReverbBRIR:
-			isBinaryResourceLoaded[ReverbBRIR] = BRIR::CreateFrom3dti(path, environment);
+#ifdef ENABLE_SOFA_SUPPORT
+			if (hasSofaExtension)
+			{
+				isBinaryResourceLoaded[HighQualityHRTF] = BRIR::CreateFromSofa(path, environment);
+			}
+			// If not sofa file then assume its a 3dti-hrtf file
+			else
+#endif
+			{
+				isBinaryResourceLoaded[ReverbBRIR] = BRIR::CreateFrom3dti(path, environment);
+			}
 			return isBinaryResourceLoaded[ReverbBRIR];
 		default:
 			return false;
