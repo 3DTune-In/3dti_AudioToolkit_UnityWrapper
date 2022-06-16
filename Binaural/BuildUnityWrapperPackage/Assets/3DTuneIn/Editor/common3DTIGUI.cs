@@ -898,13 +898,14 @@ public static class Common3DTIGUI
             if (isCompact)
             {
                 GUILayout.BeginVertical(GUILayout.ExpandWidth(false));
-                GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));
+                GUILayout.BeginHorizontal();
                 GUILayout.Label(new GUIContent(p.label, p.description));
-                valueString = GUILayout.TextField(oldValue.ToString(p.type==typeof(float) ? "F2" : "F0", System.Globalization.CultureInfo.InvariantCulture), GUILayout.ExpandWidth(false));
+                valueString = GUILayout.TextField(oldValue.ToString(/*p.type==typeof(float) ? "F2" : */"F0", System.Globalization.CultureInfo.InvariantCulture), GUILayout.ExpandWidth(false));
                 GUILayout.Label(p.units, GUILayout.ExpandWidth(false));
                 GUILayout.EndHorizontal();
                 // TODO: I Think this will have a bug where newValue gets overwritten by oldvalue in the parse below
                 newValue = GUILayout.HorizontalSlider(oldValue, minValue, maxValue);
+                GUILayout.Space(singleSpace * 2);
                 GUILayout.EndVertical();
             }
             else
@@ -941,6 +942,7 @@ public static class Common3DTIGUI
         {
             bool oldValue = plugin.GetParameter<ParameterEnum, bool>(parameter, ear);
             bool newValue = GUILayout.Toggle(oldValue, new GUIContent(p.label, p.description), GUILayout.ExpandWidth(false));
+            GUILayout.Space(singleSpace * 1);
             value = Convert.ToSingle(newValue);
             if (newValue != oldValue)
             {
