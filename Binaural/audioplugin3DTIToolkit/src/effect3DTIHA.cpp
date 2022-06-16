@@ -433,11 +433,11 @@ namespace HASimulation3DTI
 		// Dynamic EQ    
 		RegisterParameter(definition, "EQINT", "", F_FALSE, F_TRUE, DEFAULT_LEVELSINTERPOLATION, 1.0f, 1.0f, PARAM_DYNAMICEQ_INTERPOLATION_ON, "Switch On/Off Dynamic EQ Level interpolation");
 		RegisterParameter(definition, "THR0L", "dBfs", MIN_LEVELTHRESHOLD, MAX_LEVELTHRESHOLD, DEFAULT_LEVELTHRESHOLD_0, 1.0f, 1.0f, PARAM_DYNAMICEQ_LEVELTHRESHOLD_0_LEFT_DBFS, "Dynamic EQ first level threshold Left");
-		RegisterParameter(definition, "THR1L", "dBfs", MIN_LEVELTHRESHOLD, MAX_LEVELTHRESHOLD, DEFAULT_LEVELTHRESHOLD_0, 1.0f, 1.0f, PARAM_DYNAMICEQ_LEVELTHRESHOLD_1_LEFT_DBFS, "Dynamic EQ second level threshold Left");
-		RegisterParameter(definition, "THR2L", "dBfs", MIN_LEVELTHRESHOLD, MAX_LEVELTHRESHOLD, DEFAULT_LEVELTHRESHOLD_0, 1.0f, 1.0f, PARAM_DYNAMICEQ_LEVELTHRESHOLD_2_LEFT_DBFS, "Dynamic EQ third level threshold Left");
+		RegisterParameter(definition, "THR1L", "dBfs", MIN_LEVELTHRESHOLD, MAX_LEVELTHRESHOLD, DEFAULT_LEVELTHRESHOLD_1, 1.0f, 1.0f, PARAM_DYNAMICEQ_LEVELTHRESHOLD_1_LEFT_DBFS, "Dynamic EQ second level threshold Left");
+		RegisterParameter(definition, "THR2L", "dBfs", MIN_LEVELTHRESHOLD, MAX_LEVELTHRESHOLD, DEFAULT_LEVELTHRESHOLD_2, 1.0f, 1.0f, PARAM_DYNAMICEQ_LEVELTHRESHOLD_2_LEFT_DBFS, "Dynamic EQ third level threshold Left");
 		RegisterParameter(definition, "THR0R", "dBfs", MIN_LEVELTHRESHOLD, MAX_LEVELTHRESHOLD, DEFAULT_LEVELTHRESHOLD_0, 1.0f, 1.0f, PARAM_DYNAMICEQ_LEVELTHRESHOLD_0_RIGHT_DBFS, "Dynamic EQ first level threshold Right");		
-		RegisterParameter(definition, "THR1R", "dBfs", MIN_LEVELTHRESHOLD, MAX_LEVELTHRESHOLD, DEFAULT_LEVELTHRESHOLD_0, 1.0f, 1.0f, PARAM_DYNAMICEQ_LEVELTHRESHOLD_1_RIGHT_DBFS, "Dynamic EQ second level threshold Right");
-		RegisterParameter(definition, "THR2R", "dBfs", MIN_LEVELTHRESHOLD, MAX_LEVELTHRESHOLD, DEFAULT_LEVELTHRESHOLD_0, 1.0f, 1.0f, PARAM_DYNAMICEQ_LEVELTHRESHOLD_2_RIGHT_DBFS, "Dynamic EQ third level threshold Right");
+		RegisterParameter(definition, "THR1R", "dBfs", MIN_LEVELTHRESHOLD, MAX_LEVELTHRESHOLD, DEFAULT_LEVELTHRESHOLD_1, 1.0f, 1.0f, PARAM_DYNAMICEQ_LEVELTHRESHOLD_1_RIGHT_DBFS, "Dynamic EQ second level threshold Right");
+		RegisterParameter(definition, "THR2R", "dBfs", MIN_LEVELTHRESHOLD, MAX_LEVELTHRESHOLD, DEFAULT_LEVELTHRESHOLD_2, 1.0f, 1.0f, PARAM_DYNAMICEQ_LEVELTHRESHOLD_2_RIGHT_DBFS, "Dynamic EQ third level threshold Right");
 		RegisterParameter(definition, "DEQL0B0L", "dB", MIN_BANDGAINDB, MAX_BANDGAINDB, DEFAULT_BANDGAINDB, 1.0f, 1.0f, PARAM_DYNAMICEQ_LEVEL_0_BAND_0_LEFT_DB, "EQ Left 125 Hz band gain (dB) for first level");
 		RegisterParameter(definition, "DEQL0B1L", "dB", MIN_BANDGAINDB, MAX_BANDGAINDB, DEFAULT_BANDGAINDB, 1.0f, 1.0f, PARAM_DYNAMICEQ_LEVEL_0_BAND_1_LEFT_DB, "EQ Left 250 Hz band gain (dB) for first level");
 		RegisterParameter(definition, "DEQL0B2L", "dB", MIN_BANDGAINDB, MAX_BANDGAINDB, DEFAULT_BANDGAINDB, 1.0f, 1.0f, PARAM_DYNAMICEQ_LEVEL_0_BAND_2_LEFT_DB, "EQ Left 500 Hz band gain (dB) for first level");
