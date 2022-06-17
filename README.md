@@ -46,7 +46,7 @@ To use the spatializer in your project, the *Spatializer* component (defined in 
 
 This should be enough for the spatializer to work on standard Unity audio sources with its default settings.
 
-In the Inspector, the *API_3DTI_Spatializer* component provides further options, including menus to select the binary resources being used such as the different Head-related Transfer Functions (HRTFs) that are included within the package.
+In the Inspector, the *Spatializer* component provides further options, including menus to select the binary resources being used such as the different Head-related Transfer Functions (HRTFs) that are included within the package.
 
 For further information about these additional options, please refer to the 3DTI Toolkit documentation.
 
@@ -69,23 +69,51 @@ To set a binary resource from code, such as an HRTF or a BRIR, use the `SetBinar
 
 Binaural reverb is implemented as part of the Spatializer and can be enabled on the component's inspector. However, to receive the reverb mix you additionally need to add the 3DTI Spatializer Core audio effect to your mixer strip, so the plugin can return the mixed reverb.
 
+Note that the wet/dry control for the return signal on the reverb is set via the 3DTI Spatializer Core *audio effect* rather than the component. In the Editor, you can find it in the Inspector after clicking on the mixer strip containing the 3DTI Spatializer Core audio effect.
+
+### Adding your own binary resources (e.g. HRTFs, BRIRs)
+
+HRTFs and ILD binary files for spatialization and BRIRs for reverb may be added and selected.
+
+Supported formats are:
+- HRTF
+    - `3dti-hrtf`, all platforms
+    - `sofa`, Windows and MacOS (possibly only Intel Macs)
+- BRIR
+    - `3dti-brir`, all platforms
+    - `sofa`, Windows and MacOS (possibly only Intel Macs)
+- ILD
+    - `3dti-ild`, all platforms
+
+To add a binary resource, you need to:
+
+1. Append `.bytes` to the filename in addition to the existing extension. So `file.sofa` becomes `file.sofa.bytes`.
+2. Include the sample frequency anywhere within the filename, one of `44100Hz`, `48000Hz` or `96000Hz`. So `file.sofa.bytes` becomes `file_48000Hz.sofa.bytes`.
+3. Place the file in the appropriate asset folder:
+    - High Performance ILD: `/Assets/3DTuneIn/Resources/Data/HighPerformance/ILD`
+    - High Quality ILD: `/Assets/3DTuneIn/Resources/Data/HighQuality/ILD`
+    - High Quality HRTF: `/Assets/3DTuneIn/Resources/Data/HighQuality/HRTF`
+    - High Quality BRIR: `/Assets/3DTuneIn/Resources/Data/Reverb/BRIR`
+
+The binary resource should then be available in the appropriate dropdown menu in the component inspector.
+
 ### Hearing Aid and Hearing Loss simulators
 
 Hearing Aid (HA) and Hearing Loss (HL) are implemented as standard Unity native audio plugins. These are found on the mixer in the Audio window of your project. In order to use them, you also need to add the relevant components *API_3DTI_HL* and *API_3DTI_HA* to your project. Note that HA depends on HL so if you want to use HA you need to add the HL component as well. You can add these components anywhere to your hierarchy but they must be present at the moment the scene starts so we recommend also adding them to your _Main Camera_ object. 
 
-Unlike the Spatializer, the controls for HA and HL can be found on the mixer strip where the plugins have been added. Select the strip to reveal the controls in the inspector.
+Unlike the Spatializer, all controls for HA and HL can be found on the mixer strip where the plugins have been added. Select the strip to reveal the controls in the inspector.
 
-For setting parameters from code, Version 3.0 of the wrapper introduces a new API, but currently it is implemented for HL and not HA. HA will be upgraded to the new API in a future update.
+In the new API, each parameter can be read or set by calling `GetParameter<T>` and `SetParameter<T>` on the respective HearingAid or HearingLoss component. As with the spatializer, the parameters are defined by an enum in the HearingAid/HearingLoss class, with further information provided by the attribute for each defined parameter.
 
-In the new API, each parameter can be read or set by calling `GetParameter<T>` and `SetParameter<T>` on the API_3DTI_HL component. As with the spatializer, the parameters are defined by an enum in the API_3DTI_HL class, with further information provided by the attribute for each defined parameter.
-
-Most HL parameters may be set on either ear independently. We use the same Parameter enum value for either ear and indicate which ears to apply it to with the `T_ear` enum which is an additional parameter passed to `GetParameter<T>` and `SetParameter<T>`.
-
-HA parameters are currently still using the old API, with individual methods for the different parameters. See `API-3DTI_HA.cs` for details. Please note these methods will be replaced with `Parameter` enums in a future update.
+Many parameters may be set on either ear independently. We use the same Parameter enum value for either ear and indicate which ears to apply it to with the `T_ear` enum which is an additional parameter passed to `GetParameter<T>` and `SetParameter<T>`. For parameters that are shared across both ears, you must pass the `T_Ear.BOTH` value. You can see which parameters are shared across both ears because the `mixerNameLeft` and `mixerNameRight` values are equal (as are the `pluginNameLeft` and `pluginNameRight` values).
 
 HA and HL use Unity's audio plugin parameter API, which means their values may be snapshotted in the mixer. However, to support this while also offering C# methods to set the parameters, we need the mixer to have all the parameters exposed. Therefore, for HA and HL you must use the provided 3DTI_HAHL_Mixer that is included within the package, otherwise the C# interface will not work. This is a quirk of Unity's Audio Plugin API.
 
+#### Implementation notes
 
+When the Inspector is showing, exposed parameters cannot be set. The Inspector GUI is passed by Unity an instance of IAudioEffectPlugin to set parameters on the plugin. However, during playback and outside the editor, this interface is not defined and we must use the exposed parameters.
+
+For this reason, each parameter has both a "plugin name", which is used by IAudioEffectPlugin and a "mixer name" used for exposed parameters. The plugin name can have a limited number of characters which is why the same name has not been used for both plugin and mixer.
 
 ### Notes on using within an iOS app
 

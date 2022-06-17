@@ -27,6 +27,10 @@ namespace API_3DTI
         public string units;
         // For int/float parameters: limit to these discrete values. Leave as null for no limits.
         public float[] validValues;
+        public float defaultValue;
+        public float min;
+        public float max;
+        public bool isReadOnly = false;
 
         public bool isSharedBetweenEars()
         {

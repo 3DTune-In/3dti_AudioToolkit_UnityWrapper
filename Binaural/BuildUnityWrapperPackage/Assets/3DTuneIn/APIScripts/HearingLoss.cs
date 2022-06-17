@@ -23,7 +23,7 @@ using static API_3DTI.HearingLoss.Parameter;
 
 namespace API_3DTI
 {
-    public class HearingLoss : MonoBehaviour
+    public class HearingLoss : AbstractMixerEffect
     {
         // Global variables
         public AudioMixer hlMixer;  // Drag&drop here the HAHL_3DTI_Mixer
@@ -33,65 +33,95 @@ namespace API_3DTI
         {
             [Parameter(pluginNameLeft = "HLONL", pluginNameRight = "HLONR", mixerNameLeft = "HL3DTI_Process_LeftOn", mixerNameRight = "HL3DTI_Process_RightOn", label = "Hearing loss enabled", description = "Switch on hearing loss simulation", type = typeof(bool))]
             HLOn,
+
             [Parameter(pluginNameLeft = "HLCAL", pluginNameRight = "HLCAL", mixerNameLeft = "HL3DTI_Calibration", mixerNameRight = "HL3DTI_Calibration", units = "dBSPL", label = "Calibration", description = "Calibration: dBSPL equivalent to 0 dBFS", type = typeof(bool))]
             Calibration,
+
             [Parameter(pluginNameLeft = "HL0L", pluginNameRight = "HL0R", mixerNameLeft = "HL3DTI_HL_Band_0_Left", mixerNameRight = "HL3DTI_HL_Band_0_Right", units = "dBHL", label = "62.5 Hz", description = "Hearing loss level for 62.5 Hz band (dB HL)", type = typeof(float))]
             MultibandExpansionBand0,
+
             [Parameter(pluginNameLeft = "HL1L", pluginNameRight = "HL1R", mixerNameLeft = "HL3DTI_HL_Band_1_Left", mixerNameRight = "HL3DTI_HL_Band_1_Right", units = "dBHL", label = "125 Hz", description = "Hearing loss level for 125 Hz band (dB HL)", type = typeof(float))]
             MultibandExpansionBand1,
+
             [Parameter(pluginNameLeft = "HL2L", pluginNameRight = "HL2R", mixerNameLeft = "HL3DTI_HL_Band_2_Left", mixerNameRight = "HL3DTI_HL_Band_2_Right", units = "dBHL", label = "250 Hz", description = "Hearing loss level for 250 Hz band (dB HL)", type = typeof(float))]
             MultibandExpansionBand2,
+
             [Parameter(pluginNameLeft = "HL3L", pluginNameRight = "HL3R", mixerNameLeft = "HL3DTI_HL_Band_3_Left", mixerNameRight = "HL3DTI_HL_Band_3_Right", units = "dBHL", label = "500 Hz", description = "Hearing loss level for 500 Hz band (dB HL)", type = typeof(float))]
             MultibandExpansionBand3,
+
             [Parameter(pluginNameLeft = "HL4L", pluginNameRight = "HL4R", mixerNameLeft = "HL3DTI_HL_Band_4_Left", mixerNameRight = "HL3DTI_HL_Band_4_Right", units = "dBHL", label = "1 KHz", description = "Hearing loss level for 1 KHz band (dB HL)", type = typeof(float))]
             MultibandExpansionBand4,
+
             [Parameter(pluginNameLeft = "HL5L", pluginNameRight = "HL5R", mixerNameLeft = "HL3DTI_HL_Band_5_Left", mixerNameRight = "HL3DTI_HL_Band_5_Right", units = "dBHL", label = "2 KHz", description = "Hearing loss level for 2 KHz band (dB HL)", type = typeof(float))]
             MultibandExpansionBand5,
+
             [Parameter(pluginNameLeft = "HL6L", pluginNameRight = "HL6R", mixerNameLeft = "HL3DTI_HL_Band_6_Left", mixerNameRight = "HL3DTI_HL_Band_6_Right", units = "dBHL", label = "4 KHz", description = "Hearing loss level for 4 KHz band (dB HL)", type = typeof(float))]
             MultibandExpansionBand6,
+
             [Parameter(pluginNameLeft = "HL7L", pluginNameRight = "HL7R", mixerNameLeft = "HL3DTI_HL_Band_7_Left", mixerNameRight = "HL3DTI_HL_Band_7_Right", units = "dBHL", label = "8 KHz", description = "Hearing loss level for 8 KHz band (dB HL)", type = typeof(float))]
             MultibandExpansionBand7,
+
             [Parameter(pluginNameLeft = "HL8L", pluginNameRight = "HL8R", mixerNameLeft = "HL3DTI_HL_Band_8_Left", mixerNameRight = "HL3DTI_HL_Band_8_Right", units = "dBHL", label = "16 KHz", description = "Hearing loss level for 16 KHz band (dB HL)", type = typeof(float))]
             MultibandExpansionBand8,
             // NB if adding multiband expansion bands then update NumMultibandExpansionBands constant.
+
             [Parameter(pluginNameLeft = "HLMBEAPPROACHL", pluginNameRight = "HLMBEAPPROACHR", mixerNameLeft = "HL3DTI_HL_MBE_Approach_Left", mixerNameRight = "HL3DTI_HL_MBE_Approach_Right", label = "Algorithm", description = "Multiband expander algorithm", type = typeof(T_MultibandExpanderApproach))]
             MultibandExpansionApproach,
+
             [Parameter(pluginNameLeft = "HLMBEFGL", pluginNameRight = "HLMBEFGR", label = "Filter Grouping", description = "Multiband expander filter grouping", type = typeof(bool))]
             MultibandExpansionFilterGrouping,
+
             [Parameter(pluginNameLeft = "HLMBEFPBL", pluginNameRight = "HLMBEFPBR", label = "Filters per band", description = "Multiband expander number of filters per band (odd number)", type = typeof(int))]
             MultibandExpansionNumFiltersPerBand,
+
             [Parameter(pluginNameLeft = "HLATKL", pluginNameRight = "HLATKR", mixerNameLeft = "HL3DTI_Attack_Left", mixerNameRight = "HL3DTI_Attack_Right", units = "ms", label = "Attack", description = "Attack time envelope detectors for all bands (ms)", type = typeof(float))]
             MultibandExpansionAttack,
+
             [Parameter(pluginNameLeft = "HLRELL", pluginNameRight = "HLRELR", mixerNameLeft = "HL3DTI_Release_Left", mixerNameRight = "HL3DTI_Release_Right", units = "ms", label = "Release", description = "Release time envelope detectors for all bands (ms)", type = typeof(float))]
             MultibandExpansionRelease,
+
             [Parameter(pluginNameLeft = "HLMBEONL", pluginNameRight = "HLMBEONR", mixerNameLeft = "HL3DTI_MBE_LeftOn", mixerNameRight = "HL3DTI_MBE_RightOn", label = "Multiband Expander", description = "Switch on multiband expander", type = typeof(bool))]
             MultibandExpansionOn,
+
             [Parameter(pluginNameLeft = "HLTAONL", pluginNameRight = "HLTAONR", mixerNameLeft = "HL3DTI_TA_LeftOn", mixerNameRight = "HL3DTI_TA_RightOn", label = "Temporal Distortion", description = "Switch on temporal distortion simulation", type = typeof(bool))]
             TemporalDistortionOn,
+
             [Parameter(pluginNameLeft = "HLTABANDL", pluginNameRight = "HLTABANDR", mixerNameLeft = "HL3DTI_TA_Band_Left", mixerNameRight = "HL3DTI_TA_Band_Right", units = "Hz", label = "Upper band limit", description = "Upper band limit for temporal distortion simulation (Hz)", type = typeof(float), validValues = new float[] { 200, 400, 800, 1600, 3200, 6400, 12800 })]
             TemporalDistortionBandUpperLimit,
+
             [Parameter(pluginNameLeft = "HLTALPFL", pluginNameRight = "HLTALPFR", mixerNameLeft = "HL3DTI_TA_Noise_LPF_Left", mixerNameRight = "HL3DTI_TA_Noise_LPF_Right", units = "Hz", label = "LPF Cutoff frequency", description = "Cutoff frequency of temporal distortion jitter noise autocorrelation LPF (Hz)", type = typeof(float))]
             TemporalDistortionNoiseBandwidth,
+
             [Parameter(pluginNameLeft = "HLTAPOWL", pluginNameRight = "HLTAPOWR", mixerNameLeft = "HL3DTI_TA_Noise_Power_Left", mixerNameRight = "HL3DTI_TA_Noise_Power_Right", units = "ms", label = "White noise power", description = "Power of temporal distortion jitter white noise (ms)", type = typeof(float))]
             TemporalDistortionWhiteNoisePower,
+
             [Parameter(pluginNameLeft = "HLTALR", mixerNameLeft = "HL3DTI_TA_LRSync", pluginNameRight = "HLTALR", mixerNameRight = "HL3DTI_TA_LRSync", label = "Left/Right sync amount", description = "Synchronise the noise source for Temporal Distortion between left and right ears", type = typeof(float))]
             TemporalDistortionLRSyncAmount,
+
             [Parameter(pluginNameLeft = "HLTALRON", mixerNameLeft = "HL3DTI_TA_LRSync_On", pluginNameRight = "HLTALRON", mixerNameRight = "HL3DTI_TA_LRSync_On", label = "Left/Right sync", description = "Make the right ear use the same parameters for temporal distortion as the left ear", type = typeof(bool))]
             TemporalDistortionLRSyncOn,
+
             [Parameter(pluginNameLeft = "HLTA0GL", pluginNameRight = "HLTA0GR", mixerNameLeft = "HL3DTI_TA_Autocor0_Get_Left", mixerNameRight = "HL3DTI_TA_Autocor0_Get_Right", label = "Autocorrelation coefficient zero", description = "Autocorrelation coefficient zero in left temporal distortion noise source?", type = typeof(float))]
             TemporalDistortionAutocorrelation0Get,
+
             [Parameter(pluginNameLeft = "HLTA1GL", pluginNameRight = "HLTA1GR", mixerNameLeft = "HL3DTI_TA_Autocor1_Get_Left", mixerNameRight = "HL3DTI_TA_Autocor1_Get_Right", label = "Autocorrelation coefficient one", description = "Autocorrelation coefficient one in left temporal distortion noise source?", type = typeof(float))]
             TemporalDistortionAutocorrelation1Get,
+
             [Parameter(pluginNameLeft = "HLFSONL", pluginNameRight = "HLFSONR", mixerNameLeft = "HL3DTI_FS_LeftOn", mixerNameRight = "HL3DTI_FS_RightOn", label = "Frequency Smearing", description = "Switch on frequency smearing simulation", type = typeof(bool))]
             FrequencySmearingOn,
+
             [Parameter(pluginNameLeft = "HLFSAPPROACHL", pluginNameRight = "HLFSAPPROACHR", mixerNameLeft = "HL3DTI_HL_FS_Approach_Left", mixerNameRight = "HL3DTI_HL_FS_Approach_Right", label = "Algorithm", description = "Approach used for Frequency smearing", type = typeof(T_HLFrequencySmearingApproach))]
             FrequencySmearingApproach,
+
             [Parameter(pluginNameLeft = "HLFSDOWNSZL", pluginNameRight = "HLFSDOWNSZR", mixerNameLeft = "HL3DTI_FS_Size_Down_Left", mixerNameRight = "HL3DTI_FS_Size_Down_Right", label = "Downward smearing window size", description = "Size of downward section of smearing window", type = typeof(int))]
             FrequencySmearingDownSize,
+
             [Parameter(pluginNameLeft = "HLFSUPSZL", pluginNameRight = "HLFSUPSZR", mixerNameLeft = "HL3DTI_FS_Size_Up_Left", mixerNameRight = "HL3DTI_FS_Size_Up_Right", label = "Upward smearing window size", description = "Size of upward section of smearing window", type = typeof(int))]
             FrequencySmearingUpSize,
+
             [Parameter(pluginNameLeft = "HLFSDOWNHZL", pluginNameRight = "HLFSDOWNHZR", mixerNameLeft = "HL3DTI_FS_Hz_Down_Left", mixerNameRight = "HL3DTI_FS_Hz_Down_Right", units = "Hz", label = "Downward smearing amount", description = "Amount of downward smearing effect (in Hz)", type = typeof(float))]
             FrequencySmearingDownHz,
+
             [Parameter(pluginNameLeft = "HLFSUPHZL", pluginNameRight = "HLFSUPHZR", mixerNameLeft = "HL3DTI_FS_Hz_Up_Left", mixerNameRight = "HL3DTI_FS_Hz_Up_Right", units = "Hz", label = "Upward smearing amount", description = "Amount of upward smearing effect (in Hz)", type = typeof(float))]
             FrequencySmearingUpHz,
 
@@ -132,87 +162,7 @@ namespace API_3DTI
             Gammatone,
         };
 
-        //// Internal constants
-        //const float DEFAULT_CALIBRATION = 100.0f;
-        //const float DEFAULT_ATTACK = 20.0f;
-        //const float DEFAULT_RELEASE = 100.0f;
-        //const T_HLTemporalDistortionBandUpperLimit DEFAULT_TA_BANDUPPERLIMIT = T_HLTemporalDistortionBandUpperLimit.HZ_UL_1600;
-        //const float DEFAULT_TA_WHITENOISEPOWER = 0.0f;
-        //const float DEFAULT_TA_BANDWIDTH = 500.0f;
-        //const int DEFAULT_FS_SIZE = 1;
-        //const float DEFAULT_FS_HZ = 0.0f;
-
-        //// Internal parameters for consistency with GUI
-        //[HideInInspector]
-        //public bool GLOBAL_LEFT_ON = false;                         // For internal use, DO NOT USE IT DIRECTLY
-
-        //[HideInInspector]
-        //public bool GLOBAL_RIGHT_ON = false;                        // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public float PARAM_CALIBRATION = DEFAULT_CALIBRATION;       // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public float[] PARAM_AUDIOMETRY_LEFT = new float[9] { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };  // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public float[] PARAM_AUDIOMETRY_RIGHT = new float[9] { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }; // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public float PARAM_LEFT_ATTACK = DEFAULT_ATTACK;            // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public float PARAM_LEFT_RELEASE = DEFAULT_RELEASE;          // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public float PARAM_RIGHT_ATTACK = DEFAULT_ATTACK;           // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public float PARAM_RIGHT_RELEASE = DEFAULT_RELEASE;         // For internal use, DO NOT USE IT DIRECTLY
-
-        //[HideInInspector]
-        //public bool MBE_LEFT_ON = true;                         // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public bool MBE_RIGHT_ON = true;                        // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public bool TA_LEFT_ON = false;                         // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public bool TA_RIGHT_ON = false;                        // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public T_HLTemporalDistortionBandUpperLimit PARAM_LEFT_TA_BANDUPPERLIMIT = DEFAULT_TA_BANDUPPERLIMIT;      // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public T_HLTemporalDistortionBandUpperLimit PARAM_RIGHT_TA_BANDUPPERLIMIT = DEFAULT_TA_BANDUPPERLIMIT;     // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public float PARAM_LEFT_TA_WHITENOISEPOWER = DEFAULT_TA_WHITENOISEPOWER;    // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public float PARAM_RIGHT_TA_WHITENOISEPOWER = DEFAULT_TA_WHITENOISEPOWER;   // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public float PARAM_LEFT_TA_BANDWIDTH = DEFAULT_TA_BANDWIDTH;  // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public float PARAM_RIGHT_TA_BANDWIDTH = DEFAULT_TA_BANDWIDTH; // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public float PARAM_TA_LRSYNC = 0.0f;                    // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public bool PARAM_TA_LRSYNC_ON = false;                 // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public bool PARAM_LEFT_TA_POSTLPF = true;                    // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public bool PARAM_RIGHT_TA_POSTLPF = true;                    // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public bool FS_LEFT_ON = false;                         // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public bool FS_RIGHT_ON = false;                        // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public int PARAM_LEFT_FS_DOWN_SIZE = DEFAULT_FS_SIZE;      // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public int PARAM_LEFT_FS_UP_SIZE = DEFAULT_FS_SIZE;      // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public int PARAM_RIGHT_FS_DOWN_SIZE = DEFAULT_FS_SIZE;      // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public int PARAM_RIGHT_FS_UP_SIZE = DEFAULT_FS_SIZE;      // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public float PARAM_LEFT_FS_DOWN_HZ = DEFAULT_FS_HZ;      // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public float PARAM_LEFT_FS_UP_HZ = DEFAULT_FS_HZ;      // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public float PARAM_RIGHT_FS_DOWN_HZ = DEFAULT_FS_HZ;      // For internal use, DO NOT USE IT DIRECTLY
-        //[HideInInspector]
-        //public float PARAM_RIGHT_FS_UP_HZ = DEFAULT_FS_HZ;      // For internal use, DO NOT USE IT DIRECTLY
-
-
+ 
         [HideInInspector]
         public T_HLClassificationScaleCurve PARAM_CLASSIFICATION_CURVE_LEFT = T_HLClassificationScaleCurve.HL_CS_NOLOSS;      // For internal use, DO NOT USE IT DIRECTLY
         [HideInInspector]
@@ -230,79 +180,13 @@ namespace API_3DTI
 
         public bool SetParameter<T>(Parameter p, T value, T_ear ear = T_ear.BOTH) where T : IConvertible
         {
-            ParameterAttribute attributes = p.GetAttribute<ParameterAttribute>();
-            Debug.Assert(value.GetType() == attributes.type);
-
-            if (attributes.isSharedBetweenEars())
-            {
-                // Single parameter for both ears
-                if (ear != T_ear.BOTH)
-                {
-                    Debug.LogWarning($"Parameter {p} cannot be set for an individual ear. It must be set with ear == {T_ear.BOTH}.");
-                    ear = T_ear.BOTH;
-                }
-            }
-
-            if (ear.HasFlag(T_ear.LEFT))
-            {
-                if (!hlMixer.SetFloat(attributes.mixerNameLeft, Convert.ToSingle(value)))
-                {
-                    Debug.LogError($"Failed to set parameter {attributes.mixerNameLeft} on mixer {hlMixer}", this);
-                    return false;
-                }
-            }
-            if (ear.HasFlag(T_ear.RIGHT))
-            {
-                if (!hlMixer.SetFloat(attributes.mixerNameRight, Convert.ToSingle(value)))
-                {
-                    Debug.LogError($"Failed to set parameter {attributes.mixerNameRight} on mixer {hlMixer}", this);
-                    return false;
-                }
-            }
-            return true;
+            return _SetParameter(hlMixer, p, value, ear);
         }
 
         public T GetParameter<T>(Parameter p, T_ear ear)
         {
-            ParameterAttribute attributes = p.GetAttribute<ParameterAttribute>();
-            Debug.Assert(typeof(T) == attributes.type);
-
-            if (attributes.isSharedBetweenEars() && ear != T_ear.BOTH)
-            {
-                Debug.LogWarning($"Parameter {p} cannot be retrieved for an individual ear. It must be retrieved with ear == {T_ear.BOTH}.");
-                ear = T_ear.BOTH;
-            }
-            else if (!attributes.isSharedBetweenEars() && ear == T_ear.BOTH)
-            {
-                throw new Exception($"Cannot get parameter {p} for both ears. Choose wither {T_ear.LEFT} or {T_ear.RIGHT}.");
-            }
-
-            float fValue;
-            string mixerName = attributes.mixerName(ear);
-            if (!hlMixer.GetFloat(mixerName, out fValue))
-            {
-                Debug.LogError($"Failed to get parameter {mixerName} from mixer {hlMixer}", this);
-                return default(T);
-            }
-
-            return (T)Convert.ChangeType(fValue, typeof(T));
+            return _GetParameter<Parameter, T>(hlMixer, p, ear);
         }
-
-
-        ///////////////////////////////////////
-        // GLOBAL CONTROLS
-        ///////////////////////////////////////
-
-        ///// <summary>
-        ///// Set calibration to allow conversion between dBSPL and dBHL to dBFS (internally used by the hearing loss simulator)
-        ///// </summary>
-        ///// <param name="dBSPL_for_0dBFS (how many dBSPL are measured with 0dBFS)"></param>
-        ///// <returns></returns>
-        //public bool SetCalibration(float dBSPL_for_0dBFS)
-        //{
-        //    PARAM_CALIBRATION = dBSPL_for_0dBFS;
-        //    return hlMixer.SetFloat("HL3DTI_Calibration", dBSPL_for_0dBFS);
-        //}
 
         ///////////////////////////////////////
         // AUDIOMETRY 
@@ -325,42 +209,6 @@ namespace API_3DTI
             return true;
         }
 
-        ///// <summary>
-        ///// Set hearing loss level for one band in one ear
-        ///// </summary>
-        ///// <param name="ear"></param>
-        ///// <param name="band"></param>
-        ///// <param name="hearingLevel (dBHL)"></param>
-        ///// <returns></returns>
-        //public bool SetHearingLevel(T_ear ear, int band, float hearingLevel)
-        //{
-        //    // Check size
-        //    if ((band < 0) || (band > NUM_HL_BANDS))
-        //        return false;
-
-        //    // Both ears
-        //    if (ear == T_ear.BOTH)
-        //    {
-        //        if (!SetHearingLevel(T_ear.LEFT, band, hearingLevel)) return false;
-        //        return SetHearingLevel(T_ear.RIGHT, band, hearingLevel);
-        //    }
-
-        //    // Set internal variables and build parameter string
-        //    string paramName = "HL3DTI_HL_Band_" + band.ToString() + "_";
-        //    if (ear == T_ear.LEFT)
-        //    {
-        //        PARAM_AUDIOMETRY_LEFT[band] = hearingLevel;
-        //        paramName += "Left";
-        //    }
-        //    else
-        //    {
-        //        PARAM_AUDIOMETRY_RIGHT[band] = hearingLevel;
-        //        paramName += "Right";
-        //    }
-
-        //    // Send command
-        //    return hlMixer.SetFloat(paramName, hearingLevel);
-        //}
 
         /// <summary>
         /// Set audiometry from a curve and slope level using HL Classification Scale
@@ -372,12 +220,6 @@ namespace API_3DTI
         /// <returns></returns>
         public bool SetAudiometryFromClassificationScale(T_ear ear, T_HLClassificationScaleCurve curve, int slope, T_HLClassificationScaleSeverity severity)
         {
-            //// TO DO: Range check (anyway, it is done inside the plugin)        
-            //if (ear == T_ear.BOTH)
-            //{
-            //    if (!SetAudiometryFromClassificationScale(T_ear.LEFT, curve, slope, severity)) return false;
-            //    return SetAudiometryFromClassificationScale(T_ear.RIGHT, curve, slope, severity);
-            //}
 
             if (ear.HasFlag(T_ear.LEFT))
             {
@@ -391,19 +233,8 @@ namespace API_3DTI
                 PARAM_CLASSIFICATION_SLOPE_RIGHT = slope;
                 PARAM_CLASSIFICATION_SEVERITY_RIGHT = severity;
             }
-            //if (!hlMixer.SetFloat("HL3DTI_CS_Curve_Left", FromClassificationScaleCurveToFloat(curve))) return false;
-            //return hlMixer.SetFloat("HL3DTI_CS_Slope_Left", (float)slope); <-- this is not implemented in plugin, nor AudioMixer (it was Severity before)
             List<float> hl;
             GetClassificationScaleHL(curve, slope, severity, out hl);
-            //if (!hlMixer.SetFloat("HL3DTI_HL_Band_0_Left", hl[0])) return false;
-            //if (!hlMixer.SetFloat("HL3DTI_HL_Band_1_Left", hl[1])) return false;
-            //if (!hlMixer.SetFloat("HL3DTI_HL_Band_2_Left", hl[2])) return false;
-            //if (!hlMixer.SetFloat("HL3DTI_HL_Band_3_Left", hl[3])) return false;
-            //if (!hlMixer.SetFloat("HL3DTI_HL_Band_4_Left", hl[4])) return false;
-            //if (!hlMixer.SetFloat("HL3DTI_HL_Band_5_Left", hl[5])) return false;
-            //if (!hlMixer.SetFloat("HL3DTI_HL_Band_6_Left", hl[6])) return false;
-            //if (!hlMixer.SetFloat("HL3DTI_HL_Band_7_Left", hl[7])) return false;
-            //if (!hlMixer.SetFloat("HL3DTI_HL_Band_8_Left", hl[8])) return false;
 
             return SetParameter(MultibandExpansionBand0, hl[0], ear)
                 && SetParameter(MultibandExpansionBand1, hl[1], ear)
@@ -415,81 +246,8 @@ namespace API_3DTI
                 && SetParameter(MultibandExpansionBand7, hl[7], ear)
                 && SetParameter(MultibandExpansionBand8, hl[8], ear);
 
-
-            //    //if (!hlMixer.SetFloat("HL3DTI_CS_Curve_Right", FromClassificationScaleCurveToFloat(curve))) return false;
-            //    //return hlMixer.SetFloat("HL3DTI_CS_Slope_Right", (float)slope); <-- this is not implemented in plugin, nor AudioMixer (it was Severity before)
-            //    List<float> hl;
-            //    GetClassificationScaleHL(curve, slope, severity, out hl);
-            //    if (!hlMixer.SetFloat("HL3DTI_HL_Band_0_Right", hl[0])) return false;
-            //    if (!hlMixer.SetFloat("HL3DTI_HL_Band_1_Right", hl[1])) return false;
-            //    if (!hlMixer.SetFloat("HL3DTI_HL_Band_2_Right", hl[2])) return false;
-            //    if (!hlMixer.SetFloat("HL3DTI_HL_Band_3_Right", hl[3])) return false;
-            //    if (!hlMixer.SetFloat("HL3DTI_HL_Band_4_Right", hl[4])) return false;
-            //    if (!hlMixer.SetFloat("HL3DTI_HL_Band_5_Right", hl[5])) return false;
-            //    if (!hlMixer.SetFloat("HL3DTI_HL_Band_6_Right", hl[6])) return false;
-            //    if (!hlMixer.SetFloat("HL3DTI_HL_Band_7_Right", hl[7])) return false;
-            //    if (!hlMixer.SetFloat("HL3DTI_HL_Band_8_Right", hl[8])) return false;
-            //}
-            //return true;
         }
 
-        ///////////////////////////////////////
-        // NON-LINEAR ATTENUATION (MULTIBAND EXPANDER)
-        ///////////////////////////////////////
-
-
-        ///// <summary>
-        ///// Set attack of all bands envelope detectors for one ear
-        ///// </summary>
-        ///// <param name="ear"></param>
-        ///// <param name="attack (ms)"></param>
-        ///// <returns></returns>
-        //public bool SetAttackForAllBands(T_ear ear, float attack)
-        //{
-        //    if (ear == T_ear.BOTH)
-        //    {
-        //        if (!SetAttackForAllBands(T_ear.LEFT, attack)) return false;
-        //        return SetAttackForAllBands(T_ear.RIGHT, attack);
-        //    }
-        //    if (ear == T_ear.LEFT)
-        //    {
-        //        if (!hlMixer.SetFloat("HL3DTI_Attack_Left", attack)) return false;
-        //        //PARAM_LEFT_ATTACK = attack;
-        //    }
-        //    if (ear == T_ear.RIGHT)
-        //    {
-        //        if (!hlMixer.SetFloat("HL3DTI_Attack_Right", attack)) return false;
-        //        PARAM_RIGHT_ATTACK = attack;
-        //    }
-        //    return true;
-        //}
-
-        ///// <summary>
-        ///// Set release of all bands envelope detectors for one ear
-        ///// </summary>
-        ///// <param name="ear"></param>
-        ///// <param name="release (ms)"></param>
-        ///// <returns></returns>
-        //public bool SetReleaseForAllBands(T_ear ear, float release)
-        //{
-        //    if (ear == T_ear.BOTH)
-        //    {
-        //        if (!SetReleaseForAllBands(T_ear.LEFT, release)) return false;
-        //        return SetReleaseForAllBands(T_ear.RIGHT, release);
-        //    }
-
-        //    if (ear == T_ear.LEFT)
-        //    {
-        //        if (!hlMixer.SetFloat("HL3DTI_Release_Left", release)) return false;
-        //        PARAM_LEFT_RELEASE = release;
-        //    }
-        //    if (ear == T_ear.RIGHT)
-        //    {
-        //        if (!hlMixer.SetFloat("HL3DTI_Release_Right", release)) return false;
-        //        PARAM_RIGHT_RELEASE = release;
-        //    }
-        //    return true;
-        //}
 
         ///////////////////////////////////////
         // TEMPORAL DISTORTION SIMULATION
