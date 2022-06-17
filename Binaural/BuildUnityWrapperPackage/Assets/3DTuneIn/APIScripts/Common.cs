@@ -30,6 +30,7 @@ namespace API_3DTI
         public float defaultValue;
         public float min;
         public float max;
+        public bool isReadOnly = false;
 
         public bool isSharedBetweenEars()
         {

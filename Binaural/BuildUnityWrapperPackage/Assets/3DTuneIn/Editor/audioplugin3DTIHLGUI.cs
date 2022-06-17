@@ -76,8 +76,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
 
 
     // Start Play control
-    bool isStartingPlay = false;
-    bool playWasStarted = false;
+    //bool playWasStarted = false;
 
 
     /////////////////////////////////////////////////////////
@@ -110,12 +109,8 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     {
  
 
-        //return false;
-        // Initialization (first run)
-        //if (!initDone)
-        //{
-            // Get HL API instance (TO DO: Error check)
-            HLAPI = GameObject.FindObjectOfType<HearingLoss>();
+        // Get HL API instance (TO DO: Error check)
+        HLAPI = GameObject.FindObjectOfType<HearingLoss>();
         if (HLAPI == null)
         {
             GUILayout.Label("Please create an instance of HearingLoss in the scene hierarchy to use this effect.");
@@ -126,17 +121,6 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         Common3DTIGUI.InitStyles();
 
 			
-        // Check starting play
-        if (EditorApplication.isPlaying && !playWasStarted)
-        {
-            isStartingPlay = true;
-            playWasStarted = true;
-        }
-        if (!EditorApplication.isPlaying && playWasStarted)
-        {
-            playWasStarted = false;
-        }
-
         // DRAW AUDIOMETRY GUI
         Common3DTIGUI.Show3DTILogo();
 
@@ -167,12 +151,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         DrawTemporalDistortion(plugin);
         DrawFrequencySmearing(plugin);
 
-        // End starting play
-        isStartingPlay = false;
-
         // End changing buttons
-        //changingAudiometryPresetLeft = false;
-        //changingAudiometryPresetRight = false;        
         changingCSLeft = false;
         changingCSRight = false;
         changingTDPresetLeft = false;
@@ -198,7 +177,6 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         {
             Common3DTIGUI.AddLabelToParameterGroup("dB SPL for 0 dB FS");
             CreateControl(plugin, Calibration, T_ear.BOTH);
-            //Common3DTIGUI.CreatePluginParameterSlider(plugin, ref HLAPI.PARAM_CALIBRATION, "HLCAL", "dB SPL for 0 dB FS", false, "dB SPL", "Set how many dB SPL are assumed for 0 dB FS");
         }
         Common3DTIGUI.EndSection();
     }
@@ -296,10 +274,6 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                     }
                     GUILayout.EndHorizontal();
 
-                    //// Reset button
-                    //Common3DTIGUI.SingleSpace();
-                    //if (Common3DTIGUI.CreateButton("Reset", "Reset audiometry to No Hearing Loss"))
-                    //    ResetAudiometry(plugin, T_ear.LEFT);
                 }
                 GUILayout.EndVertical();
             }
@@ -362,10 +336,6 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
                     }
                     GUILayout.EndHorizontal();
 
-                    //// Reset button
-                    //Common3DTIGUI.SingleSpace();
-                    //if (Common3DTIGUI.CreateButton("Reset", "Reset audiometry to No Hearing Loss"))
-                    //    ResetAudiometry(plugin, T_ear.RIGHT);
                 }
                 GUILayout.EndVertical();
             }
@@ -386,10 +356,7 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
             foreach (T_ear ear in new T_ear[] { T_ear.LEFT, T_ear.RIGHT })
             {
                 // LEFT EAR
-                //EditorGUI.BeginDisabledGroup(!(plugin.GetBoolParameter("HLONL") && plugin.GetBoolParameter("HLMBEONL")));
                 EditorGUI.BeginDisabledGroup(!(plugin.GetParameter<Parameter, bool>(HLOn, ear) && plugin.GetParameter<Parameter, bool>(MultibandExpansionOn, ear)));
-                //Common3DTIGUI.BeginLeftColumn(true);
-                //Common3DTIGUI.BeginColumn(ear);
                 if (ear == T_ear.LEFT)
                     BeginLeftColumn(true);
                 else
@@ -414,34 +381,9 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
 
                 }
                 Common3DTIGUI.EndColumn(ear);
-                //Common3DTIGUI.EndLeftColumn();
                 EditorGUI.EndDisabledGroup();
             }
-            //// RIGHT EAR
-            //EditorGUI.BeginDisabledGroup(!(plugin.GetBoolParameter("HLONR") && plugin.GetBoolParameter("HLMBEONR")));
-            //Common3DTIGUI.BeginRightColumn(true);
-            //{
-            //    Common3DTIGUI.AddLabelToParameterGroup("62.5 Hz");
-            //    Common3DTIGUI.AddLabelToParameterGroup("125 Hz");
-            //    Common3DTIGUI.AddLabelToParameterGroup("250 Hz");
-            //    Common3DTIGUI.AddLabelToParameterGroup("500 Hz");
-            //    Common3DTIGUI.AddLabelToParameterGroup("1 KHz");
-            //    Common3DTIGUI.AddLabelToParameterGroup("2 KHz");
-            //    Common3DTIGUI.AddLabelToParameterGroup("4 KHz");
-            //    Common3DTIGUI.AddLabelToParameterGroup("8 KHz");
-            //    Common3DTIGUI.AddLabelToParameterGroup("16 KHz");
-            //    for (int i = 0; i < HearingLoss.NumMultibandExpansionBands; i++)
-            //    {
-            //        if (CreateControl(plugin, MultibandExpansionBand0 + i, T_ear.RIGHT))
-            //        {
-            //            ResetAllAudiometryButtonSelections(T_ear.RIGHT);
-            //        }
-            //    }
-              
-            //}
-            //Common3DTIGUI.EndRightColumn();
         }
-        //EditorGUI.EndDisabledGroup();
         Common3DTIGUI.EndSection();
     }
 
@@ -898,8 +840,6 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     {
         if (ear == T_ear.LEFT)
         {
-            //if (!changingAudiometryPresetLeft)
-            //    selectedAudiometryPresetLeft = HearingLoss.T_HLPreset.HL_PRESET_CUSTOM;
             if (!changingCSLeft)
             {
                 selectedCurveLeft = HearingLoss.T_HLClassificationScaleCurve.HL_CS_UNDEFINED;
@@ -909,8 +849,6 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
         }
         else
         {
-            //if (!changingAudiometryPresetRight)
-            //    selectedAudiometryPresetRight = HearingLoss.T_HLPreset.HL_PRESET_CUSTOM;
             if (!changingCSRight)
             {
                 selectedCurveRight = HearingLoss.T_HLClassificationScaleCurve.HL_CS_UNDEFINED;

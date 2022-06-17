@@ -73,7 +73,7 @@ public class TestFunctions : MonoBehaviour
     }
     public void EnableHAInBothEars(bool isEnabled)
     {
-        HearingAid.SwitchHAOnOff(T_ear.BOTH, isEnabled);
+        HearingAid.SetParameter(HearingAid.Parameter.ProcessOn, isEnabled, T_ear.BOTH);
     }
 
     public void EnableReverb(bool isEnabled)

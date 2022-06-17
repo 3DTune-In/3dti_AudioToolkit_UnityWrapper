@@ -16,6 +16,12 @@ namespace API_3DTI
         {
             ParameterAttribute attributes = p.GetAttribute<ParameterAttribute>();
             Debug.Assert(value.GetType() == attributes.type);
+            Debug.Assert(!attributes.isReadOnly);
+            if (attributes.isReadOnly)
+            {
+                Debug.LogWarning($"Parameter {p} is read-only.");
+                return false;
+            }
 
             if (attributes.isSharedBetweenEars())
             {
