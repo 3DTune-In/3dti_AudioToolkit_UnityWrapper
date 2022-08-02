@@ -34,7 +34,7 @@ namespace API_3DTI
             [Parameter(pluginNameLeft = "HLONL", pluginNameRight = "HLONR", mixerNameLeft = "HL3DTI_Process_LeftOn", mixerNameRight = "HL3DTI_Process_RightOn", label = "Hearing loss enabled", description = "Switch on hearing loss simulation", type = typeof(bool))]
             HLOn,
 
-            [Parameter(pluginNameLeft = "HLCAL", pluginNameRight = "HLCAL", mixerNameLeft = "HL3DTI_Calibration", mixerNameRight = "HL3DTI_Calibration", units = "dBSPL", label = "Calibration", description = "Calibration: dBSPL equivalent to 0 dBFS", type = typeof(bool))]
+            [Parameter(pluginNameLeft = "HLCAL", pluginNameRight = "HLCAL", mixerNameLeft = "HL3DTI_Calibration", mixerNameRight = "HL3DTI_Calibration", units = "dBSPL", label = "Calibration", description = "Calibration: dBSPL equivalent to 0 dBFS", type = typeof(float))]
             Calibration,
 
             [Parameter(pluginNameLeft = "HL0L", pluginNameRight = "HL0R", mixerNameLeft = "HL3DTI_HL_Band_0_Left", mixerNameRight = "HL3DTI_HL_Band_0_Right", units = "dBHL", label = "62.5 Hz", description = "Hearing loss level for 62.5 Hz band (dB HL)", type = typeof(float))]
