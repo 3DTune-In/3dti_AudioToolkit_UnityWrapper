@@ -11,10 +11,15 @@ public class SphereSpawner : MonoBehaviour, IPointerClickHandler
     public GameObject sphereEmitterPrefab;
     public bool spawnOnAwake;
     public bool spawnOnStart;
+    
 
     private System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
 
     private List<GameObject> spawnedSphereEmitters = new List<GameObject>();
+    public List<GameObject> SpawnedSphereEmitters
+    {
+        get => spawnedSphereEmitters;
+    }
 
     public int Count => spawnedSphereEmitters.Count;
 
