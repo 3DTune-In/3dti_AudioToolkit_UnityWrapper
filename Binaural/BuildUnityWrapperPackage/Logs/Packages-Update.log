@@ -94,3 +94,17 @@ The following packages were updated:
   com.unity.textmeshpro from version 2.0.1 to 2.1.4
   com.unity.timeline from version 1.2.6 to 1.2.18
   com.unity.xr.legacyinputhelpers from version 2.1.7 to 2.1.8
+
+=== Sun Aug  7 14:22:35 2022
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were updated:
+  com.unity.analytics from version 3.3.5 to 3.6.12
+  com.unity.collab-proxy from version 1.8.0 to 1.14.18
+  com.unity.ide.visualstudio from version 2.0.12 to 2.0.15
+  com.unity.ide.vscode from version 1.2.3 to 1.2.5
+  com.unity.purchasing from version 3.2.2 to 4.1.5
+  com.unity.test-framework from version 1.1.27 to 1.1.31
+  com.unity.xr.legacyinputhelpers from version 2.1.8 to 2.1.9
