@@ -1,0 +1,11 @@
+//
+//  Config.Debug.xcconfig
+//  AudioPlugin3DTIToolkit
+//
+//  Created by Diana UMA on 26/11/16.
+//  Copyright © 2016 diana. All rights reserved.
+//
+
+
+// 3DTune-In
+#include "Config.Common.xcconfig"
