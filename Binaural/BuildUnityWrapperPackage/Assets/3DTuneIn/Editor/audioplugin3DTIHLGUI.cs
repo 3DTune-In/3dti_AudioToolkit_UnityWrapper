@@ -945,11 +945,26 @@ public class audioplugin3DTIHLGUI : IAudioEffectPluginGUI
     {
         int downSize, upSize;
         float downHz, upHz;
-        HearingLoss.GetFrequencySmearingPresetValues(preset, out downSize, out upSize, out downHz, out upHz);
+        T_HLFrequencySmearingApproach approach = plugin.GetParameter<HearingLoss.Parameter, T_HLFrequencySmearingApproach>(FrequencySmearingApproach, ear);
 
-        plugin.SetParameter(FrequencySmearingDownSize, downSize, ear);
-        plugin.SetParameter(FrequencySmearingDownHz, downHz, ear);
-        plugin.SetParameter(FrequencySmearingUpSize, upSize, ear);
-        plugin.SetParameter(FrequencySmearingUpHz, upHz, ear);
+
+        if (approach == T_HLFrequencySmearingApproach.Graf)
+        {
+            GetFrequencySmearingGrafPresetValues(preset, out downSize, out upSize, out downHz, out upHz);
+
+            plugin.SetParameter(FrequencySmearingDownSize, downSize, ear);
+            plugin.SetParameter(FrequencySmearingDownHz, downHz, ear);
+            plugin.SetParameter(FrequencySmearingUpSize, upSize, ear);
+            plugin.SetParameter(FrequencySmearingUpHz, upHz, ear);
+        }
+        else
+        {
+            Debug.Assert(approach == T_HLFrequencySmearingApproach.BaerMoore);
+            
+            GetFrequencySmearingBaerMoorePresetValues(preset, out downHz, out upHz);
+            plugin.SetParameter(FrequencySmearingDownHz, downHz, ear);
+            plugin.SetParameter(FrequencySmearingUpHz, upHz, ear);
+
+        }
     }
 }

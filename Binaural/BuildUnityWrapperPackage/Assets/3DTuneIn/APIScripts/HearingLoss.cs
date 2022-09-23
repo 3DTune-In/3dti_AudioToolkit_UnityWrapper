@@ -433,12 +433,26 @@ namespace API_3DTI
 
             int downSize, upSize;
             float downHz, upHz;
-            GetFrequencySmearingPresetValues(preset, out downSize, out upSize, out downHz, out upHz);
 
-            return SetParameter(Parameter.FrequencySmearingDownSize, downSize, ear)
-                && SetParameter(Parameter.FrequencySmearingDownHz, downHz, ear)
-                && SetParameter(Parameter.FrequencySmearingUpSize, upSize, ear)
-                && SetParameter(Parameter.FrequencySmearingUpHz, upHz, ear);
+            T_HLFrequencySmearingApproach approach = GetParameter<T_HLFrequencySmearingApproach>(FrequencySmearingApproach, ear);
+
+            if (approach == T_HLFrequencySmearingApproach.Graf)
+            {
+                GetFrequencySmearingGrafPresetValues(preset, out downSize, out upSize, out downHz, out upHz);
+
+                return SetParameter(Parameter.FrequencySmearingDownSize, downSize, ear)
+                    && SetParameter(Parameter.FrequencySmearingDownHz, downHz, ear)
+                    && SetParameter(Parameter.FrequencySmearingUpSize, upSize, ear)
+                    && SetParameter(Parameter.FrequencySmearingUpHz, upHz, ear);
+            }
+            else
+            {
+                Debug.Assert(approach == T_HLFrequencySmearingApproach.BaerMoore);
+                GetFrequencySmearingBaerMoorePresetValues(preset, out downHz, out upHz);
+                return SetParameter(FrequencySmearingDownHz, downHz, ear)
+                    && SetParameter(FrequencySmearingUpHz, upHz, ear);
+
+            }
         }
 
         /// <summary>
@@ -449,7 +463,7 @@ namespace API_3DTI
         /// <param name="whiteNoisePower"></param>
         /// <param name="bandWidth"></param>
         /// <param name="LRSync"></param>
-        public static void GetFrequencySmearingPresetValues(T_HLPreset preset, out int downSize, out int upSize, out float downHz, out float upHz)
+        public static void GetFrequencySmearingGrafPresetValues(T_HLPreset preset, out int downSize, out int upSize, out float downHz, out float upHz)
         {
             switch (preset)
             {
@@ -480,6 +494,30 @@ namespace API_3DTI
                     upSize = 15;
                     downHz = 0.0f;
                     upHz = 0.0f;
+                    break;
+            }
+        }
+
+        public static void GetFrequencySmearingBaerMoorePresetValues(T_HLPreset preset, out float downHz, out float upHz)
+        {
+            switch (preset)
+            {
+                case T_HLPreset.HL_PRESET_MILD:
+                    downHz = 1.1f;
+                    upHz = 1.6f;
+                    break;
+                case T_HLPreset.HL_PRESET_MODERATE:
+                    downHz = 1.6f;
+                    upHz = 2.4f;
+                    break;
+                case T_HLPreset.HL_PRESET_SEVERE:
+                    downHz = 2.0f;
+                    upHz = 4.0f;
+                    break;
+                case T_HLPreset.HL_PRESET_NORMAL:
+                default:
+                    downHz = 1.01f;
+                    upHz = 1.01f;
                     break;
             }
         }
