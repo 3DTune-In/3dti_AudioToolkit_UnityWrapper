@@ -320,6 +320,7 @@
 		34BB9EE927025200005BF419 /* SpatializerCore.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SpatializerCore.cpp; path = ../src/SpatializerCore.cpp; sourceTree = "<group>"; };
 		34BB9EEA27025200005BF419 /* effect3DTISpatializerReverb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = effect3DTISpatializerReverb.h; path = ../src/effect3DTISpatializerReverb.h; sourceTree = "<group>"; };
 		34BB9EEB27025200005BF419 /* SpatializerCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SpatializerCore.h; path = ../src/SpatializerCore.h; sourceTree = "<group>"; };
+		34CA3BCD2A8CFF31006AEBCE /* AudioPlugin3DTIToolkit copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "AudioPlugin3DTIToolkit copy-Info.plist"; path = "/Users/timmb/dev/3dti_AudioToolkit_UnityWrapper/Binaural/audioplugin3DTIToolkit/MACOSX/AudioPlugin3DTIToolkit copy-Info.plist"; sourceTree = "<absolute>"; };
 		34FEE2D526FCBF420094E18F /* effect3DTISpatializerSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = effect3DTISpatializerSource.h; path = ../src/effect3DTISpatializerSource.h; sourceTree = "<group>"; };
 		34FEE2D726FCBF420094E18F /* effect3DTISpatializerSource.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = effect3DTISpatializerSource.cpp; path = ../src/effect3DTISpatializerSource.cpp; sourceTree = "<group>"; };
 		34FEE2DB26FCBF9E0094E18F /* HRTFFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HRTFFactory.cpp; sourceTree = "<group>"; };
@@ -357,61 +358,61 @@
 		3429A3BD26384B5500964E9E /* sofa */ = {
 			isa = PBXGroup;
 			children = (
-				3429A40D26384BAF00964E9E /* netcdf */,
-				3429A3BE26384B7F00964E9E /* SOFA.h */,
 				3429A3CC26384B8000964E9E /* SOFAAPI.cpp */,
-				3429A3D226384B8000964E9E /* SOFAAPI.h */,
 				3429A3D126384B8000964E9E /* SOFAAttributes.cpp */,
-				3429A3DF26384B8100964E9E /* SOFAAttributes.h */,
 				3429A3DB26384B8100964E9E /* SOFACoordinates.cpp */,
-				3429A3E726384B8200964E9E /* SOFACoordinates.h */,
 				3429A3C226384B7F00964E9E /* SOFADate.cpp */,
-				3429A3EF26384B8200964E9E /* SOFADate.h */,
 				3429A3C926384B8000964E9E /* SOFAEmitter.cpp */,
-				3429A3EC26384B8200964E9E /* SOFAEmitter.h */,
 				3429A3CE26384B8000964E9E /* SOFAExceptions.cpp */,
-				3429A3C026384B7F00964E9E /* SOFAExceptions.h */,
 				3429A3C526384B7F00964E9E /* SOFAFile.cpp */,
-				3429A3DA26384B8100964E9E /* SOFAFile.h */,
 				3429A3CA26384B8000964E9E /* SOFAGeneralFIR.cpp */,
-				3429A3DC26384B8100964E9E /* SOFAGeneralFIR.h */,
 				3429A3E426384B8100964E9E /* SOFAGeneralFIRE.cpp */,
-				3429A3D926384B8100964E9E /* SOFAGeneralFIRE.h */,
 				3429A3E626384B8200964E9E /* SOFAGeneralTF.cpp */,
-				3429A3D426384B8000964E9E /* SOFAGeneralTF.h */,
 				3429A3DD26384B8100964E9E /* SOFAHelper.cpp */,
+				3429A3CF26384B8000964E9E /* SOFAListener.cpp */,
+				3429A3DE26384B8100964E9E /* SOFAMultiSpeakerBRIR.cpp */,
+				3429A3D026384B8000964E9E /* SOFANcFile.cpp */,
+				3429A3E026384B8100964E9E /* SOFAPoint3.cpp */,
+				3429A3D826384B8100964E9E /* SOFAPosition.cpp */,
+				3429A3E826384B8200964E9E /* SOFAReceiver.cpp */,
+				3429A3E926384B8200964E9E /* SOFASimpleFreeFieldHRIR.cpp */,
+				3429A3C426384B7F00964E9E /* SOFASimpleFreeFieldSOS.cpp */,
+				3429A3EA26384B8200964E9E /* SOFASimpleHeadphoneIR.cpp */,
+				3429A3F226384B8200964E9E /* SOFASingleRoomDRIR.cpp */,
+				3429A3D726384B8100964E9E /* SOFASource.cpp */,
+				3429A3E326384B8100964E9E /* SOFAString.cpp */,
+				3429A3C326384B7F00964E9E /* SOFAUnits.cpp */,
+				3429A3BE26384B7F00964E9E /* SOFA.h */,
+				3429A3D226384B8000964E9E /* SOFAAPI.h */,
+				3429A3DF26384B8100964E9E /* SOFAAttributes.h */,
+				3429A3E726384B8200964E9E /* SOFACoordinates.h */,
+				3429A3EF26384B8200964E9E /* SOFADate.h */,
+				3429A3EC26384B8200964E9E /* SOFAEmitter.h */,
+				3429A3C026384B7F00964E9E /* SOFAExceptions.h */,
+				3429A3DA26384B8100964E9E /* SOFAFile.h */,
+				3429A3DC26384B8100964E9E /* SOFAGeneralFIR.h */,
+				3429A3D926384B8100964E9E /* SOFAGeneralFIRE.h */,
+				3429A3D426384B8000964E9E /* SOFAGeneralTF.h */,
 				3429A3F026384B8200964E9E /* SOFAHelper.h */,
 				3429A3E526384B8200964E9E /* SOFAHostArchitecture.h */,
-				3429A3CF26384B8000964E9E /* SOFAListener.cpp */,
 				3429A3D326384B8000964E9E /* SOFAListener.h */,
-				3429A3DE26384B8100964E9E /* SOFAMultiSpeakerBRIR.cpp */,
 				3429A3ED26384B8200964E9E /* SOFAMultiSpeakerBRIR.h */,
-				3429A3D026384B8000964E9E /* SOFANcFile.cpp */,
 				3429A3C626384B7F00964E9E /* SOFANcFile.h */,
 				3429A3C826384B7F00964E9E /* SOFANcUtils.h */,
 				3429A3E226384B8100964E9E /* SOFAPlatform.h */,
-				3429A3E026384B8100964E9E /* SOFAPoint3.cpp */,
 				3429A3CB26384B8000964E9E /* SOFAPoint3.h */,
-				3429A3D826384B8100964E9E /* SOFAPosition.cpp */,
 				3429A3EE26384B8200964E9E /* SOFAPosition.h */,
-				3429A3E826384B8200964E9E /* SOFAReceiver.cpp */,
 				3429A3F126384B8200964E9E /* SOFAReceiver.h */,
-				3429A3E926384B8200964E9E /* SOFASimpleFreeFieldHRIR.cpp */,
 				3429A3D526384B8000964E9E /* SOFASimpleFreeFieldHRIR.h */,
-				3429A3C426384B7F00964E9E /* SOFASimpleFreeFieldSOS.cpp */,
 				3429A3C126384B7F00964E9E /* SOFASimpleFreeFieldSOS.h */,
-				3429A3EA26384B8200964E9E /* SOFASimpleHeadphoneIR.cpp */,
 				3429A3D626384B8000964E9E /* SOFASimpleHeadphoneIR.h */,
-				3429A3F226384B8200964E9E /* SOFASingleRoomDRIR.cpp */,
 				3429A3BF26384B7F00964E9E /* SOFASingleRoomDRIR.h */,
-				3429A3D726384B8100964E9E /* SOFASource.cpp */,
 				3429A3C726384B7F00964E9E /* SOFASource.h */,
-				3429A3E326384B8100964E9E /* SOFAString.cpp */,
 				3429A3EB26384B8200964E9E /* SOFAString.h */,
-				3429A3C326384B7F00964E9E /* SOFAUnits.cpp */,
 				3429A3CD26384B8000964E9E /* SOFAUnits.h */,
 				3429A3F326384B8200964E9E /* SOFAUtils.h */,
 				3429A3E126384B8100964E9E /* SOFAVersion.h */,
+				3429A40D26384BAF00964E9E /* netcdf */,
 			);
 			path = sofa;
 			sourceTree = "<group>";
@@ -420,56 +421,56 @@
 			isa = PBXGroup;
 			children = (
 				3429A42626384BD000964E9E /* ncAtt.cpp */,
-				3429A42426384BD000964E9E /* ncAtt.h */,
 				3429A43326384BD100964E9E /* ncByte.cpp */,
-				3429A43626384BD100964E9E /* ncByte.h */,
 				3429A42E26384BD000964E9E /* ncChar.cpp */,
-				3429A41E26384BCF00964E9E /* ncChar.h */,
 				3429A43A26384BD100964E9E /* ncCheck.cpp */,
-				3429A42D26384BD000964E9E /* ncCheck.h */,
 				3429A40E26384BCE00964E9E /* ncCompoundType.cpp */,
-				3429A42A26384BD000964E9E /* ncCompoundType.h */,
 				3429A42826384BD000964E9E /* ncDim.cpp */,
-				3429A43826384BD100964E9E /* ncDim.h */,
 				3429A42926384BD000964E9E /* ncDouble.cpp */,
-				3429A42026384BCF00964E9E /* ncDouble.h */,
 				3429A41426384BCF00964E9E /* ncEnumType.cpp */,
-				3429A42C26384BD000964E9E /* ncEnumType.h */,
 				3429A41926384BCF00964E9E /* ncException.cpp */,
-				3429A42526384BD000964E9E /* ncException.h */,
 				3429A41A26384BCF00964E9E /* ncFile.cpp */,
-				3429A41726384BCF00964E9E /* ncFile.h */,
 				3429A43B26384BD100964E9E /* ncFloat.cpp */,
-				3429A43026384BD000964E9E /* ncFloat.h */,
 				3429A40F26384BCE00964E9E /* ncGroup.cpp */,
-				3429A41526384BCF00964E9E /* ncGroup.h */,
 				3429A41226384BCF00964E9E /* ncGroupAtt.cpp */,
-				3429A44226384BD100964E9E /* ncGroupAtt.h */,
 				3429A42726384BD000964E9E /* ncInt.cpp */,
-				3429A42B26384BD000964E9E /* ncInt.h */,
 				3429A41D26384BCF00964E9E /* ncInt64.cpp */,
-				3429A43526384BD100964E9E /* ncInt64.h */,
 				3429A41126384BCE00964E9E /* ncOpaqueType.cpp */,
-				3429A42326384BD000964E9E /* ncOpaqueType.h */,
 				3429A43226384BD000964E9E /* ncShort.cpp */,
-				3429A41826384BCF00964E9E /* ncShort.h */,
 				3429A43C26384BD100964E9E /* ncString.cpp */,
-				3429A42126384BCF00964E9E /* ncString.h */,
 				3429A44126384BD100964E9E /* ncType.cpp */,
-				3429A43D26384BD100964E9E /* ncType.h */,
 				3429A41326384BCF00964E9E /* ncUbyte.cpp */,
-				3429A41B26384BCF00964E9E /* ncUbyte.h */,
 				3429A43726384BD100964E9E /* ncUint.cpp */,
-				3429A43E26384BD100964E9E /* ncUint.h */,
 				3429A41F26384BCF00964E9E /* ncUint64.cpp */,
-				3429A44326384BD100964E9E /* ncUint64.h */,
 				3429A41C26384BCF00964E9E /* ncUshort.cpp */,
-				3429A42F26384BD000964E9E /* ncUshort.h */,
 				3429A44426384BD100964E9E /* ncVar.cpp */,
-				3429A42226384BD000964E9E /* ncVar.h */,
 				3429A41626384BCF00964E9E /* ncVarAtt.cpp */,
-				3429A41026384BCE00964E9E /* ncVarAtt.h */,
 				3429A43126384BD000964E9E /* ncVlenType.cpp */,
+				3429A42426384BD000964E9E /* ncAtt.h */,
+				3429A43626384BD100964E9E /* ncByte.h */,
+				3429A41E26384BCF00964E9E /* ncChar.h */,
+				3429A42D26384BD000964E9E /* ncCheck.h */,
+				3429A42A26384BD000964E9E /* ncCompoundType.h */,
+				3429A43826384BD100964E9E /* ncDim.h */,
+				3429A42026384BCF00964E9E /* ncDouble.h */,
+				3429A42C26384BD000964E9E /* ncEnumType.h */,
+				3429A42526384BD000964E9E /* ncException.h */,
+				3429A41726384BCF00964E9E /* ncFile.h */,
+				3429A43026384BD000964E9E /* ncFloat.h */,
+				3429A41526384BCF00964E9E /* ncGroup.h */,
+				3429A44226384BD100964E9E /* ncGroupAtt.h */,
+				3429A42B26384BD000964E9E /* ncInt.h */,
+				3429A43526384BD100964E9E /* ncInt64.h */,
+				3429A42326384BD000964E9E /* ncOpaqueType.h */,
+				3429A41826384BCF00964E9E /* ncShort.h */,
+				3429A42126384BCF00964E9E /* ncString.h */,
+				3429A43D26384BD100964E9E /* ncType.h */,
+				3429A41B26384BCF00964E9E /* ncUbyte.h */,
+				3429A43E26384BD100964E9E /* ncUint.h */,
+				3429A44326384BD100964E9E /* ncUint64.h */,
+				3429A42F26384BD000964E9E /* ncUshort.h */,
+				3429A42226384BD000964E9E /* ncVar.h */,
+				3429A41026384BCE00964E9E /* ncVarAtt.h */,
 				3429A44026384BD100964E9E /* ncVlenType.h */,
 				3429A43926384BD100964E9E /* netcdf_mem.h */,
 				3429A43426384BD100964E9E /* netcdf_meta.h */,
@@ -674,6 +675,7 @@
 				AF766FEE1DE9F99C0003ED20 /* Config.Debug.xcconfig */,
 				AFE889EC1DCCAC7E003505EF /* Config.Release.xcconfig */,
 				AFE883801DCCA8F6003505EF /* Products */,
+				34CA3BCD2A8CFF31006AEBCE /* AudioPlugin3DTIToolkit copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -779,7 +781,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "rsync -av --delete \"${TARGET_BUILD_DIR}/AudioPlugin3DTIToolkit.bundle/\" \"${TARGET_BUILD_DIR}/../../../../BuildUnityWrapperPackage/Assets/Plugins/MacOS/AudioPlugin3DTIToolkit.bundle/\" \n";
+			shellScript = "rsync -av --delete \"${TARGET_BUILD_DIR}/AudioPlugin3DTIToolkit.bundle/\" \"${PROJECT_DIR}/../../BuildUnityWrapperPackage/Assets/Plugins/MacOS/AudioPlugin3DTIToolkit.bundle/\" \n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -919,12 +921,22 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				"EXCLUDED_SOURCE_FILE_NAMES[arch=arm64]" = (
+					"SOFA*",
+					"nc*",
+					HRTFFactory.cpp,
+					BRIRFactory.cpp,
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64e]" = (
+					DISABLE_SOFA_SUPPORT,
 					"$(inherited)",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -935,7 +947,6 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -963,8 +974,18 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				"EXCLUDED_SOURCE_FILE_NAMES[arch=arm64]" = (
+					"SOFA*",
+					"nc*",
+					HRTFFactory.cpp,
+					BRIRFactory.cpp,
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=arm64e]" = (
+					DISABLE_SOFA_SUPPORT,
+					"$(inherited)",
+				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -1015,7 +1036,6 @@
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "$(SRCROOT)/AudioPlugin3DTIToolkit/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(_3DTI_THIRD_PARTY)/sofacoustics/libsofa/dependencies/lib/macos/libz.a",
 					"$(_3DTI_THIRD_PARTY)/sofacoustics/libsofa/dependencies/lib/macos/libnetcdf.a",

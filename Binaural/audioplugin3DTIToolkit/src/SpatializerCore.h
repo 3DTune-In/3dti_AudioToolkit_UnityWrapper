@@ -13,9 +13,10 @@
 #include "AudioPluginInterface.h"
 #include "CommonUtils.h"
 
-
+#ifndef DISABLE_SOFA_SUPPORT
 #if defined(UNITY_WIN) || (defined(TARGET_OS_OSX) && !defined(TARGET_OS_IOS))
 #define ENABLE_SOFA_SUPPORT
+#endif
 #endif
 
 namespace SpatializerCore3DTI
